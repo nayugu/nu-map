@@ -113,6 +113,7 @@ export function PlannerProvider({ children }) {
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
   const onDropRef      = useRef(null);   // updated each render for touch drag
+  const onDropBankRef   = useRef(null);   // updated each render for touch drag → bank
   const touchDragIdRef  = useRef(null);  // card id currently being touch-dragged
   const ghostRef        = useRef(null);  // floating ghost element during touch drag
   const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
@@ -164,7 +165,8 @@ export function PlannerProvider({ children }) {
   useEffect(() => {
     stateRef.current    = { placements, workPl, semOrders };
     allEdgesRef.current = allEdges;
-    onDropRef.current   = onDrop;
+    onDropRef.current     = onDrop;
+    onDropBankRef.current  = onDropBank;
   });
   useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
 
@@ -755,7 +757,10 @@ export function PlannerProvider({ children }) {
       const touch  = e.changedTouches[0];
       const target = document.elementFromPoint(touch.clientX, touch.clientY);
       const semEl  = target?.closest('[data-sem-id]');
-      if (semEl && onDropRef.current) {
+      const bankEl = target?.closest('[data-drop-bank]');
+      if (bankEl && onDropBankRef.current) {
+        onDropBankRef.current({ preventDefault: () => {} });
+      } else if (semEl && onDropRef.current) {
         onDropRef.current(null, semEl.dataset.semId);
       } else {
         setDragInfo(null);

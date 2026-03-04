@@ -87,6 +87,7 @@ export default function BankPanel() {
 
       <div
         ref={bankRef}
+        data-drop-bank="true"
         style={{ flex: 1, overflowY: sideMode === "grad" ? "hidden" : "auto", background: "var(--bg-bank)", display: "flex", flexDirection: "column" }}
         onDragOver={sideMode === "bank" ? e => e.preventDefault() : undefined}
         onDrop={sideMode === "bank" ? onDropBank : undefined}
