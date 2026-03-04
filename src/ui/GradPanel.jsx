@@ -222,7 +222,7 @@ function ReqNode({ r, depth = 0 }) {
             onMouseLeave={course ? () => setHov(false) : undefined}
             style={{ fontSize: 10, color: r.sat ? "var(--text-2)" : "var(--text-4)", fontWeight: r.sat ? 600 : 400, userSelect: "none",
               textDecoration: isSelected ? "underline" : hov ? "underline" : "none",
-              textDecorationColor: isSelected ? undefined : "var(--border-2)",
+              textDecorationColor: "var(--text-4)",
               textUnderlineOffset: 2 }}>
             {r.label}
           </span>
