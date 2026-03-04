@@ -194,7 +194,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
         ${pill}
         <span class="ccode">${c.code ?? c.id}</span>
         <span class="ctitle">${c.title ?? ""}</span>
-        <span class="csh">${c.sh} SH</span>
+        <span class="csh">${c.shMax ? `${c.sh}\u2013${c.shMax}` : c.sh} SH</span>
         ${nuBadges ? `<span class="np-badges">${nuBadges}</span>` : ""}
       </div>`;
     }).join("\n");

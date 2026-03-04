@@ -8,7 +8,7 @@ import CourseCard from "./CourseCard.jsx";
 
 export default function SemRow({ sem }) {
   const {
-    placements, semOrders, courseMap,
+    placements, semOrders, courseMap, effectiveCourseMap,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -27,8 +27,8 @@ export default function SemRow({ sem }) {
   const workItem   = workId     ? WORK_TERMS.find(w => w.id === workId)     : null;
   const contItem   = contWorkId ? WORK_TERMS.find(w => w.id === contWorkId) : null;
   const courseIds  = getOrderedCourses(sem.id, placements, semOrders, courseMap);
-  const crs        = courseIds.map(id => courseMap[id]).filter(Boolean);
-  const sh         = getSemSH(sem.id, placements, courseMap);
+  const crs        = courseIds.map(id => effectiveCourseMap[id] ?? courseMap[id]).filter(Boolean);
+  const sh         = getSemSH(sem.id, placements, effectiveCourseMap);
   const mainSlots  = (sem.type === "fall" || sem.type === "spring") ? 4
                    : sem.type === "summer" ? 2 : null;
   const main4      = crs.filter(c => c.sh >= 4);

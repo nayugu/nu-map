@@ -616,7 +616,7 @@
                 <p style="font-size:13px;font-weight:700;color:#e74c3c;margin:0 0 5px">☢ Data Override Zone</p>
                 <p style="font-size:11px;color:var(--text2);margin:0;line-height:1.55">
                   Writes catalog values directly into <code>all-courses.json</code> and updates the data timestamp.
-                  Applies <span id="ck-fix-count" style="font-weight:700;color:#e74c3c">0</span> changed/range-diff courses.
+                  Applies <span id="ck-fix-count" style="font-weight:700;color:#e74c3c">0</span> <span id="ck-fix-type-desc" style="color:var(--text2)">fixable</span> course(s) from the current filter.
                   <span style="color:var(--error)">Irreversible without git.</span>
                 </p>
               </div>
@@ -781,6 +781,28 @@ async function loadChangeLog() {
 function renderRun(run) {
   const ts = new Date(run.timestamp).toLocaleString("en-US",
     { month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit" });
+
+  // Special entries: catalog check launched, nuclear fix applied
+  if (run.type === "catalog-check" || run.type === "nuclear-fix") {
+    const isCheck = run.type === "catalog-check";
+    const color   = isCheck ? "var(--accent)" : "#e74c3c";
+    let detail = "";
+    if (!isCheck && run.fixed != null) {
+      const parts = [];
+      if (run.nChanged) parts.push(`${run.nChanged} ⚠ changed`);
+      if (run.nRange)   parts.push(`${run.nRange} ≈ range`);
+      const breakdown = parts.length ? ` (${parts.join(', ')})` : '';
+      detail = `<div style="font-size:11px;color:var(--text2);margin-top:3px">${run.fixed} course(s) overridden${breakdown} · data updated to ${run.label ?? "—"}</div>`;
+    }
+    return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
+        <span style="font-size:11px;color:var(--text2)">${ts}</span>
+      </div>
+      ${detail}
+    </div>`;
+  }
+
   const totalChanges = (run.added?.length ?? 0) + (run.modified?.length ?? 0) + (run.removedFromCatalog?.length ?? 0);
   const badge = totalChanges
     ? `<span class="badge warn">${totalChanges} change${totalChanges !== 1 ? "s" : ""}</span>`
@@ -1181,6 +1203,13 @@ function ckAccumulate(d) {
   for (const code of (d.missing_courses ?? [])) ckDiscrepancies.push({ code, type: 'missing', diffs: [] });
 }
 
+function ckGetFixable() {
+  if (ckFilter === 'changed') return ckDiscrepancies.filter(x => x.type === 'changed');
+  if (ckFilter === 'range')   return ckDiscrepancies.filter(x => x.type === 'range');
+  if (ckFilter === 'all')     return ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range');
+  return []; // 'added' or 'missing' — not fixable
+}
+
 function ckSetFilter(f, btn) {
   ckFilter = f;
   document.querySelectorAll('.ck-filter-btn').forEach(b => b.classList.remove('active'));
@@ -1201,10 +1230,20 @@ function ckRender() {
   document.getElementById('ck-inspector-count').textContent =
     `${visible.length} of ${items.length}${items.length > MAX ? ` (capped at ${MAX})` : ''}`;
 
-  // Keep the danger-zone fix count live
-  const fixCount = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range').length;
+  // Keep the danger-zone fix count + description live (reflects current filter)
+  const fixable    = ckGetFixable();
+  const nCh        = fixable.filter(x => x.type === 'changed').length;
+  const nRng       = fixable.filter(x => x.type === 'range').length;
+  const fixCount   = fixable.length;
   const fixCountEl = document.getElementById('ck-fix-count');
+  const fixDescEl  = document.getElementById('ck-fix-type-desc');
   if (fixCountEl) fixCountEl.textContent = fixCount;
+  if (fixDescEl) {
+    const parts = [];
+    if (nCh)  parts.push(`${nCh} ⚠ changed`);
+    if (nRng) parts.push(`${nRng} ≈ range`);
+    fixDescEl.textContent = parts.length ? `(${parts.join(', ')})` : 'fixable';
+  }
 
   if (!visible.length) {
     tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">${ckDiscrepancies.length ? 'No items match filter/search' : 'Run a check to populate'}</td></tr>`;
@@ -1248,9 +1287,20 @@ function ckExport() {
 }
 
 function ckApplyFixes() {
-  const items = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range');
-  if (!items.length) { alert('No changed or range-diff items to fix.'); return; }
-  const label = `${items.length} course${items.length !== 1 ? 's' : ''}`;
+  const items = ckGetFixable();
+  if (!items.length) {
+    const why = (ckFilter === 'added' || ckFilter === 'missing')
+      ? `"${ckFilter}" entries are not patchable — switch filter to Changed, Range, or All.`
+      : 'No fixable items — run a check first.';
+    alert(why);
+    return;
+  }
+  const nCh  = items.filter(x => x.type === 'changed').length;
+  const nRng = items.filter(x => x.type === 'range').length;
+  const parts = [];
+  if (nCh)  parts.push(`${nCh} ⚠ changed`);
+  if (nRng) parts.push(`${nRng} ≈ range`);
+  const label = `${items.length} course${items.length !== 1 ? 's' : ''} (${parts.join(', ')})`;
   document.getElementById('ck-fix-modal-count').textContent = label;
   const modal = document.getElementById('ck-fix-modal');
   modal.style.display = 'flex';
@@ -1258,7 +1308,7 @@ function ckApplyFixes() {
 
 async function ckDoApplyFixes() {
   document.getElementById('ck-fix-modal').style.display = 'none';
-  const items = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range');
+  const items = ckGetFixable();
   const port  = document.getElementById('check-port').value || '3333';
   const btn   = document.getElementById('ck-fix-btn');
   const progressWrap = document.getElementById('ck-fix-progress');
@@ -1304,10 +1354,19 @@ async function ckDoApplyFixes() {
         if (d.type === 'done') {
           barEl.style.width    = '100%';
           pctEl.textContent    = '100%';
-          statusEl.textContent = `✅ Fixed ${d.fixed} of ${d.total} course(s) — data updated to ${d.label}. Rebuild to deploy.`;
+          const parts = [];
+          if (d.nChanged) parts.push(`${d.nChanged} ⚠ changed`);
+          if (d.nRange)   parts.push(`${d.nRange} ≈ range`);
+          const breakdown = parts.length ? ` (${parts.join(', ')})` : '';
+          statusEl.textContent = `✅ Fixed ${d.fixed}${breakdown} — data updated to ${d.label}. Rebuild to deploy.`;
           document.getElementById('check-status-msg').textContent =
-            `☢ Fixed ${d.fixed} course(s) — updated to ${d.label}. Rebuild to deploy.`;
+            `☢ Fixed ${d.fixed}${breakdown} — updated to ${d.label}. Rebuild to deploy.`;
           btn.textContent = `✅ Fixed ${d.fixed}`;
+          // Reflect updated lastUpdated immediately in the dashboard
+          const updEl = document.getElementById('stat-updated');
+          if (updEl && d.label) updEl.textContent = d.label;
+          setTimeout(loadDataMeta,  600);
+          setTimeout(loadChangeLog, 600);
         }
         if (d.type === 'error') {
           statusEl.textContent = `❌ ${d.msg}`;

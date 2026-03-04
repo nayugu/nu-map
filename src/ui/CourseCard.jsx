@@ -19,8 +19,10 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     getSemStatus, offeredOverrides, SEMESTERS,
     starredIds, toggleStar,
     onDragStart, onDropOnCard, cardRefs,
-    isPhone,
+    isPhone, shOverrides, setShOverride,
   } = usePlanner();
+
+  const [editingSh, setEditingSh] = useState(false);
 
   const isSel         = selectedId === course.id;
   const relType       = connectedIds[course.id];
@@ -141,7 +143,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           {course.code}
         </span>
         <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
-          {course.sh}
+          {shOverrides[course.id] ?? course.sh}
         </span>
         {(isViolated || notOffered || coreqViol) && (
           <span style={{ fontSize: 11, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
@@ -235,9 +237,48 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
 
       {/* Badges */}
       <div style={{ display: "flex", gap: 3, flexWrap: "wrap", alignItems: "center" }}>
-        <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 4px" }}>
-          {course.sh} SH
-        </span>
+        {course.shMax ? (
+          editingSh ? (
+            <input
+              type="number" autoFocus
+              defaultValue={shOverrides[course.id] ?? course.sh}
+              min={course.shMin ?? course.sh} max={course.shMax} step={1}
+              style={{ width: 38, fontSize: 9, padding: "1px 3px", borderRadius: 3,
+                border: "1px solid var(--active)", background: "var(--badge-bg)",
+                color: "var(--text)", fontWeight: 700 }}
+              onClick={e => e.stopPropagation()}
+              onKeyDown={e => {
+                if (e.key === "Escape") { setEditingSh(false); return; }
+                if (e.key === "Enter") {
+                  const v = parseInt(e.target.value, 10);
+                  const lo = course.shMin ?? course.sh, hi = course.shMax;
+                  if (!isNaN(v) && v >= lo && v <= hi) setShOverride(course.id, v);
+                  setEditingSh(false);
+                }
+              }}
+              onBlur={e => {
+                const v = parseInt(e.target.value, 10);
+                const lo = course.shMin ?? course.sh, hi = course.shMax;
+                if (!isNaN(v) && v >= lo && v <= hi) setShOverride(course.id, v);
+                setEditingSh(false);
+              }}
+            />
+          ) : (
+            <span
+              onClick={e => { e.stopPropagation(); setEditingSh(true); }}
+              title={`Variable credit: ${course.shMin ?? course.sh}–${course.shMax} SH — click to set`}
+              style={{ fontSize: 9, color: "var(--active)", background: "var(--badge-bg)",
+                borderRadius: 3, padding: "1px 4px", cursor: "text",
+                borderBottom: "1px dashed var(--active)", userSelect: "none" }}
+            >
+              {shOverrides[course.id] ?? course.sh}/{course.shMax} SH
+            </span>
+          )
+        ) : (
+          <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 4px" }}>
+            {course.sh} SH
+          </span>
+        )}
         {isViolated && violationType === "order" && (
           <span title="Prerequisite is in the same or a later semester"
             style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", lineHeight: 1 }}>⚡</span>

@@ -57,12 +57,22 @@ export function normalizeCourse(raw) {
     : (raw.sections || []).map(s => (typeof s === "string" ? s : s?.term ?? "")).filter(Boolean);
   const terms = [...new Set(rawTerms)];
 
+  // creditsMax is set only for variable-credit courses (e.g. "1–4 Hours").
+  // sh = min credits (conservative — use for all credit totals).
+  // shMax = max credits (display only, e.g. "1–4 SH" in course cards).
+  // shMin = same as data-min sh (preserved even after per-plan SH overrides).
+  const shMax = typeof raw.creditsMax === "number" && raw.creditsMax !== sh
+    ? raw.creditsMax : null;
+  const shMin = shMax !== null ? (sh ?? 4) : null;
+
   return {
     id, subject, number,
     code:         `${subject} ${number}`,
     title:        title.trim(),
     desc:         sanitizeDesc(raw.description),
     sh:           sh ?? 4,
+    shMin,
+    shMax,
     scheduleType: raw.scheduleType || "",
     prereqs:      raw.prereqs ?? raw.prerequisites ?? [],
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],

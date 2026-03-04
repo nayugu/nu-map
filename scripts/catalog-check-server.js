@@ -14,7 +14,7 @@
  */
 
 import { createServer }         from "http";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, writeFileSync } from "fs";
 import { resolve, dirname }     from "path";
 import { fileURLToPath }        from "url";
 import { parse as parseHTML }   from "node-html-parser";
@@ -22,6 +22,9 @@ import { parse as parseHTML }   from "node-html-parser";
 const __dirname     = dirname(fileURLToPath(import.meta.url));
 const ROOT          = resolve(__dirname, "..");
 const ALL_COURSES   = resolve(ROOT, "public/all-courses.json");
+const META_SRC_PATH = resolve(ROOT, "src/core/dataMeta.json");
+const META_PUB_PATH = resolve(ROOT, "public/data-meta.json");
+const CHANGE_LOG    = resolve(ROOT, "public/change-log.json");
 const BASE_URL      = "https://catalog.northeastern.edu";
 const INDEX_URL     = `${BASE_URL}/course-descriptions/`;
 const DELAY_MS      = parseInt(process.env.CATALOG_DELAY_MS ?? "350", 10);
@@ -31,6 +34,15 @@ const PORT          = (() => {
 })();
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function appendLogEntry(entry) {
+  try {
+    const log = existsSync(CHANGE_LOG) ? JSON.parse(readFileSync(CHANGE_LOG, "utf8")) : { runs: [] };
+    if (!Array.isArray(log.runs)) log.runs = [];
+    log.runs.unshift(entry); // prepend — newest first
+    writeFileSync(CHANGE_LOG, JSON.stringify(log, null, 2) + "\n", "utf8");
+  } catch { /* non-fatal */ }
+}
 
 // ── NUPath map (mirrors scrape-catalog.js) ───────────────────────────────────
 const NUPATH_MAP = {
@@ -287,7 +299,7 @@ async function runCheck(send) {
 const server = createServer((req, res) => {
   const corsHeaders = {
     "Access-Control-Allow-Origin":  "*",
-    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
 
@@ -315,6 +327,12 @@ const server = createServer((req, res) => {
 
     send("hello", { msg: "Catalog check server ready — starting…" });
 
+    appendLogEntry({
+      type:      "catalog-check",
+      subject:   "🔍 Catalog Check",
+      timestamp: new Date().toISOString(),
+    });
+
     runCheck(send)
       .then(() => {
         send("end", {});
@@ -329,8 +347,80 @@ const server = createServer((req, res) => {
     return;
   }
 
+  // ── POST /fix — apply catalog discrepancies directly to all-courses.json ────────
+  if (req.method === "POST" && url.pathname === "/fix") {
+    let body = "";
+    req.on("data", chunk => { body += chunk; });
+    req.on("end", () => {
+      try {
+        const items = JSON.parse(body); // [{code, type:'changed'|'range', diffs:[{field, was, now}]}]
+        if (!existsSync(ALL_COURSES)) {
+          res.writeHead(400, { ...corsHeaders, "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "all-courses.json not found" }));
+          return;
+        }
+        const courses = JSON.parse(readFileSync(ALL_COURSES, "utf8"));
+        const courseMap = new Map(courses.map(c => [`${c.subject} ${c.number}`, c]));
+
+        // Stream SSE progress so the client can show a live progress bar
+        res.writeHead(200, { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache", "Connection": "keep-alive" });
+        res.flushHeaders?.();
+        const sendFix = (type, data) => res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
+
+        const fixable = items.filter(i => i.type === "changed" || i.type === "range");
+        let fixed = 0, nChanged = 0, nRange = 0;
+        for (let idx = 0; idx < fixable.length; idx++) {
+          const item = fixable[idx];
+          const course = courseMap.get(item.code);
+          if (!course) continue;
+          for (const { field, now } of (item.diffs ?? [])) {
+            if (field === "credits") {
+              if (typeof now === "string" && now.includes("–")) {
+                const [cMin, cMax] = now.split("–").map(Number);
+                course.credits    = cMin;
+                course.creditsMax = cMax;
+              } else {
+                course.credits = typeof now === "number" ? now : parseInt(now, 10);
+                delete course.creditsMax;
+              }
+            } else {
+              course[field] = now;
+            }
+          }
+          fixed++;
+          if (item.type === "changed") nChanged++; else nRange++;
+          sendFix("fixed", { code: item.code, itemType: item.type, index: idx + 1, total: fixable.length });
+        }
+
+        writeFileSync(ALL_COURSES, JSON.stringify([...courseMap.values()], null, 0), "utf8");
+
+        // Update dataMeta with current month/year
+        const nowTs = new Date();
+        const label = nowTs.toLocaleString("en-US", { month: "short", year: "numeric" });
+        const meta  = { lastUpdated: label, courseCount: courses.length };
+        try { writeFileSync(META_SRC_PATH, JSON.stringify(meta, null, 2) + "\n", "utf8"); } catch {}
+        try { writeFileSync(META_PUB_PATH, JSON.stringify(meta, null, 2) + "\n", "utf8"); } catch {}
+
+        appendLogEntry({
+          type:      "nuclear-fix",
+          subject:   "☢ Nuclear Fix Applied",
+          timestamp: new Date().toISOString(),
+          fixed, nChanged, nRange, label,
+        });
+
+        sendFix("done", { ok: true, fixed, nChanged, nRange, label, total: fixable.length });
+        res.end();
+      } catch (e) {
+        // If headers not yet sent, send JSON error; otherwise nothing we can do
+        try { res.writeHead(400, { ...corsHeaders, "Content-Type": "application/json" }); } catch {}
+        try { res.end(JSON.stringify({ ok: false, error: e.message })); } catch {}
+      }
+    });
+    return;
+  }
+
   res.writeHead(200, { ...corsHeaders, "Content-Type": "text/plain" });
-  res.end(`NU Map Catalog Check Server running on :${PORT}\nGET /run  — start SSE check stream`);
+  res.end(`NU Map Catalog Check Server running on :${PORT}\nGET /run  \u2014 start SSE check stream\nPOST /fix \u2014 apply discrepancy fixes to all-courses.json`);
 });
 
 server.listen(PORT, () => {

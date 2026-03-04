@@ -41,6 +41,21 @@ export function PlannerProvider({ children }) {
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
   const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
+  // Per-plan SH overrides for variable-credit courses (e.g. 1–4 SH → user picks 3).
+  const [shOverrides,      setShOverrides]      = useState(() => (_saved?.persist && _saved.shOverrides)      ? _saved.shOverrides      : {});
+
+  // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
+  const effectiveCourseMap = useMemo(() => {
+    if (!Object.keys(shOverrides).length) return courseMap;
+    return Object.fromEntries(
+      Object.entries(courseMap).map(([id, c]) => {
+        const ov = shOverrides[id];
+        if (ov == null || !c.shMax) return [id, c];
+        // Preserve the data-minimum as shMin so the edit UI knows the valid range.
+        return [id, { ...c, sh: ov, shMin: c.shMin ?? c.sh }];
+      })
+    );
+  }, [courseMap, shOverrides]);
 
   // ── UI interaction state ──────────────────────────────────────
   const [selectedId,    setSelectedId]    = useState(null);
@@ -159,14 +174,14 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides });
-  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides]);
+    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides });
+  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides]);
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides });
+    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides]);
+  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides]);
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
@@ -472,17 +487,17 @@ export function PlannerProvider({ children }) {
     return "future";
   };
 
-  // ── Totals ────────────────────────────────────────────────────
+  // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
   const totalSHPlaced = useMemo(
-    () => courses.filter(c => placements[c.id]).reduce((s, c) => s + c.sh, 0),
-    [courses, placements]
+    () => courses.filter(c => placements[c.id]).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
+    [courses, placements, effectiveCourseMap]
   );
   const totalSHDone = useMemo(
     () => courses.filter(c => {
       const sid = placements[c.id];
       return sid && (SEM_INDEX[sid] ?? 99) < currentSemIdx;
-    }).reduce((s, c) => s + c.sh, 0),
-    [courses, placements, SEM_INDEX, currentSemIdx]
+    }).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
+    [courses, placements, SEM_INDEX, currentSemIdx, effectiveCourseMap]
   );
 
   // ── Star toggle ───────────────────────────────────────────────
@@ -847,12 +862,12 @@ export function PlannerProvider({ children }) {
   // ── Context value ─────────────────────────────────────────────
   const value = {
     // Data
-    courses, courseMap, allEdges, subjects,
+    courses, courseMap, effectiveCourseMap, allEdges, subjects,
     // Load state
     loading, loadErr, loadPct,
     // Planner state
     placements, workPl, currentSemId, persistEnabled,
-    semOrders, offeredOverrides, collapsedSubs,
+    semOrders, offeredOverrides, collapsedSubs, shOverrides,
     // Semester grid
     SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
     // UI state
@@ -882,6 +897,11 @@ export function PlannerProvider({ children }) {
     setShowDisclaimer, setShowSettings,
     setPersistEnabled,
     setOfferedOverrides,
+    setShOverride: (id, value) => setShOverrides(prev => {
+      const next = { ...prev };
+      if (value === null || value === undefined) delete next[id]; else next[id] = value;
+      return next;
+    }),
     setPlacements, setWorkPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, toggleStar, toggleOffered,
