@@ -253,7 +253,7 @@ async function runCheck(send) {
       if (!prev) {
         subAdded++;
         stats.added++;
-        addedKeys.push(key);
+        addedKeys.push({ code: key, catalogData: cat }); // include full data so /fix can insert it
       } else {
         const diffs = fieldsDiffer(prev, cat);
         if (diffs.length === 0) {
@@ -376,7 +376,7 @@ const server = createServer((req, res) => {
     req.on("data", chunk => { body += chunk; });
     req.on("end", () => {
       try {
-        const items = JSON.parse(body); // [{code, type:'changed'|'range', diffs:[{field, was, now}]}]
+        const items = JSON.parse(body); // [{code, type:'changed'|'range'|'added'|'missing', diffs, catalogData?}]
         if (!existsSync(ALL_COURSES)) {
           res.writeHead(400, { ...corsHeaders, "Content-Type": "application/json" });
           res.end(JSON.stringify({ ok: false, error: "all-courses.json not found" }));
@@ -390,10 +390,16 @@ const server = createServer((req, res) => {
         res.flushHeaders?.();
         const sendFix = (type, data) => res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`);
 
-        const fixable = items.filter(i => i.type === "changed" || i.type === "range");
-        let fixed = 0, nChanged = 0, nRange = 0;
-        for (let idx = 0; idx < fixable.length; idx++) {
-          const item = fixable[idx];
+        const fixable   = items.filter(i => i.type === "changed" || i.type === "range");
+        const addable   = items.filter(i => i.type === "added");
+        const removable = items.filter(i => i.type === "missing");
+        const totalOps  = fixable.length + addable.length + removable.length;
+        let opIdx = 0;
+        let fixed = 0, nChanged = 0, nRange = 0, nAdded = 0, nRemoved = 0;
+
+        // ── Overwrite changed/range courses ───────────────────────────────
+        for (const item of fixable) {
+          opIdx++;
           const course = courseMap.get(item.code);
           if (!course) continue;
           for (const { field, now } of (item.diffs ?? [])) {
@@ -412,15 +418,46 @@ const server = createServer((req, res) => {
           }
           fixed++;
           if (item.type === "changed") nChanged++; else nRange++;
-          sendFix("fixed", { code: item.code, itemType: item.type, index: idx + 1, total: fixable.length });
+          sendFix("fixed", { code: item.code, itemType: item.type, index: opIdx, total: totalOps });
+        }
+
+        // ── Insert new courses from catalog ────────────────────────────────
+        for (const item of addable) {
+          opIdx++;
+          const cd = item.catalogData;
+          if (!cd) { sendFix("skipped", { code: item.code, reason: "no catalog data" }); continue; }
+          const cMin = cd.creditsMin ?? 1;
+          const cMax = cd.creditsMax ?? cMin;
+          const newCourse = {
+            subject:     cd.subject,
+            number:      cd.number,
+            title:       cd.title,
+            credits:     cMin,
+            ...(cMax !== cMin ? { creditsMax: cMax } : {}),
+            nuPath:      cd.nuPath ?? [],
+            description: cd.description ?? "",
+          };
+          courseMap.set(item.code, newCourse);
+          nAdded++;
+          fixed++;
+          sendFix("fixed", { code: item.code, itemType: "added", index: opIdx, total: totalOps });
+        }
+
+        // ── Remove courses dropped from catalog ────────────────────────────
+        for (const item of removable) {
+          opIdx++;
+          courseMap.delete(item.code);
+          nRemoved++;
+          fixed++;
+          sendFix("fixed", { code: item.code, itemType: "missing", index: opIdx, total: totalOps });
         }
 
         writeFileSync(ALL_COURSES, JSON.stringify([...courseMap.values()], null, 0), "utf8");
 
-        // Update dataMeta with current month/year
+        // Update dataMeta with current month/year and new course count
         const nowTs = new Date();
         const label = nowTs.toLocaleString("en-US", { month: "short", year: "numeric" });
-        const meta  = { lastUpdated: label, courseCount: courses.length };
+        const meta  = { lastUpdated: label, courseCount: courseMap.size };
         try { writeFileSync(META_SRC_PATH, JSON.stringify(meta, null, 2) + "\n", "utf8"); } catch {}
         try { writeFileSync(META_PUB_PATH, JSON.stringify(meta, null, 2) + "\n", "utf8"); } catch {}
 
@@ -428,10 +465,10 @@ const server = createServer((req, res) => {
           type:      "nuclear-fix",
           subject:   "☢ Nuclear Fix Applied",
           timestamp: new Date().toISOString(),
-          fixed, nChanged, nRange, label,
+          fixed, nChanged, nRange, nAdded, nRemoved, label,
         });
 
-        sendFix("done", { ok: true, fixed, nChanged, nRange, label, total: fixable.length });
+        sendFix("done", { ok: true, fixed, nChanged, nRange, nAdded, nRemoved, label, total: totalOps });
         res.end();
       } catch (e) {
         // If headers not yet sent, send JSON error; otherwise nothing we can do
