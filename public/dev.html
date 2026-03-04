@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="logo.png" />
   <title>NU Map — Developer Portal</title>
-  <!-- OAuth provider SDKs (configure clientIds in PROVIDERS below) -->
-  <script src="https://accounts.google.com/gsi/client" async></script>
+  <!-- OAuth: Microsoft MSAL (configure clientId in PROVIDERS below) -->
   <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js" async></script>
   <style>
     :root {
@@ -207,12 +206,8 @@
 <div id="auth-screen">
   <div class="auth-card">
     <h1><img class="site-logo" src="logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map · Dev Portal</h1>
-    <p>Authorized access only. Sign in with an approved account.</p>
-    <!-- Google Sign-In button (rendered by GSI SDK into this div) -->
-    <div id="oauth-btn-google" style="min-height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:10px"></div>
-    <div class="oauth-divider">or</div>
-    <!-- Microsoft -->
-    <button class="btn-provider" onclick="msLogin()">
+    <p>Authorized access only. Sign in with your Microsoft account.</p>
+    <button class="btn-provider" onclick="msLogin()" style="margin-top:8px">
       <svg width="18" height="18" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
         <rect x="1"  y="1"  width="9" height="9" fill="#f25022"/>
         <rect x="11" y="1"  width="9" height="9" fill="#7fba00"/>
@@ -692,48 +687,19 @@ const ALLOWED_EMAILS = [
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ── OAUTH PROVIDER REGISTRY ────────────────────────────────────────────────
-// To add a new provider: add an entry below + a matching button in the HTML.
-//
-// Google setup:
-//   1. console.cloud.google.com → APIs & Services → Credentials
-//      → Create OAuth 2.0 Client ID (Web application)
-//   2. Authorized JS origins:
-//        https://<your-netlify>.netlify.app
-//        http://localhost:5173
+// To add a new provider later, add an entry here + a button in the HTML.
 //
 // Microsoft setup:
-//   1. portal.azure.com → Azure AD → App registrations → New registration
-//   2. Redirect URIs (Single-page application):
-//        https://<your-netlify>.netlify.app/dev.html
+//   1. portal.azure.com → Azure Active Directory → App registrations → New registration
+//   2. Supported account types: "Accounts in any organizational directory and personal
+//      Microsoft accounts"
+//   3. Redirect URI → Single-page application (SPA):
+//        https://nayugu.github.io/nu-map/dev.html
 //        http://localhost:5173/dev.html
-//   3. Under Authentication: enable "Access tokens" + "ID tokens"
+//   4. Authentication tab → enable "Access tokens" + "ID tokens"
+//   5. Copy the Application (client) ID into clientId below
 // ═══════════════════════════════════════════════════════════════════════════
 const PROVIDERS = {
-  google: {
-    clientId: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
-    init() {
-      const tryRender = () => {
-        if (!window.google?.accounts?.id) { setTimeout(tryRender, 150); return; }
-        google.accounts.id.initialize({
-          client_id: PROVIDERS.google.clientId,
-          callback({ credential }) {
-            try {
-              // Decode JWT payload (no signature verification needed — Google already validated it)
-              const b64 = credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-              const p   = JSON.parse(atob(b64));
-              grantAccess(p.email, p.name ?? p.email);
-            } catch { showAuthError("Failed to read Google sign-in response."); }
-          },
-          cancel_on_tap_outside: false,
-        });
-        google.accounts.id.renderButton(
-          document.getElementById("oauth-btn-google"),
-          { theme: "filled_black", size: "large", width: 320, text: "signin_with" }
-        );
-      };
-      tryRender();
-    },
-  },
   microsoft: {
     clientId: "YOUR_MICROSOFT_CLIENT_ID",
     tenantId: "common", // use "organizations" to restrict to work/school accounts only
@@ -800,9 +766,6 @@ function msLogin() { PROVIDERS.microsoft.login(); }
   // Pre-fill today's date in patch creator
   const dateEl = document.getElementById("p-date");
   if (dateEl) dateEl.value = new Date().toISOString().substring(0, 10);
-
-  // Render Google Sign-In button
-  PROVIDERS.google.init();
 })();
 
 function showApp(name) {
@@ -821,8 +784,6 @@ function logout() {
   document.getElementById("auth-screen").style.display = "flex";
   document.getElementById("dev-app").style.display     = "none";
   document.getElementById("auth-error").style.display  = "none";
-  // Re-init Google button in case it was torn down
-  PROVIDERS.google.init();
 }
 
 // ── Change Log ──────────────────────────────────────────────────────────────
