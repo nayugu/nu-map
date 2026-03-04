@@ -4,7 +4,8 @@
 // Rendered by BankPanel as an XOR alternative to the course bank.
 // Uses graduatenu Major2 JSON schema (local fork) + gradRequirements.js
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useMemo, useEffect, useContext, createContext } from "react";
+import { useState, useMemo, useEffect, useContext, createContext, useRef } from "react";
+import { createPortal } from "react-dom";
 import { usePlanner }         from "../context/PlannerContext.jsx";
 import { NUPATH_LABELS }      from "../core/constants.js";
 import {
@@ -143,7 +144,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           >✕</button>
         )}
       </div>
-      {open && rect && (
+      {open && rect && createPortal(
         <div style={{
           position: "fixed", top: rect.bottom + 2, left: rect.left, width: rect.width, zIndex: 9000,
           maxHeight: 200, overflowY: "auto",
@@ -179,7 +180,8 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
               </div>
             ))
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
