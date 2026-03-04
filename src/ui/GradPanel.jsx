@@ -86,7 +86,7 @@ function CheckBox({ sat }) {
 
 // ── Searchable combobox (matches course-bank search style) ───────────────
 
-function SearchCombo({ value, onChange, groups, placeholder = "Search…", scale = 1 }) {
+function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
   const [rect,  setRect]  = useState(null);
@@ -116,7 +116,8 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…", scale
   const displayVal = sel ? `${sel.label}${sel.location ? ` (${sel.location})` : ""}` : "";
 
   const handleFocus  = () => { updateRect(); setQuery(""); setOpen(true); };
-  const handleBlur   = () => setTimeout(() => setOpen(false), 160);
+  // Use 300ms so touch-tap can fire mousedown/touchstart before dropdown closes
+  const handleBlur   = () => setTimeout(() => setOpen(false), 300);
   const handleChange = e  => { setQuery(e.target.value); setOpen(true); };
   const select       = path => { onChange(path); setOpen(false); setQuery(""); };
 
@@ -140,22 +141,26 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…", scale
         {value && (
           <button
             onMouseDown={e => { e.preventDefault(); select(""); }}
+            onTouchStart={e => { e.preventDefault(); select(""); }}
             style={{ background: "transparent", border: "none", color: "var(--text-4)", fontSize: 11, cursor: "pointer", padding: "0 2px", flexShrink: 0 }}
           >✕</button>
         )}
       </div>
       {open && rect && createPortal(
         <div style={{
-          position: "fixed", top: rect.bottom + 2, left: rect.left,
-          width: rect.width / scale, zIndex: 9000,
+          position: "fixed",
+          top: rect.bottom + 2,
+          left: rect.left,
+          width: rect.width,
+          zIndex: 9000,
           maxHeight: 280, overflowY: "auto",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
           fontFamily: "'Inter', system-ui, sans-serif", fontSize: 12,
-          transform: `scale(${scale})`, transformOrigin: "top left",
         }}>
           <div
             onMouseDown={() => select("")}
+            onTouchStart={e => { e.preventDefault(); select(""); }}
             style={{
               padding: "6px 10px", fontSize: 11, cursor: "pointer",
               color: "var(--text-5)", borderBottom: "1px solid var(--border-1)",
@@ -170,6 +175,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…", scale
               <div
                 key={o.path}
                 onMouseDown={() => select(o.path)}
+                onTouchStart={e => { e.preventDefault(); select(o.path); }}
                 style={{
                   padding: "5px 10px", fontSize: 11, cursor: "pointer",
                   background: o.path === value ? "var(--bg-surface-2)" : undefined,
@@ -397,7 +403,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel() {
-  const { placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, uiScale, isPhone } = usePlanner();
+  const { placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone } = usePlanner();
 
   const majorGroups  = useMemo(() => getMajorOptionGroups(), []);
   const minorGroups  = useMemo(() => getMinorOptionGroups(), []);
@@ -479,7 +485,6 @@ export default function GradPanel() {
             onChange={setSelPath}
             groups={majorGroups}
             placeholder="⌕ search majors"
-            scale={uiScale}
           />
         </div>
 
@@ -489,7 +494,7 @@ export default function GradPanel() {
             <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
               CONCENTRATION
             </div>
-            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="⌕ search concentrations" scale={uiScale} />
+            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="⌕ search concentrations" />
             {major.concentrations.minOptions > 0 && !selConc && (
               <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
                 ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
@@ -503,7 +508,7 @@ export default function GradPanel() {
           {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
             <div key={lbl}>
               <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="⌕ search minors" scale={uiScale} />
+              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="⌕ search minors" />
             </div>
           ))}
         </div>

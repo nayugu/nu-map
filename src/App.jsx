@@ -51,14 +51,14 @@ function PlannerApp() {
     <div style={{
       position: 'fixed', top: 0, left: 0,
       width: '100vw', height: '100vh',
-      background: 'var(--bg-app)', overflow: isPhone ? 'auto' : 'hidden',
+      background: 'var(--bg-app)', overflow: 'hidden',
     }}>
       <div style={{
         position: isPhone ? 'relative' : 'absolute', top: 0, left: 0,
-        width:  isPhone ? 'auto'              : `${100 / uiScale}vw`,
-        height: isPhone ? 'auto'              : `${100 / uiScale}vh`,
+        width:  isPhone ? '100vw'             : `${100 / uiScale}vw`,
+        height: isPhone ? '100vh'             : `${100 / uiScale}vh`,
         minWidth:  isPhone ? undefined : undefined,
-        minHeight: isPhone ? '100vh'  : undefined,
+        minHeight: isPhone ? undefined : undefined,
         transformOrigin: '0 0',
         transform: isPhone ? 'none' : `scale(${uiScale})`,
         display: 'flex',
