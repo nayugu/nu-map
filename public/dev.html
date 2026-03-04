@@ -534,7 +534,14 @@
 
       <!-- Launch row (hidden when on HTTPS non-localhost) -->
       <div id="ck-launch-row">
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 6px">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px;margin:18px 0 12px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Start dev server + catalog check server</div>
+            <code>npm run dev</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run dev')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px">
           <button class="launch-btn" id="check-run-btn" onclick="startCheck()">🚀 Launch Check</button>
           <button class="btn sec" id="check-stop-btn" onclick="stopCheck()" disabled style="height:46px;padding:0 20px">■ Stop</button>
           <span id="ck-status-badge" style="display:none">● Running</span>
@@ -543,10 +550,6 @@
               style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
           </span>
         </div>
-        <p class="text2" style="font-size:11px;margin:0 0 18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span>Server starts automatically with <code>npm run dev</code> — no separate terminal needed.</span>
-          <button class="btn sec" style="font-size:11px;padding:3px 10px;height:auto" onclick="copyCmd('npm run dev')">Copy</button>
-        </p>
       </div>
       <!-- HTTPS guard — shown instead of launch row when accessed from GitHub Pages -->
       <div id="ck-local-only-banner" style="display:none;margin:18px 0">
