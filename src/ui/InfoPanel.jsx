@@ -111,14 +111,30 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart } = usePlanner();
+  const { courseMap, onDragStart, placements } = usePlanner();
+  const [codeHover, setCodeHover] = useState(false);
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, flexWrap: "wrap" }}>
         <span style={{ fontSize: 10, background: selCourse.color, color: "var(--badge-bg)", borderRadius: 3, padding: "2px 8px", fontWeight: 800, letterSpacing: "0.04em" }}>
           {selCourse.subject}
         </span>
-        <span style={{ fontSize: 14, fontWeight: 800 }}>{selCourse.code}</span>
+        <span
+          draggable
+          data-drag-id={selCourse.id}
+          data-drag-type="course"
+          onDragStart={e => onDragStart(e, selCourse.id, "course", null)}
+          onMouseEnter={() => setCodeHover(true)}
+          onMouseLeave={() => setCodeHover(false)}
+          title="drag to place"
+          style={{
+            fontSize: 14, fontWeight: 800, cursor: "grab", userSelect: "none",
+            textDecoration: codeHover ? "underline" : "none",
+            textDecorationStyle: "dotted",
+            textDecorationColor: "var(--text-6)",
+            textUnderlineOffset: 3,
+          }}
+        >{selCourse.code}</span>
         <span style={{ fontSize: 12, color: "var(--text-3)" }}>{selCourse.title}</span>
         <span style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 3, padding: "1px 6px" }}>
           {selCourse.sh} SH
@@ -137,7 +153,13 @@ function CourseInfo({ selCourse, navTo }) {
       </div>
       {selCourse.desc && (
         <div style={{ fontSize: 11, color: "var(--text-3)", lineHeight: 1.55, marginBottom: 4 }}>
-          {selCourse.desc}
+          <DescriptionWithLinks
+            text={selCourse.desc}
+            courseMap={courseMap}
+            placements={placements}
+            navTo={navTo}
+            onDragStart={onDragStart}
+          />
         </div>
       )}
       {selCourse.prereqs?.length > 0 && (
@@ -147,6 +169,51 @@ function CourseInfo({ selCourse, navTo }) {
         </div>
       )}
     </div>
+  );
+}
+
+function DescriptionWithLinks({ text, courseMap, placements, navTo, onDragStart }) {
+  if (!text) return null;
+  const COURSE_RE = /\b([A-Z]{2,5})\s+(\d{4}[A-Z0-9]*)\b/g;
+  const parts = [];
+  let last = 0, m;
+  while ((m = COURSE_RE.exec(text)) !== null) {
+    if (m.index > last) parts.push({ type: "text", val: text.slice(last, m.index) });
+    const id = m[1] + m[2];
+    const c  = courseMap[id];
+    const placed = c && placements[id] !== undefined;
+    parts.push({ type: "course", id, raw: m[0], c, placed });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push({ type: "text", val: text.slice(last) });
+
+  return (
+    <>
+      {parts.map((p, i) => {
+        if (p.type === "text") return <span key={i}>{p.val}</span>;
+        if (!p.c) return <span key={i}>{p.raw}</span>;
+        const isPlaced = p.placed;
+        return (
+          <span
+            key={i}
+            draggable={!isPlaced}
+            data-drag-id={!isPlaced ? p.id : undefined}
+            data-drag-type={!isPlaced ? "course" : undefined}
+            onDragStart={!isPlaced ? (e => onDragStart(e, p.id, "course", null)) : undefined}
+            onClick={e => { e.stopPropagation(); navTo(p.id); }}
+            title={isPlaced ? `${p.c.title} (already placed) — click to view` : `${p.c.title} — drag to place or click to view`}
+            style={{
+              cursor: isPlaced ? "pointer" : "grab",
+              color: "var(--text-2)", fontWeight: 600,
+              textDecoration: "underline",
+              textDecorationStyle: "dotted",
+              textDecorationColor: isPlaced ? "var(--text-6)" : "var(--text-5)",
+              textUnderlineOffset: 2,
+            }}
+          >{p.raw}</span>
+        );
+      })}
+    </>
   );
 }
 
