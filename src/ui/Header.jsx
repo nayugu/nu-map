@@ -78,6 +78,7 @@ export default function Header() {
       }}>
         {/* Row 1: title + info — last-updated anchored right, never wraps */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "nowrap", minWidth: 0, overflow: "hidden" }}>
+          <img src="/logo.png" alt="NU Map" style={{ height: 20, width: 20, objectFit: "contain", flexShrink: 0 }} />
           <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", flexShrink: 0 }}>NU Map</span>
           <span style={{ fontSize: 10, color: "var(--text-6)", flexShrink: 0 }}>·</span>
           <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{courses.length.toLocaleString()} courses</span>
@@ -173,6 +174,18 @@ export default function Header() {
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 ⟳ Reset catalog data
               </button>
+
+              {/* Dev portal link */}
+              <a href="https://nayugu.github.io/nu-map/dev.html" target="_blank" rel="noreferrer"
+                style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)",
+                  textDecoration: "none", boxSizing: "border-box" }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
+                onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
+              >
+                🛠 Dev portal
+              </a>
 
               {/* Zoom */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
