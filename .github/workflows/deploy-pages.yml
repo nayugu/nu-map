@@ -37,8 +37,7 @@ jobs:
           # SPA fallback for GitHub Pages
           cp dist/index.html dist/404.html
 
-          # Remove developer-only files — dev portal is Netlify-only
-          rm -f dist/dev.html dist/change-log.json dist/scrape-state.json dist/data-meta.json
+          # (dev portal and data files are included — dev.html uses relative paths)
 
       - name: Deploy to gh-pages branch
         run: |
