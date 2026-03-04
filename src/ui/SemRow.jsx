@@ -16,7 +16,7 @@ export default function SemRow({ sem }) {
     workStartMap, workContMap,
     cardRefs, onDragStart,
     SEMESTERS, SEM_NEXT,
-    setWorkPl, pushUndo,
+    setWorkPl, pushUndo, isPhone,
   } = usePlanner();
 
   const semStatus  = getSemStatus(sem.id);
@@ -132,24 +132,37 @@ export default function SemRow({ sem }) {
       }}
     >
       {/* Semester label */}
-      <div
-        onClick={() => setCurrentSemId(sem.id)}
-        style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: "pointer" }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
+      {isPhone ? (
+        <div
+          onClick={() => setCurrentSemId(sem.id)}
+          style={{ width: 34, flexShrink: 0, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}
+        >
           {statusDot}
-          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}>
-            {sem.label}
-          </span>
-          {isActive && (
-            <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>
-              NOW
-            </span>
-          )}
+          {sem.label.split(" ").map((part, i) => (
+            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: 1.2, textAlign: "center" }}>{part}</span>
+          ))}
+          {shEl}
         </div>
-        <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>{sem.sub}</div>
-        {shEl}
-      </div>
+      ) : (
+        <div
+          onClick={() => setCurrentSemId(sem.id)}
+          style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: "pointer" }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
+            {statusDot}
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}>
+              {sem.label}
+            </span>
+            {isActive && (
+              <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>
+                NOW
+              </span>
+            )}
+          </div>
+          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>{sem.sub}</div>
+          {shEl}
+        </div>
+      )}
 
       {/* Course slots */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4, flex: 1 }}>
@@ -236,7 +249,7 @@ export default function SemRow({ sem }) {
                 e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
               }}
               style={{
-                display: "grid", gridTemplateColumns: `repeat(${mainSlots}, 1fr)`, gap: 4, overflow: "hidden",
+                display: "grid", gridTemplateColumns: `repeat(${isPhone ? 2 : mainSlots}, 1fr)`, gap: 4, overflow: "hidden",
                 borderRadius: 6, padding: 3, minHeight: 76,
                 border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
                   ? "1px solid var(--active)" : "1px solid transparent",
@@ -246,13 +259,13 @@ export default function SemRow({ sem }) {
               }}
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
-              {Array.from({ length: Math.max(0, mainSlots - main4.length) }).map((_, i) => (
+              {Array.from({ length: Math.max(0, (isPhone ? 2 : mainSlots) - main4.length) }).map((_, i) => (
                 <div key={`ms-${i}`} style={{ minHeight: 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
               ))}
             </div>
 
             {/* Override zone — only visible when all main slots full + dragging a ≥4 SH course */}
-            {main4.length >= mainSlots && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 4 && (
+            {main4.length >= (isPhone ? 2 : mainSlots) && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 4 && (
               <div
                 onDragOver={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;

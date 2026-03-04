@@ -478,7 +478,7 @@ export default function GradPanel() {
             value={selPath}
             onChange={setSelPath}
             groups={majorGroups}
-            placeholder="Search majors…"
+            placeholder="⌕ search majors"
             scale={uiScale}
           />
         </div>
@@ -489,7 +489,7 @@ export default function GradPanel() {
             <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
               CONCENTRATION
             </div>
-            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="Search concentrations…" scale={uiScale} />
+            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="⌕ search concentrations" scale={uiScale} />
             {major.concentrations.minOptions > 0 && !selConc && (
               <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
                 ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
@@ -503,7 +503,7 @@ export default function GradPanel() {
           {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
             <div key={lbl}>
               <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="Search minors…" scale={uiScale} />
+              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="⌕ search minors" scale={uiScale} />
             </div>
           ))}
         </div>

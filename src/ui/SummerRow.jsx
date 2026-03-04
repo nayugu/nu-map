@@ -16,7 +16,7 @@ export default function SummerRow({ semA, semB }) {
     workStartMap, workContMap,
     cardRefs, onDragStart,
     SEMESTERS, SEM_NEXT,
-    setWorkPl, pushUndo,
+    setWorkPl, pushUndo, isPhone,
   } = usePlanner();
 
   const year     = semA.id.replace("sumA", "");
@@ -145,7 +145,7 @@ export default function SummerRow({ semA, semB }) {
 
         {/* Main ≥4 SH slots */}
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 4, minHeight: 66, overflow: "hidden",
+          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 4, minHeight: isPhone ? 35 : 66, overflow: "hidden",
           borderRadius: 4, padding: 2,
           border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
             ? "1px solid var(--active)" : "1px solid transparent",
@@ -168,7 +168,7 @@ export default function SummerRow({ semA, semB }) {
           {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
           {Array.from({ length: Math.max(0, 2 - main4.length) }).map((_, i) => (
             <div key={`ms-${i}`} style={{
-              height: 66,
+              height: isPhone ? 35 : 66,
               border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg,
             }} />
           ))}
@@ -212,41 +212,35 @@ export default function SummerRow({ semA, semB }) {
       transition: "background 0.12s, border-color 0.12s, opacity 0.15s",
     }}>
       {/* Shared label column */}
-      <div
-        onClick={() => setCurrentSemId(semA.id)}
-        style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: "pointer" }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
-          <span style={{
-            width: 14, height: 14, borderRadius: 3,
-            background: combinedDone ? "var(--bg-surface)" : combinedActive ? "var(--active-bg)" : "transparent",
-            border: combinedDone ? "1px solid var(--success-border)" : combinedActive ? "1px solid var(--active-now-border)" : "1px solid var(--border-2)",
-            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-          }}>
+      {isPhone ? (
+        <div onClick={() => setCurrentSemId(semA.id)} style={{ width: 34, flexShrink: 0, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}>
+          <span style={{ width: 14, height: 14, borderRadius: 3, background: combinedDone ? "var(--bg-surface)" : combinedActive ? "var(--active-bg)" : "transparent", border: combinedDone ? "1px solid var(--success-border)" : combinedActive ? "1px solid var(--active-now-border)" : "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
-            {combinedActive && <span style={{ fontSize: 9, color: "var(--active)", fontWeight: 900 }}>▶</span>}
+            {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
           </span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}>
-            Summer {year}
-          </span>
-          {combinedActive && (
-            <span style={{
-              fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)",
-              border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px",
-              fontWeight: 700, marginLeft: 3,
-            }}>NOW</span>
-          )}
+          <span style={{ fontSize: 7, fontWeight: 700, color: "var(--text-2)", lineHeight: 1.2 }}>Sm</span>
+          <span style={{ fontSize: 7, fontWeight: 500, color: "var(--text-4)", lineHeight: 1.2 }}>{year}</span>
+          {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: 1.2, textAlign: "center" }}>{combinedSH} SH</span>}
         </div>
-        <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>May – Aug</div>
-        {combinedSH > 0 && (
-          <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: "var(--success)" }}>
-            {combinedSH} SH
-          </span>
-        )}
-      </div>
+      ) : (
+        <div onClick={() => setCurrentSemId(semA.id)} style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: "pointer" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
+            <span style={{ width: 14, height: 14, borderRadius: 3, background: combinedDone ? "var(--bg-surface)" : combinedActive ? "var(--active-bg)" : "transparent", border: combinedDone ? "1px solid var(--success-border)" : combinedActive ? "1px solid var(--active-now-border)" : "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
+              {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
+            </span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}>Summer {year}</span>
+            {combinedActive && (
+              <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700, marginLeft: 3 }}>NOW</span>
+            )}
+          </div>
+          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>May – Aug</div>
+          {combinedSH > 0 && <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: "var(--success)" }}>{combinedSH} SH</span>}
+        </div>
+      )}
 
-      {/* Two session sub-columns — always side by side, each fills half */}
-      <div style={{ display: "flex", gap: 4, flexWrap: "nowrap", flex: 1, minWidth: 0 }}>
+      {/* Two session sub-columns — stacked on phone, side by side on desktop */}
+      <div style={{ display: "flex", flexDirection: isPhone ? "column" : "row", gap: 4, flex: 1, minWidth: 0 }}>
         {renderSession(semA)}
         {renderSession(semB)}
       </div>

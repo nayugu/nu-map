@@ -11,7 +11,7 @@ export default function InfoPanel() {
   const {
     showPanel, setShowPanel, selectedId, setSelectedId,
     courseMap, allEdges, offeredOverrides, setOfferedOverrides,
-    panelHeight, panelResizing,
+    panelHeight, panelResizing, isPhone,
   } = usePlanner();
 
   // ── InfoPanel nav history (back = Cmd+Z, fwd = Cmd+Shift+Z) ──────
@@ -73,8 +73,12 @@ export default function InfoPanel() {
           panelResizing.current = { startY: e.clientY, startH: panelHeight };
           e.preventDefault();
         }}
+        onTouchStart={e => {
+          panelResizing.current = { startY: e.touches[0].clientY, startH: panelHeight };
+          e.stopPropagation();
+        }}
         style={{
-          height: 6, flexShrink: 0, cursor: "ns-resize",
+          height: 10, flexShrink: 0, cursor: "ns-resize",
           display: "flex", alignItems: "center", justifyContent: "center",
           borderBottom: "1px solid var(--border-1)",
         }}
@@ -83,27 +87,43 @@ export default function InfoPanel() {
       </div>
 
       <div style={{ flex: 1, overflowY: "auto", padding: "8px 14px 12px" }}>
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
-          {/* Course info */}
-          <CourseInfo selCourse={selCourse} navTo={navTo} />
+        <div style={{ display: "flex", flexDirection: isPhone ? "column" : "row", alignItems: "flex-start", gap: isPhone ? 8 : 14 }}>
+          {/* Top row: course info + (desktop: relationships + offered) + close */}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 14, width: "100%" }}>
+            <CourseInfo selCourse={selCourse} navTo={navTo} />
 
-          {/* Relationships */}
-          {selEdges.length > 0 && (
-            <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
+            {!isPhone && selEdges.length > 0 && (
+              <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
+            )}
+
+            {!isPhone && (
+              <OfferedToggles
+                selCourse={selCourse}
+                offeredOverrides={offeredOverrides}
+                setOfferedOverrides={setOfferedOverrides}
+              />
+            )}
+
+            {/* Close */}
+            <button
+              onClick={() => { setShowPanel(false); setSelectedId(null); }}
+              style={{ background: "transparent", border: "none", color: "var(--text-4)", fontSize: 16, cursor: "pointer", lineHeight: 1, padding: "0 2px", flexShrink: 0 }}
+            >✕</button>
+          </div>
+
+          {/* Phone: relationships + offered toggles beneath main info */}
+          {isPhone && (
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", width: "100%" }}>
+              {selEdges.length > 0 && (
+                <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
+              )}
+              <OfferedToggles
+                selCourse={selCourse}
+                offeredOverrides={offeredOverrides}
+                setOfferedOverrides={setOfferedOverrides}
+              />
+            </div>
           )}
-
-          {/* Offered toggles */}
-          <OfferedToggles
-            selCourse={selCourse}
-            offeredOverrides={offeredOverrides}
-            setOfferedOverrides={setOfferedOverrides}
-          />
-
-          {/* Close */}
-          <button
-            onClick={() => { setShowPanel(false); setSelectedId(null); }}
-            style={{ background: "transparent", border: "none", color: "var(--text-4)", fontSize: 16, cursor: "pointer", lineHeight: 1, padding: "0 2px", flexShrink: 0 }}
-          >✕</button>
         </div>
       </div>
     </div>

@@ -14,7 +14,8 @@ import DisclaimerModal from './ui/DisclaimerModal.jsx';
 function PlannerApp() {
   const {
     loading, loadErr, loadPct,
-    uiScale, bankWidth,
+    uiScale, isPhone, bankWidth,
+    showPanel, panelHeight,
     SEMESTERS,
     timelineRef,
     setSelectedId, setShowPanel,
@@ -46,23 +47,20 @@ function PlannerApp() {
     }
   }
 
-  // Mobile: uiScale === 1 (< 768 px) → natural overflow scroll, no CSS scale
-  const isMobile = uiScale === 1;
-
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0,
       width: '100vw', height: '100vh',
-      background: 'var(--bg-app)', overflow: isMobile ? 'auto' : 'hidden',
+      background: 'var(--bg-app)', overflow: isPhone ? 'auto' : 'hidden',
     }}>
       <div style={{
-        position: isMobile ? 'relative' : 'absolute', top: 0, left: 0,
-        width:  isMobile ? 'auto'              : `${100 / uiScale}vw`,
-        height: isMobile ? 'auto'              : `${100 / uiScale}vh`,
-        minWidth:  isMobile ? 860 : undefined,
-        minHeight: isMobile ? '100vh' : undefined,
+        position: isPhone ? 'relative' : 'absolute', top: 0, left: 0,
+        width:  isPhone ? 'auto'              : `${100 / uiScale}vw`,
+        height: isPhone ? 'auto'              : `${100 / uiScale}vh`,
+        minWidth:  isPhone ? undefined : undefined,
+        minHeight: isPhone ? '100vh'  : undefined,
         transformOrigin: '0 0',
-        transform: isMobile ? 'none' : `scale(${uiScale})`,
+        transform: isPhone ? 'none' : `scale(${uiScale})`,
         display: 'flex',
         fontFamily: "'Inter', system-ui, sans-serif",
         background: 'var(--bg-app)',
@@ -76,7 +74,7 @@ function PlannerApp() {
         {/* Scrollable timeline */}
         <div
           ref={timelineRef}
-          style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '10px 10px 240px 10px' }}
+          style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: isPhone ? `10px 10px ${showPanel ? panelHeight + 24 : 60}px 10px` : '10px 10px 240px 10px' }}
           onClick={() => { setSelectedId(null); setShowPanel(false); }}
         >
           <Header />

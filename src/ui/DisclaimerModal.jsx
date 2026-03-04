@@ -35,7 +35,8 @@ export default function DisclaimerModal() {
         style={{
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 12, maxWidth: 520, width: "100%",
-          padding: "28px 28px 22px", boxShadow: "var(--shadow-modal)",
+          maxHeight: "88vh", overflowY: "auto",
+          padding: "20px 16px 16px", boxShadow: "var(--shadow-modal)",
           color: "var(--text-2)", fontFamily: "'Inter', system-ui, sans-serif",
         }}
       >

@@ -57,7 +57,7 @@ export function PlannerProvider({ children }) {
   const [bankSearch,      setBankSearch]      = useState("");
   const [bankSort,        setBankSort]        = useState("az");
   const [bankTab,         setBankTab]         = useState("all");
-  const [bankWidth,       setBankWidth]       = useState(() => Math.min(300, Math.max(200, window.innerWidth * 0.21)));
+  const [bankWidth,       setBankWidth]       = useState(() => window.innerWidth < 600 ? 88 : Math.min(300, Math.max(200, window.innerWidth * 0.21)));
   const [showSubjectKeys, setShowSubjectKeys] = useState(false);
   const [starredIds,      setStarredIds]      = useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem("ncp-starred") || "[]")); } catch { return new Set(); }
@@ -76,10 +76,18 @@ export function PlannerProvider({ children }) {
   // ── Layout state ─────────────────────────────────────────────
   const [panelHeight, setPanelHeight] = useState(210);
   const uiScaleRef = useRef(1);
-  const computeUiScale = (w) => w < 768 ? 1 : Math.max(0.7, Math.min(1.5, w / 1440));
+  // isPhone = true only for narrow phone viewports (< 600px).
+  // Tablets (768px+) and phablets (600–767px) use the standard desktop layout.
+  const PHONE_BP = 600;
+  const computeUiScale = (w) => w < PHONE_BP ? 0.75 : Math.max(0.7, Math.min(1.5, w / 1440));
   const [autoScale, setAutoScale] = useState(() => computeUiScale(window.innerWidth));
+  const [isPhone, setIsPhone] = useState(() => window.innerWidth < PHONE_BP);
   const [manualZoom, setManualZoomRaw] = useState(() => {
-    try { const v = parseFloat(localStorage.getItem("ncp-zoom")); return isNaN(v) ? 1.25 : v; } catch { return 1.25; }
+    try {
+      const stored = localStorage.getItem("ncp-zoom");
+      if (stored !== null) { const v = parseFloat(stored); return isNaN(v) ? null : v; }
+      return window.innerWidth < PHONE_BP ? null : 1.25;
+    } catch { return window.innerWidth < PHONE_BP ? null : 1.25; }
   });
   const setManualZoom = v => {
     setManualZoomRaw(v);
@@ -155,7 +163,7 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
-    const update = () => setAutoScale(computeUiScale(window.innerWidth));
+    const update = () => { setAutoScale(computeUiScale(window.innerWidth)); setIsPhone(window.innerWidth < PHONE_BP); };
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -170,21 +178,26 @@ export function PlannerProvider({ children }) {
   });
   useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
 
-  // ── Effects: panel drag-resize ───────────────────────────────
+  // ── Effects: panel drag-resize (mouse + touch) ─────────────
   useEffect(() => {
     const onMove = e => {
       if (!panelResizing.current) return;
-      const dy = panelResizing.current.startY - e.clientY;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const dy = panelResizing.current.startY - clientY;
       setPanelHeight(Math.min(520, Math.max(90, panelResizing.current.startH + dy)));
     };
     const onUp = () => { panelResizing.current = null; };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup",  onUp);
+    window.addEventListener("touchmove", onMove, { passive: false });
+    window.addEventListener("touchend",  onUp);
     return () => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup",  onUp);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend",  onUp);
     };
-  }, []);
+  }, [])
 
   // ── Effect: keep currentSemId valid on cohort change ─────────
   useEffect(() => {
@@ -843,7 +856,7 @@ export function PlannerProvider({ children }) {
     showDisclaimer, showSettings,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
     panelHeight,
-    uiScale, manualZoom, setManualZoom,
+    isPhone, uiScale, manualZoom, setManualZoom,
     // Derived
     currentSemIdx, placedIds, workStartMap, workContMap,
     gradSemId, coopGradConflicts,

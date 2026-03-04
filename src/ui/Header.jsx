@@ -21,7 +21,7 @@ export default function Header() {
     setEntSem, setEntYear, setGradSem, setGradYear,
     coopGradConflicts, workPl,
     showViolLines, setShowViolLines,
-    manualZoom, setManualZoom,
+    manualZoom, setManualZoom, isPhone,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -80,10 +80,10 @@ export default function Header() {
         <span style={{ fontSize: 10, color: "var(--text-3)" }}>{courses.length.toLocaleString()} courses</span>
 
         <div style={{ display: "flex", gap: 5, marginLeft: 4 }}>
-          <span style={{ fontSize: 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, padding: "2px 7px" }}>
+          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px" }}>
             {totalSHDone} SH ✓
           </span>
-          <span style={{ fontSize: 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, padding: "2px 7px" }}>
+          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px" }}>
             {totalSHPlaced} SH placed
           </span>
         </div>
@@ -91,25 +91,25 @@ export default function Header() {
         {/* ── Right-side controls — always pinned to the right ── */}
         <div style={{ display: "flex", gap: 6, alignItems: "center", marginLeft: "auto", flexShrink: 0 }}>
 
-        {/* Export — always visible */}
-        <button className="hdr-btn" onClick={handleExport} style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
+        {/* Export — hidden on phone */}
+        {!isPhone && <button className="hdr-btn" onClick={handleExport} style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
           ⬇ Export PDF
-        </button>
+        </button>}
 
-        {/* Reset — always visible */}
-        <button className="hdr-btn" onClick={handleReset}
+        {/* Reset — hidden on phone */}
+        {!isPhone && <button className="hdr-btn" onClick={handleReset}
           style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
           ↺ Reset
-        </button>
+        </button>}
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative" }}>
           <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowQuickSet(v => !v); }}
-            style={{ fontSize: 10, cursor: "pointer",
+            style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border:    `1px solid ${showQuickSet ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, padding: "3px 8px" }}>
+              borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px" }}>
             ⚙ Settings
           </button>
 
@@ -180,12 +180,35 @@ export default function Header() {
                   })}
                 </div>
               </div>
+              {isPhone && (
+                <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>COHORT</div>
+                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>Entry</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 6 }}>
+                    {["fall","spring"].map(s => {
+                      const wouldBe = planEntYear * 2 + (s === "spring" ? 1 : 0);
+                      const blocked = wouldBe >= gradOrd;
+                      return (<button key={s} onClick={() => { if (!blocked) setEntSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? "Fall" : "Spring"}</button>);
+                    })}
+                    <YearStepper year={planEntYear} min={2010} max={2040} canInc={entOrd + 2 < gradOrd} onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }} onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < 2040) setEntYear(planEntYear + 1); }} />
+                  </div>
+                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>Graduation</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                    {["fall","spring"].map(s => {
+                      const wouldBe = planGradYear * 2 + (s === "spring" ? 1 : 0);
+                      const blocked = wouldBe <= entOrd;
+                      return (<button key={s} onClick={() => { if (!blocked) setGradSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planGradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planGradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? "Fall" : "Spring"}</button>);
+                    })}
+                    <YearStepper year={planGradYear} min={2010} max={2040} canDec={gradOrd - 2 > entOrd} onDec={() => { if (gradOrd - 2 > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }} onInc={() => { if (planGradYear < 2040) setGradYear(planGradYear + 1); }} />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {/* Cohort date picker */}
-        <div style={{ position: "relative" }}>
+        {/* Cohort date picker — hidden on phone, available via Settings above */}
+        {!isPhone && <div style={{ position: "relative" }}>
           <button
             className="hdr-btn"
             onClick={e => { e.stopPropagation(); setShowSettings(v => !v); }}
@@ -281,35 +304,35 @@ export default function Header() {
               </div>
             </div>
           )}
-        </div>
+        </div>}
 
         {/* About button */}
         <button
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
           title="About & disclaimer"
-          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}
+          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", cursor: "pointer" }}
         >ⓘ About</button>
         </div>{/* end right-side controls */}
       </div>
 
       {/* ── Relationship legend ── */}
-      <div style={{ display: "flex", gap: 14, marginBottom: 8, flexWrap: "wrap", alignItems: "center" }}>
+      <div style={{ display: "flex", gap: isPhone ? 6 : 10, marginBottom: 8, flexWrap: "nowrap", alignItems: "center", overflow: "hidden" }}>
         {Object.entries(REL_STYLE).filter(([type]) => type !== "corequisite-viol").map(([type, s]) => (
-            <div key={type} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: "var(--text-4)" }}>
-            <svg width="20" height="6">
-              <line x1="0" y1="3" x2="20" y2="3" stroke={s.color} strokeWidth="1.5" strokeDasharray={s.dash || ""} />
+            <div key={type} style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isPhone ? 8 : 9, color: "var(--text-4)", flexShrink: 0 }}>
+            <svg width={isPhone ? 14 : 18} height="6">
+              <line x1="0" y1="3" x2={isPhone ? 14 : 18} y2="3" stroke={s.color} strokeWidth="1.5" strokeDasharray={s.dash || ""} />
             </svg>
             <span>{s.label}</span>
           </div>
         ))}
-        <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: "var(--text-4)" }}>
-          <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, border: "2px solid var(--warn-bright)", flexShrink: 0 }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isPhone ? 8 : 9, color: "var(--text-4)", flexShrink: 0 }}>
+          <span style={{ display: "inline-block", width: isPhone ? 10 : 12, height: isPhone ? 10 : 12, borderRadius: 3, border: "2px solid var(--warn-bright)", flexShrink: 0 }} />
           <span>Misplaced</span>
         </div>
-        <span style={{ fontSize: 9, color: "var(--text-5)" }}>
+        {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)" }}>
           · Click card to highlight relationships · Click semester label to mark as current
-        </span>
+        </span>}
       </div>
 
       {/* ── Co-op / graduation conflict warning ── */}

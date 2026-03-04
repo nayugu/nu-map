@@ -18,7 +18,7 @@ export default function BankPanel() {
     showSubjectKeys, setShowSubjectKeys,
     starredIds, collapsedSubs, setCollapsedSubs,
     workPl, onDropBank, onDragStart, cardRefs,
-    bankRef, bankResizing, uiScaleRef,
+    bankRef, bankResizing, uiScaleRef, isPhone,
   } = usePlanner();
 
   const q = bankSearch.trim().toLowerCase();
@@ -95,21 +95,50 @@ export default function BankPanel() {
         {/* ── Sticky top bar (always visible) ────────────── */}
         <div style={{ position: "sticky", top: 0, background: "var(--bg-bank)", zIndex: 10, borderBottom: "1px solid var(--border-1)", flexShrink: 0 }}>
 
-          {/* Mode toggle */}
-          <div style={{ padding: "7px 8px 5px", display: "flex", gap: 3 }}>
-            {[["bank", "Course Bank"], ["grad", "Graduation"]].map(([mode, label]) => (
-              <button key={mode} onClick={() => setSideMode(mode)} style={{
-                flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4, cursor: "pointer",
-                background:  sideMode === mode ? "var(--bg-surface)" : "transparent",
-                border: `1px solid ${sideMode === mode ? "var(--active)" : "var(--border-2)"}`,
-                color: sideMode === mode ? "var(--active)" : "var(--text-4)",
-                fontWeight: sideMode === mode ? 700 : 400,
-              }}>{label}</button>
-            ))}
-          </div>
+          {/* Mobile: 2-tab — Courses (toggles all/saved★) + Grad */}
+          {isPhone && (
+            <div style={{ padding: "4px 5px 2px", display: "flex", gap: 3 }}>
+              <button
+                onClick={() => {
+                  if (sideMode === "bank") { setBankTab(bankTab === "all" ? "starred" : "all"); }
+                  else { setSideMode("bank"); setBankTab("all"); }
+                }}
+                style={{
+                  flex: 1, fontSize: 8, padding: "3px 0", borderRadius: 4, cursor: "pointer",
+                  background: sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bg)" : "var(--bg-surface)") : "transparent",
+                  border: `1px solid ${sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--border-2)"}`,
+                  color: sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--text-4)",
+                  fontWeight: sideMode === "bank" ? 700 : 400,
+                }}>{sideMode === "bank" && bankTab === "starred" ? "★ Saved" : "Courses"}</button>
+              <button
+                onClick={() => setSideMode("grad")}
+                style={{
+                  flex: 1, fontSize: 8, padding: "3px 0", borderRadius: 4, cursor: "pointer",
+                  background: sideMode === "grad" ? "var(--bg-surface)" : "transparent",
+                  border: `1px solid ${sideMode === "grad" ? "var(--active)" : "var(--border-2)"}`,
+                  color: sideMode === "grad" ? "var(--active)" : "var(--text-4)",
+                  fontWeight: sideMode === "grad" ? 700 : 400,
+                }}>Grad</button>
+            </div>
+          )}
 
-        {/* ── Bank-only header controls ───────────────────── */}
-        {sideMode === "bank" && <>
+          {/* Desktop: Bank ↔ Graduation toggle */}
+          {!isPhone && (
+            <div style={{ padding: "7px 8px 5px", display: "flex", gap: 3 }}>
+              {[["bank", "Course Bank"], ["grad", "Graduation"]].map(([mode, label]) => (
+                <button key={mode} onClick={() => setSideMode(mode)} style={{
+                  flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4, cursor: "pointer",
+                  background:  sideMode === mode ? "var(--bg-surface)" : "transparent",
+                  border: `1px solid ${sideMode === mode ? "var(--active)" : "var(--border-2)"}`,
+                  color: sideMode === mode ? "var(--active)" : "var(--text-4)",
+                  fontWeight: sideMode === mode ? 700 : 400,
+                }}>{label}</button>
+              ))}
+            </div>
+          )}
+
+        {/* ── Bank-only header controls (desktop: title + subject key + tabs) ── */}
+        {!isPhone && sideMode === "bank" && <>
           <div style={{ padding: "0px 9px 4px", display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>COURSE BANK</span>
             <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface)", borderRadius: 99, padding: "1px 6px" }}>
@@ -145,13 +174,16 @@ export default function BankPanel() {
               }}>{label}</button>
             ))}
           </div>
+        </>}
 
+        {/* Search + Sort: bank mode, all screen sizes */}
+        {sideMode === "bank" && <>
           {/* Search */}
           <div style={{ padding: "3px 8px 2px", position: "relative" }}>
             <input
               value={bankSearch}
               onChange={e => setBankSearch(e.target.value)}
-              placeholder="e.g. CS 2500 or machine learning…"
+              placeholder="⌕ search"
               style={{
                 width: "100%", boxSizing: "border-box",
                 background: "var(--bg-surface)", border: `1px solid ${q ? "var(--active)" : "var(--border-2)"}`,
@@ -240,7 +272,7 @@ export default function BankPanel() {
                 </div>
                 {!isCol && (
                   <div style={{ padding: "2px 6px 6px", display: "flex", flexDirection: "column", gap: 3 }}>
-                    {sortedCrs.map(c => <CourseCard key={c.id} course={c} inSem={false} semId={null} />)}
+                    {sortedCrs.map(c => <CourseCard key={c.id} course={c} inSem={false} semId={null} noSubject />)}
                   </div>
                 )}
               </div>
