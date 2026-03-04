@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Fetch graduatenu course/minor data
+        run: git clone --depth 1 https://github.com/sandboxnu/graduatenu.git graduatenu
+
       - name: Build for GitHub Pages (base = /nu-map/)
         run: npm run build
         env:

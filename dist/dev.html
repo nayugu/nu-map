@@ -136,6 +136,8 @@
     .pv-chip.active { background:rgba(79,142,247,0.12); border-color:var(--accent); color:var(--accent); font-weight:700; }
     #pv-scale-badge { font-size:10px; color:var(--text3); background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2px 7px; min-width:46px; text-align:center; }
     #pv-dim-read { font-size:10px; color:var(--text3); white-space:nowrap; min-width:120px; }
+    #pv-url-input { height:26px; font-size:11px; padding:0 8px; border-radius:5px; border:1px solid var(--border); background:var(--bg2); color:var(--text); width:210px; font-family:var(--mono); }
+    #pv-url-input:focus { outline:none; border-color:var(--accent); }
     #preview-stage { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; background:#111; }
     #pv-device-wrap { transform-origin:center center; position:relative; flex-shrink:0; }
     #pv-bezel { position:absolute; inset:0; pointer-events:none; z-index:2; display:none; box-shadow:0 0 0 1px #3a3a3c,0 0 0 2px #1c1c1e,0 24px 60px rgba(0,0,0,0.9); }
@@ -160,6 +162,13 @@
     .badge.warn{ background: #f5a62322; color: var(--warn); }
     hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
     code { font-family: var(--mono); font-size: 12px; background: var(--bg3); border-radius: 3px; padding: 1px 5px; }
+
+    /* ── Catalog Check tab ───────────────────────────────────────── */
+    #tab-check .stat .val.ok   { color: var(--success); }
+    #tab-check .stat .val.warn { color: var(--warn); }
+    #check-log::-webkit-scrollbar { width: 5px; }
+    #check-log::-webkit-scrollbar-track { background: transparent; }
+    #check-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   </style>
 </head>
 <body>
@@ -194,6 +203,7 @@
     <button onclick="switchTab('preview', this)">📱 Preview</button>
     <button onclick="switchTab('data', this)">🔄 Data Sources</button>
     <button onclick="switchTab('changes', this)">📋 Change Log</button>
+    <button onclick="switchTab('check', this)">🔍 Catalog Check</button>
   </nav>
 
   <!-- ── Dashboard ─────────────────────────────────────────────── -->
@@ -394,9 +404,11 @@
       <div class="pv-sep"></div>
       <span id="pv-dim-read">375 × 812</span>
       <span id="pv-scale-badge">100%</span>
+      <div class="pv-sep"></div>
+      <input id="pv-url-input" value="http://localhost:5173/" spellcheck="false" title="Preview URL" />
       <button class="pv-chip" id="pv-reload-btn" style="margin-left:auto">↺ Reload</button>
       <button class="pv-chip" id="pv-reset-btn">🗑 Reset state</button>
-      <a class="pv-chip" href="./" target="_blank">Open ↗</a>
+      <button class="pv-chip" id="pv-open-btn">Open ↗</button>
     </div>
     <div id="preview-stage">
       <div id="pv-device-wrap">
@@ -496,6 +508,54 @@
 </div>
 
 <div id="outer-wrap-end"></div>
+
+  <!-- ── Catalog Check tab ──────────────────────────────────────────────── -->
+  <div id="tab-check" class="tab-panel">
+    <div class="card">
+      <h2>Manual Catalog Check</h2>
+      <p class="text2" style="margin-bottom:12px">
+        Runs the same full-catalog comparison as the automated scraper — but immediately and locally,
+        so you can see what would change before committing anything. Reads from your local
+        <code>public/all-courses.json</code>.
+        <br><br>
+        <strong>Step 1:</strong> Start the check server in a terminal:
+        <code>node scripts/catalog-check-server.js</code><br>
+        <strong>Step 2:</strong> Click <strong>Run Check</strong> below.
+      </p>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <button class="btn" id="check-run-btn" onclick="startCheck()">▶ Run Check</button>
+        <button class="btn sec" id="check-stop-btn" onclick="stopCheck()" disabled>■ Stop</button>
+        <span style="font-size:11px;color:var(--text3)">
+          Server port: <input id="check-port" value="3333" type="number" min="1024" max="65535"
+            style="width:64px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+        </span>
+      </div>
+
+      <!-- Progress section (hidden until run starts) -->
+      <div id="check-progress-wrap" style="display:none">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span id="check-status-msg" style="font-size:11px;color:var(--text2)">Starting…</span>
+          <span id="check-pct" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums">0%</span>
+        </div>
+        <div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:14px">
+          <div id="check-bar" style="height:100%;width:0%;background:var(--accent);border-radius:3px;transition:width 0.25s ease"></div>
+        </div>
+
+        <!-- Live stats grid -->
+        <div class="stats" style="margin-bottom:16px">
+          <div class="stat"><div class="val" id="ck-subjects">0</div><div class="lbl">Subjects done</div></div>
+          <div class="stat"><div class="val" id="ck-read">0</div><div class="lbl">Courses read</div></div>
+          <div class="stat"><div class="val" style="color:var(--success)" id="ck-matched">0</div><div class="lbl">Matched ✓</div></div>
+          <div class="stat"><div class="val" style="color:var(--warn)" id="ck-changed">0</div><div class="lbl">Changed ⚠</div></div>
+          <div class="stat"><div class="val" style="color:var(--accent)" id="ck-added">0</div><div class="lbl">New in catalog</div></div>
+          <div class="stat"><div class="val" style="color:var(--error)" id="ck-missing">0</div><div class="lbl">Not in catalog</div></div>
+        </div>
+
+        <!-- Subject-by-subject log -->
+        <div id="check-log" style="max-height:460px;overflow-y:auto;border-top:1px solid var(--border);padding-top:8px"></div>
+      </div>
+    </div>
+  </div>
 ══════════════════════════════════════════════════════════════════ -->
 <script>
 // ── Constants ──────────────────────────────────────────────────────────────
@@ -707,6 +767,11 @@ let pvLand  = false;
 let pvFrame = true;
 let pvReady = false;
 
+function pvGetUrl() {
+  const v = (document.getElementById('pv-url-input')?.value ?? '').trim();
+  return v || 'http://localhost:5173/';
+}
+
 function pvApply() {
   const d = PV_DEVICES[pvKey];
   const w = pvLand ? d.h : d.w;
@@ -734,11 +799,11 @@ function pvApply() {
     bezel.style.display = 'block';
     bezel.style.borderRadius = br + 'px';
     bezel.style.border = bt + 'px solid #1c1c1e';
-    frame.style.borderRadius = Math.max(0, br - bt + 2) + 'px';
+    frame.style.borderRadius = Math.max(0, br - bt) + 'px';
     const showNotch = d.notch && !pvLand;
-    notchEl.style.top    = bt + 'px';
+    notchEl.style.top    = '0';
     notchEl.style.width  = d.notchW + 'px';
-    notchEl.style.height = d.notchH + 'px';
+    notchEl.style.height = (d.notchH + bt) + 'px';
     notchEl.style.display = showNotch ? 'block' : 'none';
     homeEl.style.bottom  = (bt + 7) + 'px';
     homeEl.style.display = (d.home && !pvLand) ? 'block' : 'none';
@@ -754,7 +819,7 @@ function pvApply() {
 function pvInitPreview() {
   if (!pvReady) {
     pvReady = true;
-    document.getElementById('pv-frame').src = './';
+    document.getElementById('pv-frame').src = pvGetUrl();
   }
   pvApply();
 }
@@ -768,7 +833,7 @@ document.querySelectorAll('.pv-chip[data-dev]').forEach(btn => {
     pvApply();
     const f = document.getElementById('pv-frame');
     try { f.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
-    f.src = './?t=' + Date.now();
+    f.src = pvGetUrl() + '?t=' + Date.now();
   });
 });
 document.getElementById('pv-orient-btn').addEventListener('click', () => { pvLand = !pvLand; pvApply(); });
@@ -781,15 +846,142 @@ document.getElementById('pv-frame-btn').addEventListener('click', () => {
 });
 document.getElementById('pv-reload-btn').addEventListener('click', () => {
   pvApply();
-  document.getElementById('pv-frame').src = './?t=' + Date.now();
+  document.getElementById('pv-frame').src = pvGetUrl() + '?t=' + Date.now();
 });
 document.getElementById('pv-reset-btn').addEventListener('click', () => {
   const f = document.getElementById('pv-frame');
   try { f.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
   pvApply();
-  f.src = './?t=' + Date.now();
+  f.src = pvGetUrl() + '?t=' + Date.now();
+});
+document.getElementById('pv-open-btn').addEventListener('click', () => {
+  window.open(pvGetUrl(), '_blank');
 });
 window.addEventListener('resize', () => { if (pvReady) pvApply(); });
+
+// ── Catalog Check ────────────────────────────────────────────────────────────
+let checkEvtSource = null;
+
+function startCheck() {
+  const port = document.getElementById('check-port').value || '3333';
+  const url  = `http://localhost:${port}/run`;
+
+  document.getElementById('check-progress-wrap').style.display = 'block';
+  document.getElementById('check-log').innerHTML = '';
+  document.getElementById('check-run-btn').disabled  = true;
+  document.getElementById('check-stop-btn').disabled = false;
+  ['ck-subjects','ck-read','ck-matched','ck-changed','ck-added','ck-missing'].forEach(id =>
+    document.getElementById(id).textContent = '0');
+  document.getElementById('check-bar').style.width = '0%';
+  document.getElementById('check-pct').textContent  = '0%';
+  document.getElementById('check-status-msg').textContent = 'Connecting to server…';
+
+  if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
+  checkEvtSource = new EventSource(url);
+
+  let total = 0;
+
+  checkEvtSource.onmessage = e => {
+    const d = JSON.parse(e.data);
+
+    if (d.type === 'hello' || d.type === 'status') {
+      document.getElementById('check-status-msg').textContent = d.msg;
+    }
+    if (d.type === 'start') {
+      total = d.total;
+      document.getElementById('check-status-msg').textContent =
+        `Checking ${d.total} subjects against ${(d.courses_in_db ?? 0).toLocaleString()} courses…`;
+    }
+    if (d.type === 'subject_start') {
+      document.getElementById('check-status-msg').textContent =
+        `[${d.index + 1}/${d.total}] ${d.slug}…`;
+    }
+    if (d.type === 'subject_done') {
+      if (total > 0) {
+        const pct = Math.round((d.index + 1) / total * 100);
+        document.getElementById('check-bar').style.width = pct + '%';
+        document.getElementById('check-pct').textContent = pct + '%';
+      }
+      document.getElementById('ck-subjects').textContent = d.subjects_done;
+      document.getElementById('ck-read').textContent     = (d.courses_read ?? 0).toLocaleString();
+      document.getElementById('ck-matched').textContent  = (d.matched  ?? 0).toLocaleString();
+      document.getElementById('ck-changed').textContent  = (d.changed  ?? 0).toLocaleString();
+      document.getElementById('ck-added').textContent    = (d.added    ?? 0).toLocaleString();
+      document.getElementById('ck-missing').textContent  = (d.missing  ?? 0).toLocaleString();
+
+      // Build log row
+      const log  = document.getElementById('check-log');
+      const row  = document.createElement('div');
+      row.style.cssText = 'border-bottom:1px solid var(--border);padding:6px 0;font-size:11px';
+
+      const icon  = d.error ? '❌' : d.subject_changed > 0 ? '⚠️' : d.subject_added > 0 ? '🆕' : '✓';
+      const color = d.error ? 'var(--error)' : d.subject_changed > 0 ? 'var(--warn)' :
+                    d.subject_added > 0 ? 'var(--accent)' : 'var(--success)';
+
+      let html = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-weight:700;min-width:80px;color:${color}">${icon} ${d.slug.split(' ')[0]}</span>
+        <span style="color:var(--text3)">${d.subject_courses_read ?? 0} read</span>
+        <span style="color:var(--success)">✓ ${d.subject_matched ?? 0}</span>
+        ${d.subject_changed  ? `<span style="color:var(--warn)">⚠ ${d.subject_changed} changed</span>` : ''}
+        ${d.subject_added    ? `<span style="color:var(--accent)">+ ${d.subject_added} new</span>` : ''}
+        ${d.subject_missing  ? `<span style="color:var(--error)">− ${d.subject_missing} missing</span>` : ''}
+        ${d.error ? `<span style="color:var(--error)">${escHtml(d.error)}</span>` : ''}
+      </div>`;
+
+      if (d.changes?.length > 0) {
+        html += `<details style="margin-top:3px"><summary style="cursor:pointer;color:var(--text3);font-size:10px">${d.changes.length} change(s)</summary>
+          <table style="margin-top:3px;border-collapse:collapse;font-size:10px;width:100%">`;
+        for (const { code, diffs } of d.changes) {
+          for (const { field, was, now } of diffs) {
+            const b = JSON.stringify(was  ?? null)?.slice(0, 80) ?? 'null';
+            const a = JSON.stringify(now  ?? null)?.slice(0, 80) ?? 'null';
+            html += `<tr>
+              <td style="padding:1px 8px 1px 0;color:var(--text3);white-space:nowrap">${code}</td>
+              <td style="padding:1px 6px 1px 0;color:var(--text3);white-space:nowrap">${field}</td>
+              <td style="padding:1px 0;color:#e94560;word-break:break-all">${escHtml(b)}</td>
+              <td style="padding:1px 6px;color:var(--text3)">\u2192</td>
+              <td style="padding:1px 0;color:var(--accent);word-break:break-all">${escHtml(a)}</td>
+            </tr>`;
+          }
+        }
+        html += `</table></details>`;
+      }
+      row.innerHTML = html;
+      log.appendChild(row);
+      log.scrollTop = log.scrollHeight;
+    }
+    if (d.type === 'done') {
+      document.getElementById('check-status-msg').textContent =
+        `\u2705 Done \u2014 ${d.subjects_done} subjects, ${(d.courses_read ?? 0).toLocaleString()} courses checked.`;
+      document.getElementById('check-bar').style.width = '100%';
+      document.getElementById('check-pct').textContent = '100%';
+      document.getElementById('check-run-btn').disabled  = false;
+      document.getElementById('check-stop-btn').disabled = true;
+      checkEvtSource.close(); checkEvtSource = null;
+    }
+    if (d.type === 'error') {
+      document.getElementById('check-status-msg').textContent = `\u274c ${d.msg}`;
+      document.getElementById('check-run-btn').disabled  = false;
+      document.getElementById('check-stop-btn').disabled = true;
+    }
+    if (d.type === 'end') { checkEvtSource.close(); checkEvtSource = null; }
+  };
+
+  checkEvtSource.onerror = () => {
+    document.getElementById('check-status-msg').textContent =
+      '\u274c Cannot connect \u2014 start the server: node scripts/catalog-check-server.js';
+    document.getElementById('check-run-btn').disabled  = false;
+    document.getElementById('check-stop-btn').disabled = true;
+    if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
+  };
+}
+
+function stopCheck() {
+  if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
+  document.getElementById('check-status-msg').textContent = 'Stopped.';
+  document.getElementById('check-run-btn').disabled  = false;
+  document.getElementById('check-stop-btn').disabled = true;
+}
 
 // ── Patch builder ───────────────────────────────────────────────────────────
 let currentAction = "add";

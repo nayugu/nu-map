@@ -18,6 +18,7 @@
     "data:scrape:write": "node scripts/scrape-catalog.js --merge --write",
     "data:scrape:rotate": "node scripts/scrape-catalog.js --rotate",
     "data:scrape:rotate:write": "node scripts/scrape-catalog.js --rotate --write",
+    "catalog:check": "node scripts/catalog-check-server.js",
     "test": "node scripts/test-rotate-logic.js && node scripts/test-cs2100.js",
     "test:unit": "node scripts/test-rotate-logic.js",
     "test:live": "node scripts/test-cs2100.js"
