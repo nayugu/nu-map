@@ -74,7 +74,8 @@ export function PlannerProvider({ children }) {
   const [showSettings, setShowSettings] = useState(false);
 
   // ── Layout state ─────────────────────────────────────────────
-  const uiScaleRef = useRef(1);
+  const uiScaleRef  = useRef(1);
+  const isPhoneRef  = useRef(window.innerWidth < 600);
   // isPhone = true only for narrow phone viewports (< 600px).
   // Tablets (768px+) and phablets (600–767px) use the standard desktop layout.
   const PHONE_BP  = 600;
@@ -99,7 +100,8 @@ export function PlannerProvider({ children }) {
     try { if (v == null) localStorage.removeItem("ncp-zoom"); else localStorage.setItem("ncp-zoom", String(v)); } catch {}
   };
   const uiScale = manualZoom ?? autoScale;
-  uiScaleRef.current = uiScale;
+  uiScaleRef.current  = uiScale;
+  isPhoneRef.current  = isPhone;
 
   // ── Dynamic semester grid (cohort-trimmed) ───────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -248,9 +250,10 @@ export function PlannerProvider({ children }) {
         if (!el) return null;
         const r = el.getBoundingClientRect();
         if (r.width === 0) return null;
-        // SVG is inside transform:scale(uiScale) which creates a new
-        // stacking context — divide viewport px back to SVG local coords.
-        const sc = uiScaleRef.current || 1;
+        // On desktop, the app container has transform:scale(uiScale) so we
+        // must divide back to SVG local coords.  On phone, transform is 'none'
+        // so viewport px === SVG coords — do NOT divide.
+        const sc = isPhoneRef.current ? 1 : (uiScaleRef.current || 1);
         return { x: (r.left + r.width  / 2) / sc,
                  y: (r.top  + r.height / 2) / sc };
       };
