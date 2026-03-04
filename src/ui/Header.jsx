@@ -21,7 +21,7 @@ export default function Header() {
     setEntSem, setEntYear, setGradSem, setGradYear,
     coopGradConflicts, workPl,
     showViolLines, setShowViolLines,
-    manualZoom, setManualZoom, isPhone,
+    manualZoom, setManualZoom, isPhone, isMobile,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -71,35 +71,41 @@ export default function Header() {
     <>
       {/* ── Sticky header bar ── */}
       <div style={{
-        display: "flex", alignItems: "center", gap: 8, marginBottom: 10,
+        display: "flex", flexDirection: "column", gap: 6, marginBottom: 10,
         position: "sticky", top: 0, zIndex: 30, background: "var(--bg-app)",
-        paddingBottom: 8, borderBottom: "1px solid var(--border-1)", flexWrap: "wrap",
+        paddingBottom: 8, borderBottom: "1px solid var(--border-1)",
       }}>
-        <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em" }}>NU Map</span>
-        <span style={{ fontSize: 10, color: "var(--text-6)" }}>·</span>
-        <span style={{ fontSize: 10, color: "var(--text-3)" }}>{courses.length.toLocaleString()} courses</span>
-
-        <div style={{ display: "flex", gap: 5, marginLeft: 4 }}>
-          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px" }}>
-            {totalSHDone} SH ✓
-          </span>
-          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px" }}>
-            {totalSHPlaced} SH placed
-          </span>
+        {/* Row 1: title + info — never wraps */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "nowrap", minWidth: 0, overflow: "hidden" }}>
+          <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", flexShrink: 0 }}>NU Map</span>
+          <span style={{ fontSize: 10, color: "var(--text-6)", flexShrink: 0 }}>·</span>
+          <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{courses.length.toLocaleString()} courses</span>
         </div>
 
-        {/* ── Right-side controls — always pinned to the right ── */}
-        <div style={{ display: "flex", gap: 6, alignItems: "center", marginLeft: "auto", flexShrink: 0 }}>
+        {/* Row 2: SH badges left · buttons right — never wraps */}
+        <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", minWidth: 0 }}>
+          {/* SH badges — left side */}
+          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px", flexShrink: 0 }}>
+            {totalSHDone} SH ✓
+          </span>
+          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px", flexShrink: 0 }}>
+            {totalSHPlaced} SH placed
+          </span>
+
+          {/* Spacer */}
+          <div style={{ flex: 1 }} />
+
+          {/* Buttons — right side, icon-only on mobile/tablet */}
 
         {/* Export — hidden on phone */}
-        {!isPhone && <button className="hdr-btn" onClick={handleExport} style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
-          ⬇ Export PDF
+        {!isPhone && <button className="hdr-btn" onClick={handleExport} title="Export PDF" style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
+          {isMobile ? "⬇" : "⬇ Export PDF"}
         </button>}
 
         {/* Reset — hidden on phone */}
-        {!isPhone && <button className="hdr-btn" onClick={handleReset}
-          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
-          ↺ Reset
+        {!isPhone && <button className="hdr-btn" onClick={handleReset} title="Reset all placements"
+          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
+          {isMobile ? "↺" : "↺ Reset"}
         </button>}
 
         {/* ⚙ Settings dropdown — infrequent controls */}
@@ -109,8 +115,8 @@ export default function Header() {
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border:    `1px solid ${showQuickSet ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px" }}>
-            ⚙ Settings
+              borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", whiteSpace: "nowrap" }}>
+            {isMobile ? "⚙" : "⚙ Settings"}
           </button>
 
           {showQuickSet && (
@@ -214,14 +220,13 @@ export default function Header() {
             onClick={e => { e.stopPropagation(); setShowSettings(v => !v); }}
             title="Set entry & graduation semester"
             style={{
-              fontSize: 10, cursor: "pointer",
+              fontSize: 10, cursor: "pointer", whiteSpace: "nowrap",
             color: showSettings ? "var(--text-2)" : "var(--text-4)",
             background: showSettings ? "var(--bg-surface)" : "var(--bg-surface-2)",
             border: `1px solid ${showSettings ? "var(--active)" : "var(--border-2)"}`,
-
-              borderRadius: 5, padding: "3px 8px",
+              borderRadius: 5, padding: "3px 8px", whiteSpace: "nowrap",
             }}
-          >🎓 Cohort</button>
+          >{isMobile ? "🎓" : "🎓 Cohort"}</button>
 
           {showSettings && (
             <div onClick={e => e.stopPropagation()} style={{
@@ -311,10 +316,10 @@ export default function Header() {
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
           title="About & disclaimer"
-          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", cursor: "pointer" }}
-        >ⓘ About</button>
-        </div>{/* end right-side controls */}
-      </div>
+          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}
+        >{isMobile ? "ⓘ" : "ⓘ About"}</button>
+        </div>{/* end controls row */}
+      </div>{/* end header */}
 
       {/* ── Relationship legend ── */}
       <div style={{ display: "flex", gap: isPhone ? 6 : 10, marginBottom: 8, flexWrap: "nowrap", alignItems: "center", overflow: "hidden" }}>

@@ -397,7 +397,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel() {
-  const { placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, uiScale } = usePlanner();
+  const { placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, uiScale, isPhone } = usePlanner();
 
   const majorGroups  = useMemo(() => getMajorOptionGroups(), []);
   const minorGroups  = useMemo(() => getMinorOptionGroups(), []);
@@ -471,7 +471,7 @@ export default function GradPanel() {
 
         {/* ── Major selector ─────────────────────────────────── */}
         <div style={{ marginBottom: 3 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
+          <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
             MAJOR
           </div>
           <SearchCombo
@@ -486,7 +486,7 @@ export default function GradPanel() {
         {/* ── Concentration selector ──────────────────────────── */}
         {major?.concentrations?.concentrationOptions?.length > 0 && (
           <div style={{ marginBottom: 8, marginTop: 8 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
+            <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
               CONCENTRATION
             </div>
             <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="⌕ search concentrations" scale={uiScale} />
@@ -502,7 +502,7 @@ export default function GradPanel() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 6, marginTop: 8, marginBottom: 8 }}>
           {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
             <div key={lbl}>
-              <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
+              <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
               <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="⌕ search minors" scale={uiScale} />
             </div>
           ))}
@@ -512,7 +512,7 @@ export default function GradPanel() {
         <div style={{ marginBottom: 8, padding: "7px 9px", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 6 }}>
           <div style={{ display: "flex", alignItems: "flex-end", gap: 10, marginBottom: 4 }}>
             <div>
-              <div style={{ fontSize: 16, fontWeight: 900, lineHeight: 1.1,
+              <div style={{ fontSize: isPhone ? 12 : 16, fontWeight: 900, lineHeight: 1.1,
                 color: requiredSH > 0 && totalSHPlaced >= requiredSH ? "var(--success)" : "var(--text-1)" }}>
                 {totalSHDone}
                 {plannedSH  > 0 && <span style={{ fontSize: 11, color: "var(--text-4)", fontWeight: 500 }}>+{plannedSH}</span>}

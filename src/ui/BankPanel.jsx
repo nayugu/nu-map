@@ -104,7 +104,7 @@ export default function BankPanel() {
                   else { setSideMode("bank"); setBankTab("all"); }
                 }}
                 style={{
-                  flex: 1, fontSize: 8, padding: "3px 0", borderRadius: 4, cursor: "pointer",
+                  flex: 1, fontSize: 7, padding: "3px 0", borderRadius: 4, cursor: "pointer",
                   background: sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bg)" : "var(--bg-surface)") : "transparent",
                   border: `1px solid ${sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--border-2)"}`,
                   color: sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--text-4)",
@@ -113,7 +113,7 @@ export default function BankPanel() {
               <button
                 onClick={() => setSideMode("grad")}
                 style={{
-                  flex: 1, fontSize: 8, padding: "3px 0", borderRadius: 4, cursor: "pointer",
+                  flex: 1, fontSize: 7, padding: "3px 0", borderRadius: 4, cursor: "pointer",
                   background: sideMode === "grad" ? "var(--bg-surface)" : "transparent",
                   border: `1px solid ${sideMode === "grad" ? "var(--active)" : "var(--border-2)"}`,
                   color: sideMode === "grad" ? "var(--active)" : "var(--text-4)",
@@ -187,7 +187,7 @@ export default function BankPanel() {
               style={{
                 width: "100%", boxSizing: "border-box",
                 background: "var(--bg-surface)", border: `1px solid ${q ? "var(--active)" : "var(--border-2)"}`,
-                borderRadius: 5, color: "var(--text-2)", fontSize: 11,
+                borderRadius: 5, color: "var(--text-2)", fontSize: isPhone ? 7 : 11,
                 padding: "7px 28px 7px 9px", outline: "none",
               }}
             />
@@ -208,7 +208,7 @@ export default function BankPanel() {
                 <button key={kFwd}
                   onClick={() => setBankSort(isActive ? (isRev ? kFwd : kRev) : kFwd)}
                   style={{
-                    flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: "pointer",
+                    flex: 1, fontSize: isPhone ? 7 : 9, padding: "3px 0", borderRadius: 4, cursor: "pointer",
                     background: isActive ? "var(--bg-surface)" : "transparent",
                     border: `1px solid ${isActive ? "var(--active)" : "var(--border-2)"}`,
                     color: isActive ? "var(--active)" : "var(--text-4)",
@@ -266,9 +266,9 @@ export default function BankPanel() {
                   style={{ display: "flex", alignItems: "center", gap: 5, padding: "6px 8px", cursor: "pointer", userSelect: "none" }}
                 >
                   <span style={{ width: 9, height: 9, borderRadius: 2, background: col, flexShrink: 0 }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: col, flex: 1 }}>{sub}</span>
-                  <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface)", borderRadius: 99, padding: "1px 6px" }}>{crs.length}</span>
-                  <span style={{ fontSize: 9, color: "var(--text-4)" }}>{isCol ? "▶" : "▼"}</span>
+                  <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: col, flex: 1 }}>{sub}</span>
+                  <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)", background: "var(--bg-surface)", borderRadius: 99, padding: "1px 6px" }}>{crs.length}</span>
+                  <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)" }}>{isCol ? "▶" : "▼"}</span>
                 </div>
                 {!isCol && (
                   <div style={{ padding: "2px 6px 6px", display: "flex", flexDirection: "column", gap: 3 }}>

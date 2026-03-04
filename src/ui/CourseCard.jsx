@@ -72,9 +72,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           position: "relative",
           background: isCardHov ? "var(--card-bg-hov)" : "var(--card-bg)",
           border: `2px solid ${borderColor}`,
-          borderRadius: 6, padding: "1px 4px 1px 22px",
+          borderRadius: 6, padding: "2px 5px 2px 28px",
           cursor: "grab", userSelect: "none", touchAction: "manipulation",
-          display: "flex", alignItems: "center", minHeight: 14,
+          display: "flex", alignItems: "center", minHeight: 18,
           opacity: dimmed ? 0.35 : 1,
           transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
           boxShadow: isSel ? "inset 0 -3px 0 #999" : isCardHov ? "var(--shadow-card-hov)" : "none",
@@ -85,15 +85,15 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           onClick={e => { e.stopPropagation(); toggleStar(course.id); }}
           title={starredIds.has(course.id) ? "Remove from saved" : "Save course"}
           style={{
-            position: "absolute", left: 4, top: 0, bottom: 0, width: 20,
+            position: "absolute", left: 4, top: 0, bottom: 0, width: 26,
             background: starredIds.has(course.id) ? "var(--warn-bg)" : "transparent",
             border: "none", padding: 0, cursor: "pointer",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 11, lineHeight: 1,
+            fontSize: 14, lineHeight: 1,
             color: starredIds.has(course.id) ? "var(--warn-bright)" : "var(--text-5)",
           }}
         >{starredIds.has(course.id) ? "★" : "☆"}</button>
-        <span style={{ fontSize: 8, fontWeight: 800, color: course.color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <span style={{ fontSize: 10, fontWeight: 800, color: course.color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {noSubject ? course.code.replace(/^[A-Z]+ /, "") : course.code}
         </span>
       </div>
@@ -126,24 +126,24 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           position: "relative",
           background: orderViolBg ? "var(--card-bg-viol)" : isCardHov ? "var(--card-bg-hov)" : "var(--card-bg)",
           border: `2px solid ${borderColor}`,
-          borderRadius: 5, padding: "0px 3px 0px 6px",
+          borderRadius: 5, padding: "1px 4px 1px 8px",
           cursor: "grab", userSelect: "none", touchAction: "manipulation",
           display: "flex", alignItems: "center", gap: 3,
-          minHeight: 13, minWidth: 0, overflow: "hidden",
+          minHeight: 17, minWidth: 0, overflow: "hidden",
           opacity: dimmed ? 0.35 : 1,
           transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
           boxShadow: isSel ? "inset 0 -2px 0 #999" : isCardHov ? "var(--shadow-card-hov)" : "none",
         }}
       >
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: course.color, borderRadius: "3px 0 0 3px" }} />
-        <span style={{ fontSize: 8, fontWeight: 800, color: course.color, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <span style={{ fontSize: 10, fontWeight: 800, color: course.color, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {course.code}
         </span>
-        <span style={{ fontSize: 8, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
+        <span style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 4px", flexShrink: 0 }}>
           {course.sh}
         </span>
         {(isViolated || notOffered || coreqViol) && (
-          <span style={{ fontSize: 9, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
+          <span style={{ fontSize: 12, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
             {isViolated && violationType === "order" ? "⚡" : isViolated ? "!" : notOffered ? "⚠" : "⚡"}
           </span>
         )}

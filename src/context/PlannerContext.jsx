@@ -78,10 +78,12 @@ export function PlannerProvider({ children }) {
   const uiScaleRef = useRef(1);
   // isPhone = true only for narrow phone viewports (< 600px).
   // Tablets (768px+) and phablets (600–767px) use the standard desktop layout.
-  const PHONE_BP = 600;
+  const PHONE_BP  = 600;
+  const MOBILE_BP = 1024; // phone + tablet
   const computeUiScale = (w) => w < PHONE_BP ? 0.75 : Math.max(0.7, Math.min(1.5, w / 1440));
   const [autoScale, setAutoScale] = useState(() => computeUiScale(window.innerWidth));
-  const [isPhone, setIsPhone] = useState(() => window.innerWidth < PHONE_BP);
+  const [isPhone,  setIsPhone]  = useState(() => window.innerWidth < PHONE_BP);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < MOBILE_BP);
   const [manualZoom, setManualZoomRaw] = useState(() => {
     try {
       const stored = localStorage.getItem("ncp-zoom");
@@ -163,7 +165,7 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
-    const update = () => { setAutoScale(computeUiScale(window.innerWidth)); setIsPhone(window.innerWidth < PHONE_BP); };
+    const update = () => { setAutoScale(computeUiScale(window.innerWidth)); setIsPhone(window.innerWidth < PHONE_BP); setIsMobile(window.innerWidth < MOBILE_BP); };
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -856,7 +858,7 @@ export function PlannerProvider({ children }) {
     showDisclaimer, showSettings,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
     panelHeight,
-    isPhone, uiScale, manualZoom, setManualZoom,
+    isPhone, isMobile, uiScale, manualZoom, setManualZoom,
     // Derived
     currentSemIdx, placedIds, workStartMap, workContMap,
     gradSemId, coopGradConflicts,

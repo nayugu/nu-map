@@ -370,11 +370,15 @@ function applyDevice() {
 // Chip clicks
 document.querySelectorAll('.chip[data-device]').forEach(btn => {
   btn.addEventListener('click', () => {
+    if (btn.dataset.device === currentKey) return;
     currentKey = btn.dataset.device;
     isLandscape = false;
     document.querySelectorAll('.chip[data-device]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     applyDevice();
+    // Reset the app so zoom/panels/bankWidth reinit from the new viewport size
+    try { iframe.contentWindow.localStorage.removeItem('ncp-state-v2'); } catch(e) {}
+    iframe.src = iframe.src;
   });
 });
 
