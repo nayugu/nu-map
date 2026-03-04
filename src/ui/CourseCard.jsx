@@ -86,7 +86,7 @@ export default function CourseCard({ course, inSem, semId }) {
         touchAction: "manipulation",
         opacity: dimmed ? 0.35 : 1,
         transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
-        boxShadow: isSel          ? "inset 0 -4px 0 #1a1a1a"
+        boxShadow: isSel          ? "inset 0 -4px 0 #999"
                  : isConn         ? "var(--shadow-card-conn)"
                  : isCardHov      ? "var(--shadow-card-hov)"
                  : isMouseHov     ? "inset 0 -3px 0 rgba(0,0,0,0.14)"
