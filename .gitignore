@@ -1,10 +1,6 @@
 node_modules/
+dist/
 .DS_Store
 .mypy_cache/
-graduatenu/
-nu-courses/
-*.py
-.mypy_cache/
-graduatenu/
 nu-courses/
 *.py

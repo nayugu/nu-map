@@ -54,7 +54,7 @@
     .auth-hint  { color: var(--text3); font-size: 11px; margin-top: 12px; }
 
     /* ── App shell ────────────────────────────────────────────── */
-    #dev-app { display: none; min-height: 100vh; }
+    #dev-app { display: none; }
 
     header {
       background: var(--bg2); border-bottom: 1px solid var(--border);
@@ -127,7 +127,8 @@
     .action-tab.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
 
     /* ── Preview tab ──────────────────────────────────────────── */
-    #tab-preview { padding: 0; max-width: none; margin: 0; height: calc(100vh - 52px); display: flex; flex-direction: column; }
+    #tab-preview { padding: 0; max-width: none; margin: 0; height: calc(100vh - 52px); }
+    .tab-panel.active#tab-preview { display: flex; flex-direction: column; }
     #preview-toolbar { display:flex; align-items:center; gap:8px; padding:8px 14px; background:var(--bg3); border-bottom:1px solid var(--border); flex-shrink:0; flex-wrap:wrap; }
     #preview-toolbar h2 { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:0.06em; text-transform:uppercase; margin:0 4px 0 0; }
     .pv-sep { width:1px; height:18px; background:var(--border); flex-shrink:0; }
@@ -143,7 +144,8 @@
     #pv-bezel { position:absolute; inset:0; pointer-events:none; z-index:2; display:none; box-shadow:0 0 0 1px #3a3a3c,0 0 0 2px #1c1c1e,0 24px 60px rgba(0,0,0,0.9); }
     #pv-notch { position:absolute; left:50%; transform:translateX(-50%); background:#1c1c1e; z-index:3; display:none; border-radius:0 0 18px 18px; }
     #pv-home-bar { position:absolute; left:50%; transform:translateX(-50%); width:120px; height:4px; background:#5a5a5e; border-radius:99px; z-index:3; display:none; }
-    #pv-frame { display:block; border:none; position:absolute; background:#fff; }
+    #pv-screen-bg { position:absolute; background:#fff; z-index:0; display:none; }
+    #pv-frame { display:block; border:none; position:absolute; background:#fff; z-index:1; }
     #pv-device-wrap.no-frame #pv-bezel,#pv-device-wrap.no-frame #pv-notch,#pv-device-wrap.no-frame #pv-home-bar { display:none !important; }
     #pv-device-wrap.no-frame #pv-frame { border-radius:4px; box-shadow:0 0 0 1px var(--border),0 20px 60px rgba(0,0,0,0.5); }
 
@@ -164,8 +166,14 @@
     code { font-family: var(--mono); font-size: 12px; background: var(--bg3); border-radius: 3px; padding: 1px 5px; }
 
     /* ── Catalog Check tab ───────────────────────────────────────── */
-    #tab-check .stat .val.ok   { color: var(--success); }
-    #tab-check .stat .val.warn { color: var(--warn); }
+    .launch-btn { height:46px; padding:0 32px; font-size:15px; font-weight:700; background:#c0392b; border:2px solid #e74c3c; border-radius:8px; color:#fff; cursor:pointer; letter-spacing:0.03em; box-shadow:0 0 26px rgba(192,57,43,0.5); transition:all 0.15s; }
+    .launch-btn:hover:not(:disabled) { background:#e74c3c; box-shadow:0 0 42px rgba(231,76,60,0.7); transform:translateY(-1px); }
+    .launch-btn:disabled { background:#444; border-color:#555; box-shadow:none; transform:none; cursor:not-allowed; opacity:0.6; }
+    @keyframes ck-pulse { 0%,100% { opacity:1 } 50% { opacity:0.45 } }
+    #ck-status-badge { font-size:9px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:3px; background:rgba(76,175,125,0.15); color:var(--success); border:1px solid rgba(76,175,125,0.4); animation:ck-pulse 1.4s ease-in-out infinite; }
+    .ck-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px 16px; text-align:center; }
+    .ck-val  { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--text); line-height:1.1; }
+    .ck-lbl  { font-size:11px; color:var(--text3); margin-top:5px; }
     #check-log::-webkit-scrollbar { width: 5px; }
     #check-log::-webkit-scrollbar-track { background: transparent; }
     #check-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -199,11 +207,11 @@
 
   <nav>
     <button class="active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
-    <button onclick="switchTab('patches', this)">🩹 Course Patches</button>
     <button onclick="switchTab('preview', this)">📱 Preview</button>
-    <button onclick="switchTab('data', this)">🔄 Data Sources</button>
     <button onclick="switchTab('changes', this)">📋 Change Log</button>
     <button onclick="switchTab('check', this)">🔍 Catalog Check</button>
+    <button onclick="switchTab('patches', this)" style="margin-left:auto">🩹 Course Patches</button>
+    <button onclick="switchTab('data', this)">🔄 Data Sources</button>
   </nav>
 
   <!-- ── Dashboard ─────────────────────────────────────────────── -->
@@ -391,7 +399,6 @@
       <h2>Preview</h2>
       <div class="pv-sep"></div>
       <button class="pv-chip active" data-dev="iphoneX">📱 iPhone X</button>
-      <button class="pv-chip" data-dev="iphone14">📱 iPhone 14 Pro</button>
       <div class="pv-sep"></div>
       <button class="pv-chip" data-dev="ipadAir">⬛ iPad Air</button>
       <button class="pv-chip" data-dev="ipadPro">⬛ iPad Pro 11&quot;</button>
@@ -413,8 +420,11 @@
     <div id="preview-stage">
       <div id="pv-device-wrap">
         <div id="pv-bezel"></div>
+        <div id="pv-screen-bg"></div>
         <div id="pv-notch"></div>
         <div id="pv-home-bar"></div>
+        <div id="pv-mask-top"></div>
+        <div id="pv-mask-bot"></div>
         <iframe id="pv-frame" src="about:blank" title="App Preview"></iframe>
       </div>
     </div>
@@ -482,7 +492,7 @@
       <h2>Patch Files</h2>
       <p class="text2">
         Manual corrections live in <code>data/patches/</code>.
-        Use the <a href="#" onclick="switchTab('patches', document.querySelector('nav button:nth-child(2)'));return false">Patch Creator</a> tab to generate YAML,
+        Use the <a href="#" onclick="switchTab('patches', document.querySelector(\"nav button[onclick*='patches']\"));return false">Patch Creator</a> tab to generate YAML,
         then place it in that folder and open a PR.
         Naming convention: <code>YYYY-MM-DD_short-description.yaml</code>
       </p>
@@ -507,29 +517,29 @@
   </div>
 </div>
 
-<div id="outer-wrap-end"></div>
-
   <!-- ── Catalog Check tab ──────────────────────────────────────────────── -->
   <div id="tab-check" class="tab-panel">
     <div class="card">
-      <h2>Manual Catalog Check</h2>
-      <p class="text2" style="margin-bottom:12px">
-        Runs the same full-catalog comparison as the automated scraper — but immediately and locally,
-        so you can see what would change before committing anything. Reads from your local
-        <code>public/all-courses.json</code>.
-        <br><br>
-        <strong>Step 1:</strong> Start the check server in a terminal:
-        <code>node scripts/catalog-check-server.js</code><br>
-        <strong>Step 2:</strong> Click <strong>Run Check</strong> below.
-      </p>
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-        <button class="btn" id="check-run-btn" onclick="startCheck()">▶ Run Check</button>
-        <button class="btn sec" id="check-stop-btn" onclick="stopCheck()" disabled>■ Stop</button>
-        <span style="font-size:11px;color:var(--text3)">
-          Server port: <input id="check-port" value="3333" type="number" min="1024" max="65535"
-            style="width:64px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <span style="font-size:28px;line-height:1">☢</span>
+        <div>
+          <h2 style="margin:0">Catalog Check</h2>
+          <p class="text2" style="margin:2px 0 0">Full catalog comparison — runs locally against <code>public/all-courses.json</code></p>
+        </div>
+      </div>
+
+      <!-- Launch row -->
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 6px">
+        <button class="launch-btn" id="check-run-btn" onclick="startCheck()">🚀 Launch Check</button>
+        <button class="btn sec" id="check-stop-btn" onclick="stopCheck()" disabled style="height:46px;padding:0 20px">■ Stop</button>
+        <span id="ck-status-badge" style="display:none">● Running</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text3)">
+          Port: <input id="check-port" value="3333" type="number" min="1024" max="65535"
+            style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
         </span>
       </div>
+      <p class="text2" style="font-size:11px;margin:0 0 18px">Server starts automatically with <code>npm run dev</code> — no separate terminal needed.</p>
 
       <!-- Progress section (hidden until run starts) -->
       <div id="check-progress-wrap" style="display:none">
@@ -537,18 +547,18 @@
           <span id="check-status-msg" style="font-size:11px;color:var(--text2)">Starting…</span>
           <span id="check-pct" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums">0%</span>
         </div>
-        <div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:14px">
-          <div id="check-bar" style="height:100%;width:0%;background:var(--accent);border-radius:3px;transition:width 0.25s ease"></div>
+        <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:20px">
+          <div id="check-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#c0392b,#e74c3c);border-radius:4px;transition:width 0.25s ease"></div>
         </div>
 
-        <!-- Live stats grid -->
-        <div class="stats" style="margin-bottom:16px">
-          <div class="stat"><div class="val" id="ck-subjects">0</div><div class="lbl">Subjects done</div></div>
-          <div class="stat"><div class="val" id="ck-read">0</div><div class="lbl">Courses read</div></div>
-          <div class="stat"><div class="val" style="color:var(--success)" id="ck-matched">0</div><div class="lbl">Matched ✓</div></div>
-          <div class="stat"><div class="val" style="color:var(--warn)" id="ck-changed">0</div><div class="lbl">Changed ⚠</div></div>
-          <div class="stat"><div class="val" style="color:var(--accent)" id="ck-added">0</div><div class="lbl">New in catalog</div></div>
-          <div class="stat"><div class="val" style="color:var(--error)" id="ck-missing">0</div><div class="lbl">Not in catalog</div></div>
+        <!-- Stat cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px">
+          <div class="ck-card"><div class="ck-val" id="ck-matched" style="color:var(--success)">0</div><div class="ck-lbl">✓ Correct</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-changed" style="color:var(--warn)">0</div><div class="ck-lbl">⚠ Need PR</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-added"   style="color:var(--accent)">0</div><div class="ck-lbl">🆕 New courses</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-missing" style="color:var(--error)">0</div><div class="ck-lbl">❌ Not in catalog</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-read">0</div><div class="ck-lbl">Total scanned</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-subjects">0</div><div class="ck-lbl">Subjects done</div></div>
         </div>
 
         <!-- Subject-by-subject log -->
@@ -556,7 +566,7 @@
       </div>
     </div>
   </div>
-══════════════════════════════════════════════════════════════════ -->
+</div><!-- /#dev-app -->
 <script>
 // ── Constants ──────────────────────────────────────────────────────────────
 const STORAGE_KEY   = "numap-dev-hash";
@@ -735,6 +745,7 @@ function switchTab(name, btn) {
   document.getElementById(`tab-${name}`).classList.add("active");
   if (btn) btn.classList.add("active");
   if (name === "preview") pvInitPreview();
+  if (name === "changes") loadChangeLog();
 }
 
 // ── Data meta ───────────────────────────────────────────────────────────────
@@ -761,7 +772,6 @@ const PV_DEVICES = {
   // iPhone 14 Pro: Dynamic Island; safe-area-inset-top = 59pt
   // homeH = home-indicator height from bottom edge of iframe (pt)
   iphoneX:     { w:375,  h:812,  dpr:3, ppi:458, type:'phone',   bezelR:40, bezelT:12, notchW:209, notchH:44, homeH:34, notch:true,  home:true  },
-  iphone14:    { w:393,  h:852,  dpr:3, ppi:460, type:'phone',   bezelR:47, bezelT:14, notchW:126, notchH:59, homeH:34, notch:true,  home:true  },
   ipadAir:     { w:820,  h:1180, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:20, notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
   ipadPro:     { w:834,  h:1194, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:14, notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
   macbook:     { w:1440, h:900,  dpr:2, ppi:224, type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
@@ -792,10 +802,17 @@ function pvApply() {
   const bezel  = document.getElementById('pv-bezel');
   const notchEl= document.getElementById('pv-notch');
   const homeEl = document.getElementById('pv-home-bar');
+  const screenBg = document.getElementById('pv-screen-bg');
+  // Safe-area offsets: notch occupies top notchH pt; home bar occupies bottom homeH pt
+  const showNotch = d.notch && !pvLand && pvFrame && !isDesktop;
+  const showHome  = d.home  && !pvLand && pvFrame && !isDesktop;
+  const safeTop   = showNotch ? d.notchH : 0;
+  const safeBot   = showHome  ? (d.homeH || 8) : 0;
+  // Iframe is clipped to safe area only; screen-bg fills the full screen behind it
   frame.style.left   = bt + 'px';
-  frame.style.top    = bt + 'px';
+  frame.style.top    = (bt + safeTop) + 'px';
   frame.style.width  = w + 'px';
-  frame.style.height = h + 'px';
+  frame.style.height = (h - safeTop - safeBot) + 'px';
   wrap.style.width   = outerW + 'px';
   wrap.style.height  = outerH + 'px';
   wrap.style.transform = `scale(${fit.toFixed(4)})`;
@@ -804,19 +821,26 @@ function pvApply() {
     bezel.style.display = 'block';
     bezel.style.borderRadius = br + 'px';
     bezel.style.border = bt + 'px solid #1c1c1e';
-    frame.style.borderRadius = Math.max(0, br - bt) + 'px';
-    const showNotch = d.notch && !pvLand;
-    // Notch sits flush at the top of the iframe (bt from wrap top), height = OS status-bar reservation
+    const screenR = Math.max(0, br - bt);
+    frame.style.borderRadius = showHome ? `0 0 ${screenR}px ${screenR}px` : `0 0 ${screenR}px ${screenR}px`;
+    // Screen background covers the full device screen area (status bar + safe zone + home area)
+    screenBg.style.left         = bt + 'px';
+    screenBg.style.top          = bt + 'px';
+    screenBg.style.width        = w + 'px';
+    screenBg.style.height       = h + 'px';
+    screenBg.style.borderRadius = screenR + 'px';
+    screenBg.style.display      = 'block';
+    // Notch overlaid on the white status-bar area
     notchEl.style.top    = bt + 'px';
     notchEl.style.width  = d.notchW + 'px';
     notchEl.style.height = d.notchH + 'px';
     notchEl.style.display = showNotch ? 'block' : 'none';
-    // Home bar sits inside the iframe near the bottom (homeH pt from the iframe bottom edge)
-    homeEl.style.bottom  = (bt + (d.homeH || 8)) + 'px';
-    homeEl.style.display = (d.home && !pvLand) ? 'block' : 'none';
+    // Home bar sits over the white home-area below the iframe
+    homeEl.style.bottom  = (bt + Math.round((d.homeH || 8) / 2) - 2) + 'px';
+    homeEl.style.display = showHome ? 'block' : 'none';
   } else {
     wrap.classList.add('no-frame');
-    bezel.style.display = notchEl.style.display = homeEl.style.display = 'none';
+    bezel.style.display = notchEl.style.display = homeEl.style.display = screenBg.style.display = 'none';
     frame.style.borderRadius = isDesktop ? '4px' : '12px';
   }
   document.getElementById('pv-dim-read').textContent    = `${w} × ${h}  (${d.ppi}ppi ×${d.dpr})`;
@@ -882,6 +906,7 @@ function startCheck() {
   document.getElementById('check-bar').style.width = '0%';
   document.getElementById('check-pct').textContent  = '0%';
   document.getElementById('check-status-msg').textContent = 'Connecting to server…';
+  document.getElementById('ck-status-badge').style.display = 'inline-block';
 
   if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
   checkEvtSource = new EventSource(url);
@@ -964,12 +989,14 @@ function startCheck() {
       document.getElementById('check-pct').textContent = '100%';
       document.getElementById('check-run-btn').disabled  = false;
       document.getElementById('check-stop-btn').disabled = true;
+      document.getElementById('ck-status-badge').style.display = 'none';
       checkEvtSource.close(); checkEvtSource = null;
     }
     if (d.type === 'error') {
       document.getElementById('check-status-msg').textContent = `\u274c ${d.msg}`;
       document.getElementById('check-run-btn').disabled  = false;
       document.getElementById('check-stop-btn').disabled = true;
+      document.getElementById('ck-status-badge').style.display = 'none';
     }
     if (d.type === 'end') { checkEvtSource.close(); checkEvtSource = null; }
   };
@@ -979,6 +1006,7 @@ function startCheck() {
       '\u274c Cannot connect \u2014 start the server: node scripts/catalog-check-server.js';
     document.getElementById('check-run-btn').disabled  = false;
     document.getElementById('check-stop-btn').disabled = true;
+    document.getElementById('ck-status-badge').style.display = 'none';
     if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
   };
 }
@@ -988,6 +1016,7 @@ function stopCheck() {
   document.getElementById('check-status-msg').textContent = 'Stopped.';
   document.getElementById('check-run-btn').disabled  = false;
   document.getElementById('check-stop-btn').disabled = true;
+  document.getElementById('ck-status-badge').style.display = 'none';
 }
 
 // ── Patch builder ───────────────────────────────────────────────────────────

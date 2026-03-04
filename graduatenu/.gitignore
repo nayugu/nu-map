@@ -1,0 +1,74 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# TypeScript v1 declaration files
+typings/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Avoid temp files
+*~
+
+# For our mac users
+.DS_Store
+
+# Build directories 
+lib/
+module/
+build/
+dist/
+.next
+
+# local and production env files 
+.env.*.local
+.env.production*
+!.env.*.example
+
+graduatenu.code-workspace
+
+# IDEs
+.vscode/
+.idea/
+
+# Local DB data 
+infrastructure/develop/graduatenu-db-data
+infrastructure/test/graduatenu-db-data
+
+# Yarn2 gitignore for non-zero installs
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Scraper cache
+**/catalogCache/
+
+**/scrapers-v2/major_output
+**/scrapers-v2/results
+**/scrapers-v2/**/grammar.js
+
+# Coverage
+coverage/

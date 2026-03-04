@@ -178,25 +178,33 @@
     display: none;   /* toggled by js */
   }
 
-  /* Notch */
+  /* Notch — width/height/top set by JS from device definition */
   #notch {
     position: absolute;
-    top: 0; left: 50%; transform: translateX(-50%);
-    width: 120px; height: 28px;
+    left: 50%; transform: translateX(-50%);
     background: #1c1c1e;
     border-radius: 0 0 18px 18px;
     z-index: 3;
     display: none;
   }
 
-  /* Home indicator (modern iphones) */
+  /* Home indicator — bottom set by JS */
   #home-bar {
     position: absolute;
-    bottom: 7px; left: 50%; transform: translateX(-50%);
+    left: 50%; transform: translateX(-50%);
     width: 120px; height: 4px;
     background: #5a5a5e;
     border-radius: 99px;
     z-index: 3;
+    display: none;
+  }
+
+  /* White screen background — fills full device screen, shows through in notch+home zones */
+  #screen-bg {
+    position: absolute;
+    background: #fff;
+    pointer-events: none;
+    z-index: 0;
     display: none;
   }
 
@@ -214,7 +222,8 @@
   }
   #device-wrap.no-frame #bezel,
   #device-wrap.no-frame #notch,
-  #device-wrap.no-frame #home-bar { display: none !important; }
+  #device-wrap.no-frame #home-bar,
+  #device-wrap.no-frame #screen-bg { display: none !important; }
 
   /* Ruler ticks along edge */
   #ruler-w, #ruler-h {
@@ -238,9 +247,6 @@
   <!-- Phone group -->
   <button class="chip active" data-device="iphoneX">
     <span class="icon">📱</span> iPhone X
-  </button>
-  <button class="chip" data-device="iphone14">
-    <span class="icon">📱</span> iPhone 14 Pro
   </button>
 
   <div class="sep"></div>
@@ -279,6 +285,7 @@
     <div id="bezel"></div>
     <div id="notch"></div>
     <div id="home-bar"></div>
+    <div id="screen-bg"></div>
     <iframe id="preview-frame" src="/" title="App Preview"></iframe>
     <span id="ruler-w"></span>
     <span id="ruler-h"></span>
@@ -288,12 +295,13 @@
 <script>
 // ── Device definitions ──────────────────────────────────────────
 // CSS logical pixel dimensions (physical / DPR), DPR, physical PPI
+// notchW/notchH = Dynamic Island / notch pill width + full status-bar reservation (pt)
+// homeH          = home-indicator zone height from bottom of screen content area (pt)
 const DEVICES = {
-  iphoneX:   { label: 'iPhone X',           w: 375,  h: 812,  dpr: 3, ppi: 458, type: 'phone',   bezelR: 40, bezelT: 12, notch: true,  home: true  },
-  iphone14:  { label: 'iPhone 14 Pro',       w: 393,  h: 852,  dpr: 3, ppi: 460, type: 'phone',   bezelR: 47, bezelT: 14, notch: true,  home: true  },
-  ipadAir:   { label: 'iPad Air (4th/5th)',  w: 820,  h: 1180, dpr: 2, ppi: 264, type: 'tablet',  bezelR: 20, bezelT: 20, notch: false, home: false },
-  ipadPro:   { label: 'iPad Pro 11"',        w: 834,  h: 1194, dpr: 2, ppi: 264, type: 'tablet',  bezelR: 20, bezelT: 14, notch: false, home: false },
-  macbook:   { label: 'MacBook (2560×1664)', w: 1280, h: 832,  dpr: 2, ppi: 224, type: 'desktop', bezelR: 0,  bezelT: 0,  notch: false, home: false },
+  iphoneX:   { label: 'iPhone X',           w: 375,  h: 812,  dpr: 3, ppi: 458, type: 'phone',   bezelR: 40, bezelT: 12, notchW: 209, notchH: 44, homeH: 34, notch: true,  home: true  },
+  ipadAir:   { label: 'iPad Air (4th/5th)',  w: 820,  h: 1180, dpr: 2, ppi: 264, type: 'tablet',  bezelR: 20, bezelT: 20, notchW: 0,   notchH: 0,  homeH: 0,  notch: false, home: false },
+  ipadPro:   { label: 'iPad Pro 11"',        w: 834,  h: 1194, dpr: 2, ppi: 264, type: 'tablet',  bezelR: 20, bezelT: 14, notchW: 0,   notchH: 0,  homeH: 0,  notch: false, home: false },
+  macbook:   { label: 'MacBook (2560×1664)', w: 1280, h: 832,  dpr: 2, ppi: 224, type: 'desktop', bezelR: 0,  bezelT: 0,  notchW: 0,   notchH: 0,  homeH: 0,  notch: false, home: false },
 };
 
 let currentKey  = 'iphoneX';
@@ -329,16 +337,23 @@ function applyDevice() {
   const stageH = window.innerHeight - toolbarH - 40;
   const fitScale = Math.min(1, stageW / outerW, stageH / outerH);
 
-  // iframe sits inside at (bt, bt) — its viewport is exactly w×h
+  const showNotch = !isDesktop && showFrame && d.notch && !isLandscape;
+  const showHome  = !isDesktop && showFrame && d.home  && !isLandscape;
+  const safeTop   = showNotch ? d.notchH : 0;
+  const safeBot   = showHome  ? d.homeH  : 0;
+
+  // iframe is clipped to the safe content area — app never renders in notch or home-bar zones
   iframe.style.left   = bt + 'px';
-  iframe.style.top    = bt + 'px';
+  iframe.style.top    = (bt + safeTop) + 'px';
   iframe.style.width  = w + 'px';
-  iframe.style.height = h + 'px';
+  iframe.style.height = (h - safeTop - safeBot) + 'px';
 
   // Device-wrap is the outer shell
   deviceWrap.style.width     = outerW + 'px';
   deviceWrap.style.height    = outerH + 'px';
   deviceWrap.style.transform = `scale(${fitScale.toFixed(4)})`;
+
+  const screenBg = document.getElementById('screen-bg');
 
   if (showFrame && !isDesktop) {
     deviceWrap.classList.remove('no-frame');
@@ -346,18 +361,32 @@ function applyDevice() {
     bezel.style.display      = 'block';
     bezel.style.borderRadius = br + 'px';
     bezel.style.border       = bt + 'px solid #1c1c1e';
-    iframe.style.borderRadius = Math.max(0, br - bt + 2) + 'px';
+    const screenR = Math.max(0, br - bt);
+    iframe.style.borderRadius = `0 0 ${screenR}px ${screenR}px`;
 
-    // Notch sits at the top of the iframe area (bt offset from wrapper top)
-    notchEl.style.top     = bt + 'px';
-    notchEl.style.display = (d.notch && !isLandscape) ? 'block' : 'none';
-    homeEl.style.bottom   = bt + 7 + 'px';
-    homeEl.style.display  = (d.home  && !isLandscape) ? 'block' : 'none';
+    // White background fills the full device screen (behind both notch zone and home zone)
+    screenBg.style.left         = bt + 'px';
+    screenBg.style.top          = bt + 'px';
+    screenBg.style.width        = w + 'px';
+    screenBg.style.height       = h + 'px';
+    screenBg.style.borderRadius = screenR + 'px';
+    screenBg.style.display      = 'block';
+
+    // Notch pill overlaid on the white status-bar band
+    notchEl.style.top    = bt + 'px';
+    notchEl.style.width  = d.notchW + 'px';
+    notchEl.style.height = d.notchH + 'px';
+    notchEl.style.display = showNotch ? 'block' : 'none';
+
+    // Home bar overlaid on the white home-indicator band
+    homeEl.style.bottom  = (bt + Math.round((d.homeH || 8) / 2) - 2) + 'px';
+    homeEl.style.display = showHome ? 'block' : 'none';
   } else {
     deviceWrap.classList.add('no-frame');
-    bezel.style.display      = 'none';
-    notchEl.style.display    = 'none';
-    homeEl.style.display     = 'none';
+    bezel.style.display       = 'none';
+    notchEl.style.display     = 'none';
+    homeEl.style.display      = 'none';
+    screenBg.style.display    = 'none';
     iframe.style.borderRadius = isDesktop ? '4px' : '12px';
   }
 
