@@ -88,19 +88,19 @@ export default function Header() {
         </div>
 
         {/* Export — always visible */}
-        <button onClick={handleExport} style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
+        <button className="hdr-btn" onClick={handleExport} style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
           ⬇ Export PDF
         </button>
 
         {/* Reset — always visible */}
-        <button onClick={handleReset}
+        <button className="hdr-btn" onClick={handleReset}
           style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
           ↺ Reset
         </button>
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative" }}>
-          <button onClick={e => { e.stopPropagation(); setShowQuickSet(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowQuickSet(v => !v); }}
             style={{ fontSize: 10, cursor: "pointer",
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
@@ -118,6 +118,7 @@ export default function Header() {
             }}>
               {/* Save toggle */}
               <button
+                className="hdr-btn-dd"
                 onClick={e => {
                   e.stopPropagation();
                   const next = !persistEnabled;
@@ -132,7 +133,7 @@ export default function Header() {
               </button>
 
               {/* Error lines toggle */}
-              <button onClick={() => setShowViolLines(v => !v)}
+              <button className="hdr-btn-dd" onClick={() => setShowViolLines(v => !v)}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: `1px solid ${showViolLines ? "var(--error)" : "var(--border-2)"}`,
@@ -141,7 +142,7 @@ export default function Header() {
               </button>
 
               {/* Theme toggle */}
-              <button onClick={cycleTheme}
+              <button className="hdr-btn-dd" onClick={cycleTheme}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 600, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
@@ -149,7 +150,7 @@ export default function Header() {
               </button>
 
               {/* Refresh catalog */}
-              <button onClick={handleRefresh}
+              <button className="hdr-btn-dd" onClick={handleRefresh}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
@@ -162,6 +163,7 @@ export default function Header() {
         {/* Cohort date picker */}
         <div style={{ position: "relative" }}>
           <button
+            className="hdr-btn"
             onClick={e => { e.stopPropagation(); setShowSettings(v => !v); }}
             title="Set entry & graduation semester"
             style={{
@@ -259,6 +261,7 @@ export default function Header() {
 
         {/* About button */}
         <button
+          className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
           title="About & disclaimer"
           style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}

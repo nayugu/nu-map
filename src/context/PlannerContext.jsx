@@ -37,7 +37,7 @@ export function PlannerProvider({ children }) {
   const [placements,       setPlacements]       = useState(() => (_saved?.persist && _saved.placements)       ? _saved.placements       : {});
   const [workPl,           setWorkPl]           = useState(() => (_saved?.persist && _saved.workPl)           ? _saved.workPl           : {});
   const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : `fall${DEFAULT_START_YEAR}`);
-  const [persistEnabled,   setPersistEnabled]   = useState(() => !!_saved?.persist);
+  const [persistEnabled,   setPersistEnabled]   = useState(() => _saved?.persist !== false);
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
   const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
@@ -107,8 +107,10 @@ export function PlannerProvider({ children }) {
   const stateRef      = useRef({ placements: {}, workPl: {}, semOrders: {} });
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
-  const onDropRef     = useRef(null);   // updated each render for touch drag
-  const touchDragIdRef = useRef(null);  // card id currently being touch-dragged
+  const onDropRef      = useRef(null);   // updated each render for touch drag
+  const touchDragIdRef  = useRef(null);  // card id currently being touch-dragged
+  const ghostRef        = useRef(null);  // floating ghost element during touch drag
+  const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
 
   // ── Effects: data loading ────────────────────────────────────
   useEffect(() => {
@@ -682,27 +684,60 @@ export function PlannerProvider({ children }) {
   };
 
   // ── Touch drag (mobile) ──────────────────────────────────────
-  // Mirrors the HTML5 drag API for touch devices:
-  //   touchstart on [data-drag-id] → sets dragInfo
-  //   touchmove  → elementFromPoint to highlight drop target
-  //   touchend   → executes drop via onDropRef
+  // Ghost element follows the finger; original card dims to 30% opacity.
+  // Text selection is suppressed for the duration of the drag.
   useEffect(() => {
+    const removeGhost = () => {
+      if (ghostRef.current) { ghostRef.current.remove(); ghostRef.current = null; }
+    };
+
     const onTouchStart = (e) => {
       const cardEl = e.target.closest('[data-drag-id]');
       if (!cardEl) return;
       const id      = cardEl.dataset.dragId;
       const type    = cardEl.dataset.dragType;
       const fromSem = cardEl.dataset.dragFrom || null;
+      const touch   = e.touches[0];
+      const rect    = cardEl.getBoundingClientRect();
+
+      // Suppress text selection
+      document.documentElement.style.userSelect = 'none';
+      document.documentElement.style.webkitUserSelect = 'none';
+
+      // Build ghost clone that floats under the finger
+      removeGhost();
+      const ghost = cardEl.cloneNode(true);
+      ghost.style.position      = 'fixed';
+      ghost.style.left          = rect.left + 'px';
+      ghost.style.top           = rect.top  + 'px';
+      ghost.style.width         = rect.width  + 'px';
+      ghost.style.height        = rect.height + 'px';
+      ghost.style.pointerEvents = 'none';
+      ghost.style.zIndex        = '9999';
+      ghost.style.opacity       = '0.92';
+      ghost.style.boxShadow     = '0 8px 24px rgba(0,0,0,0.25)';
+      ghost.style.transform     = 'scale(1.06)';
+      ghost.style.transition    = 'none';
+      document.body.appendChild(ghost);
+      ghostRef.current = ghost;
+      touchStartOff.current = { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+
+      // Dim original and hide from hit-testing
+      cardEl.style.opacity       = '0.3';
+      cardEl.style.pointerEvents = 'none';
+
       touchDragIdRef.current = id;
       setDragInfo({ id, type, fromSem });
-      // Make the card invisible to hit-testing so elementFromPoint sees through
-      if (cardRefs.current[id]) cardRefs.current[id].style.pointerEvents = 'none';
     };
 
     const onTouchMove = (e) => {
       if (!touchDragIdRef.current) return;
-      e.preventDefault(); // prevent page scroll while dragging
-      const touch  = e.touches[0];
+      e.preventDefault();
+      const touch = e.touches[0];
+      if (ghostRef.current) {
+        ghostRef.current.style.left = (touch.clientX - touchStartOff.current.x) + 'px';
+        ghostRef.current.style.top  = (touch.clientY - touchStartOff.current.y) + 'px';
+      }
       const target = document.elementFromPoint(touch.clientX, touch.clientY);
       const semEl  = target?.closest('[data-sem-id]');
       setHoveredSem(semEl?.dataset.semId ?? null);
@@ -711,8 +746,11 @@ export function PlannerProvider({ children }) {
     const onTouchEnd = (e) => {
       if (!touchDragIdRef.current) return;
       const id = touchDragIdRef.current;
-      // Restore pointer events before drop
-      if (cardRefs.current[id]) cardRefs.current[id].style.pointerEvents = '';
+      const cardEl = cardRefs.current[id];
+      if (cardEl) { cardEl.style.opacity = ''; cardEl.style.pointerEvents = ''; }
+      removeGhost();
+      document.documentElement.style.userSelect = '';
+      document.documentElement.style.webkitUserSelect = '';
       const touch  = e.changedTouches[0];
       const target = document.elementFromPoint(touch.clientX, touch.clientY);
       const semEl  = target?.closest('[data-sem-id]');
@@ -727,12 +765,13 @@ export function PlannerProvider({ children }) {
     };
 
     document.addEventListener('touchstart', onTouchStart, { passive: true });
-    document.addEventListener('touchmove',  onTouchMove,  { passive: false }); // non-passive to allow preventDefault
+    document.addEventListener('touchmove',  onTouchMove,  { passive: false });
     document.addEventListener('touchend',   onTouchEnd,   { passive: true });
     return () => {
       document.removeEventListener('touchstart', onTouchStart);
       document.removeEventListener('touchmove',  onTouchMove);
       document.removeEventListener('touchend',   onTouchEnd);
+      removeGhost();
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

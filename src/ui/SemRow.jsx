@@ -152,7 +152,7 @@ export default function SemRow({ sem }) {
       </div>
 
       {/* Course slots */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, flex: 1, maxWidth: 652 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, flex: 1 }}>
         {workItem ? (
           // Full-width work-term card
           <div
@@ -236,7 +236,7 @@ export default function SemRow({ sem }) {
                 e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
               }}
               style={{
-                display: "flex", gap: 4, flexWrap: "wrap",
+                display: "flex", gap: 4, flexWrap: "nowrap",
                 borderRadius: 6, padding: 3, minHeight: 76,
                 border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
                   ? "1px solid var(--active)" : "1px solid transparent",
@@ -247,7 +247,7 @@ export default function SemRow({ sem }) {
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
               {Array.from({ length: Math.max(0, mainSlots - main4.length) }).map((_, i) => (
-                <div key={`ms-${i}`} style={{ width: 164, flexShrink: 0, height: 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
+                <div key={`ms-${i}`} style={{ flex: "1 1 110px", maxWidth: 164, height: 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
               ))}
             </div>
 

@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 // COURSE CARD  — individual draggable course tile
 // ═══════════════════════════════════════════════════════════════════
+import { useState } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { REL_STYLE, SEMESTER_TYPES } from "../core/constants.js";
 import { getOfferedFromTerms, getSemOfferedType } from "../core/courseModel.js";
@@ -50,6 +51,7 @@ export default function CourseCard({ course, inSem, semId }) {
   const orderViolBg = inSem && violationType === "order";
 
   const dimmed = hasSel && !isSel && !isConn;
+  const [isMouseHov, setIsMouseHov] = useState(false);
 
   return (
     <div
@@ -59,6 +61,8 @@ export default function CourseCard({ course, inSem, semId }) {
       data-drag-type="course"
       data-drag-from={inSem ? semId : undefined}
       onDragStart={e => onDragStart(e, course.id, "course", inSem ? semId : null)}
+      onMouseEnter={() => setIsMouseHov(true)}
+      onMouseLeave={() => setIsMouseHov(false)}
       onDragOver={e => {
         if (!dragInfo || dragInfo.type !== "course" || dragInfo.id === course.id || !inSem) return;
         e.preventDefault(); e.stopPropagation();
@@ -85,6 +89,7 @@ export default function CourseCard({ course, inSem, semId }) {
         boxShadow: isSel          ? "inset 0 -4px 0 #1a1a1a"
                  : isConn         ? "var(--shadow-card-conn)"
                  : isCardHov      ? "var(--shadow-card-hov)"
+                 : isMouseHov     ? "inset 0 -3px 0 rgba(0,0,0,0.14)"
                  : "none",
       }}
     >
