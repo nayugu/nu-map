@@ -554,7 +554,7 @@
         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
           <button class="launch-btn" onclick="ckOpenLocal()">🚀 Open Local Dev Portal</button>
           <span style="margin-left:auto;font-size:11px;color:var(--text3)">
-            Dev server port: <input id="ck-local-port" value="5173" type="number" min="1024" max="65535"
+            Dev server port: <input id="ck-local-port" value="5175" type="number" min="1024" max="65535"
               style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
           </span>
         </div>
@@ -624,6 +624,16 @@
                 style="background:#7b0000;border-color:#e74c3c;box-shadow:0 0 26px rgba(231,76,60,0.5);font-size:14px;height:auto;padding:12px 28px;flex-shrink:0">
                 ☢ Apply Fixes
               </button>
+            </div>
+            <!-- Fix progress (shown during apply) -->
+            <div id="ck-fix-progress" style="display:none;margin-top:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span id="ck-fix-status" style="font-size:11px;color:var(--text2)">Applying…</span>
+                <span id="ck-fix-pct"    style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums">0%</span>
+              </div>
+              <div style="height:7px;background:var(--bg3);border-radius:4px;overflow:hidden">
+                <div id="ck-fix-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#7b0000,#e74c3c);border-radius:4px;transition:width 0.2s ease"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -987,7 +997,7 @@ window.addEventListener('resize', () => { if (pvReady) pvApply(); });
 })();
 
 function ckOpenLocal() {
-  const port = document.getElementById('ck-local-port')?.value || '5173';
+  const port = document.getElementById('ck-local-port')?.value || '5175';
   window.open(`http://localhost:${port}/dev.html`, '_blank');
 }
 
@@ -1249,28 +1259,64 @@ function ckApplyFixes() {
 async function ckDoApplyFixes() {
   document.getElementById('ck-fix-modal').style.display = 'none';
   const items = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range');
-  const port = document.getElementById('check-port').value || '3333';
-  const btn = document.getElementById('ck-fix-btn');
+  const port  = document.getElementById('check-port').value || '3333';
+  const btn   = document.getElementById('ck-fix-btn');
+  const progressWrap = document.getElementById('ck-fix-progress');
+  const statusEl     = document.getElementById('ck-fix-status');
+  const pctEl        = document.getElementById('ck-fix-pct');
+  const barEl        = document.getElementById('ck-fix-bar');
+
   btn.disabled = true;
   btn.textContent = '⏳ Fixing…';
+  progressWrap.style.display = 'block';
+  barEl.style.width = '0%'; pctEl.textContent = '0%';
+  statusEl.textContent = 'Connecting…';
+
   try {
     const r = await fetch(`http://localhost:${port}/fix`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(items)
     });
-    const j = await r.json();
-    if (j.ok) {
-      document.getElementById('check-status-msg').textContent =
-        `☢ Fixed ${j.fixed} of ${j.total} course(s) — data updated to ${j.label}. Rebuild to deploy.`;
-      btn.textContent = `✅ Fixed ${j.fixed}`;
-    } else {
-      alert('Fix failed: ' + (j.error || 'unknown error'));
-      btn.disabled = false;
-      btn.textContent = '☢ Apply Fixes';
+    if (!r.ok) { throw new Error(`Server error ${r.status}`); }
+
+    const reader  = r.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const parts = buf.split('\n\n');
+      buf = parts.pop();
+      for (const part of parts) {
+        const line = part.trim();
+        if (!line.startsWith('data: ')) continue;
+        let d; try { d = JSON.parse(line.slice(6)); } catch { continue; }
+        if (d.type === 'fixed') {
+          const pct = Math.round(d.index / d.total * 100);
+          const typeLabel = d.itemType === 'range' ? '≈ range' : '⚠ changed';
+          statusEl.textContent = `[${d.index}/${d.total}] ${d.code} — ${typeLabel}`;
+          pctEl.textContent    = pct + '%';
+          barEl.style.width    = pct + '%';
+        }
+        if (d.type === 'done') {
+          barEl.style.width    = '100%';
+          pctEl.textContent    = '100%';
+          statusEl.textContent = `✅ Fixed ${d.fixed} of ${d.total} course(s) — data updated to ${d.label}. Rebuild to deploy.`;
+          document.getElementById('check-status-msg').textContent =
+            `☢ Fixed ${d.fixed} course(s) — updated to ${d.label}. Rebuild to deploy.`;
+          btn.textContent = `✅ Fixed ${d.fixed}`;
+        }
+        if (d.type === 'error') {
+          statusEl.textContent = `❌ ${d.msg}`;
+          btn.disabled = false; btn.textContent = '☢ Apply Fixes';
+        }
+      }
     }
   } catch (e) {
-    alert('Could not reach local server: ' + e.message);
+    statusEl.textContent = `❌ ${e.message}`;
     btn.disabled = false;
     btn.textContent = '☢ Apply Fixes';
   }
