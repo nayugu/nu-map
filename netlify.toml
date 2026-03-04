@@ -1,4 +1,5 @@
 [build]
+  command   = ""
   publish   = "dist"
 
 [[redirects]]
