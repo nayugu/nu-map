@@ -21,6 +21,7 @@ export default function Header() {
     setEntSem, setEntYear, setGradSem, setGradYear,
     coopGradConflicts, workPl,
     showViolLines, setShowViolLines,
+    manualZoom, setManualZoom,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -242,6 +243,26 @@ export default function Header() {
                     onDec={() => { if (gradOrd - 2 > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }}
                     onInc={() => { if (planGradYear < 2040) setGradYear(planGradYear + 1); }}
                   />
+                </div>
+              </div>
+
+              {/* Zoom level */}
+              <div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>ZOOM</div>
+                <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+                  {[null, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(v => {
+                    const isActive = v === null ? manualZoom == null : manualZoom === v;
+                    const label = v == null ? "auto" : `${Math.round(v * 100)}%`;
+                    return (
+                      <button key={label} onClick={() => setManualZoom(v)} style={{
+                        flex: "1 1 auto", fontSize: 9, padding: "4px 4px", borderRadius: 4, cursor: "pointer",
+                        background: isActive ? "var(--active-bg)" : "transparent",
+                        border: `1px solid ${isActive ? "var(--active)" : "var(--border-2)"}`,
+                        color: isActive ? "var(--active)" : "var(--text-4)",
+                        fontWeight: isActive ? 700 : 400,
+                      }}>{label}</button>
+                    );
+                  })}
                 </div>
               </div>
 

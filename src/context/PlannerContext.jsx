@@ -77,11 +77,16 @@ export function PlannerProvider({ children }) {
   const [panelHeight, setPanelHeight] = useState(210);
   const uiScaleRef = useRef(1);
   const computeUiScale = (w) => w < 768 ? 1 : Math.max(0.7, Math.min(1.5, w / 1440));
-  const [uiScale,   setUiScale]   = useState(() => {
-    const s = computeUiScale(window.innerWidth);
-    uiScaleRef.current = s;
-    return s;
+  const [autoScale, setAutoScale] = useState(() => computeUiScale(window.innerWidth));
+  const [manualZoom, setManualZoomRaw] = useState(() => {
+    try { const v = parseFloat(localStorage.getItem("ncp-zoom")); return isNaN(v) ? null : v; } catch { return null; }
   });
+  const setManualZoom = v => {
+    setManualZoomRaw(v);
+    try { if (v == null) localStorage.removeItem("ncp-zoom"); else localStorage.setItem("ncp-zoom", String(v)); } catch {}
+  };
+  const uiScale = manualZoom ?? autoScale;
+  uiScaleRef.current = uiScale;
 
   // ── Dynamic semester grid (cohort-trimmed) ───────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,11 +154,7 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
-    const update = () => {
-      const s = computeUiScale(window.innerWidth);
-      uiScaleRef.current = s;
-      setUiScale(s);
-    };
+    const update = () => setAutoScale(computeUiScale(window.innerWidth));
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -837,7 +838,7 @@ export function PlannerProvider({ children }) {
     showDisclaimer, showSettings,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
     panelHeight,
-    uiScale,
+    uiScale, manualZoom, setManualZoom,
     // Derived
     currentSemIdx, placedIds, workStartMap, workContMap,
     gradSemId, coopGradConflicts,

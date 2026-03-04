@@ -44,7 +44,7 @@ export default function SummerRow({ semA, semB }) {
     if (workItem) {
       return (
         <div key={sem.id} style={{
-          flex: 1, minWidth: 0,
+          flex: 1, minWidth: 0, overflow: "hidden",
           border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
           background: "var(--card-bg)",
         }}>
@@ -93,7 +93,7 @@ export default function SummerRow({ semA, semB }) {
     if (contItem) {
       return (
         <div key={sem.id} style={{
-          flex: 1, minWidth: 0,
+          flex: 1, minWidth: 0, overflow: "hidden",
           border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
           background: "var(--card-bg)",
         }}>
@@ -127,7 +127,7 @@ export default function SummerRow({ semA, semB }) {
         onDragLeave={onDragLeave}
         onDrop={e => onDrop(e, sem.id)}
         style={{
-          flex: 1, minWidth: 0,
+          flex: 1, minWidth: 0, overflow: "hidden",
           padding: "4px 5px",
           border: `1px solid ${hoveredSem === sem.id ? "var(--active)" : "var(--border-slot)"}`,
           borderRadius: 4,
