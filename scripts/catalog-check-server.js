@@ -17,6 +17,7 @@ import { createServer }         from "http";
 import { readFileSync, existsSync, writeFileSync } from "fs";
 import { resolve, dirname }     from "path";
 import { fileURLToPath }        from "url";
+import { execSync }             from "child_process";
 import { parse as parseHTML }   from "node-html-parser";
 
 const __dirname     = dirname(fileURLToPath(import.meta.url));
@@ -441,8 +442,64 @@ const server = createServer((req, res) => {
     return;
   }
 
+  // ── GET /git-status — diff of data files against HEAD ───────────────────────
+  if (req.method === "GET" && url.pathname === "/git-status") {
+    const GIT_FILES = [
+      "public/change-log.json",
+      "public/all-courses.json",
+      "public/data-meta.json",
+      "src/core/dataMeta.json",
+    ];
+    try {
+      const statusOut = execSync(`git status --short -- ${GIT_FILES.join(" ")}`, { cwd: ROOT }).toString().trim();
+      const dirty = statusOut.length > 0;
+      let diff = "";
+      if (dirty) {
+        diff = execSync(`git diff -- ${GIT_FILES.join(" ")}`, { cwd: ROOT }).toString().trim().slice(0, 12000);
+      }
+      res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true, dirty, status: statusOut, diff }));
+    } catch (e) {
+      res.writeHead(500, { ...corsHeaders, "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: false, error: e.message }));
+    }
+    return;
+  }
+
+  // ── POST /git-push — commit changed data files and push ──────────────────────
+  if (req.method === "POST" && url.pathname === "/git-push") {
+    const GIT_FILES = [
+      "public/change-log.json",
+      "public/all-courses.json",
+      "public/data-meta.json",
+      "src/core/dataMeta.json",
+    ];
+    let body = "";
+    req.on("data", c => { body += c; });
+    req.on("end", () => {
+      try {
+        const statusOut = execSync(`git status --short -- ${GIT_FILES.join(" ")}`, { cwd: ROOT }).toString().trim();
+        if (!statusOut) {
+          res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok: true, msg: "Nothing to commit — already up to date." }));
+          return;
+        }
+        const date = new Date().toISOString().substring(0, 10);
+        execSync(`git add ${GIT_FILES.join(" ")}`, { cwd: ROOT });
+        execSync(`git commit -m "catalog: update data files ${date}"`, { cwd: ROOT });
+        const pushOut = execSync("git push", { cwd: ROOT, encoding: "utf8" });
+        res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true, msg: "Pushed successfully.", output: pushOut.trim() }));
+      } catch (e) {
+        res.writeHead(500, { ...corsHeaders, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
   res.writeHead(200, { ...corsHeaders, "Content-Type": "text/plain" });
-  res.end(`NU Map Catalog Check Server running on :${PORT}\nGET /run  \u2014 start SSE check stream\nPOST /fix \u2014 apply discrepancy fixes to all-courses.json`);
+  res.end(`NU Map Catalog Check Server running on :${PORT}\nGET /run  \u2014 start SSE check stream\nPOST /fix \u2014 apply discrepancy fixes\nGET /git-status \u2014 show uncommitted data file changes\nPOST /git-push \u2014 commit + push data files to GitHub`);
 });
 
 server.listen(PORT, () => {

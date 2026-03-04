@@ -286,6 +286,18 @@
       </div>
     </div>
 
+    <!-- Push card — only useful on localhost since it needs the local server -->
+    <div class="card" id="git-push-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="margin:0 0 4px">Push to GitHub</h2>
+          <p class="text2" style="margin:0;font-size:12px">Commits <code>change-log.json</code>, <code>all-courses.json</code>, and data-meta files, then pushes to <code>main</code>.</p>
+        </div>
+        <button class="btn" style="background:#238636;border-color:#2ea043;font-size:14px;padding:10px 22px;flex-shrink:0" onclick="gitReviewAndPush()">⬆ Review & Push</button>
+      </div>
+      <div id="git-push-result" style="display:none;margin-top:12px;font-size:12px;padding:8px 12px;border-radius:6px"></div>
+    </div>
+
 
   </div>
 
@@ -648,6 +660,23 @@
   </div>
 </div><!-- /#dev-app -->
 
+<!-- ── Push to GitHub confirmation modal ─────────────────────────── -->
+<div id="git-push-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:9999;align-items:center;justify-content:center"
+     onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--bg2);border:2px solid #2ea043;border-radius:12px;padding:28px 32px;max-width:600px;width:92%;box-shadow:0 0 60px rgba(46,160,67,0.35);display:flex;flex-direction:column;gap:16px">
+    <h2 style="color:#2ea043;margin:0;font-size:18px">⬆ Review Changes Before Push</h2>
+    <div id="git-push-modal-status" style="font-size:12px;color:var(--text2);line-height:1.6">
+      <span style="color:var(--text3)">Loading diff…</span>
+    </div>
+    <pre id="git-push-modal-diff" style="display:none;background:var(--bg3);border-radius:6px;padding:12px;font-size:10.5px;line-height:1.5;overflow:auto;max-height:280px;margin:0;white-space:pre-wrap;word-break:break-all;color:var(--text2)"></pre>
+    <p style="color:var(--text3);font-size:11px;margin:0">Commits to <code>main</code> then runs <code>git push</code>. GitHub Actions will redeploy the site in ~1 min.</p>
+    <div style="display:flex;gap:12px;justify-content:flex-end">
+      <button class="btn sec" onclick="document.getElementById('git-push-modal').style.display='none'">Cancel</button>
+      <button id="git-push-confirm-btn" class="btn" style="background:#238636;border-color:#2ea043" onclick="gitDoPush()">⬆ Confirm & Push</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── Apply Fixes confirmation modal ──────────────────────────── -->
 <div id="ck-fix-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:9999;align-items:center;justify-content:center"
      onclick="if(event.target===this)this.style.display='none'">
@@ -730,7 +759,8 @@ async function attemptLogin() {
   document.querySelectorAll(".site-logo").forEach(el => { el.src = isLocal ? "dev_logo.png" : "logo.png"; });
 
   // Restore session (survives page refresh, clears on tab close)
-  if (sessionStorage.getItem(SESSION_KEY) === "1") { showApp(); return; }
+  // Skip auth entirely on localhost — no point protecting your own machine
+  if (isLocal || sessionStorage.getItem(SESSION_KEY) === "1") { showApp(); return; }
 
   // Pre-fill today's date in patch creator
   const dateEl = document.getElementById("p-date");
@@ -752,6 +782,83 @@ function logout() {
   document.getElementById("dev-app").style.display     = "none";
   document.getElementById("auth-error").style.display  = "none";
   document.getElementById("pw-input").value = "";
+}
+
+// ── Push to GitHub ───────────────────────────────────────────────────────────
+async function gitReviewAndPush() {
+  const port      = document.getElementById("check-port")?.value || "3333";
+  const modal     = document.getElementById("git-push-modal");
+  const statusEl  = document.getElementById("git-push-modal-status");
+  const diffEl    = document.getElementById("git-push-modal-diff");
+  const confirmBtn = document.getElementById("git-push-confirm-btn");
+
+  statusEl.innerHTML = '<span style="color:var(--text3)">Loading diff…</span>';
+  diffEl.style.display = "none";
+  diffEl.textContent = "";
+  confirmBtn.disabled = false;
+  confirmBtn.style.opacity = "";
+  confirmBtn.textContent = "⬆ Confirm & Push";
+  modal.style.display = "flex";
+
+  try {
+    const res  = await fetch(`http://localhost:${port}/git-status`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "Server error");
+
+    if (!data.dirty) {
+      statusEl.innerHTML = '<span style="color:var(--success)">✓ Nothing to commit — all data files already match HEAD.</span>';
+      confirmBtn.disabled = true;
+      confirmBtn.style.opacity = "0.4";
+      return;
+    }
+
+    const lines = data.status.split("\n").map(l => {
+      const sym  = l.substring(0, 2).trim();
+      const file = l.substring(3);
+      const col  = sym === "M" ? "var(--warn)" : sym === "A" ? "var(--success)" : "var(--text2)";
+      return `<span style="color:${col};font-family:monospace;font-weight:700">${sym || "?"}</span>&nbsp;<code>${file}</code>`;
+    }).join("<br>");
+    statusEl.innerHTML = `<strong style="font-size:12px">Changed files:</strong><br>${lines}`;
+
+    if (data.diff) {
+      diffEl.textContent = data.diff;
+      diffEl.style.display = "block";
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span style="color:var(--error)">Could not reach server on :${port} — is <code>npm run dev</code> running?<br>${e.message}</span>`;
+    confirmBtn.disabled = true;
+    confirmBtn.style.opacity = "0.4";
+  }
+}
+
+async function gitDoPush() {
+  const port       = document.getElementById("check-port")?.value || "3333";
+  const confirmBtn = document.getElementById("git-push-confirm-btn");
+  const statusEl   = document.getElementById("git-push-modal-status");
+  const resultEl   = document.getElementById("git-push-result");
+
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Pushing…";
+  statusEl.innerHTML = '<span style="color:var(--text3)">Running git commit + push…</span>';
+
+  try {
+    const res  = await fetch(`http://localhost:${port}/git-push`, { method: "POST" });
+    const data = await res.json();
+    document.getElementById("git-push-modal").style.display = "none";
+    resultEl.style.display = "block";
+    if (data.ok) {
+      resultEl.style.cssText += ";background:rgba(46,160,67,0.12);color:var(--success)";
+      resultEl.textContent = `✓ ${data.msg}`;
+    } else {
+      resultEl.style.cssText += ";background:rgba(231,76,60,0.12);color:var(--error)";
+      resultEl.textContent = `✗ ${data.error}`;
+    }
+  } catch (e) {
+    document.getElementById("git-push-modal").style.display = "none";
+    resultEl.style.display = "block";
+    resultEl.style.cssText += ";background:rgba(231,76,60,0.12);color:var(--error)";
+    resultEl.textContent = `✗ Could not reach server: ${e.message}`;
+  }
 }
 
 // ── Change Log ──────────────────────────────────────────────────────────────
@@ -1051,6 +1158,7 @@ window.addEventListener('resize', () => { if (pvReady) pvApply(); });
   if (onHttpsRemote) {
     document.getElementById('ck-launch-row').style.display = 'none';
     document.getElementById('ck-local-only-banner').style.display = 'block';
+    document.getElementById('git-push-card').style.display = 'none';
   }
 })();
 
