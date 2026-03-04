@@ -205,6 +205,8 @@ export default function BankPanel() {
               <div key={wt.id}
                 ref={el => { cardRefs.current[wt.id] = el; }}
                 draggable
+                data-drag-id={wt.id}
+                data-drag-type="work"
                 onDragStart={e => onDragStart(e, wt.id, "work", null)}
                 style={{ background: "var(--card-bg)", border: `2px solid ${wt.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
               >

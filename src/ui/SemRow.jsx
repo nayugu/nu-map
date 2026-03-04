@@ -117,6 +117,7 @@ export default function SemRow({ sem }) {
 
   return (
     <div key={sem.id}
+      data-sem-id={sem.id}
       onDragOver={e => onDragOver(e, sem.id)}
       onDragLeave={onDragLeave}
       onDrop={e => onDrop(e, sem.id)}
@@ -151,12 +152,15 @@ export default function SemRow({ sem }) {
       </div>
 
       {/* Course slots */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, flex: 1, maxWidth: 980 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, flex: 1, maxWidth: 652 }}>
         {workItem ? (
           // Full-width work-term card
           <div
             ref={el => { cardRefs.current[workItem.id] = el; }}
             draggable
+            data-drag-id={workItem.id}
+            data-drag-type="work"
+            data-drag-from={sem.id}
             onDragStart={e => onDragStart(e, workItem.id, "work", sem.id)}
             style={{
               flex: 1, minHeight: 58, minWidth: 200,

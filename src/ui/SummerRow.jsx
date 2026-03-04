@@ -122,6 +122,7 @@ export default function SummerRow({ semA, semB }) {
 
     return (
       <div key={sem.id}
+        data-sem-id={sem.id}
         onDragOver={e => onDragOver(e, sem.id)}
         onDragLeave={onDragLeave}
         onDrop={e => onDrop(e, sem.id)}

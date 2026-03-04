@@ -46,18 +46,23 @@ function PlannerApp() {
     }
   }
 
+  // Mobile: uiScale === 1 (< 768 px) → natural overflow scroll, no CSS scale
+  const isMobile = uiScale === 1;
+
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0,
       width: '100vw', height: '100vh',
-      background: 'var(--bg-app)', overflow: 'hidden',
+      background: 'var(--bg-app)', overflow: isMobile ? 'auto' : 'hidden',
     }}>
       <div style={{
-        position: 'absolute', top: 0, left: 0,
-        width:  `${100 / uiScale}vw`,
-        height: `${100 / uiScale}vh`,
+        position: isMobile ? 'relative' : 'absolute', top: 0, left: 0,
+        width:  isMobile ? 'auto'              : `${100 / uiScale}vw`,
+        height: isMobile ? 'auto'              : `${100 / uiScale}vh`,
+        minWidth:  isMobile ? 860 : undefined,
+        minHeight: isMobile ? '100vh' : undefined,
         transformOrigin: '0 0',
-        transform: `scale(${uiScale})`,
+        transform: isMobile ? 'none' : `scale(${uiScale})`,
         display: 'flex',
         fontFamily: "'Inter', system-ui, sans-serif",
         background: 'var(--bg-app)',

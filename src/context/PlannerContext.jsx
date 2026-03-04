@@ -76,8 +76,9 @@ export function PlannerProvider({ children }) {
   // ── Layout state ─────────────────────────────────────────────
   const [panelHeight, setPanelHeight] = useState(210);
   const uiScaleRef = useRef(1);
+  const computeUiScale = (w) => w < 768 ? 1 : Math.max(0.7, Math.min(1.5, w / 1440));
   const [uiScale,   setUiScale]   = useState(() => {
-    const s = Math.max(0.6, Math.min(1.5, window.innerWidth / 1440));
+    const s = computeUiScale(window.innerWidth);
     uiScaleRef.current = s;
     return s;
   });
@@ -106,6 +107,8 @@ export function PlannerProvider({ children }) {
   const stateRef      = useRef({ placements: {}, workPl: {}, semOrders: {} });
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
+  const onDropRef     = useRef(null);   // updated each render for touch drag
+  const touchDragIdRef = useRef(null);  // card id currently being touch-dragged
 
   // ── Effects: data loading ────────────────────────────────────
   useEffect(() => {
@@ -145,19 +148,20 @@ export function PlannerProvider({ children }) {
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
     const update = () => {
-      const s = Math.max(0.6, Math.min(1.5, window.innerWidth / 1440));
+      const s = computeUiScale(window.innerWidth);
       uiScaleRef.current = s;
       setUiScale(s);
     };
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     stateRef.current    = { placements, workPl, semOrders };
     allEdgesRef.current = allEdges;
+    onDropRef.current   = onDrop;
   });
   useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
 
@@ -207,7 +211,9 @@ export function PlannerProvider({ children }) {
     if (!el) return;
     const h = () => setScrollTick(t => t + 1);
     el.addEventListener("scroll", h, { passive: true });
-    return () => el.removeEventListener("scroll", h);
+    return () => {
+      el.removeEventListener("scroll", h);
+    };
   }, [loading]);
 
   // ── Effect: SVG lines ─────────────────────────────────────────
@@ -518,7 +524,7 @@ export function PlannerProvider({ children }) {
   };
 
   const onDrop = (e, semId) => {
-    e.preventDefault();
+    if (e?.preventDefault) e.preventDefault();
     setHoveredSem(null); setHoveredZone(null);
     if (!dragInfo) return;
     pushUndo();
@@ -674,6 +680,61 @@ export function PlannerProvider({ children }) {
     }
     setDragInfo(null);
   };
+
+  // ── Touch drag (mobile) ──────────────────────────────────────
+  // Mirrors the HTML5 drag API for touch devices:
+  //   touchstart on [data-drag-id] → sets dragInfo
+  //   touchmove  → elementFromPoint to highlight drop target
+  //   touchend   → executes drop via onDropRef
+  useEffect(() => {
+    const onTouchStart = (e) => {
+      const cardEl = e.target.closest('[data-drag-id]');
+      if (!cardEl) return;
+      const id      = cardEl.dataset.dragId;
+      const type    = cardEl.dataset.dragType;
+      const fromSem = cardEl.dataset.dragFrom || null;
+      touchDragIdRef.current = id;
+      setDragInfo({ id, type, fromSem });
+      // Make the card invisible to hit-testing so elementFromPoint sees through
+      if (cardRefs.current[id]) cardRefs.current[id].style.pointerEvents = 'none';
+    };
+
+    const onTouchMove = (e) => {
+      if (!touchDragIdRef.current) return;
+      e.preventDefault(); // prevent page scroll while dragging
+      const touch  = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const semEl  = target?.closest('[data-sem-id]');
+      setHoveredSem(semEl?.dataset.semId ?? null);
+    };
+
+    const onTouchEnd = (e) => {
+      if (!touchDragIdRef.current) return;
+      const id = touchDragIdRef.current;
+      // Restore pointer events before drop
+      if (cardRefs.current[id]) cardRefs.current[id].style.pointerEvents = '';
+      const touch  = e.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const semEl  = target?.closest('[data-sem-id]');
+      if (semEl && onDropRef.current) {
+        onDropRef.current(null, semEl.dataset.semId);
+      } else {
+        setDragInfo(null);
+      }
+      touchDragIdRef.current = null;
+      setHoveredSem(null);
+      setHoveredZone(null);
+    };
+
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove',  onTouchMove,  { passive: false }); // non-passive to allow preventDefault
+    document.addEventListener('touchend',   onTouchEnd,   { passive: true });
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove',  onTouchMove);
+      document.removeEventListener('touchend',   onTouchEnd);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Bank helpers ─────────────────────────────────────────────
   const bankCourseIds = useMemo(

@@ -55,6 +55,9 @@ export default function CourseCard({ course, inSem, semId }) {
     <div
       ref={el => { cardRefs.current[course.id] = el; }}
       draggable
+      data-drag-id={course.id}
+      data-drag-type="course"
+      data-drag-from={inSem ? semId : undefined}
       onDragStart={e => onDragStart(e, course.id, "course", inSem ? semId : null)}
       onDragOver={e => {
         if (!dragInfo || dragInfo.type !== "course" || dragInfo.id === course.id || !inSem) return;
@@ -76,6 +79,7 @@ export default function CourseCard({ course, inSem, semId }) {
         borderRadius: 6,
         padding: inSem ? "4px 6px 4px 10px" : "4px 6px 4px 30px",
         cursor: "grab", userSelect: "none",
+        touchAction: "manipulation",
         opacity: dimmed ? 0.35 : 1,
         transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
         boxShadow: isSel          ? "inset 0 -4px 0 #1a1a1a"
