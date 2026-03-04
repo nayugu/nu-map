@@ -755,12 +755,17 @@ async function loadDataMeta() {
 // ── Preview ─────────────────────────────────────────────────────────────────
 // ── Device Preview ──────────────────────────────────────────────────────────
 const PV_DEVICES = {
-  iphoneX:     { w:375,  h:812,  dpr:3, ppi:458, type:'phone',   bezelR:40, bezelT:12, notchW:209, notchH:28, notch:true,  home:true  },
-  iphone14:    { w:393,  h:852,  dpr:3, ppi:460, type:'phone',   bezelR:47, bezelT:14, notchW:126, notchH:34, notch:true,  home:true  },
-  ipadAir:     { w:820,  h:1180, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:20, notchW:0,   notchH:0,  notch:false, home:false },
-  ipadPro:     { w:834,  h:1194, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:14, notchW:0,   notchH:0,  notch:false, home:false },
-  macbook:     { w:1440, h:900,  dpr:2, ppi:224, type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  notch:false, home:false },
-  desktop1080: { w:1920, h:1080, dpr:1, ppi:96,  type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  notch:false, home:false },
+  // notchH = status-bar height in points (the full area the OS reserves at top)
+  // iPhone X:  safe-area-inset-top = 44pt; notch itself = 30pt; status bar = 44pt
+  //            user reports ~35pt visible cut — use 44 for correct safe-area sim
+  // iPhone 14 Pro: Dynamic Island; safe-area-inset-top = 59pt
+  // homeH = home-indicator height from bottom edge of iframe (pt)
+  iphoneX:     { w:375,  h:812,  dpr:3, ppi:458, type:'phone',   bezelR:40, bezelT:12, notchW:209, notchH:44, homeH:34, notch:true,  home:true  },
+  iphone14:    { w:393,  h:852,  dpr:3, ppi:460, type:'phone',   bezelR:47, bezelT:14, notchW:126, notchH:59, homeH:34, notch:true,  home:true  },
+  ipadAir:     { w:820,  h:1180, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:20, notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
+  ipadPro:     { w:834,  h:1194, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:14, notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
+  macbook:     { w:1440, h:900,  dpr:2, ppi:224, type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
+  desktop1080: { w:1920, h:1080, dpr:1, ppi:96,  type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
 };
 let pvKey   = 'iphoneX';
 let pvLand  = false;
@@ -801,11 +806,13 @@ function pvApply() {
     bezel.style.border = bt + 'px solid #1c1c1e';
     frame.style.borderRadius = Math.max(0, br - bt) + 'px';
     const showNotch = d.notch && !pvLand;
-    notchEl.style.top    = '0';
+    // Notch sits flush at the top of the iframe (bt from wrap top), height = OS status-bar reservation
+    notchEl.style.top    = bt + 'px';
     notchEl.style.width  = d.notchW + 'px';
-    notchEl.style.height = (d.notchH + bt) + 'px';
+    notchEl.style.height = d.notchH + 'px';
     notchEl.style.display = showNotch ? 'block' : 'none';
-    homeEl.style.bottom  = (bt + 7) + 'px';
+    // Home bar sits inside the iframe near the bottom (homeH pt from the iframe bottom edge)
+    homeEl.style.bottom  = (bt + (d.homeH || 8)) + 'px';
     homeEl.style.display = (d.home && !pvLand) ? 'block' : 'none';
   } else {
     wrap.classList.add('no-frame');

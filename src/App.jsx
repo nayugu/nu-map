@@ -56,7 +56,7 @@ function PlannerApp() {
       <div style={{
         position: isPhone ? 'relative' : 'absolute', top: 0, left: 0,
         width:  isPhone ? '100vw'             : `${100 / uiScale}vw`,
-        height: isPhone ? '100vh'             : `${100 / uiScale}vh`,
+        height: isPhone ? '100dvh'            : `${100 / uiScale}vh`,
         minWidth:  isPhone ? undefined : undefined,
         minHeight: isPhone ? undefined : undefined,
         transformOrigin: '0 0',
@@ -74,7 +74,7 @@ function PlannerApp() {
         {/* Scrollable timeline */}
         <div
           ref={timelineRef}
-          style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: isPhone ? `10px 10px ${showPanel ? panelHeight + 24 : 60}px 10px` : '10px 10px 240px 10px' }}
+          style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: isPhone ? `10px 10px ${showPanel ? panelHeight + 24 : 90}px 10px` : '10px 10px 240px 10px' }}
           onClick={() => { setSelectedId(null); setShowPanel(false); }}
         >
           <Header />
