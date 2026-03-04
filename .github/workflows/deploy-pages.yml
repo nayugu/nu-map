@@ -24,12 +24,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      # dist/ is committed to main, so no build step needed.
-      # If you ever stop committing dist/, add: npm ci && npm run build
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for GitHub Pages (base = /nu-map/)
+        run: npm run build
+        env:
+          VITE_BASE_PATH: /nu-map/
 
       - name: Prepare deployment directory
         run: |
-          cp dist/index.html dist/404.html  # SPA fallback for GitHub Pages
+          # SPA fallback for GitHub Pages
+          cp dist/index.html dist/404.html
+
+          # Remove developer-only files — dev portal is Netlify-only
+          rm -f dist/dev.html dist/change-log.json dist/scrape-state.json dist/data-meta.json
 
       - name: Deploy to gh-pages branch
         run: |
