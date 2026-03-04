@@ -4,7 +4,9 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 
 > Not affiliated with or endorsed by Northeastern University. Always verify your plan with an advisor and DegreeWorks.
 
-**Live:** https://nayugu.github.io/nu-map/ · **Dev portal:** https://nayugu.github.io/nu-map/dev.html · **Mirror:** https://numap.netlify.app/
+**Live:** https://nayugu.github.io/nu-map/  
+**Dev portal:** https://nayugu.github.io/nu-map/dev.html  
+**Mirror:** https://numap.netlify.app/
 
 ---
 
@@ -22,9 +24,21 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
+npm run dev      # http://localhost:5173 + catalog check server on :3333
 npm run build    # output → dist/
 ```
+
+---
+
+## Dev portal
+
+The dev portal (`/dev.html`) is password-protected with PBKDF2-SHA256 (300k iterations). To set or change the password:
+
+```bash
+npm run dev:pw   # interactive — generates a hash to paste into public/dev.html PW_HASH
+```
+
+The portal provides a live catalog check tool, a change log, a course patch creator, and quick links. The catalog check server starts automatically with `npm run dev` and streams results over SSE on port 3333.
 
 ---
 
