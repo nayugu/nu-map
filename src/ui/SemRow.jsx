@@ -251,6 +251,36 @@ export default function SemRow({ sem }) {
               ))}
             </div>
 
+            {/* Override zone — only visible when all main slots full + dragging a ≥4 SH course */}
+            {main4.length >= mainSlots && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 4 && (
+              <div
+                onDragOver={e => {
+                  if (!dragInfo || dragInfo.type !== "course") return;
+                  const c = courseMap[dragInfo.id]; if (!c || c.sh < 4) return;
+                  e.preventDefault(); e.stopPropagation();
+                  setHoveredZone({ semId: sem.id, zone: "override" }); setHoveredSem(null);
+                }}
+                onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
+                onDrop={e => {
+                  if (!dragInfo || dragInfo.type !== "course") return;
+                  e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
+                }}
+                style={{
+                  marginTop: 3, padding: "3px 6px",
+                  borderRadius: 4, cursor: "copy",
+                  border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "override"
+                    ? "1px dashed var(--active)" : "1px dashed var(--border-slot)",
+                  background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "override"
+                    ? "var(--active-bg)" : "transparent",
+                  opacity: hoveredZone?.semId === sem.id && hoveredZone?.zone === "override" ? 1 : 0.35,
+                  transition: "opacity 0.15s, border-color 0.1s, background 0.1s",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}
+              >
+                <span style={{ fontSize: 9, color: "var(--text-4)", letterSpacing: "0.04em" }}>+ override limit</span>
+              </div>
+            )}
+
             {/* Other <4 SH zone */}
             {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 4) < 4)) && (
               <div

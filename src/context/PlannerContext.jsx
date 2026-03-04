@@ -79,7 +79,7 @@ export function PlannerProvider({ children }) {
   const computeUiScale = (w) => w < 768 ? 1 : Math.max(0.7, Math.min(1.5, w / 1440));
   const [autoScale, setAutoScale] = useState(() => computeUiScale(window.innerWidth));
   const [manualZoom, setManualZoomRaw] = useState(() => {
-    try { const v = parseFloat(localStorage.getItem("ncp-zoom")); return isNaN(v) ? null : v; } catch { return null; }
+    try { const v = parseFloat(localStorage.getItem("ncp-zoom")); return isNaN(v) ? 1.25 : v; } catch { return 1.25; }
   });
   const setManualZoom = v => {
     setManualZoomRaw(v);
