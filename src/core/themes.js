@@ -40,7 +40,7 @@ const dark = {
 
   // ── Status: warning ──────────────────────────────────────────────
   '--warn':              '#c17f24',
-  '--warn-bright':       '#fbbf24',
+  '--warn-bright':       '#e09618',
   '--warn-bg':           '#2a1e08',
   '--warn-border':       '#c17f24',
 
@@ -84,12 +84,12 @@ const dark = {
   '--link-border':       '#1f4b6e',
 
   // ── Cohort picker: selected fall / spring ─────────────────────────
-  '--sel-fall-bg':       '#0d2a17',
-  '--sel-fall-border':   '#2a7a3a',
-  '--sel-fall-text':     '#4ade80',
-  '--sel-spr-bg':        '#0d1a2d',
-  '--sel-spr-border':    '#1f4b6e',
-  '--sel-spr-text':      '#58a6ff',
+  '--sel-fall-bg':       '#252525',
+  '--sel-fall-border':   '#555',
+  '--sel-fall-text':     '#c0c0c0',
+  '--sel-spr-bg':        '#252525',
+  '--sel-spr-border':    '#555',
+  '--sel-spr-text':      '#c0c0c0',
   '--blocked-border':    '#2a1a1a',
   '--blocked-text':      '#3d2020',
 
@@ -188,12 +188,12 @@ const light = {
   '--link-border':       '#7aaff8',
 
   // ── Cohort picker: selected fall / spring ──────────────────────────
-  '--sel-fall-bg':       '#dcfce7',
-  '--sel-fall-border':   '#166534',
-  '--sel-fall-text':     '#15803d',
-  '--sel-spr-bg':        '#dbeafe',
-  '--sel-spr-border':    '#2563eb',
-  '--sel-spr-text':      '#2563eb',
+  '--sel-fall-bg':       '#e8e8e8',
+  '--sel-fall-border':   '#888',
+  '--sel-fall-text':     '#333',
+  '--sel-spr-bg':        '#e8e8e8',
+  '--sel-spr-border':    '#888',
+  '--sel-spr-text':      '#333',
   '--blocked-border':    '#fecaca',
   '--blocked-text':      '#dc2626',
 

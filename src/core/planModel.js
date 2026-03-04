@@ -136,6 +136,9 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     minor2Path ? loadMinor(minor2Path).catch(() => null) : null,
   ]);
 
+  // Use major's totalCreditsRequired if caller didn't supply one
+  const effectiveTotalSHRequired = totalSHRequired || (major?.totalCreditsRequired ?? 0);
+
   // ── Compute totals ────────────────────────────────────────────
   let doneSH = 0, plannedSH = 0;
   const semRows = [];
@@ -216,12 +219,12 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   ].filter(Boolean).join("\n");
 
   // ── Credit summary ────────────────────────────────────────────
-  const reqPct = totalSHRequired > 0 ? Math.min(100, (doneSH / totalSHRequired) * 100).toFixed(0) : null;
+  const reqPct = effectiveTotalSHRequired > 0 ? Math.min(100, (doneSH / effectiveTotalSHRequired) * 100).toFixed(0) : null;
   const creditHtml = `<div class="credit-row">
     <div class="credit-num">${doneSH}<span class="credit-unit"> SH completed</span></div>
     <div class="credit-sep">+</div>
     <div class="credit-num">${plannedSH}<span class="credit-unit"> SH planned</span></div>
-    ${totalSHRequired > 0 ? `<div class="credit-sep">/</div><div class="credit-num">${totalSHRequired}<span class="credit-unit"> SH required</span></div>` : ""}
+    ${effectiveTotalSHRequired > 0 ? `<div class="credit-sep">/</div><div class="credit-num">${effectiveTotalSHRequired}<span class="credit-unit"> SH required</span></div>` : ""}
     ${reqPct !== null ? `<div class="credit-pct">${reqPct}%</div>` : ""}
   </div>`;
 

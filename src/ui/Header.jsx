@@ -88,8 +88,11 @@ export default function Header() {
           </span>
         </div>
 
+        {/* ── Right-side controls — always pinned to the right ── */}
+        <div style={{ display: "flex", gap: 6, alignItems: "center", marginLeft: "auto", flexShrink: 0 }}>
+
         {/* Export — always visible */}
-        <button className="hdr-btn" onClick={handleExport} style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
+        <button className="hdr-btn" onClick={handleExport} style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
           ⬇ Export PDF
         </button>
 
@@ -287,6 +290,7 @@ export default function Header() {
           title="About & disclaimer"
           style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}
         >ⓘ About</button>
+        </div>{/* end right-side controls */}
       </div>
 
       {/* ── Relationship legend ── */}

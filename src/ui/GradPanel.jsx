@@ -86,7 +86,7 @@ function CheckBox({ sat }) {
 
 // ── Searchable combobox (matches course-bank search style) ───────────────
 
-function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
+function SearchCombo({ value, onChange, groups, placeholder = "Search…", scale = 1 }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
   const [rect,  setRect]  = useState(null);
@@ -146,30 +146,32 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
       </div>
       {open && rect && createPortal(
         <div style={{
-          position: "fixed", top: rect.bottom + 2, left: rect.left, width: rect.width, zIndex: 9000,
-          maxHeight: 200, overflowY: "auto",
+          position: "fixed", top: rect.bottom + 2, left: rect.left,
+          width: rect.width / scale, zIndex: 9000,
+          maxHeight: 280, overflowY: "auto",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
-          fontFamily: "'Inter', system-ui, sans-serif", fontSize: 13,
+          fontFamily: "'Inter', system-ui, sans-serif", fontSize: 12,
+          transform: `scale(${scale})`, transformOrigin: "top left",
         }}>
           <div
             onMouseDown={() => select("")}
             style={{
-              padding: "5px 8px", fontSize: 10, cursor: "pointer",
+              padding: "6px 10px", fontSize: 11, cursor: "pointer",
               color: "var(--text-5)", borderBottom: "1px solid var(--border-1)",
             }}
           >— None —</div>
           {!q ? (
-            <div style={{ padding: "6px 8px", fontSize: 10, color: "var(--text-5)", fontStyle: "italic" }}>Type to search…</div>
+            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)", fontStyle: "italic" }}>Type to search…</div>
           ) : filtered.length === 0 ? (
-            <div style={{ padding: "6px 8px", fontSize: 10, color: "var(--text-5)" }}>No results</div>
+            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)" }}>No results</div>
           ) : (
             filtered.map(o => (
               <div
                 key={o.path}
                 onMouseDown={() => select(o.path)}
                 style={{
-                  padding: "4px 8px", fontSize: 10, cursor: "pointer",
+                  padding: "5px 10px", fontSize: 11, cursor: "pointer",
                   background: o.path === value ? "var(--bg-surface-2)" : undefined,
                   color: o.path === value ? "var(--text-1)" : "var(--text-2)",
                 }}
@@ -179,7 +181,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
                 <div style={{ fontWeight: 600 }}>
                   {o.label}{o.location ? ` (${o.location})` : ""}
                 </div>
-                <div style={{ fontSize: 8.5, color: "var(--text-5)" }}>{o.grp}</div>
+                <div style={{ fontSize: 10, color: "var(--text-5)" }}>{o.grp}</div>
               </div>
             ))
           )}
@@ -395,7 +397,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel() {
-  const { placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel } = usePlanner();
+  const { placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, uiScale } = usePlanner();
 
   const majorGroups  = useMemo(() => getMajorOptionGroups(), []);
   const minorGroups  = useMemo(() => getMinorOptionGroups(), []);
@@ -477,6 +479,7 @@ export default function GradPanel() {
             onChange={setSelPath}
             groups={majorGroups}
             placeholder="Search majors…"
+            scale={uiScale}
           />
         </div>
 
@@ -486,7 +489,7 @@ export default function GradPanel() {
             <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
               CONCENTRATION
             </div>
-            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="Search concentrations…" />
+            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="Search concentrations…" scale={uiScale} />
             {major.concentrations.minOptions > 0 && !selConc && (
               <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
                 ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
@@ -500,7 +503,7 @@ export default function GradPanel() {
           {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
             <div key={lbl}>
               <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="Search minors…" />
+              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="Search minors…" scale={uiScale} />
             </div>
           ))}
         </div>
