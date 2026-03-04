@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="dev_logo.png" />
+  <link rel="icon" type="image/png" href="logo.png" />
   <title>NU Map — Developer Portal</title>
+  <!-- OAuth provider SDKs (configure clientIds in PROVIDERS below) -->
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js" async></script>
   <style>
     :root {
       --bg:        #111317;
@@ -51,8 +54,17 @@
       font-weight: 600; cursor: pointer;
     }
     .auth-card .btn-primary:hover { opacity: 0.9; }
-    .auth-error { color: var(--error); font-size: 12px; margin-top: 8px; display: none; }
-    .auth-hint  { color: var(--text3); font-size: 11px; margin-top: 12px; }
+    .auth-error { color: var(--error); font-size: 12px; margin-top: 10px; display: none; }
+    /* OAuth provider buttons */
+    .btn-provider {
+      width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: #2a2d35; border: 1px solid var(--border); color: var(--text);
+      border-radius: var(--radius); padding: 11px 16px; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: background 0.15s, border-color 0.15s; margin-bottom: 10px;
+    }
+    .btn-provider:hover { background: #383d48; border-color: var(--text3); }
+    .oauth-divider { display: flex; align-items: center; gap: 10px; margin: 4px 0 10px; color: var(--text3); font-size: 11px; }
+    .oauth-divider::before, .oauth-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 
     /* ── App shell ────────────────────────────────────────────── */
     #dev-app { display: none; }
@@ -194,12 +206,22 @@
 ══════════════════════════════════════════════════════════════════ -->
 <div id="auth-screen">
   <div class="auth-card">
-    <h1><img src="dev_logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map · Dev Portal</h1>
-    <p>Authorized access only. Enter your developer password.</p>
-    <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password" />
-    <button class="btn-primary" onclick="attemptLogin()">Unlock →</button>
-    <p class="auth-error" id="auth-error">Incorrect password.</p>
-    <p class="auth-hint" id="auth-hint"></p>
+    <h1><img class="site-logo" src="logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map · Dev Portal</h1>
+    <p>Authorized access only. Sign in with an approved account.</p>
+    <!-- Google Sign-In button (rendered by GSI SDK into this div) -->
+    <div id="oauth-btn-google" style="min-height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:10px"></div>
+    <div class="oauth-divider">or</div>
+    <!-- Microsoft -->
+    <button class="btn-provider" onclick="msLogin()">
+      <svg width="18" height="18" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1"  y="1"  width="9" height="9" fill="#f25022"/>
+        <rect x="11" y="1"  width="9" height="9" fill="#7fba00"/>
+        <rect x="1"  y="11" width="9" height="9" fill="#00a4ef"/>
+        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+      </svg>
+      Continue with Microsoft
+    </button>
+    <p class="auth-error" id="auth-error"></p>
   </div>
 </div>
 
@@ -208,8 +230,9 @@
 ══════════════════════════════════════════════════════════════════ -->
 <div id="dev-app">
   <header>
-    <h1><img src="dev_logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map</h1>
+    <h1><img class="site-logo" src="logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map</h1>
     <span>Developer Portal</span>
+    <span id="auth-user" style="font-size:11px;color:var(--text3);margin-left:2px"></span>
     <button class="logout" onclick="logout()">Log out</button>
   </header>
 
@@ -282,15 +305,7 @@
       </div>
     </div>
 
-    <div class="card">
-      <h2>Change Password</h2>
-      <div class="row2">
-        <div class="field"><label>New Password</label><input type="password" id="new-pw" /></div>
-        <div class="field"><label>Confirm</label><input type="password" id="new-pw2" /></div>
-      </div>
-      <button class="btn sec" onclick="changePw()">Update Password</button>
-      <p id="pw-change-msg" class="text2" style="margin-top:8px"></p>
-    </div>
+
   </div>
 
   <!-- ── Course Patches ─────────────────────────────────────────── -->
@@ -663,79 +678,151 @@
   </div>
 </div>
 <script>
-// ── Constants ──────────────────────────────────────────────────────────────
-const STORAGE_KEY   = "numap-dev-hash";
-const SETUP_KEY     = "numap-dev-setup";
+// ── Constants ────────────────────────────────────────────────────────────────
 const PREVIEW_STATE = "ncp-state-v2";
+const SESSION_KEY   = "numap-dev-session"; // sessionStorage: { email, name }
 
-// ── WebCrypto SHA-256 helper ────────────────────────────────────────────────
-async function sha256(text) {
-  const buf    = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+// ═══════════════════════════════════════════════════════════════════════════
+// ── ACCESS CONTROL ─────────────────────────────────────────────────────────
+// Add more emails here to grant access to additional developers.
+// ═══════════════════════════════════════════════════════════════════════════
+const ALLOWED_EMAILS = [
+  "gu.nat@northeastern.edu",
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── OAUTH PROVIDER REGISTRY ────────────────────────────────────────────────
+// To add a new provider: add an entry below + a matching button in the HTML.
+//
+// Google setup:
+//   1. console.cloud.google.com → APIs & Services → Credentials
+//      → Create OAuth 2.0 Client ID (Web application)
+//   2. Authorized JS origins:
+//        https://<your-netlify>.netlify.app
+//        http://localhost:5173
+//
+// Microsoft setup:
+//   1. portal.azure.com → Azure AD → App registrations → New registration
+//   2. Redirect URIs (Single-page application):
+//        https://<your-netlify>.netlify.app/dev.html
+//        http://localhost:5173/dev.html
+//   3. Under Authentication: enable "Access tokens" + "ID tokens"
+// ═══════════════════════════════════════════════════════════════════════════
+const PROVIDERS = {
+  google: {
+    clientId: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+    init() {
+      const tryRender = () => {
+        if (!window.google?.accounts?.id) { setTimeout(tryRender, 150); return; }
+        google.accounts.id.initialize({
+          client_id: PROVIDERS.google.clientId,
+          callback({ credential }) {
+            try {
+              // Decode JWT payload (no signature verification needed — Google already validated it)
+              const b64 = credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+              const p   = JSON.parse(atob(b64));
+              grantAccess(p.email, p.name ?? p.email);
+            } catch { showAuthError("Failed to read Google sign-in response."); }
+          },
+          cancel_on_tap_outside: false,
+        });
+        google.accounts.id.renderButton(
+          document.getElementById("oauth-btn-google"),
+          { theme: "filled_black", size: "large", width: 320, text: "signin_with" }
+        );
+      };
+      tryRender();
+    },
+  },
+  microsoft: {
+    clientId: "YOUR_MICROSOFT_CLIENT_ID",
+    tenantId: "common", // use "organizations" to restrict to work/school accounts only
+    _app: null,
+    async getApp() {
+      if (this._app) return this._app;
+      if (!window.msal) throw new Error("Microsoft auth library not loaded yet. Wait a moment and try again.");
+      this._app = new msal.PublicClientApplication({
+        auth: {
+          clientId:    this.clientId,
+          authority:  `https://login.microsoftonline.com/${this.tenantId}`,
+          redirectUri: location.href.split(/[?#]/)[0],
+        },
+        cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: false },
+      });
+      await this._app.initialize();
+      return this._app;
+    },
+    async login() {
+      try {
+        const app    = await PROVIDERS.microsoft.getApp();
+        const result = await app.loginPopup({ scopes: ["openid", "email", "profile"] });
+        grantAccess(result.account.username, result.account.name ?? result.account.username);
+      } catch(e) {
+        if (e.errorCode !== "user_cancelled") showAuthError(e.message ?? "Microsoft sign-in failed.");
+      }
+    },
+  },
+};
+
+// ── Auth helpers ─────────────────────────────────────────────────────────────
+function grantAccess(email, name) {
+  if (!ALLOWED_EMAILS.map(e => e.toLowerCase()).includes(email.toLowerCase())) {
+    showAuthError(`${email} is not an authorized account.`);
+    return;
+  }
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify({ email, name }));
+  showApp(name);
 }
 
-// ── Auth ────────────────────────────────────────────────────────────────────
+function showAuthError(msg) {
+  const el = document.getElementById("auth-error");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+
+function msLogin() { PROVIDERS.microsoft.login(); }
+
+// ── Initialization ───────────────────────────────────────────────────────────
 (function init() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) {
-    // First time: show setup hint
-    document.getElementById("auth-hint").textContent =
-      "First login — your password will be set from this entry.";
-    document.getElementById("auth-hint").style.display = "block";
-  }
+  // Dynamic logo: dev_logo.png on localhost, logo.png in production
+  const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
+  document.querySelectorAll(".site-logo").forEach(el => { el.src = isLocal ? "dev_logo.png" : "logo.png"; });
+
+  // Restore existing session (survives page refresh, clears on tab close)
+  try {
+    const s = JSON.parse(sessionStorage.getItem(SESSION_KEY) ?? "null");
+    if (s?.email && ALLOWED_EMAILS.map(e => e.toLowerCase()).includes(s.email.toLowerCase())) {
+      showApp(s.name ?? s.email);
+      return;
+    }
+  } catch {}
+
   // Pre-fill today's date in patch creator
-  document.getElementById("p-date").value = new Date().toISOString().substring(0, 10);
+  const dateEl = document.getElementById("p-date");
+  if (dateEl) dateEl.value = new Date().toISOString().substring(0, 10);
+
+  // Render Google Sign-In button
+  PROVIDERS.google.init();
 })();
 
-document.getElementById("pw-input").addEventListener("keydown", e => {
-  if (e.key === "Enter") attemptLogin();
-});
-
-async function attemptLogin() {
-  const pw   = document.getElementById("pw-input").value;
-  if (!pw) return;
-  const hash = await sha256(pw);
-  const stored = localStorage.getItem(STORAGE_KEY);
-
-  if (!stored) {
-    // First-time setup: store hash and log in
-    localStorage.setItem(STORAGE_KEY, hash);
-    localStorage.setItem(SETUP_KEY, "1");
-    showApp();
-  } else if (stored === hash) {
-    showApp();
-  } else {
-    document.getElementById("auth-error").style.display = "block";
-    document.getElementById("pw-input").value = "";
-    document.getElementById("pw-input").focus();
-  }
-}
-
-function showApp() {
+function showApp(name) {
   document.getElementById("auth-screen").style.display = "none";
   document.getElementById("dev-app").style.display     = "block";
+  const userEl = document.getElementById("auth-user");
+  if (userEl && name) userEl.textContent = name;
+  const dateEl = document.getElementById("p-date");
+  if (dateEl) dateEl.value = new Date().toISOString().substring(0, 10);
   loadDataMeta();
   loadChangeLog();
 }
 
 function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
   document.getElementById("auth-screen").style.display = "flex";
   document.getElementById("dev-app").style.display     = "none";
-  document.getElementById("pw-input").value   = "";
-  document.getElementById("auth-error").style.display = "none";
-}
-
-async function changePw() {
-  const pw  = document.getElementById("new-pw").value;
-  const pw2 = document.getElementById("new-pw2").value;
-  const msg = document.getElementById("pw-change-msg");
-  if (!pw) { msg.textContent = "Enter a new password."; return; }
-  if (pw !== pw2) { msg.textContent = "Passwords do not match."; return; }
-  const hash = await sha256(pw);
-  localStorage.setItem(STORAGE_KEY, hash);
-  msg.textContent = "✅ Password updated.";
-  document.getElementById("new-pw").value  = "";
-  document.getElementById("new-pw2").value = "";
+  document.getElementById("auth-error").style.display  = "none";
+  // Re-init Google button in case it was torn down
+  PROVIDERS.google.init();
 }
 
 // ── Change Log ──────────────────────────────────────────────────────────────
@@ -789,11 +876,30 @@ function renderRun(run) {
     const color   = isCheck ? "var(--accent)" : "#e74c3c";
     let detail = "";
     if (!isCheck && run.fixed != null) {
-      const parts = [];
-      if (run.nChanged) parts.push(`${run.nChanged} ⚠ changed`);
-      if (run.nRange)   parts.push(`${run.nRange} ≈ range`);
-      const breakdown = parts.length ? ` (${parts.join(', ')})` : '';
-      detail = `<div style="font-size:11px;color:var(--text2);margin-top:3px">${run.fixed} course(s) overridden${breakdown} · data updated to ${run.label ?? "—"}</div>`;
+      const fixItems = [
+        { val: run.fixed,    lbl: "Courses overridden", col: "#e74c3c" },
+        { val: run.nChanged, lbl: "⚠ Field changes",    col: "var(--warn)" },
+        { val: run.nRange,   lbl: "≈ Range fixes",       col: "#a78bfa" },
+      ].filter(x => x.val != null);
+      const labelLine = run.label ? `<div style="font-size:11px;color:var(--text3);margin-top:8px">Data timestamp updated → <strong style="color:var(--text2)">${run.label}</strong></div>` : "";
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        ${fixItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+      </div>${labelLine}`;
+    }
+    if (isCheck && run.stats) {
+      const s = run.stats;
+      const statItems = [
+        { val: s.correct,      lbl: "✓ Correct",       col: "var(--success)" },
+        { val: s.needPR,       lbl: "△ Need PR",        col: "var(--warn)" },
+        { val: s.rangeDiff,    lbl: "≈ Range diff",     col: "#a78bfa" },
+        { val: s.newCourses,   lbl: "NEW New courses",  col: "var(--accent)" },
+        { val: s.notInCatalog, lbl: "✕ Not in catalog", col: "var(--error)" },
+        { val: s.totalScanned, lbl: "Total scanned",    col: "var(--text)" },
+        { val: s.subjectsDone, lbl: "Subjects done",    col: "var(--text2)" },
+      ].filter(x => x.val != null);
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        ${statItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+      </div>`;
     }
     return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">

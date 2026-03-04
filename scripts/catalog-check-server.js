@@ -44,6 +44,14 @@ function appendLogEntry(entry) {
   } catch { /* non-fatal */ }
 }
 
+function patchLastLogEntry(fields) {
+  try {
+    const log = existsSync(CHANGE_LOG) ? JSON.parse(readFileSync(CHANGE_LOG, "utf8")) : { runs: [] };
+    if (log.runs?.length) Object.assign(log.runs[0], fields);
+    writeFileSync(CHANGE_LOG, JSON.stringify(log, null, 2) + "\n", "utf8");
+  } catch { /* non-fatal */ }
+}
+
 // ── NUPath map (mirrors scrape-catalog.js) ───────────────────────────────────
 const NUPATH_MAP = {
   "natural/designed world": "ND", "natural and designed world": "ND",
@@ -293,6 +301,7 @@ async function runCheck(send) {
   }
 
   send("done", { ...stats });
+  return stats;
 }
 
 // ── HTTP server with SSE ──────────────────────────────────────────────────────
@@ -334,7 +343,20 @@ const server = createServer((req, res) => {
     });
 
     runCheck(send)
-      .then(() => {
+      .then(stats => {
+        if (stats) {
+          patchLastLogEntry({
+            stats: {
+              correct:      stats.matched,
+              needPR:       stats.changed,
+              rangeDiff:    stats.range_only,
+              newCourses:   stats.added,
+              notInCatalog: stats.missing,
+              totalScanned: stats.courses_read,
+              subjectsDone: stats.subjects_done,
+            },
+          });
+        }
         send("end", {});
         res.end();
       })
