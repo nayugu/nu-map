@@ -535,17 +535,24 @@
         </div>
       </div>
 
-      <!-- Launch row -->
-      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 6px">
-        <button class="launch-btn" id="check-run-btn" onclick="startCheck()">🚀 Launch Check</button>
-        <button class="btn sec" id="check-stop-btn" onclick="stopCheck()" disabled style="height:46px;padding:0 20px">■ Stop</button>
-        <span id="ck-status-badge" style="display:none">● Running</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--text3)">
-          Port: <input id="check-port" value="3333" type="number" min="1024" max="65535"
-            style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
-        </span>
+      <!-- Launch row (hidden when on HTTPS non-localhost) -->
+      <div id="ck-launch-row">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 6px">
+          <button class="launch-btn" id="check-run-btn" onclick="startCheck()">🚀 Launch Check</button>
+          <button class="btn sec" id="check-stop-btn" onclick="stopCheck()" disabled style="height:46px;padding:0 20px">■ Stop</button>
+          <span id="ck-status-badge" style="display:none">● Running</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)">
+            Port: <input id="check-port" value="3333" type="number" min="1024" max="65535"
+              style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+          </span>
+        </div>
+        <p class="text2" style="font-size:11px;margin:0 0 18px">Server starts automatically with <code>npm run dev</code> — no separate terminal needed.</p>
       </div>
-      <p class="text2" style="font-size:11px;margin:0 0 18px">Server starts automatically with <code>npm run dev</code> — no separate terminal needed.</p>
+      <!-- HTTPS guard — shown instead of launch row when accessed from GitHub Pages or any HTTPS non-localhost origin -->
+      <div id="ck-local-only-banner" style="display:none;margin:18px 0;padding:14px 16px;background:var(--bg2);border:1px solid var(--warn);border-radius:8px">
+        <p style="margin:0 0 6px;font-weight:600;color:var(--warn)">⚠ Catalog Check only works locally</p>
+        <p style="margin:0;font-size:12px;color:var(--text2)">This page is being served over HTTPS, so the browser blocks requests to the local <code>http://localhost:3333</code> server (mixed-content policy). Run the app locally with <code>npm run dev</code> and open <code>http://localhost:5173/dev.html</code> instead.</p>
+      </div>
 
       <!-- Progress section (hidden until run starts) -->
       <div id="check-progress-wrap" style="display:none">
@@ -578,6 +585,7 @@
             <div style="display:flex;gap:8px;align-items:center">
               <span id="ck-inspector-count" style="font-size:11px;color:var(--text3)">0 items</span>
               <button class="btn sec" style="font-size:11px;padding:4px 10px" onclick="ckExport()">Export JSON</button>
+              <button class="btn sec" id="ck-fix-btn" style="font-size:11px;padding:4px 10px;background:#c0392b22;border-color:#e74c3c;color:#e74c3c" onclick="ckApplyFixes()">⚡ Apply Fixes</button>
             </div>
           </div>
           <div class="ck-filter-bar">
@@ -924,6 +932,17 @@ document.getElementById('pv-open-btn').addEventListener('click', () => {
 window.addEventListener('resize', () => { if (pvReady) pvApply(); });
 
 // ── Catalog Check ────────────────────────────────────────────────────────────
+// HTTPS guard: catalog check talks to http://localhost:3333 which browsers
+// block as mixed content when the page itself is served over HTTPS remotely.
+(function() {
+  const onHttpsRemote = location.protocol === 'https:' &&
+    !['localhost', '127.0.0.1'].includes(location.hostname);
+  if (onHttpsRemote) {
+    document.getElementById('ck-launch-row').style.display = 'none';
+    document.getElementById('ck-local-only-banner').style.display = 'block';
+  }
+})();
+
 let checkEvtSource = null;
 
 function startCheck() {
@@ -1044,10 +1063,10 @@ function startCheck() {
         html += `</table></details>`;
       }
       if (d.added_courses?.length) {
-        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--accent);font-size:10px">🆕 ${d.added_courses.length} new course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.added_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
+        html += `<details open style="margin-top:2px"><summary style="cursor:pointer;color:var(--accent);font-size:10px">🆕 ${d.added_courses.length} new course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.added_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
       }
       if (d.missing_courses?.length) {
-        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--error);font-size:10px">❌ ${d.missing_courses.length} missing course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.missing_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
+        html += `<details open style="margin-top:2px"><summary style="cursor:pointer;color:var(--error);font-size:10px">❌ ${d.missing_courses.length} missing course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.missing_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
       }
       row.innerHTML = html;
       log.appendChild(row);
@@ -1163,6 +1182,36 @@ function ckExport() {
   a.href = URL.createObjectURL(blob);
   a.download = `catalog-discrepancies-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
+}
+
+async function ckApplyFixes() {
+  const items = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range');
+  if (!items.length) { alert('No changed or range-diff items to fix.'); return; }
+  const port = document.getElementById('check-port').value || '3333';
+  const btn = document.getElementById('ck-fix-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Fixing…';
+  try {
+    const r = await fetch(`http://localhost:${port}/fix`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(items)
+    });
+    const j = await r.json();
+    if (j.ok) {
+      document.getElementById('check-status-msg').textContent =
+        `⚡ Fixed ${j.fixed} of ${j.total} course(s) — data updated to ${j.label}. Rebuild to deploy.`;
+      btn.textContent = `✅ Fixed ${j.fixed}`;
+    } else {
+      alert('Fix failed: ' + (j.error || 'unknown error'));
+      btn.disabled = false;
+      btn.textContent = '⚡ Apply Fixes';
+    }
+  } catch (e) {
+    alert('Could not reach local server: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = '⚡ Apply Fixes';
+  }
 }
 
 // ── Patch builder ───────────────────────────────────────────────────────────
