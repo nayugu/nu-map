@@ -1,0 +1,323 @@
+// ═══════════════════════════════════════════════════════════════════
+// HEADER  — sticky timeline header: title, SH counters, controls,
+//           relationship legend, co-op/grad conflict warning
+// ═══════════════════════════════════════════════════════════════════
+import { useState } from "react";
+import { usePlanner } from "../context/PlannerContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
+import { REL_STYLE, WORK_TERMS } from "../core/constants.js";
+import { exportReport } from "../core/planModel.js";
+import { THEME_LABELS } from "../core/themes.js";
+import { getNuPathCoverage } from "../core/gradRequirements.js";
+
+export default function Header() {
+  const {
+    courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
+    placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
+    resetAll, setShowDisclaimer,
+    showSettings, setShowSettings,
+    planEntSem, planEntYear, planGradSem, planGradYear,
+    entOrd, gradOrd,
+    setEntSem, setEntYear, setGradSem, setGradYear,
+    coopGradConflicts, workPl,
+    showViolLines, setShowViolLines,
+  } = usePlanner();
+
+  const { themeName, setThemeName, themeNames } = useTheme();
+  const [showQuickSet, setShowQuickSet] = useState(false);
+
+  const cycleTheme = e => {
+    e.stopPropagation();
+    const idx = themeNames.indexOf(themeName);
+    setThemeName(themeNames[(idx + 1) % themeNames.length]);
+  };
+
+  const handleExport = e => {
+    e.stopPropagation();
+    const curIdx     = SEM_INDEX[currentSemId] ?? 0;
+    const majorPath  = localStorage.getItem("ncp-grad-major")  || "";
+    const concLabel  = localStorage.getItem("ncp-grad-conc")   || "";
+    const minor1Path = localStorage.getItem("ncp-grad-minor1") || "";
+    const minor2Path = localStorage.getItem("ncp-grad-minor2") || "";
+    const npCovered  = getNuPathCoverage(placements, courseMap);
+    // Build set of course keys that are placed in already-completed semesters
+    const doneKeys = new Set();
+    for (const [id, semId] of Object.entries(placements)) {
+      const c = courseMap[id];
+      if (!c?.subject || !c?.number) continue;
+      if ((SEM_INDEX[semId] ?? 99) < curIdx) doneKeys.add(c.subject + c.number);
+    }
+    const gradInfo = {
+      majorPath, concLabel, minor1Path, minor2Path,
+      npCovered, doneKeys, totalSHRequired: 0,
+    };
+    exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo);
+  };
+
+  const handleReset = e => {
+    e.stopPropagation();
+    if (!confirm("Reset all placements?")) return;
+    resetAll();
+  };
+
+  const handleRefresh = e => {
+    e.stopPropagation();
+    try { localStorage.removeItem("ncp-state-v2"); } catch {}
+    window.location.reload();
+  };
+
+  return (
+    <>
+      {/* ── Sticky header bar ── */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8, marginBottom: 10,
+        position: "sticky", top: 0, zIndex: 30, background: "var(--bg-app)",
+        paddingBottom: 8, borderBottom: "1px solid var(--border-1)", flexWrap: "wrap",
+      }}>
+        <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em" }}>NU Map</span>
+        <span style={{ fontSize: 10, color: "var(--text-6)" }}>·</span>
+        <span style={{ fontSize: 10, color: "var(--text-3)" }}>{courses.length.toLocaleString()} courses</span>
+
+        <div style={{ display: "flex", gap: 5, marginLeft: 4 }}>
+          <span style={{ fontSize: 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, padding: "2px 7px" }}>
+            {totalSHDone} SH ✓
+          </span>
+          <span style={{ fontSize: 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, padding: "2px 7px" }}>
+            {totalSHPlaced} SH placed
+          </span>
+        </div>
+
+        {/* Export — always visible */}
+        <button onClick={handleExport} style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
+          ⬇ Export PDF
+        </button>
+
+        {/* Reset — always visible */}
+        <button onClick={handleReset}
+          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}>
+          ↺ Reset
+        </button>
+
+        {/* ⚙ Settings dropdown — infrequent controls */}
+        <div style={{ position: "relative" }}>
+          <button onClick={e => { e.stopPropagation(); setShowQuickSet(v => !v); }}
+            style={{ fontSize: 10, cursor: "pointer",
+              color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
+              background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
+              border:    `1px solid ${showQuickSet ? "var(--active)" : "var(--border-2)"}`,
+              borderRadius: 5, padding: "3px 8px" }}>
+            ⚙ Settings
+          </button>
+
+          {showQuickSet && (
+            <div onClick={e => e.stopPropagation()} style={{
+              position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 100,
+              background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
+              padding: "10px 12px", minWidth: 190, boxShadow: "var(--shadow-modal)",
+              display: "flex", flexDirection: "column", gap: 7,
+            }}>
+              {/* Save toggle */}
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  const next = !persistEnabled;
+                  setPersistEnabled(next);
+                  if (!next) { try { localStorage.setItem("ncp-state-v2", JSON.stringify({ persist: false })); } catch {} }
+                }}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: `1px solid ${persistEnabled ? "var(--success-border)" : "var(--border-2)"}`,
+                  color: persistEnabled ? "var(--success)" : "var(--text-4)" }}>
+                {persistEnabled ? "Saving on" : "Saving off"}
+              </button>
+
+              {/* Error lines toggle */}
+              <button onClick={() => setShowViolLines(v => !v)}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: `1px solid ${showViolLines ? "var(--error)" : "var(--border-2)"}`,
+                  color: showViolLines ? "var(--error)" : "var(--text-4)" }}>
+                {showViolLines ? "Error lines: on" : "Error lines: off"}
+              </button>
+
+              {/* Theme toggle */}
+              <button onClick={cycleTheme}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 600, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                {THEME_LABELS[themeName] ?? themeName}
+              </button>
+
+              {/* Refresh catalog */}
+              <button onClick={handleRefresh}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                ⟳ Refresh catalog
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Cohort date picker */}
+        <div style={{ position: "relative" }}>
+          <button
+            onClick={e => { e.stopPropagation(); setShowSettings(v => !v); }}
+            title="Set entry & graduation semester"
+            style={{
+              fontSize: 10, cursor: "pointer",
+            color: showSettings ? "var(--text-2)" : "var(--text-4)",
+            background: showSettings ? "var(--bg-surface)" : "var(--bg-surface-2)",
+            border: `1px solid ${showSettings ? "var(--active)" : "var(--border-2)"}`,
+
+              borderRadius: 5, padding: "3px 8px",
+            }}
+          >🎓 Cohort</button>
+
+          {showSettings && (
+            <div onClick={e => e.stopPropagation()} style={{
+              position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 100,
+              background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
+              padding: "14px 16px", minWidth: 270, boxShadow: "var(--shadow-modal)",
+              display: "flex", flexDirection: "column", gap: 12,
+            }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>COHORT DATES</div>
+
+              {/* Entry */}
+              <div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>ENTRY</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  {["fall", "spring"].map(s => {
+                    const wouldBe = planEntYear * 2 + (s === "spring" ? 1 : 0);
+                    const blocked = wouldBe >= gradOrd;
+                    return (
+                      <button key={s}
+                        onClick={() => { if (!blocked) setEntSem(s); }}
+                        style={{
+                          flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
+                          cursor: blocked ? "not-allowed" : "pointer",
+                          background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
+                          border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
+                          color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
+                          fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
+                        }}
+                      >{s === "fall" ? "Fall" : "Spring"}</button>
+                    );
+                  })}
+                  <YearStepper
+                    year={planEntYear} min={2010} max={2040}
+                    canInc={entOrd + 2 < gradOrd}
+                    onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }}
+                    onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < 2040) setEntYear(planEntYear + 1); }}
+                  />
+                </div>
+              </div>
+
+              {/* Graduation */}
+              <div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>GRADUATION</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  {["fall", "spring"].map(s => {
+                    const wouldBe = planGradYear * 2 + (s === "spring" ? 1 : 0);
+                    const blocked = wouldBe <= entOrd;
+                    return (
+                      <button key={s}
+                        onClick={() => { if (!blocked) setGradSem(s); }}
+                        style={{
+                          flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
+                          cursor: blocked ? "not-allowed" : "pointer",
+                          background: planGradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
+                          border: `1px solid ${planGradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
+                          color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
+                          fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
+                        }}
+                      >{s === "fall" ? "Fall" : "Spring"}</button>
+                    );
+                  })}
+                  <YearStepper
+                    year={planGradYear} min={2010} max={2040}
+                    canDec={gradOrd - 2 > entOrd}
+                    onDec={() => { if (gradOrd - 2 > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }}
+                    onInc={() => { if (planGradYear < 2040) setGradYear(planGradYear + 1); }}
+                  />
+                </div>
+              </div>
+
+              {/* Summary */}
+              <div style={{ fontSize: 9, color: "var(--text-6)", lineHeight: 1.6, borderTop: "1px solid var(--border-1)", paddingTop: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                <span>{planEntSem === "fall" ? "Fall" : "Spring"} {planEntYear} → {planGradSem === "fall" ? "Fall" : "Spring"} {planGradYear}</span>
+                {(planGradYear < planEntYear || (planGradYear === planEntYear && planGradSem === "fall" && planEntSem === "spring"))
+                  ? <span style={{ color: "var(--error)" }}>⚠ grad before entry</span>
+                  : <span style={{ color: "var(--success)" }}>
+                      ~{((planGradYear * 2 + (planGradSem === "fall" ? 0 : 1)) - (planEntYear * 2 + (planEntSem === "fall" ? 0 : 1))) / 2} yrs
+                    </span>
+                }
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* About button */}
+        <button
+          onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
+          title="About & disclaimer"
+          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer" }}
+        >ⓘ About</button>
+      </div>
+
+      {/* ── Relationship legend ── */}
+      <div style={{ display: "flex", gap: 14, marginBottom: 8, flexWrap: "wrap", alignItems: "center" }}>
+        {Object.entries(REL_STYLE).filter(([type]) => type !== "corequisite-viol").map(([type, s]) => (
+            <div key={type} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: "var(--text-4)" }}>
+            <svg width="20" height="6">
+              <line x1="0" y1="3" x2="20" y2="3" stroke={s.color} strokeWidth="1.5" strokeDasharray={s.dash || ""} />
+            </svg>
+            <span>{s.label}</span>
+          </div>
+        ))}
+        <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: "var(--text-4)" }}>
+          <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, border: "2px solid var(--warn-bright)", flexShrink: 0 }} />
+          <span>Misplaced</span>
+        </div>
+        <span style={{ fontSize: 9, color: "var(--text-5)" }}>
+          · Click card to highlight relationships · Click semester label to mark as current
+        </span>
+      </div>
+
+      {/* ── Co-op / graduation conflict warning ── */}
+      {coopGradConflicts.length > 0 && (
+        <div style={{
+          margin: "0 0 6px", padding: "9px 12px",
+          background: "var(--warn-bg)", border: "1px solid var(--warn-border)",
+          borderRadius: 6, display: "flex", alignItems: "flex-start", gap: 8,
+        }}>
+          <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>⚠️</span>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--warn-bright)", marginBottom: 2 }}>
+              Co-op overlaps graduation semester
+            </div>
+            <div style={{ fontSize: 10, color: "var(--warn)", lineHeight: 1.5 }}>
+              {coopGradConflicts.map(w => w.label).join(" and ")}{" "}
+              {coopGradConflicts.length === 1 ? "spans" : "span"} your graduation semester (
+              {planGradSem === "fall" ? "Fall" : "Spring"} {planGradYear}).
+              You cannot graduate while on co-op — move the co-op block or adjust your graduation date.
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+/** Small ◀ year ▶ stepper widget used in cohort popover. */
+function YearStepper({ year, canDec = true, canInc = true, onDec, onInc }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", marginLeft: 4, background: "var(--bg-app)", border: "1px solid var(--border-2)", borderRadius: 5, overflow: "hidden" }}>
+      <button onClick={onDec}
+        style={{ background: "none", border: "none", color: canDec ? "var(--text-3)" : "var(--border-2)", cursor: canDec ? "pointer" : "not-allowed", padding: "2px 7px", fontSize: 11 }}>◀</button>
+      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-2)", minWidth: 34, textAlign: "center" }}>{year}</span>
+      <button onClick={onInc}
+        style={{ background: "none", border: "none", color: canInc ? "var(--text-3)" : "var(--border-2)", cursor: canInc ? "pointer" : "not-allowed", padding: "2px 7px", fontSize: 11 }}>▶</button>
+    </div>
+  );
+}

@@ -1,0 +1,774 @@
+// ═══════════════════════════════════════════════════════════════════
+// PLANNER CONTEXT  (application port — React state + action shell)
+//
+// Create ONE PlannerProvider near the root; children consume via
+// usePlanner() instead of drilling props through every layer.
+//
+// Hexagonal role:
+//   • Drives core/* pure functions in response to user events
+//   • Calls data/* adapters for I/O
+//   • Exposes a typed surface of state + actions to the UI layer
+// ═══════════════════════════════════════════════════════════════════
+import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
+import { DEFAULT_START_YEAR, NUM_YEARS, WORK_TERMS } from "../core/constants.js";
+import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
+import { normalizeCourse, extractEdges, getOfferedFromTerms, getSemOfferedType } from "../core/courseModel.js";
+import { evalPrereqTree } from "../core/prereqEval.js";
+import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.js";
+import { fetchCourses } from "../data/courseLoader.js";
+import { loadSaved, saveState } from "../data/persistence.js";
+
+const PlannerContext = createContext(null);
+
+export function PlannerProvider({ children }) {
+  // ── API state ────────────────────────────────────────────────
+  const [courses,  setCourses]  = useState([]);
+  const [loading,  setLoading]  = useState(true);
+  const [loadErr,  setLoadErr]  = useState(null);
+  const [loadPct,  setLoadPct]  = useState(5);
+
+  // ── Derived from courses ─────────────────────────────────────
+  const courseMap = useMemo(() => Object.fromEntries(courses.map(c => [c.id, c])), [courses]);
+  const allEdges  = useMemo(() => courses.flatMap(c => extractEdges(c.id, c.prereqs, c.coreqs)), [courses]);
+  const subjects  = useMemo(() => [...new Set(courses.map(c => c.subject))].sort(), [courses]);
+
+  // ── Persistent planner state ─────────────────────────────────
+  const _saved = useMemo(() => loadSaved(), []);
+  const [placements,       setPlacements]       = useState(() => (_saved?.persist && _saved.placements)       ? _saved.placements       : {});
+  const [workPl,           setWorkPl]           = useState(() => (_saved?.persist && _saved.workPl)           ? _saved.workPl           : {});
+  const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : `fall${DEFAULT_START_YEAR}`);
+  const [persistEnabled,   setPersistEnabled]   = useState(() => !!_saved?.persist);
+  const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
+  const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
+  const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
+
+  // ── UI interaction state ──────────────────────────────────────
+  const [selectedId,    setSelectedId]    = useState(null);
+  const [dragInfo,      setDragInfo]      = useState(null);
+  const [hoveredSem,    setHoveredSem]    = useState(null);
+  const [hoveredZone,   setHoveredZone]   = useState(null);
+  const [hoveredCardId, setHoveredCardId] = useState(null);
+  const [showPanel,     setShowPanel]     = useState(false);
+  const [lines,         setLines]         = useState([]);
+  const [scrollTick,    setScrollTick]    = useState(0);
+  const [showViolLines, setShowViolLines] = useState(true);
+
+  // ── Bank state ───────────────────────────────────────────────
+  const [bankSearch,      setBankSearch]      = useState("");
+  const [bankSort,        setBankSort]        = useState("az");
+  const [bankTab,         setBankTab]         = useState("all");
+  const [bankWidth,       setBankWidth]       = useState(() => Math.min(300, Math.max(200, window.innerWidth * 0.21)));
+  const [showSubjectKeys, setShowSubjectKeys] = useState(false);
+  const [starredIds,      setStarredIds]      = useState(() => {
+    try { return new Set(JSON.parse(localStorage.getItem("ncp-starred") || "[]")); } catch { return new Set(); }
+  });
+
+  // ── Settings / modal state ───────────────────────────────────
+  const [showDisclaimer, setShowDisclaimer] = useState(() => {
+    try { return !localStorage.getItem("ncp-seen-disclaimer"); } catch { return true; }
+  });
+  const [planEntSem,   setPlanEntSem]   = useState(() => { try { return localStorage.getItem("ncp-ent-sem")  || "fall";   } catch { return "fall";   } });
+  const [planEntYear,  setPlanEntYear]  = useState(() => { try { return parseInt(localStorage.getItem("ncp-ent-year")  || String(DEFAULT_START_YEAR), 10) || DEFAULT_START_YEAR; } catch { return DEFAULT_START_YEAR; } });
+  const [planGradSem,  setPlanGradSem]  = useState(() => { try { return localStorage.getItem("ncp-grad-sem") || "spring"; } catch { return "spring"; } });
+  const [planGradYear, setPlanGradYear] = useState(() => { try { return parseInt(localStorage.getItem("ncp-grad-year") || String(DEFAULT_START_YEAR + NUM_YEARS), 10) || DEFAULT_START_YEAR + NUM_YEARS; } catch { return DEFAULT_START_YEAR + NUM_YEARS; } });
+  const [showSettings, setShowSettings] = useState(false);
+
+  // ── Layout state ─────────────────────────────────────────────
+  const [panelHeight, setPanelHeight] = useState(210);
+  const uiScaleRef = useRef(1);
+  const [uiScale,   setUiScale]   = useState(() => {
+    const s = Math.max(0.6, Math.min(1.5, window.innerWidth / 1440));
+    uiScaleRef.current = s;
+    return s;
+  });
+
+  // ── Dynamic semester grid (cohort-trimmed) ───────────────────
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const SEMESTERS = useMemo(
+    () => buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear),
+    [planEntSem, planEntYear, planGradSem, planGradYear]
+  );
+  const { SEM_INDEX, SEM_NEXT, SEM_PREV } = useMemo(() => deriveSemMaps(SEMESTERS), [SEMESTERS]);
+
+  // Ordinal helpers to enforce grad > entry
+  const entOrd  = planEntYear  * 2 + (planEntSem  === "spring" ? 1 : 0);
+  const gradOrd = planGradYear * 2 + (planGradSem === "spring" ? 1 : 0);
+
+  // ── Refs ─────────────────────────────────────────────────────
+  const panelResizing = useRef(null);
+  const timelineRef   = useRef();
+  const cardRefs      = useRef({});
+  const bankRef       = useRef();
+  const bankResizing  = useRef(null);
+  const undoStack     = useRef([]);
+  const redoStack     = useRef([]);
+  // Stale-closure escape hatches for keyboard handler
+  const stateRef      = useRef({ placements: {}, workPl: {}, semOrders: {} });
+  const selectedIdRef = useRef(null);
+  const allEdgesRef   = useRef([]);
+
+  // ── Effects: data loading ────────────────────────────────────
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true); setLoadPct(5);
+    fetchCourses()
+      .then(raw => {
+        if (!mounted) return;
+        setLoadPct(70);
+        const base = Object.fromEntries(
+          raw.map(normalizeCourse).filter(Boolean).map(c => [c.id, c])
+        );
+
+        setLoadPct(100);
+        setCourses(Object.values(base));
+        setLoading(false);
+      })
+      .catch(err => {
+        if (!mounted) return;
+        setLoadErr(err.message);
+        setLoading(false);
+      });
+    return () => { mounted = false; };
+  }, []);
+
+  // ── Effects: persistence ──────────────────────────────────────
+  useEffect(() => {
+    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides });
+  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides]);
+
+  useEffect(() => {
+    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides });
+    window.addEventListener("beforeunload", h);
+    return () => window.removeEventListener("beforeunload", h);
+  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides]);
+
+  // ── Effects: UI resize ───────────────────────────────────────
+  useEffect(() => {
+    const update = () => {
+      const s = Math.max(0.6, Math.min(1.5, window.innerWidth / 1440));
+      uiScaleRef.current = s;
+      setUiScale(s);
+    };
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  // ── Effect: stale-closure ref sync ───────────────────────────
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    stateRef.current    = { placements, workPl, semOrders };
+    allEdgesRef.current = allEdges;
+  });
+  useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
+
+  // ── Effects: panel drag-resize ───────────────────────────────
+  useEffect(() => {
+    const onMove = e => {
+      if (!panelResizing.current) return;
+      const dy = panelResizing.current.startY - e.clientY;
+      setPanelHeight(Math.min(520, Math.max(90, panelResizing.current.startH + dy)));
+    };
+    const onUp = () => { panelResizing.current = null; };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup",  onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup",  onUp);
+    };
+  }, []);
+
+  // ── Effect: keep currentSemId valid on cohort change ─────────
+  useEffect(() => {
+    const sems = buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear);
+    setCurrentSemId(cur => sems.find(s => s.id === cur) ? cur : (sems[1]?.id ?? sems[0].id));
+  }, [planEntSem, planEntYear, planGradSem, planGradYear]);
+
+  // ── Effect: bank resize ───────────────────────────────────────
+  useEffect(() => {
+    const onMove = e => {
+      if (!bankResizing.current) return;
+      const dx = (bankResizing.current.startX - e.clientX) / uiScaleRef.current;
+      setBankWidth(Math.min(640, Math.max(180, bankResizing.current.startW + dx)));
+    };
+    const onUp = () => { bankResizing.current = null; };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup",  onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup",  onUp);
+    };
+  }, []);
+
+  // ── Effect: scroll → SVG recalc ──────────────────────────────
+  // Depends on `loading` so it re-runs (and finds the DOM node) once
+  // the timeline div is actually mounted after data loads.
+  useEffect(() => {
+    const el = timelineRef.current;
+    if (!el) return;
+    const h = () => setScrollTick(t => t + 1);
+    el.addEventListener("scroll", h, { passive: true });
+    return () => el.removeEventListener("scroll", h);
+  }, [loading]);
+
+  // ── Effect: SVG lines ─────────────────────────────────────────
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      const getCenter = id => {
+        const el = cardRefs.current[id];
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        if (r.width === 0) return null;
+        // SVG is inside transform:scale(uiScale) which creates a new
+        // stacking context — divide viewport px back to SVG local coords.
+        const sc = uiScaleRef.current || 1;
+        return { x: (r.left + r.width  / 2) / sc,
+                 y: (r.top  + r.height / 2) / sc };
+      };
+      const newLines = [];
+
+      // ── Selection-driven lines ───────────────────────────────────
+      if (selectedId) {
+        getConnections(selectedId, allEdges).forEach(rel => {
+          if (!placements[rel.from] || !placements[rel.to]) return;
+          const fp = getCenter(rel.from);
+          const tp = getCenter(rel.to);
+          if (!fp || !tp) return;
+          let type = rel.type;
+          if (rel.type === "prerequisite") {
+            const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
+            const toIdx   = SEM_INDEX[placements[rel.to]]   ?? -1;
+            if (fromIdx >= toIdx) type = "prerequisite-order";
+          }
+          if (rel.type === "corequisite" && placements[rel.from] !== placements[rel.to]) {
+            type = "corequisite-viol";
+          }
+          newLines.push({ ...rel, type, fp, tp });
+        });
+      }
+
+      // ── Always-on violation lines ────────────────────────────────
+      if (showViolLines) {
+        allEdges.forEach(rel => {
+          // skip edges already drawn by selection logic above
+          if (selectedId && (rel.from === selectedId || rel.to === selectedId)) return;
+          if (!placements[rel.from] || !placements[rel.to]) return;
+          if (rel.type === "prerequisite") {
+            const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
+            const toIdx   = SEM_INDEX[placements[rel.to]]   ?? -1;
+            if (fromIdx < toIdx) return; // not violated
+            const fp = getCenter(rel.from);
+            const tp = getCenter(rel.to);
+            if (!fp || !tp) return;
+            newLines.push({ ...rel, type: "prerequisite-order", fp, tp });
+          } else if (rel.type === "corequisite") {
+            if (placements[rel.from] === placements[rel.to]) return; // not violated
+            const fp = getCenter(rel.from);
+            const tp = getCenter(rel.to);
+            if (!fp || !tp) return;
+            newLines.push({ ...rel, type: "corequisite-viol", fp, tp });
+          }
+        });
+      }
+
+      setLines(newLines);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [selectedId, showViolLines, placements, workPl, scrollTick, allEdges, SEM_INDEX]);
+
+  // ── Undo / redo ───────────────────────────────────────────────
+  const pushUndo = () => {
+    const snap = {
+      placements: stateRef.current.placements,
+      workPl:     stateRef.current.workPl,
+      semOrders:  stateRef.current.semOrders,
+    };
+    undoStack.current = [...undoStack.current.slice(-49), snap];
+    redoStack.current = [];
+  };
+
+  const doUndo = () => {
+    if (!undoStack.current.length) return;
+    const snap = undoStack.current[undoStack.current.length - 1];
+    redoStack.current = [...redoStack.current, {
+      placements: stateRef.current.placements,
+      workPl:     stateRef.current.workPl,
+      semOrders:  stateRef.current.semOrders,
+    }];
+    undoStack.current = undoStack.current.slice(0, -1);
+    setPlacements(snap.placements);
+    setWorkPl(snap.workPl);
+    setSemOrders(snap.semOrders);
+  };
+
+  const doRedo = () => {
+    if (!redoStack.current.length) return;
+    const snap = redoStack.current[redoStack.current.length - 1];
+    undoStack.current = [...undoStack.current, {
+      placements: stateRef.current.placements,
+      workPl:     stateRef.current.workPl,
+      semOrders:  stateRef.current.semOrders,
+    }];
+    redoStack.current = redoStack.current.slice(0, -1);
+    setPlacements(snap.placements);
+    setWorkPl(snap.workPl);
+    setSemOrders(snap.semOrders);
+  };
+
+  // ── Effect: keyboard shortcuts ────────────────────────────────
+  useEffect(() => {
+    const onKey = e => {
+      if (e.target.matches("input, textarea, select, [contenteditable]")) return;
+
+      if (e.key === "Delete" || e.key === "Backspace") {
+        const selId = selectedIdRef.current;
+        const pl    = stateRef.current.placements;
+        if (selId && pl[selId]) {
+          pushUndo();
+          const fromSem = pl[selId];
+          const coreqPartners = [...new Set(
+            allEdgesRef.current
+              .filter(e2 => e2.type === "corequisite" && (e2.from === selId || e2.to === selId))
+              .map(e2 => e2.from === selId ? e2.to : e2.from)
+          )];
+          setPlacements(p => {
+            const n = { ...p };
+            delete n[selId];
+            coreqPartners.forEach(cid => delete n[cid]);
+            return n;
+          });
+          setSemOrders(p => {
+            const next = { ...p };
+            const toClean = new Set(
+              [fromSem, ...coreqPartners.map(cid => pl[cid])].filter(Boolean)
+            );
+            toClean.forEach(sid => {
+              next[sid] = (next[sid] || []).filter(
+                id => id !== selId && !coreqPartners.includes(id)
+              );
+            });
+            return next;
+          });
+          setSelectedId(null);
+          setShowPanel(false);
+        }
+        return;
+      }
+
+      if ((e.metaKey || e.ctrlKey) && e.key === "z" && !e.shiftKey) {
+        e.preventDefault(); doUndo();
+      }
+      if ((e.metaKey || e.ctrlKey) && ((e.key === "z" && e.shiftKey) || e.key === "y")) {
+        e.preventDefault(); doRedo();
+      }
+      if (e.key === "Escape") {
+        setSelectedId(null); setShowPanel(false); setShowSettings(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Derived plan state ────────────────────────────────────────
+  const currentSemIdx = SEM_INDEX[currentSemId] ?? 1;
+  const placedIds     = useMemo(() => new Set(Object.keys(placements)), [placements]);
+
+  const workStartMap = useMemo(() => {
+    const m = {};
+    Object.entries(workPl).forEach(([wid, semId]) => { m[semId] = wid; });
+    return m;
+  }, [workPl]);
+
+  const workContMap = useMemo(() => {
+    const m = {};
+    Object.entries(workPl).forEach(([wid, semId]) => {
+      const nxt = SEM_NEXT[semId];
+      if (nxt) m[nxt] = wid;
+    });
+    return m;
+  }, [workPl, SEM_NEXT]);
+
+  const gradSemId = planGradSem === "fall" ? `fall${planGradYear}` : `spr${planGradYear}`;
+  const coopGradConflicts = useMemo(() => WORK_TERMS.filter(w => {
+    const startSem = workPl[w.id];
+    if (!startSem) return false;
+    return startSem === gradSemId || SEM_NEXT[startSem] === gradSemId;
+  }), [workPl, gradSemId, SEM_NEXT]);
+
+  const prereqViolations = useMemo(() => {
+    const v = new Map();
+    courses.forEach(c => {
+      if (!placements[c.id]) return;
+      if (!c.prereqs?.length) return;
+      const ti = SEM_INDEX[placements[c.id]];
+      const result = evalPrereqTree(c.prereqs, placements, SEM_INDEX, ti);
+      if (result !== "satisfied") v.set(c.id, result);
+    });
+    return v;
+  }, [courses, placements, SEM_INDEX]);
+
+  const coreqViolations = useMemo(() => {
+    const v = new Map();
+    allEdges.filter(e => e.type === "corequisite").forEach(({ from, to }) => {
+      [{ placed: from, partner: to }, { placed: to, partner: from }].forEach(({ placed, partner }) => {
+        if (!placements[placed]) return;
+        if (!placements[partner]) {
+          v.set(placed, "alone");
+        } else if (placements[placed] !== placements[partner]) {
+          if (v.get(placed) !== "alone") v.set(placed, "sep");
+        }
+      });
+    });
+    return v;
+  }, [allEdges, placements]);
+
+  const connectedIds = useMemo(() => {
+    const m = {};
+    if (!selectedId) return m;
+    getConnections(selectedId, allEdges).forEach(r => {
+      const other = r.from === selectedId ? r.to : r.from;
+      m[other] = r.type;
+    });
+    return m;
+  }, [selectedId, allEdges]);
+
+  const getSemStatus = semId => {
+    const idx = SEM_INDEX[semId];
+    if (idx < currentSemIdx)    return "completed";
+    if (semId === currentSemId) return "inprogress";
+    return "future";
+  };
+
+  // ── Totals ────────────────────────────────────────────────────
+  const totalSHPlaced = useMemo(
+    () => courses.filter(c => placements[c.id]).reduce((s, c) => s + c.sh, 0),
+    [courses, placements]
+  );
+  const totalSHDone = useMemo(
+    () => courses.filter(c => {
+      const sid = placements[c.id];
+      return sid && (SEM_INDEX[sid] ?? 99) < currentSemIdx;
+    }).reduce((s, c) => s + c.sh, 0),
+    [courses, placements, SEM_INDEX, currentSemIdx]
+  );
+
+  // ── Star toggle ───────────────────────────────────────────────
+  const toggleStar = id => {
+    setStarredIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      try { localStorage.setItem("ncp-starred", JSON.stringify([...next])); } catch {}
+      return next;
+    });
+  };
+
+  // ── Drag / drop ───────────────────────────────────────────────
+  const onDragStart = (e, id, type, fromSem) => {
+    e.stopPropagation();
+    setDragInfo({ id, type, fromSem: fromSem ?? null });
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  // Resolve the canonical co-op START semester from any of the 4 drop targets:
+  //   spring  → start is spring   (continues into sumA)
+  //   sumA    → start is spring   (the preceding semester)
+  //   sumB    → start is sumB     (continues into fall)
+  //   fall    → start is sumB     (the preceding semester)
+  const coopStartFor = semId => {
+    const sem = SEMESTERS.find(s => s.id === semId);
+    if (!sem) return null;
+    // Both sumA and sumB have type "summer" — discriminate by id prefix
+    if (sem.type === "spring" || sem.id.startsWith("sumB")) return semId;
+    // sumA or fall: the canonical start is the preceding semester
+    const prev = SEM_PREV[semId];
+    if (!prev) return null;
+    const prevSem = SEMESTERS.find(s => s.id === prev);
+    if (!prevSem) return null;
+    if (prevSem.type === "spring" || prevSem.id.startsWith("sumB")) return prev;
+    return null;
+  };
+
+  const canDropSem = semId => {
+    if (!dragInfo) return false;
+    if (dragInfo.type === "work") {
+      const startId = coopStartFor(semId);
+      if (!startId) return false;
+      const contId = SEM_NEXT[startId];
+      if (!contId) return false;
+      // Reject if either semester in the block is already occupied by a different co-op
+      const occupying = dragInfo.id; // the co-op being dragged — its own old slot is fine
+      if (workStartMap[startId] && workStartMap[startId] !== occupying) return false;
+      if (workContMap[contId]   && workContMap[contId]   !== occupying) return false;
+      return true;
+    }
+    if (workStartMap[semId] || workContMap[semId]) return false;
+    return !!SEMESTERS.find(s => s.id === semId);
+  };
+
+  const onDragOver = (e, semId) => {
+    if (!canDropSem(semId)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setHoveredSem(semId);
+  };
+
+  const onDragLeave = () => {
+    setHoveredSem(null);
+    setHoveredZone(null);
+  };
+
+  const onDrop = (e, semId) => {
+    e.preventDefault();
+    setHoveredSem(null); setHoveredZone(null);
+    if (!dragInfo) return;
+    pushUndo();
+    const { id, type } = dragInfo;
+    if (type === "work") {
+      // Normalize the drop target to the canonical start of the co-op block
+      const startId = coopStartFor(semId);
+      if (!startId) { setDragInfo(null); return; }
+      setWorkPl(p => {
+        const n = { ...p };
+        Object.keys(n).forEach(k => { if (k === id) delete n[k]; });
+        n[id] = startId;
+        return n;
+      });
+    } else {
+      const fromSem = placements[id];
+      if (fromSem === semId) { setDragInfo(null); return; }
+      // Always move ALL coreq partners together with the dragged course
+      const coreqPartners = [...new Set(
+        allEdges
+          .filter(edge => edge.type === "corequisite" && (edge.from === id || edge.to === id))
+          .map(edge => edge.from === id ? edge.to : edge.from)
+          .filter(cid => cid !== id)
+      )];
+      const allMoving = [id, ...coreqPartners];
+      setPlacements(p => {
+        const n = { ...p, [id]: semId };
+        coreqPartners.forEach(cid => { n[cid] = semId; });
+        return n;
+      });
+      setSemOrders(prev => {
+        const next = { ...prev };
+        // Clean dragged + coreqs from any sems they were in
+        if (fromSem && fromSem !== semId)
+          next[fromSem] = (next[fromSem] || []).filter(cid => !allMoving.includes(cid));
+        coreqPartners.forEach(cid => {
+          const cOld = placements[cid];
+          if (cOld && cOld !== fromSem && cOld !== semId)
+            next[cOld] = (next[cOld] || []).filter(x => x !== cid);
+        });
+        const baseOrder = next[semId] || getOrderedCourses(semId, placements, prev, courseMap);
+        const withoutDropped = baseOrder.filter(cid => !allMoving.includes(cid));
+        next[semId] = [...withoutDropped, id, ...coreqPartners];
+        return next;
+      });
+    }
+    setDragInfo(null);
+  };
+
+  const onDropBank = e => {
+    e.preventDefault();
+    if (!dragInfo) return;
+    pushUndo();
+    const { id, type, fromSem } = dragInfo;
+    if (type === "work") {
+      setWorkPl(p => { const n = { ...p }; delete n[id]; return n; });
+    } else {
+      const coreqPartners = [...new Set(
+        allEdges
+          .filter(e2 => e2.type === "corequisite" && (e2.from === id || e2.to === id))
+          .map(e2 => e2.from === id ? e2.to : e2.from)
+      )];
+      setPlacements(p => {
+        const n = { ...p };
+        delete n[id];
+        coreqPartners.forEach(cid => delete n[cid]);
+        return n;
+      });
+      setSemOrders(p => {
+        const next = { ...p };
+        const toClean = new Set([fromSem, ...coreqPartners.map(cid => placements[cid])].filter(Boolean));
+        toClean.forEach(sid => {
+          next[sid] = (next[sid] || []).filter(cid => cid !== id && !coreqPartners.includes(cid));
+        });
+        return next;
+      });
+    }
+    setDragInfo(null);
+  };
+
+  const onDropOnCard = (e, targetId, targetSemId) => {
+    e.preventDefault(); e.stopPropagation();
+    setHoveredCardId(null); setHoveredSem(null); setHoveredZone(null);
+    if (!dragInfo || dragInfo.type !== "course" || dragInfo.id === targetId) return;
+    pushUndo();
+    const dragId  = dragInfo.id;
+    const fromSem = placements[dragId];
+    const targetSemType = SEMESTERS.find(s => s.id === targetSemId)?.type;
+
+    // Always carry all coreq partners of the dragged course
+    const coreqPartners = [...new Set(
+      allEdges
+        .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
+        .map(e2 => e2.from === dragId ? e2.to : e2.from)
+        .filter(cid => cid !== dragId)
+    )];
+    const allMoving = [dragId, ...coreqPartners];
+
+    if (fromSem === targetSemId) {
+      // Same-sem reorder (coreqs stay, just reorder the dragged card)
+      setSemOrders(prev => {
+        const cur = getOrderedCourses(targetSemId, placements, prev, courseMap);
+        const fi  = cur.indexOf(dragId), ti = cur.indexOf(targetId);
+        if (fi < 0 || ti < 0) return prev;
+        const next = [...cur]; next.splice(fi, 1); next.splice(ti, 0, dragId);
+        return { ...prev, [targetSemId]: next };
+      });
+    } else if (targetSemType === "special") {
+      // Append to special/incoming sem — carry coreqs along
+      setPlacements(p => {
+        const n = { ...p, [dragId]: targetSemId };
+        coreqPartners.forEach(cid => { n[cid] = targetSemId; });
+        return n;
+      });
+      setSemOrders(prev => {
+        const next = { ...prev };
+        const toClean = new Set([fromSem, ...coreqPartners.map(cid => placements[cid])].filter(Boolean));
+        toClean.forEach(sid => {
+          next[sid] = (next[sid] || getOrderedCourses(sid, placements, prev, courseMap)).filter(cid => !allMoving.includes(cid));
+        });
+        const toOrder = getOrderedCourses(targetSemId, placements, prev, courseMap);
+        next[targetSemId] = [...toOrder.filter(cid => !allMoving.includes(cid)), dragId, ...coreqPartners];
+        return next;
+      });
+    } else {
+      // Different sem — swap targetId ↔ fromSem, move dragId+coreqs → targetSemId
+      const fromOrder = getOrderedCourses(fromSem,     placements, semOrders, courseMap);
+      const toOrder   = getOrderedCourses(targetSemId, placements, semOrders, courseMap);
+      const fi = fromOrder.indexOf(dragId), ti = toOrder.indexOf(targetId);
+      setPlacements(p => {
+        const n = { ...p, [dragId]: targetSemId, [targetId]: fromSem };
+        coreqPartners.forEach(cid => { n[cid] = targetSemId; });
+        return n;
+      });
+      setSemOrders(prev => {
+        const next = { ...prev };
+        // nf: remove dragId+coreqs, insert targetId where dragId was
+        const nf = fromOrder.filter(c => !allMoving.includes(c));
+        nf.splice(Math.min(fi, nf.length), 0, targetId);
+        // nt: remove targetId, insert dragId+coreqs where targetId was
+        const nt = toOrder.filter(c => c !== targetId);
+        nt.splice(Math.min(ti, nt.length), 0, dragId, ...coreqPartners);
+        // Remove coreqs from any other sems they were in
+        coreqPartners.forEach(cid => {
+          const cOld = placements[cid];
+          if (cOld && cOld !== fromSem && cOld !== targetSemId)
+            next[cOld] = (next[cOld] || []).filter(x => x !== cid);
+        });
+        next[fromSem]    = nf;
+        next[targetSemId] = nt;
+        return next;
+      });
+    }
+    setDragInfo(null);
+  };
+
+  // ── Bank helpers ─────────────────────────────────────────────
+  const bankCourseIds = useMemo(
+    () => new Set(courses.filter(c => !placedIds.has(c.id)).map(c => c.id)),
+    [courses, placedIds]
+  );
+
+  // ── Reset ────────────────────────────────────────────────────
+  const resetAll = () => {
+    setPlacements({});
+    setWorkPl({});
+    setSemOrders({});
+    setOfferedOverrides({});
+  };
+
+  // ── Cohort setters that also persist to localStorage ─────────
+  const setEntSem = sem => {
+    setPlanEntSem(sem);
+    try { localStorage.setItem("ncp-ent-sem", sem); } catch {}
+  };
+  const setEntYear = year => {
+    setPlanEntYear(year);
+    try { localStorage.setItem("ncp-ent-year", year); } catch {}
+  };
+  const setGradSem = sem => {
+    setPlanGradSem(sem);
+    try { localStorage.setItem("ncp-grad-sem", sem); } catch {}
+  };
+  const setGradYear = year => {
+    setPlanGradYear(year);
+    try { localStorage.setItem("ncp-grad-year", year); } catch {}
+  };
+
+  // ── Offered overrides setter ─────────────────────────────────
+  const toggleOffered = (courseId, type, currentList) => {
+    setOfferedOverrides(prev => {
+      const cur  = prev[courseId] ?? currentList;
+      const next = cur.includes(type) ? cur.filter(t => t !== type) : [...cur, type];
+      return { ...prev, [courseId]: next };
+    });
+  };
+
+  // ── Context value ─────────────────────────────────────────────
+  const value = {
+    // Data
+    courses, courseMap, allEdges, subjects,
+    // Load state
+    loading, loadErr, loadPct,
+    // Planner state
+    placements, workPl, currentSemId, persistEnabled,
+    semOrders, offeredOverrides, collapsedSubs,
+    // Semester grid
+    SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
+    // UI state
+    selectedId, dragInfo, hoveredSem, hoveredZone, hoveredCardId,
+    showPanel, lines, scrollTick, showViolLines,
+    // Bank state
+    bankSearch, bankSort, bankTab, bankWidth, showSubjectKeys,
+    starredIds, bankCourseIds,
+    // Settings
+    showDisclaimer, showSettings,
+    planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
+    panelHeight,
+    uiScale,
+    // Derived
+    currentSemIdx, placedIds, workStartMap, workContMap,
+    gradSemId, coopGradConflicts,
+    prereqViolations, coreqViolations, connectedIds,
+    totalSHPlaced, totalSHDone,
+    // Refs (passed through for DOM measurements)
+    timelineRef, cardRefs, bankRef, bankResizing, panelResizing, uiScaleRef,
+    // Actions
+    setSelectedId, setShowPanel, setDragInfo,
+    setHoveredSem, setHoveredZone, setHoveredCardId,
+    setShowViolLines,
+    setBankSearch, setBankSort, setBankTab, setBankWidth, setShowSubjectKeys,
+    setCollapsedSubs,
+    setShowDisclaimer, setShowSettings,
+    setPersistEnabled,
+    setOfferedOverrides,
+    setPlacements, setWorkPl, setSemOrders, setCurrentSemId,
+    setEntSem, setEntYear, setGradSem, setGradYear,
+    resetAll, toggleStar, toggleOffered,
+    getSemStatus,
+    onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard,
+    canDropSem,
+    doUndo, doRedo, pushUndo,
+  };
+
+  return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>;
+}
+
+/** Consume the planner context. Must be used inside <PlannerProvider>. */
+export function usePlanner() {
+  const ctx = useContext(PlannerContext);
+  if (!ctx) throw new Error("usePlanner must be used inside <PlannerProvider>");
+  return ctx;
+}
