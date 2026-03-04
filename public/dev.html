@@ -548,10 +548,16 @@
         </div>
         <p class="text2" style="font-size:11px;margin:0 0 18px">Server starts automatically with <code>npm run dev</code> — no separate terminal needed.</p>
       </div>
-      <!-- HTTPS guard — shown instead of launch row when accessed from GitHub Pages or any HTTPS non-localhost origin -->
-      <div id="ck-local-only-banner" style="display:none;margin:18px 0;padding:14px 16px;background:var(--bg2);border:1px solid var(--warn);border-radius:8px">
-        <p style="margin:0 0 6px;font-weight:600;color:var(--warn)">⚠ Catalog Check only works locally</p>
-        <p style="margin:0;font-size:12px;color:var(--text2)">This page is being served over HTTPS, so the browser blocks requests to the local <code>http://localhost:3333</code> server (mixed-content policy). Run the app locally with <code>npm run dev</code> and open <code>http://localhost:5173/dev.html</code> instead.</p>
+      <!-- HTTPS guard — shown instead of launch row when accessed from GitHub Pages -->
+      <div id="ck-local-only-banner" style="display:none;margin:18px 0">
+        <p style="font-size:11px;color:var(--text3);margin:0 0 14px">The catalog check server runs on your local machine and can&rsquo;t be reached over HTTPS. Start it with <code>npm run dev</code>, then open the local dev portal directly:</p>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <button class="launch-btn" onclick="ckOpenLocal()">🚀 Open Local Dev Portal</button>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)">
+            Dev server port: <input id="ck-local-port" value="5173" type="number" min="1024" max="65535"
+              style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+          </span>
+        </div>
       </div>
 
       <!-- Progress section (hidden until run starts) -->
@@ -585,7 +591,6 @@
             <div style="display:flex;gap:8px;align-items:center">
               <span id="ck-inspector-count" style="font-size:11px;color:var(--text3)">0 items</span>
               <button class="btn sec" style="font-size:11px;padding:4px 10px" onclick="ckExport()">Export JSON</button>
-              <button class="btn sec" id="ck-fix-btn" style="font-size:11px;padding:4px 10px;background:#c0392b22;border-color:#e74c3c;color:#e74c3c" onclick="ckApplyFixes()">⚡ Apply Fixes</button>
             </div>
           </div>
           <div class="ck-filter-bar">
@@ -603,11 +608,49 @@
               <tbody id="ck-inspector-body"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Run a check to populate</td></tr></tbody>
             </table>
           </div>
+
+          <!-- ── Apply Fixes — danger zone ──────────────────────────────── -->
+          <div style="margin-top:20px;border-top:2px solid #e74c3c44;padding-top:18px">
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+              <div style="flex:1;min-width:220px">
+                <p style="font-size:13px;font-weight:700;color:#e74c3c;margin:0 0 5px">☢ Data Override Zone</p>
+                <p style="font-size:11px;color:var(--text2);margin:0;line-height:1.55">
+                  Writes catalog values directly into <code>all-courses.json</code> and updates the data timestamp.
+                  Applies <span id="ck-fix-count" style="font-weight:700;color:#e74c3c">0</span> changed/range-diff courses.
+                  <span style="color:var(--error)">Irreversible without git.</span>
+                </p>
+              </div>
+              <button id="ck-fix-btn" class="launch-btn" onclick="ckApplyFixes()"
+                style="background:#7b0000;border-color:#e74c3c;box-shadow:0 0 26px rgba(231,76,60,0.5);font-size:14px;height:auto;padding:12px 28px;flex-shrink:0">
+                ☢ Apply Fixes
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div><!-- /#dev-app -->
+
+<!-- ── Apply Fixes confirmation modal ──────────────────────────── -->
+<div id="ck-fix-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:9999;align-items:center;justify-content:center"
+     onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--bg2);border:2px solid #e74c3c;border-radius:12px;padding:28px 32px;max-width:480px;width:90%;box-shadow:0 0 80px rgba(231,76,60,0.45)">
+    <h2 style="color:#e74c3c;margin:0 0 14px;font-size:18px">☢ Confirm Data Override</h2>
+    <p style="color:var(--text2);font-size:13px;line-height:1.6;margin:0 0 10px">
+      This will overwrite <strong id="ck-fix-modal-count" style="color:#fff">N courses</strong>
+      in <code>all-courses.json</code> and update the data timestamp.
+    </p>
+    <p style="color:var(--text3);font-size:11px;line-height:1.55;margin:0 0 22px">
+      Only “Changed” and “Range diff” entries are written — new and missing courses are not touched.<br>
+      <strong style="color:#e74c3c">This cannot be undone without reverting via git.</strong>
+    </p>
+    <div style="display:flex;gap:12px;justify-content:flex-end">
+      <button class="btn sec" onclick="document.getElementById('ck-fix-modal').style.display='none'">Cancel</button>
+      <button class="launch-btn" style="height:auto;padding:10px 28px;font-size:14px" onclick="ckDoApplyFixes()">☢ Yes, override data</button>
+    </div>
+  </div>
+</div>
 <script>
 // ── Constants ──────────────────────────────────────────────────────────────
 const STORAGE_KEY   = "numap-dev-hash";
@@ -943,6 +986,11 @@ window.addEventListener('resize', () => { if (pvReady) pvApply(); });
   }
 })();
 
+function ckOpenLocal() {
+  const port = document.getElementById('ck-local-port')?.value || '5173';
+  window.open(`http://localhost:${port}/dev.html`, '_blank');
+}
+
 let checkEvtSource = null;
 
 function startCheck() {
@@ -1143,6 +1191,11 @@ function ckRender() {
   document.getElementById('ck-inspector-count').textContent =
     `${visible.length} of ${items.length}${items.length > MAX ? ` (capped at ${MAX})` : ''}`;
 
+  // Keep the danger-zone fix count live
+  const fixCount = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range').length;
+  const fixCountEl = document.getElementById('ck-fix-count');
+  if (fixCountEl) fixCountEl.textContent = fixCount;
+
   if (!visible.length) {
     tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">${ckDiscrepancies.length ? 'No items match filter/search' : 'Run a check to populate'}</td></tr>`;
     return;
@@ -1184,9 +1237,18 @@ function ckExport() {
   a.click();
 }
 
-async function ckApplyFixes() {
+function ckApplyFixes() {
   const items = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range');
   if (!items.length) { alert('No changed or range-diff items to fix.'); return; }
+  const label = `${items.length} course${items.length !== 1 ? 's' : ''}`;
+  document.getElementById('ck-fix-modal-count').textContent = label;
+  const modal = document.getElementById('ck-fix-modal');
+  modal.style.display = 'flex';
+}
+
+async function ckDoApplyFixes() {
+  document.getElementById('ck-fix-modal').style.display = 'none';
+  const items = ckDiscrepancies.filter(x => x.type === 'changed' || x.type === 'range');
   const port = document.getElementById('check-port').value || '3333';
   const btn = document.getElementById('ck-fix-btn');
   btn.disabled = true;
@@ -1200,17 +1262,17 @@ async function ckApplyFixes() {
     const j = await r.json();
     if (j.ok) {
       document.getElementById('check-status-msg').textContent =
-        `⚡ Fixed ${j.fixed} of ${j.total} course(s) — data updated to ${j.label}. Rebuild to deploy.`;
+        `☢ Fixed ${j.fixed} of ${j.total} course(s) — data updated to ${j.label}. Rebuild to deploy.`;
       btn.textContent = `✅ Fixed ${j.fixed}`;
     } else {
       alert('Fix failed: ' + (j.error || 'unknown error'));
       btn.disabled = false;
-      btn.textContent = '⚡ Apply Fixes';
+      btn.textContent = '☢ Apply Fixes';
     }
   } catch (e) {
     alert('Could not reach local server: ' + e.message);
     btn.disabled = false;
-    btn.textContent = '⚡ Apply Fixes';
+    btn.textContent = '☢ Apply Fixes';
   }
 }
 
