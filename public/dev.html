@@ -780,7 +780,8 @@ let pvFrame = true;
 let pvReady = false;
 
 function pvGetUrl() {
-  return '/';
+  // Derive base from current page path: /nu-map/dev.html → /nu-map/  or  /dev.html → /
+  return window.location.pathname.replace(/\/[^/]*$/, '/');
 }
 
 function pvApply() {
