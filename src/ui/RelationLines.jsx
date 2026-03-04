@@ -18,11 +18,22 @@ export default function RelationLines() {
       pointerEvents: "none", zIndex: 40, overflow: "visible",
     }}>
       <defs>
-        {Object.entries(REL_STYLE).map(([type, s]) => (
-          <marker key={type} id={`dot-${type}`} markerWidth="5" markerHeight="5" refX="2.5" refY="2.5">
-            <circle cx="2.5" cy="2.5" r="2" fill={s.color} />
-          </marker>
-        ))}
+        {Object.entries(REL_STYLE).map(([type, s]) =>
+          s.arrow ? (
+            /* Filled triangle arrowhead — ~2× the old dot size, auto-oriented */
+            <marker key={type} id={`end-${type}`}
+              markerWidth="10" markerHeight="10" refX="9" refY="5"
+              orient="auto" markerUnits="userSpaceOnUse">
+              <polygon points="0,1 9,5 0,9" fill={s.color} />
+            </marker>
+          ) : (
+            /* Dot for coreq lines */
+            <marker key={type} id={`end-${type}`}
+              markerWidth="5" markerHeight="5" refX="2.5" refY="2.5">
+              <circle cx="2.5" cy="2.5" r="2" fill={s.color} />
+            </marker>
+          )
+        )}
       </defs>
 
       {lines.map((ln, i) => {
@@ -49,7 +60,7 @@ export default function RelationLines() {
             key={i} d={d}
             stroke={s.color} strokeWidth="1.5" fill="none"
             strokeDasharray={s.dash}
-            markerEnd={`url(#dot-${ln.type})`}
+            markerEnd={`url(#end-${ln.type})`}
             opacity="0.75"
           />
         );

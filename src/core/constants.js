@@ -28,10 +28,10 @@ export const TYPE_BG = {
 // Prereq connection colour is poppy mint-green (#3dd8a0) — visually distinct
 // from the NOW indicator blue (#58a6ff) used everywhere else.
 export const REL_STYLE = {
-  prerequisite:         { color: "#3dd8a0", dash: "",    label: "Prereq"              },
-  "prerequisite-order": { color: "#f85149", dash: "",    label: "Prereq (wrong order)" },
-  corequisite:          { color: "#58a6ff", dash: "5 4", label: "Coreq"               },
-  "corequisite-viol":   { color: "#ffd600", dash: "5 4", label: "Misplaced"          },
+  prerequisite:         { color: "#3dd8a0", dash: "",    label: "Prereq",               arrow: true  },
+  "prerequisite-order": { color: "#f85149", dash: "",    label: "Prereq (wrong order)",  arrow: true  },
+  corequisite:          { color: "#58a6ff", dash: "5 4", label: "Coreq",                arrow: false },
+  "corequisite-viol":   { color: "#ffd600", dash: "5 4", label: "Misplaced",             arrow: false },
 };
 
 export const NUPATH_LABELS = {
