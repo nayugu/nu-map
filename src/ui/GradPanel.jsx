@@ -150,6 +150,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           maxHeight: 200, overflowY: "auto",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+          fontFamily: "'Inter', system-ui, sans-serif", fontSize: 13,
         }}>
           <div
             onMouseDown={() => select("")}

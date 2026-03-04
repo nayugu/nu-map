@@ -200,7 +200,7 @@ const light = {
   // ── Composite shadows ──────────────────────────────────────────────
   '--shadow-modal':      '0 8px 32px rgba(0,0,0,0.12)',
   '--shadow-active-row': 'inset 2px 0 0 rgba(37,99,235,0.18)',
-  '--shadow-done-row':   'inset 2px 0 0 #14532d',
+  '--shadow-done-row':   'inset 2px 0 0 #86efac',
   '--shadow-card-sel':   '0 0 0 1px #2563eb40',
   '--shadow-card-conn':  '0 0 0 1px rgba(37,99,235,0.18)',
   '--shadow-card-hov':   '0 1px 3px rgba(0,0,0,0.10)',

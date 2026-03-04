@@ -26,7 +26,7 @@ export default function SummerRow({ semA, semB }) {
   const combinedSH     = sems.reduce((sum, s) => sum + getSemSH(s.id, placements, courseMap), 0);
   const tb         = TYPE_BG.summer;
   const rowBg      = tb.bg;
-  const rowBorder  = combinedActive ? "1px solid var(--active)" : `1px solid ${tb.border}`;
+  const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;
   const rowOpacity = combinedDone ? 0.9 : 1;
 
   const removeWork = wid => { pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[wid]; return n; }); };
@@ -220,7 +220,7 @@ export default function SummerRow({ semA, semB }) {
           <span style={{
             width: 14, height: 14, borderRadius: 3,
             background: combinedDone ? "var(--bg-surface)" : combinedActive ? "var(--active-bg)" : "transparent",
-            border: combinedDone ? "1px solid var(--success-border)" : combinedActive ? "1px solid var(--active)" : "1px solid var(--border-2)",
+            border: combinedDone ? "1px solid var(--success-border)" : combinedActive ? "1px solid var(--active-now-border)" : "1px solid var(--border-2)",
             display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
           }}>
             {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
