@@ -44,7 +44,7 @@ export default function SummerRow({ semA, semB }) {
     if (workItem) {
       return (
         <div key={sem.id} style={{
-          flex: "0 0 auto",
+          flex: 1, minWidth: 0,
           border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
           background: "var(--card-bg)",
         }}>
@@ -58,7 +58,7 @@ export default function SummerRow({ semA, semB }) {
             onDragStart={e => onDragStart(e, workItem.id, "work", sem.id)}
             style={{
               position: "relative",
-              width: 328, minHeight: 58,
+              width: "100%", minHeight: 58,
               background: "var(--card-bg)",
               border: `2px solid ${workItem.color}`,
               borderRadius: 6, padding: "8px 28px 8px 14px",
@@ -93,7 +93,7 @@ export default function SummerRow({ semA, semB }) {
     if (contItem) {
       return (
         <div key={sem.id} style={{
-          flex: "0 0 auto",
+          flex: 1, minWidth: 0,
           border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
           background: "var(--card-bg)",
         }}>
@@ -102,7 +102,7 @@ export default function SummerRow({ semA, semB }) {
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div style={{
-            width: 328, minHeight: 58,
+            width: "100%", minHeight: 58,
             border: `2px solid ${contItem.color}`,
             borderRadius: 6, padding: "8px 14px",
             display: "flex", flexDirection: "column", justifyContent: "center",
@@ -127,7 +127,7 @@ export default function SummerRow({ semA, semB }) {
         onDragLeave={onDragLeave}
         onDrop={e => onDrop(e, sem.id)}
         style={{
-          flex: "0 0 auto",
+          flex: 1, minWidth: 0,
           padding: "4px 5px",
           border: `1px solid ${hoveredSem === sem.id ? "var(--active)" : "var(--border-slot)"}`,
           borderRadius: 4,
@@ -145,7 +145,7 @@ export default function SummerRow({ semA, semB }) {
 
         {/* Main ≥4 SH slots */}
         <div style={{
-          display: "flex", gap: 4, flexWrap: "wrap", minHeight: 66,
+          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 4, minHeight: 66,
           borderRadius: 4, padding: 2,
           border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
             ? "1px solid var(--active)" : "1px solid transparent",
@@ -168,7 +168,7 @@ export default function SummerRow({ semA, semB }) {
           {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
           {Array.from({ length: Math.max(0, 2 - main4.length) }).map((_, i) => (
             <div key={`ms-${i}`} style={{
-              width: 160, flexShrink: 0, height: 66,
+              height: 66,
               border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg,
             }} />
           ))}
@@ -245,8 +245,8 @@ export default function SummerRow({ semA, semB }) {
         )}
       </div>
 
-      {/* Two session sub-columns — gap matches course-to-course spacing */}
-      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+      {/* Two session sub-columns — always side by side, each fills half */}
+      <div style={{ display: "flex", gap: 4, flexWrap: "nowrap", flex: 1, minWidth: 0 }}>
         {renderSession(semA)}
         {renderSession(semB)}
       </div>

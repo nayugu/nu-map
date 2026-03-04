@@ -128,7 +128,7 @@ export default function SemRow({ sem }) {
         minHeight: sem.type === "special" ? "auto" : 70,
         opacity: rowOpacity, boxShadow: rowBoxShadow,
         transition: "background 0.12s, border-color 0.12s, opacity 0.15s",
-        flexWrap: "wrap",
+        flexWrap: "nowrap",
       }}
     >
       {/* Semester label */}
@@ -236,7 +236,7 @@ export default function SemRow({ sem }) {
                 e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
               }}
               style={{
-                display: "flex", gap: 4, flexWrap: "nowrap",
+                display: "grid", gridTemplateColumns: `repeat(${mainSlots}, 1fr)`, gap: 4,
                 borderRadius: 6, padding: 3, minHeight: 76,
                 border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
                   ? "1px solid var(--active)" : "1px solid transparent",
@@ -247,7 +247,7 @@ export default function SemRow({ sem }) {
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
               {Array.from({ length: Math.max(0, mainSlots - main4.length) }).map((_, i) => (
-                <div key={`ms-${i}`} style={{ flex: "1 1 110px", maxWidth: 164, height: 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
+                <div key={`ms-${i}`} style={{ minHeight: 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
               ))}
             </div>
 
