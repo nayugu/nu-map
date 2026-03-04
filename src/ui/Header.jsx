@@ -9,6 +9,7 @@ import { REL_STYLE, WORK_TERMS } from "../core/constants.js";
 import { exportReport } from "../core/planModel.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { getNuPathCoverage } from "../core/gradRequirements.js";
+import dataMeta from "../core/dataMeta.json";
 
 export default function Header() {
   const {
@@ -75,11 +76,17 @@ export default function Header() {
         position: "sticky", top: 0, zIndex: 30, background: "var(--bg-app)",
         paddingBottom: 8, borderBottom: "1px solid var(--border-1)",
       }}>
-        {/* Row 1: title + info — never wraps */}
+        {/* Row 1: title + info — last-updated anchored right, never wraps */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "nowrap", minWidth: 0, overflow: "hidden" }}>
           <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", flexShrink: 0 }}>NU Map</span>
           <span style={{ fontSize: 10, color: "var(--text-6)", flexShrink: 0 }}>·</span>
-          <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{courses.length.toLocaleString()} courses</span>
+          <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{courses.length.toLocaleString()} courses</span>
+          {!isPhone && dataMeta.lastUpdated && (
+            <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap", flexShrink: 0 }}
+              title="Date of last course data refresh">
+              updated {dataMeta.lastUpdated}
+            </span>
+          )}
         </div>
 
         {/* Row 2: SH badges left · buttons right — never wraps */}

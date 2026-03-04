@@ -1,0 +1,87 @@
+name: Catalog Rotate
+
+# Runs every 3 days. Each run scrapes exactly one subject (rotating through all
+# ~130 subjects), so the entire catalog refreshes roughly every 3–4 months.
+# Developer approval is required before any data changes reach production:
+# the workflow opens a PR instead of pushing directly to main.
+
+on:
+  schedule:
+    - cron: "0 6 */3 * *"   # 06:00 UTC every 3rd day
+  workflow_dispatch:          # allow manual trigger from GitHub UI
+
+jobs:
+  rotate:
+    name: Scrape next catalog subject
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Run the rotating scraper ──────────────────────────────────────────
+      - name: Scrape next subject
+        id: scrape
+        run: |
+          node scripts/scrape-catalog.js --rotate --write 2>&1 | tee /tmp/scrape-log.txt
+          # Extract which subject was scraped for the PR title
+          SUBJECT=$(grep -oP "Subject \d+/\d+: \K[^\n]+" /tmp/scrape-log.txt | head -1 || echo "unknown")
+          echo "subject=$SUBJECT" >> "$GITHUB_OUTPUT"
+          echo "log<<EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/scrape-log.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      # ── Check if anything actually changed ───────────────────────────────
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # ── Open a PR for developer review — never push directly to main ──────
+      - name: Create pull request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: data/catalog-rotate-${{ github.run_id }}
+          delete-branch: true
+          title: "data: catalog rotate — ${{ steps.scrape.outputs.subject }}"
+          body: |
+            ## Automated catalog data update
+
+            **Subject scraped:** `${{ steps.scrape.outputs.subject }}`
+            **Triggered by:** scheduled rotate (every 3 days)
+            **Requires developer approval before merging.**
+
+            ### Changed files
+            - `public/all-courses.json` — course data for this subject updated
+            - `data/scrape-state.json` — rotation index advanced
+            - `src/core/dataMeta.json` — lastUpdated timestamp refreshed
+            - `public/data-meta.json` — lastUpdated timestamp refreshed
+
+            ### Scraper output
+            ```
+            ${{ steps.scrape.outputs.log }}
+            ```
+
+            ---
+            > Merge only after reviewing the diff. The data changes tab above
+            > shows exactly which courses were added, removed, or modified.
+          labels: "automated, data-update"
+          commit-message: "data: catalog rotate — ${{ steps.scrape.outputs.subject }}"
+
+      - name: No changes detected
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "No course data changed for this subject — nothing to commit."

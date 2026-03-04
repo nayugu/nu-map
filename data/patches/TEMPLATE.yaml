@@ -1,0 +1,55 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PATCH TEMPLATE — copy to a new file named YYYY-MM-DD_description.yaml
+# Delete sections you don't need.  All three course actions are optional.
+# ─────────────────────────────────────────────────────────────────────────────
+
+meta:
+  date: "2026-01-01"           # REQUIRED  — date of this patch (YYYY-MM-DD)
+  author: "your-github-handle" # optional
+  reason: "Brief description of why this patch exists"
+
+courses:
+
+  # ── ADD ─────────────────────────────────────────────────────────────────────
+  # Insert courses that are missing from the upstream API snapshot.
+  # Will error if the course already exists — use update instead.
+
+  add:
+    - subject: CS            # REQUIRED  2–6 uppercase letters
+      number: "2510"         # REQUIRED  4-digit string (quoted to preserve leading zeros)
+      title: "Fundamentals of Computer Science 2"  # REQUIRED
+      credits: 4             # REQUIRED  positive number
+      scheduleType: Lecture  # optional  Lecture | Lab | Seminar | Studio | Individual Instruction | Off-campus instruction
+      nuPath:                # optional  list of NUPath codes
+        - FQ
+      prereqs:               # optional  same nested array/object format as all-courses.json
+        - subject: CS
+          number: "2500"
+      coreqs: []             # optional
+      description: >         # optional  free text (use > for multi-line)
+        Continues CS 2500 with object-oriented programming in Java.
+      sections: []           # optional  [{term, crn}, …] — leave empty if unknown
+
+
+  # ── UPDATE ───────────────────────────────────────────────────────────────────
+  # Change specific fields on an existing course.
+  # subject + number identify the course; fields lists what to change.
+  # Will error if the course is not found.
+
+  update:
+    - subject: CS
+      number: "3500"
+      fields:
+        title: "Object-Oriented Design"      # new title
+        credits: 4                           # changed from 3 to 4
+        nuPath: [AD]                         # replace entire nuPath array
+
+
+  # ── REMOVE ───────────────────────────────────────────────────────────────────
+  # Remove courses from the dataset (e.g. discontinued courses).
+  # Will warn if the course is already absent.
+
+  remove:
+    - subject: CS
+      number: "1000"
+      reason: "Course discontinued after spring 2025"

@@ -136,14 +136,15 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         }}
       >
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: course.color, borderRadius: "3px 0 0 3px" }} />
-        <span style={{ fontSize: 10, fontWeight: 800, color: course.color, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        {/* Shrink code + SH when a warning icon is present so code is always readable */}
+        <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 8 : 10, fontWeight: 800, color: course.color, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {course.code}
         </span>
-        <span style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 4px", flexShrink: 0 }}>
+        <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
           {course.sh}
         </span>
         {(isViolated || notOffered || coreqViol) && (
-          <span style={{ fontSize: 12, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
+          <span style={{ fontSize: 11, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
             {isViolated && violationType === "order" ? "⚡" : isViolated ? "!" : notOffered ? "⚠" : "⚡"}
           </span>
         )}

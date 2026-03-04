@@ -1,0 +1,11 @@
+{
+  "site":       "https://numap.netlify.app/",
+  "siteBackup": "https://nayugu.github.io/nu-map/",
+  "devPortal":  "https://numap.netlify.app/dev.html",
+  "github":     "https://github.com/nayugu/nu-map",
+  "catalog": {
+    "courseDescriptions": "https://catalog.northeastern.edu/course-descriptions/",
+    "undergraduate":      "https://catalog.northeastern.edu/undergraduate/",
+    "notes": "course-descriptions/ is the authoritative scrape target; undergraduate/ is the program/major catalog (different structure)"
+  }
+}

@@ -11,7 +11,7 @@ export default function InfoPanel() {
   const {
     showPanel, setShowPanel, selectedId, setSelectedId,
     courseMap, allEdges, offeredOverrides, setOfferedOverrides,
-    panelHeight, panelResizing, isPhone,
+    panelHeight, panelResizing, isPhone, isMobile,
   } = usePlanner();
 
   // ── InfoPanel nav history (back = Cmd+Z, fwd = Cmd+Shift+Z) ──────
@@ -88,20 +88,35 @@ export default function InfoPanel() {
 
       <div style={{ flex: 1, overflowY: "auto", padding: "8px 14px 12px" }}>
         <div style={{ display: "flex", flexDirection: isPhone ? "column" : "row", alignItems: "flex-start", gap: isPhone ? 8 : 14 }}>
-          {/* Top row: course info + (desktop: relationships + offered) + close */}
+          {/* Top row: course info + right column + close */}
           <div style={{ display: "flex", alignItems: "flex-start", gap: 14, width: "100%" }}>
             <CourseInfo selCourse={selCourse} navTo={navTo} />
 
-            {!isPhone && selEdges.length > 0 && (
+            {/* Desktop only: two separate columns */}
+            {!isMobile && selEdges.length > 0 && (
               <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
             )}
-
-            {!isPhone && (
+            {!isMobile && (
               <OfferedToggles
                 selCourse={selCourse}
                 offeredOverrides={offeredOverrides}
                 setOfferedOverrides={setOfferedOverrides}
               />
+            )}
+
+            {/* Tablet: single narrow right column — Offered under Relationships */}
+            {isMobile && !isPhone && (
+              <div style={{ width: 175, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                {selEdges.length > 0 && (
+                  <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} compact />
+                )}
+                <OfferedToggles
+                  selCourse={selCourse}
+                  offeredOverrides={offeredOverrides}
+                  setOfferedOverrides={setOfferedOverrides}
+                  compact
+                />
+              </div>
             )}
 
             {/* Close */}
@@ -289,9 +304,9 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
   return null;
 }
 
-function RelationshipList({ selCourse, selEdges, courseMap }) {
+function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
   return (
-    <div style={{ width: 240, flexShrink: 0, display: "flex", flexDirection: "column" }}>
+    <div style={{ width: compact ? "100%" : 240, flexShrink: 0, display: "flex", flexDirection: "column" }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 5 }}>
         RELATIONSHIPS
       </div>
@@ -322,11 +337,11 @@ function RelationshipList({ selCourse, selEdges, courseMap }) {
   );
 }
 
-function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides }) {
+function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const defaults = getOfferedFromTerms(selCourse.terms) ?? ["fall", "spring"];
 
   return (
-    <div style={{ width: 155, flexShrink: 0 }}>
+    <div style={{ width: compact ? "100%" : 155, flexShrink: 0 }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
         OFFERED IN
       </div>

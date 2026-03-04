@@ -6,7 +6,21 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "data:fetch": "node scripts/fetch-courses.js",
+    "data:fetch:write": "node scripts/fetch-courses.js --write",
+    "data:patch": "node scripts/apply-patches.js",
+    "data:patch:write": "node scripts/apply-patches.js --write",
+    "data:validate": "node scripts/validate-patches.js",
+    "data:update": "node scripts/fetch-courses.js --write && node scripts/apply-patches.js --write",
+    "data:scrape": "node scripts/scrape-catalog.js",
+    "data:scrape:merge": "node scripts/scrape-catalog.js --merge",
+    "data:scrape:write": "node scripts/scrape-catalog.js --merge --write",
+    "data:scrape:rotate": "node scripts/scrape-catalog.js --rotate",
+    "data:scrape:rotate:write": "node scripts/scrape-catalog.js --rotate --write",
+    "test": "node scripts/test-rotate-logic.js && node scripts/test-cs2100.js",
+    "test:unit": "node scripts/test-rotate-logic.js",
+    "test:live": "node scripts/test-cs2100.js"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -14,6 +28,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
+    "js-yaml": "^4.1.1",
+    "node-html-parser": "^7.1.0",
     "vite": "^5.4.11"
   }
 }

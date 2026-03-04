@@ -74,7 +74,6 @@ export function PlannerProvider({ children }) {
   const [showSettings, setShowSettings] = useState(false);
 
   // ── Layout state ─────────────────────────────────────────────
-  const [panelHeight, setPanelHeight] = useState(210);
   const uiScaleRef = useRef(1);
   // isPhone = true only for narrow phone viewports (< 600px).
   // Tablets (768px+) and phablets (600–767px) use the standard desktop layout.
@@ -84,6 +83,10 @@ export function PlannerProvider({ children }) {
   const [autoScale, setAutoScale] = useState(() => computeUiScale(window.innerWidth));
   const [isPhone,  setIsPhone]  = useState(() => window.innerWidth < PHONE_BP);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < MOBILE_BP);
+  // panelHeight: half-screen on phone, 210px otherwise. Must come after PHONE_BP.
+  const [panelHeight, setPanelHeight] = useState(
+    () => window.innerWidth < PHONE_BP ? Math.round(window.innerHeight * 0.5) : 210
+  );
   const [manualZoom, setManualZoomRaw] = useState(() => {
     try {
       const stored = localStorage.getItem("ncp-zoom");

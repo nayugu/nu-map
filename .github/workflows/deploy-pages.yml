@@ -1,0 +1,57 @@
+name: Deploy to GitHub Pages
+
+# Serves dist/ at nayugu.github.io/nu-map as a backup to Netlify.
+# One-time setup: go to Settings → Pages → Source → "Deploy from a branch",
+# choose branch "gh-pages", folder "/" — then this workflow takes over.
+#
+# After first successful run the site is live at: https://nayugu.github.io/nu-map/
+# The SPA redirect is handled by a 404.html copy (created below).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Publish dist/ to gh-pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # dist/ is committed to main, so no build step needed.
+      # If you ever stop committing dist/, add: npm ci && npm run build
+
+      - name: Prepare deployment directory
+        run: |
+          cp dist/index.html dist/404.html  # SPA fallback for GitHub Pages
+
+      - name: Deploy to gh-pages branch
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stash the built files
+          cp -r dist/ /tmp/gh-pages-deploy
+
+          # Switch to (or create) gh-pages branch as an orphan
+          git fetch origin gh-pages 2>/dev/null && git checkout gh-pages || git checkout --orphan gh-pages
+          git rm -rf --quiet . 2>/dev/null || true
+
+          # Copy dist contents (not the dist/ folder itself)
+          cp -r /tmp/gh-pages-deploy/. .
+
+          # GitHub Pages needs a .nojekyll to serve files starting with _
+          touch .nojekyll
+
+          git add --all
+          git diff --cached --quiet && echo "Nothing to deploy." || \
+            (git commit -m "deploy: ${GITHUB_SHA:0:7}" && git push --force origin HEAD:gh-pages)
+
+      - name: Summary
+        run: echo "✅ Deployed to https://nayugu.github.io/nu-map/"

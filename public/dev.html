@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NU Map — Developer Portal</title>
+  <style>
+    :root {
+      --bg:        #111317;
+      --bg2:       #1a1d24;
+      --bg3:       #222630;
+      --border:    #2e3340;
+      --text:      #e4e8f0;
+      --text2:     #9aa5bb;
+      --text3:     #5c667a;
+      --accent:    #5b8dee;
+      --accent-bg: #5b8dee14;
+      --success:   #4caf7d;
+      --warn:      #f5a623;
+      --error:     #e8655a;
+      --radius:    8px;
+      --mono:      "Fira Code", "Cascadia Code", ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Auth screen ──────────────────────────────────────────── */
+    #auth-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 24px;
+    }
+    .auth-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 40px 36px; width: 100%; max-width: 400px;
+    }
+    .auth-card h1 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .auth-card p  { font-size: 12px; color: var(--text2); margin-bottom: 24px; }
+    .auth-card input {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text); padding: 10px 14px;
+      font-size: 14px; margin-bottom: 12px; outline: none;
+      transition: border-color 0.15s;
+    }
+    .auth-card input:focus { border-color: var(--accent); }
+    .auth-card .btn-primary {
+      width: 100%; background: var(--accent); border: none; color: #fff;
+      border-radius: var(--radius); padding: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer;
+    }
+    .auth-card .btn-primary:hover { opacity: 0.9; }
+    .auth-error { color: var(--error); font-size: 12px; margin-top: 8px; display: none; }
+    .auth-hint  { color: var(--text3); font-size: 11px; margin-top: 12px; }
+
+    /* ── App shell ────────────────────────────────────────────── */
+    #dev-app { display: none; min-height: 100vh; }
+
+    header {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 12px 24px; display: flex; align-items: center; gap: 12px;
+    }
+    header h1  { font-size: 15px; font-weight: 700; }
+    header span { font-size: 11px; color: var(--text3); background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; }
+    header button.logout { margin-left: auto; background: none; border: 1px solid var(--border); color: var(--text2); border-radius: var(--radius); padding: 5px 12px; font-size: 12px; cursor: pointer; }
+    header button.logout:hover { border-color: var(--error); color: var(--error); }
+
+    nav { background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; padding: 0 24px; gap: 2px; }
+    nav button {
+      background: none; border: none; color: var(--text2);
+      padding: 12px 16px; font-size: 13px; cursor: pointer;
+      border-bottom: 2px solid transparent; transition: color 0.12s, border-color 0.12s;
+    }
+    nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+    nav button:hover:not(.active) { color: var(--text); }
+
+    .tab-panel { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
+    .tab-panel.active { display: block; }
+
+    /* ── Shared card ──────────────────────────────────────────── */
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+    }
+    .card h2 { font-size: 13px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+    .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+
+    /* ── Stats grid ───────────────────────────────────────────── */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+    .stat { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+    .stat .val { font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .stat .lbl { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+    /* ── Form controls ────────────────────────────────────────── */
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: var(--text2); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 5px; }
+    .field input, .field select, .field textarea {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text); padding: 8px 10px;
+      font-size: 13px; outline: none; transition: border-color 0.12s;
+      font-family: inherit;
+    }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+    .field select option { background: var(--bg3); }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); border: none; color: #fff; border-radius: var(--radius); padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn:hover { opacity: 0.88; }
+    .btn.sec { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+    .btn.sec:hover { border-color: var(--text2); }
+    .btn.danger { background: var(--error); }
+
+    /* ── YAML output ──────────────────────────────────────────── */
+    .yaml-out {
+      background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 14px; font-family: var(--mono); font-size: 12px; color: #c9d1d9;
+      white-space: pre; overflow: auto; max-height: 340px;
+      margin-top: 14px; display: none;
+    }
+    .yaml-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+    /* ── Action tabs (add/update/remove) ──────────────────────── */
+    .action-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .action-tab { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer; }
+    .action-tab.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+
+    /* ── Preview tab ──────────────────────────────────────────── */
+    .preview-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .preview-bar  { background: var(--bg3); padding: 10px 16px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid var(--border); }
+    .preview-bar button { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 5px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+    .preview-bar button.active { border-color: var(--accent); color: var(--accent); }
+    #preview-frame { width: 100%; border: none; display: block; }
+
+    /* ── Chip list ────────────────────────────────────────────── */
+    .chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-bg); border: 1px solid var(--accent)55; color: var(--accent); border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; }
+    .chip .chip-rm { color: var(--text3); font-size: 10px; }
+    .chip:hover .chip-rm { color: var(--error); }
+    .chip-input-row { display: flex; gap: 6px; margin-top: 6px; }
+    .chip-input-row input { flex: 1; }
+
+    /* ── Misc ─────────────────────────────────────────────────── */
+    .text2 { color: var(--text2); font-size: 12px; }
+    .badge { display: inline-block; font-size: 10px; border-radius: 3px; padding: 1px 6px; }
+    .badge.ok  { background: #4caf7d22; color: var(--success); }
+    .badge.warn{ background: #f5a62322; color: var(--warn); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    code { font-family: var(--mono); font-size: 12px; background: var(--bg3); border-radius: 3px; padding: 1px 5px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <h1>🗂 NU Map · Dev Portal</h1>
+    <p>Authorized access only. Enter your developer password.</p>
+    <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password" />
+    <button class="btn-primary" onclick="attemptLogin()">Unlock →</button>
+    <p class="auth-error" id="auth-error">Incorrect password.</p>
+    <p class="auth-hint" id="auth-hint"></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DEV APP
+══════════════════════════════════════════════════════════════════ -->
+<div id="dev-app">
+  <header>
+    <h1>🗂 NU Map</h1>
+    <span>Developer Portal</span>
+    <button class="logout" onclick="logout()">Log out</button>
+  </header>
+
+  <nav>
+    <button class="active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+    <button onclick="switchTab('patches', this)">🩹 Course Patches</button>
+    <button onclick="switchTab('preview', this)">📱 Preview</button>
+    <button onclick="switchTab('data', this)">🔄 Data Sources</button>
+    <button onclick="switchTab('changes', this)">📋 Change Log</button>
+  </nav>
+
+  <!-- ── Dashboard ─────────────────────────────────────────────── -->
+  <div id="tab-dashboard" class="tab-panel active">
+    <div class="card">
+      <h2>Data Status</h2>
+      <div class="stats" id="data-stats">
+        <div class="stat"><div class="val" id="stat-courses">—</div><div class="lbl">Courses in database</div></div>
+        <div class="stat"><div class="val" id="stat-updated">—</div><div class="lbl">Last updated</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <p class="text2" style="margin-bottom:14px">Run these commands in the repo root. Build afterwards to apply changes.</p>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Annual course refresh</div>
+            <code>npm run data:fetch:write && npm run data:patch:write && npm run build</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:fetch:write && npm run data:patch:write && npm run build')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Scrape from catalog.northeastern.edu</div>
+            <code>npm run data:scrape:write && npm run build</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:scrape:write && npm run build')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Validate all patches</div>
+            <code>npm run data:validate</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:validate')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Repository</h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn sec" href="https://github.com/nayugu/nu-map" target="_blank">📦 nayugu/nu-map</a>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/pulls" target="_blank">🔀 Pull Requests</a>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/actions" target="_blank">⚙ Actions</a>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/tree/main/data/patches" target="_blank">🩹 Patches folder</a>
+        <a class="btn sec" href="https://nayugu.github.io/nu-map/" target="_blank">🔁 GitHub Pages (backup)</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Change Password</h2>
+      <div class="row2">
+        <div class="field"><label>New Password</label><input type="password" id="new-pw" /></div>
+        <div class="field"><label>Confirm</label><input type="password" id="new-pw2" /></div>
+      </div>
+      <button class="btn sec" onclick="changePw()">Update Password</button>
+      <p id="pw-change-msg" class="text2" style="margin-top:8px"></p>
+    </div>
+  </div>
+
+  <!-- ── Course Patches ─────────────────────────────────────────── -->
+  <div id="tab-patches" class="tab-panel">
+    <div class="card" style="margin-bottom:0">
+      <h2>Patch Creator</h2>
+      <p class="text2" style="margin-bottom:16px">
+        Generate a YAML patch file to add, update, or remove courses.
+        Copy the output into <code>data/patches/YYYY-MM-DD_description.yaml</code> and open a pull request.
+      </p>
+
+      <div class="action-tabs">
+        <div class="action-tab active" id="act-add" onclick="setAction('add')">➕ Add course</div>
+        <div class="action-tab" id="act-update" onclick="setAction('update')">✏️ Update course</div>
+        <div class="action-tab" id="act-remove" onclick="setAction('remove')">🗑 Remove course</div>
+      </div>
+
+      <!-- Meta fields (always shown) -->
+      <div class="row2">
+        <div class="field"><label>Patch date</label><input type="date" id="p-date" /></div>
+        <div class="field"><label>Reason</label><input type="text" id="p-reason" placeholder="e.g. New course added in Spring 2026 catalog" /></div>
+      </div>
+      <hr>
+
+      <!-- ADD fields -->
+      <div id="fields-add">
+        <h3>Course to add</h3>
+        <div class="row3">
+          <div class="field"><label>Subject *</label><input id="a-subj" placeholder="CS" maxlength="6" style="text-transform:uppercase" /></div>
+          <div class="field"><label>Number *</label><input id="a-num" placeholder="3700" maxlength="5" /></div>
+          <div class="field"><label>Credits *</label><input id="a-credits" type="number" min="1" max="8" placeholder="4" /></div>
+        </div>
+        <div class="field"><label>Title *</label><input id="a-title" placeholder="Networks and Distributed Systems" /></div>
+        <div class="row2">
+          <div class="field">
+            <label>Schedule type</label>
+            <select id="a-sched">
+              <option>Lecture</option><option>Lab</option><option>Seminar</option>
+              <option>Studio</option><option>Individual Instruction</option><option>Off-campus instruction</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>NUPath codes</label>
+            <div class="chip-input-row">
+              <input id="a-np-input" placeholder="e.g. FQ" maxlength="4" style="text-transform:uppercase" onkeydown="if(event.key==='Enter'){addChip('np');event.preventDefault()}" />
+              <button class="btn sec" onclick="addChip('np')" style="white-space:nowrap;flex-shrink:0">Add</button>
+            </div>
+            <div class="chip-list" id="a-np-chips"></div>
+          </div>
+        </div>
+        <div class="field"><label>Prerequisites (text)</label><input id="a-prereq" placeholder="CS 2500" /></div>
+        <div class="field"><label>Description</label><textarea id="a-desc" placeholder="Introduces networks…"></textarea></div>
+      </div>
+
+      <!-- UPDATE fields -->
+      <div id="fields-update" style="display:none">
+        <h3>Course to update</h3>
+        <div class="row2">
+          <div class="field"><label>Subject *</label><input id="u-subj" placeholder="CS" maxlength="6" style="text-transform:uppercase" /></div>
+          <div class="field"><label>Number *</label><input id="u-num" placeholder="3700" maxlength="5" /></div>
+        </div>
+        <p class="text2" style="margin-bottom:12px">Fill in only the fields you want to change:</p>
+        <div class="row2">
+          <div class="field"><label>New title</label><input id="u-title" /></div>
+          <div class="field"><label>New credits</label><input id="u-credits" type="number" min="1" max="8" /></div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Schedule type</label>
+            <select id="u-sched"><option value="">— no change —</option>
+              <option>Lecture</option><option>Lab</option><option>Seminar</option>
+              <option>Studio</option><option>Individual Instruction</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>NUPath codes (replaces existing)</label>
+            <div class="chip-input-row">
+              <input id="u-np-input" placeholder="e.g. SI" maxlength="4" style="text-transform:uppercase" onkeydown="if(event.key==='Enter'){addChip('unp');event.preventDefault()}" />
+              <button class="btn sec" onclick="addChip('unp')" style="white-space:nowrap;flex-shrink:0">Add</button>
+            </div>
+            <div class="chip-list" id="u-np-chips"></div>
+          </div>
+        </div>
+        <div class="field"><label>New description</label><textarea id="u-desc"></textarea></div>
+      </div>
+
+      <!-- REMOVE fields -->
+      <div id="fields-remove" style="display:none">
+        <h3>Course to remove</h3>
+        <div class="row3">
+          <div class="field"><label>Subject *</label><input id="r-subj" placeholder="CS" maxlength="6" style="text-transform:uppercase" /></div>
+          <div class="field"><label>Number *</label><input id="r-num" placeholder="9999" maxlength="5" /></div>
+          <div class="field"><label>Reason</label><input id="r-reason" placeholder="Discontinued after Spring 2026" /></div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;display:flex;gap:10px">
+        <button class="btn" onclick="generateYAML()">Generate YAML</button>
+        <button class="btn sec" onclick="clearPatchForm()">Clear</button>
+      </div>
+
+      <pre class="yaml-out" id="yaml-output"></pre>
+      <div class="yaml-actions" id="yaml-actions" style="display:none">
+        <button class="btn" onclick="copyYAML()">📋 Copy YAML</button>
+        <a id="yaml-dl" class="btn sec" download>⬇ Download .yaml</a>
+        <a id="yaml-gh" class="btn sec" href="https://github.com/nayugu/nu-map/tree/main/data/patches" target="_blank">Open patches folder →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Preview tab ────────────────────────────────────────────── -->
+  <div id="tab-preview" class="tab-panel">
+    <div class="preview-wrap">
+      <div class="preview-bar">
+        <span style="font-size:12px;color:var(--text2);margin-right:4px">Device:</span>
+        <button class="active" data-w="375" data-h="812" onclick="setDevice(this)">📱 iPhone</button>
+        <button data-w="768" data-h="1024" onclick="setDevice(this)">📟 iPad</button>
+        <button data-w="1280" data-h="800" onclick="setDevice(this)">💻 Laptop</button>
+        <button data-w="1920" data-h="1080" onclick="setDevice(this)">🖥 Desktop</button>
+        <button style="margin-left:auto" onclick="reloadPreview()">↺ Reload</button>
+        <button onclick="resetPreviewState()">🗑 Reset state</button>
+        <a class="btn sec" href="/" target="_blank" style="font-size:12px;padding:5px 12px">Open in tab →</a>
+      </div>
+      <div style="overflow:auto;background:#000;display:flex;align-items:flex-start;justify-content:center;padding:16px;min-height:600px">
+        <iframe id="preview-frame" src="/" style="border:1px solid #333;border-radius:8px;background:#fff"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Data Sources tab ───────────────────────────────────────── -->
+  <div id="tab-data" class="tab-panel">
+    <div class="card">
+      <h2>Course Data Sources</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border)">
+            <th style="text-align:left;padding:8px 0;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">Source</th>
+            <th style="text-align:left;padding:8px 12px;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">What it provides</th>
+            <th style="text-align:left;padding:8px 0;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">Update frequency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)22">
+            <td style="padding:10px 0"><a href="https://catalog.northeastern.edu/course-descriptions/" target="_blank">catalog.northeastern.edu</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">Official titles, descriptions, credits, NUPath</td>
+            <td style="padding:10px 0"><span class="badge ok">Annually</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)22">
+            <td style="padding:10px 0"><a href="https://github.com/ninest/nu-courses" target="_blank">ninest/nu-courses (SearchNEU)</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">Live sections, term availability (CRNs)</td>
+            <td style="padding:10px 0"><span class="badge warn">Each semester</span></td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0"><a href="https://github.com/sandboxnu/graduatenu" target="_blank">sandboxnu/graduatenu</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">Major/minor requirement JSON files</td>
+            <td style="padding:10px 0"><span class="badge warn">Ad hoc</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Update Workflow</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</span>
+          <div><b>Fetch fresh course list</b> from the SearchNEU API:<br><code>npm run data:fetch</code> → review diff → <code>npm run data:fetch:write</code></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</span>
+          <div><b>Optionally scrape the catalog</b> for richer descriptions:<br><code>npm run data:scrape:write</code></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</span>
+          <div><b>Re-apply manual patches</b>:<br><code>npm run data:patch:write</code></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</span>
+          <div><b>Build and verify</b>:<br><code>npm run build</code></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">5</span>
+          <div><b>Open a pull request</b> — GitHub Actions validates and posts a diff summary.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Patch Files</h2>
+      <p class="text2">
+        Manual corrections live in <code>data/patches/</code>.
+        Use the <a href="#" onclick="switchTab('patches', document.querySelector('nav button:nth-child(2)'));return false">Patch Creator</a> tab to generate YAML,
+        then place it in that folder and open a PR.
+        Naming convention: <code>YYYY-MM-DD_short-description.yaml</code>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Change Log tab ────────────────────────────────────────── -->
+<div id="tab-changes" class="tab-panel">
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+      <h2 style="margin:0">Scrape History</h2>
+      <button class="btn sec" onclick="loadChangeLog()">↻ Refresh</button>
+    </div>
+    <p class="text2" style="margin-bottom:16px">Each rotating scrape run is logged here. Runs open a PR — merge only after reviewing the diff.</p>
+    <div id="change-log-list"><p class="text2">Loading…</p></div>
+  </div>
+
+  <div class="card">
+    <h2>Rotation Status</h2>
+    <div id="rotate-state"><p class="text2">Loading…</p></div>
+  </div>
+</div>
+
+<div id="outer-wrap-end"></div>
+══════════════════════════════════════════════════════════════════ -->
+<script>
+// ── Constants ──────────────────────────────────────────────────────────────
+const STORAGE_KEY   = "numap-dev-hash";
+const SETUP_KEY     = "numap-dev-setup";
+const PREVIEW_STATE = "ncp-state-v2";
+
+// ── WebCrypto SHA-256 helper ────────────────────────────────────────────────
+async function sha256(text) {
+  const buf    = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+// ── Auth ────────────────────────────────────────────────────────────────────
+(function init() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) {
+    // First time: show setup hint
+    document.getElementById("auth-hint").textContent =
+      "First login — your password will be set from this entry.";
+    document.getElementById("auth-hint").style.display = "block";
+  }
+  // Pre-fill today's date in patch creator
+  document.getElementById("p-date").value = new Date().toISOString().substring(0, 10);
+})();
+
+document.getElementById("pw-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") attemptLogin();
+});
+
+async function attemptLogin() {
+  const pw   = document.getElementById("pw-input").value;
+  if (!pw) return;
+  const hash = await sha256(pw);
+  const stored = localStorage.getItem(STORAGE_KEY);
+
+  if (!stored) {
+    // First-time setup: store hash and log in
+    localStorage.setItem(STORAGE_KEY, hash);
+    localStorage.setItem(SETUP_KEY, "1");
+    showApp();
+  } else if (stored === hash) {
+    showApp();
+  } else {
+    document.getElementById("auth-error").style.display = "block";
+    document.getElementById("pw-input").value = "";
+    document.getElementById("pw-input").focus();
+  }
+}
+
+function showApp() {
+  document.getElementById("auth-screen").style.display = "none";
+  document.getElementById("dev-app").style.display     = "block";
+  loadDataMeta();
+  loadChangeLog();
+  initPreview();
+}
+
+function logout() {
+  document.getElementById("auth-screen").style.display = "flex";
+  document.getElementById("dev-app").style.display     = "none";
+  document.getElementById("pw-input").value   = "";
+  document.getElementById("auth-error").style.display = "none";
+}
+
+async function changePw() {
+  const pw  = document.getElementById("new-pw").value;
+  const pw2 = document.getElementById("new-pw2").value;
+  const msg = document.getElementById("pw-change-msg");
+  if (!pw) { msg.textContent = "Enter a new password."; return; }
+  if (pw !== pw2) { msg.textContent = "Passwords do not match."; return; }
+  const hash = await sha256(pw);
+  localStorage.setItem(STORAGE_KEY, hash);
+  msg.textContent = "✅ Password updated.";
+  document.getElementById("new-pw").value  = "";
+  document.getElementById("new-pw2").value = "";
+}
+
+// ── Change Log ──────────────────────────────────────────────────────────────
+async function loadChangeLog() {
+  const listEl  = document.getElementById("change-log-list");
+  const stateEl = document.getElementById("rotate-state");
+  if (!listEl) return;
+  try {
+    const [logRes, stateRes] = await Promise.all([
+      fetch("/change-log.json?"  + Date.now()),
+      fetch("/scrape-state.json?" + Date.now()).catch(() => null),
+    ]);
+    const log   = logRes.ok   ? await logRes.json()   : { runs: [] };
+    const state = stateRes?.ok ? await stateRes.json() : null;
+
+    // Render rotation state card
+    if (stateEl) {
+      if (!state) {
+        stateEl.innerHTML = '<p class="text2">scrape-state.json not yet published. Run <code>data:scrape:rotate:write</code> once first.</p>';
+      } else {
+        const nextSubj = state.subjects?.[state.nextIndex]?.[0] ?? '—';
+        const total    = state.subjects?.length ?? 0;
+        stateEl.innerHTML = `
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">
+            <div class="stat"><div class="val">${state.nextIndex ?? '—'}/${total}</div><div class="lbl">Next subject index</div></div>
+            <div class="stat"><div class="val" style="font-size:14px">${nextSubj}</div><div class="lbl">Next subject</div></div>
+            <div class="stat"><div class="val" style="font-size:13px">${state.lastRun ? new Date(state.lastRun).toLocaleDateString() : '—'}</div><div class="lbl">Last run</div></div>
+            <div class="stat"><div class="val">${total}</div><div class="lbl">Total subjects</div></div>
+          </div>`;
+      }
+    }
+
+    // Render run list
+    if (!log.runs?.length) {
+      listEl.innerHTML = '<p class="text2">No runs recorded yet. The change log is written each time <code>data:scrape:rotate:write</code> completes.</p>';
+      return;
+    }
+    listEl.innerHTML = log.runs.map(renderRun).join("");
+  } catch (err) {
+    listEl.innerHTML = `<p class="text2">Could not load change-log.json: ${err.message}</p>`;
+  }
+}
+
+function renderRun(run) {
+  const ts = new Date(run.timestamp).toLocaleString("en-US",
+    { month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit" });
+  const totalChanges = (run.added?.length ?? 0) + (run.modified?.length ?? 0) + (run.removedFromCatalog?.length ?? 0);
+  const badge = totalChanges
+    ? `<span class="badge warn">${totalChanges} change${totalChanges !== 1 ? "s" : ""}</span>`
+    : `<span class="badge ok">No changes</span>`;
+
+  let detail = "";
+  if (run.added?.length) {
+    detail += `<div style="margin-top:8px"><b style="color:var(--accent)">+ ${run.added.length} added</b>
+      <div style="font-size:11px;color:var(--text2);margin-top:2px;word-break:break-all">${run.added.join(", ")}</div></div>`;
+  }
+  if (run.removedFromCatalog?.length) {
+    detail += `<div style="margin-top:8px"><b style="color:#e94560">⚠ ${run.removedFromCatalog.length} no longer in catalog (kept in data)</b>
+      <div style="font-size:11px;color:var(--text2);margin-top:2px">${run.removedFromCatalog.join(", ")}</div></div>`;
+  }
+  if (run.modified?.length) {
+    detail += `<div style="margin-top:8px"><b style="color:#f59e0b">✎ ${run.modified.length} field change${run.modified.length !== 1 ? "s" : ""}</b>`;
+    for (const { code, changes } of run.modified) {
+      const fields = changes.map(c => c.field).join(", ");
+      detail += `<details style="margin-top:4px;padding-left:10px;font-size:11px">
+        <summary style="cursor:pointer;color:var(--text2)"><b>${code}</b>: ${fields}</summary>
+        <table style="margin-top:4px;border-collapse:collapse;width:100%;font-size:11px">`;
+      for (const { field, before, after } of changes) {
+        const b = JSON.stringify(before)?.slice(0, 80) ?? "null";
+        const a = JSON.stringify(after) ?.slice(0, 80) ?? "null";
+        detail += `<tr><td style="padding:2px 8px 2px 0;color:var(--text2);white-space:nowrap;vertical-align:top">${field}</td>
+          <td style="padding:2px 0;color:#e94560;word-break:break-all">${escHtml(b)}</td>
+          <td style="padding:2px 6px;color:var(--text2)">→</td>
+          <td style="padding:2px 0;color:var(--accent);word-break:break-all">${escHtml(a)}</td></tr>`;
+      }
+      detail += `</table></details>`;
+    }
+    detail += `</div>`;
+  }
+
+  return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+      <div style="font-size:14px;font-weight:700">${run.subject}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        ${badge}
+        <span style="font-size:11px;color:var(--text2)">${ts}</span>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:3px">${run.unchanged ?? 0} unchanged</div>
+    ${detail}
+  </div>`;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── Tabs ────────────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  document.getElementById(`tab-${name}`).classList.add("active");
+  if (btn) btn.classList.add("active");
+  if (name === "preview") initPreview();
+}
+
+// ── Data meta ───────────────────────────────────────────────────────────────
+async function loadDataMeta() {
+  try {
+    const res  = await fetch("/data-meta.json?" + Date.now()); // bust cache
+    if (!res.ok) throw new Error("not found");
+    const meta = await res.json();
+    document.getElementById("stat-courses").textContent  = meta.courseCount?.toLocaleString() ?? "—";
+    document.getElementById("stat-updated").textContent  = meta.lastUpdated ?? "—";
+  } catch {
+    // Fallback: try src path at build time via compile-time injected value
+    document.getElementById("stat-courses").textContent = "run npm run build to see";
+    document.getElementById("stat-updated").textContent = "—";
+  }
+}
+
+// ── Preview ─────────────────────────────────────────────────────────────────
+const DEVICES = { "375": 812, "768": 1024, "1280": 800, "1920": 1080 };
+let currentDevice = { w: 375, h: 812 };
+
+function initPreview() {
+  const frame = document.getElementById("preview-frame");
+  if (!frame.src || frame.src === "about:blank") {
+    applyDeviceSize(currentDevice.w, currentDevice.h);
+    frame.src = "/";
+  }
+}
+
+function setDevice(btn) {
+  document.querySelectorAll(".preview-bar button[data-w]").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const w = parseInt(btn.dataset.w, 10), h = parseInt(btn.dataset.h, 10);
+  currentDevice = { w, h };
+  applyDeviceSize(w, h);
+}
+
+function applyDeviceSize(w, h) {
+  const frame = document.getElementById("preview-frame");
+  frame.style.width  = w + "px";
+  frame.style.height = h + "px";
+  frame.style.maxWidth = "none";
+}
+
+function reloadPreview() {
+  const frame = document.getElementById("preview-frame");
+  frame.src = "/" + "?" + Date.now();
+}
+
+function resetPreviewState() {
+  const frame = document.getElementById("preview-frame");
+  try { frame.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
+  reloadPreview();
+}
+
+// ── Patch builder ───────────────────────────────────────────────────────────
+let currentAction = "add";
+const npChips   = { np: [], unp: [] };
+
+function setAction(action) {
+  currentAction = action;
+  ["add","update","remove"].forEach(a => {
+    document.getElementById(`act-${a}`).classList.toggle("active", a === action);
+    document.getElementById(`fields-${a}`).style.display = a === action ? "" : "none";
+  });
+  document.getElementById("yaml-output").style.display = "none";
+  document.getElementById("yaml-actions").style.display = "none";
+}
+
+function addChip(key) {
+  const inputId = key === "np" ? "a-np-input" : "u-np-input";
+  const val = document.getElementById(inputId).value.trim().toUpperCase();
+  if (!val) return;
+  document.getElementById(inputId).value = "";
+  if (npChips[key].includes(val)) return;
+  npChips[key].push(val);
+  renderChips(key);
+}
+
+function removeChip(key, val) {
+  npChips[key] = npChips[key].filter(v => v !== val);
+  renderChips(key);
+}
+
+function renderChips(key) {
+  const containerId = key === "np" ? "a-np-chips" : "u-np-chips";
+  const el = document.getElementById(containerId);
+  el.innerHTML = npChips[key].map(v =>
+    `<span class="chip">${v} <span class="chip-rm" onclick="removeChip('${key}','${v}')">✕</span></span>`
+  ).join("");
+}
+
+function v(id) { return document.getElementById(id)?.value?.trim() ?? ""; }
+
+function generateYAML() {
+  const date   = v("p-date")   || new Date().toISOString().substring(0, 10);
+  const reason = v("p-reason") || "Manual data correction";
+
+  let courseSection = "";
+
+  if (currentAction === "add") {
+    const subj  = v("a-subj").toUpperCase();
+    const num   = v("a-num");
+    const title = v("a-title");
+    const credRaw = v("a-credits");
+    if (!subj || !num || !title || !credRaw) {
+      alert("Subject, number, title, and credits are required."); return;
+    }
+    const npLine = npChips.np.length
+      ? `      nuPath:\n${npChips.np.map(c => `        - ${c}`).join("\n")}\n` : "";
+    const prereqLine = v("a-prereq") ? `      prereqs: ["${v("a-prereq")}"]\n` : "";
+    const descLine   = v("a-desc")   ? `      description: >\n        ${v("a-desc").replace(/\n/g, "\n        ")}\n` : "";
+
+    courseSection = `  add:\n    - subject: ${subj}\n      number: "${num}"\n      title: "${title}"\n      credits: ${credRaw}\n      scheduleType: ${v("a-sched") || "Lecture"}\n${npLine}${prereqLine}${descLine}`;
+  }
+
+  else if (currentAction === "update") {
+    const subj = v("u-subj").toUpperCase();
+    const num  = v("u-num");
+    if (!subj || !num) { alert("Subject and number are required."); return; }
+
+    const fields = [];
+    if (v("u-title"))   fields.push(`        title: "${v("u-title")}"`);
+    if (v("u-credits")) fields.push(`        credits: ${v("u-credits")}`);
+    if (v("u-sched"))   fields.push(`        scheduleType: ${v("u-sched")}`);
+    if (npChips.unp.length) fields.push(`        nuPath: [${npChips.unp.map(c => `"${c}"`).join(", ")}]`);
+    if (v("u-desc"))    fields.push(`        description: >\n          ${v("u-desc").replace(/\n/g, "\n          ")}`);
+    if (!fields.length) { alert("Fill in at least one field to update."); return; }
+
+    courseSection = `  update:\n    - subject: ${subj}\n      number: "${num}"\n      fields:\n${fields.join("\n")}\n`;
+  }
+
+  else if (currentAction === "remove") {
+    const subj = v("r-subj").toUpperCase();
+    const num  = v("r-num");
+    if (!subj || !num) { alert("Subject and number are required."); return; }
+    const reasonLine = v("r-reason") ? `\n      reason: "${v("r-reason")}"` : "";
+    courseSection = `  remove:\n    - subject: ${subj}\n      number: "${num}"${reasonLine}\n`;
+  }
+
+  const yaml =
+`# Generated by NU Map Developer Portal
+meta:
+  date: "${date}"
+  author: "developer"
+  reason: "${reason}"
+
+courses:
+${courseSection}`;
+
+  const outEl = document.getElementById("yaml-output");
+  outEl.textContent = yaml;
+  outEl.style.display = "block";
+  document.getElementById("yaml-actions").style.display = "flex";
+
+  // Setup download link
+  const blob = new Blob([yaml], { type: "text/yaml" });
+  const dl   = document.getElementById("yaml-dl");
+  dl.href = URL.createObjectURL(blob);
+  dl.download = `${date}_${currentAction}-course.yaml`;
+}
+
+function copyYAML() {
+  navigator.clipboard.writeText(document.getElementById("yaml-output").textContent)
+    .then(() => alert("Copied!"));
+}
+
+function clearPatchForm() {
+  ["a-subj","a-num","a-credits","a-title","a-prereq","a-desc","u-subj","u-num","u-title","u-credits","u-desc","r-subj","r-num","r-reason","p-reason"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  npChips.np  = []; npChips.unp = [];
+  renderChips("np"); renderChips("unp");
+  document.getElementById("yaml-output").style.display = "none";
+  document.getElementById("yaml-actions").style.display = "none";
+}
+
+function copyCmd(cmd) {
+  navigator.clipboard.writeText(cmd).then(() => alert("Copied: " + cmd));
+}
+</script>
+</body>
+</html>

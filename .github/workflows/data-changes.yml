@@ -1,0 +1,176 @@
+name: Data Change Review
+
+# Runs on every PR that touches data files or scripts.
+# Posts a diff summary as a PR comment so the developer can review before merging.
+
+on:
+  pull_request:
+    paths:
+      - "data/patches/**"
+      - "public/all-courses.json"
+      - "graduatenu/packages/api/src/major/**"
+      - "graduatenu/packages/api/src/minor/**"
+      - "scripts/fetch-courses.js"
+      - "scripts/apply-patches.js"
+      - "scripts/validate-patches.js"
+
+jobs:
+  review-data-changes:
+    name: Validate & Summarise Data Changes
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write   # needed to post the summary comment
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Validate patch files ──────────────────────────────────────────────
+      - name: Validate patches
+        id: validate
+        run: |
+          node scripts/validate-patches.js --json > /tmp/validate-result.json 2>&1 || true
+          cat /tmp/validate-result.json
+
+      # ── Generate summary ──────────────────────────────────────────────────
+      - name: Build PR comment
+        id: build-comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { readFileSync, existsSync } = require('fs');
+
+            // ── Validation results ────────────────────────────────────────
+            let validateSection = '';
+            try {
+              const raw = readFileSync('/tmp/validate-result.json', 'utf8');
+              const res = JSON.parse(raw);
+              if (res.totalErrors === 0) {
+                validateSection = `### ✅ Patch validation passed (${res.files.length} file(s))\n`;
+              } else {
+                const lines = res.files
+                  .filter(f => f.errors.length > 0)
+                  .flatMap(f => [`**${f.file}**`, ...f.errors.map(e => `- ${e}`)]);
+                validateSection = `### ❌ Patch validation failed\n\n${lines.join('\n')}\n`;
+              }
+            } catch {
+              validateSection = '### ⚠️ Could not parse validation output\n';
+            }
+
+            // ── Changed files summary ─────────────────────────────────────
+            const { execSync } = require('child_process');
+
+            let patchSection = '';
+            const patchChanged = execSync(
+              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'data/patches/*.yaml' | grep -v TEMPLATE || true",
+              { encoding: 'utf8' }
+            ).trim();
+
+            if (patchChanged) {
+              const files = patchChanged.split('\n').filter(Boolean);
+              patchSection = `### 📄 Patch files changed (${files.length})\n\n` +
+                files.map(f => `- \`${f}\``).join('\n') + '\n';
+            }
+
+            let majorSection = '';
+            const majorChanged = execSync(
+              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'graduatenu/packages/api/src/major/**' 'graduatenu/packages/api/src/minor/**' || true",
+              { encoding: 'utf8' }
+            ).trim();
+
+            if (majorChanged) {
+              const files = majorChanged.split('\n').filter(Boolean);
+              majorSection = `### 🎓 Major/minor files changed (${files.length})\n\n` +
+                files.map(f => {
+                  const m = f.match(/\/(major|minor)s\/(.+?)\/parsed/);
+                  return m ? `- ${m[1]}: \`${m[2]}\`` : `- \`${f}\``;
+                }).join('\n') + '\n';
+            }
+
+            let courseSection = '';
+            const courseChanged = execSync(
+              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'public/all-courses.json' || true",
+              { encoding: 'utf8' }
+            ).trim();
+
+            if (courseChanged) {
+              try {
+                const before = JSON.parse(execSync(
+                  "git show origin/${{ github.base_ref }}:public/all-courses.json",
+                  { encoding: 'utf8' }
+                ));
+                const after = JSON.parse(readFileSync('public/all-courses.json', 'utf8'));
+                const bk = new Set(before.map(c => `${c.subject} ${c.number}`));
+                const ak = new Set(after.map(c => `${c.subject} ${c.number}`));
+                const added   = [...ak].filter(k => !bk.has(k));
+                const removed = [...bk].filter(k => !ak.has(k));
+                courseSection = `### 📚 all-courses.json: ${before.length} → ${after.length} courses\n\n` +
+                  (added.length   ? `**+ Added (${added.length}):** ` + added.slice(0,20).join(', ') + (added.length > 20 ? ` …+${added.length-20}` : '') + '\n' : '') +
+                  (removed.length ? `**− Removed (${removed.length}):** ` + removed.slice(0,20).join(', ') + (removed.length > 20 ? ` …+${removed.length-20}` : '') + '\n' : '');
+              } catch {
+                courseSection = `### 📚 all-courses.json changed\n`;
+              }
+            }
+
+            const body = [
+              '## 🗂️  Data Change Review',
+              '',
+              validateSection,
+              patchSection,
+              majorSection,
+              courseSection,
+              '---',
+              '_Generated automatically. Merge only after reviewing the changes above._',
+            ].filter(Boolean).join('\n');
+
+            return body;
+
+      - name: Post PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `${{ steps.build-comment.outputs.result }}`;
+
+            // Find and update existing bot comment, or create a new one
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('🗂️  Data Change Review')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      # ── Fail the check if patches are invalid ─────────────────────────────
+      - name: Fail if patches are invalid
+        run: |
+          result=$(node scripts/validate-patches.js --json)
+          errors=$(echo "$result" | node -e "const d=require('fs').readFileSync('/dev/stdin','utf8'); console.log(JSON.parse(d).totalErrors)")
+          if [ "$errors" -gt 0 ]; then
+            echo "❌ $errors validation error(s) found. See PR comment for details."
+            exit 1
+          fi
