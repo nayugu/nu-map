@@ -76,7 +76,7 @@ export default function CourseCard({ course, inSem, semId }) {
         else { setSelectedId(course.id); setShowPanel(true); }
       }}
       style={{
-        flex: "1 1 110px", ...(inSem ? {} : { maxWidth: 160 }), minHeight: 58, flexShrink: 0,
+        flex: "1 1 110px", ...(inSem ? { minWidth: 0, overflow: "hidden" } : { maxWidth: 160 }), minHeight: 58, flexShrink: 0,
         position: "relative",
         background: orderViolBg ? "var(--card-bg-viol)" : isCardHov ? "var(--card-bg-hov)" : "var(--card-bg)",
         border: `2px solid ${borderColor}`,

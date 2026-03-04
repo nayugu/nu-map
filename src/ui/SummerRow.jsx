@@ -145,7 +145,7 @@ export default function SummerRow({ semA, semB }) {
 
         {/* Main ≥4 SH slots */}
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 4, minHeight: 66,
+          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 4, minHeight: 66, overflow: "hidden",
           borderRadius: 4, padding: 2,
           border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
             ? "1px solid var(--active)" : "1px solid transparent",

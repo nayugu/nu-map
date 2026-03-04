@@ -236,7 +236,7 @@ export default function SemRow({ sem }) {
                 e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
               }}
               style={{
-                display: "grid", gridTemplateColumns: `repeat(${mainSlots}, 1fr)`, gap: 4,
+                display: "grid", gridTemplateColumns: `repeat(${mainSlots}, 1fr)`, gap: 4, overflow: "hidden",
                 borderRadius: 6, padding: 3, minHeight: 76,
                 border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
                   ? "1px solid var(--active)" : "1px solid transparent",
