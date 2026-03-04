@@ -131,7 +131,7 @@
     .preview-bar  { background: var(--bg3); padding: 10px 16px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid var(--border); }
     .preview-bar button { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 5px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; }
     .preview-bar button.active { border-color: var(--accent); color: var(--accent); }
-    #preview-frame { width: 100%; border: none; display: block; }
+    #preview-frame { border: none; display: block; }
 
     /* ── Chip list ────────────────────────────────────────────── */
     .chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
@@ -368,16 +368,18 @@
     <div class="preview-wrap">
       <div class="preview-bar">
         <span style="font-size:12px;color:var(--text2);margin-right:4px">Device:</span>
-        <button class="active" data-w="375" data-h="812" onclick="setDevice(this)">📱 iPhone</button>
-        <button data-w="768" data-h="1024" onclick="setDevice(this)">📟 iPad</button>
-        <button data-w="1280" data-h="800" onclick="setDevice(this)">💻 Laptop</button>
-        <button data-w="1920" data-h="1080" onclick="setDevice(this)">🖥 Desktop</button>
+        <button class="active" data-w="390" data-h="844" onclick="setDevice(this)">📱 iPhone 15</button>
+        <button data-w="820" data-h="1180" onclick="setDevice(this)">📟 iPad Air</button>
+        <button data-w="1440" data-h="900" onclick="setDevice(this)">💻 MacBook Pro</button>
+        <button data-w="1920" data-h="1080" onclick="setDevice(this)">🖥 1080p Desktop</button>
         <button style="margin-left:auto" onclick="reloadPreview()">↺ Reload</button>
         <button onclick="resetPreviewState()">🗑 Reset state</button>
         <a class="btn sec" href="./" target="_blank" style="font-size:12px;padding:5px 12px">Open in tab →</a>
       </div>
-      <div style="overflow:auto;background:#000;display:flex;align-items:flex-start;justify-content:center;padding:16px;min-height:600px">
-        <iframe id="preview-frame" src="./" style="border:1px solid #333;border-radius:8px;background:#fff"></iframe>
+      <div style="overflow:hidden;background:#000;padding:16px;min-height:600px;display:flex;justify-content:center;align-items:flex-start">
+        <div id="preview-scaler" style="position:relative;flex-shrink:0">
+          <iframe id="preview-frame" src="./" style="position:absolute;top:0;left:0;transform-origin:top left;border:1px solid #333;border-radius:8px;background:#fff"></iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -668,8 +670,8 @@ async function loadDataMeta() {
 }
 
 // ── Preview ─────────────────────────────────────────────────────────────────
-const DEVICES = { "375": 812, "768": 1024, "1280": 800, "1920": 1080 };
-let currentDevice = { w: 375, h: 812 };
+const DEVICES = { "390": 844, "820": 1180, "1440": 900, "1920": 1080 };
+let currentDevice = { w: 390, h: 844 };
 
 function initPreview() {
   const frame = document.getElementById("preview-frame");
@@ -686,16 +688,29 @@ function setDevice(btn) {
   currentDevice = { w, h };
   applyDeviceSize(w, h);
   // Reload so the app re-initializes at the new viewport width.
-  // (React context checks window.innerWidth on mount — resizing alone won't re-run it.)
   const frame = document.getElementById("preview-frame");
   frame.src = "./" + "?" + Date.now();
 }
 
 function applyDeviceSize(w, h) {
-  const frame = document.getElementById("preview-frame");
-  frame.style.width  = w + "px";
-  frame.style.height = h + "px";
-  frame.style.maxWidth = "none";
+  const scaler    = document.getElementById("preview-scaler");
+  const frame     = document.getElementById("preview-frame");
+
+  // Available width inside the black container (16px padding each side)
+  const available = (scaler.parentElement.clientWidth || 920) - 32;
+  const scale     = w > available ? available / w : 1;
+  const scaledW   = Math.round(w * scale);
+  const scaledH   = Math.round(h * scale);
+
+  // Scaler wrapper governs document flow at the *scaled* size
+  scaler.style.width  = scaledW + "px";
+  scaler.style.height = scaledH + "px";
+
+  // Iframe is positioned absolutely at true device dimensions, then scaled down
+  frame.style.width           = w + "px";
+  frame.style.height          = h + "px";
+  frame.style.transform       = `scale(${scale.toFixed(5)})`;
+  frame.style.transformOrigin = "top left";
 }
 
 function reloadPreview() {
