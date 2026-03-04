@@ -109,8 +109,8 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
     ? allOptions.filter(o =>
         o.label.toLowerCase().includes(q) ||
         o.grp.toLowerCase().includes(q)  ||
-        (o.folder ?? "").toLowerCase().includes(q))
-    : allOptions;
+        (o.folder ?? "").toLowerCase().includes(q)).slice(0, 60)
+    : [];                        // never render all ~1500 items unfiltered
 
   const sel = value ? allOptions.find(o => o.path === value) : null;
   const displayVal = sel ? `${sel.label}${sel.location ? ` (${sel.location})` : ""}` : "";
@@ -158,7 +158,9 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
               color: "var(--text-5)", borderBottom: "1px solid var(--border-1)",
             }}
           >— None —</div>
-          {filtered.length === 0 ? (
+          {!q ? (
+            <div style={{ padding: "6px 8px", fontSize: 10, color: "var(--text-5)", fontStyle: "italic" }}>Type to search…</div>
+          ) : filtered.length === 0 ? (
             <div style={{ padding: "6px 8px", fontSize: 10, color: "var(--text-5)" }}>No results</div>
           ) : (
             filtered.map(o => (
