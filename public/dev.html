@@ -172,6 +172,15 @@
     .ck-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px 16px; text-align:center; }
     .ck-val  { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--text); line-height:1.1; }
     .ck-lbl  { font-size:11px; color:var(--text3); margin-top:5px; }
+    /* Inspector panel */
+    .ck-filter-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; align-items:center; }
+    .ck-filter-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:5px; padding:4px 12px; font-size:11px; cursor:pointer; transition:all 0.12s; }
+    .ck-filter-btn.active { background:var(--accent-bg); border-color:var(--accent); color:var(--accent); }
+    .ck-filter-btn:hover:not(.active) { border-color:var(--text3); color:var(--text); }
+    #ck-inspector-table { width:100%; border-collapse:collapse; font-size:11px; }
+    #ck-inspector-table th { text-align:left; padding:5px 8px; color:var(--text3); border-bottom:1px solid var(--border); font-weight:600; }
+    #ck-inspector-table td { padding:3px 8px; border-bottom:1px solid var(--bg3); vertical-align:top; }
+    #ck-inspector-table tbody tr:hover { background:var(--bg3); }
     #check-log::-webkit-scrollbar { width: 5px; }
     #check-log::-webkit-scrollbar-track { background: transparent; }
     #check-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -552,6 +561,7 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px">
           <div class="ck-card"><div class="ck-val" id="ck-matched" style="color:var(--success)">0</div><div class="ck-lbl">✓ Correct</div></div>
           <div class="ck-card"><div class="ck-val" id="ck-changed" style="color:var(--warn)">0</div><div class="ck-lbl">⚠ Need PR</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-range"   style="color:#a78bfa">0</div><div class="ck-lbl">≈ Range diff</div></div>
           <div class="ck-card"><div class="ck-val" id="ck-added"   style="color:var(--accent)">0</div><div class="ck-lbl">🆕 New courses</div></div>
           <div class="ck-card"><div class="ck-val" id="ck-missing" style="color:var(--error)">0</div><div class="ck-lbl">❌ Not in catalog</div></div>
           <div class="ck-card"><div class="ck-val" id="ck-read">0</div><div class="ck-lbl">Total scanned</div></div>
@@ -559,7 +569,33 @@
         </div>
 
         <!-- Subject-by-subject log -->
-        <div id="check-log" style="max-height:460px;overflow-y:auto;border-top:1px solid var(--border);padding-top:8px"></div>
+        <div id="check-log" style="max-height:360px;overflow-y:auto;border-top:1px solid var(--border);padding-top:8px"></div>
+
+        <!-- ── Discrepancy Inspector ───────────────────────────────────────────────── -->
+        <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+            <h3 style="margin:0;font-size:13px">Discrepancy Inspector</h3>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="ck-inspector-count" style="font-size:11px;color:var(--text3)">0 items</span>
+              <button class="btn sec" style="font-size:11px;padding:4px 10px" onclick="ckExport()">Export JSON</button>
+            </div>
+          </div>
+          <div class="ck-filter-bar">
+            <button class="ck-filter-btn active" onclick="ckSetFilter('all',this)">All</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('changed',this)">⚠ Changed</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('range',this)">≈ Range</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('added',this)">🆕 New</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('missing',this)">❌ Missing</button>
+            <input id="ck-search" placeholder="Search course code…" oninput="ckRender()"
+              style="margin-left:auto;width:180px;font-size:11px;padding:4px 8px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none">
+          </div>
+          <div style="max-height:400px;overflow-y:auto">
+            <table id="ck-inspector-table">
+              <thead><tr><th>Code</th><th>Type</th><th>Field</th><th>Was</th><th>Now</th></tr></thead>
+              <tbody id="ck-inspector-body"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Run a check to populate</td></tr></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -898,12 +934,17 @@ function startCheck() {
   document.getElementById('check-log').innerHTML = '';
   document.getElementById('check-run-btn').disabled  = true;
   document.getElementById('check-stop-btn').disabled = false;
-  ['ck-subjects','ck-read','ck-matched','ck-changed','ck-added','ck-missing'].forEach(id =>
+  ['ck-subjects','ck-read','ck-matched','ck-changed','ck-range','ck-added','ck-missing'].forEach(id =>
     document.getElementById(id).textContent = '0');
   document.getElementById('check-bar').style.width = '0%';
   document.getElementById('check-pct').textContent  = '0%';
   document.getElementById('check-status-msg').textContent = 'Connecting to server…';
   document.getElementById('ck-status-badge').style.display = 'inline-block';
+  // Reset inspector
+  ckDiscrepancies.length = 0;
+  ckSetFilter('all', document.querySelector('.ck-filter-btn'));
+  document.getElementById('ck-search').value = '';
+  ckRender();
 
   if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
   checkEvtSource = new EventSource(url);
@@ -935,45 +976,78 @@ function startCheck() {
       document.getElementById('ck-read').textContent     = (d.courses_read ?? 0).toLocaleString();
       document.getElementById('ck-matched').textContent  = (d.matched  ?? 0).toLocaleString();
       document.getElementById('ck-changed').textContent  = (d.changed  ?? 0).toLocaleString();
+      document.getElementById('ck-range').textContent    = (d.range_only ?? 0).toLocaleString();
       document.getElementById('ck-added').textContent    = (d.added    ?? 0).toLocaleString();
       document.getElementById('ck-missing').textContent  = (d.missing  ?? 0).toLocaleString();
+
+      // Accumulate into inspector
+      ckAccumulate(d);
+      ckRender();
 
       // Build log row
       const log  = document.getElementById('check-log');
       const row  = document.createElement('div');
       row.style.cssText = 'border-bottom:1px solid var(--border);padding:6px 0;font-size:11px';
 
-      const icon  = d.error ? '❌' : d.subject_changed > 0 ? '⚠️' : d.subject_added > 0 ? '🆕' : '✓';
-      const color = d.error ? 'var(--error)' : d.subject_changed > 0 ? 'var(--warn)' :
-                    d.subject_added > 0 ? 'var(--accent)' : 'var(--success)';
+      const hasRealChange = d.subject_changed > 0;
+      const hasRange      = d.subject_range_only > 0;
+      const icon  = d.error ? '❌' : hasRealChange ? '⚠️' : hasRange ? '≈' : d.subject_added > 0 ? '🆕' : '✓';
+      const color = d.error ? 'var(--error)' : hasRealChange ? 'var(--warn)' :
+                    hasRange ? '#a78bfa' : d.subject_added > 0 ? 'var(--accent)' : 'var(--success)';
 
       let html = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span style="font-weight:700;min-width:80px;color:${color}">${icon} ${d.slug.split(' ')[0]}</span>
         <span style="color:var(--text3)">${d.subject_courses_read ?? 0} read</span>
         <span style="color:var(--success)">✓ ${d.subject_matched ?? 0}</span>
-        ${d.subject_changed  ? `<span style="color:var(--warn)">⚠ ${d.subject_changed} changed</span>` : ''}
-        ${d.subject_added    ? `<span style="color:var(--accent)">+ ${d.subject_added} new</span>` : ''}
-        ${d.subject_missing  ? `<span style="color:var(--error)">− ${d.subject_missing} missing</span>` : ''}
+        ${d.subject_changed     ? `<span style="color:var(--warn)">⚠ ${d.subject_changed} changed</span>` : ''}
+        ${d.subject_range_only  ? `<span style="color:#a78bfa">≈ ${d.subject_range_only} range</span>` : ''}
+        ${d.subject_added       ? `<span style="color:var(--accent)">+ ${d.subject_added} new</span>` : ''}
+        ${d.subject_missing     ? `<span style="color:var(--error)">− ${d.subject_missing} missing</span>` : ''}
         ${d.error ? `<span style="color:var(--error)">${escHtml(d.error)}</span>` : ''}
       </div>`;
 
-      if (d.changes?.length > 0) {
-        html += `<details style="margin-top:3px"><summary style="cursor:pointer;color:var(--text3);font-size:10px">${d.changes.length} change(s)</summary>
+      // Real content diffs (expanded by default); range diffs collapsed separately
+      const realChanges  = (d.changes ?? []).filter(c => c.diffs.some(df => !df.isRangeOnly));
+      const rangeChanges = (d.changes ?? []).filter(c => c.diffs.every(df => df.isRangeOnly));
+      if (realChanges.length > 0) {
+        html += `<details open style="margin-top:3px"><summary style="cursor:pointer;color:var(--text3);font-size:10px">${realChanges.length} real change(s)</summary>
           <table style="margin-top:3px;border-collapse:collapse;font-size:10px;width:100%">`;
-        for (const { code, diffs } of d.changes) {
-          for (const { field, was, now } of diffs) {
+        for (const { code, diffs } of realChanges) {
+          for (const { field, was, now } of diffs.filter(df => !df.isRangeOnly)) {
             const b = JSON.stringify(was  ?? null)?.slice(0, 80) ?? 'null';
             const a = JSON.stringify(now  ?? null)?.slice(0, 80) ?? 'null';
             html += `<tr>
               <td style="padding:1px 8px 1px 0;color:var(--text3);white-space:nowrap">${code}</td>
               <td style="padding:1px 6px 1px 0;color:var(--text3);white-space:nowrap">${field}</td>
               <td style="padding:1px 0;color:#e94560;word-break:break-all">${escHtml(b)}</td>
-              <td style="padding:1px 6px;color:var(--text3)">\u2192</td>
+              <td style="padding:1px 6px;color:var(--text3)">→</td>
               <td style="padding:1px 0;color:var(--accent);word-break:break-all">${escHtml(a)}</td>
             </tr>`;
           }
         }
         html += `</table></details>`;
+      }
+      if (rangeChanges.length > 0) {
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:#a78bfa;font-size:10px">≈ ${rangeChanges.length} range-only diff(s) (low priority)</summary>
+          <table style="margin-top:3px;border-collapse:collapse;font-size:10px;width:100%">`;
+        for (const { code, diffs } of rangeChanges) {
+          for (const { field, was, now } of diffs) {
+            html += `<tr>
+              <td style="padding:1px 8px 1px 0;color:var(--text3);white-space:nowrap">${code}</td>
+              <td style="padding:1px 6px 1px 0;color:#a78bfa;white-space:nowrap">${field}</td>
+              <td style="padding:1px 0;color:#e94560;word-break:break-all;font-size:10px">${escHtml(String(was ?? 'null'))}</td>
+              <td style="padding:1px 6px;color:var(--text3)">→</td>
+              <td style="padding:1px 0;color:#a78bfa;word-break:break-all;font-size:10px">${escHtml(String(now ?? 'null'))}</td>
+            </tr>`;
+          }
+        }
+        html += `</table></details>`;
+      }
+      if (d.added_courses?.length) {
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--accent);font-size:10px">🆕 ${d.added_courses.length} new course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.added_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
+      }
+      if (d.missing_courses?.length) {
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--error);font-size:10px">❌ ${d.missing_courses.length} missing course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.missing_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
       }
       row.innerHTML = html;
       log.appendChild(row);
@@ -981,7 +1055,8 @@ function startCheck() {
     }
     if (d.type === 'done') {
       document.getElementById('check-status-msg').textContent =
-        `\u2705 Done \u2014 ${d.subjects_done} subjects, ${(d.courses_read ?? 0).toLocaleString()} courses checked.`;
+        `✅ Done — ${d.subjects_done} subjects, ${(d.courses_read ?? 0).toLocaleString()} courses checked. ` +
+        `${d.changed ?? 0} need PR · ${d.range_only ?? 0} range diffs · ${d.added ?? 0} new · ${d.missing ?? 0} missing.`;
       document.getElementById('check-bar').style.width = '100%';
       document.getElementById('check-pct').textContent = '100%';
       document.getElementById('check-run-btn').disabled  = false;
@@ -1014,6 +1089,80 @@ function stopCheck() {
   document.getElementById('check-run-btn').disabled  = false;
   document.getElementById('check-stop-btn').disabled = true;
   document.getElementById('ck-status-badge').style.display = 'none';
+}
+
+// ── Discrepancy Inspector ────────────────────────────────────────────────────────
+const ckDiscrepancies = [];  // { code, type:'changed'|'range'|'added'|'missing', diffs }
+let   ckFilter = 'all';
+
+function ckAccumulate(d) {
+  for (const { code, diffs } of (d.changes ?? [])) {
+    const allRange = diffs.every(df => df.isRangeOnly);
+    ckDiscrepancies.push({ code, type: allRange ? 'range' : 'changed', diffs });
+  }
+  for (const code of (d.added_courses   ?? [])) ckDiscrepancies.push({ code, type: 'added',   diffs: [] });
+  for (const code of (d.missing_courses ?? [])) ckDiscrepancies.push({ code, type: 'missing', diffs: [] });
+}
+
+function ckSetFilter(f, btn) {
+  ckFilter = f;
+  document.querySelectorAll('.ck-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  ckRender();
+}
+
+function ckRender() {
+  const search = (document.getElementById('ck-search')?.value ?? '').trim().toUpperCase();
+  let items = ckDiscrepancies;
+  if (ckFilter !== 'all') items = items.filter(x => x.type === ckFilter);
+  if (search) items = items.filter(x => x.code.toUpperCase().includes(search));
+
+  const MAX = 500;
+  const visible = items.slice(0, MAX);
+  const tbody = document.getElementById('ck-inspector-body');
+
+  document.getElementById('ck-inspector-count').textContent =
+    `${visible.length} of ${items.length}${items.length > MAX ? ` (capped at ${MAX})` : ''}`;
+
+  if (!visible.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">${ckDiscrepancies.length ? 'No items match filter/search' : 'Run a check to populate'}</td></tr>`;
+    return;
+  }
+
+  const rows = [];
+  for (const item of visible) {
+    if (item.type === 'added') {
+      rows.push(`<tr><td style="white-space:nowrap">${escHtml(item.code)}</td><td><span style="background:#5b8dee22;color:var(--accent);border-radius:3px;padding:1px 5px;font-size:10px">🆕 new</span></td><td colspan="3" style="color:var(--text3)">Not in our database</td></tr>`);
+      continue;
+    }
+    if (item.type === 'missing') {
+      rows.push(`<tr><td style="white-space:nowrap">${escHtml(item.code)}</td><td><span style="background:#e8655a22;color:var(--error);border-radius:3px;padding:1px 5px;font-size:10px">❌ missing</span></td><td colspan="3" style="color:var(--text3)">Removed from catalog</td></tr>`);
+      continue;
+    }
+    for (const { field, was, now, isRangeOnly } of item.diffs) {
+      const b = String(was  ?? 'null').slice(0, 80);
+      const a = String(now  ?? 'null').slice(0, 80);
+      const badge = isRangeOnly
+        ? `<span style="background:#a78bfa22;color:#a78bfa;border-radius:3px;padding:1px 5px;font-size:10px">≈ range</span>`
+        : `<span style="background:#f5a62322;color:var(--warn);border-radius:3px;padding:1px 5px;font-size:10px">⚠ changed</span>`;
+      rows.push(`<tr>
+        <td style="white-space:nowrap">${escHtml(item.code)}</td>
+        <td>${badge}</td>
+        <td style="color:var(--text3);white-space:nowrap">${field}</td>
+        <td style="color:#e94560;word-break:break-all;max-width:200px">${escHtml(b)}</td>
+        <td style="color:var(--accent);word-break:break-all;max-width:200px">${escHtml(a)}</td>
+      </tr>`);
+    }
+  }
+  tbody.innerHTML = rows.join('');
+}
+
+function ckExport() {
+  const blob = new Blob([JSON.stringify(ckDiscrepancies, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `catalog-discrepancies-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
 }
 
 // ── Patch builder ───────────────────────────────────────────────────────────

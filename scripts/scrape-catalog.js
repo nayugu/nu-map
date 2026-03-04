@@ -160,10 +160,13 @@ function parseSubjectPage(html, subjectCode) {
     const [, subject, number, title, credStr] = titleMatch;
     if (SUBJECT && subject !== SUBJECT) continue;
 
-    // Parse credits — handle ranges like "1-4" by taking max
-    const credits = credStr.includes("-") || credStr.includes("–")
-      ? parseInt(credStr.split(/[-–]/)[1], 10)
-      : parseInt(credStr, 10);
+    // Parse credits — preserve ranges: store min in `credits` (matching SearchNEU convention)
+    // and `creditsMax` only when different (variable-credit course, e.g. "1-4 Hours").
+    const [cMin, cMax] = (credStr.includes("-") || credStr.includes("–"))
+      ? credStr.split(/[-–]/).map(n => parseInt(n, 10))
+      : [parseInt(credStr, 10), parseInt(credStr, 10)];
+    const credits    = cMin;
+    const creditsMax = cMax !== cMin ? cMax : undefined;
 
     // ── Description ──
     // NOTE: do NOT fall back to bare 'p' — the first <p> in the block is the
@@ -210,6 +213,7 @@ function parseSubjectPage(html, subjectCode) {
       title,
       scheduleType,
       credits,
+      ...(creditsMax !== undefined ? { creditsMax } : {}),
       nuPath,
       sections: [],      // catalog has no section/term data
       description,
@@ -251,7 +255,7 @@ async function getSubjectURLs() {
 }
 
 // ── Field-level diff between two course objects ───────────────────────────────────
-const DIFF_FIELDS = ["title", "credits", "scheduleType", "description", "nuPath", "prereqs", "coreqs"];
+const DIFF_FIELDS = ["title", "credits", "creditsMax", "scheduleType", "description", "nuPath", "prereqs", "coreqs"];
 
 function diffCourse(prev, next) {
   const changes = [];
@@ -352,6 +356,12 @@ async function runRotate() {
         ...prev,
         title:        cat.title        || prev.title,
         credits:      cat.credits      || prev.credits,
+        // creditsMax: set when catalog shows a range, clear when fixed-credit, preserve existing if cat has no data
+        ...(cat.creditsMax !== undefined
+          ? { creditsMax: cat.creditsMax }
+          : cat.credits != null
+            ? {} // catalog confirms fixed credit — drop any stale creditsMax
+            : prev.creditsMax !== undefined ? { creditsMax: prev.creditsMax } : {}),
         scheduleType: cat.scheduleType || prev.scheduleType,
         description:  cat.description  || prev.description,
         nuPath:       cat.nuPath?.length  ? cat.nuPath  : prev.nuPath,
@@ -523,6 +533,9 @@ if (MERGE) {
       ...c,
       title:        cat.title        || c.title,
       credits:      cat.credits      || c.credits,
+      ...(cat.creditsMax !== undefined
+        ? { creditsMax: cat.creditsMax }
+        : cat.credits != null ? {} : c.creditsMax !== undefined ? { creditsMax: c.creditsMax } : {}),
       scheduleType: cat.scheduleType || c.scheduleType,
       description:  cat.description  || c.description,
       nuPath:       cat.nuPath?.length ? cat.nuPath : c.nuPath,

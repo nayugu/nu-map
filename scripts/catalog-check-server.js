@@ -84,9 +84,12 @@ function parseSubjectPage(html, subjectCode) {
     if (!tm) continue;
 
     const [, subject, number, title, credStr] = tm;
-    const credits = credStr.includes("-") || credStr.includes("–")
-      ? parseInt(credStr.split(/[-–]/)[1], 10)
-      : parseInt(credStr, 10);
+    // Parse credits — preserve ranges (min in `credits`, max in `creditsMax` when different)
+    const [cMin, cMax] = (credStr.includes("-") || credStr.includes("–"))
+      ? credStr.split(/[-–]/).map(n => parseInt(n, 10))
+      : [parseInt(credStr, 10), parseInt(credStr, 10)];
+    const creditsMin = cMin;
+    const creditsMax = cMax;
 
     const descEl = block.querySelector(".courseblockdesc, .cb_desc, .course-description, .courseblock-desc");
     const description = descEl
@@ -96,7 +99,7 @@ function parseSubjectPage(html, subjectCode) {
     const nuPathEl = block.querySelector("[class*='nupath'], [class*='NUpath'], [class*='attribute']");
     const nuPath = nuPathEl ? parseNUPath(nuPathEl.textContent) : parseNUPath(description);
 
-    courses.push({ subject, number, title, credits, nuPath, description });
+    courses.push({ subject, number, title, creditsMin, creditsMax, nuPath, description });
   }
   return courses;
 }
@@ -119,15 +122,38 @@ async function getSubjectURLs() {
 }
 
 // ── Check fields that the catalog provides ────────────────────────────────
-const CHECK_FIELDS = ["title", "credits", "nuPath"];
+// Credits handled separately with range-awareness; title + nuPath use strict equality.
+const CHECK_FIELDS = ["title", "nuPath"];
 
 function fieldsDiffer(prev, cat) {
   const diffs = [];
+
+  // Generic equality check for title and nuPath
   for (const f of CHECK_FIELDS) {
     if (JSON.stringify(prev[f] ?? null) !== JSON.stringify(cat[f] ?? null)) {
       diffs.push({ field: f, was: prev[f] ?? null, now: cat[f] ?? null });
     }
   }
+
+  // Credits — range-aware comparison.
+  // Our data: credits = min (from SearchNEU), creditsMax = max (only set when range).
+  // Catalog: creditsMin + creditsMax (equal when fixed count).
+  const prevMin = prev.credits    ?? null;
+  const prevMax = prev.creditsMax ?? prev.credits ?? null;
+  const catMin  = cat.creditsMin  ?? null;
+  const catMax  = cat.creditsMax  ?? null;
+  if (prevMin !== catMin || prevMax !== catMax) {
+    const wasStr = (prevMax != null && prevMax !== prevMin)
+      ? `${prevMin}\u2013${prevMax}` : prevMin;
+    const nowStr = (catMax  != null && catMax  !== catMin)
+      ? `${catMin}\u2013${catMax}`  : catMin;
+    // isRangeOnly = true when the catalog shows a range (variable-credit course).
+    // The values differ only because we weren't storing the range, not because the
+    // course fundamentally changed — low priority, no PR needed.
+    const isRangeOnly = catMin !== catMax;
+    diffs.push({ field: "credits", was: wasStr, now: nowStr, isRangeOnly });
+  }
+
   return diffs;
 }
 
@@ -160,7 +186,8 @@ async function runCheck(send) {
     subjects_done: 0,
     courses_read:  0,
     matched:       0,   // in both catalog and our data, no field changes
-    changed:       0,   // in both, but field(s) differ
+    changed:       0,   // in both, but real content field(s) differ
+    range_only:    0,   // in both, but only credits-range discrepancy (soft diff)
     added:         0,   // in catalog but not in our data
     missing:       0,   // in our data (for this subject) but not in catalog
     errors:        0,
@@ -189,8 +216,10 @@ async function runCheck(send) {
     }
 
     // Per-subject stats
-    let subRead = 0, subMatched = 0, subChanged = 0, subAdded = 0, subMissing = 0;
-    const subjectChanges = []; // [{code, diffs:[]}]
+    let subRead = 0, subMatched = 0, subChanged = 0, subRangeOnly = 0, subAdded = 0, subMissing = 0;
+    const subjectChanges = []; // [{code, diffs:[]}] — includes both changed + range-only
+    const addedKeys    = []; // course codes new in catalog, not in our data
+    const missingKeys  = []; // course codes in our data, not in catalog
 
     const seenKeys = new Set();
     for (const cat of catCourses) {
@@ -203,15 +232,22 @@ async function runCheck(send) {
       if (!prev) {
         subAdded++;
         stats.added++;
+        addedKeys.push(key);
       } else {
         const diffs = fieldsDiffer(prev, cat);
         if (diffs.length === 0) {
           subMatched++;
           stats.matched++;
         } else {
-          subChanged++;
-          stats.changed++;
+          const allRangeOnly = diffs.every(d => d.isRangeOnly);
           subjectChanges.push({ code: key, diffs });
+          if (allRangeOnly) {
+            subRangeOnly++;
+            stats.range_only++;
+          } else {
+            subChanged++;
+            stats.changed++;
+          }
         }
       }
     }
@@ -221,6 +257,7 @@ async function runCheck(send) {
       if (c.subject === subjectCode && !seenKeys.has(key)) {
         subMissing++;
         stats.missing++;
+        missingKeys.push(key);
       }
     }
 
@@ -229,11 +266,14 @@ async function runCheck(send) {
     send("subject_done", {
       index: i, slug,
       subject_courses_read: subRead,
-      subject_matched:  subMatched,
-      subject_changed:  subChanged,
-      subject_added:    subAdded,
-      subject_missing:  subMissing,
-      changes:          subjectChanges,
+      subject_matched:    subMatched,
+      subject_changed:    subChanged,
+      subject_range_only: subRangeOnly,
+      subject_added:      subAdded,
+      subject_missing:    subMissing,
+      changes:            subjectChanges,
+      added_courses:      addedKeys,
+      missing_courses:    missingKeys,
       ...stats,
     });
 
