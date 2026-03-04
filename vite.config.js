@@ -8,7 +8,7 @@ function catalogCheckPlugin() {
   return {
     name: "catalog-check-server",
     configureServer() {
-      child = spawn("node", ["scripts/catalog-check-server.js"], { stdio: "inherit" });
+      child = spawn("node", ["--watch", "scripts/catalog-check-server.js"], { stdio: "inherit" });
       child.on("error", () => {}); // silently ignore if port already in use
     },
     buildEnd() {

@@ -1063,10 +1063,10 @@ function startCheck() {
         html += `</table></details>`;
       }
       if (d.added_courses?.length) {
-        html += `<details open style="margin-top:2px"><summary style="cursor:pointer;color:var(--accent);font-size:10px">🆕 ${d.added_courses.length} new course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.added_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--accent);font-size:10px">🆕 ${d.added_courses.length} new course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.added_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
       }
       if (d.missing_courses?.length) {
-        html += `<details open style="margin-top:2px"><summary style="cursor:pointer;color:var(--error);font-size:10px">❌ ${d.missing_courses.length} missing course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.missing_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--error);font-size:10px">❌ ${d.missing_courses.length} missing course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.missing_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
       }
       row.innerHTML = html;
       log.appendChild(row);
