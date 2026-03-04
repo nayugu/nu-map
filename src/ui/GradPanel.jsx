@@ -88,6 +88,12 @@ function CheckBox({ sat }) {
 function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
+  const [rect,  setRect]  = useState(null);
+  const inputRef = useRef(null);
+
+  const updateRect = () => {
+    if (inputRef.current) setRect(inputRef.current.getBoundingClientRect());
+  };
 
   const allOptions = useMemo(() => {
     const list = [];
@@ -108,7 +114,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
   const sel = value ? allOptions.find(o => o.path === value) : null;
   const displayVal = sel ? `${sel.label}${sel.location ? ` (${sel.location})` : ""}` : "";
 
-  const handleFocus  = () => { setQuery(""); setOpen(true); };
+  const handleFocus  = () => { updateRect(); setQuery(""); setOpen(true); };
   const handleBlur   = () => setTimeout(() => setOpen(false), 160);
   const handleChange = e  => { setQuery(e.target.value); setOpen(true); };
   const select       = path => { onChange(path); setOpen(false); setQuery(""); };
@@ -117,6 +123,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
     <div style={{ position: "relative" }}>
       <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
         <input
+          ref={inputRef}
           type="text"
           value={open ? query : displayVal}
           onChange={handleChange}
@@ -136,9 +143,9 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           >✕</button>
         )}
       </div>
-      {open && (
+      {open && rect && (
         <div style={{
-          position: "absolute", top: "calc(100% + 2px)", left: 0, right: 0, zIndex: 200,
+          position: "fixed", top: rect.bottom + 2, left: rect.left, width: rect.width, zIndex: 9000,
           maxHeight: 200, overflowY: "auto",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
@@ -319,7 +326,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
 
 function NuPathGrid({ covered }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3, marginBottom: 6 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 3, marginBottom: 6 }}>
       {ALL_NUPATHS.map(key => {
         const sat = covered.has(key);
         return (
@@ -484,7 +491,7 @@ export default function GradPanel() {
         )}
 
         {/* ── Minor selectors ──────────────────────────────────── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginTop: 8, marginBottom: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 6, marginTop: 8, marginBottom: 8 }}>
           {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
             <div key={lbl}>
               <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
