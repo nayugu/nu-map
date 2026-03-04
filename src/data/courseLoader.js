@@ -3,7 +3,7 @@
 // Tries the bundled local JSON first; falls back to the live API.
 // ═══════════════════════════════════════════════════════════════════
 
-const LOCAL_URL = "/all-courses.json";
+const LOCAL_URL = `${import.meta.env.BASE_URL}all-courses.json`;
 const API_URL   = "https://husker.vercel.app/courses/all";
 
 async function tryFetch(url) {
