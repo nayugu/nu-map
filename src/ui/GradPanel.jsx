@@ -126,7 +126,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
   const select       = path => { onChange(path); setOpen(false); setQuery(""); };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", width: "100%", boxSizing: "border-box" }}>
       <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
         <input
           ref={inputRef}
@@ -523,7 +523,7 @@ export default function GradPanel() {
             value={selPath}
             onChange={setSelPath}
             groups={majorGroups}
-            placeholder="⌕ search majors"
+            placeholder={isPhone ? "⌕ search" : "⌕ search majors"}
           />
         </div>
 
@@ -533,7 +533,7 @@ export default function GradPanel() {
             <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
               CONCENTRATION
             </div>
-            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder="⌕ search concentrations" />
+            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? "⌕ search" : "⌕ search concentrations"} />
             {major.concentrations.minOptions > 0 && !selConc && (
               <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
                 ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
@@ -544,11 +544,11 @@ export default function GradPanel() {
 
         {/* ── Minor selectors ──────────────────────────────────── */}
         {/* Phone: single column (full-width like MAJOR). Tablet/desktop: side-by-side. */}
-        <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
           {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
-            <div key={lbl}>
+            <div key={lbl} style={{ minWidth: 0, overflow: "hidden" }}>
               <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder="⌕ search minors" />
+              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? "⌕ search" : "⌕ search minors"} />
             </div>
           ))}
         </div>
