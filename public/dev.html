@@ -127,11 +127,23 @@
     .action-tab.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
 
     /* ── Preview tab ──────────────────────────────────────────── */
-    .preview-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    .preview-bar  { background: var(--bg3); padding: 10px 16px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid var(--border); }
-    .preview-bar button { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 5px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; }
-    .preview-bar button.active { border-color: var(--accent); color: var(--accent); }
-    #preview-frame { border: none; display: block; }
+    #tab-preview { padding: 0; max-width: none; margin: 0; height: calc(100vh - 52px); display: flex; flex-direction: column; }
+    #preview-toolbar { display:flex; align-items:center; gap:8px; padding:8px 14px; background:var(--bg3); border-bottom:1px solid var(--border); flex-shrink:0; flex-wrap:wrap; }
+    #preview-toolbar h2 { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:0.06em; text-transform:uppercase; margin:0 4px 0 0; }
+    .pv-sep { width:1px; height:18px; background:var(--border); flex-shrink:0; }
+    .pv-chip { height:26px; padding:0 10px; border-radius:5px; border:1px solid var(--border); background:transparent; color:var(--text3); font-size:11px; font-weight:500; cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; text-decoration:none; }
+    .pv-chip:hover { border-color:#555; color:var(--text); }
+    .pv-chip.active { background:rgba(79,142,247,0.12); border-color:var(--accent); color:var(--accent); font-weight:700; }
+    #pv-scale-badge { font-size:10px; color:var(--text3); background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2px 7px; min-width:46px; text-align:center; }
+    #pv-dim-read { font-size:10px; color:var(--text3); white-space:nowrap; min-width:120px; }
+    #preview-stage { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; background:#111; }
+    #pv-device-wrap { transform-origin:center center; position:relative; flex-shrink:0; }
+    #pv-bezel { position:absolute; inset:0; pointer-events:none; z-index:2; display:none; box-shadow:0 0 0 1px #3a3a3c,0 0 0 2px #1c1c1e,0 24px 60px rgba(0,0,0,0.9); }
+    #pv-notch { position:absolute; left:50%; transform:translateX(-50%); background:#1c1c1e; z-index:3; display:none; border-radius:0 0 18px 18px; }
+    #pv-home-bar { position:absolute; left:50%; transform:translateX(-50%); width:120px; height:4px; background:#5a5a5e; border-radius:99px; z-index:3; display:none; }
+    #pv-frame { display:block; border:none; position:absolute; background:#fff; }
+    #pv-device-wrap.no-frame #pv-bezel,#pv-device-wrap.no-frame #pv-notch,#pv-device-wrap.no-frame #pv-home-bar { display:none !important; }
+    #pv-device-wrap.no-frame #pv-frame { border-radius:4px; box-shadow:0 0 0 1px var(--border),0 20px 60px rgba(0,0,0,0.5); }
 
     /* ── Chip list ────────────────────────────────────────────── */
     .chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
@@ -365,21 +377,33 @@
 
   <!-- ── Preview tab ────────────────────────────────────────────── -->
   <div id="tab-preview" class="tab-panel">
-    <div class="preview-wrap">
-      <div class="preview-bar">
-        <span style="font-size:12px;color:var(--text2);margin-right:4px">Device:</span>
-        <button class="active" data-w="390" data-h="844" onclick="setDevice(this)">📱 iPhone 15</button>
-        <button data-w="820" data-h="1180" onclick="setDevice(this)">📟 iPad Air</button>
-        <button data-w="1440" data-h="900" onclick="setDevice(this)">💻 MacBook Pro</button>
-        <button data-w="1920" data-h="1080" onclick="setDevice(this)">🖥 1080p Desktop</button>
-        <button style="margin-left:auto" onclick="reloadPreview()">↺ Reload</button>
-        <button onclick="resetPreviewState()">🗑 Reset state</button>
-        <a class="btn sec" href="./" target="_blank" style="font-size:12px;padding:5px 12px">Open in tab →</a>
-      </div>
-      <div style="overflow:hidden;background:#000;padding:16px;min-height:600px;display:flex;justify-content:center;align-items:flex-start">
-        <div id="preview-scaler" style="position:relative;flex-shrink:0">
-          <iframe id="preview-frame" src="./" style="position:absolute;top:0;left:0;transform-origin:top left;border:1px solid #333;border-radius:8px;background:#fff"></iframe>
-        </div>
+    <div id="preview-toolbar">
+      <h2>Preview</h2>
+      <div class="pv-sep"></div>
+      <button class="pv-chip active" data-dev="iphoneX">📱 iPhone X</button>
+      <button class="pv-chip" data-dev="iphone14">📱 iPhone 14 Pro</button>
+      <div class="pv-sep"></div>
+      <button class="pv-chip" data-dev="ipadAir">⬛ iPad Air</button>
+      <button class="pv-chip" data-dev="ipadPro">⬛ iPad Pro 11&quot;</button>
+      <div class="pv-sep"></div>
+      <button class="pv-chip" data-dev="macbook">💻 MacBook</button>
+      <button class="pv-chip" data-dev="desktop1080">🖥 1080p</button>
+      <div class="pv-sep"></div>
+      <button class="pv-chip" id="pv-orient-btn" title="Rotate">⟳ Rotate</button>
+      <button class="pv-chip active" id="pv-frame-btn">Frame: on</button>
+      <div class="pv-sep"></div>
+      <span id="pv-dim-read">375 × 812</span>
+      <span id="pv-scale-badge">100%</span>
+      <button class="pv-chip" id="pv-reload-btn" style="margin-left:auto">↺ Reload</button>
+      <button class="pv-chip" id="pv-reset-btn">🗑 Reset state</button>
+      <a class="pv-chip" href="./" target="_blank">Open ↗</a>
+    </div>
+    <div id="preview-stage">
+      <div id="pv-device-wrap">
+        <div id="pv-bezel"></div>
+        <div id="pv-notch"></div>
+        <div id="pv-home-bar"></div>
+        <iframe id="pv-frame" src="about:blank" title="App Preview"></iframe>
       </div>
     </div>
   </div>
@@ -527,7 +551,6 @@ function showApp() {
   document.getElementById("dev-app").style.display     = "block";
   loadDataMeta();
   loadChangeLog();
-  initPreview();
 }
 
 function logout() {
@@ -651,7 +674,7 @@ function switchTab(name, btn) {
   document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
   document.getElementById(`tab-${name}`).classList.add("active");
   if (btn) btn.classList.add("active");
-  if (name === "preview") initPreview();
+  if (name === "preview") pvInitPreview();
 }
 
 // ── Data meta ───────────────────────────────────────────────────────────────
@@ -670,60 +693,103 @@ async function loadDataMeta() {
 }
 
 // ── Preview ─────────────────────────────────────────────────────────────────
-const DEVICES = { "390": 844, "820": 1180, "1440": 900, "1920": 1080 };
-let currentDevice = { w: 390, h: 844 };
+// ── Device Preview ──────────────────────────────────────────────────────────
+const PV_DEVICES = {
+  iphoneX:     { w:375,  h:812,  dpr:3, ppi:458, type:'phone',   bezelR:40, bezelT:12, notchW:209, notchH:28, notch:true,  home:true  },
+  iphone14:    { w:393,  h:852,  dpr:3, ppi:460, type:'phone',   bezelR:47, bezelT:14, notchW:126, notchH:34, notch:true,  home:true  },
+  ipadAir:     { w:820,  h:1180, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:20, notchW:0,   notchH:0,  notch:false, home:false },
+  ipadPro:     { w:834,  h:1194, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:14, notchW:0,   notchH:0,  notch:false, home:false },
+  macbook:     { w:1440, h:900,  dpr:2, ppi:224, type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  notch:false, home:false },
+  desktop1080: { w:1920, h:1080, dpr:1, ppi:96,  type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  notch:false, home:false },
+};
+let pvKey   = 'iphoneX';
+let pvLand  = false;
+let pvFrame = true;
+let pvReady = false;
 
-function initPreview() {
-  const frame = document.getElementById("preview-frame");
-  if (!frame.src || frame.src === "about:blank") {
-    applyDeviceSize(currentDevice.w, currentDevice.h);
-    frame.src = "./";
+function pvApply() {
+  const d = PV_DEVICES[pvKey];
+  const w = pvLand ? d.h : d.w;
+  const h = pvLand ? d.w : d.h;
+  const isDesktop = d.type === 'desktop';
+  const bt = (pvFrame && !isDesktop) ? d.bezelT : 0;
+  const br = pvLand ? Math.round(d.bezelR * 0.55) : d.bezelR;
+  const outerW = w + 2 * bt, outerH = h + 2 * bt;
+  const stage  = document.getElementById('preview-stage');
+  const fit    = Math.min(1, (stage.clientWidth - 40) / outerW, (stage.clientHeight - 40) / outerH);
+  const wrap   = document.getElementById('pv-device-wrap');
+  const frame  = document.getElementById('pv-frame');
+  const bezel  = document.getElementById('pv-bezel');
+  const notchEl= document.getElementById('pv-notch');
+  const homeEl = document.getElementById('pv-home-bar');
+  frame.style.left   = bt + 'px';
+  frame.style.top    = bt + 'px';
+  frame.style.width  = w + 'px';
+  frame.style.height = h + 'px';
+  wrap.style.width   = outerW + 'px';
+  wrap.style.height  = outerH + 'px';
+  wrap.style.transform = `scale(${fit.toFixed(4)})`;
+  if (pvFrame && !isDesktop) {
+    wrap.classList.remove('no-frame');
+    bezel.style.display = 'block';
+    bezel.style.borderRadius = br + 'px';
+    bezel.style.border = bt + 'px solid #1c1c1e';
+    frame.style.borderRadius = Math.max(0, br - bt + 2) + 'px';
+    const showNotch = d.notch && !pvLand;
+    notchEl.style.top    = bt + 'px';
+    notchEl.style.width  = d.notchW + 'px';
+    notchEl.style.height = d.notchH + 'px';
+    notchEl.style.display = showNotch ? 'block' : 'none';
+    homeEl.style.bottom  = (bt + 7) + 'px';
+    homeEl.style.display = (d.home && !pvLand) ? 'block' : 'none';
+  } else {
+    wrap.classList.add('no-frame');
+    bezel.style.display = notchEl.style.display = homeEl.style.display = 'none';
+    frame.style.borderRadius = isDesktop ? '4px' : '12px';
   }
+  document.getElementById('pv-dim-read').textContent    = `${w} × ${h}  (${d.ppi}ppi ×${d.dpr})`;
+  document.getElementById('pv-scale-badge').textContent = Math.round(fit * 100) + '%';
 }
 
-function setDevice(btn) {
-  document.querySelectorAll(".preview-bar button[data-w]").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  const w = parseInt(btn.dataset.w, 10), h = parseInt(btn.dataset.h, 10);
-  currentDevice = { w, h };
-  applyDeviceSize(w, h);
-  // Reload so the app re-initializes at the new viewport width.
-  const frame = document.getElementById("preview-frame");
-  frame.src = "./" + "?" + Date.now();
+function pvInitPreview() {
+  if (!pvReady) {
+    pvReady = true;
+    document.getElementById('pv-frame').src = './';
+  }
+  pvApply();
 }
 
-function applyDeviceSize(w, h) {
-  const scaler    = document.getElementById("preview-scaler");
-  const frame     = document.getElementById("preview-frame");
-
-  // Available width inside the black container (16px padding each side)
-  const available = (scaler.parentElement.clientWidth || 920) - 32;
-  const scale     = w > available ? available / w : 1;
-  const scaledW   = Math.round(w * scale);
-  const scaledH   = Math.round(h * scale);
-
-  // Scaler wrapper governs document flow at the *scaled* size
-  scaler.style.width  = scaledW + "px";
-  scaler.style.height = scaledH + "px";
-
-  // Iframe is positioned absolutely at true device dimensions, then scaled down
-  frame.style.width           = w + "px";
-  frame.style.height          = h + "px";
-  frame.style.transform       = `scale(${scale.toFixed(5)})`;
-  frame.style.transformOrigin = "top left";
-}
-
-function reloadPreview() {
-  const frame = document.getElementById("preview-frame");
-  applyDeviceSize(currentDevice.w, currentDevice.h);
-  frame.src = "./" + "?" + Date.now();
-}
-
-function resetPreviewState() {
-  const frame = document.getElementById("preview-frame");
-  try { frame.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
-  reloadPreview();
-}
+document.querySelectorAll('.pv-chip[data-dev]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.dev === pvKey) return;
+    pvKey = btn.dataset.dev; pvLand = false;
+    document.querySelectorAll('.pv-chip[data-dev]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    pvApply();
+    const f = document.getElementById('pv-frame');
+    try { f.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
+    f.src = './?t=' + Date.now();
+  });
+});
+document.getElementById('pv-orient-btn').addEventListener('click', () => { pvLand = !pvLand; pvApply(); });
+document.getElementById('pv-frame-btn').addEventListener('click', () => {
+  pvFrame = !pvFrame;
+  const b = document.getElementById('pv-frame-btn');
+  b.textContent = 'Frame: ' + (pvFrame ? 'on' : 'off');
+  b.classList.toggle('active', pvFrame);
+  pvApply();
+});
+document.getElementById('pv-reload-btn').addEventListener('click', () => {
+  pvApply();
+  document.getElementById('pv-frame').src = './?t=' + Date.now();
+});
+document.getElementById('pv-reset-btn').addEventListener('click', () => {
+  const f = document.getElementById('pv-frame');
+  try { f.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
+  pvApply();
+  f.src = './?t=' + Date.now();
+});
+window.addEventListener('resize', () => { if (pvReady) pvApply(); });
 
 // ── Patch builder ───────────────────────────────────────────────────────────
 let currentAction = "add";

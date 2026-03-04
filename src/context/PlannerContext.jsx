@@ -215,7 +215,8 @@ export function PlannerProvider({ children }) {
     const onMove = e => {
       if (!bankResizing.current) return;
       const dx = (bankResizing.current.startX - e.clientX) / uiScaleRef.current;
-      setBankWidth(Math.min(640, Math.max(180, bankResizing.current.startW + dx)));
+      const minW = window.innerWidth < 600 ? 80 : 180;
+      setBankWidth(Math.min(640, Math.max(minW, bankResizing.current.startW + dx)));
     };
     const onUp = () => { bankResizing.current = null; };
     window.addEventListener("mousemove", onMove);

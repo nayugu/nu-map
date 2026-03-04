@@ -93,7 +93,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             color: starredIds.has(course.id) ? "var(--warn-bright)" : "var(--text-5)",
           }}
         >{starredIds.has(course.id) ? "★" : "☆"}</button>
-        <span style={{ fontSize: course.code.length > 7 ? 8 : 10, fontWeight: 800, color: course.color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <span style={{ fontSize: 8, fontWeight: 800, color: course.color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {noSubject ? course.code.replace(/^[A-Z]+ /, "") : course.code}
         </span>
       </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>NU Map — Device Preview</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 12px;
+    padding: calc(6px + env(safe-area-inset-top)) 12px 6px;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
@@ -153,6 +153,7 @@
     justify-content: center;
     overflow: hidden;
     position: relative;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   /* The scaled outer wrapper */

@@ -75,15 +75,15 @@ export default function BankPanel() {
 
   return (
     <div style={{ display: "flex", width: bankWidth, flexShrink: 0 }}>
-      {/* Drag-resize handle */}
-      <div
+      {/* Drag-resize handle — desktop only */}
+      {!isPhone && <div
         onMouseDown={e => {
           bankResizing.current = { startX: e.clientX, startW: bankWidth };
           e.preventDefault();
         }}
         style={{ width: 5, flexShrink: 0, cursor: "col-resize", borderLeft: "1px solid var(--border-1)", background: "transparent" }}
         title="Drag to resize"
-      />
+      />}
 
       <div
         ref={bankRef}
