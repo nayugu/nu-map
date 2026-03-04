@@ -3,6 +3,20 @@
     {
       "type": "catalog-check",
       "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-04T23:24:56.341Z",
+      "stats": {
+        "correct": 2622,
+        "needPR": 1304,
+        "rangeDiff": 128,
+        "newCourses": 3787,
+        "notInCatalog": 186,
+        "totalScanned": 7841,
+        "subjectsDone": 231
+      }
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
       "timestamp": "2026-03-04T22:43:52.716Z",
       "stats": {
         "correct": 42,
