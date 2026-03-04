@@ -186,6 +186,16 @@
 
   <!-- ── Dashboard ─────────────────────────────────────────────── -->
   <div id="tab-dashboard" class="tab-panel active">
+    <div class="card" style="border:2px solid #f59e0b;background:rgba(245,158,11,0.07)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="margin-bottom:4px">⚠️ Automated Catalog Updates Need Review</h2>
+          <p class="text2" style="margin:0">Every 3 days the scraper runs and opens a <strong>pull request</strong> with any field changes it found (title, description, credits, NUPath, prereqs). <strong>You must approve and merge the PR</strong> for changes to go live — nothing is auto-merged.</p>
+        </div>
+        <a class="btn" href="https://github.com/nayugu/nu-map/pulls" target="_blank" style="background:#f59e0b;border-color:#f59e0b;flex-shrink:0;font-size:14px;padding:10px 20px">🔀 Review Open PRs →</a>
+      </div>
+    </div>
+
     <div class="card">
       <h2>Data Status</h2>
       <div class="stats" id="data-stats">
@@ -665,7 +675,7 @@ function initPreview() {
   const frame = document.getElementById("preview-frame");
   if (!frame.src || frame.src === "about:blank") {
     applyDeviceSize(currentDevice.w, currentDevice.h);
-    frame.src = "/";
+    frame.src = "./";
   }
 }
 
@@ -675,6 +685,10 @@ function setDevice(btn) {
   const w = parseInt(btn.dataset.w, 10), h = parseInt(btn.dataset.h, 10);
   currentDevice = { w, h };
   applyDeviceSize(w, h);
+  // Reload so the app re-initializes at the new viewport width.
+  // (React context checks window.innerWidth on mount — resizing alone won't re-run it.)
+  const frame = document.getElementById("preview-frame");
+  frame.src = "./" + "?" + Date.now();
 }
 
 function applyDeviceSize(w, h) {
@@ -686,7 +700,8 @@ function applyDeviceSize(w, h) {
 
 function reloadPreview() {
   const frame = document.getElementById("preview-frame");
-  frame.src = "/" + "?" + Date.now();
+  applyDeviceSize(currentDevice.w, currentDevice.h);
+  frame.src = "./" + "?" + Date.now();
 }
 
 function resetPreviewState() {
