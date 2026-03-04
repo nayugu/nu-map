@@ -4,7 +4,7 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 
 > Not affiliated with or endorsed by Northeastern University. Always verify your plan with an advisor and DegreeWorks.
 
-**Live site:** https://numap.netlify.app/ · **Backup:** https://nayugu.github.io/nu-map/
+**Live site:** https://nayugu.github.io/nu-map/ · **Dev portal:** https://nayugu.github.io/nu-map/dev.html · **Mirror:** https://numap.netlify.app/
 
 ---
 
@@ -84,7 +84,7 @@ Edit files under `graduatenu/packages/api/src/major/majors/` or `.../minor/minor
 
 ## Developer portal
 
-A password-protected admin UI is served at `/dev.html` (https://numap.netlify.app/dev.html).
+A password-protected admin UI is served at `/dev.html` (https://nayugu.github.io/nu-map/dev.html).
 
 Tabs:
 - **Dashboard** — course count, last-updated timestamp, quick-copy npm commands, links to GitHub
@@ -109,10 +109,10 @@ npm run test:live     # live CS 2100 scrape against catalog.northeastern.edu
 
 ## Deployment
 
-| Host | URL | Trigger |
+| Host | URL | Notes |
 |---|---|---|
-| Netlify (primary) | https://numap.netlify.app/ | Push to `main` (auto) |
-| GitHub Pages (backup) | https://nayugu.github.io/nu-map/ | Push to `main` via `deploy-pages.yml` |
+| GitHub Pages (primary) | https://nayugu.github.io/nu-map/ | Push to `main` via `deploy-pages.yml`; includes dev portal |
+| Netlify (mirror) | https://numap.netlify.app/ | Push to `main` (auto); no dev portal |
 
 **GitHub Pages one-time setup:** Settings → Pages → Source → "Deploy from a branch" → `gh-pages` / `/` → Save.
 
