@@ -20,6 +20,7 @@ import { getMinorOptionGroups, loadMinor } from "../data/minorLoader.js";
 const ALL_NUPATHS = Object.keys(NUPATH_LABELS);
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
+// isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
 const GradCtx = createContext(null);
 
 // ── Shared atoms ─────────────────────────────────────────────────
@@ -70,13 +71,16 @@ function CreditBar({ completedSH, plannedSH, requiredSH }) {
 }
 
 function CheckBox({ sat }) {
+  const ctx = useContext(GradCtx);
+  const ph  = ctx?.isPhone;
+  const sz  = ph ? 12 : 14;
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: 14, height: 14, borderRadius: 3, flexShrink: 0,
+      width: sz, height: sz, borderRadius: ph ? 2 : 3, flexShrink: 0,
       background:  sat ? "var(--success-bg)"     : "var(--bg-surface-2)",
       border: `1px solid ${sat ? "var(--success-border)" : "var(--border-2)"}`,
-      fontSize: 9, fontWeight: 900,
+      fontSize: ph ? 7 : 9, fontWeight: 900,
       color: sat ? "var(--success)" : "var(--text-5)",
     }}>
       {sat ? "✓" : ""}
@@ -202,16 +206,22 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
 function ReqNode({ r, depth = 0 }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
-  const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId } = useContext(GradCtx);
-  const pl               = depth * 10;
+  const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone } = useContext(GradCtx);
+  const pl               = depth * (isPhone ? 4 : 10);
+  const rowMB            = isPhone ? 1 : 3;
+  const nodeFz           = isPhone ? 8 : 10;
+  const rowGap           = isPhone ? 3 : 5;
+  const baseIndent       = isPhone ? 2 : 4;
 
   if (r.type === "COURSE") {
     const course    = courseMap?.[r.key];
     const isSelected = selectedId === r.key;
+    // On phone: show only the course code (r.key) to save horizontal space.
+    const displayLabel = isPhone ? r.key : r.label;
     return (
-      <div style={{ paddingLeft: pl + 4, marginBottom: 3 }}>
+      <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB }}>
         <div
-          style={{ display: "flex", alignItems: "center", gap: 5, cursor: course ? "grab" : "default" }}
+          style={{ display: "flex", alignItems: "center", gap: rowGap, cursor: course ? "grab" : "default" }}
           draggable={!!course}
           onDragStart={course ? e => {
             e.stopPropagation();
@@ -222,17 +232,17 @@ function ReqNode({ r, depth = 0 }) {
             setSelectedId(r.key);
             setShowPanel(true);
           } : undefined}
-          title={course ? `Drag to place • click to preview` : undefined}
+          title={course ? (isPhone ? r.label : `Drag to place • click to preview`) : undefined}
         >
           <CheckBox sat={r.sat} />
           <span
             onMouseEnter={course ? () => setHov(true) : undefined}
             onMouseLeave={course ? () => setHov(false) : undefined}
-            style={{ fontSize: 10, color: r.sat ? "var(--text-2)" : "var(--text-4)", fontWeight: r.sat ? 600 : 400, userSelect: "none",
+            style={{ fontSize: nodeFz, color: r.sat ? "var(--text-2)" : "var(--text-4)", fontWeight: r.sat ? 600 : 400, userSelect: "none",
               textDecoration: isSelected ? "underline" : hov ? "underline" : "none",
               textDecorationColor: "var(--text-4)",
               textUnderlineOffset: 2 }}>
-            {r.label}
+            {displayLabel}
           </span>
         </div>
       </div>
@@ -240,9 +250,9 @@ function ReqNode({ r, depth = 0 }) {
   }
 
   if (r.type === "RANGE") return (
-    <div style={{ display: "flex", alignItems: "center", gap: 5, paddingLeft: pl + 4, marginBottom: 2 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: pl + baseIndent, marginBottom: rowMB }}>
       <CheckBox sat={r.sat} />
-      <span style={{ fontSize: 10, color: r.sat ? "var(--text-2)" : "var(--text-4)" }}>
+      <span style={{ fontSize: nodeFz, color: r.sat ? "var(--text-2)" : "var(--text-4)" }}>
         {r.sat ? `${r.matched.slice(0, 3).join(", ")}${r.matched.length > 3 ? ` +${r.matched.length - 3}` : ""} (${r.subject} range)` : r.label}
       </span>
     </div>
@@ -251,14 +261,14 @@ function ReqNode({ r, depth = 0 }) {
   if (r.type === "XOM") {
     const has = r.children?.length > 0;
     return (
-      <div style={{ paddingLeft: pl, marginBottom: 3 }}>
+      <div style={{ paddingLeft: pl, marginBottom: rowMB }}>
         <div onClick={() => has && setOpen(v => !v)}
-          style={{ display: "flex", alignItems: "center", gap: 5, paddingLeft: 4, cursor: has ? "pointer" : "default", userSelect: "none" }}>
+          style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
           <CheckBox sat={r.sat} />
-          <span style={{ fontSize: 10, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>
+          <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>
             {r.satSh}/{r.reqSh} SH from elective pool
           </span>
-          {has && <span style={{ fontSize: 9, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
+          {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
         </div>
         {open && has && <div style={{ marginTop: 3 }}>
           {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} />)}
@@ -276,12 +286,12 @@ function ReqNode({ r, depth = 0 }) {
     r.title ?? r.label;
 
   return (
-    <div style={{ paddingLeft: pl, marginBottom: 3 }}>
+    <div style={{ paddingLeft: pl, marginBottom: rowMB }}>
       <div onClick={() => has && !isLocked && setOpen(v => !v)}
-        style={{ display: "flex", alignItems: "center", gap: 5, paddingLeft: 4, cursor: has && !isLocked ? "pointer" : "default", userSelect: "none" }}>
+        style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has && !isLocked ? "pointer" : "default", userSelect: "none" }}>
         <CheckBox sat={r.sat} />
-        <span style={{ fontSize: 10, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>{heading}</span>
-        {has && !isLocked && <span style={{ fontSize: 9, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
+        <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>{heading}</span>
+        {has && !isLocked && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
       </div>
       {(open || isLocked) && has && <div style={{ marginTop: 3 }}>
         {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} />)}
@@ -294,38 +304,41 @@ function ReqNode({ r, depth = 0 }) {
 
 function SectionBlock({ sec, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
+  const ctx = useContext(GradCtx);
+  const ph  = ctx?.isPhone;
   const frac = sec.total > 0 ? sec.satCount / sec.total : 0;
 
   return (
-    <div style={{ marginBottom: 4, border: "1px solid var(--border-2)", borderRadius: 6, overflow: "hidden" }}>
+    <div style={{ marginBottom: ph ? 3 : 4, border: "1px solid var(--border-2)", borderRadius: 6, overflow: "hidden" }}>
       {/* Clickable header */}
       <div onClick={() => setOpen(v => !v)} style={{
-        display: "flex", alignItems: "center", gap: 6, padding: "5px 8px",
+        display: "flex", alignItems: "center", gap: ph ? 4 : 6,
+        padding: ph ? "3px 6px" : "5px 8px",
         cursor: "pointer", background: "var(--bg-surface)", userSelect: "none",
       }}>
         <CheckBox sat={sec.sat} />
-        <span style={{ flex: 1, fontSize: 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
+        <span style={{ flex: 1, fontSize: ph ? 9 : 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {sec.title}
         </span>
-        <span style={{ fontSize: 9, color: "var(--text-5)", marginRight: 2 }}>{sec.satCount}/{sec.total}</span>
-        <span style={{ fontSize: 9, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>
+        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>{sec.satCount}/{sec.total}</span>
+        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>
       </div>
       {/* Progress sliver */}
-      <div style={{ padding: "0 8px", background: "var(--bg-surface)" }}>
+      <div style={{ padding: ph ? "0 6px" : "0 8px", background: "var(--bg-surface)" }}>
         <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--warn-bright)"} />
       </div>
       {/* Requirements */}
       {open && (
-        <div style={{ padding: "8px 6px 6px", background: "var(--bg-surface-2)" }}>
+        <div style={{ padding: ph ? "4px 3px 3px" : "8px 6px 6px", background: "var(--bg-surface-2)" }}>
           {sec.warnings?.map((w, i) => (
-            <div key={i} style={{ fontSize: 9, color: "var(--warn-bright)", marginBottom: 4, paddingLeft: 4, borderLeft: "2px solid var(--warn-bright)" }}>
+            <div key={i} style={{ fontSize: ph ? 8 : 9, color: "var(--warn-bright)", marginBottom: ph ? 3 : 4, paddingLeft: 4, borderLeft: "2px solid var(--warn-bright)" }}>
               ⚠ {w}
             </div>
           ))}
           {sec.children.map((r, i) => <ReqNode key={i} r={r} />)}
           {sec.minRequired < sec.total && (
-            <div style={{ fontSize: 9, color: "var(--text-5)", marginTop: 4, paddingLeft: 4, fontStyle: "italic" }}>
+            <div style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginTop: ph ? 3 : 4, paddingLeft: 4, fontStyle: "italic" }}>
               Requires {sec.minRequired} of {sec.total}
             </div>
           )}
@@ -338,20 +351,46 @@ function SectionBlock({ sec, defaultOpen = true }) {
 // ── NUPath grid ──────────────────────────────────────────────────
 
 function NuPathGrid({ covered }) {
+  const { isPhone } = useContext(GradCtx);
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 3, marginBottom: 6 }}>
+    <div style={{
+      display: "grid",
+      // Phone: 3 equal columns → 5 rows, cells naturally wider than tall.
+      // Desktop: auto-fit as before.
+      gridTemplateColumns: isPhone
+        ? "repeat(3, 1fr)"
+        : "repeat(auto-fit, minmax(130px, 1fr))",
+      width: "100%",
+      boxSizing: "border-box",
+      gap: isPhone ? 2 : 3,
+      marginBottom: 6,
+    }}>
       {ALL_NUPATHS.map(key => {
         const sat = covered.has(key);
         return (
           <div key={key} style={{
-            display: "flex", alignItems: "center", gap: 4, padding: "3px 5px", borderRadius: 4, fontSize: 9,
+            display: "flex", alignItems: "center", justifyContent: isPhone ? "center" : "flex-start",
+            gap: isPhone ? 0 : 4,
+            // Natural height with modest vertical padding — wider than tall.
+            padding: isPhone ? "4px 2px" : "3px 5px",
+            borderRadius: isPhone ? 3 : 4,
+            fontSize: 9,
             background: "var(--bg-surface)",
             border: `1px solid ${sat ? "var(--nupath-sat-border)" : "var(--border-2)"}`,
             color: sat ? "var(--nupath-sat-text)" : "var(--text-5)",
-            fontWeight: sat ? 600 : 400,
+            fontWeight: sat ? 700 : 400,
           }}>
-            <span style={{ width: 24, flexShrink: 0, fontWeight: 800, color: sat ? "var(--nupath-sat-text)" : "var(--text-4)" }}>{key}</span>
-            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{NUPATH_LABELS[key]}</span>
+            <span style={{
+              flexShrink: 0, fontWeight: 800,
+              fontSize: isPhone ? 8.5 : 9,
+              lineHeight: 1,
+              color: sat ? "var(--nupath-sat-text)" : "var(--text-4)",
+            }}>{key}</span>
+            {!isPhone && (
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {NUPATH_LABELS[key]}
+              </span>
+            )}
           </div>
         );
       })}
@@ -472,8 +511,8 @@ export default function GradPanel() {
   const overallFrac = sections.length > 0 ? satSections / sections.length : 0;
 
   return (
-    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel }}>
-      <div style={{ overflowY: "auto", height: "100%", padding: "9px 9px 40px" }}>
+    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone }}>
+      <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
         {/* ── Major selector ─────────────────────────────────── */}
         <div style={{ marginBottom: 3 }}>
@@ -504,7 +543,8 @@ export default function GradPanel() {
         )}
 
         {/* ── Minor selectors ──────────────────────────────────── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 6, marginTop: 8, marginBottom: 8 }}>
+        {/* Phone: single column (full-width like MAJOR). Tablet/desktop: side-by-side. */}
+        <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8 }}>
           {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
             <div key={lbl}>
               <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
@@ -527,7 +567,7 @@ export default function GradPanel() {
                 SH done{plannedSH > 0 ? " + planned" : ""}{requiredSH > 0 ? " / required" : ""}
               </div>
             </div>
-            {major && (
+            {major && !isPhone && (
               <div style={{ marginLeft: "auto", textAlign: "right" }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)" }}>{major.yearVersion}</div>
                 <div style={{ fontSize: 9, color: "var(--text-4)" }}>catalog</div>
@@ -581,15 +621,15 @@ export default function GradPanel() {
         {/* ── Major requirement sections ───────────────────────── */}
         {major && !fetching && (
           <>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5, marginTop: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: isPhone ? 3 : 5, marginTop: isPhone ? 2 : 4 }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+                <div style={{ fontSize: isPhone ? 9 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
                   REQUIREMENTS
                   <span style={{ fontWeight: 400, color: "var(--text-5)", marginLeft: 5 }}>
                     ({satSections}/{sections.length})
                   </span>
                 </div>
-                <div style={{ fontSize: 9, fontWeight: 600, color: "var(--text-2)", marginTop: 1 }}>
+                <div style={{ fontSize: isPhone ? 8 : 9, fontWeight: 600, color: "var(--text-2)", marginTop: 1 }}>
                   {major.name}
                   {major.metadata?.verified && (
                     <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px", verticalAlign: "middle" }}>
@@ -598,7 +638,7 @@ export default function GradPanel() {
                   )}
                 </div>
               </div>
-              <div style={{ fontSize: 22, fontWeight: 900, lineHeight: 1, color: overallFrac === 1 ? "var(--success)" : "var(--text-1)" }}>
+              <div style={{ fontSize: isPhone ? 16 : 22, fontWeight: 900, lineHeight: 1, color: overallFrac === 1 ? "var(--success)" : "var(--text-1)" }}>
                 {Math.round(overallFrac * 100)}%
               </div>
             </div>

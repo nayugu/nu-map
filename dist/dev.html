@@ -137,8 +137,6 @@
     .pv-chip.active { background:rgba(79,142,247,0.12); border-color:var(--accent); color:var(--accent); font-weight:700; }
     #pv-scale-badge { font-size:10px; color:var(--text3); background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2px 7px; min-width:46px; text-align:center; }
     #pv-dim-read { font-size:10px; color:var(--text3); white-space:nowrap; min-width:120px; }
-    #pv-url-input { height:26px; font-size:11px; padding:0 8px; border-radius:5px; border:1px solid var(--border); background:var(--bg2); color:var(--text); width:210px; font-family:var(--mono); }
-    #pv-url-input:focus { outline:none; border-color:var(--accent); }
     #preview-stage { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; background:#111; }
     #pv-device-wrap { transform-origin:center center; position:relative; flex-shrink:0; }
     #pv-bezel { position:absolute; inset:0; pointer-events:none; z-index:2; display:none; box-shadow:0 0 0 1px #3a3a3c,0 0 0 2px #1c1c1e,0 24px 60px rgba(0,0,0,0.9); }
@@ -412,7 +410,6 @@
       <span id="pv-dim-read">375 × 812</span>
       <span id="pv-scale-badge">100%</span>
       <div class="pv-sep"></div>
-      <input id="pv-url-input" value="http://localhost:5173/" spellcheck="false" title="Preview URL" />
       <button class="pv-chip" id="pv-reload-btn" style="margin-left:auto">↺ Reload</button>
       <button class="pv-chip" id="pv-reset-btn">🗑 Reset state</button>
       <button class="pv-chip" id="pv-open-btn">Open ↗</button>
@@ -783,8 +780,8 @@ let pvFrame = true;
 let pvReady = false;
 
 function pvGetUrl() {
-  const v = (document.getElementById('pv-url-input')?.value ?? '').trim();
-  return v || 'http://localhost:5173/';
+  // Derive base from current page path: /nu-map/dev.html → /nu-map/  or  /dev.html → /
+  return window.location.pathname.replace(/\/[^/]*$/, '/');
 }
 
 function pvApply() {

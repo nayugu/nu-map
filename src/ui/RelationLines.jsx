@@ -5,12 +5,16 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
 
 export default function RelationLines() {
-  const { lines, bankWidth } = usePlanner();
+  const { lines, bankWidth, isPhone } = usePlanner();
 
   return (
     <svg style={{
       position: "fixed", top: 0, left: 0,
-      width: `calc(100% - ${bankWidth}px)`, height: "100vh",
+      // On phone the bank is narrow and mobile browsers can clip fixed SVGs at
+      // their own bounding rect even with overflow:visible.  Use full viewport
+      // width so no bezier path is ever silently cut off.
+      width: isPhone ? "100vw" : `calc(100% - ${bankWidth}px)`,
+      height: "100vh",
       pointerEvents: "none", zIndex: 40, overflow: "visible",
     }}>
       <defs>
