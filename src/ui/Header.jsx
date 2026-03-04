@@ -172,7 +172,7 @@ export default function Header() {
                 style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                ⟳ Reset catalog data
+                ↺ Reset
               </button>
 
               {/* Dev portal link */}
