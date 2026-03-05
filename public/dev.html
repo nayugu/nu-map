@@ -214,20 +214,23 @@
   <header>
     <h1><img class="site-logo" src="logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map</h1>
     <span>Developer Portal</span>
-    <button class="logout" onclick="logout()">Log out</button>
+    <span id="local-badge" style="display:none;margin-left:auto;background:#fff;color:#0d0d0d;border:1px solid #fff;font-weight:700;border-radius:20px">● Local</span>
+    <a id="remote-link-btn" href="https://nayugu.github.io/nu-map/dev.html" target="_blank" class="btn sec" style="display:none;font-size:11px;padding:4px 12px;height:auto;text-decoration:none">Open on GitHub Pages →</a>
+    <button id="local-link-btn" onclick="openLocalPortal()" class="btn sec" style="display:none;margin-left:auto;font-size:11px;padding:4px 12px">Open Local →</button>
+    <button class="logout" id="logout-btn" onclick="logout()">Log out</button>
   </header>
 
   <nav>
-    <button class="active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+    <button class="active" onclick="switchTab('overview', this)">📊 Overview</button>
+    <button onclick="switchTab('changes', this)">📋 Changes</button>
     <button onclick="switchTab('preview', this)">📱 Preview</button>
-    <button onclick="switchTab('changes', this)">📋 Change Log</button>
-    <button onclick="switchTab('check', this)">🔍 Catalog Check</button>
-    <button onclick="switchTab('patches', this)" style="margin-left:auto">🩹 Course Patches</button>
+    <button id="nav-work-btn" onclick="switchTab('work', this)">⚙ Work</button>
+    <button onclick="switchTab('patches', this)" style="margin-left:auto">🩹 Patches</button>
     <button onclick="switchTab('data', this)">🔄 Data Sources</button>
   </nav>
 
-  <!-- ── Dashboard ─────────────────────────────────────────────── -->
-  <div id="tab-dashboard" class="tab-panel active">
+  <!-- ── Overview ─────────────────────────────────────────────── -->
+  <div id="tab-overview" class="tab-panel active">
     <div class="card" style="border:2px solid #f59e0b;background:rgba(245,158,11,0.07)">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
         <div>
@@ -246,31 +249,18 @@
       </div>
     </div>
 
-    <div class="card">
-      <h2>Quick Actions</h2>
-      <p class="text2" style="margin-bottom:14px">Run these commands in the repo root. Build afterwards to apply changes.</p>
-
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
-          <div>
-            <div style="font-size:13px;font-weight:600">Annual course refresh</div>
-            <code>npm run data:fetch:write && npm run data:patch:write && npm run build</code>
-          </div>
-          <button class="btn sec" onclick="copyCmd('npm run data:fetch:write && npm run data:patch:write && npm run build')">Copy</button>
+    <!-- Only show local-tools shortcut on non-local visits -->
+    <div class="card" id="remote-work-hint" style="display:none;border:1px solid var(--accent);background:var(--accent-bg)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="color:var(--accent);margin-bottom:4px">⚙ Work tools are local-only</h2>
+          <p class="text2" style="margin:0">Catalog check, data fixes, and push to GitHub need the local dev server. Run <code>npm run dev</code>, then open the local portal:</p>
         </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
-          <div>
-            <div style="font-size:13px;font-weight:600">Scrape from catalog.northeastern.edu</div>
-            <code>npm run data:scrape:write && npm run build</code>
-          </div>
-          <button class="btn sec" onclick="copyCmd('npm run data:scrape:write && npm run build')">Copy</button>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
-          <div>
-            <div style="font-size:13px;font-weight:600">Validate all patches</div>
-            <code>npm run data:validate</code>
-          </div>
-          <button class="btn sec" onclick="copyCmd('npm run data:validate')">Copy</button>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span style="font-size:11px;color:var(--text3)">Port:</span>
+          <input id="local-portal-port" type="number" value="5175" min="1024" max="65535"
+            style="width:64px;font-size:12px;padding:4px 6px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
+          <button class="btn" onclick="openLocalPortal()" style="font-size:13px;padding:8px 18px">Open Local Dev Portal →</button>
         </div>
       </div>
     </div>
@@ -285,19 +275,6 @@
         <a class="btn sec" href="./" target="_blank">🌍 Live Site</a>
       </div>
     </div>
-
-    <!-- Push card — only useful on localhost since it needs the local server -->
-    <div class="card" id="git-push-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-        <div>
-          <h2 style="margin:0 0 4px">Push to GitHub</h2>
-          <p class="text2" style="margin:0;font-size:12px">Commits <code>change-log.json</code>, <code>all-courses.json</code>, and data-meta files, then pushes to <code>main</code>.</p>
-        </div>
-        <button class="btn" style="background:#238636;border-color:#2ea043;font-size:14px;padding:10px 22px;flex-shrink:0" onclick="gitReviewAndPush()">⬆ Review & Push</button>
-      </div>
-      <div id="git-push-result" style="display:none;margin-top:12px;font-size:12px;padding:8px 12px;border-radius:6px"></div>
-    </div>
-
 
   </div>
 
@@ -532,8 +509,48 @@
   </div>
 </div>
 
-  <!-- ── Catalog Check tab ──────────────────────────────────────────────── -->
-  <div id="tab-check" class="tab-panel">
+  <!-- ── Work tab (local-only: Push + Catalog Check) ──────────────────── -->
+  <div id="tab-work" class="tab-panel">
+    <!-- Quick Actions -->
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <p class="text2" style="margin-bottom:14px">Run these commands in the repo root. Build afterwards to apply changes.</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Annual course refresh</div>
+            <code>npm run data:fetch:write && npm run data:patch:write && npm run build</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:fetch:write && npm run data:patch:write && npm run build')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Scrape from catalog.northeastern.edu</div>
+            <code>npm run data:scrape:write && npm run build</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:scrape:write && npm run build')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Validate all patches</div>
+            <code>npm run data:validate</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:validate')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Push card -->
+    <div class="card" id="git-push-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="margin:0 0 4px">Push to GitHub</h2>
+          <p class="text2" style="margin:0;font-size:12px">Commits <code>change-log.json</code>, <code>all-courses.json</code>, and data-meta files, then pushes to <code>main</code>.</p>
+        </div>
+        <button class="btn" style="background:#238636;border-color:#2ea043;font-size:14px;padding:10px 22px;flex-shrink:0" onclick="gitReviewAndPush()">⬆ Review & Push</button>
+      </div>
+      <div id="git-push-result" style="display:none;margin-top:12px;font-size:12px;padding:8px 12px;border-radius:6px"></div>
+    </div>
     <div class="card">
       <!-- Header row -->
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
@@ -758,6 +775,17 @@ async function attemptLogin() {
   const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
   document.querySelectorAll(".site-logo").forEach(el => { el.src = isLocal ? "dev_logo.png" : "logo.png"; });
 
+  // Show Local badge + GitHub Pages link; hide Log out (auth is bypassed on localhost)
+  if (isLocal) {
+    document.getElementById("local-badge").style.display     = "inline-block";
+    document.getElementById("remote-link-btn").style.display = "inline-flex";
+    document.getElementById("logout-btn").style.display      = "none";
+  } else {
+    // On remote: show persistent header link + hint card in Overview
+    document.getElementById("local-link-btn").style.display   = "inline-flex";
+    document.getElementById("remote-work-hint").style.display = "block";
+  }
+
   // Restore session (survives page refresh, clears on tab close)
   // Skip auth entirely on localhost — no point protecting your own machine
   if (isLocal || sessionStorage.getItem(SESSION_KEY) === "1") { showApp(); return; }
@@ -867,12 +895,25 @@ async function loadChangeLog() {
   const stateEl = document.getElementById("rotate-state");
   if (!listEl) return;
   try {
-    const [logRes, stateRes] = await Promise.all([
+    const isLocalHost = ["localhost", "127.0.0.1", ""].includes(location.hostname);
+    const [logRes, stateRes, deployedRes] = await Promise.all([
       fetch("change-log.json?"  + Date.now()),
       fetch("scrape-state.json?" + Date.now()).catch(() => null),
+      isLocalHost
+        ? fetch("https://nayugu.github.io/nu-map/change-log.json?" + Date.now()).catch(() => null)
+        : Promise.resolve(null),
     ]);
     const log   = logRes.ok   ? await logRes.json()   : { runs: [] };
     const state = stateRes?.ok ? await stateRes.json() : null;
+
+    // Build set of timestamps that are already in the deployed changelog
+    let deployedTs = null;
+    if (deployedRes?.ok) {
+      try {
+        const deployed = await deployedRes.json();
+        deployedTs = new Set(deployed.runs?.map(r => r.timestamp) ?? []);
+      } catch { /* ignore — just means no pending-push badges */ }
+    }
 
     // Render rotation state card
     if (stateEl) {
@@ -896,15 +937,20 @@ async function loadChangeLog() {
       listEl.innerHTML = '<p class="text2">No runs recorded yet. The change log is written each time <code>data:scrape:rotate:write</code> completes.</p>';
       return;
     }
-    listEl.innerHTML = log.runs.map(renderRun).join("");
+    listEl.innerHTML = log.runs.map(run => renderRun(run, deployedTs)).join("");
   } catch (err) {
     listEl.innerHTML = `<p class="text2">Could not load change-log.json: ${err.message}</p>`;
   }
 }
 
-function renderRun(run) {
+function renderRun(run, deployedTs = null) {
   const ts = new Date(run.timestamp).toLocaleString("en-US",
     { month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit" });
+
+  const isPending    = deployedTs !== null && !deployedTs.has(run.timestamp);
+  const pendingBadge = isPending
+    ? `<span style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b55;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap">⏳ Pending push</span>`
+    : '';
 
   // Special entries: catalog check launched, nuclear fix applied
   if (run.type === "catalog-check" || run.type === "nuclear-fix") {
@@ -940,7 +986,7 @@ function renderRun(run) {
     return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
         <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
-        <span style="font-size:11px;color:var(--text2)">${ts}</span>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
       </div>
       ${detail}
     </div>`;
@@ -985,6 +1031,7 @@ function renderRun(run) {
       <div style="font-size:14px;font-weight:700">${run.subject}</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         ${badge}
+        ${pendingBadge}
         <span style="font-size:11px;color:var(--text2)">${ts}</span>
       </div>
     </div>
@@ -1156,16 +1203,22 @@ window.addEventListener('resize', () => { if (pvReady) pvApply(); });
   const onHttpsRemote = location.protocol === 'https:' &&
     !['localhost', '127.0.0.1'].includes(location.hostname);
   if (onHttpsRemote) {
-    document.getElementById('ck-launch-row').style.display = 'none';
+    document.getElementById('ck-launch-row').style.display       = 'none';
     document.getElementById('ck-local-only-banner').style.display = 'block';
-    document.getElementById('git-push-card').style.display = 'none';
+    document.getElementById('git-push-card').style.display       = 'none';
+    document.getElementById('nav-work-btn').style.display        = 'none';
   }
 })();
 
-function ckOpenLocal() {
-  const port = document.getElementById('ck-local-port')?.value || '5175';
+// Opens the local dev portal — reads port from whichever input is visible
+function openLocalPortal() {
+  const port = document.getElementById('local-portal-port')?.value
+            || document.getElementById('ck-local-port')?.value
+            || '5175';
   window.open(`http://localhost:${port}/dev.html`, '_blank');
 }
+
+function ckOpenLocal() { openLocalPortal(); }
 
 let checkEvtSource = null;
 
