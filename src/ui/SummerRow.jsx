@@ -22,7 +22,7 @@ export default function SummerRow({ semA, semB }) {
   } = usePlanner();
 
   // Collapsible state for other credits
-  const [showOther, setShowOther] = useState(!collapseOtherCredits);
+  const [showOther, setShowOther] = useState(false);
 
   const year     = semA.id.replace("sumA", "");
   const sems     = [semA, semB].filter(Boolean);

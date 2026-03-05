@@ -49,14 +49,7 @@ export function PlannerProvider({ children }) {
   const [bonusSH, setBonusSH] = useState(() => (_saved?.persist && _saved.bonusSH != null) ? _saved.bonusSH : 0);
 
   // ── UI: Other credits collapse setting ──
-  const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => {
-    try {
-      const v = localStorage.getItem("ncp-collapse-other-credits");
-      return v === null ? true : v === "true";
-    } catch {
-      return true;
-    }
-  });
+  const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => true);
   const updateCollapseOtherCredits = (val) => {
     setCollapseOtherCredits(val);
     try { localStorage.setItem("ncp-collapse-other-credits", String(val)); } catch {}
