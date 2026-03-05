@@ -254,7 +254,11 @@
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
         <div>
           <h2 style="color:var(--accent);margin-bottom:4px">⚙ Work tools are local-only</h2>
-          <p class="text2" style="margin:0">Catalog check, data fixes, and push to GitHub need the local dev server. Run <code>npm run dev</code>, then open the local portal:</p>
+          <p class="text2" style="margin:0 0 10px">Catalog check, data fixes, and push to GitHub need the local dev server.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:8px 12px">
+            <code style="font-size:12px">npm run dev</code>
+            <button class="btn sec" onclick="copyCmd('npm run dev')" style="font-size:11px;padding:3px 10px;height:auto">Copy</button>
+          </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
           <span style="font-size:11px;color:var(--text3)">Port:</span>
@@ -390,6 +394,8 @@
   <div id="tab-preview" class="tab-panel">
     <div id="preview-toolbar">
       <h2>Preview</h2>
+      <span id="pv-local-label" style="display:none;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#f59e0b;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);border-radius:4px;padding:2px 8px">&#9679; Local build</span>
+      <span id="pv-remote-label" style="display:none;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);border:1px solid rgba(79,142,247,0.4);border-radius:4px;padding:2px 8px">&#9679; Deployed build</span>
       <div class="pv-sep"></div>
       <button class="pv-chip active" data-dev="iphoneX">📱 iPhone X</button>
       <div class="pv-sep"></div>
@@ -408,6 +414,12 @@
       <button class="pv-chip" id="pv-reload-btn" style="margin-left:auto">↺ Reload</button>
       <button class="pv-chip" id="pv-reset-btn">🗑 Reset state</button>
       <button class="pv-chip" id="pv-open-btn">Open ↗</button>
+    </div>
+    <div id="pv-local-banner" style="display:none;background:#f59e0b;color:#0d0d0d;font-size:11px;font-weight:700;text-align:center;padding:5px 14px;letter-spacing:0.03em;flex-shrink:0">
+      Previewing local build — changes here are <em>not yet deployed</em>. Use <strong>Work → Push to GitHub</strong> to deploy.
+    </div>
+    <div id="pv-remote-banner" style="display:none;background:var(--accent);color:#fff;font-size:11px;font-weight:700;text-align:center;padding:5px 14px;letter-spacing:0.03em;flex-shrink:0">
+      Previewing the <em>deployed</em> build at nayugu.github.io/nu-map — to preview unreleased changes, run <code style="background:rgba(255,255,255,0.2);color:#fff">npm run dev</code> and use the local portal.
     </div>
     <div id="preview-stage">
       <div id="pv-device-wrap">
@@ -777,13 +789,17 @@ async function attemptLogin() {
 
   // Show Local badge + GitHub Pages link; hide Log out (auth is bypassed on localhost)
   if (isLocal) {
-    document.getElementById("local-badge").style.display     = "inline-block";
-    document.getElementById("remote-link-btn").style.display = "inline-flex";
-    document.getElementById("logout-btn").style.display      = "none";
+    document.getElementById("local-badge").style.display      = "inline-block";
+    document.getElementById("remote-link-btn").style.display  = "inline-flex";
+    document.getElementById("logout-btn").style.display       = "none";
+    document.getElementById("pv-local-label").style.display   = "inline-block";
+    document.getElementById("pv-local-banner").style.display  = "block";
   } else {
-    // On remote: show persistent header link + hint card in Overview
-    document.getElementById("local-link-btn").style.display   = "inline-flex";
-    document.getElementById("remote-work-hint").style.display = "block";
+    // On remote: show persistent header link, hint card, and deployed preview label
+    document.getElementById("local-link-btn").style.display    = "inline-flex";
+    document.getElementById("remote-work-hint").style.display  = "block";
+    document.getElementById("pv-remote-label").style.display   = "inline-block";
+    document.getElementById("pv-remote-banner").style.display  = "block";
   }
 
   // Restore session (survives page refresh, clears on tab close)
