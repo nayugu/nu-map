@@ -784,9 +784,13 @@ async function attemptLogin() {
 
 // ── Initialization ───────────────────────────────────────────────────────────
 (function init() {
-  // Dynamic logo: dev_logo.png on localhost, logo.png in production
+  // Dynamic logo + favicon + title based on environment
   const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
-  document.querySelectorAll(".site-logo").forEach(el => { el.src = isLocal ? "dev_logo.png" : "logo.png"; });
+  const logoSrc = isLocal ? "dev_logo.png" : "logo.png";
+  document.querySelectorAll(".site-logo").forEach(el => { el.src = logoSrc; });
+  document.querySelector("link[rel='icon']").href = logoSrc;
+  document.title = isLocal ? "NU Map — Local Dev" : "NU Map — Developer Portal";
+  document.querySelector("header span").textContent = isLocal ? "Local Dev" : "Developer Portal";
 
   // Show Local badge + GitHub Pages link; hide Log out (auth is bypassed on localhost)
   if (isLocal) {

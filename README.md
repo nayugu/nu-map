@@ -32,13 +32,17 @@ npm run build    # output → dist/
 
 ## Dev portal
 
-The dev portal (`/dev.html`) is password-protected with PBKDF2-SHA256 (300k iterations). To set or change the password:
+There are two ways to access the dev portal (`/dev.html`):
+
+**Remote** (`https://nayugu.github.io/nu-map/dev.html`) — the deployed version, password-protected. Useful for checking the current change log, browsing patches and data sources, and previewing the live site. Work tools (catalog check, applying fixes, pushing to GitHub) are not available here.
+
+**Local** (`http://localhost:5173/dev.html`, after `npm run dev`) — the full portal. No password required on localhost. Includes everything in the remote version plus the Work tab: run the catalog check against `catalog.northeastern.edu`, apply fixes, review diffs, and push to GitHub. The catalog check server starts automatically with `npm run dev` and streams results over SSE on port 3333.
+
+To set or change the remote password (PBKDF2-SHA256, 300k iterations):
 
 ```bash
 npm run dev:pw   # interactive — generates a hash to paste into public/dev.html PW_HASH
 ```
-
-The portal provides a live catalog check tool, a change log, a course patch creator, and quick links. The catalog check server starts automatically with `npm run dev` and streams results over SSE on port 3333.
 
 ---
 
