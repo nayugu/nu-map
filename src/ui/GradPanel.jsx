@@ -575,6 +575,7 @@ export default function GradPanel() {
             )}
           </div>
           <CreditBar completedSH={totalSHDone} plannedSH={plannedSH} requiredSH={requiredSH} />
+          {!isPhone && (
           <div style={{ display: "flex", gap: 10, marginTop: 3 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
               <div style={{ width: 8, height: 8, borderRadius: 1, background: "var(--success)" }} />
@@ -593,6 +594,7 @@ export default function GradPanel() {
               </div>
             )}
           </div>
+          )}
         </div>
 
         {/* ── NUPath — always visible ───────────────────────────── */}

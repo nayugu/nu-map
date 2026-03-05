@@ -55,7 +55,7 @@ npm run data:validate       # validate all patches in data/patches/
 npm run data:patch          # preview what would change (dry run)
 ```
 
-Automated scraping rotates through all ~130 subjects every 3 days via GitHub Actions, opening a PR for developer review. Rotation state is in `data/scrape-state.json`.
+Automated scraping rotates through all ~130 subjects every 3 days via GitHub Actions, opening a PR for developer review. Rotation state is in `data/scrape-state.json`. Each run is logged in `public/change-log.json` (capped at 600 entries, ~4.5 years of history).
 
 See [`data/patches/CONTRIBUTING.md`](data/patches/CONTRIBUTING.md) for the manual patch format.
 

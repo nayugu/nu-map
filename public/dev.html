@@ -508,11 +508,22 @@
 <!-- ── Change Log tab ────────────────────────────────────────── -->
 <div id="tab-changes" class="tab-panel">
   <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px">
       <h2 style="margin:0">Scrape History</h2>
       <button class="btn sec" onclick="loadChangeLog()">↻ Refresh</button>
     </div>
-    <p class="text2" style="margin-bottom:16px">Each rotating scrape run is logged here. Runs open a PR — merge only after reviewing the diff.</p>
+    <p class="text2" style="margin-bottom:12px">Each rotating scrape run is logged here. Runs open a PR — merge only after reviewing the diff.</p>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap">
+      <input id="cl-search" type="text" placeholder="Search subject or date…" oninput="clFilter()"
+        style="flex:1;min-width:160px;font-size:12px;padding:5px 9px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none">
+      <select id="cl-sort" onchange="clFilter()"
+        style="font-size:12px;padding:5px 9px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none;cursor:pointer">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="changes">Most changes</option>
+        <option value="subject">Subject A–Z</option>
+      </select>
+    </div>
     <div id="change-log-list"><p class="text2">Loading…</p></div>
   </div>
 
@@ -911,6 +922,49 @@ async function gitDoPush() {
 }
 
 // ── Change Log ──────────────────────────────────────────────────────────────
+let clAllRuns    = [];
+let clDeployedTs = null;
+
+function clFilter() {
+  const listEl = document.getElementById("change-log-list");
+  if (!listEl) return;
+  const query = (document.getElementById("cl-search")?.value ?? "").trim().toLowerCase();
+  const sort  = document.getElementById("cl-sort")?.value ?? "newest";
+
+  let runs = [...clAllRuns];
+
+  if (query) {
+    runs = runs.filter(r => {
+      const subj = (r.subject ?? "").toLowerCase();
+      const ts   = new Date(r.timestamp).toLocaleString("en-US",
+        { month:"short", day:"numeric", year:"numeric" }).toLowerCase();
+      return subj.includes(query) || ts.includes(query);
+    });
+  }
+
+  if (sort === "oldest") {
+    runs = [...runs].reverse();
+  } else if (sort === "changes") {
+    runs = [...runs].sort((a, b) => {
+      const n = r => (r.added?.length ?? 0) + (r.modified?.length ?? 0) +
+                     (r.removedFromCatalog?.length ?? 0) + (r.fixed ?? 0) +
+                     (r.stats?.needPR ?? 0);
+      return n(b) - n(a);
+    });
+  } else if (sort === "subject") {
+    runs = [...runs].sort((a, b) => (a.subject ?? "").localeCompare(b.subject ?? ""));
+  }
+  // "newest": already ordered newest-first from the JSON
+
+  if (!runs.length) {
+    listEl.innerHTML = query
+      ? `<p class="text2">No runs match "${escHtml(query)}".</p>`
+      : '<p class="text2">No runs recorded yet.</p>';
+    return;
+  }
+  listEl.innerHTML = runs.map(run => renderRun(run, clDeployedTs)).join("");
+}
+
 async function loadChangeLog() {
   const listEl  = document.getElementById("change-log-list");
   const stateEl = document.getElementById("rotate-state");
@@ -954,11 +1008,13 @@ async function loadChangeLog() {
     }
 
     // Render run list
-    if (!log.runs?.length) {
+    clAllRuns    = log.runs ?? [];
+    clDeployedTs = deployedTs;
+    if (!clAllRuns.length) {
       listEl.innerHTML = '<p class="text2">No runs recorded yet. The change log is written each time <code>data:scrape:rotate:write</code> completes.</p>';
       return;
     }
-    listEl.innerHTML = log.runs.map(run => renderRun(run, deployedTs)).join("");
+    clFilter();
   } catch (err) {
     listEl.innerHTML = `<p class="text2">Could not load change-log.json: ${err.message}</p>`;
   }

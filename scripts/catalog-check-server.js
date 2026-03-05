@@ -36,11 +36,14 @@ const PORT          = (() => {
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+const CHANGE_LOG_MAX = 600;
+
 function appendLogEntry(entry) {
   try {
     const log = existsSync(CHANGE_LOG) ? JSON.parse(readFileSync(CHANGE_LOG, "utf8")) : { runs: [] };
     if (!Array.isArray(log.runs)) log.runs = [];
     log.runs.unshift(entry); // prepend — newest first
+    if (log.runs.length > CHANGE_LOG_MAX) log.runs = log.runs.slice(0, CHANGE_LOG_MAX);
     writeFileSync(CHANGE_LOG, JSON.stringify(log, null, 2) + "\n", "utf8");
   } catch { /* non-fatal */ }
 }
