@@ -109,12 +109,78 @@ function parseNUPath(text) {
 
 // ── Prerequisite text → structured array (best-effort) ───────────────────────
 function parsePrereqText(text) {
-  if (!text) return [];
-  // Return the raw text wrapped so the UI can display it.
-  // Full structured parsing mirrors all-courses.json prereq arrays and is
-  // complex; for now return a single-element array with the raw string so
-  // existing prereq UI still gets populated.
-  return [text.trim()];
+    if (!text) return [];
+
+    // Remove "may be taken concurrently" and grade requirements
+    let cleaned = text
+      .replace(/\(may be taken concurrently\)/gi, '')
+      .replace(/with a minimum grade of [A-Z][+-]?/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    // Strip trailing period if present
+    cleaned = cleaned.replace(/\.\s*$/, '');
+
+    // Tokenize: split on "and"/"or" while preserving them, and handle parens
+    const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = coursePattern.exec(cleaned)) !== null) {
+      // Check text between last match and this match for operators and parens
+      const between = cleaned.slice(lastIndex, match.index);
+      extractOperators(between, parts);
+
+      parts.push({ subject: match[1], number: match[2] });
+      lastIndex = coursePattern.lastIndex;
+    }
+
+    // Check for trailing operators after last course ref
+    if (lastIndex < cleaned.length) {
+      extractOperators(cleaned.slice(lastIndex), parts);
+    }
+
+    // Post-process: insert implicit "And" between adjacent ) and ( with no operator
+    const result = [];
+    for (let i = 0; i < parts.length; i++) {
+      result.push(parts[i]);
+      if (i < parts.length - 1) {
+        const cur  = parts[i];
+        const next = parts[i + 1];
+        const curIsEnd  = cur === ')' || (typeof cur === 'object' && cur.subject);
+        const nextIsStart = next === '(' || (typeof next === 'object' && next.subject);
+        if (curIsEnd && nextIsStart) {
+          result.push('And');
+        }
+      }
+    }
+    return result;
+  }
+
+  function extractOperators(text, parts) {
+      const normalized = text.replace(/;/g, ' ').trim();
+      if (!normalized) return;
+      const opPattern = /(\(|\)|(?:^|\s)(and|or)(?:\s|$))/gi;
+      let m;
+      while ((m = opPattern.exec(normalized)) !== null) {
+        const token = (m[2] || m[1]).trim();
+        if (token === '(') parts.push('(');
+        else if (token === ')') parts.push(')');
+        else if (/^or$/i.test(token)) parts.push('Or');
+        else if (/^and$/i.test(token)) parts.push('And');
+      }
+  }
+
+  function parseCoreqText(text) {
+    if (!text) return [];
+    const refs = [];
+    const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)/g;
+    let match;
+    while ((match = coursePattern.exec(text)) !== null) {
+      refs.push({ subject: match[1], number: match[2] });
+    }
+    return refs;
 }
 
 // ── HTML fetch with basic error handling ─────────────────────────────────────
@@ -187,14 +253,18 @@ function parseSubjectPage(html, subjectCode) {
       : parseNUPath(description);
 
     // ── Prereqs / coreqs (text extraction) ──
-    let prereqText = "";
-    let coreqText  = "";
+    const extraEls = block.querySelectorAll('.courseblockextra, p');
+    let prereqText = '';
+    let coreqText = '';
 
-    const extras = block.querySelectorAll(".courseblockextra, .cb_extra, .course-extras, p");
-    for (const el of extras) {
-      const t = el.textContent.toLowerCase();
-      if (t.includes("prerequisite"))  prereqText = el.textContent.replace(/prerequisite[s]?(?:\(s\))?:?\s*/i, "").trim();
-      if (t.includes("corequisite"))   coreqText  = el.textContent.replace(/corequisite[s]?(?:\(s\))?:?\s*/i,  "").trim();
+    for (const el of extraEls) {
+      const text = el.textContent.replace(/\u00a0/g, ' ').trim();
+      if (/prerequisite\(s\)\s*:/i.test(text)) {
+        prereqText = text.replace(/.*prerequisite\(s\)\s*:\s*/i, '').trim();
+      }
+      if (/corequisite\(s\)\s*:/i.test(text)) {
+        coreqText = text.replace(/.*corequisite\(s\)\s*:\s*/i, '').trim();
+      }
     }
 
     // ── Schedule type heuristic ──
@@ -217,7 +287,7 @@ function parseSubjectPage(html, subjectCode) {
       nuPath,
       sections: [],      // catalog has no section/term data
       description,
-      coreqs:  coreqText  ? parsePrereqText(coreqText)  : [],
+      coreqs:  coreqText  ? parseCoreqText(coreqText)  : [],
       prereqs: prereqText ? parsePrereqText(prereqText) : [],
     });
   }
@@ -365,8 +435,8 @@ async function runRotate() {
         scheduleType: cat.scheduleType || prev.scheduleType,
         description:  cat.description  || prev.description,
         nuPath:       cat.nuPath?.length  ? cat.nuPath  : prev.nuPath,
-        prereqs:      cat.prereqs?.length ? cat.prereqs : prev.prereqs,
-        coreqs:       cat.coreqs?.length  ? cat.coreqs  : prev.coreqs,
+        prereqs: (Array.isArray(cat.prereqs) && cat.prereqs.length > 0) ? cat.prereqs : (prev.prereqs ?? []),
+        coreqs: (Array.isArray(cat.coreqs) && cat.coreqs.length > 0) ? cat.coreqs : (prev.coreqs ?? []),
       };
       const changes = diffCourse(prev, merged);
       if (changes.length > 0) {

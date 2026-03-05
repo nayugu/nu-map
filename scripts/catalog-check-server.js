@@ -38,6 +38,76 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const CHANGE_LOG_MAX = 600;
 
+// ── Prereq/coreq parsing helpers (identical to scrape-catalog.js) ──
+function parsePrereqText(text) {
+  if (!text) return [];
+  // Remove "may be taken concurrently" and grade requirements
+  let cleaned = text
+    .replace(/\(may be taken concurrently\)/gi, '')
+    .replace(/with a minimum grade of [A-Z][+-]?/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  // Strip trailing period if present
+  cleaned = cleaned.replace(/\.\s*$/, '');
+  // Tokenize: split on "and"/"or" while preserving them, and handle parens
+  const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)/g;
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+  while ((match = coursePattern.exec(cleaned)) !== null) {
+    // Check text between last match and this match for operators and parens
+    const between = cleaned.slice(lastIndex, match.index);
+    extractOperators(between, parts);
+    parts.push({ subject: match[1], number: match[2] });
+    lastIndex = coursePattern.lastIndex;
+  }
+  // Check for trailing operators after last course ref
+  if (lastIndex < cleaned.length) {
+    extractOperators(cleaned.slice(lastIndex), parts);
+  }
+  // Post-process: insert implicit "And" between adjacent ) and ( with no operator
+  const result = [];
+  for (let i = 0; i < parts.length; i++) {
+    result.push(parts[i]);
+    if (i < parts.length - 1) {
+      const cur  = parts[i];
+      const next = parts[i + 1];
+      const curIsEnd  = cur === ')' || (typeof cur === 'object' && cur.subject);
+      const nextIsStart = next === '(' || (typeof next === 'object' && next.subject);
+      if (curIsEnd && nextIsStart) {
+        result.push('And');
+      }
+    }
+  }
+  return result;
+}
+
+function extractOperators(text, parts) {
+  // Remove commas and semicolons, treat as whitespace
+  const normalized = text.replace(/[,;]/g, ' ').trim();
+  if (!normalized) return;
+  const opPattern = /(\(|\)|(?:^|\s)(and|or)(?:\s|$))/gi;
+  let m;
+  while ((m = opPattern.exec(normalized)) !== null) {
+    const token = (m[2] || m[1]).trim();
+    if (token === '(') parts.push('(');
+    else if (token === ')') parts.push(')');
+    else if (/^or$/i.test(token)) parts.push('Or');
+    else if (/^and$/i.test(token)) parts.push('And');
+  }
+}
+
+function parseCoreqText(text) {
+  if (!text) return [];
+  const refs = [];
+  const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)/g;
+  let match;
+  while ((match = coursePattern.exec(text)) !== null) {
+    refs.push({ subject: match[1], number: match[2] });
+  }
+  return refs;
+}
+
 function appendLogEntry(entry) {
   try {
     const log = existsSync(CHANGE_LOG) ? JSON.parse(readFileSync(CHANGE_LOG, "utf8")) : { runs: [] };
@@ -123,7 +193,25 @@ function parseSubjectPage(html, subjectCode) {
     const nuPathEl = block.querySelector("[class*='nupath'], [class*='NUpath'], [class*='attribute']");
     const nuPath = nuPathEl ? parseNUPath(nuPathEl.textContent) : parseNUPath(description);
 
-    courses.push({ subject, number, title, creditsMin, creditsMax, nuPath, description });
+    // ── Extract prereqs and coreqs from courseblockextra paragraphs ──
+    const extraEls = block.querySelectorAll('.courseblockextra, p');
+    let prereqText = '';
+    let coreqText = '';
+
+    for (const el of extraEls) {
+      const text = el.textContent.replace(/\u00a0/g, ' ').trim();
+      if (/prerequisite\(s\)\s*:/i.test(text)) {
+        prereqText = text.replace(/.*prerequisite\(s\)\s*:\s*/i, '').trim();
+      }
+      if (/corequisite\(s\)\s*:/i.test(text)) {
+        coreqText = text.replace(/.*corequisite\(s\)\s*:\s*/i, '').trim();
+      }
+    }
+
+    const prereqs = prereqText ? parsePrereqText(prereqText) : [];
+    const coreqs = coreqText ? parseCoreqText(coreqText) : [];
+
+    courses.push({ subject, number, title, creditsMin, creditsMax, nuPath, description, prereqs, coreqs });
   }
   return courses;
 }
@@ -176,6 +264,34 @@ function fieldsDiffer(prev, cat) {
     // course fundamentally changed — low priority, no PR needed.
     const isRangeOnly = catMin !== catMax;
     diffs.push({ field: "credits", was: wasStr, now: nowStr, isRangeOnly });
+  }
+
+  // Compare prereq course references (not exact structure, just referenced courses)
+  function extractCourseRefs(prereqs) {
+    const refs = new Set();
+    function walk(node) {
+      if (!node) return;
+      if (Array.isArray(node)) { node.forEach(walk); return; }
+      if (typeof node === 'object' && node.subject && node.number) {
+        refs.add(`${node.subject} ${node.number}`);
+      }
+    }
+    walk(prereqs);
+    return [...refs].sort();
+  }
+
+  // Prereqs
+  const prevRefs = extractCourseRefs(prev.prereqs);
+  const catRefs = extractCourseRefs(cat.prereqs);
+  if (catRefs.length > 0 && JSON.stringify(prevRefs) !== JSON.stringify(catRefs)) {
+    diffs.push({ field: 'prereqs', was: prev.prereqs ?? [], now: cat.prereqs });
+  }
+
+  // Coreqs (same logic)
+  const prevCoreqRefs = extractCourseRefs(prev.coreqs);
+  const catCoreqRefs = extractCourseRefs(cat.coreqs);
+  if (catCoreqRefs.length > 0 && JSON.stringify(prevCoreqRefs) !== JSON.stringify(catCoreqRefs)) {
+    diffs.push({ field: 'coreqs', was: prev.coreqs ?? [], now: cat.coreqs });
   }
 
   return diffs;
@@ -439,6 +555,8 @@ const server = createServer((req, res) => {
             ...(cMax !== cMin ? { creditsMax: cMax } : {}),
             nuPath:      cd.nuPath ?? [],
             description: cd.description ?? "",
+            prereqs:     cd.prereqs ?? [],
+            coreqs:      cd.coreqs ?? [],
           };
           courseMap.set(item.code, newCourse);
           nAdded++;

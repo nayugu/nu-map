@@ -1535,6 +1535,20 @@ function ckSetFilter(f, btn) {
   ckRender();
 }
 
+
+// Helper to format prereq/coreq token arrays as human-readable text
+function formatPrereqTokens(val) {
+  if (!val) return '(none)';
+  if (!Array.isArray(val)) return String(val);
+  if (val.length === 0) return '(none)';
+  return val.map(tok => {
+    if (typeof tok === 'string') return tok;
+    if (tok && tok.subject && tok.number) return tok.subject + ' ' + tok.number;
+    if (Array.isArray(tok)) return '(' + formatPrereqTokens(tok) + ')';
+    return String(tok);
+  }).join(' ');
+}
+
 function ckRender() {
   const search = (document.getElementById('ck-search')?.value ?? '').trim().toUpperCase();
   let items = ckDiscrepancies;
@@ -1583,8 +1597,16 @@ function ckRender() {
       continue;
     }
     for (const { field, was, now, isRangeOnly } of item.diffs) {
-      const b = String(was  ?? 'null').slice(0, 80);
-      const a = String(now  ?? 'null').slice(0, 80);
+      let b = was;
+      let a = now;
+      // Use human-readable formatting for prereq/coreq fields
+      if (field === 'prereqs' || field === 'coreqs') {
+        b = formatPrereqTokens(was);
+        a = formatPrereqTokens(now);
+      } else {
+        b = String(was ?? 'null').slice(0, 80);
+        a = String(now ?? 'null').slice(0, 80);
+      }
       const badge = isRangeOnly
         ? `<span style="background:#a78bfa22;color:#a78bfa;border-radius:3px;padding:1px 5px;font-size:10px">≈ range</span>`
         : `<span style="background:#f5a62322;color:var(--warn);border-radius:3px;padding:1px 5px;font-size:10px">⚠ changed</span>`;
@@ -1592,8 +1614,8 @@ function ckRender() {
         <td style="white-space:nowrap">${escHtml(item.code)}</td>
         <td>${badge}</td>
         <td style="color:var(--text3);white-space:nowrap">${field}</td>
-        <td style="color:#e94560;word-break:break-all;max-width:200px">${escHtml(b)}</td>
-        <td style="color:var(--accent);word-break:break-all;max-width:200px">${escHtml(a)}</td>
+        <td style="color:#e94560;word-break:break-all;max-width:340px">${escHtml(b)}</td>
+        <td style="color:var(--accent);word-break:break-all;max-width:340px">${escHtml(a)}</td>
       </tr>`);
     }
   }
