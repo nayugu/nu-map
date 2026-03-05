@@ -373,6 +373,342 @@ const server = createServer((req, res) => {
     return;
   }
 
+  // Add this to your catalog-check-server.js after the existing /run endpoint
+
+  // ═══════════════════════════════════════════════════════════════════════════
+// REPLACE your existing /offerings-check handler in catalog-check-server.js
+// with this version. It drives the loop from the server and streams
+// per-subject SSE events — exactly like /run does for the catalog check.
+// ═══════════════════════════════════════════════════════════════════════════
+
+  if (url.pathname === "/offerings-check") {
+    res.writeHead(200, {
+      ...corsHeaders,
+      "Content-Type":  "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection":    "keep-alive",
+    });
+    res.flushHeaders?.();
+
+    const send = (type, data) => {
+      const payload = JSON.stringify({ type, ...data });
+      res.write(`data: ${payload}\n\n`);
+    };
+
+    send("status", { msg: "Starting comprehensive offerings check…" });
+
+    (async () => {
+      try {
+        const { SmartBannerOfferingsSystem } = await import(
+          resolve(ROOT, "src/data/bannerOfferingsLoader.js")
+        );
+        const banner = new SmartBannerOfferingsSystem();
+
+        // ── Load previous state ──────────────────────────────────────
+        const offeringsStateFile = resolve(ROOT, "public/offerings-state.json");
+        let previousState = null;
+        try {
+          if (existsSync(offeringsStateFile)) {
+            previousState = JSON.parse(readFileSync(offeringsStateFile, "utf8"));
+          }
+        } catch {
+          send("status", { msg: "No previous state found — will create baseline" });
+        }
+
+        // ── Phase 1: Classify terms and find data-rich ones ───────────
+        send("status", { msg: "Fetching available terms from Banner…" });
+        const allTerms = await banner.getAllTerms();
+        send("status", { msg: `Got ${allTerms.length} terms. Classifying and probing…` });
+
+        // Use the modular classifier to group terms by semester type
+        const { SmartBannerOfferingsSystem: BannerClass } = await import(
+          resolve(ROOT, "src/data/bannerOfferingsLoader.js")
+        );
+        const grouped = BannerClass.classifyAndGroupTerms(allTerms);
+        const SEMESTER_ORDER = BannerClass.SEMESTER_ORDER;
+
+        const smartTerms = {};
+        const MIN_COURSES = 50;
+
+        for (const semType of SEMESTER_ORDER) {
+          const candidates = grouped[semType];
+          if (!candidates || !candidates.length) continue;
+
+          for (const candidate of candidates) {
+            send("term_probe", {
+              semType,
+              termCode: candidate.code,
+              termName: candidate.description,
+            });
+
+            const probe = await banner.testTermDataRichness(candidate.code);
+
+            if (probe.totalCourses >= MIN_COURSES) {
+              smartTerms[semType] = {
+                termCode: candidate.code,
+                termName: banner.formatTermName(candidate.description),
+                termDescription: candidate.description,
+                totalCourses: probe.totalCourses,
+                totalSubjects: probe.totalSubjects,
+              };
+              send("term_found", {
+                semType,
+                termCode: candidate.code,
+                termName: banner.formatTermName(candidate.description),
+                estimatedCourses: probe.totalCourses,
+                subjects: probe.totalSubjects,
+              });
+              break;
+            } else {
+              send("term_skip", {
+                semType,
+                termCode: candidate.code,
+                courses: probe.totalCourses,
+                reason: `only ${probe.totalCourses} courses`,
+              });
+            }
+          }
+        }
+
+        const semTypes = Object.keys(smartTerms);
+        if (!semTypes.length) {
+          send("error", { msg: "No data-rich terms found for any semester type" });
+          send("end", {});
+          res.end();
+          return;
+        }
+
+        // ── Phase 2: Fetch all subjects per semester (the big loop) ──
+        // Count total subjects across all semesters for a global progress bar
+        const semSubjects = {};  // { fall: [{code,description},...], ... }
+        let totalSubjects = 0;
+
+        for (const semType of semTypes) {
+          const ti = smartTerms[semType];
+          await banner.declareTermInterest(ti.termCode);
+          const subjects = await banner.getSubjectsForTerm(ti.termCode);
+          semSubjects[semType] = subjects;
+          totalSubjects += subjects.length;
+        }
+
+        send("start", {
+          totalSubjects,
+          semesters: Object.fromEntries(
+            semTypes.map(st => [st, {
+              termCode: smartTerms[st].termCode,
+              termName: smartTerms[st].termName,
+              subjectCount: semSubjects[st].length,
+            }])
+          ),
+        });
+
+        // ── Process every subject in every semester ──────────────────
+        const offeringsBySemester = {};
+        let globalIdx = 0;
+
+        // Running totals for the stat cards
+        const totals = {
+          subjects_done: 0,
+          courses_read:  0,
+          errors:        0,
+        };
+
+        for (const semType of semTypes) {
+          const ti       = smartTerms[semType];
+          const subjects = semSubjects[semType];
+
+          send("semester_start", {
+            semType,
+            termCode: ti.termCode,
+            termName: ti.termName,
+            subjectCount: subjects.length,
+          });
+
+          // Re-declare term interest (Banner sessions can expire)
+          await banner.declareTermInterest(ti.termCode);
+
+          const semesterData = {
+            termCode:        ti.termCode,
+            termName:        ti.termName,
+            termDescription: ti.termDescription,
+            totalSubjects:   subjects.length,
+            courses:         {},
+            stats:           { totalCourses: 0, subjectsCompleted: 0, errors: 0 },
+          };
+
+          for (let i = 0; i < subjects.length; i++) {
+            const subj = subjects[i];
+            globalIdx++;
+
+            send("subject_start", {
+              globalIndex: globalIdx,
+              globalTotal: totalSubjects,
+              semType,
+              termName: ti.termName,
+              subjectCode: subj.code,
+              subjectName: subj.description,
+              localIndex: i,
+              localTotal: subjects.length,
+            });
+
+            let courseCount = 0;
+            let errorMsg = null;
+
+            try {
+              const courses = await banner.searchCourses(ti.termCode, subj.code, "", 500);
+              courseCount = courses.length;
+
+              if (courses.length > 0) {
+                semesterData.courses[subj.code] = courses.map(c => ({
+                  subject:       c.subject,
+                  number:        c.courseNumber,
+                  title:         c.courseTitle,
+                  crn:           c.courseReferenceNumber,
+                  credits:       c.creditHourLow || c.creditHours || 4,
+                  sections:      1,
+                  instructor:    c.faculty?.[0]?.displayName || "TBA",
+                  enrollment:    c.enrollment || 0,
+                  maxEnrollment: c.maximumEnrollment || 0,
+                  scheduleType:  c.scheduleTypeDescription || "Lecture",
+                }));
+                semesterData.stats.totalCourses += courses.length;
+              }
+
+              semesterData.stats.subjectsCompleted++;
+              totals.subjects_done++;
+              totals.courses_read += courses.length;
+            } catch (err) {
+              errorMsg = err.message;
+              semesterData.stats.errors++;
+              totals.errors++;
+            }
+
+            // Progress percentage based on global subject count
+            const pct = Math.round((globalIdx / totalSubjects) * 100);
+
+            send("subject_done", {
+              globalIndex: globalIdx,
+              globalTotal: totalSubjects,
+              pct,
+              semType,
+              termName: ti.termName,
+              subjectCode: subj.code,
+              subjectName: subj.description,
+              courses: courseCount,
+              error: errorMsg,
+              // Running totals
+              ...totals,
+              // Per-semester running total
+              sem_courses: semesterData.stats.totalCourses,
+              sem_subjects_done: semesterData.stats.subjectsCompleted,
+              sem_errors: semesterData.stats.errors,
+            });
+
+            if (i < subjects.length - 1) await banner.delay();
+          }
+
+          offeringsBySemester[semType] = semesterData;
+
+          send("semester_done", {
+            semType,
+            termCode: ti.termCode,
+            termName: ti.termName,
+            totalCourses: semesterData.stats.totalCourses,
+            subjectsDone: semesterData.stats.subjectsCompleted,
+            errors: semesterData.stats.errors,
+          });
+        }
+
+        // ── Phase 3: Compare with previous state ────────────────────
+        send("status", { msg: "Comparing with previous state…" });
+
+        let changes;
+        if (previousState?.bySemester) {
+          changes = banner.compareOfferingsBySemester(
+            previousState.bySemester,
+            offeringsBySemester
+          );
+        } else {
+          changes = {
+            totalChanges: 0,
+            bySemester: Object.fromEntries(
+              Object.entries(offeringsBySemester).map(([st, data]) => [
+                st,
+                {
+                  termName:     data.termName,
+                  termCode:     data.termCode,
+                  type:         "baseline",
+                  totalCourses: data.stats.totalCourses,
+                  changes:      { newly: 0, stopped: 0, modified: 0 },
+                  details:      [],
+                },
+              ])
+            ),
+          };
+        }
+
+        // ── Save current state ──────────────────────────────────────
+        const currentState = {
+          timestamp:    new Date().toISOString(),
+          bySemester:   offeringsBySemester,
+          totalCourses: Object.values(offeringsBySemester).reduce(
+            (sum, sem) => sum + sem.stats.totalCourses, 0
+          ),
+          terms: Object.values(offeringsBySemester)
+            .map(sem => `${sem.termName} (${sem.termCode})`)
+            .join(", "),
+        };
+        writeFileSync(offeringsStateFile, JSON.stringify(currentState, null, 2));
+
+        // ── Send final results ──────────────────────────────────────
+        send("results", {
+          totalCourses:  currentState.totalCourses,
+          totalChanges:  changes.totalChanges,
+          terms:         currentState.terms,
+          semesters:     changes.bySemester,
+          termsChecked:  semTypes.length,
+        });
+
+        appendLogEntry({
+          type:         "offerings-check",
+          subject:      "📅 Course Offerings",
+          timestamp:    currentState.timestamp,
+          terms:        currentState.terms,
+          totalCourses: currentState.totalCourses,
+          totalChanges: changes.totalChanges,
+          bySemester:   changes.bySemester,
+          stats: {
+            totalChanges: changes.totalChanges,
+            semesters:    semTypes.length,
+          },
+        });
+
+        send("done", {
+          success:      true,
+          totalChanges: changes.totalChanges,
+          totalCourses: currentState.totalCourses,
+          terms:        currentState.terms,
+        });
+      } catch (error) {
+        console.error("Offerings check error:", error);
+        send("error", { msg: error.message });
+
+        appendLogEntry({
+          type:      "offerings-error",
+          subject:   "📅 Course Offerings (Error)",
+          timestamp: new Date().toISOString(),
+          error:     error.message,
+        });
+      }
+
+      send("end", {});
+      res.end();
+    })();
+
+    req.on("close", () => { /* client disconnected */ });
+    return;
+  }
+
   // ── POST /fix — apply catalog discrepancies directly to all-courses.json ────────
   if (req.method === "POST" && url.pathname === "/fix") {
     let body = "";

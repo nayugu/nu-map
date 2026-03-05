@@ -697,6 +697,529 @@
         </div>
       </div>
     </div>
+  
+    <div class="card">
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <span style="font-size:28px;line-height:1">📅</span>
+        <div>
+          <h2 style="margin:0">Schedule Changes</h2>
+          <p class="text2" style="margin:2px 0 0">Track course offerings across semesters with smart term detection</p>
+        </div>
+      </div>
+
+      <!-- Launch row -->
+      <div id="sc-launch-row">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px;margin:18px 0 12px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Comprehensive offerings check (finds data-rich terms)</div>
+            <code>npm run offerings:check</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run offerings:check')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px">
+          <button class="launch-btn" id="offerings-check-btn" onclick="startOfferingsCheck()" style="background:#2563eb;border-color:#3b82f6;box-shadow:0 0 26px rgba(37,99,235,0.4)">📅 Check All Offerings</button>
+          <button class="btn sec" id="offerings-stop-btn" onclick="stopOfferingsCheck()" disabled style="height:46px;padding:0 20px">■ Stop</button>
+          <span id="sc-status-badge" style="display:none;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:3px;background:rgba(37,99,235,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.4);animation:ck-pulse 1.4s ease-in-out infinite">● Checking</span>
+        </div>
+      </div>
+
+      <!-- Progress section (hidden until run starts) -->
+      <div id="offerings-progress-wrap" style="display:none">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span id="offerings-status-msg" style="font-size:11px;color:var(--text2)">Starting…</span>
+          <span id="offerings-pct" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums">0%</span>
+        </div>
+        <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:20px">
+          <div id="offerings-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#2563eb,#3b82f6);border-radius:4px;transition:width 0.25s ease"></div>
+        </div>
+
+        <!-- Terms Summary -->
+        <div id="sc-terms-summary" style="display:none;margin-bottom:16px;padding:12px;background:var(--bg3);border-radius:var(--radius);font-size:12px;color:var(--text2)">
+          <strong>Terms checked:</strong> <span id="sc-terms-list">Loading...</span>
+        </div>
+
+        <!-- Semester Breakdown Cards -->
+        <div id="sc-semester-breakdown" style="display:none;margin-bottom:20px">
+          <h3 style="font-size:13px;margin:0 0 12px;color:var(--text2)">Semester Breakdown</h3>
+          <div style="display:grid;grid-template-columns:1fr;gap:12px">
+            <div id="sc-semester-cards"></div>
+          </div>
+        </div>
+
+        <!-- Overall Stats -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px">
+          <div class="ck-card"><div class="ck-val" id="sc-total-courses" style="color:var(--text)">0</div><div class="ck-lbl">Total courses</div></div>
+          <div class="ck-card"><div class="ck-val" id="sc-total-changes" style="color:var(--warn)">0</div><div class="ck-lbl">Total changes</div></div>
+          <div class="ck-card"><div class="ck-val" id="sc-newly-offered" style="color:var(--accent)">0</div><div class="ck-lbl">🆕 Newly offered</div></div>
+          <div class="ck-card"><div class="ck-val" id="sc-stopped-offering" style="color:var(--error)">0</div><div class="ck-lbl">❌ Stopped offering</div></div>
+          <div class="ck-card"><div class="ck-val" id="sc-schedule-changes" style="color:var(--warn)">0</div><div class="ck-lbl">📅 Schedule changes</div></div>
+          <div class="ck-card"><div class="ck-val" id="sc-terms-checked" style="color:var(--text2)">0</div><div class="ck-lbl">Semesters</div></div>
+        </div>
+
+        <div id="sc-check-log" style="max-height:360px;overflow-y:auto;border-top:1px solid var(--border);padding-top:8px;margin-bottom:16px"></div>
+
+        <!-- Change Inspector -->
+        <div id="sc-inspector-wrap" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+            <h3 style="margin:0;font-size:13px">Change Inspector</h3>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="sc-inspector-count" style="font-size:11px;color:var(--text3)">0 changes</span>
+              <button class="btn sec" style="font-size:11px;padding:4px 10px" onclick="scExportChanges()">Export JSON</button>
+            </div>
+          </div>
+
+          <div class="ck-filter-bar">
+            <button class="ck-filter-btn active" onclick="scSetFilter('all',this)">All</button>
+            <button class="ck-filter-btn" onclick="scSetFilter('newly',this)">🆕 New</button>
+            <button class="ck-filter-btn" onclick="scSetFilter('stopped',this)">❌ Stopped</button>
+            <button class="ck-filter-btn" onclick="scSetFilter('modified',this)">📅 Modified</button>
+            
+            <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+              <select id="sc-filter-semester" onchange="scApplyFilters()" style="font-size:11px;padding:3px 6px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
+                <option value="">All semesters</option>
+              </select>
+              <select id="sc-filter-subject" onchange="scApplyFilters()" style="font-size:11px;padding:3px 6px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
+                <option value="">All subjects</option>
+              </select>
+              <input id="sc-search" placeholder="Search course…" oninput="scApplyFilters()" style="width:120px;font-size:11px;padding:3px 6px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none">
+            </div>
+          </div>
+
+          <div style="max-height:400px;overflow-y:auto">
+            <table id="sc-inspector-table" style="width:100%;border-collapse:collapse;font-size:11px">
+              <thead><tr><th style="text-align:left;padding:5px 8px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Course</th><th style="text-align:left;padding:5px 8px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Semester</th><th style="text-align:left;padding:5px 8px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Type</th><th style="text-align:left;padding:5px 8px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Change</th></tr></thead>
+              <tbody id="sc-inspector-body">
+                <tr><td colspan="4" style="color:var(--text3);text-align:center;padding:20px 0">Run a check to populate</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Nuclear Fix Section -->
+          <div style="margin-top:20px;border-top:2px solid #2563eb44;padding-top:18px">
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+              <div style="flex:1;min-width:280px">
+                <p style="font-size:13px;font-weight:700;color:#2563eb;margin:0 0 5px">📅 Offerings Update Zone</p>
+                <p style="font-size:11px;color:var(--text2);margin:0;line-height:1.55">
+                  Updates course offering data based on current Banner information.
+                  Applies <span id="sc-fix-count" style="font-weight:700;color:#2563eb">0</span> <span id="sc-fix-type-desc" style="color:var(--text2)">changes</span> from the current filter.
+                  <span style="color:var(--text3)">Updates offering metadata only.</span>
+                </p>
+                <!-- Fix filters -->
+                <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+                  <select id="sc-fix-semester" style="font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
+                    <option value="">All semesters</option>
+                  </select>
+                  <select id="sc-fix-subject" style="font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
+                    <option value="">All subjects</option>
+                  </select>
+                  <select id="sc-fix-type" style="font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
+                    <option value="">All changes</option>
+                    <option value="newly">New only</option>
+                    <option value="stopped">Stopped only</option>
+                    <option value="modified">Modified only</option>
+                  </select>
+                </div>
+              </div>
+              <button id="sc-fix-btn" class="launch-btn" onclick="scApplyFixes()" style="background:#1e40af;border-color:#2563eb;box-shadow:0 0 26px rgba(37,99,235,0.5);font-size:14px;height:auto;padding:12px 28px;flex-shrink:0">
+                📅 Update Offerings
+              </button>
+            </div>
+
+            <!-- Fix progress -->
+            <div id="sc-fix-progress" style="display:none;margin-top:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span id="sc-fix-status" style="font-size:11px;color:var(--text2)">Updating…</span>
+                <span id="sc-fix-pct" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums">0%</span>
+              </div>
+              <div style="height:7px;background:var(--bg3);border-radius:4px;overflow:hidden">
+                <div id="sc-fix-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#1e40af,#2563eb);border-radius:4px;transition:width 0.2s ease"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    // Schedule Changes (Offerings) System — STREAMS PER-SUBJECT EVENTS
+
+    let offeringsEvtSource = null;
+    let scAllChanges = [];
+    let scCurrentFilter = 'all';
+    let scCurrentSemesters = {};
+
+    function startOfferingsCheck() {
+      const port = document.getElementById('check-port')?.value || '3333';
+      const url = `http://localhost:${port}/offerings-check`;
+
+      document.getElementById('offerings-progress-wrap').style.display = 'block';
+      document.getElementById('offerings-check-btn').disabled = true;
+      document.getElementById('offerings-stop-btn').disabled = false;
+      document.getElementById('sc-status-badge').style.display = 'inline-block';
+
+      ['sc-total-courses', 'sc-total-changes', 'sc-newly-offered',
+       'sc-stopped-offering', 'sc-schedule-changes', 'sc-terms-checked'
+      ].forEach(id => { document.getElementById(id).textContent = '0'; });
+
+      document.getElementById('offerings-bar').style.width = '0%';
+      document.getElementById('offerings-pct').textContent = '0%';
+      document.getElementById('offerings-status-msg').textContent = 'Connecting…';
+
+      document.getElementById('sc-terms-summary').style.display = 'none';
+      document.getElementById('sc-semester-breakdown').style.display = 'none';
+      document.getElementById('sc-inspector-wrap').style.display = 'none';
+
+      const logEl = document.getElementById('sc-check-log');
+      if (logEl) logEl.innerHTML = '';
+
+      scAllChanges = [];
+
+      if (offeringsEvtSource) { offeringsEvtSource.close(); offeringsEvtSource = null; }
+
+      offeringsEvtSource = new EventSource(url);
+
+      offeringsEvtSource.onmessage = e => {
+        const d = JSON.parse(e.data);
+
+        if (d.type === 'status') {
+          document.getElementById('offerings-status-msg').textContent = d.msg;
+        }
+
+        if (d.type === 'term_probe') {
+          document.getElementById('offerings-status-msg').textContent =
+            `Probing ${d.semType}: ${d.termCode} (${d.termName || '…'})`;
+        }
+
+        if (d.type === 'term_found') {
+          appendScLog(`✅ <strong style="color:var(--success)">${d.semType}</strong>: ${d.termName} (${d.termCode}) — ~${d.estimatedCourses} courses, ${d.subjects} subjects`);
+        }
+
+        if (d.type === 'term_skip') {
+          appendScLog(`⚠️ <span style="color:var(--text3)">${d.semType} ${d.termCode}: ${d.reason} — skipped</span>`);
+        }
+
+        if (d.type === 'start') {
+          document.getElementById('offerings-status-msg').textContent =
+            `Processing ${d.totalSubjects} subjects across ${Object.keys(d.semesters).length} semesters…`;
+          appendScLog(`<hr style="border-color:var(--border);margin:6px 0">`);
+          appendScLog(`📊 <strong>${d.totalSubjects} subjects</strong> to process across ${Object.keys(d.semesters).length} semesters`);
+        }
+
+        if (d.type === 'semester_start') {
+          appendScLog(`<hr style="border-color:var(--border);margin:8px 0"><span style="font-size:12px;font-weight:700;color:var(--accent)">📅 ${d.termName} (${d.termCode})</span> — ${d.subjectCount} subjects`);
+        }
+
+        if (d.type === 'semester_done') {
+          appendScLog(`<span style="color:var(--success);font-weight:700">✅ ${d.termName} complete:</span> ${d.totalCourses.toLocaleString()} courses from ${d.subjectsDone} subjects` +
+            (d.errors ? ` <span style="color:var(--error)">(${d.errors} errors)</span>` : ''));
+        }
+
+        if (d.type === 'subject_start') {
+          document.getElementById('offerings-status-msg').textContent =
+            `[${d.globalIndex}/${d.globalTotal}] ${d.termName} — ${d.subjectCode}…`;
+        }
+
+        if (d.type === 'subject_done') {
+          document.getElementById('offerings-bar').style.width = d.pct + '%';
+          document.getElementById('offerings-pct').textContent = d.pct + '%';
+          document.getElementById('sc-total-courses').textContent = (d.courses_read || 0).toLocaleString();
+
+          const hasError = !!d.error;
+          const hasCourses = d.courses > 0;
+          const icon = hasError ? '❌' : hasCourses ? '✓' : '·';
+          const color = hasError ? 'var(--error)' : hasCourses ? 'var(--success)' : 'var(--text3)';
+
+          let rowHtml = `<span style="font-weight:700;min-width:60px;display:inline-block;color:${color}">${icon} ${escHtml(d.subjectCode)}</span>`;
+          rowHtml += `<span style="color:var(--text3);margin-left:8px">${d.courses} course${d.courses !== 1 ? 's' : ''}</span>`;
+          if (hasError) {
+            rowHtml += ` <span style="color:var(--error);margin-left:8px">${escHtml(d.error)}</span>`;
+          }
+          appendScLog(rowHtml, hasError ? 'error' : hasCourses ? '' : 'dim');
+        }
+
+        if (d.type === 'results') {
+          document.getElementById('sc-total-courses').textContent = (d.totalCourses || 0).toLocaleString();
+          document.getElementById('sc-total-changes').textContent = (d.totalChanges || 0).toLocaleString();
+          document.getElementById('sc-terms-checked').textContent = (d.termsChecked || 0);
+          document.getElementById('sc-terms-list').textContent = d.terms || 'Unknown';
+          document.getElementById('sc-terms-summary').style.display = 'block';
+
+          if (d.semesters) {
+            scCurrentSemesters = d.semesters;
+            scRenderSemesterBreakdown(d.semesters);
+            scBuildChangesList(d.semesters);
+            scRenderInspector();
+            document.getElementById('sc-semester-breakdown').style.display = 'block';
+            document.getElementById('sc-inspector-wrap').style.display = 'block';
+          }
+
+          let totalNew = 0, totalStopped = 0, totalModified = 0;
+          Object.values(d.semesters || {}).forEach(sem => {
+            if (sem.changes) {
+              totalNew += sem.changes.newly || 0;
+              totalStopped += sem.changes.stopped || 0;
+              totalModified += sem.changes.modified || 0;
+            }
+          });
+          document.getElementById('sc-newly-offered').textContent = totalNew.toLocaleString();
+          document.getElementById('sc-stopped-offering').textContent = totalStopped.toLocaleString();
+          document.getElementById('sc-schedule-changes').textContent = totalModified.toLocaleString();
+        }
+
+        if (d.type === 'done') {
+          document.getElementById('offerings-status-msg').textContent =
+            `✅ Complete — ${(d.totalCourses || 0).toLocaleString()} courses, ${d.totalChanges || 0} changes across ${d.terms || 'multiple terms'}`;
+          document.getElementById('offerings-bar').style.width = '100%';
+          document.getElementById('offerings-pct').textContent = '100%';
+          scFinishCheck();
+          setTimeout(loadChangeLog, 1000);
+        }
+
+        if (d.type === 'error') {
+          document.getElementById('offerings-status-msg').textContent = `❌ ${d.msg}`;
+          appendScLog(`<span style="color:var(--error);font-weight:700">❌ ${escHtml(d.msg)}</span>`);
+          scFinishCheck();
+        }
+
+        if (d.type === 'end') {
+          if (offeringsEvtSource) { offeringsEvtSource.close(); offeringsEvtSource = null; }
+        }
+      };
+
+      offeringsEvtSource.onerror = () => {
+        document.getElementById('offerings-status-msg').textContent =
+          '❌ Cannot connect — make sure the server is running (npm run dev)';
+        appendScLog('<span style="color:var(--error)">❌ Connection failed — is the server running?</span>');
+        scFinishCheck();
+        if (offeringsEvtSource) { offeringsEvtSource.close(); offeringsEvtSource = null; }
+      };
+    }
+
+    function scFinishCheck() {
+      document.getElementById('offerings-check-btn').disabled = false;
+      document.getElementById('offerings-stop-btn').disabled = true;
+      document.getElementById('sc-status-badge').style.display = 'none';
+    }
+
+    function stopOfferingsCheck() {
+      if (offeringsEvtSource) { offeringsEvtSource.close(); offeringsEvtSource = null; }
+      document.getElementById('offerings-status-msg').textContent = 'Stopped.';
+      scFinishCheck();
+    }
+
+    function appendScLog(html, style) {
+      const logEl = document.getElementById('sc-check-log');
+      if (!logEl) return;
+      const row = document.createElement('div');
+      row.style.cssText = 'border-bottom:1px solid var(--border);padding:3px 0;font-size:11px;line-height:1.5';
+      if (style === 'dim') row.style.opacity = '0.5';
+      row.innerHTML = html;
+      logEl.appendChild(row);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function scRenderSemesterBreakdown(semesters) {
+      const container = document.getElementById('sc-semester-cards');
+      const semesterOrder = ['fall', 'spring', 'sumA', 'sumFull', 'sumB'];
+      let html = '';
+      semesterOrder.forEach(semType => {
+        const sem = semesters[semType];
+        if (!sem) return;
+        const changes = sem.changes || { newly: 0, stopped: 0, modified: 0 };
+        const totalChanges = changes.newly + changes.stopped + changes.modified;
+        const hasChanges = totalChanges > 0;
+        const borderColor = hasChanges ? 'var(--warn)' : 'var(--success)';
+        const bgColor = hasChanges ? 'rgba(245, 158, 11, 0.05)' : 'rgba(76, 175, 125, 0.05)';
+        html += `
+          <div style="border:1px solid ${borderColor};background:${bgColor};border-radius:6px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px">
+            <div style="flex:1">
+              <div style="font-weight:700;font-size:13px;color:var(--text)">${sem.termName} (${sem.termCode})</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px">${(sem.totalCourses || 0).toLocaleString()} courses</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              ${changes.newly > 0 ? `<span style="background:var(--accent)22;color:var(--accent);font-size:10px;padding:2px 6px;border-radius:3px;font-weight:700">🆕 ${changes.newly}</span>` : ''}
+              ${changes.stopped > 0 ? `<span style="background:var(--error)22;color:var(--error);font-size:10px;padding:2px 6px;border-radius:3px;font-weight:700">❌ ${changes.stopped}</span>` : ''}
+              ${changes.modified > 0 ? `<span style="background:var(--warn)22;color:var(--warn);font-size:10px;padding:2px 6px;border-radius:3px;font-weight:700">📅 ${changes.modified}</span>` : ''}
+              ${totalChanges === 0 ? `<span style="background:var(--success)22;color:var(--success);font-size:10px;padding:2px 6px;border-radius:3px;font-weight:700">✅ No changes</span>` : ''}
+            </div>
+          </div>`;
+      });
+      container.innerHTML = html;
+      scPopulateFilters(semesters);
+    }
+
+    function scBuildChangesList(semesters) {
+      scAllChanges = [];
+      Object.entries(semesters).forEach(([semType, sem]) => {
+        if (sem.details) {
+          sem.details.forEach(change => {
+            scAllChanges.push({ ...change, semester: semType, termName: sem.termName, termCode: sem.termCode });
+          });
+        }
+      });
+    }
+
+    function scPopulateFilters(semesters) {
+      const selectors = ['sc-filter-semester', 'sc-fix-semester'];
+      const subjectSelectors = ['sc-filter-subject', 'sc-fix-subject'];
+      selectors.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        while (el.children.length > 1) el.removeChild(el.lastChild);
+        Object.entries(semesters).forEach(([semType, sem]) => {
+          const opt = document.createElement('option');
+          opt.value = semType; opt.textContent = sem.termName;
+          el.appendChild(opt);
+        });
+      });
+      const subjects = new Set();
+      scAllChanges.forEach(c => { if (c.subject) subjects.add(c.subject); });
+      subjectSelectors.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        while (el.children.length > 1) el.removeChild(el.lastChild);
+        [...subjects].sort().forEach(subj => {
+          const opt = document.createElement('option');
+          opt.value = subj; opt.textContent = subj;
+          el.appendChild(opt);
+        });
+      });
+    }
+
+    function scSetFilter(type, btn) {
+      scCurrentFilter = type;
+      const wrap = document.getElementById('sc-inspector-wrap');
+      if (wrap) wrap.querySelectorAll('.ck-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      scApplyFilters();
+    }
+
+    function scApplyFilters() { scRenderInspector(); }
+
+    function scRenderInspector() {
+      const tbody = document.getElementById('sc-inspector-body');
+      const semesterFilter = document.getElementById('sc-filter-semester')?.value || '';
+      const subjectFilter = document.getElementById('sc-filter-subject')?.value || '';
+      const searchTerm = document.getElementById('sc-search')?.value?.toUpperCase() || '';
+      let filtered = [...scAllChanges];
+      if (scCurrentFilter !== 'all') filtered = filtered.filter(c => c.type === scCurrentFilter);
+      if (semesterFilter) filtered = filtered.filter(c => c.semester === semesterFilter);
+      if (subjectFilter) filtered = filtered.filter(c => c.subject === subjectFilter);
+      if (searchTerm) filtered = filtered.filter(c => c.course.toUpperCase().includes(searchTerm));
+      document.getElementById('sc-inspector-count').textContent = `${filtered.length} of ${scAllChanges.length} changes`;
+      const fixCount = scGetFixableChanges().length;
+      document.getElementById('sc-fix-count').textContent = fixCount;
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text3);text-align:center;padding:20px 0">No changes match current filters</td></tr>';
+        return;
+      }
+      const visible = filtered.slice(0, 500);
+      const typeColors = {
+        newly:    { bg: 'var(--accent)22', color: 'var(--accent)', icon: '🆕', label: 'Newly offered' },
+        stopped:  { bg: 'var(--error)22',  color: 'var(--error)',  icon: '❌', label: 'Stopped' },
+        modified: { bg: 'var(--warn)22',   color: 'var(--warn)',   icon: '📅', label: 'Modified' },
+      };
+      const rows = visible.map(change => {
+        const style = typeColors[change.type] || typeColors.newly;
+        let detail = style.label;
+        if (change.type === 'modified' && change.modifications) {
+          detail = change.modifications.map(m => `${m.field}: ${m.from} → ${m.to}`).join(', ');
+        }
+        return `<tr>
+          <td style="padding:3px 8px;border-bottom:1px solid var(--bg3);white-space:nowrap">${escHtml(change.course)}</td>
+          <td style="padding:3px 8px;border-bottom:1px solid var(--bg3);color:var(--text2)">${change.termName}</td>
+          <td style="padding:3px 8px;border-bottom:1px solid var(--bg3)">
+            <span style="background:${style.bg};color:${style.color};font-size:10px;padding:2px 6px;border-radius:3px;font-weight:700">${style.icon} ${style.label}</span>
+          </td>
+          <td style="padding:3px 8px;border-bottom:1px solid var(--bg3);color:var(--text3);font-size:10px;max-width:200px;overflow:hidden;text-overflow:ellipsis">${escHtml(detail)}</td>
+        </tr>`;
+      }).join('');
+      tbody.innerHTML = rows +
+        (filtered.length > 500 ? `<tr><td colspan="4" style="color:var(--text3);text-align:center;padding:10px 0;font-style:italic">…and ${filtered.length - 500} more</td></tr>` : '');
+    }
+
+    function scGetFixableChanges() {
+      const sem  = document.getElementById('sc-fix-semester')?.value || '';
+      const subj = document.getElementById('sc-fix-subject')?.value || '';
+      const type = document.getElementById('sc-fix-type')?.value || '';
+      let fixable = [...scAllChanges];
+      if (sem)  fixable = fixable.filter(c => c.semester === sem);
+      if (subj) fixable = fixable.filter(c => c.subject === subj);
+      if (type) fixable = fixable.filter(c => c.type === type);
+      return fixable;
+    }
+
+    function scApplyFixes() {
+      const fixable = scGetFixableChanges();
+      if (!fixable.length) { alert('No changes to apply with current filters'); return; }
+      if (!confirm(`Apply ${fixable.length} offering changes?`)) return;
+      const port = document.getElementById('check-port')?.value || '3333';
+      const btn = document.getElementById('sc-fix-btn');
+      const progressWrap = document.getElementById('sc-fix-progress');
+      const statusEl = document.getElementById('sc-fix-status');
+      const pctEl = document.getElementById('sc-fix-pct');
+      const barEl = document.getElementById('sc-fix-bar');
+      btn.disabled = true; btn.textContent = '⏳ Updating…';
+      progressWrap.style.display = 'block';
+      barEl.style.width = '0%'; pctEl.textContent = '0%';
+      statusEl.textContent = 'Preparing updates…';
+      const filters = {
+        semesters: [document.getElementById('sc-fix-semester')?.value || ''].filter(Boolean),
+        subjects:  [document.getElementById('sc-fix-subject')?.value || ''].filter(Boolean),
+        types:     [document.getElementById('sc-fix-type')?.value || ''].filter(Boolean),
+      };
+      fetch(`http://localhost:${port}/offerings-fix`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filters, items: fixable }),
+      }).then(response => {
+        if (!response.ok) throw new Error(`Server error ${response.status}`);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        function readStream() {
+          return reader.read().then(({ done, value }) => {
+            if (done) return;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n\n');
+            buffer = lines.pop();
+            for (const line of lines) {
+              if (!line.trim().startsWith('data: ')) continue;
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.type === 'fixed') {
+                  const pct = Math.round(data.index / data.total * 100);
+                  statusEl.textContent = `[${data.index}/${data.total}] ${data.code}`;
+                  pctEl.textContent = pct + '%';
+                  barEl.style.width = pct + '%';
+                }
+                if (data.type === 'done') {
+                  statusEl.textContent = `✅ Updated ${data.fixed} offering records`;
+                  barEl.style.width = '100%'; pctEl.textContent = '100%';
+                  btn.textContent = `✅ Updated ${data.fixed}`;
+                  setTimeout(loadChangeLog, 1000);
+                }
+              } catch {}
+            }
+            return readStream();
+          });
+        }
+        return readStream();
+      }).catch(error => {
+        statusEl.textContent = `❌ ${error.message}`;
+        btn.disabled = false; btn.textContent = '📅 Update Offerings';
+      });
+    }
+
+    function scExportChanges() {
+      const blob = new Blob([JSON.stringify(scAllChanges, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `offerings-changes-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+    }
+    </script>
   </div>
 </div><!-- /#dev-app -->
 
@@ -1055,104 +1578,198 @@ async function loadChangeLog() {
   } catch (err) {
     listEl.innerHTML = `<p class="text2">Could not load change-log.json: ${err.message}</p>`;
   }
-}
 
-function renderRun(run, deployedTs = null) {
-  const ts = new Date(run.timestamp).toLocaleString("en-US",
-    { month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit" });
+  function renderRun(run, deployedTs = null) {
+    const ts = new Date(run.timestamp).toLocaleString("en-US",
+      { month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit" });
 
-  const isPending    = deployedTs !== null && !deployedTs.has(run.timestamp);
-  const pendingBadge = isPending
-    ? `<span style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b55;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap">⏳ Pending push</span>`
-    : '';
+    const isPending    = deployedTs !== null && !deployedTs.has(run.timestamp);
+    const pendingBadge = isPending
+      ? `<span style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b55;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap">⏳ Pending push</span>`
+      : '';
 
-  // Special entries: catalog check launched, nuclear fix applied
-  if (run.type === "catalog-check" || run.type === "nuclear-fix") {
-    const isCheck = run.type === "catalog-check";
-    const color   = isCheck ? "var(--accent)" : "#e74c3c";
-    let detail = "";
-    if (!isCheck && run.fixed != null) {
-      const fixItems = [
-        { val: run.fixed,    lbl: "Courses overridden", col: "#e74c3c" },
-        { val: run.nChanged, lbl: "⚠ Field changes",    col: "var(--warn)" },
-        { val: run.nRange,   lbl: "≈ Range fixes",       col: "#a78bfa" },
-      ].filter(x => x.val != null);
-      const labelLine = run.label ? `<div style="font-size:11px;color:var(--text3);margin-top:8px">Data timestamp updated → <strong style="color:var(--text2)">${run.label}</strong></div>` : "";
-      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
-        ${fixItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
-      </div>${labelLine}`;
-    }
-    if (isCheck && run.stats) {
-      const s = run.stats;
-      const statItems = [
-        { val: s.correct,      lbl: "✓ Correct",       col: "var(--success)" },
-        { val: s.needPR,       lbl: "△ Need PR",        col: "var(--warn)" },
-        { val: s.rangeDiff,    lbl: "≈ Range diff",     col: "#a78bfa" },
-        { val: s.newCourses,   lbl: "NEW New courses",  col: "var(--accent)" },
-        { val: s.notInCatalog, lbl: "✕ Not in catalog", col: "var(--error)" },
-        { val: s.totalScanned, lbl: "Total scanned",    col: "var(--text)" },
-        { val: s.subjectsDone, lbl: "Subjects done",    col: "var(--text2)" },
-      ].filter(x => x.val != null);
-      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
-        ${statItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+    // ── Catalog check + nuclear fix entries ────────────────────────────────
+    if (run.type === "catalog-check" || run.type === "nuclear-fix") {
+      const isCheck = run.type === "catalog-check";
+      const color   = isCheck ? "var(--accent)" : "#e74c3c";
+      let detail = "";
+      if (!isCheck && run.fixed != null) {
+        const fixItems = [
+          { val: run.fixed,    lbl: "Courses overridden", col: "#e74c3c" },
+          { val: run.nChanged, lbl: "⚠ Field changes",    col: "var(--warn)" },
+          { val: run.nRange,   lbl: "≈ Range fixes",       col: "#a78bfa" },
+        ].filter(x => x.val != null);
+        const labelLine = run.label ? `<div style="font-size:11px;color:var(--text3);margin-top:8px">Data timestamp updated → <strong style="color:var(--text2)">${run.label}</strong></div>` : "";
+        detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+          ${fixItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+        </div>${labelLine}`;
+      }
+      if (isCheck && run.stats) {
+        const s = run.stats;
+        const statItems = [
+          { val: s.correct,      lbl: "✓ Correct",       col: "var(--success)" },
+          { val: s.needPR,       lbl: "△ Need PR",        col: "var(--warn)" },
+          { val: s.rangeDiff,    lbl: "≈ Range diff",     col: "#a78bfa" },
+          { val: s.newCourses,   lbl: "NEW New courses",  col: "var(--accent)" },
+          { val: s.notInCatalog, lbl: "✕ Not in catalog", col: "var(--error)" },
+          { val: s.totalScanned, lbl: "Total scanned",    col: "var(--text)" },
+          { val: s.subjectsDone, lbl: "Subjects done",    col: "var(--text2)" },
+        ].filter(x => x.val != null);
+        detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+          ${statItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+        </div>`;
+      }
+      return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+          <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+        </div>
+        ${detail}
       </div>`;
     }
+
+    // ── Offerings check + offerings fix + offerings error entries ──────────
+    if (run.type === "offerings-check" || run.type === "offerings-fix" || run.type === "offerings-error") {
+      const color = run.type === "offerings-error" ? "var(--error)"
+                  : run.type === "offerings-fix"   ? "#2563eb"
+                  : "var(--accent)";
+
+      if (run.type === "offerings-error") {
+        return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+            <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+          </div>
+          <div style="margin-top:8px;font-size:12px;color:var(--error)">${escHtml(run.error || 'Unknown error')}</div>
+        </div>`;
+      }
+
+      if (run.type === "offerings-fix") {
+        return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+            <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+            <div class="stat"><div class="val" style="font-size:22px;color:#2563eb">${run.fixed ?? 0}</div><div class="lbl">Updated</div></div>
+          </div>
+          ${run.label ? `<div style="font-size:11px;color:var(--text3);margin-top:8px">Timestamp → <strong style="color:var(--text2)">${run.label}</strong></div>` : ''}
+        </div>`;
+      }
+
+      // ── offerings-check: show semester breakdown + stats ──────────────
+      const bySem = run.bySemester || {};
+      const semOrder = ['fall', 'spring', 'sumA', 'sumFull', 'sumB'];
+      const termsLine = run.terms
+        ? `<div style="font-size:11px;color:var(--text3);margin-top:6px">${escHtml(run.terms)}</div>`
+        : '';
+
+      let semCards = '';
+      let aggNew = 0, aggStopped = 0, aggModified = 0;
+
+      semOrder.forEach(st => {
+        const sem = bySem[st];
+        if (!sem) return;
+        const ch = sem.changes || { newly: 0, stopped: 0, modified: 0 };
+        aggNew += ch.newly || 0;
+        aggStopped += ch.stopped || 0;
+        aggModified += ch.modified || 0;
+        const totalCh = (ch.newly || 0) + (ch.stopped || 0) + (ch.modified || 0);
+        const hasCh = totalCh > 0;
+        const border = hasCh ? '#f5a623' : '#4caf7d';
+        const bg = hasCh ? 'rgba(245,166,35,0.06)' : 'rgba(76,175,125,0.06)';
+
+        let badges = '';
+        if (ch.newly > 0)    badges += `<span style="background:var(--accent)22;color:var(--accent);font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700">🆕 ${ch.newly}</span> `;
+        if (ch.stopped > 0)  badges += `<span style="background:var(--error)22;color:var(--error);font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700">❌ ${ch.stopped}</span> `;
+        if (ch.modified > 0) badges += `<span style="background:var(--warn)22;color:var(--warn);font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700">📅 ${ch.modified}</span> `;
+        if (totalCh === 0)   badges += `<span style="background:var(--success)22;color:var(--success);font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700">✅ No changes</span>`;
+
+        semCards += `<div style="border:1px solid ${border};background:${bg};border-radius:5px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div>
+            <div style="font-weight:700;font-size:12px;color:var(--text)">${escHtml(sem.termName || st)} (${escHtml(sem.termCode || '?')})</div>
+            <div style="font-size:10px;color:var(--text3)">${(sem.totalCourses || 0).toLocaleString()} courses</div>
+          </div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap">${badges}</div>
+        </div>`;
+      });
+
+      const statItems = [
+        { val: run.totalCourses,     lbl: "Total courses",      col: "var(--text)" },
+        { val: run.totalChanges,     lbl: "Total changes",      col: "var(--warn)" },
+        { val: aggNew,               lbl: "🆕 Newly offered",   col: "var(--accent)" },
+        { val: aggStopped,           lbl: "❌ Stopped",          col: "var(--error)" },
+        { val: aggModified,          lbl: "📅 Modified",         col: "var(--warn)" },
+        { val: run.stats?.semesters, lbl: "Semesters",           col: "var(--text2)" },
+      ].filter(x => x.val != null);
+
+      return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+          <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            ${run.totalChanges > 0
+              ? `<span class="badge warn">${run.totalChanges} change${run.totalChanges !== 1 ? 's' : ''}</span>`
+              : `<span class="badge ok">No changes</span>`}
+            ${pendingBadge}
+            <span style="font-size:11px;color:var(--text2)">${ts}</span>
+          </div>
+        </div>
+        ${termsLine}
+        ${semCards ? `<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">${semCards}</div>` : ''}
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:10px">
+          ${statItems.map(x => `<div class="stat"><div class="val" style="font-size:20px;color:${x.col}">${(x.val || 0).toLocaleString()}</div><div class="lbl">${x.lbl}</div></div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    // ── Generic scrape run entries (the original renderer) ─────────────────
+    const totalChanges = (run.added?.length ?? 0) + (run.modified?.length ?? 0) + (run.removedFromCatalog?.length ?? 0);
+    const badge = totalChanges
+      ? `<span class="badge warn">${totalChanges} change${totalChanges !== 1 ? "s" : ""}</span>`
+      : `<span class="badge ok">No changes</span>`;
+
+    let detail = "";
+    if (run.added?.length) {
+      detail += `<div style="margin-top:8px"><b style="color:var(--accent)">+ ${run.added.length} added</b>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px;word-break:break-all">${run.added.join(", ")}</div></div>`;
+    }
+    if (run.removedFromCatalog?.length) {
+      detail += `<div style="margin-top:8px"><b style="color:#e94560">⚠ ${run.removedFromCatalog.length} no longer in catalog (kept in data)</b>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">${run.removedFromCatalog.join(", ")}</div></div>`;
+    }
+    if (run.modified?.length) {
+      detail += `<div style="margin-top:8px"><b style="color:#f59e0b">✎ ${run.modified.length} field change${run.modified.length !== 1 ? "s" : ""}</b>`;
+      for (const { code, changes } of run.modified) {
+        const fields = changes.map(c => c.field).join(", ");
+        detail += `<details style="margin-top:4px;padding-left:10px;font-size:11px">
+          <summary style="cursor:pointer;color:var(--text2)"><b>${code}</b>: ${fields}</summary>
+          <table style="margin-top:4px;border-collapse:collapse;width:100%;font-size:11px">`;
+        for (const { field, before, after } of changes) {
+          const b = JSON.stringify(before)?.slice(0, 80) ?? "null";
+          const a = JSON.stringify(after) ?.slice(0, 80) ?? "null";
+          detail += `<tr><td style="padding:2px 8px 2px 0;color:var(--text2);white-space:nowrap;vertical-align:top">${field}</td>
+            <td style="padding:2px 0;color:#e94560;word-break:break-all">${escHtml(b)}</td>
+            <td style="padding:2px 6px;color:var(--text2)">→</td>
+            <td style="padding:2px 0;color:var(--accent);word-break:break-all">${escHtml(a)}</td></tr>`;
+        }
+        detail += `</table></details>`;
+      }
+      detail += `</div>`;
+    }
+
     return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
-        <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+        <div style="font-size:14px;font-weight:700">${run.subject}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          ${badge}
+          ${pendingBadge}
+          <span style="font-size:11px;color:var(--text2)">${ts}</span>
+        </div>
       </div>
+      <div style="font-size:11px;color:var(--text2);margin-top:3px">${run.unchanged ?? 0} unchanged</div>
       ${detail}
     </div>`;
   }
-
-  const totalChanges = (run.added?.length ?? 0) + (run.modified?.length ?? 0) + (run.removedFromCatalog?.length ?? 0);
-  const badge = totalChanges
-    ? `<span class="badge warn">${totalChanges} change${totalChanges !== 1 ? "s" : ""}</span>`
-    : `<span class="badge ok">No changes</span>`;
-
-  let detail = "";
-  if (run.added?.length) {
-    detail += `<div style="margin-top:8px"><b style="color:var(--accent)">+ ${run.added.length} added</b>
-      <div style="font-size:11px;color:var(--text2);margin-top:2px;word-break:break-all">${run.added.join(", ")}</div></div>`;
-  }
-  if (run.removedFromCatalog?.length) {
-    detail += `<div style="margin-top:8px"><b style="color:#e94560">⚠ ${run.removedFromCatalog.length} no longer in catalog (kept in data)</b>
-      <div style="font-size:11px;color:var(--text2);margin-top:2px">${run.removedFromCatalog.join(", ")}</div></div>`;
-  }
-  if (run.modified?.length) {
-    detail += `<div style="margin-top:8px"><b style="color:#f59e0b">✎ ${run.modified.length} field change${run.modified.length !== 1 ? "s" : ""}</b>`;
-    for (const { code, changes } of run.modified) {
-      const fields = changes.map(c => c.field).join(", ");
-      detail += `<details style="margin-top:4px;padding-left:10px;font-size:11px">
-        <summary style="cursor:pointer;color:var(--text2)"><b>${code}</b>: ${fields}</summary>
-        <table style="margin-top:4px;border-collapse:collapse;width:100%;font-size:11px">`;
-      for (const { field, before, after } of changes) {
-        const b = JSON.stringify(before)?.slice(0, 80) ?? "null";
-        const a = JSON.stringify(after) ?.slice(0, 80) ?? "null";
-        detail += `<tr><td style="padding:2px 8px 2px 0;color:var(--text2);white-space:nowrap;vertical-align:top">${field}</td>
-          <td style="padding:2px 0;color:#e94560;word-break:break-all">${escHtml(b)}</td>
-          <td style="padding:2px 6px;color:var(--text2)">→</td>
-          <td style="padding:2px 0;color:var(--accent);word-break:break-all">${escHtml(a)}</td></tr>`;
-      }
-      detail += `</table></details>`;
-    }
-    detail += `</div>`;
-  }
-
-  return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
-      <div style="font-size:14px;font-weight:700">${run.subject}</div>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        ${badge}
-        ${pendingBadge}
-        <span style="font-size:11px;color:var(--text2)">${ts}</span>
-      </div>
-    </div>
-    <div style="font-size:11px;color:var(--text2);margin-top:3px">${run.unchanged ?? 0} unchanged</div>
-    ${detail}
-  </div>`;
-}
 
 function escHtml(s) {
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");

@@ -22,6 +22,7 @@ export const TYPE_BG = {
   fall:    { bg: 'var(--row-fall-bg)', border: 'var(--row-fall-border)' },
   spring:  { bg: 'var(--row-spr-bg)',  border: 'var(--row-spr-border)'  },
   summer:  { bg: 'var(--row-sum-bg)',  border: 'var(--row-sum-border)'  },
+  sumFull: { bg: 'var(--row-sum-bg)',  border: 'var(--row-sum-border)'  },
   special: { bg: 'var(--row-spc-bg)',  border: 'var(--row-spc-border)'  },
 };
 
@@ -44,7 +45,7 @@ export const NUPATH_LABELS = {
   CE: "Capstone Experience",
 };
 
-export const SEMESTER_TYPES = ["fall", "spring", "sumA", "sumB"];
+export const SEMESTER_TYPES = ["fall", "spring", "sumA", "sumFull", "sumB"];
 
 export const WORK_TERMS = [
   { id: "WORK1", label: "CO-OP 1", color: "#e94560" },
