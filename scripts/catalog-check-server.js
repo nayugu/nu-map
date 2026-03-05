@@ -491,11 +491,13 @@ const server = createServer((req, res) => {
       "src/core/dataMeta.json",
     ];
     try {
-      const statusOut = execSync(`git status --short -- ${GIT_FILES.join(" ")}`, { cwd: ROOT }).toString().trim();
+      const opts = { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 };
+      const statusOut = execSync(`git status --short -- ${GIT_FILES.join(" ")}`, opts).toString().trim();
       const dirty = statusOut.length > 0;
       let diff = "";
       if (dirty) {
-        diff = execSync(`git diff -- ${GIT_FILES.join(" ")}`, { cwd: ROOT }).toString().trim().slice(0, 12000);
+        // Use --stat to avoid blowing the buffer on large files like all-courses.json
+        diff = execSync(`git diff --stat -- ${GIT_FILES.join(" ")}`, opts).toString().trim();
       }
       res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, dirty, status: statusOut, diff }));
@@ -518,16 +520,17 @@ const server = createServer((req, res) => {
     req.on("data", c => { body += c; });
     req.on("end", () => {
       try {
-        const statusOut = execSync(`git status --short -- ${GIT_FILES.join(" ")}`, { cwd: ROOT }).toString().trim();
+        const opts = { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 };
+        const statusOut = execSync(`git status --short -- ${GIT_FILES.join(" ")}`, opts).toString().trim();
         if (!statusOut) {
           res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
           res.end(JSON.stringify({ ok: true, msg: "Nothing to commit — already up to date." }));
           return;
         }
         const date = new Date().toISOString().substring(0, 10);
-        execSync(`git add ${GIT_FILES.join(" ")}`, { cwd: ROOT });
-        execSync(`git commit -m "catalog: update data files ${date}"`, { cwd: ROOT });
-        const pushOut = execSync("git push", { cwd: ROOT, encoding: "utf8" });
+        execSync(`git add ${GIT_FILES.join(" ")}`, opts);
+        execSync(`git commit -m "catalog: update data files ${date}"`, opts);
+        const pushOut = execSync("git push", { ...opts, encoding: "utf8" });
         res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
         res.end(JSON.stringify({ ok: true, msg: "Pushed successfully.", output: pushOut.trim() }));
       } catch (e) {
