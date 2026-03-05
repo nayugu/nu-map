@@ -296,6 +296,8 @@ export function PlannerProvider({ children }) {
       if (selectedId) {
         getConnections(selectedId, allEdges).forEach(rel => {
           if (!placements[rel.from] || !placements[rel.to]) return;
+          // Disable prereq/error lines for courses in 'incoming' semester
+          if (placements[rel.from] === "incoming" || placements[rel.to] === "incoming") return;
           const fp = getCenter(rel.from);
           const tp = getCenter(rel.to);
           if (!fp || !tp) return;
@@ -318,6 +320,8 @@ export function PlannerProvider({ children }) {
           // skip edges already drawn by selection logic above
           if (selectedId && (rel.from === selectedId || rel.to === selectedId)) return;
           if (!placements[rel.from] || !placements[rel.to]) return;
+          // Disable prereq/error lines for courses in 'incoming' semester
+          if (placements[rel.from] === "incoming" || placements[rel.to] === "incoming") return;
           if (rel.type === "prerequisite") {
             const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
             const toIdx   = SEM_INDEX[placements[rel.to]]   ?? -1;
@@ -465,6 +469,7 @@ export function PlannerProvider({ children }) {
     const v = new Map();
     courses.forEach(c => {
       if (!placements[c.id]) return;
+      if (placements[c.id] === "incoming") return;
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[placements[c.id]];
       const result = evalPrereqTree(c.prereqs, placements, SEM_INDEX, ti);
@@ -478,6 +483,7 @@ export function PlannerProvider({ children }) {
     allEdges.filter(e => e.type === "corequisite").forEach(({ from, to }) => {
       [{ placed: from, partner: to }, { placed: to, partner: from }].forEach(({ placed, partner }) => {
         if (!placements[placed]) return;
+        if (placements[placed] === "incoming") return;
         if (!placements[partner]) {
           v.set(placed, "alone");
         } else if (placements[placed] !== placements[partner]) {
