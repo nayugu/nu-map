@@ -3,6 +3,69 @@
     {
       "type": "nuclear-fix",
       "subject": "☢ Nuclear Fix Applied",
+      "timestamp": "2026-03-05T16:08:16.542Z",
+      "fixed": 1305,
+      "nChanged": 1298,
+      "nRange": 0,
+      "nAdded": 7,
+      "nRemoved": 0,
+      "label": "Mar 2026"
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-05T16:05:25.318Z",
+      "stats": {
+        "correct": 6481,
+        "needPR": 1298,
+        "rangeDiff": 0,
+        "newCourses": 7,
+        "notInCatalog": 0,
+        "totalScanned": 7786,
+        "subjectsDone": 230
+      }
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-05T16:04:50.266Z"
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-05T16:03:42.901Z"
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-05T15:59:48.684Z",
+      "stats": {
+        "correct": 6500,
+        "needPR": 1312,
+        "rangeDiff": 0,
+        "newCourses": 7,
+        "notInCatalog": 0,
+        "totalScanned": 7819,
+        "subjectsDone": 230
+      }
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-05T15:43:29.782Z",
+      "stats": {
+        "correct": 6436,
+        "needPR": 1264,
+        "rangeDiff": 0,
+        "newCourses": 7,
+        "notInCatalog": 0,
+        "totalScanned": 7707,
+        "subjectsDone": 229
+      }
+    },
+    {
+      "type": "nuclear-fix",
+      "subject": "☢ Nuclear Fix Applied",
       "timestamp": "2026-03-05T14:23:44.975Z",
       "fixed": 5282,
       "nChanged": 1304,
