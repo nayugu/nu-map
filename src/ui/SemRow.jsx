@@ -33,8 +33,8 @@ export default function SemRow({ sem }) {
   const sh         = getSemSH(sem.id, placements, effectiveCourseMap);
   const mainSlots  = (sem.type === "fall" || sem.type === "spring") ? 4
                    : sem.type === "summer" ? 2 : null;
-  const main4      = crs.filter(c => c.sh >= 4);
-  const others     = crs.filter(c => c.sh < 4);
+  const main4      = crs.filter(c => c.sh >= 3);
+  const others     = crs.filter(c => c.sh <= 2);
 
   // Collapsible other credits
   const { collapseOtherCredits, setCollapseOtherCredits } = usePlanner();
