@@ -214,9 +214,10 @@
   <header>
     <h1><img class="site-logo" src="logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map</h1>
     <span>Developer Portal</span>
-    <span id="local-badge" style="display:none;margin-left:auto;background:#fff;color:#0d0d0d;border:1px solid #fff;font-weight:700;border-radius:20px">● Local</span>
+    <span id="local-badge" style="display:none;color:#fff;font-weight:800;font-size:13px;letter-spacing:0.14em;margin-left:20px">LOCAL</span>
+    <div style="flex:1"></div>
     <a id="remote-link-btn" href="https://nayugu.github.io/nu-map/dev.html" target="_blank" class="btn sec" style="display:none;font-size:11px;padding:4px 12px;height:auto;text-decoration:none">Open on GitHub Pages →</a>
-    <button id="local-link-btn" onclick="openLocalPortal()" class="btn sec" style="display:none;margin-left:auto;font-size:11px;padding:4px 12px">Open Local →</button>
+    <button id="local-link-btn" onclick="openLocalPortal()" class="btn sec" style="display:none;font-size:11px;padding:4px 12px">Open Local →</button>
     <button class="logout" id="logout-btn" onclick="logout()">Log out</button>
   </header>
 
@@ -262,7 +263,7 @@
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
           <span style="font-size:11px;color:var(--text3)">Port:</span>
-          <input id="local-portal-port" type="number" value="5175" min="1024" max="65535"
+          <input id="local-portal-port" type="number" value="5173" min="1024" max="65535"
             style="width:64px;font-size:12px;padding:4px 6px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
           <button class="btn" onclick="openLocalPortal()" style="font-size:13px;padding:8px 18px">Open Local Dev Portal →</button>
         </div>
@@ -601,7 +602,7 @@
         <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
           <button class="launch-btn" onclick="ckOpenLocal()">🚀 Open Local Dev Portal</button>
           <span style="margin-left:auto;font-size:11px;color:var(--text3)">
-            Dev server port: <input id="ck-local-port" value="5175" type="number" min="1024" max="65535"
+            Dev server port: <input id="ck-local-port" value="5173" type="number" min="1024" max="65535"
               style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
           </span>
         </div>
@@ -1230,7 +1231,7 @@ window.addEventListener('resize', () => { if (pvReady) pvApply(); });
 function openLocalPortal() {
   const port = document.getElementById('local-portal-port')?.value
             || document.getElementById('ck-local-port')?.value
-            || '5175';
+            || '5173';
   window.open(`http://localhost:${port}/dev.html`, '_blank');
 }
 
