@@ -924,10 +924,11 @@ async function gitDoPush() {
 // ── Change Log ──────────────────────────────────────────────────────────────
 let clAllRuns    = [];
 let clDeployedTs = null;
+let clFiltered   = [];
+let clPage       = 0;
+const CL_PAGE_SIZE = 50;
 
 function clFilter() {
-  const listEl = document.getElementById("change-log-list");
-  if (!listEl) return;
   const query = (document.getElementById("cl-search")?.value ?? "").trim().toLowerCase();
   const sort  = document.getElementById("cl-sort")?.value ?? "newest";
 
@@ -954,15 +955,52 @@ function clFilter() {
   } else if (sort === "subject") {
     runs = [...runs].sort((a, b) => (a.subject ?? "").localeCompare(b.subject ?? ""));
   }
-  // "newest": already ordered newest-first from the JSON
 
-  if (!runs.length) {
+  clFiltered = runs;
+  clPage = 0;
+  clRenderPage();
+}
+
+function clGoPage(n) {
+  clPage = n;
+  clRenderPage();
+  document.getElementById("change-log-list")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function clRenderPage() {
+  const listEl = document.getElementById("change-log-list");
+  if (!listEl) return;
+  const query = (document.getElementById("cl-search")?.value ?? "").trim();
+
+  if (!clFiltered.length) {
     listEl.innerHTML = query
       ? `<p class="text2">No runs match "${escHtml(query)}".</p>`
       : '<p class="text2">No runs recorded yet.</p>';
     return;
   }
-  listEl.innerHTML = runs.map(run => renderRun(run, clDeployedTs)).join("");
+
+  const totalPages = Math.ceil(clFiltered.length / CL_PAGE_SIZE);
+  const page = Math.min(clPage, totalPages - 1);
+  const slice = clFiltered.slice(page * CL_PAGE_SIZE, (page + 1) * CL_PAGE_SIZE);
+
+  const pageBar = totalPages > 1 ? `
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(0)" ${page === 0 ? "disabled" : ""}>«</button>
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(${page - 1})" ${page === 0 ? "disabled" : ""}>‹</button>
+      ${Array.from({ length: totalPages }, (_, i) => {
+        if (totalPages <= 7 || Math.abs(i - page) <= 2 || i === 0 || i === totalPages - 1) {
+          return `<button class="btn ${i === page ? "" : "sec"}" style="padding:3px 10px;font-size:12px;min-width:32px" onclick="clGoPage(${i})">${i + 1}</button>`;
+        } else if (Math.abs(i - page) === 3) {
+          return `<span style="color:var(--text4);font-size:12px">…</span>`;
+        }
+        return "";
+      }).filter(Boolean).join("")}
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(${page + 1})" ${page === totalPages - 1 ? "disabled" : ""}>›</button>
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(${totalPages - 1})" ${page === totalPages - 1 ? "disabled" : ""}>»</button>
+      <span style="font-size:11px;color:var(--text4);margin-left:4px">Page ${page + 1} of ${totalPages} · ${clFiltered.length} runs</span>
+    </div>` : `<div style="font-size:11px;color:var(--text4);margin-top:8px;text-align:right">${clFiltered.length} run${clFiltered.length !== 1 ? "s" : ""}</div>`;
+
+  listEl.innerHTML = slice.map(run => renderRun(run, clDeployedTs)).join("") + pageBar;
 }
 
 async function loadChangeLog() {
