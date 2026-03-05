@@ -17,6 +17,7 @@ export default function SemRow({ sem }) {
     cardRefs, onDragStart,
     SEMESTERS, SEM_NEXT,
     setWorkPl, pushUndo, isPhone,
+    bonusSH, setBonusSH,
   } = usePlanner();
 
   const semStatus  = getSemStatus(sem.id);
@@ -161,6 +162,26 @@ export default function SemRow({ sem }) {
           </div>
           <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>{sem.sub}</div>
           {shEl}
+          {sem.id === "incoming" && (
+            <div style={{ paddingLeft: 19, marginTop: 5 }} onClick={e => e.stopPropagation()}>
+              <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 2 }}>general SH</div>
+              <input
+                type="number" min={0} max={999} value={bonusSH || ""}
+                placeholder="0"
+                onChange={e => {
+                  const v = parseInt(e.target.value, 10);
+                  setBonusSH(isNaN(v) || v < 0 ? 0 : v);
+                }}
+                style={{
+                  width: 52, fontSize: 11, fontWeight: 700,
+                  padding: "2px 5px", borderRadius: 4,
+                  border: "1px solid var(--border-2)",
+                  background: "var(--bg-surface-2)", color: "var(--text-1)",
+                  outline: "none",
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
 

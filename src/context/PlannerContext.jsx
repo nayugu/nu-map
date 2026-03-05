@@ -43,6 +43,9 @@ export function PlannerProvider({ children }) {
   const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
   // Per-plan SH overrides for variable-credit courses (e.g. 1–4 SH → user picks 3).
   const [shOverrides,      setShOverrides]      = useState(() => (_saved?.persist && _saved.shOverrides)      ? _saved.shOverrides      : {});
+  // Extra SH that counts toward graduation but isn't tied to a specific course
+  // (e.g. AP/IB general credit, transfer credit, test-out hours).
+  const [bonusSH, setBonusSH] = useState(() => (_saved?.persist && _saved.bonusSH != null) ? _saved.bonusSH : 0);
 
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
   const effectiveCourseMap = useMemo(() => {
@@ -174,14 +177,14 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides });
-  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides]);
+    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH });
+  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides });
+    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides]);
+  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
@@ -489,15 +492,15 @@ export function PlannerProvider({ children }) {
 
   // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
   const totalSHPlaced = useMemo(
-    () => courses.filter(c => placements[c.id]).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [courses, placements, effectiveCourseMap]
+    () => bonusSH + courses.filter(c => placements[c.id]).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
+    [bonusSH, courses, placements, effectiveCourseMap]
   );
   const totalSHDone = useMemo(
-    () => courses.filter(c => {
+    () => bonusSH + courses.filter(c => {
       const sid = placements[c.id];
       return sid && (SEM_INDEX[sid] ?? 99) < currentSemIdx;
     }).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [courses, placements, SEM_INDEX, currentSemIdx, effectiveCourseMap]
+    [bonusSH, courses, placements, SEM_INDEX, currentSemIdx, effectiveCourseMap]
   );
 
   // ── Star toggle ───────────────────────────────────────────────
@@ -830,6 +833,7 @@ export function PlannerProvider({ children }) {
     setWorkPl({});
     setSemOrders({});
     setOfferedOverrides({});
+    setBonusSH(0);
   };
 
   // ── Cohort setters that also persist to localStorage ─────────
@@ -885,7 +889,7 @@ export function PlannerProvider({ children }) {
     currentSemIdx, placedIds, workStartMap, workContMap,
     gradSemId, coopGradConflicts,
     prereqViolations, coreqViolations, connectedIds,
-    totalSHPlaced, totalSHDone,
+    totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
     // Refs (passed through for DOM measurements)
     timelineRef, cardRefs, bankRef, bankResizing, panelResizing, uiScaleRef,
     // Actions

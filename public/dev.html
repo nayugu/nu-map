@@ -492,12 +492,11 @@
         </div>
       </div>
     </div>
-
     <div class="card">
       <h2>Patch Files</h2>
       <p class="text2">
         Manual corrections live in <code>data/patches/</code>.
-        Use the <a href="#" onclick="switchTab('patches', document.querySelector(\"nav button[onclick*='patches']\"));return false">Patch Creator</a> tab to generate YAML,
+        Use the <a href="#" onclick='switchTab("patches", document.querySelector("nav button[onclick*=patches]"));return false'>Patch Creator</a> tab to generate YAML,
         then place it in that folder and open a PR.
         Naming convention: <code>YYYY-MM-DD_short-description.yaml</code>
       </p>
