@@ -323,9 +323,15 @@ export function PlannerProvider({ children }) {
           // Disable prereq/error lines for courses in 'incoming' semester
           if (placements[rel.from] === "incoming" || placements[rel.to] === "incoming") return;
           if (rel.type === "prerequisite") {
+            // Only draw a red line if the prereq predicate is unsatisfied due to order
+            const toCourse = courseMap[rel.to];
+            if (!toCourse || !toCourse.prereqs?.length) return;
+            const ti = SEM_INDEX[placements[rel.to]];
+            const prereqResult = evalPrereqTree(toCourse.prereqs, placements, SEM_INDEX, ti);
+            if (prereqResult !== "order") return; // Only draw if unsatisfied due to order
+            // Now, check if THIS edge is the one out of order
             const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
-            const toIdx   = SEM_INDEX[placements[rel.to]]   ?? -1;
-            if (fromIdx < toIdx) return; // not violated
+            if (fromIdx < ti) return; // This edge is not the one out of order
             const fp = getCenter(rel.from);
             const tp = getCenter(rel.to);
             if (!fp || !tp) return;
