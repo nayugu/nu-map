@@ -23,6 +23,7 @@ export default function Header() {
     coopGradConflicts, workPl,
     showViolLines, setShowViolLines,
     manualZoom, setManualZoom, isPhone, isMobile,
+    collapseOtherCredits, setCollapseOtherCredits,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -157,6 +158,15 @@ export default function Header() {
                   border: `1px solid ${showViolLines ? "var(--error)" : "var(--border-2)"}`,
                   color: showViolLines ? "var(--error)" : "var(--text-4)" }}>
                 {showViolLines ? "Error lines: on" : "Error lines: off"}
+              </button>
+
+              {/* Collapse other credits toggle */}
+              <button className="hdr-btn-dd" onClick={() => setCollapseOtherCredits(v => !v)}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: `1px solid ${collapseOtherCredits ? "var(--active)" : "var(--border-2)"}`,
+                  color: collapseOtherCredits ? "var(--active)" : "var(--text-4)" }}>
+                {collapseOtherCredits ? "Collapse other credits: on" : "Collapse other credits: off"}
               </button>
 
               {/* Theme toggle */}

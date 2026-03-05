@@ -32,6 +32,7 @@ export function PlannerProvider({ children }) {
   const allEdges  = useMemo(() => courses.flatMap(c => extractEdges(c.id, c.prereqs, c.coreqs)), [courses]);
   const subjects  = useMemo(() => [...new Set(courses.map(c => c.subject))].sort(), [courses]);
 
+
   // ── Persistent planner state ─────────────────────────────────
   const _saved = useMemo(() => loadSaved(), []);
   const [placements,       setPlacements]       = useState(() => (_saved?.persist && _saved.placements)       ? _saved.placements       : {});
@@ -46,6 +47,20 @@ export function PlannerProvider({ children }) {
   // Extra SH that counts toward graduation but isn't tied to a specific course
   // (e.g. AP/IB general credit, transfer credit, test-out hours).
   const [bonusSH, setBonusSH] = useState(() => (_saved?.persist && _saved.bonusSH != null) ? _saved.bonusSH : 0);
+
+  // ── UI: Other credits collapse setting ──
+  const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => {
+    try {
+      const v = localStorage.getItem("ncp-collapse-other-credits");
+      return v === null ? true : v === "true";
+    } catch {
+      return true;
+    }
+  });
+  const updateCollapseOtherCredits = (val) => {
+    setCollapseOtherCredits(val);
+    try { localStorage.setItem("ncp-collapse-other-credits", String(val)); } catch {}
+  };
 
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
   const effectiveCourseMap = useMemo(() => {
@@ -882,6 +897,7 @@ export function PlannerProvider({ children }) {
     starredIds, bankCourseIds,
     // Settings
     showDisclaimer, showSettings,
+    collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
     panelHeight,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,

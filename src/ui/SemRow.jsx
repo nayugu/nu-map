@@ -2,6 +2,7 @@
 // SEM ROW  — renders a single non-summer semester row (fall/spring/special)
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
+import { useState } from "react";
 import { TYPE_BG, WORK_TERMS } from "../core/constants.js";
 import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
@@ -34,6 +35,10 @@ export default function SemRow({ sem }) {
                    : sem.type === "summer" ? 2 : null;
   const main4      = crs.filter(c => c.sh >= 4);
   const others     = crs.filter(c => c.sh < 4);
+
+  // Collapsible other credits
+  const { collapseOtherCredits, setCollapseOtherCredits } = usePlanner();
+  const [showOther, setShowOther] = useState(!collapseOtherCredits);
   const isHov      = hoveredSem === sem.id;
   const tb         = TYPE_BG[sem.type] || TYPE_BG.special;
 
@@ -315,37 +320,55 @@ export default function SemRow({ sem }) {
               </div>
             )}
 
-            {/* Other <4 SH zone */}
+            {/* Other <4 SH zone (collapsible) */}
             {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 4) < 4)) && (
-              <div
-                onDragOver={e => {
-                  if (!dragInfo || dragInfo.type !== "course") return;
-                  const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
-                  e.preventDefault(); e.stopPropagation();
-                  setHoveredZone({ semId: sem.id, zone: "other" }); setHoveredSem(null);
-                }}
-                onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
-                onDrop={e => {
-                  if (!dragInfo || dragInfo.type !== "course") return;
-                  const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
-                  e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
-                }}
-                style={{
-                  display: "flex", flexWrap: "wrap", gap: 4,
-                  marginTop: 5, padding: "5px 4px 4px",
-                  borderTop: "1px solid var(--border-sub)", borderRadius: 4,
-                  minHeight: others.length === 0 ? 34 : "auto",
-                background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "other" ? "var(--active-bg)" : "transparent",
-                outline:    hoveredZone?.semId === sem.id && hoveredZone?.zone === "other" ? "1px dashed var(--active)" : "none",
-                  transition: "background 0.1s",
-                }}
-              >
-                <span style={{ fontSize: 10, color: "var(--text-5)", width: "100%", margin: "0 0 2px 1px" }}>other credits</span>
-                {others.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
-                {others.length === 0 && (
-                  <span style={{ fontSize: 9, color: "var(--text-5)", fontStyle: "italic", alignSelf: "center" }}>
-                    drop &lt;4 SH here
-                  </span>
+              <div style={{ marginTop: 5 }}>
+                <button
+                  onClick={() => {
+                    setShowOther(v => {
+                      setCollapseOtherCredits(v ? false : true);
+                      return !v;
+                    });
+                  }}
+                  style={{
+                    fontSize: 9, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left"
+                  }}
+                  aria-expanded={showOther}
+                  title={showOther ? "Hide other credits" : "Show other credits"}
+                >
+                  {showOther ? "▼ other credits" : "► other credits"}
+                </button>
+                {showOther && (
+                  <div
+                    onDragOver={e => {
+                      if (!dragInfo || dragInfo.type !== "course") return;
+                      const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
+                      e.preventDefault(); e.stopPropagation();
+                      setHoveredZone({ semId: sem.id, zone: "other" }); setHoveredSem(null);
+                    }}
+                    onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
+                    onDrop={e => {
+                      if (!dragInfo || dragInfo.type !== "course") return;
+                      const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
+                      e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
+                    }}
+                    style={{
+                      display: "flex", flexWrap: "wrap", gap: 4,
+                      padding: "5px 4px 4px",
+                      borderTop: "1px solid var(--border-sub)", borderRadius: 4,
+                      minHeight: others.length === 0 ? 34 : "auto",
+                      background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "other" ? "var(--active-bg)" : "transparent",
+                      outline: hoveredZone?.semId === sem.id && hoveredZone?.zone === "other" ? "1px dashed var(--active)" : "none",
+                      transition: "background 0.1s",
+                    }}
+                  >
+                    {others.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
+                    {others.length === 0 && (
+                      <span style={{ fontSize: 9, color: "var(--text-5)", fontStyle: "italic", alignSelf: "center" }}>
+                        drop &lt;4 SH here
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             )}
