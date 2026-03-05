@@ -1,6 +1,20 @@
 {
   "runs": [
     {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-05T01:20:02.530Z",
+      "stats": {
+        "correct": 2755,
+        "needPR": 1306,
+        "rangeDiff": 1,
+        "newCourses": 3780,
+        "notInCatalog": 186,
+        "totalScanned": 7842,
+        "subjectsDone": 231
+      }
+    },
+    {
       "type": "nuclear-fix",
       "subject": "☢ Nuclear Fix Applied",
       "timestamp": "2026-03-05T01:14:53.809Z",
