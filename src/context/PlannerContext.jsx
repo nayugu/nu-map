@@ -951,6 +951,10 @@ export function PlannerProvider({ children }) {
     } catch {
       resetPlanToDefaults();
     }
+    // Reset bank UI filters to defaults
+    setBankSearch("");
+    setBankTab("all");
+    setBankSort("az");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePlanId]);
 
