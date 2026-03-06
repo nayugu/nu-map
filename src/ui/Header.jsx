@@ -93,31 +93,61 @@ export default function Header() {
           <img src={`${import.meta.env.BASE_URL}logo.png`} alt="NU Map" style={{ height: 20, width: 20, objectFit: "contain", flexShrink: 0 }} />
           <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", flexShrink: 0 }}>NU Map</span>
           <span style={{ fontSize: 10, color: "var(--text-6)", flexShrink: 0 }}>·</span>
-          <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{courses.length.toLocaleString()} courses</span>
+          {!isPhone && (
+            <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{courses.length.toLocaleString()} courses</span>
+          )}
           {!isPhone && dataMeta.lastUpdated && (
-              <span style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap" }} title="Date of last course data refresh">
+            <span style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+              <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap" }} title="Date of last course data refresh">
+                updated {dataMeta.lastUpdated}
+              </span>
+              <span
+                style={{
+                  fontSize: 9,
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  color: "var(--beta-text)",
+                  background: "var(--beta-bg)",
+                  padding: "1px 7px",
+                  borderRadius: 6,
+                  marginLeft: 0,
+                  userSelect: "none",
+                  boxShadow: "0 1px 2px 0 rgba(0,0,0,0.03)",
+                  lineHeight: 1.7,
+                  transition: "background 0.2s,color 0.2s"
+                }}
+              >
+                BETA
+              </span>
+            </span>
+          )}
+          {isPhone && dataMeta.lastUpdated && (
+            <>
+              <span style={{ flex: 1, display: "flex", alignItems: "center", minWidth: 0, overflow: "hidden" }}>
+                <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} title="Date of last course data refresh">
                   updated {dataMeta.lastUpdated}
                 </span>
-                <span
-                  style={{
-                    fontSize: 9,
-                    fontWeight: 700,
-                    letterSpacing: "0.04em",
-                    color: "var(--beta-text)",
-                    background: "var(--beta-bg)",
-                    padding: "1px 7px",
-                    borderRadius: 6,
-                    marginLeft: 0,
-                    userSelect: "none",
-                    boxShadow: "0 1px 2px 0 rgba(0,0,0,0.03)",
-                    lineHeight: 1.7,
-                    transition: "background 0.2s,color 0.2s"
-                  }}
-                >
-                  BETA
-                </span>
               </span>
+              <span
+                style={{
+                  fontSize: 9,
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  color: "var(--beta-text)",
+                  background: "var(--beta-bg)",
+                  padding: "1px 7px",
+                  borderRadius: 6,
+                  marginLeft: 0,
+                  userSelect: "none",
+                  boxShadow: "0 1px 2px 0 rgba(0,0,0,0.03)",
+                  lineHeight: 1.7,
+                  transition: "background 0.2s,color 0.2s",
+                  alignSelf: "flex-end"
+                }}
+              >
+                BETA
+              </span>
+            </>
           )}
         </div>
 
