@@ -3,6 +3,31 @@
     {
       "type": "nuclear-fix",
       "subject": "☢ Nuclear Fix Applied",
+      "timestamp": "2026-03-06T00:45:25.402Z",
+      "fixed": 20,
+      "nChanged": 16,
+      "nRange": 0,
+      "nAdded": 4,
+      "nRemoved": 0,
+      "label": "Mar 2026"
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-03-06T00:41:04.870Z",
+      "stats": {
+        "correct": 7709,
+        "needPR": 16,
+        "rangeDiff": 0,
+        "newCourses": 4,
+        "notInCatalog": 0,
+        "totalScanned": 7729,
+        "subjectsDone": 228
+      }
+    },
+    {
+      "type": "nuclear-fix",
+      "subject": "☢ Nuclear Fix Applied",
       "timestamp": "2026-03-05T16:08:16.542Z",
       "fixed": 1305,
       "nChanged": 1298,

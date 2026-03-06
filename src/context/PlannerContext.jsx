@@ -865,6 +865,137 @@ export function PlannerProvider({ children }) {
     setBonusSH(0);
   };
 
+  // ── Multi-plan management ────────────────────────────────────
+  const [plans, setPlans] = useState(() => {
+    try {
+      const raw = localStorage.getItem("ncp-plan-index");
+      if (raw) return JSON.parse(raw);
+    } catch {}
+    return [{ id: "default", name: "Plan 1" }];
+  });
+  const [activePlanId, setActivePlanId] = useState(() => {
+    try { return localStorage.getItem("ncp-active-plan") || "default"; } catch { return "default"; }
+  });
+
+  // Persist plan index whenever it changes
+  useEffect(() => {
+    try { localStorage.setItem("ncp-plan-index", JSON.stringify(plans)); } catch {}
+  }, [plans]);
+  useEffect(() => {
+    try { localStorage.setItem("ncp-active-plan", activePlanId); } catch {}
+  }, [activePlanId]);
+
+  // Capture full plan state as a serializable object
+  const captureCurrentPlan = () => ({
+    version: 1,
+    exported: new Date().toISOString(),
+    entSem: planEntSem, entYear: planEntYear,
+    gradSem: planGradSem, gradYear: planGradYear,
+    placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
+    offeredOverrides, collapsedSubs,
+    major:  localStorage.getItem("ncp-grad-major")  || "",
+    conc:   localStorage.getItem("ncp-grad-conc")   || "",
+    minor1: localStorage.getItem("ncp-grad-minor1") || "",
+    minor2: localStorage.getItem("ncp-grad-minor2") || "",
+  });
+
+  // Restore a plan data object into all state
+  const restorePlan = (d) => {
+    setPlacements(d.placements ?? {});
+    setWorkPl(d.workPl ?? {});
+    setSemOrders(d.semOrders ?? {});
+    setShOverrides(d.shOverrides ?? {});
+    setOfferedOverrides(d.offeredOverrides ?? {});
+    setCollapsedSubs(d.collapsedSubs ?? {});
+    setBonusSH(d.bonusSH ?? 0);
+    if (d.currentSemId) setCurrentSemId(d.currentSemId);
+    if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem("ncp-ent-sem",  d.entSem);  } catch {} }
+    if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem("ncp-ent-year", d.entYear); } catch {} }
+    if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem("ncp-grad-sem", d.gradSem); } catch {} }
+    if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem("ncp-grad-year",d.gradYear);} catch {} }
+    if (d.major)  localStorage.setItem("ncp-grad-major",  d.major);
+    if (d.conc)   localStorage.setItem("ncp-grad-conc",   d.conc);
+    if (d.minor1) localStorage.setItem("ncp-grad-minor1", d.minor1);
+    if (d.minor2) localStorage.setItem("ncp-grad-minor2", d.minor2);
+  };
+
+  // Save current plan to its localStorage slot
+  const saveCurrentPlanToSlot = () => {
+    try { localStorage.setItem(`ncp-plan-data-${activePlanId}`, JSON.stringify(captureCurrentPlan())); } catch {}
+  };
+
+  // Switch to a different plan
+  const switchPlan = (id) => {
+    if (id === activePlanId) return;
+    // Auto-save current plan
+    saveCurrentPlanToSlot();
+    // Load new plan
+    try {
+      const raw = localStorage.getItem(`ncp-plan-data-${id}`);
+      if (raw) {
+        const d = JSON.parse(raw);
+        restorePlan(d);
+      } else {
+        // No data yet for this plan — start blank
+        resetAll();
+      }
+    } catch {
+      resetAll();
+    }
+    setActivePlanId(id);
+  };
+
+  // Create a new plan
+  const createPlan = (name) => {
+    // Auto-save current plan first
+    saveCurrentPlanToSlot();
+    const id = `plan_${Date.now()}`;
+    setPlans(prev => [...prev, { id, name }]);
+    setActivePlanId(id);
+    // Start blank
+    resetAll();
+    // Reset cohort to defaults
+    setPlanEntSem("fall"); setPlanEntYear(DEFAULT_START_YEAR);
+    setPlanGradSem("spring"); setPlanGradYear(DEFAULT_START_YEAR + NUM_YEARS);
+    try {
+      localStorage.setItem("ncp-ent-sem", "fall");
+      localStorage.setItem("ncp-ent-year", String(DEFAULT_START_YEAR));
+      localStorage.setItem("ncp-grad-sem", "spring");
+      localStorage.setItem("ncp-grad-year", String(DEFAULT_START_YEAR + NUM_YEARS));
+      localStorage.removeItem("ncp-grad-major");
+      localStorage.removeItem("ncp-grad-conc");
+      localStorage.removeItem("ncp-grad-minor1");
+      localStorage.removeItem("ncp-grad-minor2");
+    } catch {}
+  };
+
+  // Delete a plan
+  const deletePlan = (id) => {
+    if (plans.length <= 1) return; // can't delete last plan
+    try { localStorage.removeItem(`ncp-plan-data-${id}`); } catch {}
+    const remaining = plans.filter(p => p.id !== id);
+    setPlans(remaining);
+    if (id === activePlanId) {
+      // Switch to first remaining plan
+      const nextId = remaining[0].id;
+      setActivePlanId(nextId);
+      try {
+        const raw = localStorage.getItem(`ncp-plan-data-${nextId}`);
+        if (raw) restorePlan(JSON.parse(raw)); else resetAll();
+      } catch { resetAll(); }
+    }
+  };
+
+  // Rename a plan
+  const renamePlan = (id, name) => {
+    setPlans(prev => prev.map(p => p.id === id ? { ...p, name } : p));
+  };
+
+  // Auto-save active plan periodically (on every persistence save)
+  useEffect(() => {
+    saveCurrentPlanToSlot();
+  }, [placements, workPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
     const data = {
@@ -888,6 +1019,7 @@ export function PlannerProvider({ children }) {
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
+
   const importPlanJSON = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -1020,7 +1152,9 @@ export function PlannerProvider({ children }) {
     }),
     setPlacements, setWorkPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    resetAll, exportPlanJSON, importPlanJSON, toggleStar, toggleOffered,
+    resetAll, exportPlanJSON, importPlanJSON,
+    plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
+    toggleStar, toggleOffered,
     getSemStatus,
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard,
     canDropSem,

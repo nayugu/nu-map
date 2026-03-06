@@ -2,7 +2,7 @@
 // HEADER  — sticky timeline header: title, SH counters, controls,
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE, WORK_TERMS } from "../core/constants.js";
@@ -26,10 +26,19 @@ export default function Header() {
     collapseOtherCredits, setCollapseOtherCredits,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON,
+    plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
   const [showQuickSet, setShowQuickSet] = useState(false);
+  const [showPlanMenu, setShowPlanMenu] = useState(false);
+
+   useEffect(() => {
+    if (!showPlanMenu) return;
+    const close = () => setShowPlanMenu(false);
+    window.addEventListener("click", close);
+    return () => window.removeEventListener("click", close);
+  }, [showPlanMenu]);
 
   const cycleTheme = e => {
     e.stopPropagation();
@@ -103,10 +112,82 @@ export default function Header() {
             {totalSHPlaced} SH placed
           </span>
 
-          {/* Spacer */}
-          <div style={{ flex: 1 }} />
-
           {/* Buttons — right side, icon-only on mobile/tablet */}
+        
+        {/* Plan switcher dropdown */}
+        <div style={{ position: "relative" }}>
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowPlanMenu(v => !v); }}
+            style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? 80 : 160,
+              overflow: "hidden", textOverflow: "ellipsis",
+              color: showPlanMenu ? "var(--text-2)" : "var(--text-4)",
+              background: showPlanMenu ? "var(--bg-surface)" : "var(--bg-surface-2)",
+              border: `1px solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`,
+              borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", whiteSpace: "nowrap" }}>
+            {isPhone ? `${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾` : isMobile ? "📋" : `📋 ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
+          </button>
+
+          {showPlanMenu && (
+            <div onClick={e => e.stopPropagation()} style={{
+              position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
+              background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 6,
+              padding: "6px 0", minWidth: 160, boxShadow: "var(--shadow-modal)",
+              display: "flex", flexDirection: "column", transformOrigin: "top left",
+              fontSize: isPhone ? 9 : 11,
+            }}>
+              <div style={{fontSize: 8, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", padding: "3px 10px 6px", borderBottom: "1px solid var(--border-1)" }}>
+                SAVED PLANS
+              </div>
+
+              {plans.map(p => (
+                <div key={p.id} style={{
+                  display: "flex", alignItems: "center", gap: 4, padding: "4px 10px",
+                  background: p.id === activePlanId ? "var(--active-bg)" : "transparent",
+                  cursor: p.id === activePlanId ? "default" : "pointer",
+                }} onClick={() => { if (p.id !== activePlanId) { switchPlan(p.id); setShowPlanMenu(false); } }}>
+                  <span style={{
+                    flex: 1, fontSize: isPhone ? 9 : 10, fontWeight: p.id === activePlanId ? 700 : 400,
+                    color: p.id === activePlanId ? "var(--active)" : "var(--text-3)",
+                    overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                  }}>
+                    {p.id === activePlanId ? "● " : ""}{p.name}
+                  </span>
+                  {/* Rename */}
+                  <button onClick={e => {
+                    e.stopPropagation();
+                    const name = prompt("Rename plan:", p.name);
+                    if (name?.trim()) renamePlan(p.id, name.trim());
+                  }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px" }}
+                    title="Rename">✎</button>
+                  {/* Delete */}
+                  {plans.length > 1 && (
+                    <button onClick={e => {
+                      e.stopPropagation();
+                      if (confirm(`Delete "${p.name}"?`)) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
+                    }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px" }}
+                      title="Delete">✕</button>
+                  )}
+                </div>
+              ))}
+
+              <div style={{ borderTop: "1px solid var(--border-1)", padding: "4px 10px 3px" }}>
+                <button onClick={e => {
+                  e.stopPropagation();
+                  const name = prompt("New plan name:");
+                  if (name?.trim()) { createPlan(name.trim()); setShowPlanMenu(false); }
+                }} style={{
+                  width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--accent)", textAlign: "left",
+                }}>
+                  + New plan
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Spacer */}
+          <div style={{ flex: 1 }} />
 
         {/* Export — hidden on phone */}
         {!isPhone && <button className="hdr-btn" onClick={handleExport} title="Export PDF" style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
@@ -130,7 +211,7 @@ export default function Header() {
         {/* Reset — hidden on phone */}
         {!isPhone && <button className="hdr-btn" onClick={handleReset} title="Reset all placements"
           style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
-          {isMobile ? "↺" : "↺ Reset"}
+          {isMobile ? "↺" : "↺ Erase"}
         </button>}
 
         {/* ⚙ Settings dropdown — infrequent controls */}
@@ -198,7 +279,7 @@ export default function Header() {
                 style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                ↺ Reset
+                ↺ Erase
               </button>
 
               {/* Dev portal link */}
