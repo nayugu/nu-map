@@ -172,6 +172,7 @@ export function PlannerProvider({ children }) {
   const touchDragIdRef  = useRef(null);  // card id currently being touch-dragged
   const ghostRef        = useRef(null);  // floating ghost element during touch drag
   const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
+  const isFirstRender = useRef(true);
 
   // ── Effects: data loading ────────────────────────────────────
   useEffect(() => {
@@ -862,7 +863,7 @@ export function PlannerProvider({ children }) {
   );
 
   // ── Reset ────────────────────────────────────────────────────
-  const resetAll = () => {
+  const resetPlanToDefaults = () => {
     setPlacements({});
     setWorkPl({});
     setSemOrders({});
@@ -872,7 +873,20 @@ export function PlannerProvider({ children }) {
     setConc("");
     setMinor1("");
     setMinor2("");
+    // Reset cohort to defaults
+    setPlanEntSem("fall");
+    setPlanEntYear(DEFAULT_START_YEAR);
+    setPlanGradSem("spring");
+    setPlanGradYear(DEFAULT_START_YEAR + NUM_YEARS);
+    // Also clear any per‑plan localStorage items for cohort (optional, but safe)
+    try {
+      localStorage.setItem("ncp-ent-sem", "fall");
+      localStorage.setItem("ncp-ent-year", String(DEFAULT_START_YEAR));
+      localStorage.setItem("ncp-grad-sem", "spring");
+      localStorage.setItem("ncp-grad-year", String(DEFAULT_START_YEAR + NUM_YEARS));
+    } catch {}
   };
+  const resetAll = resetPlanToDefaults;
 
   // ── Multi-plan management ────────────────────────────────────
   const [plans, setPlans] = useState(() => {
@@ -925,6 +939,21 @@ export function PlannerProvider({ children }) {
     setMinor2(d.minor2 ?? "");
   };
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(`ncp-plan-data-${activePlanId}`);
+      if (raw) {
+        const d = JSON.parse(raw);
+        restorePlan(d);
+      } else {
+        resetPlanToDefaults();
+      }
+    } catch {
+      resetPlanToDefaults();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePlanId]);
+
   // Save current plan to its localStorage slot
   const saveCurrentPlanToSlot = () => {
     try { localStorage.setItem(`ncp-plan-data-${activePlanId}`, JSON.stringify(captureCurrentPlan())); } catch {}
@@ -935,44 +964,18 @@ export function PlannerProvider({ children }) {
     if (id === activePlanId) return;
     // Auto-save current plan
     saveCurrentPlanToSlot();
-    // Load new plan
-    try {
-      const raw = localStorage.getItem(`ncp-plan-data-${id}`);
-      if (raw) {
-        const d = JSON.parse(raw);
-        restorePlan(d);
-      } else {
-        // No data yet for this plan — start blank
-        resetAll();
-      }
-    } catch {
-      resetAll();
-    }
+    // Switch to new plan – the useEffect will load its data (or reset)
     setActivePlanId(id);
   };
 
   // Create a new plan
-  const createPlan = (name) => {
-    // Auto-save current plan first
+    const createPlan = (name) => {
+    // Auto-save current plan
     saveCurrentPlanToSlot();
     const id = `plan_${Date.now()}`;
     setPlans(prev => [...prev, { id, name }]);
+    // Switch to new plan – the useEffect will reset to defaults (no saved data)
     setActivePlanId(id);
-    // Start blank
-    resetAll();
-    // Reset cohort to defaults
-    setPlanEntSem("fall"); setPlanEntYear(DEFAULT_START_YEAR);
-    setPlanGradSem("spring"); setPlanGradYear(DEFAULT_START_YEAR + NUM_YEARS);
-    try {
-      localStorage.setItem("ncp-ent-sem", "fall");
-      localStorage.setItem("ncp-ent-year", String(DEFAULT_START_YEAR));
-      localStorage.setItem("ncp-grad-sem", "spring");
-      localStorage.setItem("ncp-grad-year", String(DEFAULT_START_YEAR + NUM_YEARS));
-      setMajor("");
-      setConc("");
-      setMinor1("");
-      setMinor2("");
-    } catch {}
   };
 
   // Delete a plan
@@ -982,13 +985,8 @@ export function PlannerProvider({ children }) {
     const remaining = plans.filter(p => p.id !== id);
     setPlans(remaining);
     if (id === activePlanId) {
-      // Switch to first remaining plan
-      const nextId = remaining[0].id;
-      setActivePlanId(nextId);
-      try {
-        const raw = localStorage.getItem(`ncp-plan-data-${nextId}`);
-        if (raw) restorePlan(JSON.parse(raw)); else resetAll();
-      } catch { resetAll(); }
+      // Switch to first remaining plan – the useEffect will load its data (or reset)
+      setActivePlanId(remaining[0].id);
     }
   };
 
@@ -999,9 +997,13 @@ export function PlannerProvider({ children }) {
 
   // Auto-save active plan periodically (on every persistence save)
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     saveCurrentPlanToSlot();
-  }, [placements, workPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [placements, workPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
+  
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
     const data = {
