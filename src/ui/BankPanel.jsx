@@ -19,14 +19,15 @@ export default function BankPanel() {
     starredIds, collapsedSubs, setCollapsedSubs,
     workPl, onDropBank, onDragStart, cardRefs,
     bankRef, bankResizing, uiScaleRef, isPhone,
+    placedIds,
   } = usePlanner();
 
   const q = bankSearch.trim().toLowerCase();
 
   const bankCourses = useMemo(() => {
     const tokens = q.split(/\s+/).filter(Boolean);
-    let list = courses.filter(c => bankCourseIds.has(c.id));
-    if (bankTab === "starred") list = list.filter(c => starredIds.has(c.id));
+    let list = q ? [...courses] : courses.filter(c => bankCourseIds.has(c.id));
+    if (bankTab === "starred" && !(q && !isPhone)) list = list.filter(c => starredIds.has(c.id));
 
     const tieSort =
       bankSort === "za"  ? (a, b) => b.code.localeCompare(a.code) :
@@ -61,7 +62,7 @@ export default function BankPanel() {
     if (bankSort === "sh↑") return [...list].sort((a, b) => a.sh - b.sh || a.code.localeCompare(b.code));
     return list;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courses, bankCourseIds.size, bankTab, starredIds, q, bankSort]);
+  }, [courses, bankCourseIds.size, bankTab, starredIds, q, bankSort, placedIds.size]);
 
   const bankBySubject = useMemo(() => {
     if (q || bankTab === "starred") return null;
@@ -286,7 +287,22 @@ export default function BankPanel() {
                   <><div style={{ fontSize: 20, marginBottom: 6 }}>☆</div>No saved courses yet.<br /><span style={{ fontSize: 9 }}>Click ☆ on any course row to save it.</span></>
                 ) : "No courses match."}
               </div>
-            ) : bankCourses.map(c => <CourseCard key={c.id} course={c} inSem={false} semId={null} />)}
+            ) : bankCourses.map(c => {
+              const isPlaced = placedIds.has(c.id);
+              return (
+                <div key={c.id} style={{ position: "relative", opacity: isPlaced ? 0.55 : 1 }}>
+                  <CourseCard course={c} inSem={false} semId={null} />
+                  {isPlaced && !isPhone && (
+                    <span style={{
+                      position: "absolute", top: 3, right: 5,
+                      fontSize: 7, fontWeight: 700, color: "var(--success)",
+                      background: "var(--success-bg)", border: "1px solid var(--success-border)",
+                      borderRadius: 3, padding: "0px 4px", pointerEvents: "none",
+                    }}>placed</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
 
