@@ -48,6 +48,15 @@ export function PlannerProvider({ children }) {
   // (e.g. AP/IB general credit, transfer credit, test-out hours).
   const [bonusSH, setBonusSH] = useState(() => (_saved?.persist && _saved.bonusSH != null) ? _saved.bonusSH : 0);
 
+  // ── Sticky Courses ──
+  const stickySnapshotRef = useRef(null);
+  const [stickyCourses, setStickyCourses] = useState(() => {
+    try { return localStorage.getItem("ncp-sticky-courses") !== "false"; } catch { return true; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem("ncp-sticky-courses", String(stickyCourses)); } catch {}
+  }, [stickyCourses]);
+
   // ── UI: Other credits collapse setting ──
   const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => true);
   const updateCollapseOtherCredits = (val) => {
@@ -857,22 +866,50 @@ export function PlannerProvider({ children }) {
   };
 
   // ── Cohort setters that also persist to localStorage ─────────
+  // When stickyCourses is on, snapshot placements + SEMESTERS before changing
   const setEntSem = sem => {
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
     setPlanEntSem(sem);
     try { localStorage.setItem("ncp-ent-sem", sem); } catch {}
   };
   const setEntYear = year => {
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
     setPlanEntYear(year);
     try { localStorage.setItem("ncp-ent-year", year); } catch {}
   };
   const setGradSem = sem => {
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
     setPlanGradSem(sem);
     try { localStorage.setItem("ncp-grad-sem", sem); } catch {}
   };
   const setGradYear = year => {
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
     setPlanGradYear(year);
     try { localStorage.setItem("ncp-grad-year", year); } catch {}
   };
+
+  // ── Sticky Courses: remap placements after SEMESTERS regenerates ──
+  useEffect(() => {
+    const snap = stickySnapshotRef.current;
+    if (!snap) return;
+    stickySnapshotRef.current = null;
+    const oldIds = snap.sems.map(s => s.id);
+    const newIds = SEMESTERS.map(s => s.id);
+    // If semesters didn't actually change, skip
+    if (oldIds.length === newIds.length && oldIds.every((id, i) => id === newIds[i])) return;
+    const newPl = {};
+    for (const [cid, semId] of Object.entries(snap.placements)) {
+      const idx = oldIds.indexOf(semId);
+      if (idx !== -1 && idx < newIds.length) {
+        newPl[cid] = newIds[idx]; // same row index → new semester ID
+      } else if (semId === "incoming" || newIds.includes(semId)) {
+        newPl[cid] = semId; // special semesters or still-valid IDs stay
+      } else {
+        newPl[cid] = newIds[newIds.length - 1]; // overflow → last semester
+      }
+    }
+    setPlacements(newPl);
+  }, [SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Offered overrides setter ─────────────────────────────────
   const toggleOffered = (courseId, type, currentList) => {
@@ -903,6 +940,7 @@ export function PlannerProvider({ children }) {
     // Settings
     showDisclaimer, showSettings,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
+    stickyCourses, setStickyCourses,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
     panelHeight,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,

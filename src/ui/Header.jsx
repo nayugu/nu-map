@@ -24,6 +24,7 @@ export default function Header() {
     showViolLines, setShowViolLines,
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
+    stickyCourses, setStickyCourses,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -336,6 +337,15 @@ export default function Header() {
                       ~{((planGradYear * 2 + (planGradSem === "fall" ? 0 : 1)) - (planEntYear * 2 + (planEntSem === "fall" ? 0 : 1))) / 2} yrs
                     </span>
                 }
+              </div>
+              {/* Sticky courses toggle */}
+              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 8, display: "flex", justifyContent: "flex-end" }}>
+                <button onClick={() => setStickyCourses(v => !v)}
+                  style={{ fontSize: 9, fontWeight: 700, cursor: "pointer", background: "var(--bg-surface)", padding: "3px 8px", borderRadius: 4,
+                    border: `1px solid ${stickyCourses ? "var(--active)" : "var(--border-2)"}`,
+                    color: stickyCourses ? "var(--active)" : "var(--text-5)" }}>
+                  {stickyCourses ? "📌 Sticky: on" : "📌 Sticky: off"}
+                </button>
               </div>
             </div>
           )}
