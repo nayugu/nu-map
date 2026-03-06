@@ -47,6 +47,11 @@ export function PlannerProvider({ children }) {
   // Extra SH that counts toward graduation but isn't tied to a specific course
   // (e.g. AP/IB general credit, transfer credit, test-out hours).
   const [bonusSH, setBonusSH] = useState(() => (_saved?.persist && _saved.bonusSH != null) ? _saved.bonusSH : 0);
+  // Plan-specific program selections (major path, concentration label, minor paths)
+  const [major,  setMajor]  = useState("");
+  const [conc,   setConc]   = useState("");
+  const [minor1, setMinor1] = useState("");
+  const [minor2, setMinor2] = useState("");
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
@@ -863,6 +868,10 @@ export function PlannerProvider({ children }) {
     setSemOrders({});
     setOfferedOverrides({});
     setBonusSH(0);
+    setMajor("");
+    setConc("");
+    setMinor1("");
+    setMinor2("");
   };
 
   // ── Multi-plan management ────────────────────────────────────
@@ -893,10 +902,7 @@ export function PlannerProvider({ children }) {
     gradSem: planGradSem, gradYear: planGradYear,
     placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
-    major:  localStorage.getItem("ncp-grad-major")  || "",
-    conc:   localStorage.getItem("ncp-grad-conc")   || "",
-    minor1: localStorage.getItem("ncp-grad-minor1") || "",
-    minor2: localStorage.getItem("ncp-grad-minor2") || "",
+    major, conc, minor1, minor2,
   });
 
   // Restore a plan data object into all state
@@ -913,10 +919,10 @@ export function PlannerProvider({ children }) {
     if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem("ncp-ent-year", d.entYear); } catch {} }
     if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem("ncp-grad-sem", d.gradSem); } catch {} }
     if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem("ncp-grad-year",d.gradYear);} catch {} }
-    if (d.major)  localStorage.setItem("ncp-grad-major",  d.major);
-    if (d.conc)   localStorage.setItem("ncp-grad-conc",   d.conc);
-    if (d.minor1) localStorage.setItem("ncp-grad-minor1", d.minor1);
-    if (d.minor2) localStorage.setItem("ncp-grad-minor2", d.minor2);
+    setMajor(d.major ?? "");
+    setConc(d.conc ?? "");
+    setMinor1(d.minor1 ?? "");
+    setMinor2(d.minor2 ?? "");
   };
 
   // Save current plan to its localStorage slot
@@ -962,10 +968,10 @@ export function PlannerProvider({ children }) {
       localStorage.setItem("ncp-ent-year", String(DEFAULT_START_YEAR));
       localStorage.setItem("ncp-grad-sem", "spring");
       localStorage.setItem("ncp-grad-year", String(DEFAULT_START_YEAR + NUM_YEARS));
-      localStorage.removeItem("ncp-grad-major");
-      localStorage.removeItem("ncp-grad-conc");
-      localStorage.removeItem("ncp-grad-minor1");
-      localStorage.removeItem("ncp-grad-minor2");
+      setMajor("");
+      setConc("");
+      setMinor1("");
+      setMinor2("");
     } catch {}
   };
 
@@ -994,7 +1000,7 @@ export function PlannerProvider({ children }) {
   // Auto-save active plan periodically (on every persistence save)
   useEffect(() => {
     saveCurrentPlanToSlot();
-  }, [placements, workPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, workPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -1005,10 +1011,7 @@ export function PlannerProvider({ children }) {
       gradSem: planGradSem, gradYear: planGradYear,
       placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
       offeredOverrides, collapsedSubs,
-      major:  localStorage.getItem("ncp-grad-major")  || "",
-      conc:   localStorage.getItem("ncp-grad-conc")   || "",
-      minor1: localStorage.getItem("ncp-grad-minor1") || "",
-      minor2: localStorage.getItem("ncp-grad-minor2") || "",
+      major, conc, minor1, minor2,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
@@ -1039,10 +1042,10 @@ export function PlannerProvider({ children }) {
         if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem("ncp-ent-year", d.entYear); } catch {} }
         if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem("ncp-grad-sem", d.gradSem); } catch {} }
         if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem("ncp-grad-year",d.gradYear);} catch {} }
-        if (d.major)  localStorage.setItem("ncp-grad-major",  d.major);
-        if (d.conc)   localStorage.setItem("ncp-grad-conc",   d.conc);
-        if (d.minor1) localStorage.setItem("ncp-grad-minor1", d.minor1);
-        if (d.minor2) localStorage.setItem("ncp-grad-minor2", d.minor2);
+        setMajor(d.major ?? "");
+        setConc(d.conc ?? "");
+        setMinor1(d.minor1 ?? "");
+        setMinor2(d.minor2 ?? "");
       } catch (err) {
         alert("Could not read plan file: " + err.message);
       }
@@ -1151,6 +1154,7 @@ export function PlannerProvider({ children }) {
     gradSemId, coopGradConflicts,
     prereqViolations, coreqViolations, connectedIds,
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
+    major, setMajor, conc, setConc, minor1, setMinor1, minor2, setMinor2,
     // Refs (passed through for DOM measurements)
     timelineRef, cardRefs, bankRef, bankResizing, panelResizing, uiScaleRef,
     // Actions

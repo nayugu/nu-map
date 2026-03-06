@@ -442,21 +442,19 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel() {
-  const { placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone } = usePlanner();
+  const {
+    placements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
+    major: majorPath, setMajor: setMajorPath,
+    conc: selConc, setConc: setSelConc,
+    minor1, setMinor1,
+    minor2, setMinor2,
+  } = usePlanner();
+
+  const selPath    = majorPath || "";
+  const setSelPath = setMajorPath;
 
   const majorGroups  = useMemo(() => getMajorOptionGroups(), []);
   const minorGroups  = useMemo(() => getMinorOptionGroups(), []);
-
-  // ── Persist selections to localStorage ───────────────────────────────
-  const [selPath,  setSelPathRaw]  = useState(() => { try { return localStorage.getItem("ncp-grad-major") || ""; } catch { return ""; } });
-  const [selConc,  setSelConcRaw]  = useState(() => { try { return localStorage.getItem("ncp-grad-conc")  || ""; } catch { return ""; } });
-  const [minor1,   setMinor1Raw]   = useState(() => { try { return localStorage.getItem("ncp-grad-minor1") || ""; } catch { return ""; } });
-  const [minor2,   setMinor2Raw]   = useState(() => { try { return localStorage.getItem("ncp-grad-minor2") || ""; } catch { return ""; } });
-
-  const setSelPath = v => { setSelPathRaw(v); try { localStorage.setItem("ncp-grad-major",  v); } catch {} };
-  const setSelConc = v => { setSelConcRaw(v); try { localStorage.setItem("ncp-grad-conc",   v); } catch {} };
-  const setMinor1  = v => { setMinor1Raw(v);  try { localStorage.setItem("ncp-grad-minor1", v); } catch {} };
-  const setMinor2  = v => { setMinor2Raw(v);  try { localStorage.setItem("ncp-grad-minor2", v); } catch {} };
 
   const [major,    setMajor]    = useState(null);
   const [loadErr,  setLoadErr]  = useState(null);
@@ -465,7 +463,7 @@ export default function GradPanel() {
 
   // Fetch major JSON on path change
   useEffect(() => {
-    if (!selPath) { setMajor(null); setLoadErr(null); setSelConc(""); return; }
+    if (!selPath) { setMajor(null); setLoadErr(null); return; }
     setFetching(true); setLoadErr(null); setMajor(null); setSelConc("");
     loadMajor(selPath)
       .then(setMajor)

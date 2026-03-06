@@ -27,6 +27,7 @@ export default function Header() {
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
+    major, conc, minor1, minor2,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -49,10 +50,10 @@ export default function Header() {
   const handleExport = e => {
     e.stopPropagation();
     const curIdx     = SEM_INDEX[currentSemId] ?? 0;
-    const majorPath  = localStorage.getItem("ncp-grad-major")  || "";
-    const concLabel  = localStorage.getItem("ncp-grad-conc")   || "";
-    const minor1Path = localStorage.getItem("ncp-grad-minor1") || "";
-    const minor2Path = localStorage.getItem("ncp-grad-minor2") || "";
+    const majorPath  = major  || "";
+    const concLabel  = conc   || "";
+    const minor1Path = minor1 || "";
+    const minor2Path = minor2 || "";
     const npCovered  = getNuPathCoverage(placements, courseMap);
     // Build set of course keys that are placed in already-completed semesters
     const doneKeys = new Set();
