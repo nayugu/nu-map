@@ -336,7 +336,12 @@ export default function SemRow({ sem }) {
                   aria-expanded={showOther}
                   title={showOther ? "Hide other credits" : "Show other credits"}
                 >
-                  {showOther ? "▼ other credits" : "► other credits"}
+                  {showOther
+                    ? "▼ other credits"
+                    : (!isPhone && others.length > 0)
+                      ? `► ${others.map(c => `${c.subject} ${c.number}`).join(", ")}`
+                      : "► other credits"
+                  }
                 </button>
                 {showOther && (
                   <div

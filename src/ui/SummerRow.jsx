@@ -122,8 +122,8 @@ export default function SummerRow({ semA, semB }) {
     // ── Normal course session ─────────────────────────────────────
     const courseIds = getOrderedCourses(sem.id, placements, semOrders, courseMap);
     const crs    = courseIds.map(id => courseMap[id]).filter(Boolean);
-    const main4  = crs.filter(c => c.sh >= 4);
-    const others = crs.filter(c => c.sh < 4);
+    const main4  = crs.filter(c => c.sh >= 3);
+    const others = crs.filter(c => c.sh <= 2);
 
     return (
       <div key={sem.id}
@@ -159,14 +159,14 @@ export default function SummerRow({ semA, semB }) {
         }}
           onDragOver={e => {
             if (!dragInfo || dragInfo.type !== "course") return;
-            const c = courseMap[dragInfo.id]; if (!c || c.sh < 4) return;
+            const c = courseMap[dragInfo.id]; if (!c || c.sh < 3) return;
             e.preventDefault(); e.stopPropagation();
             setHoveredZone({ semId: sem.id, zone: "main" }); setHoveredSem(null);
           }}
           onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
           onDrop={e => {
             if (!dragInfo || dragInfo.type !== "course") return;
-            const c = courseMap[dragInfo.id]; if (!c || c.sh < 4) return;
+            const c = courseMap[dragInfo.id]; if (!c || c.sh < 3) return;
             e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
           }}
         >
@@ -180,7 +180,7 @@ export default function SummerRow({ semA, semB }) {
         </div>
 
         {/* Other <4 SH (collapsible) */}
-        {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 4) < 4)) && (
+        {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 3) <= 2)) && (
           <div style={{ marginTop: 4 }}>
             <button
               onClick={() => {
@@ -195,7 +195,12 @@ export default function SummerRow({ semA, semB }) {
               aria-expanded={showOther}
               title={showOther ? "Hide other credits" : "Show other credits"}
             >
-              {showOther ? "▼ other credits" : "► other credits"}
+              {showOther
+                ? "▼ other credits"
+                : (!isPhone && others.length > 0)
+                  ? `► ${others.map(c => `${c.subject} ${c.number}`).join(", ")}`
+                  : "► other credits"
+              }
             </button>
             {showOther && (
               <div style={{
@@ -206,14 +211,14 @@ export default function SummerRow({ semA, semB }) {
               }}
                 onDragOver={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;
-                  const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
+                  const c = courseMap[dragInfo.id]; if (!c || c.sh > 2) return;
                   e.preventDefault(); e.stopPropagation();
                   setHoveredZone({ semId: sem.id, zone: "other" }); setHoveredSem(null);
                 }}
                 onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
                 onDrop={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;
-                  const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
+                  const c = courseMap[dragInfo.id]; if (!c || c.sh > 2) return;
                   e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
                 }}
               >
