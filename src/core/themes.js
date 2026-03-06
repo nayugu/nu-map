@@ -6,6 +6,8 @@
 // ═══════════════════════════════════════════════════════════════════
 
 const dark = {
+    '--beta-text':           '#8ecaff',
+    '--beta-bg':             '#1a263a',
   // ── Surfaces ─────────────────────────────────────────────────────
   '--bg-app':            '#0d1117',
   '--bg-surface':        '#161b22',
@@ -108,6 +110,8 @@ const dark = {
 };
 
 const light = {
+    '--beta-text':           '#0057b8',
+    '--beta-bg':             '#e6f0ff',
   // ── Surfaces — barely-warm off-white ─────────────────────────────
   '--bg-app':            '#fefefe',   // indistinguishable from white, but not pure
   '--bg-surface':        '#ffffff',
