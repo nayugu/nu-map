@@ -25,6 +25,7 @@ export default function Header() {
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
     stickyCourses, setStickyCourses,
+    exportPlanJSON, importPlanJSON,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -111,6 +112,20 @@ export default function Header() {
         {!isPhone && <button className="hdr-btn" onClick={handleExport} title="Export PDF" style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
           {isMobile ? "⬇" : "⬇ Export PDF"}
         </button>}
+
+        {/* Export/Import JSON plan */}
+        {!isPhone && <button className="hdr-btn" onClick={exportPlanJSON} title="Export plan as JSON"
+          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
+          {isMobile ? "💾" : "💾 Save"}
+        </button>}
+        {!isPhone && <>
+          <input type="file" id="plan-import-input" accept=".json" style={{ display: "none" }}
+            onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
+          <button className="hdr-btn" onClick={() => document.getElementById("plan-import-input").click()} title="Import plan from JSON"
+            style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
+            {isMobile ? "📂" : "📂 Load"}
+          </button>
+        </>}
 
         {/* Reset — hidden on phone */}
         {!isPhone && <button className="hdr-btn" onClick={handleReset} title="Reset all placements"

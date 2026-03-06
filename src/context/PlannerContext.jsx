@@ -865,6 +865,59 @@ export function PlannerProvider({ children }) {
     setBonusSH(0);
   };
 
+  // ── Plan JSON export / import ────────────────────────────────
+  const exportPlanJSON = () => {
+    const data = {
+      version: 1,
+      exported: new Date().toISOString(),
+      entSem: planEntSem, entYear: planEntYear,
+      gradSem: planGradSem, gradYear: planGradYear,
+      placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
+      offeredOverrides, collapsedSubs,
+      major:  localStorage.getItem("ncp-grad-major")  || "",
+      conc:   localStorage.getItem("ncp-grad-conc")   || "",
+      minor1: localStorage.getItem("ncp-grad-minor1") || "",
+      minor2: localStorage.getItem("ncp-grad-minor2") || "",
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `numap-plan-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  const importPlanJSON = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const d = JSON.parse(reader.result);
+        if (d.version !== 1) { alert("Unrecognized plan file format."); return; }
+        pushUndo();
+        setPlacements(d.placements ?? {});
+        setWorkPl(d.workPl ?? {});
+        setSemOrders(d.semOrders ?? {});
+        setShOverrides(prev => d.shOverrides ?? prev);
+        setOfferedOverrides(prev => d.offeredOverrides ?? prev);
+        setCollapsedSubs(prev => d.collapsedSubs ?? prev);
+        setBonusSH(d.bonusSH ?? 0);
+        if (d.currentSemId) setCurrentSemId(d.currentSemId);
+        if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem("ncp-ent-sem",  d.entSem);  } catch {} }
+        if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem("ncp-ent-year", d.entYear); } catch {} }
+        if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem("ncp-grad-sem", d.gradSem); } catch {} }
+        if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem("ncp-grad-year",d.gradYear);} catch {} }
+        if (d.major)  localStorage.setItem("ncp-grad-major",  d.major);
+        if (d.conc)   localStorage.setItem("ncp-grad-conc",   d.conc);
+        if (d.minor1) localStorage.setItem("ncp-grad-minor1", d.minor1);
+        if (d.minor2) localStorage.setItem("ncp-grad-minor2", d.minor2);
+      } catch (err) {
+        alert("Could not read plan file: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
   // ── Cohort setters that also persist to localStorage ─────────
   // When stickyCourses is on, snapshot placements + SEMESTERS before changing
   const setEntSem = sem => {
@@ -967,7 +1020,7 @@ export function PlannerProvider({ children }) {
     }),
     setPlacements, setWorkPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    resetAll, toggleStar, toggleOffered,
+    resetAll, exportPlanJSON, importPlanJSON, toggleStar, toggleOffered,
     getSemStatus,
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard,
     canDropSem,
