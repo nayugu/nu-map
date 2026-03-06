@@ -1053,27 +1053,27 @@ export function PlannerProvider({ children }) {
   // ── Cohort setters that also persist to localStorage ─────────
   // When stickyCourses is on, snapshot placements + SEMESTERS before changing
   const setEntSem = sem => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
     setPlanEntSem(sem);
     try { localStorage.setItem("ncp-ent-sem", sem); } catch {}
   };
   const setEntYear = year => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
     setPlanEntYear(year);
     try { localStorage.setItem("ncp-ent-year", year); } catch {}
   };
   const setGradSem = sem => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
     setPlanGradSem(sem);
     try { localStorage.setItem("ncp-grad-sem", sem); } catch {}
   };
   const setGradYear = year => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
     setPlanGradYear(year);
     try { localStorage.setItem("ncp-grad-year", year); } catch {}
   };
 
-  // ── Sticky Courses: remap placements after SEMESTERS regenerates ──
+  // ── Sticky: remap placements + co-ops after SEMESTERS regenerates ──
   useEffect(() => {
     const snap = stickySnapshotRef.current;
     if (!snap) return;
@@ -1082,18 +1082,35 @@ export function PlannerProvider({ children }) {
     const newIds = SEMESTERS.map(s => s.id);
     // If semesters didn't actually change, skip
     if (oldIds.length === newIds.length && oldIds.every((id, i) => id === newIds[i])) return;
+
+    // Remap course placements
     const newPl = {};
     for (const [cid, semId] of Object.entries(snap.placements)) {
       const idx = oldIds.indexOf(semId);
       if (idx !== -1 && idx < newIds.length) {
-        newPl[cid] = newIds[idx]; // same row index → new semester ID
+        newPl[cid] = newIds[idx];
       } else if (semId === "incoming" || newIds.includes(semId)) {
-        newPl[cid] = semId; // special semesters or still-valid IDs stay
+        newPl[cid] = semId;
       } else {
-        newPl[cid] = newIds[newIds.length - 1]; // overflow → last semester
+        newPl[cid] = newIds[newIds.length - 1];
       }
     }
     setPlacements(newPl);
+
+    // Remap co-op placements
+    if (snap.workPl) {
+      const newWp = {};
+      for (const [wid, semId] of Object.entries(snap.workPl)) {
+        const idx = oldIds.indexOf(semId);
+        if (idx !== -1 && idx < newIds.length) {
+          newWp[wid] = newIds[idx];
+        } else if (newIds.includes(semId)) {
+          newWp[wid] = semId;
+        }
+        // If the semester no longer exists at all, drop the co-op placement
+      }
+      setWorkPl(newWp);
+    }
   }, [SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Offered overrides setter ─────────────────────────────────

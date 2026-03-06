@@ -1,9 +1,11 @@
 // ═══════════════════════════════════════════════════════════════════
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
+import { WORK_TERMS } from "./constants.js";
 import { buildPlacedKeySet, validateMajor } from "./gradRequirements.js";
 import { loadMajor } from "../data/majorLoader.js";
 import { loadMinor } from "../data/minorLoader.js";
+
 
 /** Convert a CSS hex colour to "r,g,b" string (for use in rgba()). */
 export function hexRgb(hex) {
@@ -120,7 +122,7 @@ function sectionHtml(sec, doneKeys) {
  * gradInfo: { majorPath, concLabel, minor1Path, minor2Path,
  *             npCovered (Set<string>), doneKeys (Set<string>), totalSHRequired }
  */
-export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}) {
+export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, workPl = {}) {
   const curIdx = dynSemIdx[currentSemId] ?? 0;
   const date   = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
@@ -140,18 +142,32 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const effectiveTotalSHRequired = totalSHRequired || (major?.totalCreditsRequired ?? 0);
 
   // ── Compute totals ────────────────────────────────────────────
+  // ── Co-op maps ──────────────────────────────────────────────────
+  const semNextMap = {};
+  for (let i = 0; i < dynSems.length - 1; i++) {
+    semNextMap[dynSems[i].id] = dynSems[i + 1].id;
+  }
+  const workStartMap = {};
+  const workContMap  = {};
+  Object.entries(workPl).forEach(([wid, semId]) => {
+    workStartMap[semId] = wid;
+    const nxt = semNextMap[semId];
+    if (nxt) workContMap[nxt] = wid;
+  });
   let doneSH = 0, plannedSH = 0;
   const semRows = [];
   dynSems.forEach(sem => {
     const ids = Object.keys(placements).filter(id => placements[id] === sem.id && courseMap[id]);
-    if (ids.length === 0) return;
+    const hasWork = !!workStartMap[sem.id];
+    const hasCont = !!workContMap[sem.id];
+    if (ids.length === 0 && !hasWork && !hasCont) return;
     const isDone = (dynSemIdx[sem.id] ?? 99) < curIdx;
     const isCur  = sem.id === currentSemId;
     ids.forEach(id => {
       const sh = courseMap[id]?.sh ?? 0;
       if (isDone) doneSH += sh; else plannedSH += sh;
     });
-    semRows.push({ sem, ids, isDone, isCur });
+    semRows.push({ sem, ids, isDone, isCur, hasWork, hasCont });
   });
 
   // ── Requirements sections HTML ────────────────────────────────
@@ -182,10 +198,55 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   }).join("\n");
 
   // ── Semester blocks HTML ──────────────────────────────────────
-  const semHtml = semRows.map(({ sem, ids, isDone, isCur }) => {
+  const semHtml = semRows.map(({ sem, ids, isDone, isCur, hasWork, hasCont }) => {
     const semSH = ids.reduce((s, id) => s + (courseMap[id]?.sh ?? 0), 0);
     const tag   = isDone ? " done" : isCur ? " current" : "";
-    const rows  = ids.map(id => {
+
+    // Co-op continuation row
+    if (hasCont && !hasWork) {
+      const contWorkId = workContMap[sem.id];
+      const contItem   = WORK_TERMS.find(w => w.id === contWorkId);
+      if (contItem) {
+        return `<div class="sem-block${tag}">
+          <div class="sem-head">
+            <span class="sem-label">${sem.label}</span>
+            <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
+          </div>
+          <div class="coop-row" style="border-color:${contItem.color}">
+            <div class="coop-bar" style="background:${contItem.color}"></div>
+            <div>
+              <div class="coop-title" style="color:${contItem.color}">\u2195 ${contItem.label} CONTINUES</div>
+              <div class="coop-sub">6-month block</div>
+            </div>
+          </div>
+        </div>`;
+      }
+    }
+
+    // Co-op start row
+    if (hasWork) {
+      const workId   = workStartMap[sem.id];
+      const workItem = WORK_TERMS.find(w => w.id === workId);
+      if (workItem) {
+        const nextSem = dynSems.find(s => s.id === semNextMap[sem.id]);
+        return `<div class="sem-block${tag}">
+          <div class="sem-head">
+            <span class="sem-label">${sem.label}</span>
+            <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
+          </div>
+          <div class="coop-row" style="border-color:${workItem.color}">
+            <div class="coop-bar" style="background:${workItem.color}"></div>
+            <div>
+              <div class="coop-title" style="color:${workItem.color}">${workItem.label}</div>
+              <div class="coop-sub">${nextSem ? `Spans into ${nextSem.label} \u00b7 6-month block` : "6-month block"}</div>
+            </div>
+          </div>
+        </div>`;
+      }
+    }
+
+    // Normal course semester
+    const rows = ids.map(id => {
       const c = courseMap[id];
       if (!c) return "";
       const pill     = `<span class="pill" style="background:${c.color}">${c.subject ?? c.id}</span>`;
@@ -341,7 +402,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .csh    { font-size: 10px; color: #888; flex-shrink: 0; }
   .np-badges { display: flex; gap: 2px; flex-shrink: 0; }
   .np-badge  { font-size: 8px; font-weight: 700; background: #f3f4f6;
-               border: 1px solid #e0e0e0; border-radius: 3px; padding: 1px 4px; color: #666; }
+               border: 1px solid #e0e0e0; border-radius: 3px; padding: 1px 4px; color: #666; }.coop-row  { display: flex; align-items: center; gap: 10px;
+               padding: 10px 14px; border: 2px solid; border-radius: 6px;
+               margin-top: 3px;
+               -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .coop-bar  { width: 4px; align-self: stretch; border-radius: 2px; min-height: 36px;
+               -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .coop-title { font-size: 13px; font-weight: 900; letter-spacing: 0.05em;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .coop-sub   { font-size: 10px; color: #888; margin-top: 2px; }
 
   @media print {
     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }

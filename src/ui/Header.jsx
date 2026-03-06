@@ -65,7 +65,7 @@ export default function Header() {
       majorPath, concLabel, minor1Path, minor2Path,
       npCovered, doneKeys, totalSHRequired: 0,
     };
-    exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo);
+    exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl);
   };
 
   const handleReset = e => {
