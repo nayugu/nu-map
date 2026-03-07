@@ -343,53 +343,51 @@ export default function Header() {
 
 
         {/* Input/Output Dropdown */}
-        {!isPhone && (
-          <div style={{ position: "relative" }}>
-            <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowIO(v => !v); }}
-              style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
-                color: showIO ? "var(--text-2)" : "var(--text-4)",
-                background: showIO ? "var(--bg-surface)" : "var(--bg-surface-2)",
-                border: `1px solid ${showIO ? "var(--active)" : "var(--border-2)"}`,
-                borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", whiteSpace: "nowrap" }}>
-              {isMobile ? "⇅" : "⇅ Input/Output"}
-            </button>
-            {showIO && (
-              <div onClick={e => e.stopPropagation()} style={{
-                position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 100,
-                background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
-                padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
-                display: "flex", flexDirection: "column", gap: 7,
-              }}>
-                <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title="Copy human-readable plan to clipboard"
-                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  {isMobile ? "📋" : "📋 Copy summary"}
-                </button>
-                <button className="hdr-btn-dd" onClick={handleExport} title="Export PDF"
-                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  {isMobile ? "⬇" : "⬇ Export PDF"}
-                </button>
-                <button className="hdr-btn-dd" onClick={exportPlanJSON} title="Export plan as JSON"
-                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  {isMobile ? "💾" : "💾 Save"}
-                </button>
-                <input type="file" id="plan-import-input" accept=".json" style={{ display: "none" }}
-                  onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
-                <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()} title="Import plan from JSON"
-                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  {isMobile ? "📂" : "📂 Load"}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+        <div style={{ position: "relative" }}>
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowIO(v => !v); }}
+            style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
+              color: showIO ? "var(--text-2)" : "var(--text-4)",
+              background: showIO ? "var(--bg-surface)" : "var(--bg-surface-2)",
+              border: `1px solid ${showIO ? "var(--active)" : "var(--border-2)"}`,
+              borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", whiteSpace: "nowrap" }}>
+            {isMobile ? "⇅" : "⇅ Input/Output"}
+          </button>
+          {showIO && (
+            <div onClick={e => e.stopPropagation()} style={{
+              position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 100,
+              background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
+              padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
+              display: "flex", flexDirection: "column", gap: 7,
+            }}>
+              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title="Copy human-readable plan to clipboard"
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                Copy summary
+              </button>
+              <button className="hdr-btn-dd" onClick={handleExport} title="Export PDF"
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                Export PDF
+              </button>
+              <button className="hdr-btn-dd" onClick={exportPlanJSON} title="Export plan as JSON"
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                  Save
+              </button>
+              <input type="file" id="plan-import-input" accept=".json" style={{ display: "none" }}
+                onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
+              <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()} title="Import plan from JSON"
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                  Load
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Reset — hidden on phone */}
         {!isPhone && <button className="hdr-btn" onClick={handleReset} title="Reset all placements"
