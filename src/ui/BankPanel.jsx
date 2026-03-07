@@ -228,6 +228,7 @@ export default function BankPanel() {
         </div>
         {!collapsePlacedOut && (
           <div
+            data-drop-placedout="true"
             onDragOver={e => {
               e.preventDefault();
               e.dataTransfer.dropEffect = "move";

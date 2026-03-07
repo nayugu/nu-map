@@ -178,6 +178,9 @@ export function PlannerProvider({ children }) {
   const ghostRef        = useRef(null);  // floating ghost element during touch drag
   const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
   const isFirstRender = useRef(true);
+  const touchDragFromRef = useRef(null);
+  const touchDragTypeRef = useRef(null);
+  const onDropPlacedOutRef = useRef(null);
 
   // ── Effects: data loading ────────────────────────────────────
   useEffect(() => {
@@ -228,6 +231,7 @@ export function PlannerProvider({ children }) {
     allEdgesRef.current = allEdges;
     onDropRef.current     = onDrop;
     onDropBankRef.current  = onDropBank;
+    onDropPlacedOutRef.current = onDropPlacedOut;
   });
   useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
 
@@ -888,6 +892,8 @@ export function PlannerProvider({ children }) {
       cardEl.style.pointerEvents = 'none';
 
       touchDragIdRef.current = id;
+      touchDragTypeRef.current = type;
+      touchDragFromRef.current = fromSem;
       setDragInfo({ id, type, fromSem });
     };
 
@@ -907,6 +913,8 @@ export function PlannerProvider({ children }) {
     const onTouchEnd = (e) => {
       if (!touchDragIdRef.current) return;
       const id = touchDragIdRef.current;
+      const type = touchDragTypeRef.current;
+      const fromSem = touchDragFromRef.current;
       const cardEl = cardRefs.current[id];
       if (cardEl) { cardEl.style.opacity = ''; cardEl.style.pointerEvents = ''; }
       removeGhost();
@@ -916,14 +924,20 @@ export function PlannerProvider({ children }) {
       const target = document.elementFromPoint(touch.clientX, touch.clientY);
       const semEl  = target?.closest('[data-sem-id]');
       const bankEl = target?.closest('[data-drop-bank]');
+      const placedOutEl = target?.closest('[data-drop-placedout]');
       if (bankEl && onDropBankRef.current) {
         onDropBankRef.current({ preventDefault: () => {} });
+      } else if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
+        const dragInfo = { id, type, fromSem };
+        onDropPlacedOutRef.current(dragInfo);
       } else if (semEl && onDropRef.current) {
         onDropRef.current(null, semEl.dataset.semId);
       } else {
         setDragInfo(null);
       }
       touchDragIdRef.current = null;
+      touchDragTypeRef.current = null;
+      touchDragFromRef.current = null;
       setHoveredSem(null);
       setHoveredZone(null);
     };
