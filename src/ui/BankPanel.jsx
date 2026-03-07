@@ -221,7 +221,7 @@ export default function BankPanel() {
             cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
           }}
         >
-          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
             ↪ PLACED OUT {placedOut.size > 0 ? `(${placedOut.size})` : ""}
           </span>
           <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut ? "▶" : "▼"}</span>
