@@ -391,11 +391,12 @@ export default function Header() {
           )}
         </div>
 
-        {/* Reset — hidden on phone */}
+        {/** Reset — hidden on all devices (commented out)
         {!isPhone && <button className="hdr-btn" onClick={handleReset} title="Reset all placements"
           style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}>
           {isMobile ? "↺" : "↺ Erase"}
         </button>}
+        */}
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative" }}>
@@ -457,13 +458,14 @@ export default function Header() {
                 {THEME_LABELS[themeName] ?? themeName}
               </button>
 
-              {/* Reset catalog data */}
+              {/** Refresh catalog data (commented out)
               <button className="hdr-btn-dd" onClick={handleRefresh}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                ↺ Erase
+                ↺ Refresh
               </button>
+              */}
 
               {/* Dev portal link */}
               <a href="https://nayugu.github.io/nu-map/dev.html" target="_blank" rel="noreferrer"
