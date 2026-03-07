@@ -268,6 +268,31 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     </div>`;
   }).join("\n");
 
+  // Build appendix of course descriptions
+  const appendixHtml = [];
+  if (Object.keys(placements).length > 0) {
+    appendixHtml.push('<div class="page-break"></div>');
+    appendixHtml.push('<div class="appendix-section">');
+    appendixHtml.push('<h2>Course Descriptions</h2>');
+    for (const id of Object.keys(placements)) {
+      const c = courseMap[id];
+      if (!c) continue;
+      const desc = c.desc?.trim() || c.description?.trim() || 'No description available.';
+        appendixHtml.push(`
+        <div class="appendix-course">
+          <div style="display: grid; grid-template-columns: 45px 85px 1fr auto; align-items: baseline; gap: 10px; margin-bottom: 4px;">
+            <span class="pill" style="background:${c.color}; display: inline-block; width: 100%; text-align: center;">${c.subject}</span>
+            <span class="ccode">${c.code}</span>
+            <span class="ctitle">${c.title}</span>
+            <span class="csh">${c.sh} SH</span>
+          </div>
+          <div class="appendix-course-description">${desc.replace(/\n/g, '<br>')}</div>
+        </div>
+      `);
+    }
+    appendixHtml.push('</div>');
+  }
+
   // ── Meta lines ───────────────────────────────────────────────
   const majorLabel  = major?.name  ?? "";
   const minor1Label = minor1?.name ?? "";
@@ -397,7 +422,11 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .pill  { font-size: 8.5px; font-weight: 800; border-radius: 3px; padding: 2px 6px;
            color: #fff; flex-shrink: 0;
            -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .ccode  { font-size: 11px; font-weight: 700; flex-shrink: 0; min-width: 72px; }
+  .ccode {
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;   /* prevent code from wrapping */
+  }
   .ctitle { font-size: 11px; flex: 1; color: #333; }
   .csh    { font-size: 10px; color: #888; flex-shrink: 0; }
   .np-badges { display: flex; gap: 2px; flex-shrink: 0; }
@@ -411,6 +440,72 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .coop-title { font-size: 13px; font-weight: 900; letter-spacing: 0.05em;
                 -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .coop-sub   { font-size: 10px; color: #888; margin-top: 2px; }
+  /* Appendix styles */
+  .appendix-section {
+    margin-top: 20px;
+  }
+  .appendix-section h2 {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #444;
+    border-bottom: 2px solid #e5e5e5;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+  .appendix-course {
+    margin-bottom: 32px;
+    page-break-inside: avoid;
+  }
+  .appendix-course-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .appendix-course-code {
+    font-size: 12px;
+    font-weight: 700;
+    color: #111;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .appendix-course-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+  }
+  .appendix-course-credits {
+    font-size: 11px;
+    color: #888;
+    background: #f5f5f5;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .appendix-course-description {
+    font-size: 11px;
+    color: #555;
+    line-height: 1.6;
+    padding-left: 10px;
+    border-left: 3px solid #e0e0e0;
+  }
+  .appendix-section .pill {
+    font-size: 10px;
+  }
+  .appendix-section .ccode {
+    font-size: 13px;
+  }
+  .appendix-section .ctitle {
+    font-size: 13px;
+  }
+  .appendix-section .csh {
+    font-size: 12px;
+  }
+  .appendix-section .appendix-course-description {
+    font-size: 12px;
+  }
 
   @media print {
     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -439,6 +534,7 @@ ${reqHtml}
 <div class="date">Generated ${date}</div>
 <br>
 ${semHtml}
+${appendixHtml.join('\n')}
 
 </body></html>`;
 
