@@ -132,29 +132,22 @@ export default function Header() {
         }
       }
 
-      // Normal courses
+      // Normal courses – only code, title, SH
       for (const id of idsInSem) {
         const c = courseMap[id];
         if (!c) continue;
-        const nu = c.nuPath?.length ? ` [${c.nuPath.join(', ')}]` : '';
-        semLines.push(`  - ${c.code}: ${c.title} (${c.sh} SH)${nu}`);
+        semLines.push(`  - ${c.code}: ${c.title} (${c.sh} SH)`);
       }
     }
 
-    // Build appendix of course descriptions
+    // Build appendix of course descriptions (code, title, SH, description)
     const appendixLines = ['\n\n--- Appendix: Course Descriptions ---'];
     for (const id of allPlacedIds) {
       const c = courseMap[id];
       if (!c) continue;
-      const desc = c.description?.trim() || 'No description available.';
-      // Format prerequisites if available (you may need to import formatPrereqSummary)
-      // For simplicity, we'll skip prereqs for now, but you could add a helper.
+      const desc = c.desc?.trim() || c.description?.trim() || 'No description available.';
       appendixLines.push(`\n${c.code}: ${c.title}`);
       appendixLines.push(`  Credits: ${c.sh} SH`);
-      if (c.nuPath?.length) appendixLines.push(`  NUPath: ${c.nuPath.join(', ')}`);
-      if (c.prereqs?.length) {
-        // Optionally include a simplified prereq string; we'll leave it out for brevity.
-      }
       appendixLines.push(`  Description: ${desc}`);
     }
 
