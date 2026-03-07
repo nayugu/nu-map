@@ -33,8 +33,10 @@ export function deriveSemMaps(semesters) {
  * Always keeps the "incoming" slot at index 0.
  */
 export function buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear) {
-  const numY  = Math.max(2, planGradYear - planEntYear + 2);
-  const all   = generateSemesters(planEntYear, numY);
+  // If entry is spring, we need to start from the previous year to include that spring semester.
+  const startYear = planEntSem === "spring" ? planEntYear - 1 : planEntYear;
+  const numY  = Math.max(2, planGradYear - startYear + 2);
+  const all   = generateSemesters(startYear, numY);
   const entId  = planEntSem  === "fall" ? `fall${planEntYear}`  : `spr${planEntYear}`;
   const gradId = planGradSem === "fall" ? `fall${planGradYear}` : `spr${planGradYear}`;
   const tmpIdx = Object.fromEntries(all.map((s, i) => [s.id, i]));
