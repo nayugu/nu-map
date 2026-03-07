@@ -921,10 +921,24 @@ export function PlannerProvider({ children }) {
       document.documentElement.style.userSelect = '';
       document.documentElement.style.webkitUserSelect = '';
       const touch  = e.changedTouches[0];
-      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const touchX = touch.clientX, touchY = touch.clientY;
+      const target = document.elementFromPoint(touchX, touchY);
       const semEl  = target?.closest('[data-sem-id]');
       const bankEl = target?.closest('[data-drop-bank]');
-      const placedOutEl = target?.closest('[data-drop-placedout]');
+      let placedOutEl = target?.closest('[data-drop-placedout]');
+
+      // Fallback: manually check all placed-out containers
+      if (!placedOutEl) {
+        const placedOutContainers = document.querySelectorAll('[data-drop-placedout]');
+        for (const container of placedOutContainers) {
+          const rect = container.getBoundingClientRect();
+          if (touchX >= rect.left && touchX <= rect.right && touchY >= rect.top && touchY <= rect.bottom) {
+            placedOutEl = container;
+            break;
+          }
+        }
+      }
+
       if (bankEl && onDropBankRef.current) {
         onDropBankRef.current({ preventDefault: () => {} });
       } else if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
