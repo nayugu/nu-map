@@ -28,6 +28,7 @@ export default function Header() {
     exportPlanJSON, importPlanJSON,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
     major, conc, minor1, minor2,
+    placedOut,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
