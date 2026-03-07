@@ -950,13 +950,13 @@ export function PlannerProvider({ children }) {
         }
       }
 
-      if (bankEl && onDropBankRef.current) {
-        console.log('Dropping on bank');
-        onDropBankRef.current({ preventDefault: () => {} });
-      } else if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
+      if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
         console.log('Dropping on placed out section');
         const dragInfo = { id, type, fromSem };
         onDropPlacedOutRef.current(dragInfo);
+      } else if (bankEl && onDropBankRef.current) {
+        console.log('Dropping on bank');
+        onDropBankRef.current({ preventDefault: () => {} });
       } else if (semEl && onDropRef.current) {
         console.log('Dropping on semester');
         onDropRef.current(null, semEl.dataset.semId);
