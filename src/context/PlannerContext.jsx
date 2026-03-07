@@ -1022,7 +1022,10 @@ export function PlannerProvider({ children }) {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `numap-plan-${new Date().toISOString().slice(0, 10)}.json`;
+    const planName = plans.find(p => p.id === activePlanId)?.name || 'Untitled';
+    const sanitizedPlanName = planName.replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    const dateStr = new Date().toISOString().slice(0, 10);
+    a.download = `${sanitizedPlanName || 'Plan'} - NU Map - ${dateStr}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
