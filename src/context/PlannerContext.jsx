@@ -723,6 +723,7 @@ export function PlannerProvider({ children }) {
   };
 
   const onDropPlacedOut = (dragInfo) => {
+    console.log('onDropPlacedOut called with:', dragInfo);
     try {
       if (!dragInfo || dragInfo.type !== "course") return;
       pushUndo();
@@ -911,7 +912,11 @@ export function PlannerProvider({ children }) {
     };
 
     const onTouchEnd = (e) => {
-      if (!touchDragIdRef.current) return;
+      console.log('Touch end triggered');
+      if (!touchDragIdRef.current) {
+        console.log('No drag in progress');
+        return;
+      }
       const id = touchDragIdRef.current;
       const type = touchDragTypeRef.current;
       const fromSem = touchDragFromRef.current;
@@ -922,31 +927,41 @@ export function PlannerProvider({ children }) {
       document.documentElement.style.webkitUserSelect = '';
       const touch  = e.changedTouches[0];
       const touchX = touch.clientX, touchY = touch.clientY;
+      console.log('Touch coordinates:', { touchX, touchY });
       const target = document.elementFromPoint(touchX, touchY);
+      console.log('Element at touch point:', target);
       const semEl  = target?.closest('[data-sem-id]');
       const bankEl = target?.closest('[data-drop-bank]');
       let placedOutEl = target?.closest('[data-drop-placedout]');
+      console.log('Direct placedOutEl via closest:', placedOutEl);
 
       // Fallback: manually check all placed-out containers
       if (!placedOutEl) {
         const placedOutContainers = document.querySelectorAll('[data-drop-placedout]');
+        console.log('Number of placed-out containers found:', placedOutContainers.length);
         for (const container of placedOutContainers) {
           const rect = container.getBoundingClientRect();
+          console.log('Container rect:', rect);
           if (touchX >= rect.left && touchX <= rect.right && touchY >= rect.top && touchY <= rect.bottom) {
             placedOutEl = container;
+            console.log('Found via bounding rect');
             break;
           }
         }
       }
 
       if (bankEl && onDropBankRef.current) {
+        console.log('Dropping on bank');
         onDropBankRef.current({ preventDefault: () => {} });
       } else if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
+        console.log('Dropping on placed out section');
         const dragInfo = { id, type, fromSem };
         onDropPlacedOutRef.current(dragInfo);
       } else if (semEl && onDropRef.current) {
+        console.log('Dropping on semester');
         onDropRef.current(null, semEl.dataset.semId);
       } else {
+        console.log('No valid drop target, cancelling drag');
         setDragInfo(null);
       }
       touchDragIdRef.current = null;
