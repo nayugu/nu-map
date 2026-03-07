@@ -37,8 +37,10 @@ export default function SemRow({ sem }) {
   const others     = crs.filter(c => c.sh <= 2);
 
   // Collapsible other credits
-  const { collapseOtherCredits, setCollapseOtherCredits } = usePlanner();
+  const { collapseOtherCredits, setCollapseOtherCredits, collapsedSubs, setCollapsedSubs } = usePlanner();
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
+  // Collapsed state for incoming credit section (per-semester)
+  const isIncomingCollapsed = collapsedSubs[sem.id] !== false;
   const isHov      = hoveredSem === sem.id;
   const tb         = TYPE_BG[sem.type] || TYPE_BG.special;
 
@@ -167,7 +169,7 @@ export default function SemRow({ sem }) {
           </div>
           <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>{sem.sub}</div>
           {shEl}
-          {sem.id === "incoming" && (
+          {sem.id === "incoming" && !isIncomingCollapsed && (
             <div style={{ paddingLeft: 19, marginTop: 5 }} onClick={e => e.stopPropagation()}>
               <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 2 }}>general SH</div>
               <input
@@ -230,32 +232,49 @@ export default function SemRow({ sem }) {
           </div>
 
         ) : mainSlots === null ? (
-          // Special / incoming — no slot limits, always-visible append zone at end
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, flex: 1, alignItems: "flex-start" }}>
-            {crs.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
-            <div
-              onDragOver={e => {
-                if (!dragInfo || dragInfo.type !== "course") return;
-                e.preventDefault(); e.stopPropagation();
-                setHoveredZone({ semId: sem.id, zone: "append" }); setHoveredSem(null);
-              }}
-              onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
-              onDrop={e => { e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id); }}
+          // Special / incoming — collapsible section
+          <div style={{ flex: 1, alignItems: "flex-start", display: "flex", flexDirection: "column", gap: 2 }}>
+            <button
+              onClick={() => setCollapsedSubs(p => ({ ...p, [sem.id]: !isIncomingCollapsed }))}
               style={{
-                height: 70, width: 164, flexShrink: 0,
-                border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "append"
-                  ? "1px dashed var(--active)" : "1px dashed var(--border-slot)",
-                borderRadius: 6,
-                background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "append"
-                  ? "var(--active-bg)" : "transparent",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "border-color 0.1s, background 0.1s",
+                fontSize: 10, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left", alignSelf: "flex-start"
               }}
+              aria-expanded={!isIncomingCollapsed}
+              title={isIncomingCollapsed ? "Show incoming credit details" : "Hide incoming credit details"}
             >
-              <span style={{ fontSize: 9, color: "var(--text-5)", fontStyle: "italic", pointerEvents: "none" }}>
-                {hoveredZone?.semId === sem.id && hoveredZone?.zone === "append" ? "drop to add" : "+ add"}
-              </span>
-            </div>
+              {isIncomingCollapsed
+                ? `► general SH: ${bonusSH || 0}${crs.length > 0 ? ' | ' : ''}${crs.map(c => c.code || (c.subject + ' ' + c.number)).join(", ")}`
+                : "▼ Incoming Credit"
+              }
+            </button>
+            {!isIncomingCollapsed && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "flex-start" }}>
+                {crs.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
+                <div
+                  onDragOver={e => {
+                    if (!dragInfo || dragInfo.type !== "course") return;
+                    e.preventDefault(); e.stopPropagation();
+                    setHoveredZone({ semId: sem.id, zone: "append" }); setHoveredSem(null);
+                  }}
+                  onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
+                  onDrop={e => { e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id); }}
+                  style={{
+                    height: 70, width: 164, flexShrink: 0,
+                    border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "append"
+                      ? "1px dashed var(--active)" : "1px dashed var(--border-slot)",
+                    borderRadius: 6,
+                    background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "append"
+                      ? "var(--active-bg)" : "transparent",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "border-color 0.1s, background 0.1s",
+                  }}
+                >
+                  <span style={{ fontSize: 9, color: "var(--text-5)", fontStyle: "italic", pointerEvents: "none" }}>
+                    {hoveredZone?.semId === sem.id && hoveredZone?.zone === "append" ? "drop to add" : "+ add"}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
         ) : (
