@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE, WORK_TERMS } from "../core/constants.js";
-import { exportReport } from "../core/planModel.js";
+import { exportReport, getOrderedCourses } from "../core/planModel.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { getNuPathCoverage } from "../core/gradRequirements.js";
 import dataMeta from "../core/dataMeta.json";
@@ -20,7 +20,7 @@ export default function Header() {
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    coopGradConflicts, workPl,
+    coopGradConflicts, workPl, semOrders,
     showViolLines, setShowViolLines,
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
@@ -68,6 +68,114 @@ export default function Header() {
       npCovered, doneKeys, totalSHRequired: 0,
     };
     exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl);
+  };
+
+  const handleCopyHumanReadable = async () => {
+    // Gather plan metadata
+    const entry = `${planEntSem === 'fall' ? 'Fall' : 'Spring'} ${planEntYear}`;
+    const grad = `${planGradSem === 'fall' ? 'Fall' : 'Spring'} ${planGradYear}`;
+    const totalSH = totalSHPlaced;
+    const completedSH = totalSHDone;
+    const plannedSH = totalSHPlaced - totalSHDone;
+
+    // Build semester blocks
+    const semLines = [];
+    const semById = Object.fromEntries(SEMESTERS.map(s => [s.id, s]));
+
+    // Determine current semester index for "completed" marking
+    const currentIdx = SEM_INDEX[currentSemId] ?? 0;
+
+    // Collect all placed course IDs for the appendix
+    const allPlacedIds = Object.keys(placements);
+
+    // Helper to format co‑op blocks (similar to PDF export)
+    const workStartMap = {};
+    const workContMap = {};
+    Object.entries(workPl).forEach(([wid, semId]) => {
+      workStartMap[semId] = wid;
+      const nxt = SEM_NEXT[semId];
+      if (nxt) workContMap[nxt] = wid;
+    });
+
+    // Iterate through semesters in order
+    for (const sem of SEMESTERS) {
+      const semId = sem.id;
+      const idsInSem = getOrderedCourses(semId, placements, semOrders, courseMap);
+      const hasWork = !!workStartMap[semId];
+      const hasCont = !!workContMap[semId];
+
+      // Skip empty semesters with no co‑op activity
+      if (idsInSem.length === 0 && !hasWork && !hasCont) continue;
+
+      const semLabel = sem.label;
+      const isDone = (SEM_INDEX[semId] ?? 99) < currentIdx;
+      const status = isDone ? ' (completed)' : (semId === currentSemId ? ' (in progress)' : '');
+      semLines.push(`\n${semLabel}${status}`);
+
+      // Co‑op continuation row
+      if (hasCont && !hasWork) {
+        const contWorkId = workContMap[semId];
+        const workItem = WORK_TERMS.find(w => w.id === contWorkId);
+        if (workItem) {
+          semLines.push(`  ⤷ ${workItem.label} (continues)`);
+        }
+      }
+
+      // Co‑op start row
+      if (hasWork) {
+        const workId = workStartMap[semId];
+        const workItem = WORK_TERMS.find(w => w.id === workId);
+        const nextSem = SEM_NEXT[semId];
+        if (workItem) {
+          const contPart = nextSem ? ` (spans into ${semById[nextSem]?.label ?? nextSem})` : '';
+          semLines.push(`  ⤷ ${workItem.label}${contPart}`);
+        }
+      }
+
+      // Normal courses
+      for (const id of idsInSem) {
+        const c = courseMap[id];
+        if (!c) continue;
+        const nu = c.nuPath?.length ? ` [${c.nuPath.join(', ')}]` : '';
+        semLines.push(`  - ${c.code}: ${c.title} (${c.sh} SH)${nu}`);
+      }
+    }
+
+    // Build appendix of course descriptions
+    const appendixLines = ['\n\n--- Appendix: Course Descriptions ---'];
+    for (const id of allPlacedIds) {
+      const c = courseMap[id];
+      if (!c) continue;
+      const desc = c.description?.trim() || 'No description available.';
+      // Format prerequisites if available (you may need to import formatPrereqSummary)
+      // For simplicity, we'll skip prereqs for now, but you could add a helper.
+      appendixLines.push(`\n${c.code}: ${c.title}`);
+      appendixLines.push(`  Credits: ${c.sh} SH`);
+      if (c.nuPath?.length) appendixLines.push(`  NUPath: ${c.nuPath.join(', ')}`);
+      if (c.prereqs?.length) {
+        // Optionally include a simplified prereq string; we'll leave it out for brevity.
+      }
+      appendixLines.push(`  Description: ${desc}`);
+    }
+
+    // Assemble final text
+    const fullText = [
+      `NU Map Plan: ${plans.find(p => p.id === activePlanId)?.name || 'Untitled'}`,
+      `Entry: ${entry}`,
+      `Graduation: ${grad}`,
+      `Total SH: ${totalSH} (completed: ${completedSH}, planned: ${plannedSH})`,
+      '',
+      '--- Semester Schedule ---',
+      ...semLines,
+      ...appendixLines,
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.writeText(fullText);
+      alert('Plan copied to clipboard!');
+    } catch (err) {
+      alert('Failed to copy: ' + err.message);
+    }
   };
 
   const handleReset = e => {
@@ -259,6 +367,12 @@ export default function Header() {
                 padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
                 display: "flex", flexDirection: "column", gap: 7,
               }}>
+                <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title="Copy human-readable plan to clipboard"
+                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                    border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                  {isMobile ? "📋" : "📋 Copy summary"}
+                </button>
                 <button className="hdr-btn-dd" onClick={handleExport} title="Export PDF"
                   style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                     background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
