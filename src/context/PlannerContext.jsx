@@ -52,6 +52,11 @@ export function PlannerProvider({ children }) {
   const [conc,   setConc]   = useState("");
   const [minor1, setMinor1] = useState("");
   const [minor2, setMinor2] = useState("");
+  // Set of course IDs that are placed out (satisfy prereqs, no credit)
+  const [placedOut, setPlacedOut] = useState(() => {
+    const saved = _saved?.persist && _saved.placedOut;
+    return saved ? new Set(saved) : new Set();
+  });
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
@@ -455,7 +460,10 @@ export function PlannerProvider({ children }) {
 
   // ── Derived plan state ────────────────────────────────────────
   const currentSemIdx = SEM_INDEX[currentSemId] ?? 1;
-  const placedIds     = useMemo(() => new Set(Object.keys(placements)), [placements]);
+  const placedIds = useMemo(
+    () => new Set([...Object.keys(placements), ...placedOut]),
+    [placements, placedOut]
+  );
 
   const workStartMap = useMemo(() => {
     const m = {};
@@ -482,31 +490,37 @@ export function PlannerProvider({ children }) {
   const prereqViolations = useMemo(() => {
     const v = new Map();
     courses.forEach(c => {
-      if (!placements[c.id]) return;
+      if (!placements[c.id] && !placedOut.has(c.id)) return; // not taken at all
       if (placements[c.id] === "incoming") return;
+      if (placedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[placements[c.id]];
-      const result = evalPrereqTree(c.prereqs, placements, SEM_INDEX, ti);
+      const result = evalPrereqTree(c.prereqs, placements, SEM_INDEX, ti, placedOut);
       if (result !== "satisfied") v.set(c.id, result);
     });
     return v;
-  }, [courses, placements, SEM_INDEX]);
+  }, [courses, placements, placedOut, SEM_INDEX]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
     allEdges.filter(e => e.type === "corequisite").forEach(({ from, to }) => {
       [{ placed: from, partner: to }, { placed: to, partner: from }].forEach(({ placed, partner }) => {
-        if (!placements[placed]) return;
+        const placedTaken = placements[placed] !== undefined || placedOut.has(placed);
+        const partnerTaken = placements[partner] !== undefined || placedOut.has(partner);
+        if (!placedTaken) return;
         if (placements[placed] === "incoming") return;
-        if (!placements[partner]) {
+        if (placedOut.has(placed)) return; // skip placed-out courses – they have no coreq warnings
+        if (!partnerTaken) {
           v.set(placed, "alone");
-        } else if (placements[placed] !== placements[partner]) {
+        } else if (placements[placed] && placements[partner] && placements[placed] !== placements[partner]) {
+          // both placed in different semesters → violation
           if (v.get(placed) !== "alone") v.set(placed, "sep");
         }
+        // If one is placed out, no violation (treated as satisfied)
       });
     });
     return v;
-  }, [allEdges, placements]);
+  }, [allEdges, placements, placedOut]);
 
   const connectedIds = useMemo(() => {
     const m = {};
@@ -527,15 +541,18 @@ export function PlannerProvider({ children }) {
 
   // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
   const totalSHPlaced = useMemo(
-    () => bonusSH + courses.filter(c => placements[c.id]).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [bonusSH, courses, placements, effectiveCourseMap]
+    () => bonusSH + courses
+      .filter(c => placements[c.id] && !placedOut.has(c.id))
+      .reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
+    [bonusSH, courses, placements, placedOut, effectiveCourseMap]
   );
+
   const totalSHDone = useMemo(
     () => bonusSH + courses.filter(c => {
       const sid = placements[c.id];
-      return sid && (SEM_INDEX[sid] ?? 99) < currentSemIdx;
+      return sid && !placedOut.has(c.id) && (SEM_INDEX[sid] ?? 99) < currentSemIdx;
     }).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [bonusSH, courses, placements, SEM_INDEX, currentSemIdx, effectiveCourseMap]
+    [bonusSH, courses, placements, placedOut, SEM_INDEX, currentSemIdx, effectiveCourseMap]
   );
 
   // ── Star toggle ───────────────────────────────────────────────
@@ -609,6 +626,14 @@ export function PlannerProvider({ children }) {
     if (!dragInfo) return;
     pushUndo();
     const { id, type } = dragInfo;
+    // If the course was placed out, remove it from placedOut
+    if (placedOut.has(id)) {
+      setPlacedOut(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
     if (type === "work") {
       // Normalize the drop target to the canonical start of the co-op block
       const startId = coopStartFor(semId);
@@ -659,6 +684,14 @@ export function PlannerProvider({ children }) {
     if (!dragInfo) return;
     pushUndo();
     const { id, type, fromSem } = dragInfo;
+    // If the course was placed out, remove it from placedOut
+    if (placedOut.has(id)) {
+      setPlacedOut(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
     if (type === "work") {
       setWorkPl(p => { const n = { ...p }; delete n[id]; return n; });
     } else {
@@ -683,6 +716,56 @@ export function PlannerProvider({ children }) {
       });
     }
     setDragInfo(null);
+  };
+
+  const onDropPlacedOut = (dragInfo) => {
+    try {
+      if (!dragInfo || dragInfo.type !== "course") return;
+      pushUndo();
+      const { id, fromSem } = dragInfo;
+
+      console.log('onDropPlacedOut called with:', { id, fromSem });
+
+      // Add to placedOut set
+      setPlacedOut(prev => {
+        console.log('Adding to placedOut:', id);
+        return new Set([...prev, id]);
+      });
+
+      // If the course was placed in a semester, remove it from placements
+      if (placements[id]) {
+        console.log('Course was placed in semester:', placements[id]);
+        const coreqPartners = [...new Set(
+          allEdges
+            .filter(edge => edge.type === "corequisite" && (edge.from === id || edge.to === id))
+            .map(edge => edge.from === id ? edge.to : edge.from)
+        )];
+        console.log('Coreq partners:', coreqPartners);
+
+        setPlacements(p => {
+          const n = { ...p };
+          delete n[id];
+          coreqPartners.forEach(cid => delete n[cid]);
+          console.log('New placements:', n);
+          return n;
+        });
+        setSemOrders(p => {
+          const next = { ...p };
+          const toClean = new Set([fromSem, ...coreqPartners.map(cid => placements[cid])].filter(Boolean));
+          console.log('Cleaning semesters:', toClean);
+          toClean.forEach(sid => {
+            next[sid] = (next[sid] || []).filter(cid => cid !== id && !coreqPartners.includes(cid));
+          });
+          return next;
+        });
+      } else {
+        console.log('Course was not placed (from bank)');
+      }
+
+      setDragInfo(null);
+    } catch (error) {
+      console.error('Error in onDropPlacedOut:', error);
+    }
   };
 
   const onDropOnCard = (e, targetId, targetSemId) => {
@@ -873,6 +956,7 @@ export function PlannerProvider({ children }) {
     setConc("");
     setMinor1("");
     setMinor2("");
+    setPlacedOut(new Set());
     // Reset cohort to defaults
     setPlanEntSem("fall");
     setPlanEntYear(DEFAULT_START_YEAR);
@@ -917,6 +1001,7 @@ export function PlannerProvider({ children }) {
     placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
     major, conc, minor1, minor2,
+    placedOut: [...placedOut],
   });
 
   // Restore a plan data object into all state
@@ -937,6 +1022,7 @@ export function PlannerProvider({ children }) {
     setConc(d.conc ?? "");
     setMinor1(d.minor1 ?? "");
     setMinor2(d.minor2 ?? "");
+    setPlacedOut(d.placedOut ? new Set(d.placedOut) : new Set());
   };
 
   useEffect(() => {
@@ -1164,6 +1250,7 @@ export function PlannerProvider({ children }) {
     prereqViolations, coreqViolations, connectedIds,
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
     major, setMajor, conc, setConc, minor1, setMinor1, minor2, setMinor2,
+    placedOut, setPlacedOut, 
     // Refs (passed through for DOM measurements)
     timelineRef, cardRefs, bankRef, bankResizing, panelResizing, uiScaleRef,
     // Actions
@@ -1186,7 +1273,7 @@ export function PlannerProvider({ children }) {
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,
-    onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard,
+    onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard, onDropPlacedOut,
     canDropSem,
     doUndo, doRedo, pushUndo,
   };

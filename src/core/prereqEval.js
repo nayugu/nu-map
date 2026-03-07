@@ -15,7 +15,7 @@
 //   "missing"   : a prereq is not placed in the plan at all
 // ═══════════════════════════════════════════════════════════════════
 
-export function evalPrereqTree(tree, placements, semIndex, ti) {
+export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new Set()) {
   if (!tree || !tree.length) return "satisfied";
   let pos = 0;
 
@@ -64,12 +64,16 @@ export function evalPrereqTree(tree, placements, semIndex, ti) {
 
     if (Array.isArray(tok)) {
       pos++;
-      return evalPrereqTree(tok, placements, semIndex, ti);
+      return evalPrereqTree(tok, placements, semIndex, ti, placedOut);
     }
 
     if (tok && typeof tok === "object" && tok.subject && tok.number) {
       pos++;
       const id = `${tok.subject.toUpperCase()}${tok.number}`;
+      // If the prerequisite course is placed out, it's satisfied regardless of semester.
+      if (placedOut.has(id)) {
+        return "satisfied";
+      }
       const fi = semIndex[placements[id]];
       if (fi === undefined) return "missing";
       return fi < ti ? "satisfied" : "order";

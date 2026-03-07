@@ -10,7 +10,8 @@ import GradPanel   from "./GradPanel.jsx";
 
 export default function BankPanel() {
   const {
-    courses, bankCourseIds, subjects,
+    courses, bankCourseIds, subjects, courseMap,
+    placements,
     bankSearch, setBankSearch,
     bankSort, setBankSort,
     bankTab, setBankTab,
@@ -20,6 +21,11 @@ export default function BankPanel() {
     workPl, onDropBank, onDragStart, cardRefs,
     bankRef, bankResizing, uiScaleRef, isPhone,
     placedIds,
+    placedOut, setPlacedOut,
+    dragInfo,
+    onDropPlacedOut,
+    selectedId, setSelectedId,
+    setShowPanel,
   } = usePlanner();
 
   const q = bankSearch.trim().toLowerCase();
@@ -73,6 +79,9 @@ export default function BankPanel() {
 
   const bankWorkIds = new Set(WORK_TERMS.filter(w => !workPl[w.id]).map(w => w.id));
   const [sideMode, setSideMode] = useState("bank"); // "bank" | "grad"
+
+  const [collapsePlacedOut, setCollapsePlacedOut] = useState(true);
+  const [hoveredPlacedOutId, setHoveredPlacedOutId] = useState(null);
 
   return (
     <div style={{ display: "flex", width: bankWidth, flexShrink: 0 }}>
@@ -200,27 +209,102 @@ export default function BankPanel() {
             )}
           </div>
 
-          {/* Sort */}
+                    {/* Sort */}
           <div style={{ display: "flex", gap: 3, padding: "3px 8px 7px" }}>
-            {([["az", "za", "A–Z", "Z–A"], ["sh↓", "sh↑", "SH↓", "SH↑"]]).map(([kFwd, kRev, lFwd, lRev]) => {
-              const isActive = bankSort === kFwd || bankSort === kRev;
-              const isRev    = bankSort === kRev;
-              return (
-                <button key={kFwd}
-                  onClick={() => setBankSort(isActive ? (isRev ? kFwd : kRev) : kFwd)}
-                  style={{
-                    flex: 1, fontSize: isPhone ? 7 : 9, padding: "3px 0", borderRadius: 4, cursor: "pointer",
-                    background: isActive ? "var(--bg-surface)" : "transparent",
-                    border: `1px solid ${isActive ? "var(--active)" : "var(--border-2)"}`,
-                    color: isActive ? "var(--active)" : "var(--text-4)",
-                    fontWeight: isActive ? 700 : 400,
-                  }}
-                >{isRev ? lRev : lFwd}</button>
-              );
-            })}
           </div>
+
+        {/* Placed Out section */}
+        <div
+          onClick={() => setCollapsePlacedOut(v => !v)}
+          style={{
+            display: "flex", alignItems: "center", gap: 5, padding: "6px 8px",
+            cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
+          }}
+        >
+          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+            ↪ PLACED OUT {placedOut.size > 0 ? `(${placedOut.size})` : ""}
+          </span>
+          <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut ? "▶" : "▼"}</span>
+        </div>
+        {!collapsePlacedOut && (
+          <div
+            onDragOver={e => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+            }}
+            onDrop={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (dragInfo) onDropPlacedOut(dragInfo);
+            }}
+            style={{
+              padding: placedOut.size > 0 ? "0 8px 6px" : "8px",
+              display: "flex", flexDirection: "column", gap: 3,
+              minHeight: placedOut.size === 0 ? (isPhone ? "40px" : "50px") : "auto",
+              border: placedOut.size === 0 ? "2px dashed var(--border-2)" : "none",
+              borderRadius: "4px",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "var(--text-5)",
+              fontSize: isPhone ? 9 : 10,
+            }}
+          >
+            {placedOut.size > 0 ? (
+              Array.from(placedOut).map(id => {
+                const c = courseMap[id];
+                if (!c) return null;
+                return (
+                  <div
+                    key={id}
+                    draggable
+                    data-drag-id={id}
+                    data-drag-type="course"
+                    onDragStart={e => onDragStart(e, id, "course", null)}
+                    onClick={() => {
+                      setSelectedId(id);
+                      setShowPanel(true);
+                    }}
+                    onMouseEnter={() => setHoveredPlacedOutId(id)}
+                    onMouseLeave={() => setHoveredPlacedOutId(null)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: isPhone ? 4 : 6,
+                      padding: isPhone ? "2px 4px" : "3px 6px",
+                      background: "var(--bg-surface-2)", borderRadius: 4,
+                      cursor: "grab",
+                      textDecoration: selectedId === id || hoveredPlacedOutId === id ? "underline" : "none",
+                      textDecorationStyle: "dotted",
+                      textDecorationColor: "var(--text-4)",
+                      textUnderlineOffset: 2,
+                      fontSize: isPhone ? 5 : 10,
+                    }}
+                  >
+                    <span style={{ fontSize: isPhone ? 6 : 10, fontWeight: 600, color: "var(--text-2)" }}>{c.code}</span>
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        const newSet = new Set(placedOut);
+                        newSet.delete(id);
+                        setPlacedOut(newSet);
+                      }}
+                      style={{
+                        marginLeft: "auto", background: "none", border: "none",
+                        color: "var(--text-4)", cursor: "pointer",
+                        fontSize: isPhone ? 10 : 11, padding: "0 4px",
+                      }}
+                      title="Remove from placed out"
+                    >✕</button>
+                  </div>
+                );
+              })
+            ) : (
+              <div style={{ textAlign: "center", padding: "4px", fontSize: isPhone ? 7 : 10 }}>
+                Drag courses here to place them out (no credit, but satisfy prerequisites)
+              </div>
+            )}
+          </div>
+        )}
         </>}
-        {/* ── End sticky header ─────────────────────── */}
+        {/* ── End sticky header ── */}
         </div>
 
         {/* Graduation panel */}
@@ -288,18 +372,28 @@ export default function BankPanel() {
                 ) : "No courses match."}
               </div>
             ) : bankCourses.map(c => {
-              const isPlaced = placedIds.has(c.id);
               return (
-                <div key={c.id} style={{ position: "relative", opacity: isPlaced ? 0.55 : 1 }}>
+                <div key={c.id} style={{ position: "relative", opacity: placedIds.has(c.id) ? 0.55 : 1 }}>
                   <CourseCard course={c} inSem={false} semId={null} />
-                  {isPlaced && !isPhone && (
-                    <span style={{
-                      position: "absolute", top: 3, right: 5,
-                      fontSize: 7, fontWeight: 700, color: "var(--success)",
-                      background: "var(--success-bg)", border: "1px solid var(--success-border)",
-                      borderRadius: 3, padding: "0px 4px", pointerEvents: "none",
-                    }}>placed</span>
-                  )}
+                  <button
+                    onClick={() => {
+                      const newSet = new Set(placedOut);
+                      if (newSet.has(c.id)) newSet.delete(c.id); else newSet.add(c.id);
+                      setPlacedOut(newSet);
+                    }}
+                    style={{
+                      position: "absolute", top: 2, right: 2,
+                      fontSize: isPhone ? 6 : 8, padding: "1px 4px",
+                      background: placedOut.has(c.id) ? "var(--success-bg)" : "var(--bg-surface)",
+                      border: `1px solid ${placedOut.has(c.id) ? "var(--success-border)" : "var(--border-2)"}`,
+                      borderRadius: 4, cursor: "pointer",
+                      color: placedOut.has(c.id) ? "var(--success)" : "var(--text-4)",
+                    }}
+                    title={placedOut.has(c.id) ? "Remove placed out" : "Mark as placed out"}
+                  >
+                    {placedOut.has(c.id) ? "✓" : "↪"}
+                  </button>
+                  {/* The "in plan" badge is removed because placed courses are filtered out of the bank */}
                 </div>
               );
             })}

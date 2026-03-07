@@ -18,9 +18,15 @@ export const courseKey = (subject, id) => `${subject}${id}`;
  * Build a Set of canonical course keys for every placed course.
  * Only courses that exist in courseMap are included.
  */
-export function buildPlacedKeySet(placements, courseMap) {
+export function buildPlacedKeySet(placements, placedOut = new Set(), courseMap) {
   const keys = new Set();
+  // Add placed courses
   for (const id of Object.keys(placements)) {
+    const c = courseMap[id];
+    if (c) keys.add(courseKey(c.subject, c.number));
+  }
+  // Add placed out courses
+  for (const id of placedOut) {
     const c = courseMap[id];
     if (c) keys.add(courseKey(c.subject, c.number));
   }

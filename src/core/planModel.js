@@ -129,6 +129,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const {
     majorPath = "", concLabel = "", minor1Path = "", minor2Path = "",
     npCovered = new Set(), doneKeys = new Set(), totalSHRequired = 0,
+    placedOut = new Set(),
   } = gradInfo;
 
   // ── Load major + minors (async) ───────────────────────────────
@@ -171,7 +172,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   });
 
   // ── Requirements sections HTML ────────────────────────────────
-  const placedSet = buildPlacedKeySet(placements, courseMap);
+  const placedSet = buildPlacedKeySet(placements, placedOut, courseMap);
 
   function renderProgram(prog, doneKeysSet, headerLabel, name) {
     if (!prog) return "";

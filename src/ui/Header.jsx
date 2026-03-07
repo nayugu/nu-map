@@ -66,6 +66,7 @@ export default function Header() {
     const gradInfo = {
       majorPath, concLabel, minor1Path, minor2Path,
       npCovered, doneKeys, totalSHRequired: 0,
+      placedOut,
     };
     exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl);
   };
