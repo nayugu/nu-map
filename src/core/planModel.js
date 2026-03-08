@@ -2,7 +2,7 @@
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
 import { WORK_TERMS } from "./constants.js";
-import { buildPlacedKeySet, validateMajor } from "./gradRequirements.js";
+import { buildPlacedKeySet, allocateMajor } from "./gradRequirements.js";
 import { loadMajor } from "../data/majorLoader.js";
 import { loadMinor } from "../data/minorLoader.js";
 
@@ -176,7 +176,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 
   function renderProgram(prog, doneKeysSet, headerLabel, name) {
     if (!prog) return "";
-    const sections = validateMajor(prog, placedSet, courseMap);
+    const sections = allocateMajor(prog, placedSet, courseMap);
     const sectionsHtml = sections.map(s => sectionHtml(s, doneKeysSet)).join("");
     return `<div class="section-title">${headerLabel}<span class="prog-name">${name}</span></div>
       ${sectionsHtml}`;

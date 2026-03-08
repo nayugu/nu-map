@@ -10,8 +10,8 @@ import { usePlanner }         from "../context/PlannerContext.jsx";
 import { NUPATH_LABELS }      from "../core/constants.js";
 import {
   buildPlacedKeySet,
-  validateMajor,
-  checkSection,
+  allocateMajor,
+  allocateSections,
   getNuPathCoverage,
 } from "../core/gradRequirements.js";
 import { getMajorOptionGroups, loadMajor } from "../data/majorLoader.js";
@@ -416,7 +416,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
   }, [path]);
 
   const sections = useMemo(
-    () => (minor ? validateMajor(minor, placedSet, courseMap) : []),
+    () => (minor ? allocateMajor(minor, placedSet, courseMap) : []),
     [minor, placedSet, courseMap]
   );
 
@@ -492,21 +492,31 @@ export default function GradPanel() {
   const plannedSH  = totalSHPlaced - totalSHDone;
   const requiredSH = major?.totalCreditsRequired ?? 0;
 
-  // Validated requirement sections
-  const sections = useMemo(
-    () => (major ? validateMajor(major, placedSet, courseMap) : []),
-    [major, placedSet, courseMap]
-  );
+    // ── Build combined sections (major + concentration) ─────────────────
+  const allSections = useMemo(() => {
+    if (!major) return [];
+    const sections = [...(major.requirementSections ?? [])];
+    if (selConc && major.concentrations) {
+      const concSec = major.concentrations.concentrationOptions.find(c => c.title === selConc);
+      if (concSec) sections.push(concSec);
+    }
+    return sections;
+  }, [major, selConc]);
 
-  // Validated concentration section (if selected)
-  const concResult = useMemo(() => {
-    if (!major?.concentrations || !selConc) return null;
-    const sec = major.concentrations.concentrationOptions.find(c => c.title === selConc);
-    return sec ? checkSection(sec, placedSet, courseMap) : null;
-  }, [major, selConc, placedSet, courseMap]);
+  // ── Allocate all sections together (shared used set) ────────────────
+  const allocatedSections = useMemo(() => {
+    if (!major) return [];
+    // Each major gets its own fresh global used set
+    return allocateSections(allSections, placedSet, new Set(), courseMap);
+  }, [allSections, placedSet, courseMap]);
 
-  const satSections = sections.filter(s => s.sat).length;
-  const overallFrac = sections.length > 0 ? satSections / sections.length : 0;
+  // Split back for display: major sections (original count) and concentration (if any)
+  const majorSectionsCount = major?.requirementSections?.length ?? 0;
+  const majorSections = allocatedSections.slice(0, majorSectionsCount);
+  const concSection = allocatedSections.length > majorSectionsCount ? allocatedSections[majorSectionsCount] : null;
+
+  const satSections = majorSections.filter(s => s.sat).length;
+  const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
   return (
     <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone }}>
@@ -618,7 +628,7 @@ export default function GradPanel() {
           </div>
         )}
 
-        {/* ── Major requirement sections ───────────────────────── */}
+                {/* ── Major requirement sections ───────────────────────── */}
         {major && !fetching && (
           <>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: isPhone ? 3 : 5, marginTop: isPhone ? 2 : 4 }}>
@@ -626,7 +636,7 @@ export default function GradPanel() {
                 <div style={{ fontSize: isPhone ? 9 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
                   REQUIREMENTS
                   <span style={{ fontWeight: 400, color: "var(--text-5)", marginLeft: 5 }}>
-                    ({satSections}/{sections.length})
+                    ({satSections}/{majorSections.length})
                   </span>
                 </div>
                 <div style={{ fontSize: isPhone ? 8 : 9, fontWeight: 600, color: "var(--text-2)", marginTop: 1 }}>
@@ -644,16 +654,16 @@ export default function GradPanel() {
             </div>
             <ProgressBar frac={overallFrac} />
             <div style={{ marginTop: 8 }}>
-              {sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+              {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
             </div>
 
             {/* Concentration */}
-            {concResult && (
+            {concSection && (
               <>
                 <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 10 }}>
                   CONCENTRATION
                 </div>
-                <SectionBlock sec={concResult} defaultOpen={true} />
+                <SectionBlock sec={concSection} defaultOpen={true} />
               </>
             )}
           </>
@@ -663,13 +673,13 @@ export default function GradPanel() {
         <MinorBlock path={minor1} placedSet={placedSet} label="MINOR 1" />
         <MinorBlock path={minor2} placedSet={placedSet} label="MINOR 2" />
 
-        {/* ── Empty state ──────────────────────────────────────── */}
+                {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !minor1 && !minor2 && !fetching && !loadErr && (
           <div style={{ textAlign: "center", color: "var(--text-5)", fontSize: 10, paddingTop: 12, lineHeight: 1.7 }}>
             Search for your major above<br />to check graduation requirements<br />against your current plan.
           </div>
         )}
-      </div>
-    </GradCtx.Provider>
-  );
-}
+      </div> {/* closes the main padding div */}
+    </GradCtx.Provider> 
+  ); 
+} // closes the function

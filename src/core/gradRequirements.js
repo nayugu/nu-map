@@ -15,6 +15,21 @@
 export const courseKey = (subject, id) => `${subject}${id}`;
 
 /**
+ * Get canonical keys of all co‑requisites of a course.
+ */
+function getCorequisiteKeys(course, courseMap) {
+  const keys = [];
+  if (course && course.coreqs) {
+    for (const cq of course.coreqs) {
+      if (cq && cq.subject && cq.number) {
+        keys.push(courseKey(cq.subject, cq.number));
+      }
+    }
+  }
+  return keys;
+}
+
+/**
  * Build a Set of canonical course keys for every placed course.
  * Only courses that exist in courseMap are included.
  */
@@ -197,4 +212,328 @@ export function getTotalPlacedSH(placements, courseMap) {
     const c = courseMap[id];
     return sum + (c?.sh ?? 0);
   }, 0);
+}
+
+// ── Allocation functions (prevent double-counting within a major) ──
+
+/**
+ * Allocate courses to sections of a major, ensuring each course is used at most once.
+ * Returns an array of section result objects, each with an additional `allocatedCourses` Set.
+ */
+export function allocateMajor(major, placedSet, courseMap) {
+  const used = new Set();
+  return allocateSections(major.requirementSections ?? [], placedSet, used, courseMap);
+}
+
+/**
+ * Allocate courses to an array of sections, sharing the same used set.
+ */
+export function allocateSections(sections, placedSet, globalUsed, courseMap) {
+  const results = [];
+  for (const section of sections) {
+    // Make a working copy of the global used set for this section
+    const workingUsed = new Set(globalUsed);
+    // Process the section with its own working set, and pass the original global set as 'originalUsed'
+    const sectionResult = allocateSection(section, placedSet, workingUsed, globalUsed, courseMap);
+    results.push(sectionResult);
+    // After the section, commit its new allocations to the global set
+    workingUsed.forEach(key => globalUsed.add(key));
+  }
+  return results;
+}
+
+/**
+ * Allocate courses to a single section.
+ */
+export function allocateSection(section, placedSet, used, originalUsed, courseMap) {
+  const children = (section.requirements ?? []).map(req => allocateNode(req, placedSet, used, originalUsed, courseMap));
+  const satCount = children.filter(c => c.sat).length;
+  const sat = satCount >= section.minRequirementCount;
+  const allocatedCourses = new Set();
+  children.forEach(c => c.allocatedCourses?.forEach(k => allocatedCourses.add(k)));
+  return {
+    type: 'SECTION',
+    title: section.title ?? '',
+    warnings: section.warnings ?? [],
+    sat,
+    satCount,
+    minRequired: section.minRequirementCount,
+    total: children.length,
+    children,
+    allocatedCourses,
+  };
+}
+
+function allocateNode(node, placedSet, used, originalUsed, courseMap) {
+  switch (node.type) {
+    case 'COURSE': {
+      const key = courseKey(node.subject, node.classId);
+      const course = courseMap[key];
+      // Check if any coreq is already used in the original used set (outside this transaction)
+      const coreqKeys = getCorequisiteKeys(course, courseMap);
+      const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
+      const sat = placedSet.has(key) && !originalUsed.has(key) && !anyCoreqUsedInOriginal;
+      if (sat) {
+        used.add(key);
+        // Mark all placed coreqs as used in this transaction (they cannot be used elsewhere later)
+        coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
+      }
+      const allocatedCourses = sat ? new Set([key, ...coreqKeys.filter(k => placedSet.has(k))]) : new Set();
+      const desc = node.description ? ` — ${node.description}` : '';
+      return {
+        type: 'COURSE',
+        key,
+        sat,
+        label: `${node.subject} ${node.classId}${desc}`,
+        allocatedCourses,
+      };
+    }
+
+    case 'RANGE': {
+      const candidates = [];
+      for (const key of placedSet) {
+        const c = courseMap[key];
+        if (!c || c.subject !== node.subject) continue;
+        const num = parseInt(c.number, 10);
+        if (isNaN(num)) continue;
+        if (num < node.idRangeStart || num > node.idRangeEnd) continue;
+        const isExc = (node.exceptions ?? []).some(
+          ex => courseKey(ex.subject, ex.classId) === key
+        );
+        if (isExc) continue;
+        if (!originalUsed.has(key)) {
+          const coreqKeys = getCorequisiteKeys(c, courseMap);
+          const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
+          if (!anyCoreqUsedInOriginal) candidates.push(key);
+        }
+      }
+      const chosen = candidates.length > 0 ? candidates[0] : null;
+      let coreqKeys = [];
+      if (chosen) {
+        used.add(chosen);
+        const c = courseMap[chosen];
+        coreqKeys = getCorequisiteKeys(c, courseMap);
+        coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
+      }
+      const sat = !!chosen;
+      const allocatedCourses = sat ? new Set([chosen, ...coreqKeys.filter(k => placedSet.has(k))]) : new Set();
+      return {
+        type: 'RANGE',
+        sat,
+        matched: sat ? [`${courseMap[chosen].subject} ${courseMap[chosen].number}`] : [],
+        subject: node.subject,
+        start: node.idRangeStart,
+        end: node.idRangeEnd,
+        label: `Any ${node.subject} ${node.idRangeStart}–${node.idRangeEnd}`,
+        allocatedCourses,
+      };
+    }
+
+    case 'XOM': {
+      const possibleCourses = new Map(); // key -> SH
+
+      function collect(node) {
+        if (node.type === 'COURSE') {
+          const key = courseKey(node.subject, node.classId);
+          const c = courseMap[key];
+          if (!c) return;
+          if (placedSet.has(key) && !used.has(key) && !possibleCourses.has(key)) {
+            const coreqKeys = getCorequisiteKeys(c, courseMap);
+            const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
+            if (!anyCoreqUsedInOriginal) {
+              possibleCourses.set(key, c.sh);
+            }
+          }
+        } else if (node.type === 'RANGE') {
+          for (const key of placedSet) {
+            const c = courseMap[key];
+            if (!c || c.subject !== node.subject) continue;
+            const num = parseInt(c.number, 10);
+            if (isNaN(num)) continue;
+            if (num < node.idRangeStart || num > node.idRangeEnd) continue;
+            const isExc = (node.exceptions ?? []).some(
+              ex => courseKey(ex.subject, ex.classId) === key
+            );
+            if (isExc) continue;
+            if (!used.has(key) && !possibleCourses.has(key)) {
+              const coreqKeys = getCorequisiteKeys(c, courseMap);
+              const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
+              if (!anyCoreqUsedInOriginal) {
+                possibleCourses.set(key, c.sh);
+              }
+            }
+          }
+        }
+        // For AND/OR, we could recursively collect, but we'll assume not present.
+      }
+
+      for (const child of node.courses ?? []) {
+        collect(child);
+      }
+
+      const sorted = Array.from(possibleCourses.entries()).sort((a, b) => b[1] - a[1]);
+      const allocated = [];
+      let sum = 0;
+      for (const [key, sh] of sorted) {
+        if (sum >= node.numCreditsMin) break;
+        const c = courseMap[key];
+        const coreqKeys = getCorequisiteKeys(c, courseMap);
+        // Check if any coreq is already used (either in originalUsed or from previous picks in this XOM)
+        const anyCoreqUsed = coreqKeys.some(k => used.has(k));
+        if (anyCoreqUsed) continue;
+        allocated.push(key);
+        sum += sh;
+        used.add(key);
+        coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
+      }
+      const sat = sum >= node.numCreditsMin;
+      const satSh = sum;
+
+      const children = (node.courses ?? []).map(child => {
+        if (child.type === 'COURSE') {
+          const key = courseKey(child.subject, child.classId);
+          const childSat = allocated.includes(key);
+          const desc = child.description ? ` — ${child.description}` : '';
+          return {
+            type: 'COURSE',
+            key,
+            sat: childSat,
+            label: `${child.subject} ${child.classId}${desc}`,
+            allocatedCourses: childSat ? new Set([key]) : new Set(),
+          };
+        } else if (child.type === 'RANGE') {
+          const matched = allocated.filter(key => {
+            const c = courseMap[key];
+            if (!c || c.subject !== child.subject) return false;
+            const num = parseInt(c.number, 10);
+            if (isNaN(num)) return false;
+            if (num < child.idRangeStart || num > child.idRangeEnd) return false;
+            const isExc = (child.exceptions ?? []).some(
+              ex => courseKey(ex.subject, ex.classId) === key
+            );
+            return !isExc;
+          });
+          const childSat = matched.length > 0;
+          return {
+            type: 'RANGE',
+            sat: childSat,
+            matched: matched.map(key => `${courseMap[key].subject} ${courseMap[key].number}`),
+            subject: child.subject,
+            start: child.idRangeStart,
+            end: child.idRangeEnd,
+            label: `Any ${child.subject} ${child.idRangeStart}–${child.idRangeEnd}`,
+            allocatedCourses: childSat ? new Set(matched) : new Set(),
+          };
+        } else {
+          return {
+            type: child.type,
+            sat: false,
+            label: 'Unsupported',
+            allocatedCourses: new Set(),
+          };
+        }
+      });
+
+      const allocatedCourses = new Set(allocated);
+      return {
+        type: 'XOM',
+        sat,
+        satSh,
+        reqSh: node.numCreditsMin,
+        children,
+        label: `${node.numCreditsMin}+ SH from pool`,
+        allocatedCourses,
+      };
+    }
+
+    case 'AND': {
+      const usedClone = new Set(used);
+      const children = [];
+      let allSat = true;
+      for (const child of node.courses ?? []) {
+        const childResult = allocateNode(child, placedSet, usedClone, originalUsed, courseMap);
+        children.push(childResult);
+        if (!childResult.sat) allSat = false;
+      }
+      if (allSat) {
+        usedClone.forEach(k => used.add(k));
+        const allocatedCourses = new Set();
+        children.forEach(c => c.allocatedCourses?.forEach(k => allocatedCourses.add(k)));
+        return {
+          type: 'AND',
+          sat: true,
+          satCount: children.length,
+          total: children.length,
+          children,
+          label: `All of (${children.map(c => c.label).join(', ')})`,
+          allocatedCourses,
+        };
+      } else {
+        const failedChildren = (node.courses ?? []).map(child => {
+          const base = checkReq(child, placedSet, courseMap);
+          return {
+            type: child.type,
+            sat: false,
+            label: base.label,
+            allocatedCourses: new Set(),
+          };
+        });
+        return {
+          type: 'AND',
+          sat: false,
+          satCount: 0,
+          total: children.length,
+          children: failedChildren,
+          label: `All of (${(node.courses ?? []).map(c => c.label).join(', ')})`,
+          allocatedCourses: new Set(),
+        };
+      }
+    }
+
+    case 'OR': {
+      for (const child of node.courses ?? []) {
+        const usedClone = new Set(used);
+        const childResult = allocateNode(child, placedSet, usedClone, originalUsed, courseMap);
+        if (childResult.sat) {
+          usedClone.forEach(k => used.add(k));
+          const children = [childResult];
+          const allocatedCourses = new Set(childResult.allocatedCourses);
+          return {
+            type: 'OR',
+            sat: true,
+            children,
+            label: `One of (${children.map(c => c.label).join(', ')})`,
+            allocatedCourses,
+          };
+        }
+      }
+      const failedChildren = (node.courses ?? []).map(child => {
+        const base = checkReq(child, placedSet, courseMap);
+        return {
+          type: child.type,
+          sat: false,
+          label: base.label,
+          allocatedCourses: new Set(),
+        };
+      });
+      return {
+        type: 'OR',
+        sat: false,
+        children: failedChildren,
+        label: `One of (${(node.courses ?? []).map(c => c.label).join(', ')})`,
+        allocatedCourses: new Set(),
+      };
+    }
+
+    case 'SECTION':
+      return allocateSection(node, placedSet, used, originalUsed, courseMap);
+
+    default:
+      return {
+        type: node.type ?? 'UNKNOWN',
+        sat: false,
+        label: String(node.type ?? 'Unknown'),
+        allocatedCourses: new Set(),
+      };
+  }
 }
