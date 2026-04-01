@@ -1,6 +1,477 @@
 {
   "runs": [
     {
+      "timestamp": "2026-04-01T07:26:17.024Z",
+      "subject": "ACCT",
+      "added": [],
+      "modified": [
+        {
+          "code": "ACCT 1990",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 2301",
+          "changes": [
+            {
+              "field": "description",
+              "before": "Focuses on the development and use of information—especially financial information—for managerial decisions within the firm. Introduces managerial accounting concepts, analyses, and practices that support business decisions through class discussions, exercises, and case analysis. Topics include budgeting, cost management and behavior, cost-volume-profit analysis, relevant costs for decision making, cost allocation issues, and performance evaluation. Emphasizes the importance of ethics.",
+              "after": "Focuses on the development and analysis of information for managerial decision making within the firm. Students take a managerial or advisory perspective to conduct cost and profit analyses that support the strategic goals of an organization to manage firm profitability. Topics include costing products, services, and customers; understanding cost behavior; cost-volume-profit analysis; relevant cost analysis for decision making; budgeting; variance analysis; and performance evaluation. Covers key knowledge and tasks that managers, consultants, and advisors need to understand to help a business run successfully."
+            }
+          ]
+        },
+        {
+          "code": "ACCT 2990",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 3220",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lab"
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 3304",
+          "changes": [
+            {
+              "field": "description",
+              "before": "Covers business law, professional code of conduct, and the importance of ethical behavior in today's business environment. Examines legal aspects of commercial transactions and business relationships. Specifically, laws relating to contracts and sale of goods under the Uniform Commercial Code, agency law, and product liability law are discussed. May not be used as an accounting concentration elective.",
+              "after": "Covers business law, professional code of conduct, and the importance of ethical behavior in today’s business environment. Examines legal aspects of commercial transactions and business relationships. Specifically, laws relating to contracts and sale of goods under the Uniform Commercial Code, agency law, and product liability law are discussed. May not be used as an accounting concentration elective."
+            }
+          ]
+        },
+        {
+          "code": "ACCT 3990",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 4990",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 4992",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Individual Instruction"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 5201",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 5202",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 5203",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 5204",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 5232",
+          "changes": [
+            {
+              "field": "prereqs",
+              "before": [
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                }
+              ],
+              "after": [
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "And",
+                "(",
+                ")",
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6203",
+          "changes": [
+            {
+              "field": "description",
+              "before": "Provides an in-depth look at the structure of the federal income tax system as it relates to different taxable entitites. Emphasizes tax compliance, planning, and research as they impact the decision-making process for corporation and flow-through entities. Also examines the implications of wealth transfer taxes.",
+              "after": "Provides an in-depth look at the structure of the federal income tax system as it relates to different taxable entities. Emphasizes tax compliance, planning, and research as they impact the decision-making process for corporation and flow-through entities. Also examines the implications of wealth transfer taxes."
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6204",
+          "changes": [
+            {
+              "field": "description",
+              "before": "Presents and discusses financial reporting practices for diversified, international business entities. In today's global business environment, many corporations operate diverse economic activities and often conduct those activities across geographic boundaries. Examines accounting and disclosure standards in the United States that are relevant to presenting consolidated financial statements. Also analyzes accounting and disclosure standards in other countries and those developed by international bodies with respect to their effects on reporting entities and the financial markets.",
+              "after": "Presents and discusses financial reporting practices for diversified, international business entities. In today’s global business environment, many corporations operate diverse economic activities and often conduct those activities across geographic boundaries. Examines accounting and disclosure standards in the United States that are relevant to presenting consolidated financial statements. Also analyzes accounting and disclosure standards in other countries and those developed by international bodies with respect to their effects on reporting entities and the financial markets."
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6223",
+          "changes": [
+            {
+              "field": "description",
+              "before": "Introduces the attest function and its application to financial statement opinion audits and other assurance services common in today's professional environment. Emphasizes a risk-based approach to audit planning, the internal control structure, and the control environment; the design of test of controls, substantive tests, and the resultant audit report. Topics include audit sampling, audit evidence, audit procedures, workpaper preparation, the impact of information technology on the audit process, and the auditor's responsibility to detect fraud. A primary focus is the auditor's legal and ethical responsibilities. Emphasis is also on operational audits, compliance audits, reviews, compilation, and other attestation services.",
+              "after": "Introduces the attest function and its application to financial statement opinion audits and other assurance services common in today’s professional environment. Emphasizes a risk-based approach to audit planning, the internal control structure, and the control environment; the design of test of controls, substantive tests, and the resultant audit report. Topics include audit sampling, audit evidence, audit procedures, workpaper preparation, the impact of information technology on the audit process, and the auditor’s responsibility to detect fraud. A primary focus is the auditor’s legal and ethical responsibilities. Emphasis is also on operational audits, compliance audits, reviews, compilation, and other attestation services."
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6231",
+          "changes": [
+            {
+              "field": "prereqs",
+              "before": [
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                }
+              ],
+              "after": [
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "And",
+                "(",
+                ")"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6235",
+          "changes": [
+            {
+              "field": "prereqs",
+              "before": [
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                }
+              ],
+              "after": [
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "And",
+                "(",
+                ")"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6239",
+          "changes": [
+            {
+              "field": "prereqs",
+              "before": [
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                }
+              ],
+              "after": [
+                {
+                  "subject": "ACCT",
+                  "number": "6230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "Or",
+                {
+                  "subject": "ACCT",
+                  "number": "5230"
+                },
+                "And",
+                "(",
+                ")"
+              ]
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6265",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": "Lecture",
+              "after": "Lab"
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6345",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        },
+        {
+          "code": "ACCT 6962",
+          "changes": [
+            {
+              "field": "scheduleType",
+              "before": null,
+              "after": "Lecture"
+            },
+            {
+              "field": "prereqs",
+              "before": null,
+              "after": []
+            },
+            {
+              "field": "coreqs",
+              "before": null,
+              "after": []
+            }
+          ]
+        }
+      ],
+      "removedFromCatalog": [],
+      "unchanged": 37
+    },
+    {
       "type": "nuclear-fix",
       "subject": "☢ Nuclear Fix Applied",
       "timestamp": "2026-03-06T00:45:25.402Z",
