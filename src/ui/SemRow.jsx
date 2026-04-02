@@ -56,8 +56,8 @@ export default function SemRow({ sem }) {
     rowOpacity   = 0.9;
     rowBoxShadow = "var(--shadow-done-row)";
   } else {
-    rowBg        = isHov ? "var(--active-hov-bg)" : workItem ? `rgba(${hexRgb(workItem.color)},0.06)` : tb.bg;
-    rowBorder    = `1px solid ${isHov ? "var(--active)" : workItem ? `${workItem.color}50` : tb.border}`;
+    rowBg        = isHov ? "var(--active-hov-bg)" : tb.bg;
+    rowBorder    = `1px solid ${isHov ? "var(--active)" : tb.border}`;
     rowOpacity   = 1;
     rowBoxShadow = "none";
   }
