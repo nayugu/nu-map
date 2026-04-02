@@ -2,7 +2,7 @@
 // SUMMER ROW  — renders sumA + sumB as a single combined visual block
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TYPE_BG, WORK_TERMS } from "../core/constants.js";
 import { getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
@@ -22,7 +22,12 @@ export default function SummerRow({ semA, semB }) {
   } = usePlanner();
 
   // Collapsible state for other credits
-  const [showOther, setShowOther] = useState(false);
+  const [showOther, setShowOther] = useState(!collapseOtherCredits);
+
+  // Sync local state with global collapseOtherCredits setting
+  useEffect(() => {
+    setShowOther(!collapseOtherCredits);
+  }, [collapseOtherCredits]);
 
   const year     = semA.id.replace("sumA", "");
   const sems     = [semA, semB].filter(Boolean);

@@ -2,7 +2,7 @@
 // SEM ROW  — renders a single non-summer semester row (fall/spring/special)
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TYPE_BG, WORK_TERMS } from "../core/constants.js";
 import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
@@ -39,6 +39,12 @@ export default function SemRow({ sem }) {
   // Collapsible other credits
   const { collapseOtherCredits, setCollapseOtherCredits, collapsedSubs, setCollapsedSubs } = usePlanner();
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
+
+  // Sync local state with global collapseOtherCredits setting
+  useEffect(() => {
+    setShowOther(!collapseOtherCredits);
+  }, [collapseOtherCredits]);
+
   // Collapsed state for incoming credit section (per-semester)
   const isIncomingCollapsed = collapsedSubs[sem.id] !== false;
   const isHov      = hoveredSem === sem.id;
