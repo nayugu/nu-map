@@ -216,8 +216,8 @@ function ReqNode({ r, depth = 0 }) {
   if (r.type === "COURSE") {
     const course    = courseMap?.[r.key];
     const isSelected = selectedId === r.key;
-    // On phone: show only the course code (r.key) to save horizontal space.
-    const displayLabel = isPhone ? r.key : r.label;
+    // Show only the course code, without description (strip " — Description" part)
+    const displayLabel = r.label.split(' — ')[0];
     return (
       <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB }}>
         <div
@@ -606,7 +606,7 @@ export default function GradPanel() {
 
         {/* ── NUPath — always visible ───────────────────────────── */}
         <div style={{ marginBottom: 8 }}>
-          <div onClick={() => setShowNP(v => !v)} style={{
+          <div onClick={(e) => { e.stopPropagation(); setShowNP(v => !v); }} style={{
             display: "flex", alignItems: "center", gap: 5, cursor: "pointer", marginBottom: 4, userSelect: "none",
           }}>
             <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>

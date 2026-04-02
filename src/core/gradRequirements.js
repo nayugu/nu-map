@@ -472,9 +472,8 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
         const failedChildren = (node.courses ?? []).map(child => {
           const base = checkReq(child, placedSet, courseMap);
           return {
-            type: child.type,
+            ...base,
             sat: false,
-            label: base.label,
             allocatedCourses: new Set(),
           };
         });
