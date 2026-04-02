@@ -262,7 +262,7 @@ function ReqNode({ r, depth = 0 }) {
     const has = r.children?.length > 0;
     return (
       <div style={{ paddingLeft: pl, marginBottom: rowMB }}>
-        <div onClick={() => has && setOpen(v => !v)}
+        <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
           style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
           <CheckBox sat={r.sat} />
           <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>
@@ -279,7 +279,6 @@ function ReqNode({ r, depth = 0 }) {
 
   // AND / OR / nested SECTION
   const has = r.children?.length > 0;
-  const isLocked = r.type === "OR" || r.type === "AND";
   const heading =
     r.type === "AND" ? `All of (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.type === "OR"  ? `One of` :
@@ -287,13 +286,13 @@ function ReqNode({ r, depth = 0 }) {
 
   return (
     <div style={{ paddingLeft: pl, marginBottom: rowMB }}>
-      <div onClick={() => has && !isLocked && setOpen(v => !v)}
-        style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has && !isLocked ? "pointer" : "default", userSelect: "none" }}>
+      <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
+        style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
         <CheckBox sat={r.sat} />
         <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>{heading}</span>
-        {has && !isLocked && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
+        {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
       </div>
-      {(open || isLocked) && has && <div style={{ marginTop: 3 }}>
+      {open && has && <div style={{ marginTop: 3 }}>
         {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} />)}
       </div>}
     </div>
@@ -311,7 +310,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
   return (
     <div style={{ marginBottom: ph ? 3 : 4, border: "1px solid var(--border-2)", borderRadius: 6, overflow: "hidden" }}>
       {/* Clickable header */}
-      <div onClick={() => setOpen(v => !v)} style={{
+      <div onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }} style={{
         display: "flex", alignItems: "center", gap: ph ? 4 : 6,
         padding: ph ? "3px 6px" : "5px 8px",
         cursor: "pointer", background: "var(--bg-surface)", userSelect: "none",

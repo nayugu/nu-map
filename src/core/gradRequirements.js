@@ -491,37 +491,32 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
     }
 
     case 'OR': {
+      // Always render all children so users can see and interact with all options
+      const children = [];
+      let satisfiedChild = null;
+      let allocatedCourses = new Set();
+
       for (const child of node.courses ?? []) {
         const usedClone = new Set(used);
         const childResult = allocateNode(child, placedSet, usedClone, originalUsed, courseMap);
-        if (childResult.sat) {
+
+        // Keep track of the first satisfied child for allocation
+        if (!satisfiedChild && childResult.sat) {
+          satisfiedChild = childResult;
           usedClone.forEach(k => used.add(k));
-          const children = [childResult];
-          const allocatedCourses = new Set(childResult.allocatedCourses);
-          return {
-            type: 'OR',
-            sat: true,
-            children,
-            label: `One of (${children.map(c => c.label).join(', ')})`,
-            allocatedCourses,
-          };
+          allocatedCourses = new Set(childResult.allocatedCourses);
         }
+
+        // Always add to children array for display
+        children.push(childResult);
       }
-      const failedChildren = (node.courses ?? []).map(child => {
-        const base = checkReq(child, placedSet, courseMap);
-        return {
-          type: child.type,
-          sat: false,
-          label: base.label,
-          allocatedCourses: new Set(),
-        };
-      });
+
       return {
         type: 'OR',
-        sat: false,
-        children: failedChildren,
-        label: `One of (${(node.courses ?? []).map(c => c.label).join(', ')})`,
-        allocatedCourses: new Set(),
+        sat: !!satisfiedChild,
+        children,
+        label: `One of (${children.map(c => c.label).join(', ')})`,
+        allocatedCourses,
       };
     }
 
