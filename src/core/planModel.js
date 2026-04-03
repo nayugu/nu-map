@@ -62,13 +62,29 @@ const ALL_NP = Object.keys(NP_LABELS).filter(k => k !== "WF");
 
 // ── Requirement tree → HTML ───────────────────────────────────────
 
+const STATUS_RANK = { done: 2, planned: 1, missing: 0 };
+
+function nodeMinStatus(r, doneKeys) {
+  if (r.type === "COURSE") {
+    return r.sat ? (doneKeys.has(r.key) ? "done" : "planned") : "missing";
+  }
+  if (r.type === "RANGE") {
+    return r.sat ? "done" : "missing";
+  }
+  if (!r.sat) return "missing";
+  const satChildren = (r.children ?? []).filter(c => c.sat);
+  if (!satChildren.length) return "done";
+  return satChildren.map(c => nodeMinStatus(c, doneKeys))
+    .reduce((min, s) => STATUS_RANK[s] < STATUS_RANK[min] ? s : min, "done");
+}
+
 function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
   const pl = depth * 12;
   if (r.type === "COURSE") {
     const isDimmed = dimmed && !r.sat;
     const status = r.sat ? (doneKeys.has(r.key) ? "done" : "planned") : isDimmed ? "dimmed" : "missing";
     const icon   = status === "done" ? "✓" : status === "planned" ? "○" : status === "dimmed" ? "╱" : "";
-    return `<div class="rc rc-${status}" style="padding-left:${pl + 4}px${isDimmed ? ";opacity:0.4" : ""}">
+    return `<div class="rc rc-${status}" style="padding-left:${pl}px${isDimmed ? ";opacity:0.4" : ""}">
       <span class="rc-icon rc-icon-${status}">${icon}</span>
       <span class="rc-lbl">${r.label}</span>
     </div>`;
@@ -79,7 +95,7 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
     const lbl    = r.sat
       ? r.matched.slice(0, 3).join(", ") + (r.matched.length > 3 ? ` +${r.matched.length - 3}` : "") + ` (${r.subject} range)`
       : r.label;
-    return `<div class="rc rc-${status}" style="padding-left:${pl + 4}px${isDimmed ? ";opacity:0.4" : ""}">
+    return `<div class="rc rc-${status}" style="padding-left:${pl}px${isDimmed ? ";opacity:0.4" : ""}">
       <span class="rc-icon rc-icon-${status}">${r.sat ? "✓" : isDimmed ? "╱" : ""}</span>
       <span class="rc-lbl">${lbl}</span>
     </div>`;
@@ -96,9 +112,11 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
     reqNodeHtml(c, doneKeys, depth + 1, dimChildren && !c.sat)
   ).join("");
   const groupDimmed = dimmed && !isSat;
+  const groupStatus = isSat ? nodeMinStatus(r, doneKeys) : "unsat";
+  const groupIcon   = groupStatus === "done" ? "✓" : groupStatus === "planned" ? "○" : groupDimmed ? "╱" : "";
   return `<div class="rg" style="padding-left:${pl}px${groupDimmed ? ";opacity:0.4" : ""}">
-    <div class="rg-head rg-${isSat ? "sat" : "unsat"}">
-      <span class="rg-icon">${isSat ? "✓" : groupDimmed ? "╱" : ""}</span>
+    <div class="rg-head rg-${groupStatus}">
+      <span class="rg-icon">${groupIcon}</span>
       <span class="rg-lbl">${heading}</span>
     </div>
     ${childrenHtml}
@@ -115,9 +133,16 @@ function sectionHtml(sec, doneKeys) {
     `<div class="sec-warn">⚠ ${w}</div>`).join("");
   const noteHtml  = isPoolStructure && sec.minRequired > 0
     ? `<div class="sec-note">Requires ${sec.minRequired} of ${sec.total}</div>` : "";
-  return `<div class="sec${sec.sat ? " sec-sat" : ""}">
+  const secStatus = sec.sat ? (() => {
+    const satReqs = (sec.children ?? []).filter(r => r.sat);
+    if (!satReqs.length) return "done";
+    return satReqs.map(r => nodeMinStatus(r, doneKeys))
+      .reduce((min, s) => STATUS_RANK[s] < STATUS_RANK[min] ? s : min, "done");
+  })() : "missing";
+  const secIcon = secStatus === "done" ? "✓" : secStatus === "planned" ? "○" : "";
+  return `<div class="sec${secStatus === "done" ? " sec-sat" : secStatus === "planned" ? " sec-planned" : ""}">
     <div class="sec-head">
-      <span class="sec-icon">${sec.sat ? "✓" : ""}</span>
+      <span class="sec-icon">${secIcon}</span>
       <span class="sec-title">${sec.title}</span>
       <span class="sec-prog">${displaySatCount}/${displayTotal}</span>
     </div>
@@ -364,8 +389,8 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
         ${pill}
         <span class="ccode">${c.code ?? c.id}</span>
         <span class="ctitle">${c.title ?? ""}</span>
-        <span class="csh">${c.shMax ? `${c.sh}\u2013${c.shMax}` : c.sh} SH</span>
         ${nuBadges ? `<span class="np-badges">${nuBadges}</span>` : ""}
+        <span class="csh">${c.shMax ? `${c.sh}\u2013${c.shMax}` : c.sh} SH</span>
       </div>`;
     }).join("\n");
     return `<div class="sem-block${tag}">
@@ -468,16 +493,20 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   /* Requirements */
   .sec         { margin-bottom: 5px; border: 1px solid #e8e8e8; border-radius: 5px; overflow: hidden; page-break-inside: avoid; }
   .sec-sat     { border-color: #bbf7d0; }
+  .sec-planned { border-color: #bfdbfe; }
   .sec-head    { display: flex; align-items: center; gap: 6px; padding: 4px 8px;
                  background: #f8f8f8; }
-  .sec-sat .sec-head { background: #f0faf4; }
+  .sec-sat .sec-head     { background: #f0faf4; }
+  .sec-planned .sec-head { background: #eff6ff; }
   .sec-icon    { width: 13px; height: 13px; border-radius: 3px; display: inline-flex;
                  align-items: center; justify-content: center; font-size: 8px; font-weight: 900;
                  flex-shrink: 0; border: 1px solid #d0d0d0; color: #bbb; background: #fff; }
-  .sec-sat .sec-icon { background: #dcfce7; border-color: #86efac; color: #16a34a; }
+  .sec-sat .sec-icon     { background: #dcfce7; border-color: #86efac; color: #16a34a; }
+  .sec-planned .sec-icon { background: #dbeafe; border-color: #93c5fd; color: #2563eb; }
   .sec-title   { flex: 1; font-size: 10px; font-weight: 700; color: #444;
                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .sec-sat .sec-title { color: #111; }
+  .sec-sat .sec-title     { color: #111; }
+  .sec-planned .sec-title { color: #111; }
   .sec-prog    { font-size: 9px; color: #999; flex-shrink: 0; }
   .sec-bar     { height: 3px; background: #e5e5e5; }
   .sec-bar-fill { height: 100%; background: #f59e0b; border-radius: 0; }
@@ -507,11 +536,13 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .rg-icon   { width: 12px; height: 12px; border-radius: 2px; display: inline-flex;
                align-items: center; justify-content: center; font-size: 8px; font-weight: 900;
                flex-shrink: 0; border: 1px solid #d8d8d8; color: #ccc; background: #fff; }
-  .rg-sat .rg-icon   { background: #dcfce7; border-color: #86efac; color: #16a34a; }
-  .rg-unsat .rg-icon { background: #fff; border-color: #d8d8d8; color: #ccc; }
+  .rg-done .rg-icon     { background: #dcfce7; border-color: #86efac; color: #16a34a; }
+  .rg-planned .rg-icon  { background: #dbeafe; border-color: #93c5fd; color: #2563eb; }
+  .rg-unsat .rg-icon    { background: #fff; border-color: #d8d8d8; color: #ccc; }
   .rg-lbl    { font-size: 10px; font-weight: 600; color: #444; }
-  .rg-sat   .rg-lbl   { color: #111; }
-  .rg-unsat .rg-lbl   { color: #888; }
+  .rg-done    .rg-lbl   { color: #111; }
+  .rg-planned .rg-lbl   { color: #1d4ed8; }
+  .rg-unsat   .rg-lbl   { color: #888; }
 
   /* Page break */
   .page-break { page-break-after: always; }
