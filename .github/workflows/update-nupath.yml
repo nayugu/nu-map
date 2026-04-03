@@ -1,0 +1,125 @@
+name: Update NUpath Data
+
+# Scrapes official NUpath source (Tableau dashboard + catalog fallback) and
+# commits updated nuPath fields directly to main — no PR needed.
+#
+# ┌─ MANUAL trigger ──────────────────────────────────────────────────────┐
+# │  GitHub → Actions → "Update NUpath Data" → Run workflow              │
+# └───────────────────────────────────────────────────────────────────────┘
+#
+# ┌─ AUTOMATIC trigger ────────────────────────────────────────────────────┐
+# │  Uncomment the `schedule:` block below to enable weekly automation.   │
+# │  Default: disabled (you control when data updates run).               │
+# └───────────────────────────────────────────────────────────────────────┘
+
+on:
+  workflow_dispatch:
+    inputs:
+      strategy:
+        description: "Scraping strategy (auto / tableau / catalog)"
+        required: false
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - tableau
+          - catalog
+
+  # ── Uncomment to enable automatic updates (January, May, September) ──
+  # schedule:
+  #   - cron: "0 5 1 1,5,9 *"   # 05:00 UTC on the 1st of Jan, May, Sep
+
+permissions:
+  contents: write   # needed to push the updated course data directly to main
+
+jobs:
+  update-nupath:
+    name: Fetch & commit NUpath data
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Install Playwright + Chromium (used for Tableau browser scraping) ─
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      # ── Run the NUpath scraper ────────────────────────────────────────────
+      - name: Scrape NUpath data
+        id: scrape
+        run: |
+          STRATEGY="${{ github.event.inputs.strategy || 'auto' }}"
+          FLAGS="--write"
+
+          if [ "$STRATEGY" = "tableau" ]; then
+            FLAGS="$FLAGS --tableau"
+          elif [ "$STRATEGY" = "catalog" ]; then
+            FLAGS="$FLAGS --catalog"
+          fi
+
+          echo "Strategy: $STRATEGY  |  Flags: $FLAGS"
+          node scripts/fetch-nupath.js $FLAGS 2>&1 | tee /tmp/nupath-log.txt
+
+          # Count how many nuPath values changed
+          CHANGED=$(grep -oP 'Changed\s*:\s*\K\d+' /tmp/nupath-log.txt | head -1 || echo "0")
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+          echo "log<<EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/nupath-log.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      # ── Re-apply manual patches so they're not lost ───────────────────────
+      - name: Re-apply patches
+        if: steps.scrape.outputs.changed != '0'
+        run: node scripts/apply-patches.js --write
+
+      # ── Check for actual file changes ─────────────────────────────────────
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # ── Commit and push directly to main ──────────────────────────────────
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "nu-map-bot"
+          git config user.email "nu-map-bot@users.noreply.github.com"
+
+          CHANGED="${{ steps.scrape.outputs.changed }}"
+          STRATEGY="${{ github.event.inputs.strategy || 'auto' }}"
+          DATE=$(date -u '+%Y-%m-%d')
+
+          git add public/all-courses.json public/change-log.json
+          git commit -m "data: update NUpath designations ($CHANGED changed) [$DATE]
+
+          Source: $STRATEGY strategy (Tableau → catalog fallback)
+          Triggered by: ${{ github.actor }}
+          Workflow run: ${{ github.run_id }}"
+
+          git push origin main
+
+      - name: No changes detected
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "✅  NUpath data is already up-to-date — nothing to commit."
+
+      # ── Post a summary to the Actions run log ─────────────────────────────
+      - name: Summary
+        if: always()
+        run: |
+          echo "## NUpath Update Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/nupath-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"  >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

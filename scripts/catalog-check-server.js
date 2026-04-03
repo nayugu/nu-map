@@ -26,6 +26,15 @@ const ALL_COURSES   = resolve(ROOT, "public/all-courses.json");
 const META_SRC_PATH = resolve(ROOT, "src/core/dataMeta.json");
 const META_PUB_PATH = resolve(ROOT, "public/data-meta.json");
 const CHANGE_LOG    = resolve(ROOT, "public/change-log.json");
+const NUPATH_WORKFLOW   = resolve(ROOT, ".github/workflows/update-nupath.yml");
+const NUPATH_MAP_PATH   = resolve(ROOT, "data/nupath-map.json");
+const NUPATH_SCHEDULE_COMMENT = `  # schedule:\n  #   - cron: "0 5 1 1,5,9 *"   # 05:00 UTC on the 1st of Jan, May, Sep`;
+const NUPATH_SCHEDULE_ACTIVE  = `  schedule:\n    - cron: "0 5 1 1,5,9 *"   # 05:00 UTC on the 1st of Jan, May, Sep`;
+const TABLEAU_EMBED_URL = "https://tableau.northeastern.edu/t/Registrar/views/NUpathAttributes/NUpathAttribute?%3Aembed=y&%3AisGuestRedirectFromVizportal=y";
+const TABLEAU_CSV_URLS  = [
+  "https://tableau.northeastern.edu/t/Registrar/views/NUpathAttributes/NUpathAttribute.csv",
+  "https://tableau.northeastern.edu/views/NUpathAttributes/NUpathAttribute.csv",
+];
 const BASE_URL      = "https://catalog.northeastern.edu";
 const INDEX_URL     = `${BASE_URL}/course-descriptions/`;
 const DELAY_MS      = parseInt(process.env.CATALOG_DELAY_MS ?? "350", 10);
@@ -150,6 +159,59 @@ function parseNUPath(text) {
     if (lower.includes(frag) && !found.includes(code)) found.push(code);
   }
   return found.sort();
+}
+
+// ── Tableau CSV helpers ───────────────────────────────────────────────────────
+
+function parseCsvLine(line) {
+  const result = []; let cur = "", inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') { if (inQ && line[i + 1] === '"') { cur += '"'; i++; } else inQ = !inQ; }
+    else if (ch === "," && !inQ) { result.push(cur); cur = ""; }
+    else cur += ch;
+  }
+  result.push(cur);
+  return result;
+}
+
+function findCol(headers, candidates) {
+  for (const c of candidates) {
+    const i = headers.findIndex(h => h.includes(c));
+    if (i !== -1) return i;
+  }
+  return -1;
+}
+
+// Parse Tableau CSV into Map<"SUBJ NUM", string[]>
+function parseTableauCsvNuPaths(csv) {
+  const lines  = csv.trim().split(/\r?\n/);
+  if (lines.length < 2) return new Map();
+  const header = parseCsvLine(lines[0]).map(h => h.toLowerCase().trim());
+
+  const subjCol  = findCol(header, ["subject", "subj"]);
+  const numCol   = findCol(header, ["catalog number", "course number", "catalog nbr", "crse nmbr", "number", "nbr"]);
+  const attrCol  = findCol(header, ["attribute description", "attribute", "nupath", "np attribute", "crse attr description"]);
+
+  if (subjCol === -1 || numCol === -1 || attrCol === -1) return new Map();
+
+  // One row per attribute per course — group by key
+  const grouped = new Map();
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCsvLine(lines[i]);
+    const subj = cols[subjCol]?.trim().toUpperCase();
+    const num  = cols[numCol]?.trim();
+    const attr = cols[attrCol]?.trim() ?? "";
+    if (!subj || !num) continue;
+    const key   = `${subj} ${num}`;
+    const codes = parseNUPath(attr);
+    if (!grouped.has(key)) grouped.set(key, new Set());
+    codes.forEach(c => grouped.get(key).add(c));
+  }
+
+  const result = new Map();
+  for (const [key, codeSet] of grouped) result.set(key, [...codeSet].sort());
+  return result;
 }
 
 async function fetchPage(url) {
@@ -659,8 +721,337 @@ const server = createServer((req, res) => {
     return;
   }
 
+  // ── GET /nupath-schedule — return current auto/manual mode ──────────────────
+  if (req.method === "GET" && url.pathname === "/nupath-schedule") {
+    try {
+      const content = readFileSync(NUPATH_WORKFLOW, "utf8");
+      const isAuto  = content.includes("  schedule:\n    - cron:");
+      res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true, mode: isAuto ? "auto" : "manual" }));
+    } catch (e) {
+      res.writeHead(500, { ...corsHeaders, "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: false, error: e.message }));
+    }
+    return;
+  }
+
+  // ── POST /nupath-schedule — toggle auto/manual mode in the workflow file ─────
+  if (req.method === "POST" && url.pathname === "/nupath-schedule") {
+    let body = "";
+    req.on("data", c => { body += c; });
+    req.on("end", () => {
+      try {
+        const { mode } = JSON.parse(body);
+        let content = readFileSync(NUPATH_WORKFLOW, "utf8");
+        if (mode === "auto") {
+          content = content.replace(NUPATH_SCHEDULE_COMMENT, NUPATH_SCHEDULE_ACTIVE);
+        } else {
+          content = content.replace(NUPATH_SCHEDULE_ACTIVE, NUPATH_SCHEDULE_COMMENT);
+        }
+        writeFileSync(NUPATH_WORKFLOW, content, "utf8");
+        res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true, mode }));
+      } catch (e) {
+        res.writeHead(500, { ...corsHeaders, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // ── GET /nupath-scan — SSE: fetch NUpath from Tableau → diff → return results ─
+  // Does NOT write to disk. Sends progress events then a final "done" with discrepancies.
+  if (req.method === "GET" && url.pathname === "/nupath-scan") {
+    res.writeHead(200, { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache", "Connection": "keep-alive" });
+    res.flushHeaders?.();
+    const send = (type, data) => { try { res.write(`data: ${JSON.stringify({ type, ...data })}\n\n`); } catch {} };
+    let aborted = false;
+    req.on("close", () => { aborted = true; });
+
+    (async () => {
+      if (!existsSync(ALL_COURSES)) {
+        send("error", { msg: "all-courses.json not found. Run npm run data:fetch first." });
+        res.end(); return;
+      }
+      const existing = JSON.parse(readFileSync(ALL_COURSES, "utf8"));
+      const existMap = new Map(existing.map(c => [`${c.subject} ${c.number}`, c]));
+
+      // ── Strategy 1: Tableau CSV download ─────────────────────────────────
+      send("log", { msg: "Trying Tableau CSV download…" });
+      let freshNuPaths = null; // Map<"SUBJ NUM", string[]>
+      let source = "";
+
+      // Try Playwright first (headless browser — most reliable for Tableau JS rendering)
+      if (!freshNuPaths) {
+        try {
+          const { chromium } = await import("playwright");
+          send("log", { msg: "  Playwright available — launching headless Chromium…" });
+          const browser = await chromium.launch({ headless: true });
+          try {
+            const context = await browser.newContext({ acceptDownloads: true });
+            const page    = await context.newPage();
+            send("log", { msg: `  Loading Tableau dashboard…` });
+            await page.goto(TABLEAU_EMBED_URL, { waitUntil: "networkidle", timeout: 90_000 });
+            await page.waitForTimeout(6_000); // Tableau renders async after networkidle
+
+            // Attempt A: click Download → Data to get CSV
+            let csvText = null;
+            const dlSelectors = ['[data-tb-test-id="Download-Button"]','button[title="Download"]','button[aria-label="Download"]','.tab-icon-download'];
+            for (const sel of dlSelectors) {
+              const btn = await page.$(sel);
+              if (!btn) continue;
+              await btn.click();
+              await page.waitForTimeout(800);
+              const dataSelectors = ['[data-tb-test-id="DownloadData-Button"]','a:has-text("Data")','li:has-text("Data")','[aria-label*="Data"]'];
+              for (const dsel of dataSelectors) {
+                const dBtn = await page.$(dsel);
+                if (!dBtn) continue;
+                const [dl] = await Promise.all([
+                  page.waitForEvent("download", { timeout: 15_000 }).catch(() => null),
+                  dBtn.click(),
+                ]);
+                if (dl) {
+                  const path = await dl.path();
+                  if (path) { const { readFileSync: rf } = await import("fs"); csvText = rf(path, "utf8"); }
+                }
+                break;
+              }
+              break;
+            }
+
+            if (csvText) {
+              const parsed = parseTableauCsvNuPaths(csvText);
+              if (parsed.size > 0) {
+                freshNuPaths = parsed;
+                source = "Tableau (Playwright download)";
+                send("log", { msg: `  → ✓ Got ${parsed.size} mappings via Playwright download` });
+              }
+            }
+
+            // Attempt B: read rendered HTML table from DOM
+            if (!freshNuPaths) {
+              const tableHtml = await page.evaluate(() => {
+                const t = document.querySelector("table");
+                return t ? t.outerHTML : null;
+              });
+              if (tableHtml) {
+                // Convert simple HTML table to CSV-like text and parse
+                const { parse: ph } = await import("node-html-parser");
+                const root = ph(tableHtml);
+                const rows = root.querySelectorAll("tr");
+                const csvLines = rows.map(r =>
+                  [...r.querySelectorAll("td,th")].map(c => `"${c.textContent.trim().replace(/"/g, '""')}"`).join(",")
+                );
+                if (csvLines.length > 1) {
+                  const parsed = parseTableauCsvNuPaths(csvLines.join("\n"));
+                  if (parsed.size > 0) {
+                    freshNuPaths = parsed;
+                    source = "Tableau (Playwright DOM)";
+                    send("log", { msg: `  → ✓ Got ${parsed.size} mappings via Playwright DOM` });
+                  }
+                }
+              }
+            }
+          } finally {
+            await browser.close();
+          }
+        } catch (e) {
+          if (e.code === "ERR_MODULE_NOT_FOUND" || e.message?.includes("Cannot find")) {
+            send("log", { msg: "  Playwright not installed — skipping. Run: npx playwright install chromium" });
+          } else {
+            send("log", { msg: `  Playwright error: ${e.message}` });
+          }
+        }
+      }
+
+      try {
+        // Get session cookie from the embed URL first
+        let cookie = "";
+        try {
+          const sessRes = await fetch(TABLEAU_EMBED_URL, {
+            headers: { "User-Agent": "NU-Map-NUpathBot/1.0" }, redirect: "follow",
+          });
+          const sc = sessRes.headers.get("set-cookie");
+          if (sc) cookie = sc.split(";")[0];
+        } catch {}
+
+        for (const csvUrl of TABLEAU_CSV_URLS) {
+          send("log", { msg: `  GET ${csvUrl}` });
+          const r = await fetch(csvUrl, {
+            headers: { "User-Agent": "NU-Map-NUpathBot/1.0", Accept: "text/csv,*/*", ...(cookie ? { Cookie: cookie } : {}) },
+          });
+          if (!r.ok) { send("log", { msg: `  → HTTP ${r.status}` }); continue; }
+          const csv = await r.text();
+          if (!csv.includes(",") || csv.trim().split(/\r?\n/).length < 2) {
+            send("log", { msg: "  → Response is not valid CSV" }); continue;
+          }
+          freshNuPaths = parseTableauCsvNuPaths(csv);
+          if (freshNuPaths.size === 0) { send("log", { msg: "  → Parsed 0 mappings" }); freshNuPaths = null; continue; }
+          send("log", { msg: `  → ✓ Got ${freshNuPaths.size} NUpath mappings from Tableau` });
+          source = "Tableau";
+          break;
+        }
+      } catch (e) {
+        send("log", { msg: `  Tableau error: ${e.message}` });
+      }
+
+      // ── Strategy 2: catalog.northeastern.edu scrape ───────────────────────
+      if (!freshNuPaths && !aborted) {
+        send("log", { msg: "\nFalling back to catalog.northeastern.edu…" });
+        try {
+          let subjects;
+          try {
+            subjects = await getSubjectURLs();
+            send("log", { msg: `Found ${subjects.length} subjects. Scanning…` });
+          } catch (e) {
+            send("error", { msg: `Cannot reach catalog: ${e.message}` }); res.end(); return;
+          }
+
+          freshNuPaths = new Map();
+          let done = 0;
+          const BATCH = 5;
+          for (let i = 0; i < subjects.length && !aborted; i += BATCH) {
+            const batch = subjects.slice(i, i + BATCH);
+            await Promise.all(batch.map(async ([slug, url]) => {
+              const subjectCode = slug.split(/\s/)[0];
+              try {
+                const html   = await fetchPage(url);
+                const parsed = parseSubjectPage(html, subjectCode);
+                for (const c of parsed) freshNuPaths.set(`${c.subject} ${c.number}`, c.nuPath);
+              } catch {}
+              done++;
+              send("progress", { done, total: subjects.length, msg: `${done}/${subjects.length} subjects` });
+            }));
+            await sleep(300);
+          }
+          source = "catalog.northeastern.edu";
+          send("log", { msg: `Catalog scan complete — ${freshNuPaths.size} courses found.` });
+        } catch (e) {
+          send("error", { msg: `Scan failed: ${e.message}` }); res.end(); return;
+        }
+      }
+
+      if (aborted) { res.end(); return; }
+
+      // ── Build discrepancy list ────────────────────────────────────────────
+      const discrepancies = [];
+      for (const [key, freshNP] of freshNuPaths) {
+        const course = existMap.get(key);
+        if (!course) continue; // not in our DB — skip
+        const oldNP = course.nuPath ?? [];
+        if (JSON.stringify(oldNP) === JSON.stringify(freshNP)) continue; // no change
+        const oldSet  = new Set(oldNP);
+        const newSet  = new Set(freshNP);
+        discrepancies.push({
+          subject:   course.subject,
+          number:    course.number,
+          title:     course.title ?? "",
+          oldNuPath: oldNP,
+          newNuPath: freshNP,
+          added:     freshNP.filter(c => !oldSet.has(c)),
+          removed:   oldNP.filter(c =>  !newSet.has(c)),
+        });
+      }
+      // Sort by new NUpath count desc, then by course key asc
+      discrepancies.sort((a, b) =>
+        b.newNuPath.length - a.newNuPath.length ||
+        `${a.subject} ${a.number}`.localeCompare(`${b.subject} ${b.number}`)
+      );
+
+      // Write nupath-map.json as authoritative source
+      try {
+        const mapData = {
+          _readme: "Authoritative NUpath designations. Updated by Tableau scraper / catalog scrape.",
+          _lastUpdated: new Date().toISOString(),
+          _source: source,
+          courses: Object.fromEntries(freshNuPaths),
+        };
+        writeFileSync(NUPATH_MAP_PATH, JSON.stringify(mapData, null, 2) + "\n", "utf8");
+        send("log", { msg: `Updated data/nupath-map.json (${freshNuPaths.size} courses)` });
+      } catch (e) {
+        send("log", { msg: `Warning: could not write nupath-map.json: ${e.message}`, isErr: true });
+      }
+
+      // Log to change-log.json
+      appendLogEntry({
+        type:      "nupath-scan",
+        subject:   "🎓 NUpath Scan",
+        timestamp: new Date().toISOString(),
+        source,
+        stats: {
+          scanned:      freshNuPaths.size,
+          changed:      discrepancies.length,
+          gained:       discrepancies.reduce((s, x) => s + x.added.length,   0),
+          lost:         discrepancies.reduce((s, x) => s + x.removed.length, 0),
+          gainedOnly:   discrepancies.filter(x => x.added.length  > 0 && x.removed.length === 0).length,
+          lostOnly:     discrepancies.filter(x => x.removed.length > 0 && x.added.length  === 0).length,
+          mixed:        discrepancies.filter(x => x.added.length  > 0 && x.removed.length > 0).length,
+        },
+      });
+
+      send("done", {
+        ok: true,
+        source,
+        scanned: freshNuPaths.size,
+        discrepancies,
+      });
+      res.end();
+    })();
+    return;
+  }
+
+  // ── POST /nupath-fix — apply selected NUpath fixes to all-courses.json ────────
+  if (req.method === "POST" && url.pathname === "/nupath-fix") {
+    let body = "";
+    req.on("data", c => { body += c; });
+    req.on("end", () => {
+      try {
+        // items: [{subject, number, newNuPath: string[]}]
+        const items = JSON.parse(body);
+        if (!existsSync(ALL_COURSES)) {
+          res.writeHead(400, { ...corsHeaders, "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: "all-courses.json not found" }));
+          return;
+        }
+        const courses   = JSON.parse(readFileSync(ALL_COURSES, "utf8"));
+        const courseMap = new Map(courses.map(c => [`${c.subject} ${c.number}`, c]));
+        let fixed = 0;
+        for (const { subject, number, newNuPath } of items) {
+          const course = courseMap.get(`${subject} ${number}`);
+          if (!course) continue;
+          course.nuPath = newNuPath;
+          fixed++;
+        }
+        writeFileSync(ALL_COURSES, JSON.stringify([...courseMap.values()], null, 0), "utf8");
+        appendLogEntry({
+          type:      "nupath-manual-fix",
+          subject:   "🎓 NUpath Manual Fix",
+          timestamp: new Date().toISOString(),
+          fixed,
+          courses:   items.map(i => `${i.subject} ${i.number}`),
+        });
+        res.writeHead(200, { ...corsHeaders, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true, fixed }));
+      } catch (e) {
+        res.writeHead(500, { ...corsHeaders, "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
   res.writeHead(200, { ...corsHeaders, "Content-Type": "text/plain" });
-  res.end(`NU Map Catalog Check Server running on :${PORT}\nGET /run  \u2014 start SSE check stream\nPOST /fix \u2014 apply discrepancy fixes\nGET /git-status \u2014 show uncommitted data file changes\nPOST /git-push \u2014 commit + push data files to GitHub`);
+  res.end([
+    `NU Map Catalog Check Server — :${PORT}`,
+    `GET  /run             SSE catalog check stream`,
+    `POST /fix             apply catalog discrepancy fixes`,
+    `GET  /git-status      diff uncommitted data files`,
+    `POST /git-push        commit + push data files`,
+    `GET  /nupath-schedule get current NUpath auto/manual mode`,
+    `POST /nupath-schedule set NUpath auto/manual mode`,
+    `GET  /nupath-scan     SSE: fetch NUpath from Tableau/catalog, return discrepancies`,
+    `POST /nupath-fix      apply selected NUpath fixes`,
+  ].join("\n"));
 });
 
 server.listen(PORT, () => {

@@ -697,6 +697,142 @@
         </div>
       </div>
     </div>
+    <!-- NUpath Update card -->
+    <div class="card">
+
+      <!-- ── Header row ─────────────────────────────────────────────── -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <span style="font-size:28px;line-height:1">🎓</span>
+        <div style="flex:1">
+          <h2 style="margin:0">NUpath Update</h2>
+          <p class="text2" style="margin:2px 0 0">Fetch from <code>tableau.northeastern.edu</code> (official source) · falls back to catalog</p>
+        </div>
+        <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0">
+          <button id="np-mode-manual" onclick="npSetMode('manual')"
+            style="padding:5px 14px;font-size:11px;font-weight:600;border:none;cursor:pointer;background:var(--accent);color:#fff;border-right:1px solid var(--border)">Manual</button>
+          <button id="np-mode-auto" onclick="npSetMode('auto')"
+            style="padding:5px 14px;font-size:11px;font-weight:600;border:none;cursor:pointer;background:var(--bg3);color:var(--text2)">Automatic</button>
+        </div>
+      </div>
+
+      <!-- ── Manual mode panel ──────────────────────────────────────── -->
+      <div id="np-manual-panel">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="launch-btn" id="np-run-btn" onclick="npRun()">↺ Scan for Changes</button>
+          <button class="btn sec" id="np-stop-btn" onclick="npStop()" disabled style="height:46px;padding:0 20px">■ Stop</button>
+          <span id="np-status-badge" style="display:none;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:3px;background:rgba(76,175,125,0.15);color:var(--success);border:1px solid rgba(76,175,125,0.4);animation:ck-pulse 1.4s ease-in-out infinite">● Scanning</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)">
+            Port: <input id="np-port" value="3333" type="number" min="1024" max="65535"
+              style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+          </span>
+        </div>
+
+        <!-- progress bar + log -->
+        <div id="np-progress-wrap" style="display:none;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span id="np-progress-msg" style="font-size:11px;color:var(--text2)">Scanning…</span>
+            <span id="np-progress-pct" style="font-size:11px;color:var(--text3)"></span>
+          </div>
+          <div style="height:6px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:10px">
+            <div id="np-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#7eb3ff);border-radius:4px;transition:width 0.3s ease"></div>
+          </div>
+          <div id="np-log" style="max-height:160px;overflow-y:auto;font-family:var(--mono);font-size:10.5px;color:var(--text2);background:var(--bg3);border-radius:6px;padding:8px 12px;line-height:1.5;white-space:pre-wrap;word-break:break-all"></div>
+        </div>
+
+        <!-- ── Discrepancy inspector (appears after scan) ─────────────── -->
+        <div id="np-inspector" style="display:none">
+
+          <!-- stat cards -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:14px">
+            <div class="ck-card"><div class="ck-val" id="np-stat-scanned">0</div><div class="ck-lbl">Scanned</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-gainedonly" style="color:var(--success)">0</div><div class="ck-lbl">+ Gained only</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-lostonly" style="color:var(--error)">0</div><div class="ck-lbl">− Lost only</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-mixed" style="color:var(--warn)">0</div><div class="ck-lbl">± Mixed</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-source" style="font-size:11px;color:var(--accent)">—</div><div class="ck-lbl">Source</div></div>
+          </div>
+
+          <!-- filter + table header -->
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <div class="ck-filter-bar" style="margin:0;flex:1">
+              <button class="ck-filter-btn active" onclick="npSetFilter('all',this)">All</button>
+              <button class="ck-filter-btn" onclick="npSetFilter('gained',this)">+ Gained</button>
+              <button class="ck-filter-btn" onclick="npSetFilter('lost',this)">− Lost</button>
+              <button class="ck-filter-btn" onclick="npSetFilter('mixed',this)">± Mixed</button>
+            </div>
+            <span style="font-size:10px;color:var(--text3)">sorted by # NUpath codes</span>
+            <span id="np-sel-count" style="font-size:11px;color:var(--text3)">0 selected</span>
+          </div>
+
+          <!-- select all / none -->
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <button class="btn sec" style="font-size:11px;padding:3px 10px" onclick="npSelectAll(true)">Select All</button>
+            <button class="btn sec" style="font-size:11px;padding:3px 10px" onclick="npSelectAll(false)">None</button>
+          </div>
+
+          <!-- table -->
+          <div style="max-height:340px;overflow-y:auto;margin-bottom:14px">
+            <table style="width:100%;border-collapse:collapse;font-size:11px">
+              <thead>
+                <tr>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600;width:20px"></th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Course</th>
+                  <th style="text-align:center;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600"># NUpath</th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Old</th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">New</th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Type</th>
+                </tr>
+              </thead>
+              <tbody id="np-inspector-body">
+                <tr><td colspan="6" style="text-align:center;color:var(--text3);padding:20px 0">Run a scan to see discrepancies</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- apply fixes -->
+          <div style="border-top:2px solid #e74c3c44;padding-top:14px">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="flex:1;min-width:200px">
+                <p style="font-size:13px;font-weight:700;color:#e74c3c;margin:0 0 3px">☢ Apply Selected Fixes</p>
+                <p style="font-size:11px;color:var(--text2);margin:0">
+                  Overwrites <code>nuPath</code> for <span id="np-fix-count" style="font-weight:700;color:#e74c3c">0</span> course(s) in <code>all-courses.json</code>.
+                  <span style="color:var(--error)">Irreversible without git.</span>
+                </p>
+              </div>
+              <button id="np-fix-btn" class="launch-btn" onclick="npApplyFixes()"
+                style="background:#7b0000;border-color:#e74c3c;box-shadow:0 0 20px rgba(231,76,60,0.4);font-size:14px;height:auto;padding:10px 22px;flex-shrink:0">
+                ☢ Apply Fixes
+              </button>
+            </div>
+            <div id="np-fix-result" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Automatic mode panel ───────────────────────────────────── -->
+      <div id="np-auto-panel" style="display:none">
+        <div style="background:var(--bg3);border-radius:var(--radius);padding:12px 16px;margin-bottom:12px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px">Scheduled runs</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div id="np-sched-jan" style="background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 14px;font-size:11px;text-align:center">
+              <div style="font-weight:700">Jan 1</div><div style="color:var(--text3);font-size:10px">Winter refresh</div>
+            </div>
+            <div id="np-sched-may" style="background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 14px;font-size:11px;text-align:center">
+              <div style="font-weight:700">May 1</div><div style="color:var(--text3);font-size:10px">Spring refresh</div>
+            </div>
+            <div id="np-sched-sep" style="background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 14px;font-size:11px;text-align:center">
+              <div style="font-weight:700">Sep 1</div><div style="color:var(--text3);font-size:10px">Fall refresh</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--text2)">
+            Next run: <strong id="np-next-run" style="color:var(--text)">—</strong>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--text3);margin:0">
+          GitHub Actions fetches from Tableau and commits updated NUpath data directly to <code>main</code>.
+          Schedule is in <code>.github/workflows/update-nupath.yml</code>.
+        </p>
+      </div>
+    </div>
   </div>
 </div><!-- /#dev-app -->
 
@@ -1106,6 +1242,65 @@ function renderRun(run, deployedTs = null) {
     </div>`;
   }
 
+  // NUpath entries
+  if (run.type === "nupath-scan" || run.type === "nupath-auto-update" || run.type === "nupath-manual-fix") {
+    const isAuto  = run.type === "nupath-auto-update";
+    const isFix   = run.type === "nupath-manual-fix";
+    const color   = isAuto ? "#a78bfa" : isFix ? "#f59e0b" : "var(--accent)";
+
+    let detail = "";
+    if (isFix) {
+      const courses = run.courses ?? [];
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        <div class="stat"><div class="val" style="font-size:22px;color:#f59e0b">${run.fixed ?? courses.length}</div><div class="lbl">Courses fixed</div></div>
+      </div>`;
+      if (courses.length) {
+        detail += `<div style="font-size:11px;color:var(--text2);margin-top:8px;word-break:break-all">${courses.map(c => escHtml(c)).join(", ")}</div>`;
+      }
+    } else if (run.stats) {
+      const s = run.stats;
+      const statItems = [
+        { val: s.scanned,    lbl: "Scanned",    col: "var(--text)" },
+        { val: s.changed,    lbl: "Changed",    col: s.changed ? "var(--warn)" : "var(--text2)" },
+        { val: s.gainedOnly, lbl: "+ Gained",   col: "var(--success)" },
+        { val: s.lostOnly,   lbl: "− Lost",     col: "var(--error)" },
+        { val: s.mixed,      lbl: "± Mixed",    col: "#f59e0b" },
+      ].filter(x => x.val != null);
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        ${statItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+      </div>`;
+      const meta = [];
+      if (run.source)      meta.push(`Source: <strong style="color:var(--accent)">${escHtml(run.source)}</strong>`);
+      if (run.triggeredBy) meta.push(`By: <strong style="color:var(--text2)">${escHtml(run.triggeredBy)}</strong>`);
+      if (run.runId)       meta.push(`Run: <a href="https://github.com/nayugu/nu-map/actions/runs/${escHtml(run.runId)}" target="_blank" style="color:var(--accent)">#${escHtml(run.runId)}</a>`);
+      if (meta.length) detail += `<div style="font-size:11px;color:var(--text3);margin-top:8px">${meta.join(" · ")}</div>`;
+
+      // Sample discrepancies (first 5)
+      if (run.discrepancies?.length) {
+        const samples = run.discrepancies.slice(0, 5);
+        detail += `<details style="margin-top:8px;font-size:11px">
+          <summary style="cursor:pointer;color:var(--text2)">${run.discrepancies.length} discrepanc${run.discrepancies.length !== 1 ? "ies" : "y"}</summary>
+          <div style="margin-top:6px;display:flex;flex-direction:column;gap:3px">
+            ${samples.map(d => {
+              const gained  = d.added?.map(c => `<span style="color:var(--success)">+${c}</span>`).join(" ") ?? "";
+              const lost    = d.removed?.map(c => `<span style="color:var(--error)">−${c}</span>`).join(" ") ?? "";
+              return `<div style="color:var(--text2)"><strong>${escHtml(d.subject)} ${escHtml(String(d.number))}</strong>  ${gained} ${lost}</div>`;
+            }).join("")}
+            ${run.discrepancies.length > 5 ? `<div style="color:var(--text4)">… and ${run.discrepancies.length - 5} more</div>` : ""}
+          </div>
+        </details>`;
+      }
+    }
+
+    return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div style="font-size:14px;font-weight:700;color:${color}">${run.subject ?? run.type}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+      </div>
+      ${detail}
+    </div>`;
+  }
+
   const totalChanges = (run.added?.length ?? 0) + (run.modified?.length ?? 0) + (run.removedFromCatalog?.length ?? 0);
   const badge = totalChanges
     ? `<span class="badge warn">${totalChanges} change${totalChanges !== 1 ? "s" : ""}</span>`
@@ -1166,6 +1361,7 @@ function switchTab(name, btn) {
   if (btn) btn.classList.add("active");
   if (name === "preview") pvInitPreview();
   if (name === "changes") loadChangeLog();
+  if (name === "work")    npLoadMode();
 }
 
 // ── Data meta ───────────────────────────────────────────────────────────────
@@ -1856,6 +2052,313 @@ function clearPatchForm() {
 
 function copyCmd(cmd) {
   navigator.clipboard.writeText(cmd).then(() => alert("Copied: " + cmd));
+}
+
+// ── NUpath Update ─────────────────────────────────────────────────────────────
+
+let npCurrentMode   = "manual";
+let npEvtSource     = null;
+let npRunning       = false;
+let npDiscrepancies = [];
+let npFilter        = "all";
+let npSelected      = new Set();
+
+// ── Mode / schedule ───────────────────────────────────────────────────────────
+
+function npNextRunDate() {
+  const now  = new Date();
+  const year = now.getFullYear();
+  const candidates = [
+    new Date(year, 0, 1), new Date(year, 4, 1), new Date(year, 8, 1),
+    new Date(year + 1, 0, 1),
+  ];
+  const next = candidates.find(d => d > now) ?? candidates[candidates.length - 1];
+  return next.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+}
+
+function npHighlightNext() {
+  const month = new Date().getMonth() + 1;
+  const upcoming = [1, 5, 9].find(m => m > month) ?? 1;
+  ["jan","may","sep"].forEach((id, i) => {
+    const el = document.getElementById(`np-sched-${id}`);
+    if (!el) return;
+    const isNext = [1,5,9][i] === upcoming;
+    el.style.borderColor = isNext ? "var(--accent)"    : "var(--border)";
+    el.style.background  = isNext ? "var(--accent-bg)" : "var(--bg2)";
+    el.style.color       = isNext ? "var(--accent)"    : "";
+  });
+  const el = document.getElementById("np-next-run");
+  if (el) el.textContent = npNextRunDate();
+}
+
+async function npLoadMode() {
+  const port = document.getElementById("np-port")?.value || "3333";
+  try {
+    const r = await fetch(`http://localhost:${port}/nupath-schedule`);
+    if (!r.ok) return;
+    const { mode } = await r.json();
+    npApplyMode(mode, false);
+  } catch {}
+}
+
+function npApplyMode(mode, save = true) {
+  npCurrentMode = mode;
+  const isAuto = mode === "auto";
+  const manBtn  = document.getElementById("np-mode-manual");
+  const autoBtn = document.getElementById("np-mode-auto");
+  manBtn.style.background  = isAuto ? "var(--bg3)"    : "var(--accent)";
+  manBtn.style.color       = isAuto ? "var(--text2)"  : "#fff";
+  autoBtn.style.background = isAuto ? "var(--accent)" : "var(--bg3)";
+  autoBtn.style.color      = isAuto ? "#fff"           : "var(--text2)";
+  document.getElementById("np-manual-panel").style.display = isAuto ? "none"  : "block";
+  document.getElementById("np-auto-panel").style.display   = isAuto ? "block" : "none";
+  if (isAuto) npHighlightNext();
+  if (save) {
+    const port = document.getElementById("np-port")?.value || "3333";
+    fetch(`http://localhost:${port}/nupath-schedule`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode }),
+    }).catch(() => {});
+  }
+}
+
+function npSetMode(mode) { npApplyMode(mode, true); }
+
+// ── Scan ──────────────────────────────────────────────────────────────────────
+
+function npRun() {
+  if (npRunning) return;
+  const port = document.getElementById("np-port")?.value || "3333";
+
+  const logEl   = document.getElementById("np-log");
+  const barEl   = document.getElementById("np-bar");
+  const wrapEl  = document.getElementById("np-progress-wrap");
+  const msgEl   = document.getElementById("np-progress-msg");
+  const pctEl   = document.getElementById("np-progress-pct");
+  const runBtn  = document.getElementById("np-run-btn");
+  const stopBtn = document.getElementById("np-stop-btn");
+  const badge   = document.getElementById("np-status-badge");
+  const inspEl  = document.getElementById("np-inspector");
+
+  logEl.textContent = "";
+  barEl.style.width = "0%";
+  wrapEl.style.display = "block";
+  inspEl.style.display = "none";
+  msgEl.textContent    = "Connecting\u2026";
+  pctEl.textContent    = "";
+  runBtn.disabled  = true;
+  stopBtn.disabled = false;
+  badge.style.display = "inline";
+  npRunning = true;
+
+  let barPct = 0;
+  const barTick = setInterval(() => {
+    barPct = Math.min(barPct + 0.3, 88);
+    barEl.style.width = barPct + "%";
+  }, 400);
+
+  npEvtSource = new EventSource(`http://localhost:${port}/nupath-scan`);
+
+  npEvtSource.onmessage = (e) => {
+    const d = JSON.parse(e.data);
+    if (d.type === "log") {
+      logEl.textContent += d.msg + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
+      msgEl.textContent = d.msg.slice(0, 80);
+    }
+    if (d.type === "progress") {
+      const pct = Math.round(d.done / d.total * 100);
+      clearInterval(barTick);
+      barEl.style.width = pct + "%";
+      msgEl.textContent = d.msg;
+      pctEl.textContent = pct + "%";
+    }
+    if (d.type === "error") {
+      logEl.textContent += "\u2717 " + d.msg + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    if (d.type === "done") {
+      clearInterval(barTick);
+      barEl.style.width   = "100%";
+      badge.style.display = "none";
+      runBtn.disabled     = false;
+      stopBtn.disabled    = true;
+      npRunning           = false;
+      npEvtSource.close();
+      msgEl.textContent = d.ok
+        ? `Scan complete \u2014 ${d.discrepancies?.length ?? 0} discrepancies found.`
+        : "Scan failed.";
+      pctEl.textContent = "";
+      if (d.ok && d.discrepancies) {
+        npDiscrepancies = d.discrepancies;
+        npSelected = new Set(d.discrepancies.map(x => `${x.subject} ${x.number}`));
+        npRenderInspector(d);
+        inspEl.style.display = "block";
+      }
+    }
+  };
+
+  npEvtSource.onerror = () => {
+    clearInterval(barTick);
+    badge.style.display = "none";
+    runBtn.disabled = false; stopBtn.disabled = true;
+    npRunning = false; npEvtSource.close();
+    msgEl.style.color = "var(--error)";
+    msgEl.textContent = "\u2717 Cannot reach dev server \u2014 run  npm run dev  first.";
+  };
+}
+
+function npStop() {
+  if (npEvtSource) { npEvtSource.close(); npEvtSource = null; }
+  npRunning = false;
+  document.getElementById("np-run-btn").disabled  = false;
+  document.getElementById("np-stop-btn").disabled = true;
+  document.getElementById("np-status-badge").style.display = "none";
+}
+
+// ── Inspector rendering ───────────────────────────────────────────────────────
+
+function npSetFilter(f, btn) {
+  npFilter = f;
+  document.querySelectorAll("#np-inspector .ck-filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  npRenderRows();
+}
+
+function npCodeBadge(code, variant) {
+  const color = variant === "add" ? "var(--success)" : variant === "rem" ? "var(--error)" : "var(--text2)";
+  return `<span style="display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--bg3);color:${color};margin:1px">${code}</span>`;
+}
+
+function npRowKey(x) { return `${x.subject} ${x.number}`; }
+
+function npVisible() {
+  return npDiscrepancies.filter(x => {
+    if (npFilter === "gained") return x.added.length > 0 && x.removed.length === 0;
+    if (npFilter === "lost")   return x.removed.length > 0 && x.added.length === 0;
+    if (npFilter === "mixed")  return x.added.length > 0 && x.removed.length > 0;
+    return true;
+  });
+}
+
+function npDots(n) {
+  const filled = Math.min(n, 5);
+  return "<span style='font-size:10px;letter-spacing:1px;color:var(--text2)'>"
+    + "\u25CF".repeat(filled)
+    + (n > 5 ? `+${n - 5}` : "\u25CB".repeat(Math.max(0, 3 - filled)))
+    + "</span>";
+}
+
+function npRenderRows() {
+  const tbody   = document.getElementById("np-inspector-body");
+  const selEl   = document.getElementById("np-sel-count");
+  const fixEl   = document.getElementById("np-fix-count");
+  const visible = npVisible();
+
+  if (visible.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:20px 0">No discrepancies match this filter</td></tr>`;
+    selEl.textContent = "0 selected";
+    if (fixEl) fixEl.textContent = "0";
+    return;
+  }
+
+  tbody.innerHTML = visible.map(x => {
+    const key     = npRowKey(x);
+    const checked = npSelected.has(key);
+    const oldB = x.oldNuPath.map(c => npCodeBadge(c, x.removed.includes(c) ? "rem" : "neutral")).join("") || `<span style="color:var(--text3);font-size:10px">none</span>`;
+    const newB = x.newNuPath.map(c => npCodeBadge(c, x.added.includes(c)   ? "add" : "neutral")).join("") || `<span style="color:var(--text3);font-size:10px">none</span>`;
+    const typeLabel = x.added.length > 0 && x.removed.length > 0 ? "mixed"
+                    : x.added.length > 0  ? "gained"
+                    : "lost";
+    const typeStyle = typeLabel === "gained" ? "color:var(--success);background:rgba(76,175,125,0.12);border:1px solid rgba(76,175,125,0.35)"
+                    : typeLabel === "lost"   ? "color:var(--error);background:rgba(232,101,90,0.12);border:1px solid rgba(232,101,90,0.35)"
+                    : "color:var(--warn);background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.35)";
+    const typeText  = typeLabel === "gained" ? "+ Gained" : typeLabel === "lost" ? "− Lost" : "± Mixed";
+    return `<tr style="border-bottom:1px solid var(--bg3)" onmouseenter="this.style.background='var(--bg3)'" onmouseleave="this.style.background=''">
+      <td style="padding:4px 6px;vertical-align:middle"><input type="checkbox" ${checked ? "checked" : ""} onchange="npToggle('${key.replace(/'/g,"\\'")}',this.checked)" style="cursor:pointer;accent-color:var(--accent)"></td>
+      <td style="padding:4px 6px;vertical-align:middle"><div style="font-weight:600;font-size:11px">${x.subject} ${x.number}</div><div style="font-size:9px;color:var(--text3);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${x.title}</div></td>
+      <td style="padding:4px 6px;text-align:center;vertical-align:middle">${npDots(x.newNuPath.length)}</td>
+      <td style="padding:4px 6px;vertical-align:middle">${oldB}</td>
+      <td style="padding:4px 6px;vertical-align:middle">${newB}</td>
+      <td style="padding:4px 6px;vertical-align:middle"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;${typeStyle}">${typeText}</span></td>
+    </tr>`;
+  }).join("");
+
+  const visible_keys = new Set(visible.map(x => npRowKey(x)));
+  const selCount = [...npSelected].filter(k => visible_keys.has(k)).length;
+  selEl.textContent = `${selCount} selected`;
+  if (fixEl) fixEl.textContent = npSelected.size;
+}
+
+function npRenderInspector(d) {
+  const gainedOnly = d.discrepancies.filter(x => x.added.length > 0 && x.removed.length === 0).length;
+  const lostOnly   = d.discrepancies.filter(x => x.removed.length > 0 && x.added.length === 0).length;
+  const mixed      = d.discrepancies.filter(x => x.added.length > 0 && x.removed.length > 0).length;
+  document.getElementById("np-stat-scanned").textContent    = (d.scanned ?? 0).toLocaleString();
+  document.getElementById("np-stat-gainedonly").textContent = gainedOnly;
+  document.getElementById("np-stat-lostonly").textContent   = lostOnly;
+  document.getElementById("np-stat-mixed").textContent      = mixed;
+  document.getElementById("np-stat-source").textContent     = d.source === "Tableau (Playwright download)" || d.source === "Tableau (Playwright DOM)" || d.source === "Tableau" ? "Tableau" : "catalog";
+  npFilter = "all";
+  document.querySelectorAll("#np-inspector .ck-filter-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
+  npRenderRows();
+}
+
+function npToggle(key, checked) {
+  if (checked) npSelected.add(key); else npSelected.delete(key);
+  const visible_keys = new Set(npVisible().map(x => npRowKey(x)));
+  const selCount = [...npSelected].filter(k => visible_keys.has(k)).length;
+  document.getElementById("np-sel-count").textContent = `${selCount} selected`;
+  const fixEl = document.getElementById("np-fix-count");
+  if (fixEl) fixEl.textContent = npSelected.size;
+}
+
+function npSelectAll(checked) {
+  if (checked) npVisible().forEach(x => npSelected.add(npRowKey(x)));
+  else         npVisible().forEach(x => npSelected.delete(npRowKey(x)));
+  npRenderRows();
+}
+
+// ── Apply fixes ───────────────────────────────────────────────────────────────
+
+async function npApplyFixes() {
+  if (npSelected.size === 0) { alert("No courses selected."); return; }
+  const port   = document.getElementById("np-port")?.value || "3333";
+  const fixBtn = document.getElementById("np-fix-btn");
+  const fixRes = document.getElementById("np-fix-result");
+  const items  = npDiscrepancies
+    .filter(x => npSelected.has(npRowKey(x)))
+    .map(x => ({ subject: x.subject, number: x.number, newNuPath: x.newNuPath }));
+
+  fixBtn.disabled = true;
+  fixBtn.textContent = "Applying\u2026";
+  fixRes.style.display = "none";
+
+  try {
+    const r    = await fetch(`http://localhost:${port}/nupath-fix`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(items),
+    });
+    const data = await r.json();
+    fixRes.style.display = "block";
+    if (data.ok) {
+      fixRes.style.cssText = "display:block;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(76,175,125,0.12);border:1px solid rgba(76,175,125,0.4);color:var(--success)";
+      fixRes.textContent   = `\u2713 Updated nuPath for ${data.fixed} course(s). Re-scan to verify.`;
+      const applied = new Set(items.map(i => `${i.subject} ${i.number}`));
+      npDiscrepancies = npDiscrepancies.filter(x => !applied.has(npRowKey(x)));
+      npSelected      = new Set([...npSelected].filter(k => !applied.has(k)));
+      npRenderRows();
+    } else {
+      fixRes.style.cssText = "display:block;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(232,101,90,0.12);border:1px solid rgba(232,101,90,0.4);color:var(--error)";
+      fixRes.textContent   = `\u2717 ${data.error}`;
+    }
+  } catch (e) {
+    fixRes.style.cssText = "display:block;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(232,101,90,0.12);border:1px solid rgba(232,101,90,0.4);color:var(--error)";
+    fixRes.textContent   = `\u2717 ${e.message}`;
+  } finally {
+    fixBtn.disabled = false;
+    fixBtn.textContent = "\u2622 Apply Fixes";
+  }
 }
 </script>
 </body>

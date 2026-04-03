@@ -1,6 +1,35 @@
 {
   "runs": [
     {
+      "type": "nupath-scan",
+      "subject": "🎓 NUpath Scan",
+      "timestamp": "2026-04-03T14:08:50.313Z",
+      "source": "catalog.northeastern.edu",
+      "stats": {
+        "scanned": 7841,
+        "changed": 0,
+        "gained": 0,
+        "lost": 0,
+        "gainedOnly": 0,
+        "lostOnly": 0,
+        "mixed": 0
+      }
+    },
+    {
+      "type": "catalog-check",
+      "subject": "🔍 Catalog Check",
+      "timestamp": "2026-04-03T13:51:11.208Z",
+      "stats": {
+        "correct": 7709,
+        "needPR": 0,
+        "rangeDiff": 0,
+        "newCourses": 0,
+        "notInCatalog": 0,
+        "totalScanned": 7709,
+        "subjectsDone": 230
+      }
+    },
+    {
       "type": "nuclear-fix",
       "subject": "☢ Nuclear Fix Applied",
       "timestamp": "2026-03-06T00:45:25.402Z",
