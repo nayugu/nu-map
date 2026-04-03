@@ -751,14 +751,17 @@
             <div class="ck-card"><div class="ck-val" id="np-stat-source" style="font-size:11px;color:var(--accent)">—</div><div class="ck-lbl">Source</div></div>
           </div>
 
-          <!-- filter + table header -->
+          <!-- filter + search row -->
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-            <div class="ck-filter-bar" style="margin:0;flex:1">
+            <div class="ck-filter-bar" style="margin:0">
               <button class="ck-filter-btn active" onclick="npSetFilter('all',this)">All</button>
               <button class="ck-filter-btn" onclick="npSetFilter('gained',this)">+ Gained</button>
               <button class="ck-filter-btn" onclick="npSetFilter('lost',this)">− Lost</button>
               <button class="ck-filter-btn" onclick="npSetFilter('mixed',this)">± Mixed</button>
             </div>
+            <input id="np-search" type="text" placeholder="Search course…"
+              oninput="npRenderRows()"
+              style="flex:1;min-width:120px;max-width:200px;font-size:11px;padding:4px 8px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none">
             <span style="font-size:10px;color:var(--text3)">sorted by # NUpath codes</span>
             <span id="np-sel-count" style="font-size:11px;color:var(--text3)">0 selected</span>
           </div>
@@ -2233,10 +2236,15 @@ function npCodeBadge(code, variant) {
 function npRowKey(x) { return `${x.subject} ${x.number}`; }
 
 function npVisible() {
+  const q = (document.getElementById("np-search")?.value ?? "").trim().toUpperCase();
   return npDiscrepancies.filter(x => {
-    if (npFilter === "gained") return x.added.length > 0 && x.removed.length === 0;
-    if (npFilter === "lost")   return x.removed.length > 0 && x.added.length === 0;
-    if (npFilter === "mixed")  return x.added.length > 0 && x.removed.length > 0;
+    if (npFilter === "gained" && !(x.added.length > 0 && x.removed.length === 0)) return false;
+    if (npFilter === "lost"   && !(x.removed.length > 0 && x.added.length === 0)) return false;
+    if (npFilter === "mixed"  && !(x.added.length > 0 && x.removed.length > 0))   return false;
+    if (q) {
+      const key = `${x.subject} ${x.number}`;
+      return key.includes(q) || x.subject.includes(q);
+    }
     return true;
   });
 }
@@ -2300,6 +2308,8 @@ function npRenderInspector(d) {
   document.getElementById("np-stat-mixed").textContent      = mixed;
   document.getElementById("np-stat-source").textContent     = d.source === "Tableau (Playwright download)" || d.source === "Tableau (Playwright DOM)" || d.source === "Tableau" ? "Tableau" : "catalog";
   npFilter = "all";
+  const npSearchEl = document.getElementById("np-search");
+  if (npSearchEl) npSearchEl.value = "";
   document.querySelectorAll("#np-inspector .ck-filter-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
   npRenderRows();
 }

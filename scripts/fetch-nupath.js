@@ -118,107 +118,214 @@ async function fetchText(url, headers = {}) {
   return res.text();
 }
 
-// ── Strategy 1: Tableau CSV download ─────────────────────────────────────────
+// ── Strategy 1a: Tableau REST API (guest auth) ───────────────────────────────
 //
-// Tableau Server exposes CSV downloads for public views at:
-//   /t/{site}/views/{workbook}/{view}.csv
-//
-// The dashboard shows columns like:
-//   Subject, Course Number, Course Name, NUpath Attribute
-//
-// We try two URL patterns (with and without the site prefix) and also attempt
-// to bootstrap a guest session first (some TS deployments need a cookie).
+// Tableau Server exposes a REST API. For public sites, guest auth (empty
+// credentials) returns a token that can download view data as CSV.
+// Site ID sourced from the official embed snippet on the Registrar page.
 
-async function fetchTableauData() {
+const TABLEAU_SITE_ID = "fa2c3643-d73c-40e1-b43c-06e38c98065d";
+const TABLEAU_API     = `${TABLEAU_BASE}/api/3.20`;
+
+async function fetchTableauRestApi() {
+  const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+
+  // Step 1: authenticate as guest
+  console.log("  Trying Tableau REST API (guest auth)…");
+  let token, siteId;
+  try {
+    const authRes = await fetch(`${TABLEAU_API}/auth/signin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json", "User-Agent": BROWSER_UA },
+      body: JSON.stringify({ credentials: { name: "", password: "", site: { contentUrl: TABLEAU_SITE } } }),
+    });
+    if (!authRes.ok) { console.log(`    ↳ Guest auth failed: HTTP ${authRes.status}`); return null; }
+    const data = await authRes.json();
+    token  = data.credentials?.token;
+    siteId = data.credentials?.site?.id ?? TABLEAU_SITE_ID;
+    if (!token) { console.log("    ↳ No token in auth response"); return null; }
+    console.log(`    ↳ Authenticated (token length ${token.length})`);
+  } catch (err) {
+    console.log(`    ↳ Auth request failed: ${err.message}`);
+    return null;
+  }
+
+  const authHeaders = { "X-Tableau-Auth": token, "User-Agent": BROWSER_UA };
+
+  // Step 2: find the view LUID
+  let viewId;
+  try {
+    const viewsRes = await fetch(
+      `${TABLEAU_API}/sites/${siteId}/views?filter=name:eq:${TABLEAU_VIEW}`,
+      { headers: { ...authHeaders, Accept: "application/json" } },
+    );
+    if (!viewsRes.ok) { console.log(`    ↳ Views query failed: HTTP ${viewsRes.status}`); return null; }
+    const data = await viewsRes.json();
+    viewId = data.views?.view?.[0]?.id;
+    if (!viewId) { console.log(`    ↳ View '${TABLEAU_VIEW}' not found in site`); return null; }
+    console.log(`    ↳ Found view: ${viewId}`);
+  } catch (err) {
+    console.log(`    ↳ Views query error: ${err.message}`);
+    return null;
+  }
+
+  // Step 3: download view data as CSV
+  try {
+    const dataRes = await fetch(`${TABLEAU_API}/sites/${siteId}/views/${viewId}/data`, {
+      headers: { ...authHeaders, Accept: "text/csv" },
+    });
+    if (!dataRes.ok) { console.log(`    ↳ Data download failed: HTTP ${dataRes.status}`); return null; }
+    const csv = await dataRes.text();
+    const result = parseTableauCsv(csv);
+    if (result.size === 0) { console.log("    ↳ Downloaded CSV but parsed 0 mappings"); return null; }
+    console.log(`    ↳ ✅ Got ${result.size} mappings via REST API`);
+    return result;
+  } catch (err) {
+    console.log(`    ↳ Data download error: ${err.message}`);
+    return null;
+  }
+}
+
+// ── Strategy 1b: Tableau CSV direct download (with session cookie) ────────────
+//
+// Some Tableau Server deployments serve public CSVs at the .csv URL.
+// We first load the embed URL to acquire a guest session cookie.
+
+async function fetchTableauCsvDirect() {
+  const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+
+  // Acquire session cookie from embed URL
+  let sessionCookie = "";
+  try {
+    const embedUrl = `${TABLEAU_BASE}/t/${TABLEAU_SITE}/views/${TABLEAU_WB}/${TABLEAU_VIEW}?:embed=y&:isGuestRedirectFromVizportal=y`;
+    const sessRes  = await fetch(embedUrl, { headers: { "User-Agent": BROWSER_UA }, redirect: "follow" });
+    const raw = sessRes.headers.get("set-cookie") ?? "";
+    // Extract all name=value pairs
+    sessionCookie = raw.split(",")
+      .map(s => s.trim().split(";")[0])
+      .filter(Boolean)
+      .join("; ");
+  } catch { /* session cookie optional */ }
+
+  const headers = {
+    "User-Agent": BROWSER_UA,
+    Accept: "text/csv,application/csv,*/*",
+    ...(sessionCookie ? { Cookie: sessionCookie } : {}),
+  };
+
   const urls = [
+    `${TABLEAU_BASE}/t/${TABLEAU_SITE}/views/${TABLEAU_WB}/${TABLEAU_VIEW}.csv?:size=1920,1080`,
     `${TABLEAU_BASE}/t/${TABLEAU_SITE}/views/${TABLEAU_WB}/${TABLEAU_VIEW}.csv`,
     `${TABLEAU_BASE}/views/${TABLEAU_WB}/${TABLEAU_VIEW}.csv`,
   ];
 
-  // Try to get a guest session cookie from the embed URL
-  let sessionCookie = "";
-  try {
-    const embedUrl = `${TABLEAU_BASE}/t/${TABLEAU_SITE}/views/${TABLEAU_WB}/${TABLEAU_VIEW}?:embed=y&:isGuestRedirectFromVizportal=y`;
-    const sessRes = await fetch(embedUrl, {
-      headers: { "User-Agent": "NU-Map-NUpathBot/1.0" },
-      redirect: "follow",
-    });
-    const setCookie = sessRes.headers.get("set-cookie");
-    if (setCookie) sessionCookie = setCookie.split(";")[0];
-  } catch {
-    // ignore — session cookie is optional
-  }
-
-  const extraHeaders = sessionCookie ? { Cookie: sessionCookie } : {};
-
   for (const url of urls) {
     try {
-      console.log(`  Trying Tableau CSV: ${url}`);
-      const csv = await fetchText(url, extraHeaders);
-
-      // Validate: should look like CSV with at least a header row
+      console.log(`  Trying direct CSV: ${url.replace(TABLEAU_BASE, "")}`);
+      const res = await fetch(url, { headers });
+      if (!res.ok) { console.log(`    ↳ HTTP ${res.status}`); continue; }
+      const csv = await res.text();
       if (!csv.includes(",") || csv.trim().split("\n").length < 2) {
-        console.log("    ↳ Response doesn't look like valid CSV — skipping");
-        continue;
+        console.log("    ↳ Response doesn't look like CSV"); continue;
       }
-
-      const nuPathMap = parseTableauCsv(csv);
-      if (nuPathMap.size === 0) {
-        console.log("    ↳ Parsed 0 course→NUpath mappings — skipping");
-        continue;
-      }
-
-      console.log(`    ↳ ✅ Got ${nuPathMap.size} course NUpath mappings from Tableau`);
-      return nuPathMap;
+      const result = parseTableauCsv(csv);
+      if (result.size === 0) { console.log("    ↳ Parsed 0 mappings"); continue; }
+      console.log(`    ↳ ✅ Got ${result.size} mappings via direct CSV`);
+      return result;
     } catch (err) {
       console.log(`    ↳ Failed: ${err.message}`);
     }
   }
-
-  return null; // signal failure
+  return null;
 }
 
 /**
  * Parse Tableau CSV export into a Map of "SUBJECT NUMBER" → string[]
  *
- * The Tableau NUpath dashboard typically has columns like:
- *   "Subject", "Catalog Number", "Long Title", "Attribute Description"
- * or similar.  We detect column positions by header names.
+ * The Tableau NUpath dashboard uses a WIDE format:
+ *   "Advanced Writing Ind.", "Analyzing/Using Data Ind.", …, "Course ID ", "Subject Code", …
+ *
+ * Each row is one course; indicator columns are Y or N.
+ * "Course ID " already contains the "SUBJ NUM" key (e.g. "ACCT 2301").
+ *
+ * We detect indicator columns dynamically by their " Ind." suffix and map
+ * each column name through NUPATH_MAP to get the 2-letter code.
  */
+
+// Maps fragments of indicator column names → NUpath codes
+// (subset of NUPATH_MAP, tuned to the exact Tableau column names)
+const INDICATOR_FRAGMENT_MAP = {
+  "advanced writing":      "WD",
+  "adv writing":           "WD",
+  "analyzing/using data":  "AD",
+  "analyzing and using":   "AD",
+  "capstone":              "CE",
+  "creative express":      "EI",
+  "difference/diversity":  "DD",
+  "ethical reasoning":     "ER",
+  "formal/quant":          "FQ",
+  "integration experience":"EX",
+  "interpreting culture":  "IC",
+  "natural/designed world":"ND",
+  "societies/institutions":"SI",
+  "writing intensive":     "WI",
+  "1st yr writing":        "WF",
+  "first year writing":    "WF",
+  "first.year writing":    "WF",
+};
+
+function indicatorColToCode(colName) {
+  const lower = colName.toLowerCase().replace(/ ind\.?\s*$/, "").trim();
+  for (const [frag, code] of Object.entries(INDICATOR_FRAGMENT_MAP)) {
+    if (lower.includes(frag)) return code;
+  }
+  return null;
+}
+
 function parseTableauCsv(csv) {
   const lines = csv.trim().split(/\r?\n/);
   if (lines.length < 2) return new Map();
 
-  const header = parseCsvLine(lines[0]).map((h) => h.toLowerCase().trim());
+  const header = parseCsvLine(lines[0]).map((h) => h.trim());
 
-  // Find subject and course-number columns (flexible naming)
-  const subjectCol  = findCol(header, ["subject", "subj"]);
-  const numberCol   = findCol(header, ["catalog number", "course number", "catalog nbr", "number", "nbr"]);
-  const attrCol     = findCol(header, ["attribute description", "attribute", "nupath", "np attribute"]);
+  // Find "Course ID" column (already formatted as "SUBJ NUM")
+  const courseIdCol = header.findIndex((h) => h.toLowerCase().startsWith("course id"));
 
-  if (subjectCol === -1 || numberCol === -1 || attrCol === -1) {
-    console.log(`    ↳ Could not identify required columns.`);
-    console.log(`       Headers found: ${header.join(" | ")}`);
+  if (courseIdCol === -1) {
+    console.log(`    ↳ Could not find 'Course ID' column.`);
+    console.log(`       Headers: ${header.join(" | ")}`);
     return new Map();
   }
 
-  // Group rows by course key — one row per attribute per course
+  // Detect indicator columns and map them to NUpath codes
+  const indicatorCols = []; // { index, code }
+  for (let i = 0; i < header.length; i++) {
+    if (!header[i].toLowerCase().endsWith("ind.") && !header[i].toLowerCase().endsWith("ind")) continue;
+    const code = indicatorColToCode(header[i]);
+    if (code) indicatorCols.push({ index: i, code });
+  }
+
+  if (indicatorCols.length === 0) {
+    console.log(`    ↳ Found no indicator columns (expected columns ending in 'Ind.')`);
+    return new Map();
+  }
+  console.log(`    ↳ Detected ${indicatorCols.length} indicator columns: ${indicatorCols.map(c => c.code).join(", ")}`);
+
+  // Build map — OR across multiple rows for the same Course ID
   const grouped = new Map(); // "SUBJ NUM" → Set<code>
 
   for (let i = 1; i < lines.length; i++) {
-    const cols = parseCsvLine(lines[i]);
-    const subj = cols[subjectCol]?.trim().toUpperCase();
-    const num  = cols[numberCol]?.trim();
-    const attr = cols[attrCol]?.trim() ?? "";
-    if (!subj || !num) continue;
+    const cols    = parseCsvLine(lines[i]);
+    const courseId = cols[courseIdCol]?.trim().toUpperCase();
+    if (!courseId) continue;
 
-    const key   = `${subj} ${num}`;
-    const codes = parseNUPath(attr);
-    if (!grouped.has(key)) grouped.set(key, new Set());
-    codes.forEach((c) => grouped.get(key).add(c));
+    if (!grouped.has(courseId)) grouped.set(courseId, new Set());
+    const codeSet = grouped.get(courseId);
+    for (const { index, code } of indicatorCols) {
+      if (cols[index]?.trim().toUpperCase() === "Y") codeSet.add(code);
+    }
   }
 
-  // Convert to sorted arrays
   const result = new Map();
   for (const [key, codeSet] of grouped) {
     result.set(key, [...codeSet].sort());
@@ -255,15 +362,17 @@ function parseCsvLine(line) {
   return result;
 }
 
-// ── Strategy 1b: Tableau via Playwright (browser automation) ─────────────────
+// ── Strategy 1c: Playwright + Tableau Embedding API v3 ───────────────────────
 //
-// Used when the plain CSV download requires authentication.  Launches a headless
-// Chromium browser, loads the Tableau dashboard, and either:
-//   (a) triggers the built-in download button to get a CSV, or
-//   (b) reads the rendered HTML table from the DOM.
+// Uses the same official SDK as the Registrar's embed code:
+//   <script src="tableau.embedding.3.latest.min.js">
+//   <tableau-viz src="…/NUpathAttributes/NUpathAttribute">
 //
-// Playwright is an optional dependency — if not installed the function returns
-// null and the catalog HTML strategy is used instead.
+// After firstinteractive fires we call getSummaryDataAsync({ maxRows: 0 })
+// which returns all rows as structured columns + values — no button-clicking
+// or DOM scraping needed.
+//
+// Playwright is an optional dependency; returns null if not installed.
 
 async function fetchTableauWithPlaywright() {
   let chromium;
@@ -273,111 +382,123 @@ async function fetchTableauWithPlaywright() {
     return null; // Playwright not installed — skip
   }
 
-  const TABLEAU_URL =
-    `${TABLEAU_BASE}/t/${TABLEAU_SITE}/views/${TABLEAU_WB}/${TABLEAU_VIEW}` +
-    `?:embed=y&:isGuestRedirectFromVizportal=y`;
+  const EMBED_SDK = `${TABLEAU_BASE}/javascripts/api/tableau.embedding.3.latest.min.js`;
+  const VIZ_SRC   = `${TABLEAU_BASE}/t/${TABLEAU_SITE}/views/${TABLEAU_WB}/${TABLEAU_VIEW}`;
 
-  console.log(`  Playwright: loading ${TABLEAU_URL}`);
+  console.log(`  Playwright: loading Tableau Embedding API v3…`);
   const browser = await chromium.launch({ headless: true });
 
   try {
-    const context = await browser.newContext({ acceptDownloads: true });
+    const context = await browser.newContext();
     const page    = await context.newPage();
 
-    // ── Intercept Tableau bootstrap to grab session cookie ────────────────
-    let sessionCookie = "";
-    page.on("response", async (res) => {
-      if (res.url().includes("bootstrapSession") && res.status() === 200) {
-        const cookies = await context.cookies();
-        sessionCookie = cookies.map((c) => `${c.name}=${c.value}`).join("; ");
-      }
-    });
+    // Build a minimal host page that loads the official SDK and the viz
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <script type="module" src="${EMBED_SDK}"></script>
+</head>
+<body>
+  <tableau-viz
+    id="viz"
+    src="${VIZ_SRC}"
+    hide-tabs
+    toolbar="hidden"
+  ></tableau-viz>
+  <script type="module">
+    const viz = document.getElementById('viz');
 
-    // ── Navigate and wait for Tableau to render ───────────────────────────
-    await page.goto(TABLEAU_URL, { waitUntil: "networkidle", timeout: 90_000 });
-    // Extra buffer — Tableau renders asynchronously after network idle
-    await page.waitForTimeout(8_000);
-
-    // ── Attempt 1: click the Download button to get CSV ───────────────────
-    const downloadSelectors = [
-      '[data-tb-test-id="Download-Button"]',
-      'button[title="Download"]',
-      'button[aria-label="Download"]',
-      ".tab-icon-download",
-    ];
-    let downloadBtn = null;
-    for (const sel of downloadSelectors) {
-      downloadBtn = await page.$(sel);
-      if (downloadBtn) break;
+    async function extractSheet(ws) {
+      const dt = await ws.getSummaryDataAsync({ maxRows: 0, ignoreAliases: false });
+      return {
+        name:    ws.name,
+        columns: dt.columns.map(c => c.fieldName),
+        rows:    dt.data.map(row => row.map(v => v.formattedValue)),
+      };
     }
 
-    if (downloadBtn) {
-      await downloadBtn.click();
-      await page.waitForTimeout(1_000);
-
-      // Click the "Data" sub-option
-      const dataSelectors = [
-        '[data-tb-test-id="DownloadData-Button"]',
-        '[aria-label*="Data"]',
-        'a:has-text("Data")',
-        'li:has-text("Data")',
-      ];
-      for (const sel of dataSelectors) {
-        const dataBtn = await page.$(sel);
-        if (dataBtn) {
-          const [dl] = await Promise.all([
-            page.waitForEvent("download", { timeout: 20_000 }),
-            dataBtn.click(),
-          ]);
-          const path = dl.suggestedFilename().endsWith(".csv") || true
-            ? await dl.path()
-            : null;
-          if (path) {
-            const { readFileSync: rf } = await import("fs");
-            const csv = rf(path, "utf8");
-            await browser.close();
-            console.log("    ↳ Got CSV via Playwright download button");
-            return parseTableauCsv(csv);
-          }
-          break;
+    viz.addEventListener('firstinteractive', async () => {
+      try {
+        const sheet = viz.workbook.activeSheet;
+        const sheets = sheet.sheetType === 'dashboard'
+          ? sheet.worksheets
+          : [sheet];
+        const results = [];
+        for (const ws of sheets) {
+          results.push(await extractSheet(ws));
         }
+        window._tableau_result = results;
+      } catch (e) {
+        window._tableau_error = e.message;
       }
-    }
-
-    // ── Attempt 2: read table text from rendered DOM ──────────────────────
-    // Tableau renders either HTML <table> cells or SVG <text> nodes.
-    const tableData = await page.evaluate(() => {
-      // Try HTML table first
-      const rows = document.querySelectorAll("table tr");
-      if (rows.length > 1) {
-        return Array.from(rows)
-          .map((r) => Array.from(r.querySelectorAll("td, th")).map((c) => c.textContent.trim()).join(","))
-          .join("\n");
-      }
-      // Fall back: extract all text marks (SVG-based Tableau views)
-      const texts = document.querySelectorAll(
-        ".tab-widget text, .tabCanvas text, .VIZText text, [class*='label'] text"
-      );
-      if (texts.length > 0) {
-        return Array.from(texts).map((t) => t.textContent.trim()).join("\n");
-      }
-      return "";
     });
+  </script>
+</body>
+</html>`;
+
+    await page.setContent(html, { waitUntil: "domcontentloaded" });
+
+    console.log("    ↳ Waiting for firstinteractive (up to 120s)…");
+    await page.waitForFunction(
+      () => window._tableau_result !== undefined || window._tableau_error !== undefined,
+      { timeout: 120_000, polling: 2_000 },
+    );
+
+    const { result, error } = await page.evaluate(() => ({
+      result: window._tableau_result,
+      error:  window._tableau_error,
+    }));
 
     await browser.close();
 
-    if (tableData && tableData.includes(",")) {
-      const nuPathMap = parseTableauCsv(tableData);
-      if (nuPathMap.size > 0) {
-        console.log(`    ↳ Got ${nuPathMap.size} mappings via Playwright DOM extraction`);
-        return nuPathMap;
+    if (error) {
+      console.log(`    ↳ Tableau API error: ${error}`);
+      return null;
+    }
+    if (!result?.length) {
+      console.log("    ↳ No data returned");
+      return null;
+    }
+
+    // Find the sheet with recognizable NUpath columns
+    for (const sheet of result) {
+      const colsLower = sheet.columns.map(c => c.toLowerCase());
+      const subjIdx   = findCol(colsLower, ["subject", "subj"]);
+      const numIdx    = findCol(colsLower, ["catalog number", "course number", "catalog nbr", "crse nmbr", "number", "nbr"]);
+      const attrIdx   = findCol(colsLower, ["attribute description", "attribute", "nupath", "np attribute", "crse attr description"]);
+
+      console.log(`    ↳ Sheet "${sheet.name}": ${sheet.rows.length} rows | cols: ${sheet.columns.slice(0, 6).join(", ")}`);
+
+      if (subjIdx === -1 || numIdx === -1 || attrIdx === -1) {
+        console.log(`    ↳ Skipping — could not identify subject/number/attribute columns`);
+        continue;
+      }
+
+      const grouped = new Map();
+      for (const row of sheet.rows) {
+        const subj = row[subjIdx]?.toUpperCase()?.trim();
+        const num  = row[numIdx]?.trim();
+        const attr = row[attrIdx]?.trim() ?? "";
+        if (!subj || !num) continue;
+        const key = `${subj} ${num}`;
+        const codes = parseNUPath(attr);
+        if (!grouped.has(key)) grouped.set(key, new Set());
+        codes.forEach(c => grouped.get(key).add(c));
+      }
+
+      const mapped = new Map();
+      for (const [key, codeSet] of grouped) mapped.set(key, [...codeSet].sort());
+
+      if (mapped.size > 0) {
+        console.log(`    ↳ ✅ Got ${mapped.size} mappings from sheet "${sheet.name}"`);
+        return mapped;
       }
     }
 
-    console.log("    ↳ Playwright loaded page but could not extract structured data");
+    console.log("    ↳ No sheets had recognizable NUpath data");
     return null;
   } catch (err) {
-    await browser.close();
+    await browser.close().catch(() => {});
     console.log(`    ↳ Playwright error: ${err.message}`);
     return null;
   }
@@ -501,29 +622,26 @@ let nuPathSource;
 let nuPathMap; // Map<"SUBJ NUM", string[]>
 
 if (!FORCE_CAT) {
-  // ── Try 1: Tableau CSV (plain HTTP — works for public views) ─────────────
-  console.log("\n[1] Trying Tableau CSV download (plain HTTP)…");
-  try {
-    nuPathMap = await fetchTableauData();
-  } catch (err) {
-    console.log(`  ↳ Tableau HTTP error: ${err.message}`);
-  }
-  if (nuPathMap) {
-    nuPathSource = "Tableau (HTTP CSV)";
+  // ── Try 1: Tableau REST API (guest auth → view LUID → CSV download) ──────
+  console.log("\n[1] Trying Tableau REST API (guest auth)…");
+  nuPathMap = await fetchTableauRestApi();
+  if (nuPathMap) nuPathSource = "Tableau REST API";
+
+  // ── Try 2: Tableau direct CSV download (with session cookie) ─────────────
+  if (!nuPathMap) {
+    console.log("\n[2] Trying Tableau direct CSV download…");
+    nuPathMap = await fetchTableauCsvDirect();
+    if (nuPathMap) nuPathSource = "Tableau CSV (direct)";
   }
 
-  // ── Try 2: Tableau via Playwright browser automation ─────────────────────
+  // ── Try 3: Playwright + Tableau Embedding API v3 ──────────────────────────
   if (!nuPathMap && USE_PLAYWRIGHT) {
-    console.log("\n[2] Trying Tableau via Playwright (browser automation)…");
-    try {
-      nuPathMap = await fetchTableauWithPlaywright();
-    } catch (err) {
-      console.log(`  ↳ Playwright error: ${err.message}`);
-    }
+    console.log("\n[3] Trying Playwright + Tableau Embedding API v3…");
+    nuPathMap = await fetchTableauWithPlaywright();
     if (nuPathMap) {
-      nuPathSource = "Tableau (Playwright)";
+      nuPathSource = "Tableau (Embedding API v3)";
     } else {
-      console.log("  ↳ Playwright strategy unavailable or returned no data.");
+      console.log("  ↳ All Tableau strategies exhausted.");
     }
   }
 }

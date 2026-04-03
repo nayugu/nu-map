@@ -31,10 +31,7 @@ const NUPATH_MAP_PATH   = resolve(ROOT, "data/nupath-map.json");
 const NUPATH_SCHEDULE_COMMENT = `  # schedule:\n  #   - cron: "0 5 1 1,5,9 *"   # 05:00 UTC on the 1st of Jan, May, Sep`;
 const NUPATH_SCHEDULE_ACTIVE  = `  schedule:\n    - cron: "0 5 1 1,5,9 *"   # 05:00 UTC on the 1st of Jan, May, Sep`;
 const TABLEAU_EMBED_URL = "https://tableau.northeastern.edu/t/Registrar/views/NUpathAttributes/NUpathAttribute?%3Aembed=y&%3AisGuestRedirectFromVizportal=y";
-const TABLEAU_CSV_URLS  = [
-  "https://tableau.northeastern.edu/t/Registrar/views/NUpathAttributes/NUpathAttribute.csv",
-  "https://tableau.northeastern.edu/views/NUpathAttributes/NUpathAttribute.csv",
-];
+
 const BASE_URL      = "https://catalog.northeastern.edu";
 const INDEX_URL     = `${BASE_URL}/course-descriptions/`;
 const DELAY_MS      = parseInt(process.env.CATALOG_DELAY_MS ?? "350", 10);
@@ -183,30 +180,67 @@ function findCol(headers, candidates) {
   return -1;
 }
 
-// Parse Tableau CSV into Map<"SUBJ NUM", string[]>
+// Maps fragments of indicator column names → NUpath codes
+const INDICATOR_FRAGMENT_MAP = {
+  "advanced writing":       "WD",
+  "adv writing":            "WD",
+  "analyzing/using data":   "AD",
+  "analyzing and using":    "AD",
+  "capstone":               "CE",
+  "creative express":       "EI",
+  "difference/diversity":   "DD",
+  "ethical reasoning":      "ER",
+  "formal/quant":           "FQ",
+  "integration experience": "EX",
+  "interpreting culture":   "IC",
+  "natural/designed world": "ND",
+  "societies/institutions": "SI",
+  "writing intensive":      "WI",
+  "1st yr writing":         "WF",
+  "first year writing":     "WF",
+  "first.year writing":     "WF",
+};
+
+function indicatorColToCode(colName) {
+  const lower = colName.toLowerCase().replace(/ ind\.?\s*$/, "").trim();
+  for (const [frag, code] of Object.entries(INDICATOR_FRAGMENT_MAP)) {
+    if (lower.includes(frag)) return code;
+  }
+  return null;
+}
+
+// Parse Tableau CSV (wide format) into Map<"SUBJ NUM", string[]>
+// Each row is one course; columns ending in "Ind." are Y/N NUpath indicators.
+// "Course ID " column already contains the "SUBJ NUM" key.
 function parseTableauCsvNuPaths(csv) {
   const lines  = csv.trim().split(/\r?\n/);
   if (lines.length < 2) return new Map();
-  const header = parseCsvLine(lines[0]).map(h => h.toLowerCase().trim());
+  const header = parseCsvLine(lines[0]).map(h => h.trim());
 
-  const subjCol  = findCol(header, ["subject", "subj"]);
-  const numCol   = findCol(header, ["catalog number", "course number", "catalog nbr", "crse nmbr", "number", "nbr"]);
-  const attrCol  = findCol(header, ["attribute description", "attribute", "nupath", "np attribute", "crse attr description"]);
+  // Find "Course ID" column
+  const courseIdCol = header.findIndex(h => h.toLowerCase().startsWith("course id"));
+  if (courseIdCol === -1) return new Map();
 
-  if (subjCol === -1 || numCol === -1 || attrCol === -1) return new Map();
+  // Detect all indicator columns dynamically
+  const indicatorCols = [];
+  for (let i = 0; i < header.length; i++) {
+    const lower = header[i].toLowerCase();
+    if (!lower.endsWith("ind.") && !lower.endsWith("ind")) continue;
+    const code = indicatorColToCode(header[i]);
+    if (code) indicatorCols.push({ index: i, code });
+  }
+  if (indicatorCols.length === 0) return new Map();
 
-  // One row per attribute per course — group by key
   const grouped = new Map();
   for (let i = 1; i < lines.length; i++) {
-    const cols = parseCsvLine(lines[i]);
-    const subj = cols[subjCol]?.trim().toUpperCase();
-    const num  = cols[numCol]?.trim();
-    const attr = cols[attrCol]?.trim() ?? "";
-    if (!subj || !num) continue;
-    const key   = `${subj} ${num}`;
-    const codes = parseNUPath(attr);
-    if (!grouped.has(key)) grouped.set(key, new Set());
-    codes.forEach(c => grouped.get(key).add(c));
+    const cols     = parseCsvLine(lines[i]);
+    const courseId = cols[courseIdCol]?.trim().toUpperCase();
+    if (!courseId) continue;
+    if (!grouped.has(courseId)) grouped.set(courseId, new Set());
+    const codeSet = grouped.get(courseId);
+    for (const { index, code } of indicatorCols) {
+      if (cols[index]?.trim().toUpperCase() === "Y") codeSet.add(code);
+    }
   }
 
   const result = new Map();
@@ -776,123 +810,190 @@ const server = createServer((req, res) => {
       const existing = JSON.parse(readFileSync(ALL_COURSES, "utf8"));
       const existMap = new Map(existing.map(c => [`${c.subject} ${c.number}`, c]));
 
-      // ── Strategy 1: Tableau CSV download ─────────────────────────────────
-      send("log", { msg: "Trying Tableau CSV download…" });
       let freshNuPaths = null; // Map<"SUBJ NUM", string[]>
       let source = "";
 
-      // Try Playwright first (headless browser — most reliable for Tableau JS rendering)
-      if (!freshNuPaths) {
-        try {
-          const { chromium } = await import("playwright");
-          send("log", { msg: "  Playwright available — launching headless Chromium…" });
-          const browser = await chromium.launch({ headless: true });
-          try {
-            const context = await browser.newContext({ acceptDownloads: true });
-            const page    = await context.newPage();
-            send("log", { msg: `  Loading Tableau dashboard…` });
-            await page.goto(TABLEAU_EMBED_URL, { waitUntil: "networkidle", timeout: 90_000 });
-            await page.waitForTimeout(6_000); // Tableau renders async after networkidle
+      const TABLEAU_SITE_ID = "fa2c3643-d73c-40e1-b43c-06e38c98065d";
+      const TABLEAU_API_BASE = "https://tableau.northeastern.edu/api/3.20";
+      const EMBED_SDK_URL    = "https://tableau.northeastern.edu/javascripts/api/tableau.embedding.3.latest.min.js";
+      const VIZ_SRC          = "https://tableau.northeastern.edu/t/Registrar/views/NUpathAttributes/NUpathAttribute";
+      const BROWSER_UA       = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
-            // Attempt A: click Download → Data to get CSV
-            let csvText = null;
-            const dlSelectors = ['[data-tb-test-id="Download-Button"]','button[title="Download"]','button[aria-label="Download"]','.tab-icon-download'];
-            for (const sel of dlSelectors) {
-              const btn = await page.$(sel);
-              if (!btn) continue;
-              await btn.click();
-              await page.waitForTimeout(800);
-              const dataSelectors = ['[data-tb-test-id="DownloadData-Button"]','a:has-text("Data")','li:has-text("Data")','[aria-label*="Data"]'];
-              for (const dsel of dataSelectors) {
-                const dBtn = await page.$(dsel);
-                if (!dBtn) continue;
-                const [dl] = await Promise.all([
-                  page.waitForEvent("download", { timeout: 15_000 }).catch(() => null),
-                  dBtn.click(),
-                ]);
-                if (dl) {
-                  const path = await dl.path();
-                  if (path) { const { readFileSync: rf } = await import("fs"); csvText = rf(path, "utf8"); }
-                }
-                break;
-              }
-              break;
-            }
-
-            if (csvText) {
-              const parsed = parseTableauCsvNuPaths(csvText);
-              if (parsed.size > 0) {
-                freshNuPaths = parsed;
-                source = "Tableau (Playwright download)";
-                send("log", { msg: `  → ✓ Got ${parsed.size} mappings via Playwright download` });
-              }
-            }
-
-            // Attempt B: read rendered HTML table from DOM
-            if (!freshNuPaths) {
-              const tableHtml = await page.evaluate(() => {
-                const t = document.querySelector("table");
-                return t ? t.outerHTML : null;
-              });
-              if (tableHtml) {
-                // Convert simple HTML table to CSV-like text and parse
-                const { parse: ph } = await import("node-html-parser");
-                const root = ph(tableHtml);
-                const rows = root.querySelectorAll("tr");
-                const csvLines = rows.map(r =>
-                  [...r.querySelectorAll("td,th")].map(c => `"${c.textContent.trim().replace(/"/g, '""')}"`).join(",")
-                );
-                if (csvLines.length > 1) {
-                  const parsed = parseTableauCsvNuPaths(csvLines.join("\n"));
+      // ── Strategy 1: Tableau REST API (guest auth) ─────────────────────────
+      send("log", { msg: "[1] Trying Tableau REST API (guest auth)…" });
+      try {
+        const authRes = await fetch(`${TABLEAU_API_BASE}/auth/signin`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json", "User-Agent": BROWSER_UA },
+          body: JSON.stringify({ credentials: { name: "", password: "", site: { contentUrl: "Registrar" } } }),
+        });
+        if (!authRes.ok) {
+          send("log", { msg: `  → Guest auth failed: HTTP ${authRes.status}` });
+        } else {
+          const authData = await authRes.json();
+          const token  = authData.credentials?.token;
+          const siteId = authData.credentials?.site?.id ?? TABLEAU_SITE_ID;
+          if (!token) {
+            send("log", { msg: "  → No token in auth response" });
+          } else {
+            send("log", { msg: `  → Authenticated. Querying views…` });
+            const authHeaders = { "X-Tableau-Auth": token, "User-Agent": BROWSER_UA };
+            const viewsRes = await fetch(
+              `${TABLEAU_API_BASE}/sites/${siteId}/views?filter=name:eq:NUpathAttribute`,
+              { headers: { ...authHeaders, Accept: "application/json" } },
+            );
+            if (viewsRes.ok) {
+              const vData  = await viewsRes.json();
+              const viewId = vData.views?.view?.[0]?.id;
+              if (viewId) {
+                send("log", { msg: `  → View LUID: ${viewId}` });
+                const dataRes = await fetch(`${TABLEAU_API_BASE}/sites/${siteId}/views/${viewId}/data`, {
+                  headers: { ...authHeaders, Accept: "text/csv" },
+                });
+                if (dataRes.ok) {
+                  const csv    = await dataRes.text();
+                  const parsed = parseTableauCsvNuPaths(csv);
                   if (parsed.size > 0) {
                     freshNuPaths = parsed;
-                    source = "Tableau (Playwright DOM)";
-                    send("log", { msg: `  → ✓ Got ${parsed.size} mappings via Playwright DOM` });
+                    source = "Tableau REST API";
+                    send("log", { msg: `  → ✅ Got ${parsed.size} mappings via REST API` });
+                  } else {
+                    send("log", { msg: "  → Downloaded CSV but parsed 0 mappings" });
                   }
+                } else {
+                  send("log", { msg: `  → Data download failed: HTTP ${dataRes.status}` });
+                }
+              } else {
+                send("log", { msg: "  → View 'NUpathAttribute' not found in site" });
+              }
+            } else {
+              send("log", { msg: `  → Views query failed: HTTP ${viewsRes.status}` });
+            }
+          }
+        }
+      } catch (e) {
+        send("log", { msg: `  REST API error: ${e.message}` });
+      }
+
+      // ── Strategy 2: Tableau direct CSV download (session cookie) ──────────
+      if (!freshNuPaths) {
+        send("log", { msg: "[2] Trying Tableau direct CSV download…" });
+        try {
+          let cookie = "";
+          try {
+            const sessRes = await fetch(TABLEAU_EMBED_URL, { headers: { "User-Agent": BROWSER_UA }, redirect: "follow" });
+            const sc = sessRes.headers.get("set-cookie") ?? "";
+            cookie = sc.split(",").map(s => s.trim().split(";")[0]).filter(Boolean).join("; ");
+          } catch {}
+          const csvUrls = [
+            `${VIZ_SRC}.csv?:size=1920,1080`,
+            `${VIZ_SRC}.csv`,
+            "https://tableau.northeastern.edu/views/NUpathAttributes/NUpathAttribute.csv",
+          ];
+          for (const csvUrl of csvUrls) {
+            send("log", { msg: `  GET ${csvUrl.replace("https://tableau.northeastern.edu", "")}` });
+            const r = await fetch(csvUrl, {
+              headers: { "User-Agent": BROWSER_UA, Accept: "text/csv,*/*", ...(cookie ? { Cookie: cookie } : {}) },
+            });
+            if (!r.ok) { send("log", { msg: `  → HTTP ${r.status}` }); continue; }
+            const csv = await r.text();
+            if (!csv.includes(",") || csv.trim().split(/\r?\n/).length < 2) {
+              send("log", { msg: "  → Not valid CSV" }); continue;
+            }
+            const parsed = parseTableauCsvNuPaths(csv);
+            if (parsed.size === 0) { send("log", { msg: "  → Parsed 0 mappings" }); continue; }
+            freshNuPaths = parsed;
+            source = "Tableau CSV (direct)";
+            send("log", { msg: `  → ✅ Got ${parsed.size} mappings` });
+            break;
+          }
+        } catch (e) {
+          send("log", { msg: `  Direct CSV error: ${e.message}` });
+        }
+      }
+
+      // ── Strategy 3: Playwright + Tableau Embedding API v3 ────────────────
+      if (!freshNuPaths) {
+        send("log", { msg: "[3] Trying Playwright + Tableau Embedding API v3…" });
+        try {
+          const { chromium } = await import("playwright");
+          const browser = await chromium.launch({ headless: true });
+          try {
+            const page = await browser.newPage();
+            const html = `<!DOCTYPE html>
+<html><head><script type="module" src="${EMBED_SDK_URL}"></script></head>
+<body>
+<tableau-viz id="viz" src="${VIZ_SRC}" hide-tabs toolbar="hidden"></tableau-viz>
+<script type="module">
+  const viz = document.getElementById('viz');
+  async function extractSheet(ws) {
+    const dt = await ws.getSummaryDataAsync({ maxRows: 0, ignoreAliases: false });
+    return { name: ws.name, columns: dt.columns.map(c => c.fieldName), rows: dt.data.map(r => r.map(v => v.formattedValue)) };
+  }
+  viz.addEventListener('firstinteractive', async () => {
+    try {
+      const sheet = viz.workbook.activeSheet;
+      const sheets = sheet.sheetType === 'dashboard' ? sheet.worksheets : [sheet];
+      const results = [];
+      for (const ws of sheets) results.push(await extractSheet(ws));
+      window._tableau_result = results;
+    } catch(e) { window._tableau_error = e.message; }
+  });
+</script>
+</body></html>`;
+            await page.setContent(html, { waitUntil: "domcontentloaded" });
+            send("log", { msg: "  → Waiting for firstinteractive (up to 120s)…" });
+            await page.waitForFunction(
+              () => window._tableau_result !== undefined || window._tableau_error !== undefined,
+              { timeout: 120_000, polling: 2_000 },
+            );
+            const { result, error } = await page.evaluate(() => ({
+              result: window._tableau_result, error: window._tableau_error,
+            }));
+            if (error) {
+              send("log", { msg: `  → Embedding API error: ${error}` });
+            } else if (result?.length) {
+              for (const sheet of result) {
+                const colsLower = sheet.columns.map(c => c.toLowerCase());
+                const subjIdx = findCol(colsLower, ["subject", "subj"]);
+                const numIdx  = findCol(colsLower, ["catalog number", "course number", "catalog nbr", "crse nmbr", "number", "nbr"]);
+                const attrIdx = findCol(colsLower, ["attribute description", "attribute", "nupath", "np attribute", "crse attr description"]);
+                send("log", { msg: `  → Sheet "${sheet.name}": ${sheet.rows.length} rows | ${sheet.columns.slice(0,5).join(", ")}` });
+                if (subjIdx === -1 || numIdx === -1 || attrIdx === -1) continue;
+                const grouped = new Map();
+                for (const row of sheet.rows) {
+                  const subj = row[subjIdx]?.toUpperCase()?.trim();
+                  const num  = row[numIdx]?.trim();
+                  const attr = row[attrIdx]?.trim() ?? "";
+                  if (!subj || !num) continue;
+                  const key = `${subj} ${num}`;
+                  const codes = parseNUPath(attr);
+                  if (!grouped.has(key)) grouped.set(key, new Set());
+                  codes.forEach(c => grouped.get(key).add(c));
+                }
+                const mapped = new Map();
+                for (const [k, s] of grouped) mapped.set(k, [...s].sort());
+                if (mapped.size > 0) {
+                  freshNuPaths = mapped;
+                  source = "Tableau (Embedding API v3)";
+                  send("log", { msg: `  → ✅ Got ${mapped.size} mappings from sheet "${sheet.name}"` });
+                  break;
                 }
               }
+              if (!freshNuPaths) send("log", { msg: "  → No sheets had recognizable NUpath columns" });
+            } else {
+              send("log", { msg: "  → No data returned" });
             }
           } finally {
-            await browser.close();
+            await browser.close().catch(() => {});
           }
         } catch (e) {
           if (e.code === "ERR_MODULE_NOT_FOUND" || e.message?.includes("Cannot find")) {
-            send("log", { msg: "  Playwright not installed — skipping. Run: npx playwright install chromium" });
+            send("log", { msg: "  Playwright not installed — run: npx playwright install chromium" });
           } else {
             send("log", { msg: `  Playwright error: ${e.message}` });
           }
         }
-      }
-
-      try {
-        // Get session cookie from the embed URL first
-        let cookie = "";
-        try {
-          const sessRes = await fetch(TABLEAU_EMBED_URL, {
-            headers: { "User-Agent": "NU-Map-NUpathBot/1.0" }, redirect: "follow",
-          });
-          const sc = sessRes.headers.get("set-cookie");
-          if (sc) cookie = sc.split(";")[0];
-        } catch {}
-
-        for (const csvUrl of TABLEAU_CSV_URLS) {
-          send("log", { msg: `  GET ${csvUrl}` });
-          const r = await fetch(csvUrl, {
-            headers: { "User-Agent": "NU-Map-NUpathBot/1.0", Accept: "text/csv,*/*", ...(cookie ? { Cookie: cookie } : {}) },
-          });
-          if (!r.ok) { send("log", { msg: `  → HTTP ${r.status}` }); continue; }
-          const csv = await r.text();
-          if (!csv.includes(",") || csv.trim().split(/\r?\n/).length < 2) {
-            send("log", { msg: "  → Response is not valid CSV" }); continue;
-          }
-          freshNuPaths = parseTableauCsvNuPaths(csv);
-          if (freshNuPaths.size === 0) { send("log", { msg: "  → Parsed 0 mappings" }); freshNuPaths = null; continue; }
-          send("log", { msg: `  → ✓ Got ${freshNuPaths.size} NUpath mappings from Tableau` });
-          source = "Tableau";
-          break;
-        }
-      } catch (e) {
-        send("log", { msg: `  Tableau error: ${e.message}` });
       }
 
       // ── Strategy 2: catalog.northeastern.edu scrape ───────────────────────
