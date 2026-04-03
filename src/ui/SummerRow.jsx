@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
+import CompanySearch from "./CompanySearch.jsx";
 
 export default function SummerRow({ semA, semB }) {
   const {
@@ -97,10 +98,25 @@ export default function SummerRow({ semA, semB }) {
               }}
               title="Remove co-op"
             >✕</button>
-            <div style={{ fontSize: 13, fontWeight: 900, color: workItem.color, letterSpacing: "0.05em" }}>
-              {workItem.label} {coopNumFor(workItem.id)}
+            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 4 }}>
+              <div style={{ fontSize: 13, fontWeight: 900, color: workItem.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
+                {workItem.label} {coopNumFor(workItem.id)}
+              </div>
+              <CompanySearch
+                name={workData.company}
+                domain={workData.companyDomain}
+                onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
+                inputStyle={{ fontSize: 10 }}
+              />
+              <input
+                value={workData.position ?? ""}
+                onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], position: e.target.value } }))}
+                onMouseDown={e => e.stopPropagation()}
+                placeholder="Role..."
+                style={{ flex: 1, minWidth: 0, fontSize: 10, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
+              />
             </div>
-            <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 3 }}>
+            <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {workContMap[SEM_NEXT[sem.id]] === workItem.id
                 ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (${workItem.duration}-month block)`
                 : `${workItem.duration}-month co-op`}
@@ -175,10 +191,25 @@ export default function SummerRow({ semA, semB }) {
               style={{ position: "absolute", top: 4, right: 6, background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0 }}
               title="Remove internship"
             >✕</button>
-            <div style={{ fontSize: 13, fontWeight: 900, color: internTerm.color, letterSpacing: "0.05em" }}>
-              Full-Time Internship {internNumFor(internId)}
+            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 4 }}>
+              <div style={{ fontSize: 13, fontWeight: 900, color: internTerm.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
+                Full-Time Internship {internNumFor(internId)}
+              </div>
+              <CompanySearch
+                name={internData.company}
+                domain={internData.companyDomain}
+                onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
+                inputStyle={{ fontSize: 10 }}
+              />
+              <input
+                value={internData.position ?? ""}
+                onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], position: e.target.value } }))}
+                onMouseDown={e => e.stopPropagation()}
+                placeholder="Role..."
+                style={{ flex: 1, minWidth: 0, fontSize: 10, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
+              />
             </div>
-            <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 3 }}>
+            <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {internData.duration === 4
                 ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label}`
                 : `${internData.duration}-month internship`}

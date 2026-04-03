@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
+import CompanySearch from "./CompanySearch.jsx";
 
 export default function SemRow({ sem }) {
   const {
@@ -273,10 +274,24 @@ export default function SemRow({ sem }) {
               }}
               title="Remove co-op"
             >✕</button>
-            <div style={{ fontSize: 14, fontWeight: 900, color: workItem.color, letterSpacing: "0.06em" }}>
-              {workItem.label} {coopNum}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: workItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
+                {workItem.label} {coopNum}
+              </div>
+              <CompanySearch
+                name={workData.company}
+                domain={workData.companyDomain}
+                onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
+              />
+              <input
+                value={workData.position ?? ""}
+                onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], position: e.target.value } }))}
+                onMouseDown={e => e.stopPropagation()}
+                placeholder="Role..."
+                style={{ flex: 1, minWidth: 0, fontSize: 11, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
+              />
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
+            <div style={{ fontSize: 10, color: "var(--text-4)" }}>
               {workContMap[SEM_NEXT[sem.id]] === workItem.id
                 ? `↕ Spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (${workItem.duration}-month block)`
                 : `${workItem.duration}-month co-op`}
@@ -311,18 +326,30 @@ export default function SemRow({ sem }) {
               }}
               title="Remove internship"
             >✕</button>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between" }}>
-              <div style={{ fontSize: 14, fontWeight: 900, color: internItem.color, letterSpacing: "0.06em" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: internItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNum(internId)}
               </div>
+              <CompanySearch
+                name={internPl[internItem.id]?.company}
+                domain={internPl[internItem.id]?.companyDomain}
+                onChange={v => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
+              />
+              <input
+                value={internPl[internItem.id]?.position ?? ""}
+                onChange={e => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], position: e.target.value } }))}
+                onMouseDown={e => e.stopPropagation()}
+                placeholder="Role..."
+                style={{ flex: 1, minWidth: 0, fontSize: 11, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
+              />
               {(sem.type === "fall" || sem.type === "spring") && (
-                <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0, marginRight: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
                   <span style={{ fontSize: 14, color: "#facc15" }}>⚠</span>
                   <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3 }}>requires petition<br/>for non-attendance</span>
                 </div>
               )}
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
+            <div style={{ fontSize: 10, color: "var(--text-4)" }}>
               {internItem.duration === 4 && internContMap[SEM_NEXT[sem.id]]
                 ? `↕ Spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (4-month block)`
                 : `${internItem.duration}-month internship`}

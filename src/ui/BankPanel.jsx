@@ -192,6 +192,8 @@ export default function BankPanel() {
   const [subFromId, setSubFromId] = useState(null);
   const [subToId,   setSubToId]   = useState(null);
   const [hoveredSubId, setHoveredSubId] = useState(null);
+  const [coopsCollapsed,  setCoopsCollapsed]  = useState(false);
+  const [internsCollapsed, setInternsCollapsed] = useState(true);
 
   return (
     <div style={{ display: "flex", width: bankWidth, flexShrink: 0 }}>
@@ -529,8 +531,13 @@ export default function BankPanel() {
           <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", marginBottom: 5 }}>WORK EXPERIENCE</div>
 
           {/* Co-op templates — always visible, never consumed */}
-          <div style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: 3 }}>Co-ops</div>
-          {COOP_TERMS.map(ct => (
+          <div
+            onClick={() => setCoopsCollapsed(v => !v)}
+            style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: coopsCollapsed ? 0 : 3, cursor: "pointer", userSelect: "none", display: "flex", alignItems: "center", gap: 4 }}
+          >
+            <span style={{ fontSize: 7, opacity: 0.7 }}>{coopsCollapsed ? "▶" : "▼"}</span>Co-ops
+          </div>
+          {!coopsCollapsed && COOP_TERMS.map(ct => (
             <div key={ct.id}
               draggable
               data-drag-id=""
@@ -545,8 +552,13 @@ export default function BankPanel() {
           ))}
 
           {/* Internship templates — always visible, never consumed */}
-          <div style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: 3, marginTop: 6 }}>Full-Time Internships</div>
-          {INTERNSHIP_TERMS.map(it => (
+          <div
+            onClick={() => setInternsCollapsed(v => !v)}
+            style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: internsCollapsed ? 0 : 3, marginTop: 6, cursor: "pointer", userSelect: "none", display: "flex", alignItems: "center", gap: 4 }}
+          >
+            <span style={{ fontSize: 7, opacity: 0.7 }}>{internsCollapsed ? "▶" : "▼"}</span>Full-Time Internships
+          </div>
+          {!internsCollapsed && INTERNSHIP_TERMS.map(it => (
             <div key={it.id}
               draggable
               data-drag-id=""
