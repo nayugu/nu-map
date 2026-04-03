@@ -278,7 +278,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
           {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
         </div>
         {open && has && <div style={{ marginTop: 3 }}>
-          {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} />)}
+          {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)}
         </div>}
       </div>
     );
@@ -300,7 +300,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
         {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
       </div>
       {open && has && <div style={{ marginTop: 3 }}>
-        {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} />)}
+        {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.type === "OR" && r.sat && !c.sat} />)}
       </div>}
     </div>
   );
