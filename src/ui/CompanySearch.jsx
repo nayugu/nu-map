@@ -13,16 +13,19 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
   const [results, setResults] = useState([]);
   const [open,    setOpen]    = useState(false);
   const [pos,     setPos]     = useState({ top: 0, right: 0 });
-  const timerRef = useRef(null);
-  const wrapRef  = useRef(null);
+  const timerRef    = useRef(null);
+  const wrapRef     = useRef(null);
+  const dropdownRef = useRef(null);
 
   // Sync when parent resets the value
   useEffect(() => { setQuery(name ?? ""); }, [name]);
 
-  // Close on outside click/tap
+  // Close on outside click/tap — must exclude the portal dropdown too
   useEffect(() => {
     const handler = e => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+      if (wrapRef.current?.contains(e.target)) return;
+      if (dropdownRef.current?.contains(e.target)) return;
+      setOpen(false);
     };
     document.addEventListener("mousedown", handler);
     document.addEventListener("touchstart", handler);
@@ -62,15 +65,8 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
     onChange({ name: company.name, domain: company.domain });
   };
 
-  const handleChange = e => {
-    const v = e.target.value;
-    setQuery(v);
-    if (!v) onChange(null);
-    else fetchSuggestions(v);
-  };
-
   const dropdown = open && results.length > 0 && createPortal(
-    <div style={{
+    <div ref={dropdownRef} style={{
       position: "fixed", top: pos.top, right: pos.right, zIndex: 99999,
       background: "var(--bg-surface)", border: "1px solid var(--border-2)",
       borderRadius: 8, boxShadow: "0 6px 24px rgba(0,0,0,0.4)",
@@ -84,7 +80,7 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
           onTouchEnd={e => { e.preventDefault(); select(c); }}
           style={{
             display: "flex", alignItems: "center", gap: 9,
-            padding: "6px 12px", cursor: "pointer",
+            padding: "10px 12px", cursor: "pointer",
             fontSize: 12, color: "var(--text-1)",
           }}
           onMouseEnter={e => { e.currentTarget.style.background = "var(--card-bg-hov)"; }}
@@ -115,14 +111,27 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
         style={{
           width: "100%", textAlign: "right",
           fontFamily: "'Inter', sans-serif",
-          fontSize, fontWeight: 600, letterSpacing: "0.01em",
+          // iOS Safari zooms in on inputs with font-size < 16px; use 16px and
+          // visually scale down so the text still appears at the intended size.
+          fontSize: phonePadding ? 16 : fontSize,
+          transform: phonePadding ? `scale(${fontSize / 16})` : undefined,
+          transformOrigin: "right center",
+          fontWeight: 600, letterSpacing: "0.01em",
           color: query ? color : (emptyColor ?? "var(--text-5)"),
           background: "transparent", border: "none", outline: "none",
           padding: phonePadding ? "5px 0" : 0,
+          touchAction: "manipulation",
         }}
         className="work-input"
       />
       {dropdown}
     </div>
   );
+
+  function handleChange(e) {
+    const v = e.target.value;
+    setQuery(v);
+    if (!v) onChange(null);
+    else fetchSuggestions(v);
+  }
 }
