@@ -4,6 +4,7 @@
 import { useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 import { COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { subjectColor } from "../core/courseModel.js";
 import CourseCard  from "./CourseCard.jsx";
@@ -194,6 +195,8 @@ export default function BankPanel() {
   const [hoveredSubId, setHoveredSubId] = useState(null);
   const [coopsCollapsed,  setCoopsCollapsed]  = useState(false);
   const [internsCollapsed, setInternsCollapsed] = useState(true);
+  const { themeName } = useTheme();
+  const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
 
   return (
     <div style={{ display: "flex", width: bankWidth, flexShrink: 0 }}>
@@ -544,9 +547,9 @@ export default function BankPanel() {
               data-drag-type="work"
               data-drag-duration={ct.duration}
               onDragStart={e => onDragStart(e, null, "work", null, { duration: ct.duration })}
-              style={{ background: "var(--card-bg)", border: `2px solid ${ct.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
+              style={{ background: "var(--card-bg)", border: "1px solid var(--border-card)", borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
             >
-              <div style={{ fontSize: 11, fontWeight: 900, color: ct.color }}>{ct.label}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{ct.label}</div>
               <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{ct.duration} months · satisfies EX</div>
             </div>
           ))}
@@ -565,9 +568,9 @@ export default function BankPanel() {
               data-drag-type="intern"
               data-drag-duration={it.duration}
               onDragStart={e => onDragStart(e, null, "intern", null, { duration: it.duration })}
-              style={{ background: "var(--card-bg)", border: `2px solid ${it.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
+              style={{ background: "var(--card-bg)", border: "1px solid var(--border-card)", borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
             >
-              <div style={{ fontSize: 11, fontWeight: 900, color: it.color }}>{it.label}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>{it.label}</div>
               <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{it.duration} months · does not satisfy EX</div>
             </div>
           ))}

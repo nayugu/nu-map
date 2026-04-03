@@ -8,7 +8,7 @@ import { createPortal } from "react-dom";
 
 const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 
-export default function CompanySearch({ name, onChange, color, fontSize = 11, placeholder = "Company..." }) {
+export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company" }) {
   const [query,   setQuery]   = useState(name ?? "");
   const [results, setResults] = useState([]);
   const [open,    setOpen]    = useState(false);
@@ -111,9 +111,10 @@ export default function CompanySearch({ name, onChange, color, fontSize = 11, pl
           width: "100%", textAlign: "right",
           fontFamily: "'Inter', sans-serif",
           fontSize, fontWeight: 600, letterSpacing: "0.01em",
-          color: query ? color : "var(--text-5)",
+          color: query ? color : (emptyColor ?? "var(--text-5)"),
           background: "transparent", border: "none", outline: "none", padding: 0,
         }}
+        className="work-input"
       />
       {dropdown}
     </div>

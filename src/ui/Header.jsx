@@ -90,13 +90,37 @@ export default function Header() {
     // Collect all placed course IDs for the appendix
     const allPlacedIds = Object.keys(placements);
 
-    // Helper to format co‑op blocks (similar to PDF export)
+    // Helper to format co‑op and internship blocks
     const workStartMap = {};
     const workContMap = {};
-    Object.entries(workPl).forEach(([wid, semId]) => {
+    Object.entries(workPl).forEach(([wid, data]) => {
+      const semId = data?.semId;
+      if (!semId) return;
       workStartMap[semId] = wid;
-      const nxt = SEM_NEXT[semId];
-      if (nxt) workContMap[nxt] = wid;
+      if (data.duration === 6) {
+        const nxt = SEM_NEXT[semId];
+        if (nxt) workContMap[nxt] = wid;
+      } else if (data.duration === 4) {
+        const sem = SEMESTERS.find(s => s.id === semId);
+        if (sem?.type === "summer") {
+          const nxt = SEM_NEXT[semId];
+          if (nxt) workContMap[nxt] = wid;
+        }
+      }
+    });
+    const internStartMap = {};
+    const internContMap = {};
+    Object.entries(internPl).forEach(([iid, data]) => {
+      const semId = data?.semId;
+      if (!semId) return;
+      internStartMap[semId] = iid;
+      if (data.duration === 4) {
+        const sem = SEMESTERS.find(s => s.id === semId);
+        if (sem?.type === "summer") {
+          const nxt = SEM_NEXT[semId];
+          if (nxt) internContMap[nxt] = iid;
+        }
+      }
     });
 
     // Iterate through semesters in order
@@ -106,8 +130,11 @@ export default function Header() {
       const hasWork = !!workStartMap[semId];
       const hasCont = !!workContMap[semId];
 
-      // Skip empty semesters with no co‑op activity
-      if (idsInSem.length === 0 && !hasWork && !hasCont) continue;
+      const hasIntern     = !!internStartMap[semId];
+      const hasInternCont = !!internContMap[semId];
+
+      // Skip empty semesters
+      if (idsInSem.length === 0 && !hasWork && !hasCont && !hasIntern && !hasInternCont) continue;
 
       const semLabel = sem.label;
       const isDone = (SEM_INDEX[semId] ?? 99) < currentIdx;
@@ -116,21 +143,50 @@ export default function Header() {
 
       // Co‑op continuation row
       if (hasCont && !hasWork) {
-        const contWorkId = workContMap[semId];
-        const workItem = WORK_TERMS.find(w => w.id === contWorkId);
+        const contWorkId   = workContMap[semId];
+        const contWorkData = workPl[contWorkId];
+        const workItem     = contWorkData ? (WORK_TERMS.find(w => w.duration === contWorkData.duration) ?? WORK_TERMS[0]) : null;
         if (workItem) {
-          semLines.push(`  ⤷ ${workItem.label} (continues)`);
+          const co = contWorkData.company ? ` @ ${contWorkData.company}` : '';
+          semLines.push(`  ⤷ ${workItem.label}${co} (continues)`);
         }
       }
 
       // Co‑op start row
       if (hasWork) {
-        const workId = workStartMap[semId];
-        const workItem = WORK_TERMS.find(w => w.id === workId);
-        const nextSem = SEM_NEXT[semId];
+        const workId   = workStartMap[semId];
+        const workData = workPl[workId];
+        const workItem = workData ? (WORK_TERMS.find(w => w.duration === workData.duration) ?? WORK_TERMS[0]) : null;
         if (workItem) {
-          const contPart = nextSem ? ` (spans into ${semById[nextSem]?.label ?? nextSem})` : '';
-          semLines.push(`  ⤷ ${workItem.label}${contPart}`);
+          const nextSemId = SEM_NEXT[semId];
+          const contPart  = nextSemId ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
+          const co        = workData.company  ? ` @ ${workData.company}`  : '';
+          const role      = workData.subline  ? ` · ${workData.subline}`  : '';
+          semLines.push(`  ⤷ ${workItem.label}${co}${role}${contPart}`);
+        }
+      }
+
+      // Internship continuation row
+      if (hasInternCont && !hasIntern) {
+        const contInternId   = internContMap[semId];
+        const contInternData = internPl[contInternId];
+        if (contInternData) {
+          const co = contInternData.company ? ` @ ${contInternData.company}` : '';
+          semLines.push(`  ⤷ Full-Time Internship${co} (continues)`);
+        }
+      }
+
+      // Internship start row
+      if (hasIntern) {
+        const internId   = internStartMap[semId];
+        const internData = internPl[internId];
+        if (internData) {
+          const nextSemId  = SEM_NEXT[semId];
+          const spansNext  = internData.duration === 4 && nextSemId && SEMESTERS.find(s => s.id === semId)?.type === "summer";
+          const contPart   = spansNext ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
+          const co         = internData.company ? ` @ ${internData.company}` : '';
+          const role       = internData.subline ? ` · ${internData.subline}` : '';
+          semLines.push(`  ⤷ Full-Time Internship${co}${role}${contPart}`);
         }
       }
 

@@ -47,6 +47,8 @@ export function getConnections(id, edges) {
 
 // ── PDF export ───────────────────────────────────────────────────
 
+const pdfFaviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+
 const NP_LABELS = {
   ND:"Natural/Designed World", EI:"Creative Express/Innov",
   IC:"Interpreting Culture",   FQ:"Formal/Quant Reasoning",
@@ -253,18 +255,20 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 
     // Co-op continuation row
     if (hasCont && !hasWork) {
-      const contWorkId = workContMap[sem.id];
-      const contItem   = WORK_TERMS.find(w => w.id === contWorkId);
+      const contWorkId   = workContMap[sem.id];
+      const contWorkData = workPl[contWorkId];
+      const contItem     = contWorkData ? (WORK_TERMS.find(w => w.duration === contWorkData.duration) ?? WORK_TERMS[0]) : null;
       if (contItem) {
+        const contCompany = contWorkData.company || "";
         return `<div class="sem-block${tag}">
           <div class="sem-head">
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
-          <div class="coop-row" style="border-color:${contItem.color}">
-            <div class="coop-bar" style="background:${contItem.color}"></div>
+          <div class="coop-row" style="border-color:#e0e0e0">
+            <div class="coop-icon"><div class="coop-bar"></div></div>
             <div>
-              <div class="coop-title" style="color:${contItem.color}">\u2195 ${contItem.label} CONTINUES</div>
+              <div class="coop-title">${contItem.label} CONTINUES${contCompany ? `<span style="text-transform:none"> \u00b7 ${contCompany}</span>` : ""}</div>
               <div class="coop-sub">6-month block</div>
             </div>
           </div>
@@ -275,18 +279,22 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     // Co-op start row
     if (hasWork) {
       const workId   = workStartMap[sem.id];
-      const workItem = WORK_TERMS.find(w => w.id === workId);
+      const workData2 = workPl[workId];
+      const workItem = workData2 ? (WORK_TERMS.find(w => w.duration === workData2.duration) ?? WORK_TERMS[0]) : null;
       if (workItem) {
-        const nextSem = dynSems.find(s => s.id === semNextMap[sem.id]);
+        const nextSem  = dynSems.find(s => s.id === semNextMap[sem.id]);
+        const company  = workData2.company  || "";
+        const role     = workData2.subline  || "";
         return `<div class="sem-block${tag}">
           <div class="sem-head">
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
-          <div class="coop-row" style="border-color:${workItem.color}">
-            <div class="coop-bar" style="background:${workItem.color}"></div>
-            <div>
-              <div class="coop-title" style="color:${workItem.color}">${workItem.label}</div>
+          <div class="coop-row" style="border-color:#e0e0e0">
+            <div class="coop-icon">${workData2.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(workData2.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div style="flex:1">
+              <div class="coop-title">${workItem.label}${company ? `<span style="text-transform:none"> \u00b7 ${company}</span>` : ""}</div>
+              ${role ? `<div class="coop-role">${role}</div>` : ""}
               <div class="coop-sub">${nextSem ? `Spans into ${nextSem.label} \u00b7 6-month block` : "6-month block"}</div>
             </div>
           </div>
@@ -305,10 +313,10 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
-          <div class="coop-row" style="border-color:${contInternTerm.color}">
-            <div class="coop-bar" style="background:${contInternTerm.color}"></div>
+          <div class="coop-row" style="border-color:#e0e0e0">
+            <div class="coop-icon"><div class="coop-bar"></div></div>
             <div>
-              <div class="coop-title" style="color:${contInternTerm.color}">\u2195 INTERNSHIP CONTINUES</div>
+              <div class="coop-title" style="text-transform:none;letter-spacing:0.03em">Internship Continues</div>
               <div class="coop-sub">4-month block</div>
             </div>
           </div>
@@ -329,10 +337,11 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
-          <div class="coop-row" style="border-color:${internTerm.color}">
-            <div class="coop-bar" style="background:${internTerm.color}"></div>
-            <div>
-              <div class="coop-title" style="color:${internTerm.color}">Full-Time Internship</div>
+          <div class="coop-row" style="border-color:#e0e0e0">
+            <div class="coop-icon">${internData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(internData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div style="flex:1">
+              <div class="coop-title" style="text-transform:none;letter-spacing:0.03em">Full-Time Internship${internData.company ? ` \u00b7 ${internData.company}` : ""}</div>
+              ${internData.subline ? `<div class="coop-role">${internData.subline}</div>` : ""}
               <div class="coop-sub">${spansNext ? `Spans into ${nextSem.label} \u00b7 4-month block` : `${internData.duration}-month internship`}</div>
             </div>
           </div>
@@ -481,7 +490,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .rc-icon-done    { background: #dcfce7; border-color: #86efac; color: #16a34a; }
   .rc-icon-planned { background: #dbeafe; border-color: #93c5fd; color: #2563eb; font-size: 9px; }
   .rc-icon-missing { background: #fff; border-color: #d8d8d8; color: #ccc; }
-  .rc-icon-dimmed  { background: #fff; border-color: #d8d8d8; color: #aaa; }
+  .rc-icon-dimmed  { background: #f0f0f0; border-color: #999; color: #333; }
   .rc-lbl    { font-size: 10px; }
   .rc-done    .rc-lbl { color: #15803d; }
   .rc-planned .rc-lbl { color: #1d4ed8; }
@@ -528,14 +537,17 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .np-badges { display: flex; gap: 2px; flex-shrink: 0; }
   .np-badge  { font-size: 8px; font-weight: 700; background: #f3f4f6;
                border: 1px solid #e0e0e0; border-radius: 3px; padding: 1px 4px; color: #666; }.coop-row  { display: flex; align-items: center; gap: 10px;
-               padding: 10px 14px; border: 2px solid; border-radius: 6px;
+               padding: 10px 14px; border: 1.5px solid; border-radius: 6px;
                margin-top: 3px;
                -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .coop-bar  { width: 4px; align-self: stretch; border-radius: 2px; min-height: 36px;
-               -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .coop-title { font-size: 13px; font-weight: 900; letter-spacing: 0.05em;
+  .coop-icon  { width: 28px; display: flex; justify-content: center; align-self: stretch; flex-shrink: 0; }
+  .coop-bar   { width: 4px; border-radius: 2px; align-self: stretch; min-height: 36px; background: #e0e0e0;
                 -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .coop-logo  { width: 28px; height: 28px; object-fit: contain; align-self: center; }
+  .coop-title { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: #595959;
+                text-transform: uppercase; font-family: "Inter", -apple-system, sans-serif; }
   .coop-sub   { font-size: 10px; color: #888; margin-top: 2px; }
+  .coop-role  { font-size: 10px; color: #595959; margin-top: 1px; font-style: italic; }
   /* Appendix styles */
   .appendix-section {
     margin-top: 20px;
@@ -660,15 +672,13 @@ ${appendixHtml.join('\n')}
 
 </body></html>`;
 
-  const w = window.open("", "_blank");
-  if (!w) { alert("Pop-up blocked — please allow pop-ups for this site and try again."); return; }
-  w.document.write(html);
-  w.document.close();
-  // Replace about:blank in the print footer with the app URL
-  try { w.history.replaceState({}, "NU Map", window.location.href); } catch {}
+  const blob = new Blob([html], { type: "text/html" });
+  const url  = URL.createObjectURL(blob);
+  const w    = window.open(url, "_blank");
+  if (!w) { URL.revokeObjectURL(url); alert("Pop-up blocked — please allow pop-ups for this site and try again."); return; }
   w.focus();
   // Close this tab automatically once the print dialog is dismissed.
-  w.onafterprint = () => w.close();
+  w.onafterprint = () => { w.close(); URL.revokeObjectURL(url); };
   setTimeout(() => { w.print(); }, 400);
 }
 

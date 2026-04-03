@@ -832,7 +832,7 @@ export function PlannerProvider({ children }) {
         const next = { ...prev };
         if (id) delete next[id];
         const newId = id || `coop-${Date.now()}`;
-        next[newId] = { semId: startId, duration };
+        next[newId] = { ...(id ? prev[id] : {}), semId: startId, duration };
         return next;
       });
     } else if (type === "intern") {
@@ -843,7 +843,7 @@ export function PlannerProvider({ children }) {
         const next = { ...prev };
         if (id) delete next[id]; // remove old placement if moving an existing instance
         const newId = id || `int-${Date.now()}`;
-        next[newId] = { semId: startId, duration };
+        next[newId] = { ...(id ? prev[id] : {}), semId: startId, duration };
         return next;
       });
     } else {

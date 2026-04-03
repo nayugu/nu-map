@@ -27,6 +27,7 @@ export default function SemRow({ sem }) {
 
   const { themeName } = useTheme();
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
+  const placeholderColor = themeName === "dark" ? "#3e4856" : "#e4e4e4";
 
   const semStatus  = getSemStatus(sem.id);
   const isDone     = semStatus === "completed";
@@ -118,7 +119,7 @@ export default function SemRow({ sem }) {
         style={{
           display: "flex", alignItems: "stretch", marginBottom: 3, cursor: "pointer",
           background: "var(--card-bg)",
-          border: isActive ? "2px solid var(--active)" : `1px solid ${contInternItem.color}`,
+          border: isActive ? "2px solid var(--active)" : "1px solid var(--border-card)",
           borderRadius: 6, padding: "6px 10px",
           opacity: isDone ? 0.9 : 1,
           boxShadow: isActive ? "var(--shadow-active-row)" : "none",
@@ -130,9 +131,9 @@ export default function SemRow({ sem }) {
           <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 0 }}>{sem.sub}</div>
         </div>
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
-          <div style={{ width: 3, alignSelf: "stretch", background: contInternItem.color, borderRadius: 2 }} />
+          <div style={{ width: 3, alignSelf: "stretch", background: "var(--border-2)", borderRadius: 2 }} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 800, color: contInternItem.color }}>↕ INTERNSHIP CONTINUES</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Continues</div>
             <div style={{ fontSize: 10, color: "var(--text-4)" }}>4-month block · drag to move</div>
           </div>
         </div>
@@ -148,7 +149,7 @@ export default function SemRow({ sem }) {
         style={{
           display: "flex", alignItems: "stretch", marginBottom: 3, cursor: "pointer",
           background: `var(--card-bg)`,
-          border: isActive ? "2px solid var(--active)" : `1px solid ${contItem.color}`,
+          border: isActive ? "2px solid var(--active)" : "1px solid var(--border-card)",
           borderRadius: 6, padding: "6px 10px",
           opacity: isDone ? 0.9 : 1,
           boxShadow: isActive ? "var(--shadow-active-row)" : "none",
@@ -170,9 +171,9 @@ export default function SemRow({ sem }) {
           <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19 }}>{sem.sub}</div>
         </div>
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
-          <div style={{ width: 3, alignSelf: "stretch", background: contItem.color, borderRadius: 2 }} />
+          <div style={{ width: 3, alignSelf: "stretch", background: "var(--border-2)", borderRadius: 2 }} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 800, color: contItem.color }}>↕ {contItem.label} CONTINUES</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONTINUES</div>
             <div style={{ fontSize: 10, color: "var(--text-4)" }}>6-month block · drag to move</div>
           </div>
         </div>
@@ -264,19 +265,20 @@ export default function SemRow({ sem }) {
             style={{
               flex: 1, minHeight: 58, minWidth: 200,
               background: `var(--card-bg)`,
-              border: `2px solid ${workItem.color}`,
+              border: "1px solid var(--border-card)",
               borderRadius: 6, padding: "8px 12px 8px 14px", cursor: "grab",
               display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ fontSize: 14, fontWeight: 900, color: workItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNum}
               </div>
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
                 <CompanySearch
                   name={workData.company}
                   color={companyColor}
+                  emptyColor={placeholderColor}
                   fontSize={14}
                   onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
@@ -285,10 +287,11 @@ export default function SemRow({ sem }) {
                   onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  className="work-input"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo domain={workData.companyDomain} size={40} />
+              <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={40} />
               <button
                 onClick={e => { e.stopPropagation(); pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[workItem.id]; return n; }); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -317,7 +320,7 @@ export default function SemRow({ sem }) {
               flex: 1, minHeight: 58, minWidth: 200,
               position: "relative",
               background: "var(--card-bg)",
-              border: `2px solid ${internItem.color}`,
+              border: "1px solid var(--border-card)",
               borderRadius: 6, padding: "8px 12px 8px 14px", cursor: "grab",
               display: "flex", flexDirection: "column", justifyContent: "center",
             }}
@@ -334,13 +337,14 @@ export default function SemRow({ sem }) {
               </div>
             )}
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ fontSize: 14, fontWeight: 900, color: internItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNum(internId)}
               </div>
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
                 <CompanySearch
                   name={internPl[internItem.id]?.company}
                   color={companyColor}
+                  emptyColor={placeholderColor}
                   fontSize={14}
                   onChange={v => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
@@ -349,10 +353,11 @@ export default function SemRow({ sem }) {
                   onChange={e => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  className="work-input"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: internPl[internItem.id]?.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo domain={internPl[internItem.id]?.companyDomain} size={40} />
+              <CompanyLogo key={internPl[internItem.id]?.companyDomain || ""} domain={internPl[internItem.id]?.companyDomain} size={40} />
               <button
                 onClick={e => { e.stopPropagation(); pushUndo(); setInternPl(p => { const n = { ...p }; delete n[internItem.id]; return n; }); }}
                 onMouseDown={e => e.stopPropagation()}

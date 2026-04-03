@@ -27,6 +27,7 @@ export default function SummerRow({ semA, semB }) {
 
   const { themeName } = useTheme();
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
+  const placeholderColor = themeName === "dark" ? "#3e4856" : "#e4e4e4";
 
   // Collapsible state for other credits
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
@@ -74,7 +75,7 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, color: workItem.color }}>{sessionLabel}</span>
+            <span style={{ fontSize: 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div
@@ -88,19 +89,20 @@ export default function SummerRow({ semA, semB }) {
             style={{
               width: "100%", minHeight: 58,
               background: "var(--card-bg)",
-              border: `2px solid ${workItem.color}`,
+              border: "1px solid var(--border-card)",
               borderRadius: 6, padding: "8px 10px 8px 12px",
               cursor: "grab", display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ fontSize: 13, fontWeight: 900, color: workItem.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNumFor(workItem.id)}
               </div>
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
                 <CompanySearch
                   name={workData.company}
                   color={companyColor}
+                  emptyColor={placeholderColor}
                   fontSize={13}
                   onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
@@ -109,10 +111,11 @@ export default function SummerRow({ semA, semB }) {
                   onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  className="work-input"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo domain={workData.companyDomain} size={34} />
+              <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={34} />
               <button
                 onClick={e => { e.stopPropagation(); removeWork(workItem.id); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -142,16 +145,16 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, color: contItem.color }}>{sessionLabel}</span>
+            <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div style={{
             width: "100%", minHeight: 58,
-            border: `2px solid ${contItem.color}`,
+            border: "1px solid var(--border-card)",
             borderRadius: 6, padding: "8px 14px",
             display: "flex", flexDirection: "column", justifyContent: "center",
           }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: contItem.color }}>↕ {contItem.label} CONT.</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONT.</div>
             <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 2 }}>6-month block</div>
           </div>
         </div>
@@ -170,7 +173,7 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, color: internTerm.color }}>{sessionLabel}</span>
+            <span style={{ fontSize: 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div
@@ -184,19 +187,20 @@ export default function SummerRow({ semA, semB }) {
             style={{
               width: "100%", minHeight: 58,
               background: "var(--card-bg)",
-              border: `2px solid ${internTerm.color}`,
+              border: "1px solid var(--border-card)",
               borderRadius: 6, padding: "8px 10px 8px 12px",
               cursor: "grab", display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ fontSize: 13, fontWeight: 900, color: internTerm.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNumFor(internId)}
               </div>
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
                 <CompanySearch
                   name={internData.company}
                   color={companyColor}
+                  emptyColor={placeholderColor}
                   fontSize={13}
                   onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
@@ -205,10 +209,11 @@ export default function SummerRow({ semA, semB }) {
                   onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  className="work-input"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo domain={internData.companyDomain} size={34} />
+              <CompanyLogo key={internData.companyDomain || ""} domain={internData.companyDomain} size={34} />
               <button
                 onClick={e => { e.stopPropagation(); removeIntern(internId); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -238,16 +243,16 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, color: contInternTerm.color }}>{sessionLabel}</span>
+            <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div style={{
             width: "100%", minHeight: 58,
-            border: `2px solid ${contInternTerm.color}`,
+            border: "1px solid var(--border-card)",
             borderRadius: 6, padding: "8px 14px",
             display: "flex", flexDirection: "column", justifyContent: "center",
           }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: contInternTerm.color }}>↕ INTERNSHIP CONT.</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Cont.</div>
             <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 2 }}>4-month block</div>
           </div>
         </div>
