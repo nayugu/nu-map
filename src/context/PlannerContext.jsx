@@ -402,9 +402,8 @@ export function PlannerProvider({ children }) {
           }
         });
 
-        // Substitution-inherited prereq lines (always-on).
-        // For each substitution, draw dashed green lines from the substituting course
-        // to every placed course that lists the substituted course as a direct prereq.
+        // Substitution-inherited prereq violation lines (always-on, mirrors normal prereq logic).
+        // Only draw when the substituting course is in the wrong order relative to the dependent.
         substitutions.forEach(({ from: subFrom, to: subTo }) => {
           if (!placements[subFrom] || placements[subFrom] === "incoming") return;
           allEdges.forEach(e => {
@@ -412,13 +411,14 @@ export function PlannerProvider({ children }) {
             if (!placements[e.to] || placements[e.to] === "incoming") return;
             // Skip if already drawn by selection logic
             if (selectedId && (subFrom === selectedId || e.to === selectedId)) return;
+            const subFromIdx = SEM_INDEX[placements[subFrom]] ?? -1;
+            const depIdx     = SEM_INDEX[placements[e.to]]    ?? -1;
+            // Only draw violation (wrong order), not green satisfied lines
+            if (subFromIdx < depIdx) return;
             const fp = getCenter(subFrom);
             const tp = getCenter(e.to);
             if (!fp || !tp) return;
-            const subFromIdx = SEM_INDEX[placements[subFrom]] ?? -1;
-            const depIdx     = SEM_INDEX[placements[e.to]]    ?? -1;
-            const subType    = subFromIdx < depIdx ? "substitution-prereq" : "substitution-prereq-order";
-            newLines.push({ from: subFrom, to: e.to, type: subType, fp, tp });
+            newLines.push({ from: subFrom, to: e.to, type: "substitution-prereq-order", fp, tp });
           });
         });
       }
