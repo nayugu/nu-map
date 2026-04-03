@@ -1,6 +1,21 @@
 {
   "runs": [
     {
+      "type": "nupath-scan",
+      "subject": "🎓 NUpath Scan",
+      "timestamp": "2026-04-03T18:39:45.189Z",
+      "source": "Tableau CSV (direct)",
+      "stats": {
+        "scanned": 1459,
+        "changed": 0,
+        "gained": 0,
+        "lost": 0,
+        "gainedOnly": 0,
+        "lostOnly": 0,
+        "mixed": 0
+      }
+    },
+    {
       "type": "nupath-manual-fix",
       "subject": "🎓 NUpath Manual Fix",
       "timestamp": "2026-04-03T14:34:05.637Z",
