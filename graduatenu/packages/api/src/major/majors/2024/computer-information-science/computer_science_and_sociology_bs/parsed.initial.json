@@ -174,59 +174,65 @@
       "title": "Khoury Elective Courses",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "CS",
-          "idRangeStart": 2500,
-          "idRangeEnd": 9999,
-          "exceptions": [
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
             {
+              "type": "RANGE",
               "subject": "CS",
-              "classId": 5010,
-              "type": "COURSE"
-            }
-          ]
-        },
-        {
-          "type": "RANGE",
-          "subject": "CY",
-          "idRangeStart": 2000,
-          "idRangeEnd": 9999,
-          "exceptions": [
+              "idRangeStart": 2500,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "subject": "CS",
+                  "classId": 5010,
+                  "type": "COURSE"
+                }
+              ]
+            },
             {
+              "type": "RANGE",
               "subject": "CY",
-              "classId": 4930,
-              "type": "COURSE"
-            }
-          ]
-        },
-        {
-          "type": "RANGE",
-          "subject": "DS",
-          "idRangeStart": 2500,
-          "idRangeEnd": 9999,
-          "exceptions": [
+              "idRangeStart": 2000,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "subject": "CY",
+                  "classId": 4930,
+                  "type": "COURSE"
+                }
+              ]
+            },
             {
+              "type": "RANGE",
               "subject": "DS",
-              "classId": 4900,
-              "type": "COURSE"
-            }
-          ]
-        },
-        {
-          "type": "RANGE",
-          "subject": "IS",
-          "idRangeStart": 2000,
-          "idRangeEnd": 9999,
-          "exceptions": [
+              "idRangeStart": 2500,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "subject": "DS",
+                  "classId": 4900,
+                  "type": "COURSE"
+                }
+              ]
+            },
             {
+              "type": "RANGE",
               "subject": "IS",
-              "classId": 4900,
-              "type": "COURSE"
+              "idRangeStart": 2000,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "subject": "IS",
+                  "classId": 4900,
+                  "type": "COURSE"
+                }
+              ]
             }
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -270,28 +276,34 @@
       "title": "Sociology Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "SOCL",
-          "idRangeStart": 1000,
-          "idRangeEnd": 1999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "SOCL",
-          "idRangeStart": 2000,
-          "idRangeEnd": 3999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "SOCL",
-          "idRangeStart": 4000,
-          "idRangeEnd": 4999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 1000,
+              "idRangeEnd": 1999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 2000,
+              "idRangeEnd": 3999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 4000,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            }
+          ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

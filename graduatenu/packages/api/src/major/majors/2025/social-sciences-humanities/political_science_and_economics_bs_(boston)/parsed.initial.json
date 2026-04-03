@@ -193,49 +193,55 @@
       "title": "Economics Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 1200,
-          "idRangeEnd": 1999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 1200,
-          "idRangeEnd": 1999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 2990,
-          "idRangeEnd": 3559,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 3561,
-          "idRangeEnd": 4689,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 4900,
-          "idRangeEnd": 4996,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 5200,
-          "idRangeEnd": 5999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 1200,
+              "idRangeEnd": 1999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 1200,
+              "idRangeEnd": 1999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 2990,
+              "idRangeEnd": 3559,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 3561,
+              "idRangeEnd": 4689,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 4900,
+              "idRangeEnd": 4996,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 5200,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -264,35 +270,41 @@
           "title": "Economics",
           "requirements": [
             {
-              "type": "RANGE",
-              "subject": "ECON",
-              "idRangeStart": 1200,
-              "idRangeEnd": 1999,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "ECON",
-              "idRangeStart": 2990,
-              "idRangeEnd": 4689,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "ECON",
-              "idRangeStart": 4900,
-              "idRangeEnd": 4996,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "ECON",
-              "idRangeStart": 5200,
-              "idRangeEnd": 5999,
-              "exceptions": []
+              "type": "XOM",
+              "numCreditsMin": 8,
+              "courses": [
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 1200,
+                  "idRangeEnd": 1999,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 2990,
+                  "idRangeEnd": 4689,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 4900,
+                  "idRangeEnd": 4996,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 5200,
+                  "idRangeEnd": 5999,
+                  "exceptions": []
+                }
+              ]
             }
           ],
-          "minRequirementCount": 4
+          "minRequirementCount": 1
         }
       ],
       "minRequirementCount": 2

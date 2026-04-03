@@ -101,63 +101,69 @@
       "title": "Advanced Engineering Elective",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "BIOE",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "CHME",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "CIVE",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "EECE",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ENGR",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "IE",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ME",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "MEIE",
-          "idRangeStart": 0,
-          "idRangeEnd": 9999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOE",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHME",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CIVE",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ENGR",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "IE",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ME",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "MEIE",
+              "idRangeStart": 0,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            }
+          ]
         }
       ],
-      "minRequirementCount": 8
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

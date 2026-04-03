@@ -433,89 +433,95 @@
       "title": "Technical Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "BIOL",
-          "idRangeStart": 2301,
-          "idRangeEnd": 5999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "CHEM",
-          "idRangeStart": 2311,
-          "idRangeEnd": 5999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "CHME",
-          "idRangeStart": 2001,
-          "idRangeEnd": 4699,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "CIVE",
-          "idRangeStart": 2001,
-          "idRangeEnd": 4699,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "CS",
-          "idRangeStart": 2990,
-          "idRangeEnd": 4900,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "EECE",
-          "idRangeStart": 2001,
-          "idRangeEnd": 5999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ENVR",
-          "idRangeStart": 2300,
-          "idRangeEnd": 5999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "IE",
-          "idRangeStart": 2001,
-          "idRangeEnd": 4699,
-          "exceptions": []
-        },
-        {
-          "type": "COURSE",
-          "classId": 2280,
-          "subject": "MATH"
-        },
-        {
-          "type": "RANGE",
-          "subject": "MATH",
-          "idRangeStart": 2321,
-          "idRangeEnd": 5999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ME",
-          "idRangeStart": 2001,
-          "idRangeEnd": 4699,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "PHYS",
-          "idRangeStart": 2303,
-          "idRangeEnd": 7999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 24,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2301,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHEM",
+              "idRangeStart": 2311,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHME",
+              "idRangeStart": 2001,
+              "idRangeEnd": 4699,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CIVE",
+              "idRangeStart": 2001,
+              "idRangeEnd": 4699,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 2990,
+              "idRangeEnd": 4900,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 2001,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ENVR",
+              "idRangeStart": 2300,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "IE",
+              "idRangeStart": 2001,
+              "idRangeEnd": 4699,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "classId": 2280,
+              "subject": "MATH"
+            },
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 2321,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ME",
+              "idRangeStart": 2001,
+              "idRangeEnd": 4699,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 2303,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            }
+          ]
         }
       ],
-      "minRequirementCount": 12
+      "minRequirementCount": 1
     }
   ],
   "concentrations": {

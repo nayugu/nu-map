@@ -308,28 +308,34 @@
           "title": "Upper-Level Elective",
           "requirements": [
             {
-              "type": "RANGE",
-              "subject": "BIOL",
-              "idRangeStart": 3405,
-              "idRangeEnd": 9999,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "BNSC",
-              "idRangeStart": 4970,
-              "idRangeEnd": 9999,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "PSYC",
-              "idRangeStart": 3404,
-              "idRangeEnd": 9999,
-              "exceptions": []
+              "type": "XOM",
+              "numCreditsMin": 6,
+              "courses": [
+                {
+                  "type": "RANGE",
+                  "subject": "BIOL",
+                  "idRangeStart": 3405,
+                  "idRangeEnd": 9999,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "BNSC",
+                  "idRangeStart": 4970,
+                  "idRangeEnd": 9999,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "PSYC",
+                  "idRangeStart": 3404,
+                  "idRangeEnd": 9999,
+                  "exceptions": []
+                }
+              ]
             }
           ],
-          "minRequirementCount": 3
+          "minRequirementCount": 1
         }
       ],
       "minRequirementCount": 3

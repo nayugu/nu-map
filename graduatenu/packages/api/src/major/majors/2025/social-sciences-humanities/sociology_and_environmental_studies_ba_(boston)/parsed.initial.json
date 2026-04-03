@@ -52,21 +52,27 @@
       "title": "Sociology Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "SOCL",
-          "idRangeStart": 1200,
-          "idRangeEnd": 2999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "SOCL",
-          "idRangeStart": 3000,
-          "idRangeEnd": 4999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 1200,
+              "idRangeEnd": 2999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 3000,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            }
+          ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

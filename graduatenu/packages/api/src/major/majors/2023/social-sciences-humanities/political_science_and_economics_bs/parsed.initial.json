@@ -210,69 +210,16 @@
       "title": "Economics Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 1200,
-          "idRangeEnd": 1999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 1200,
-          "idRangeEnd": 1999,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 2990,
-          "idRangeEnd": 4689,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 4900,
-          "idRangeEnd": 4996,
-          "exceptions": []
-        },
-        {
-          "type": "RANGE",
-          "subject": "ECON",
-          "idRangeStart": 5200,
-          "idRangeEnd": 5999,
-          "exceptions": []
-        }
-      ],
-      "minRequirementCount": 5
-    },
-    {
-      "type": "SECTION",
-      "title": "Supporting Courses",
-      "requirements": [],
-      "minRequirementCount": 0
-    },
-    {
-      "type": "SECTION",
-      "title": "Combination A",
-      "requirements": [
-        {
-          "type": "SECTION",
-          "title": "Statistics",
-          "requirements": [
+          "type": "XOM",
+          "numCreditsMin": 10,
+          "courses": [
             {
-              "type": "COURSE",
-              "classId": 2400,
-              "subject": "POLS"
-            }
-          ],
-          "minRequirementCount": 1
-        },
-        {
-          "type": "SECTION",
-          "title": "Economics",
-          "requirements": [
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 1200,
+              "idRangeEnd": 1999,
+              "exceptions": []
+            },
             {
               "type": "RANGE",
               "subject": "ECON",
@@ -301,8 +248,73 @@
               "idRangeEnd": 5999,
               "exceptions": []
             }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Supporting Courses",
+      "requirements": [],
+      "minRequirementCount": 0
+    },
+    {
+      "type": "SECTION",
+      "title": "Combination A",
+      "requirements": [
+        {
+          "type": "SECTION",
+          "title": "Statistics",
+          "requirements": [
+            {
+              "type": "COURSE",
+              "classId": 2400,
+              "subject": "POLS"
+            }
           ],
-          "minRequirementCount": 4
+          "minRequirementCount": 1
+        },
+        {
+          "type": "SECTION",
+          "title": "Economics",
+          "requirements": [
+            {
+              "type": "XOM",
+              "numCreditsMin": 8,
+              "courses": [
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 1200,
+                  "idRangeEnd": 1999,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 2990,
+                  "idRangeEnd": 4689,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 4900,
+                  "idRangeEnd": 4996,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 5200,
+                  "idRangeEnd": 5999,
+                  "exceptions": []
+                }
+              ]
+            }
+          ],
+          "minRequirementCount": 1
         }
       ],
       "minRequirementCount": 2
