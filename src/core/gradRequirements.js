@@ -270,6 +270,44 @@ function buildGeneralElectivesSection(placedSet, sectionResults, courseMap) {
 }
 
 /**
+ * Merge sections that share the same title (parser bug in some combined majors).
+ * Requirements are unioned by identity key; minRequirementCount takes the max.
+ */
+function mergeDuplicateSections(sections) {
+  const seen = new Map(); // title → index in result
+  const result = [];
+  for (const section of sections) {
+    const title = section.title;
+    if (title && seen.has(title)) {
+      const existing = result[seen.get(title)];
+      const existingKeys = new Set(
+        existing.requirements.map(r =>
+          r.type === 'COURSE' ? `C:${r.subject}:${r.classId}` :
+          r.type === 'RANGE'  ? `R:${r.subject}:${r.idRangeStart}:${r.idRangeEnd}` : null
+        ).filter(Boolean)
+      );
+      for (const req of (section.requirements ?? [])) {
+        const key =
+          req.type === 'COURSE' ? `C:${req.subject}:${req.classId}` :
+          req.type === 'RANGE'  ? `R:${req.subject}:${req.idRangeStart}:${req.idRangeEnd}` : null;
+        if (!key || !existingKeys.has(key)) {
+          existing.requirements = [...existing.requirements, req];
+          if (key) existingKeys.add(key);
+        }
+      }
+      existing.minRequirementCount = Math.max(
+        existing.minRequirementCount ?? 0,
+        section.minRequirementCount ?? 0
+      );
+    } else {
+      if (title) seen.set(title, result.length);
+      result.push({ ...section, requirements: [...(section.requirements ?? [])] });
+    }
+  }
+  return result;
+}
+
+/**
  * Allocate courses to sections of a major, ensuring each course is used at most once.
  * Returns an array of section result objects, each with an additional `allocatedCourses` Set.
  * Automatically appends General Electives section at the end.
@@ -277,8 +315,10 @@ function buildGeneralElectivesSection(placedSet, sectionResults, courseMap) {
 export function allocateMajor(major, placedSet, courseMap) {
   const used = new Set();
   // Filter out "Required General Electives" placeholder - we generate our own
-  const sectionsToAllocate = (major.requirementSections ?? []).filter(
-    section => section.title !== 'Required General Electives'
+  const sectionsToAllocate = mergeDuplicateSections(
+    (major.requirementSections ?? []).filter(
+      section => section.title !== 'Required General Electives'
+    )
   );
   const sectionResults = allocateSections(sectionsToAllocate, placedSet, used, courseMap);
 
@@ -709,8 +749,10 @@ export function calculateGeneralElectives(placedSet, allocatedSet, courseMap) {
 export function allocateMajorWithElectives(major, placedSet, courseMap) {
   const globalUsed = new Set();
   // Filter out "Required General Electives" placeholder - we generate our own
-  const sectionsToAllocate = (major.requirementSections ?? []).filter(
-    section => section.title !== 'Required General Electives'
+  const sectionsToAllocate = mergeDuplicateSections(
+    (major.requirementSections ?? []).filter(
+      section => section.title !== 'Required General Electives'
+    )
   );
   const sections = allocateSections(sectionsToAllocate, placedSet, globalUsed, courseMap);
   const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap);
