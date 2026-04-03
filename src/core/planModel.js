@@ -260,15 +260,17 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
       const contItem     = contWorkData ? (WORK_TERMS.find(w => w.duration === contWorkData.duration) ?? WORK_TERMS[0]) : null;
       if (contItem) {
         const contCompany = contWorkData.company || "";
+        const contRole    = contWorkData.subline  || "";
         return `<div class="sem-block${tag}">
           <div class="sem-head">
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon"><div class="coop-bar"></div></div>
-            <div>
+            <div class="coop-icon">${contWorkData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(contWorkData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div style="flex:1">
               <div class="coop-title">${contItem.label} CONTINUES${contCompany ? `<span style="text-transform:none"> \u00b7 ${contCompany}</span>` : ""}</div>
+              ${contRole ? `<div class="coop-role">${contRole}</div>` : ""}
               <div class="coop-sub">6-month block</div>
             </div>
           </div>
@@ -308,15 +310,18 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
       const contInternData = internPl[contInternId];
       const contInternTerm = contInternData ? (INTERNSHIP_TERMS.find(t => t.duration === contInternData.duration) ?? INTERNSHIP_TERMS[0]) : null;
       if (contInternTerm) {
+        const contInternCompany = contInternData.company || "";
+        const contInternRole    = contInternData.subline  || "";
         return `<div class="sem-block${tag}">
           <div class="sem-head">
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon"><div class="coop-bar"></div></div>
-            <div>
-              <div class="coop-title" style="text-transform:none;letter-spacing:0.03em">Internship Continues</div>
+            <div class="coop-icon">${contInternData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(contInternData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div style="flex:1">
+              <div class="coop-title" style="text-transform:none;letter-spacing:0.03em">Internship Continues${contInternCompany ? ` \u00b7 ${contInternCompany}` : ""}</div>
+              ${contInternRole ? `<div class="coop-role">${contInternRole}</div>` : ""}
               <div class="coop-sub">4-month block</div>
             </div>
           </div>
