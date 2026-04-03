@@ -7,7 +7,7 @@ const LOCAL_URL = `${import.meta.env.BASE_URL}all-courses.json`;
 const API_URL   = "https://husker.vercel.app/courses/all";
 
 async function tryFetch(url) {
-  const res = await fetch(url, { cache: "default" });
+  const res = await fetch(url, { cache: "no-cache" });
   if (!res.ok) throw new Error(`HTTP ${res.status} from ${url}`);
   const text = await res.text();
   if (text.trim().startsWith("<")) throw new Error(`Got HTML (not JSON) from ${url}`);
