@@ -8,6 +8,9 @@ import { createPortal } from "react-dom";
 
 const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 
+const vpLock   = () => { const v = document.querySelector('meta[name=viewport]'); if (v) v.content = 'width=device-width, initial-scale=1, maximum-scale=1'; };
+const vpUnlock = () => { const v = document.querySelector('meta[name=viewport]'); if (v) v.content = 'width=device-width, initial-scale=1'; };
+
 export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company", phonePadding = false, align = "right" }) {
   const [query,   setQuery]   = useState(name ?? "");
   const [results, setResults] = useState([]);
@@ -105,7 +108,8 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
       <input
         value={query}
         onChange={handleChange}
-        onFocus={() => { if (results.length) { openAt(); setOpen(true); } }}
+        onFocus={() => { vpLock(); if (results.length) { openAt(); setOpen(true); } }}
+        onBlur={() => vpUnlock()}
         onMouseDown={e => e.stopPropagation()}
         placeholder={placeholder}
         style={{

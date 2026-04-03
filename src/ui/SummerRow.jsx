@@ -10,6 +10,9 @@ import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
 
+const vpLock   = () => { const v = document.querySelector('meta[name=viewport]'); if (v) v.content = 'width=device-width, initial-scale=1, maximum-scale=1'; };
+const vpUnlock = () => { const v = document.querySelector('meta[name=viewport]'); if (v) v.content = 'width=device-width, initial-scale=1'; };
+
 export default function SummerRow({ semA, semB }) {
   const {
     placements, semOrders, effectiveCourseMap,
@@ -96,7 +99,7 @@ export default function SummerRow({ semA, semB }) {
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
                 <CompanySearch name={workData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
-                <input value={workData.subline ?? ""} onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
+                <input value={workData.subline ?? ""} onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} onFocus={vpLock} onBlur={vpUnlock} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
               </div>
               <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={isPhone ? 17 : 34} />
               <button onClick={e => { e.stopPropagation(); removeWork(workItem.id); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title="Remove co-op">✕</button>
