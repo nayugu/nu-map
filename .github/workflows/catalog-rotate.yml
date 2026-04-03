@@ -1,14 +1,20 @@
-name: Catalog Rotate
+name: Catalog Rotate [DISABLED]
 
-# Runs every 3 days. Each run scrapes exactly one subject (rotating through all
-# ~130 subjects), so the entire catalog refreshes roughly every 3–4 months.
+# ⚠️ DISABLED - GitHub Actions is not permitted to create or approve pull requests
+#
+# Original concept: Runs every 3 days to scrape exactly one subject (rotating through all
+# ~130 subjects), with the entire catalog refreshing roughly every 3–4 months.
 # Developer approval is required before any data changes reach production:
 # the workflow opens a PR instead of pushing directly to main.
+#
+# The idea is sound, but this needs to be triggered manually or by a different service
+# that has permission to create pull requests in this repository.
 
 on:
-  schedule:
-    - cron: "0 6 */3 * *"   # 06:00 UTC every 3rd day
-  workflow_dispatch:          # allow manual trigger from GitHub UI
+  # DISABLED: schedule not runs anymore
+  # schedule:
+  #   - cron: "0 6 */3 * *"   # 06:00 UTC every 3rd day
+  workflow_dispatch:          # allow manual trigger from GitHub UI (for testing only)
 
 jobs:
   rotate:
