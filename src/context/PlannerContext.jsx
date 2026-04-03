@@ -77,7 +77,9 @@ export function PlannerProvider({ children }) {
   }, [stickyCourses]);
 
   // ── UI: Other credits collapse setting ──
-  const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => true);
+  const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => {
+    try { const v = localStorage.getItem("ncp-collapse-other-credits"); return v === null ? true : v !== "false"; } catch { return true; }
+  });
   const updateCollapseOtherCredits = (val) => {
     setCollapseOtherCredits(val);
     try { localStorage.setItem("ncp-collapse-other-credits", String(val)); } catch {}

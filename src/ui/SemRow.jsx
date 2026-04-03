@@ -59,7 +59,7 @@ export default function SemRow({ sem }) {
   const others     = crs.filter(c => c.sh <= 2);
 
   // Collapsible other credits
-  const { collapseOtherCredits, setCollapseOtherCredits, collapsedSubs, setCollapsedSubs } = usePlanner();
+  const { collapseOtherCredits, collapsedSubs, setCollapsedSubs } = usePlanner();
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
 
   // Sync local state with global collapseOtherCredits setting
@@ -133,8 +133,8 @@ export default function SemRow({ sem }) {
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
           <div style={{ width: 3, alignSelf: "stretch", background: "var(--border-2)", borderRadius: 2 }} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Continues</div>
-            <div style={{ fontSize: 10, color: "var(--text-4)" }}>4-month block · drag to move</div>
+            <div style={{ fontSize: isPhone ? 6 : 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Continues</div>
+            <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)" }}>4-month block · drag to move</div>
           </div>
         </div>
       </div>
@@ -173,8 +173,8 @@ export default function SemRow({ sem }) {
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
           <div style={{ width: 3, alignSelf: "stretch", background: "var(--border-2)", borderRadius: 2 }} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONTINUES</div>
-            <div style={{ fontSize: 10, color: "var(--text-4)" }}>6-month block · drag to move</div>
+            <div style={{ fontSize: isPhone ? 6 : 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONTINUES</div>
+            <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)" }}>6-month block · drag to move</div>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function SemRow({ sem }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNum}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
@@ -279,7 +279,7 @@ export default function SemRow({ sem }) {
                   name={workData.company}
                   color={companyColor}
                   emptyColor={placeholderColor}
-                  fontSize={14}
+                  fontSize={isPhone ? 7 : 14}
                   onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
                 <input
@@ -288,10 +288,10 @@ export default function SemRow({ sem }) {
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
                   className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 10, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={40} />
+              <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={isPhone ? 20 : 40} />
               <button
                 onClick={e => { e.stopPropagation(); pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[workItem.id]; return n; }); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -325,19 +325,8 @@ export default function SemRow({ sem }) {
               display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
-            {(sem.type === "fall" || sem.type === "spring") && (
-              <div style={{
-                position: "absolute", left: "50%", top: "50%",
-                transform: "translate(-50%, -50%)",
-                display: "flex", alignItems: "center", gap: 4,
-                pointerEvents: "none",
-              }}>
-                <span style={{ fontSize: 13, color: "#facc15" }}>⚠</span>
-                <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3, whiteSpace: "nowrap" }}>requires petition for non-attendance</span>
-              </div>
-            )}
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNum(internId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
@@ -345,7 +334,7 @@ export default function SemRow({ sem }) {
                   name={internPl[internItem.id]?.company}
                   color={companyColor}
                   emptyColor={placeholderColor}
-                  fontSize={14}
+                  fontSize={isPhone ? 7 : 14}
                   onChange={v => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
                 <input
@@ -354,10 +343,10 @@ export default function SemRow({ sem }) {
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
                   className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: internPl[internItem.id]?.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 10, fontWeight: 400, color: internPl[internItem.id]?.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo key={internPl[internItem.id]?.companyDomain || ""} domain={internPl[internItem.id]?.companyDomain} size={40} />
+              <CompanyLogo key={internPl[internItem.id]?.companyDomain || ""} domain={internPl[internItem.id]?.companyDomain} size={isPhone ? 20 : 40} />
               <button
                 onClick={e => { e.stopPropagation(); pushUndo(); setInternPl(p => { const n = { ...p }; delete n[internItem.id]; return n; }); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -370,6 +359,23 @@ export default function SemRow({ sem }) {
                 ? `↕ Spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (4-month block)`
                 : `${internItem.duration}-month internship`}
             </div> */}
+            {(sem.type === "fall" || sem.type === "spring") && !isPhone && (
+              <div style={{
+                position: "absolute", left: "50%", top: "50%",
+                transform: "translate(-50%, -50%)",
+                display: "flex", alignItems: "center", gap: 4,
+                pointerEvents: "none",
+              }}>
+                <span style={{ fontSize: 13, color: "#facc15" }}>⚠</span>
+                <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3, whiteSpace: "nowrap" }}>requires petition for non-attendance</span>
+              </div>
+            )}
+            {(sem.type === "fall" || sem.type === "spring") && isPhone && (
+              <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6, pointerEvents: "none" }}>
+                <span style={{ fontSize: 11, color: "#facc15" }}>⚠</span>
+                <span style={{ fontSize: 8, color: "#facc15", lineHeight: 1.3 }}>requires petition for non-attendance</span>
+              </div>
+            )}
           </div>
 
         ) : mainSlots === null ? (
@@ -484,12 +490,7 @@ export default function SemRow({ sem }) {
             {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 4) < 4)) && (
               <div style={{ marginTop: 5 }}>
                 <button
-                  onClick={() => {
-                    setShowOther(v => {
-                      setCollapseOtherCredits(v ? false : true);
-                      return !v;
-                    });
-                  }}
+                  onClick={() => setShowOther(v => !v)}
                   style={{
                     fontSize: 9, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left"
                   }}

@@ -22,7 +22,7 @@ export default function SummerRow({ semA, semB }) {
     cardRefs, onDragStart,
     SEM_INDEX,
     setWorkPl, pushUndo, isPhone,
-    collapseOtherCredits, setCollapseOtherCredits,
+    collapseOtherCredits,
   } = usePlanner();
 
   const { themeName } = useTheme();
@@ -75,8 +75,8 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
-            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div
             ref={el => { cardRefs.current[workItem.id] = el; }}
@@ -95,7 +95,7 @@ export default function SummerRow({ semA, semB }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNumFor(workItem.id)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
@@ -103,7 +103,7 @@ export default function SummerRow({ semA, semB }) {
                   name={workData.company}
                   color={companyColor}
                   emptyColor={placeholderColor}
-                  fontSize={13}
+                  fontSize={isPhone ? 7 : 13}
                   onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
                 <input
@@ -112,10 +112,10 @@ export default function SummerRow({ semA, semB }) {
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
                   className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={34} />
+              <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={isPhone ? 17 : 34} />
               <button
                 onClick={e => { e.stopPropagation(); removeWork(workItem.id); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -145,8 +145,8 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
-            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div style={{
             width: "100%", minHeight: 58,
@@ -154,8 +154,8 @@ export default function SummerRow({ semA, semB }) {
             borderRadius: 6, padding: "8px 14px",
             display: "flex", flexDirection: "column", justifyContent: "center",
           }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONT.</div>
-            <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 2 }}>6-month block</div>
+            <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONT.</div>
+            <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>6-month block</div>
           </div>
         </div>
       );
@@ -173,8 +173,8 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
-            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div
             ref={el => { cardRefs.current[internId] = el; }}
@@ -193,7 +193,7 @@ export default function SummerRow({ semA, semB }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNumFor(internId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1 }}>
@@ -201,7 +201,7 @@ export default function SummerRow({ semA, semB }) {
                   name={internData.company}
                   color={companyColor}
                   emptyColor={placeholderColor}
-                  fontSize={13}
+                  fontSize={isPhone ? 7 : 13}
                   onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
                 <input
@@ -210,10 +210,10 @@ export default function SummerRow({ semA, semB }) {
                   onMouseDown={e => e.stopPropagation()}
                   placeholder="Role"
                   className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
               </div>
-              <CompanyLogo key={internData.companyDomain || ""} domain={internData.companyDomain} size={34} />
+              <CompanyLogo key={internData.companyDomain || ""} domain={internData.companyDomain} size={isPhone ? 17 : 34} />
               <button
                 onClick={e => { e.stopPropagation(); removeIntern(internId); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -243,8 +243,8 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
-            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div style={{
             width: "100%", minHeight: 58,
@@ -252,8 +252,8 @@ export default function SummerRow({ semA, semB }) {
             borderRadius: 6, padding: "8px 14px",
             display: "flex", flexDirection: "column", justifyContent: "center",
           }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Cont.</div>
-            <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 2 }}>4-month block</div>
+            <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Cont.</div>
+            <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>4-month block</div>
           </div>
         </div>
       );
@@ -323,12 +323,7 @@ export default function SummerRow({ semA, semB }) {
         {(others.length > 0 || (dragInfo?.type === "course" && (effectiveCourseMap[dragInfo.id]?.sh ?? 3) <= 2)) && (
           <div style={{ marginTop: 4 }}>
             <button
-              onClick={() => {
-                setShowOther(v => {
-                  setCollapseOtherCredits(v ? false : true);
-                  return !v;
-                });
-              }}
+              onClick={() => setShowOther(v => !v)}
               style={{
                 fontSize: 9, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left"
               }}
