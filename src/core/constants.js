@@ -41,7 +41,7 @@ export const NUPATH_LABELS = {
   IC: "Interpreting Culture",   FQ: "Formal/Quant Reasoning",
   SI: "Societies/Institutions", AD: "Analyzing/Using Data",
   DD: "Difference/Diversity",   ER: "Ethical Reasoning",
-  WF: "1st Yr Writing",         WD: "Adv Writing Disc",
+  WD: "Adv Writing Disc",
   WI: "Writing Intensive",      EX: "Integration Experience",
   CE: "Capstone Experience",
 };
