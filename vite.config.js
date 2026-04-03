@@ -1,6 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { spawn } from "child_process";
+import { spawn, execSync } from "child_process";
+
+const commitDate = (() => {
+  try {
+    return execSync('git log -1 --format=%cd --date=format:"%b %Y"').toString().trim();
+  } catch { return ""; }
+})();
 
 /** Spawns catalog-check-server alongside the dev server so no second terminal is needed. */
 function catalogCheckPlugin() {
@@ -20,4 +26,5 @@ function catalogCheckPlugin() {
 export default defineConfig({
   plugins: [react(), catalogCheckPlugin()],
   base: process.env.VITE_BASE_PATH ?? "/",
+  define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
 });

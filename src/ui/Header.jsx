@@ -217,10 +217,10 @@ export default function Header() {
           {!isPhone && (
             <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{courses.length.toLocaleString()} courses</span>
           )}
-          {!isPhone && dataMeta.lastUpdated && (
+          {!isPhone && (__COMMIT_DATE__ || dataMeta.lastUpdated) && (
             <span style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
               <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap" }} title="Date of last course data refresh">
-                updated {dataMeta.lastUpdated}
+                updated {__COMMIT_DATE__ || dataMeta.lastUpdated}
               </span>
               <span
                 style={{
@@ -242,11 +242,11 @@ export default function Header() {
               </span>
             </span>
           )}
-          {isPhone && dataMeta.lastUpdated && (
+          {isPhone && (__COMMIT_DATE__ || dataMeta.lastUpdated) && (
             <>
               <span style={{ flex: 1, display: "flex", alignItems: "center", minWidth: 0, overflow: "hidden" }}>
                 <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} title="Date of last course data refresh">
-                  updated {dataMeta.lastUpdated}
+                  updated {__COMMIT_DATE__ || dataMeta.lastUpdated}
                 </span>
               </span>
               <span
