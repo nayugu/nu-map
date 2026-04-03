@@ -600,9 +600,11 @@ export default function GradPanel() {
                 {plannedSH  > 0 && <span style={{ fontSize: 11, color: "var(--text-4)", fontWeight: 500 }}>+{plannedSH}</span>}
                 {requiredSH > 0 && <span style={{ fontSize: 11, color: "var(--text-5)", fontWeight: 400 }}>/{requiredSH}</span>}
               </div>
-              <div style={{ fontSize: 9, color: "var(--text-4)" }}>
-                SH done{plannedSH > 0 ? " + planned" : ""}{requiredSH > 0 ? " / required" : ""}
-              </div>
+              {!isPhone && (
+                <div style={{ fontSize: 9, color: "var(--text-4)" }}>
+                  SH done{plannedSH > 0 ? " + planned" : ""}{requiredSH > 0 ? " / required" : ""}
+                </div>
+              )}
             </div>
             {major && !isPhone && (
               <div style={{ marginLeft: "auto", textAlign: "right" }}>

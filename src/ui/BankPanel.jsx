@@ -11,7 +11,7 @@ import GradPanel   from "./GradPanel.jsx";
 
 // ── Course search for substitution input ────────────────────────
 
-function CourseSearch({ courses, value, onChange, placeholder }) {
+function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
   const [rect,  setRect]  = useState(null);
@@ -62,7 +62,7 @@ function CourseSearch({ courses, value, onChange, placeholder }) {
           onBlur={handleBlur}
           placeholder={placeholder}
           style={{
-            flex: 1, fontSize: 10, padding: "4px 6px", minWidth: 0,
+            flex: 1, fontSize: isPhone ? 8 : 10, padding: "4px 6px", minWidth: 0,
             background: "var(--bg-surface-2)", color: "var(--text-2)",
             border: "1px solid var(--border-2)", borderRadius: 4, outline: "none",
           }}
@@ -78,8 +78,8 @@ function CourseSearch({ courses, value, onChange, placeholder }) {
       {open && rect && createPortal(
         <div style={{
           position: "fixed", zIndex: 9000,
-          top: rect.bottom + 2, left: rect.left,
-          width: rect.width,
+          top: rect.bottom + 2,
+          ...(isPhone ? (() => { const w = Math.max(rect.width, window.innerWidth * 0.48); return { width: w, left: Math.min(rect.left, window.innerWidth - w - 4) }; })() : { width: rect.width, left: rect.left }),
           maxHeight: 280, overflowY: "auto",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
@@ -445,9 +445,11 @@ export default function BankPanel() {
         </div>
         {!collapseSubstitutions && (
           <div style={{ padding: "0 8px 8px" }}>
-            <div style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)", marginBottom: 5, lineHeight: 1.4 }}>
-              Placing course A also satisfies course B's requirements. Credits count once (A only). Semester timing applies.
-            </div>
+            {!isPhone && (
+              <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 5, lineHeight: 1.4 }}>
+                Placing course A also satisfies course B's requirements. Credits count once (A only). Semester timing applies.
+              </div>
+            )}
 
             {substitutions.map(({ from, to }) => {
               const fc = courseMap[from];
@@ -462,14 +464,14 @@ export default function BankPanel() {
               });
               return (
                 <div key={`${from}-${to}`} style={{
-                  display: "flex", alignItems: "center", gap: 5,
-                  padding: "3px 5px", marginBottom: 2,
+                  display: "flex", alignItems: "center", gap: isPhone ? 2 : 5,
+                  padding: isPhone ? "1px 3px" : "3px 5px", marginBottom: 2,
                   background: "var(--bg-surface-2)", borderRadius: 4,
                   opacity: fromPlaced ? 1 : 0.55,
-                  fontSize: isPhone ? 8 : 10,
+                  fontSize: isPhone ? 5 : 10,
                 }}>
                   {!fromPlaced && (
-                    <span title="Course A not yet placed in a semester" style={{ fontSize: 10, flexShrink: 0 }}>⚠</span>
+                    <span title="Course A not yet placed in a semester" style={{ fontSize: isPhone ? 7 : 10, flexShrink: 0 }}>⚠</span>
                   )}
                   <span
                     style={{ fontWeight: 700, color: "var(--link-1)", flexShrink: 0, ...underlineStyle(from) }}
@@ -479,7 +481,7 @@ export default function BankPanel() {
                   >
                     {fc ? `${fc.subject} ${fc.number}` : from}
                   </span>
-                  <span style={{ fontSize: 9, color: "var(--text-5)", flexShrink: 0 }}>→</span>
+                  <span style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", flexShrink: 0 }}>→</span>
                   <span
                     style={{ fontWeight: 700, color: "var(--text-2)", flex: 1, minWidth: 0, ...underlineStyle(to) }}
                     onClick={() => { setSelectedId(to); setShowPanel(true); }}
@@ -490,7 +492,7 @@ export default function BankPanel() {
                   </span>
                   <button
                     onClick={e => { e.stopPropagation(); removeSubstitution(from, to); }}
-                    style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-4)", fontSize: 12, padding: "0 2px", lineHeight: 1, flexShrink: 0 }}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-4)", fontSize: isPhone ? 8 : 12, padding: "0 2px", lineHeight: 1, flexShrink: 0 }}
                     title="Remove substitution"
                   >✕</button>
                 </div>
@@ -500,9 +502,9 @@ export default function BankPanel() {
             <div style={{ marginTop: substitutions.length ? 6 : 0 }}>
               <div style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)", marginBottom: 4 }}>Add substitution:</div>
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
-                <CourseSearch courses={courses} value={subFromId} onChange={setSubFromId} placeholder="Course A (placed)" />
+                <CourseSearch courses={courses} value={subFromId} onChange={setSubFromId} placeholder="Course A (placed)" isPhone={isPhone} />
                 <span style={{ fontSize: 10, color: "var(--text-5)", flexShrink: 0 }}>→</span>
-                <CourseSearch courses={courses} value={subToId} onChange={setSubToId} placeholder="Course B (satisfied)" />
+                <CourseSearch courses={courses} value={subToId} onChange={setSubToId} placeholder="Course B (satisfied)" isPhone={isPhone} />
               </div>
               <button
                 onClick={() => {
@@ -513,7 +515,7 @@ export default function BankPanel() {
                 }}
                 disabled={!subFromId || !subToId || subFromId === subToId}
                 style={{
-                  width: "100%", padding: "4px 0", fontSize: 10, borderRadius: 4,
+                  width: "100%", padding: "4px 0", fontSize: isPhone ? 7 : 10, borderRadius: 4,
                   background: subFromId && subToId && subFromId !== subToId ? "var(--link-1)" : "var(--bg-surface-2)",
                   color: subFromId && subToId && subFromId !== subToId ? "#fff" : "var(--text-4)",
                   border: "1px solid var(--border-2)", cursor: subFromId && subToId && subFromId !== subToId ? "pointer" : "not-allowed",
