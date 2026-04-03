@@ -56,27 +56,29 @@ const NP_LABELS = {
   WI:"Writing Intensive",      EX:"Integration Experience",
   CE:"Capstone Experience",
 };
-const ALL_NP = Object.keys(NP_LABELS);
+const ALL_NP = Object.keys(NP_LABELS).filter(k => k !== "WF");
 
 // ── Requirement tree → HTML ───────────────────────────────────────
 
-function reqNodeHtml(r, doneKeys, depth = 0) {
+function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
   const pl = depth * 12;
   if (r.type === "COURSE") {
-    const status = r.sat ? (doneKeys.has(r.key) ? "done" : "planned") : "missing";
-    const icon   = status === "done" ? "✓" : status === "planned" ? "○" : "";
-    return `<div class="rc rc-${status}" style="padding-left:${pl + 4}px">
+    const isDimmed = dimmed && !r.sat;
+    const status = r.sat ? (doneKeys.has(r.key) ? "done" : "planned") : isDimmed ? "dimmed" : "missing";
+    const icon   = status === "done" ? "✓" : status === "planned" ? "○" : status === "dimmed" ? "╱" : "";
+    return `<div class="rc rc-${status}" style="padding-left:${pl + 4}px${isDimmed ? ";opacity:0.4" : ""}">
       <span class="rc-icon rc-icon-${status}">${icon}</span>
       <span class="rc-lbl">${r.label}</span>
     </div>`;
   }
   if (r.type === "RANGE") {
-    const status = r.sat ? "done" : "missing";
+    const isDimmed = dimmed && !r.sat;
+    const status = r.sat ? "done" : isDimmed ? "dimmed" : "missing";
     const lbl    = r.sat
       ? r.matched.slice(0, 3).join(", ") + (r.matched.length > 3 ? ` +${r.matched.length - 3}` : "") + ` (${r.subject} range)`
       : r.label;
-    return `<div class="rc rc-${status}" style="padding-left:${pl + 4}px">
-      <span class="rc-icon rc-icon-${status}">${r.sat ? "✓" : ""}</span>
+    return `<div class="rc rc-${status}" style="padding-left:${pl + 4}px${isDimmed ? ";opacity:0.4" : ""}">
+      <span class="rc-icon rc-icon-${status}">${r.sat ? "✓" : isDimmed ? "╱" : ""}</span>
       <span class="rc-lbl">${lbl}</span>
     </div>`;
   }
@@ -86,10 +88,15 @@ function reqNodeHtml(r, doneKeys, depth = 0) {
     r.type === "OR"  ? `One of (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.type === "XOM" ? `${r.satSh ?? 0}/${r.reqSh ?? 0} SH from elective pool` :
     r.title ?? r.label ?? "";
-  const childrenHtml = (r.children ?? []).map(c => reqNodeHtml(c, doneKeys, depth + 1)).join("");
-  return `<div class="rg" style="padding-left:${pl}px">
+  // XOM and OR: dim unsatisfied children once parent is satisfied (same as app)
+  const dimChildren = (r.type === "XOM" || r.type === "OR") && isSat;
+  const childrenHtml = (r.children ?? []).map(c =>
+    reqNodeHtml(c, doneKeys, depth + 1, dimChildren && !c.sat)
+  ).join("");
+  const groupDimmed = dimmed && !isSat;
+  return `<div class="rg" style="padding-left:${pl}px${groupDimmed ? ";opacity:0.4" : ""}">
     <div class="rg-head rg-${isSat ? "sat" : "unsat"}">
-      <span class="rg-icon">${isSat ? "✓" : ""}</span>
+      <span class="rg-icon">${isSat ? "✓" : groupDimmed ? "╱" : ""}</span>
       <span class="rg-lbl">${heading}</span>
     </div>
     ${childrenHtml}
@@ -115,7 +122,7 @@ function sectionHtml(sec, doneKeys) {
     <div class="sec-bar"><div class="sec-bar-fill${sec.sat ? " sec-bar-sat" : ""}" style="width:${pct}%"></div></div>
     ${warnHtml}
     <div class="sec-body">
-      ${sec.children.map(r => reqNodeHtml(r, doneKeys)).join("")}
+      ${sec.children.map(r => reqNodeHtml(r, doneKeys, 0, isPoolStructure && !r.sat && sec.satCount >= sec.minRequired)).join("")}
       ${noteHtml}
     </div>
   </div>`;
@@ -403,6 +410,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .rc-icon-done    { background: #dcfce7; border-color: #86efac; color: #16a34a; }
   .rc-icon-planned { background: #dbeafe; border-color: #93c5fd; color: #2563eb; font-size: 9px; }
   .rc-icon-missing { background: #fff; border-color: #d8d8d8; color: #ccc; }
+  .rc-icon-dimmed  { background: #fff; border-color: #d8d8d8; color: #aaa; }
   .rc-lbl    { font-size: 10px; }
   .rc-done    .rc-lbl { color: #15803d; }
   .rc-planned .rc-lbl { color: #1d4ed8; }

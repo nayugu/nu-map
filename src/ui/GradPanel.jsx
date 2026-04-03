@@ -18,7 +18,7 @@ import {
 import { getMajorOptionGroups, loadMajor } from "../data/majorLoader.js";
 import { getMinorOptionGroups, loadMinor } from "../data/minorLoader.js";
 
-const ALL_NUPATHS = Object.keys(NUPATH_LABELS);
+const ALL_NUPATHS = Object.keys(NUPATH_LABELS).filter(k => k !== "WF");
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
