@@ -593,6 +593,8 @@ ${appendixHtml.join('\n')}
   if (!w) { alert("Pop-up blocked — please allow pop-ups for this site and try again."); return; }
   w.document.write(html);
   w.document.close();
+  // Replace about:blank in the print footer with the app URL
+  try { w.history.replaceState({}, "NU Map", window.location.href); } catch {}
   w.focus();
   // Close this tab automatically once the print dialog is dismissed.
   w.onafterprint = () => w.close();
