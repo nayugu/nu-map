@@ -14,7 +14,7 @@ import dataMeta from "../core/dataMeta.json";
 export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
-    placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
+    placements, courseMap, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
     resetAll, setShowDisclaimer,
     showSettings, setShowSettings,
     planEntSem, planEntYear, planGradSem, planGradYear,
@@ -69,7 +69,7 @@ export default function Header() {
       npCovered, doneKeys, totalSHRequired: 0,
       placedOut, substitutions,
     };
-    exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl, internPl);
+    exportReport(placements, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl, internPl);
   };
 
   const handleCopyHumanReadable = async () => {
