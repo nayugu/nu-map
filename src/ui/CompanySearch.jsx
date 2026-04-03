@@ -8,7 +8,7 @@ import { createPortal } from "react-dom";
 
 const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 
-export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company" }) {
+export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company", phonePadding = false }) {
   const [query,   setQuery]   = useState(name ?? "");
   const [results, setResults] = useState([]);
   const [open,    setOpen]    = useState(false);
@@ -19,13 +19,17 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
   // Sync when parent resets the value
   useEffect(() => { setQuery(name ?? ""); }, [name]);
 
-  // Close on outside click
+  // Close on outside click/tap
   useEffect(() => {
     const handler = e => {
       if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
     };
     document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
   }, []);
 
   const openAt = () => {
@@ -77,6 +81,7 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
         <div
           key={c.domain}
           onMouseDown={e => { e.preventDefault(); select(c); }}
+          onTouchEnd={e => { e.preventDefault(); select(c); }}
           style={{
             display: "flex", alignItems: "center", gap: 9,
             padding: "6px 12px", cursor: "pointer",
@@ -112,7 +117,8 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
           fontFamily: "'Inter', sans-serif",
           fontSize, fontWeight: 600, letterSpacing: "0.01em",
           color: query ? color : (emptyColor ?? "var(--text-5)"),
-          background: "transparent", border: "none", outline: "none", padding: 0,
+          background: "transparent", border: "none", outline: "none",
+          padding: phonePadding ? "5px 0" : 0,
         }}
         className="work-input"
       />

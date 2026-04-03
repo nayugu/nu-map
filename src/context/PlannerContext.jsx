@@ -1061,6 +1061,9 @@ export function PlannerProvider({ children }) {
     };
 
     const onTouchStart = (e) => {
+      // Let interactive elements handle their own touch (inputs, buttons, selects)
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON') return;
       const cardEl = e.target.closest('[data-drag-id]');
       if (!cardEl) return;
       const id       = cardEl.dataset.dragId || null;

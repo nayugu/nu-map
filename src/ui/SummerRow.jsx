@@ -100,16 +100,19 @@ export default function SummerRow({ semA, semB }) {
                   color={companyColor}
                   emptyColor={placeholderColor}
                   fontSize={isPhone ? 7 : 13}
+                  phonePadding={isPhone}
                   onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
-                <input
-                  value={workData.subline ?? ""}
-                  onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))}
-                  onMouseDown={e => e.stopPropagation()}
-                  placeholder="Role"
-                  className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
-                />
+                {!isPhone && (
+                  <input
+                    value={workData.subline ?? ""}
+                    onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))}
+                    onMouseDown={e => e.stopPropagation()}
+                    placeholder="Role"
+                    className="work-input"
+                    style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  />
+                )}
               </div>
               <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={isPhone ? 17 : 34} />
               <button
@@ -199,16 +202,19 @@ export default function SummerRow({ semA, semB }) {
                   color={companyColor}
                   emptyColor={placeholderColor}
                   fontSize={isPhone ? 7 : 13}
+                  phonePadding={isPhone}
                   onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
-                <input
-                  value={internData.subline ?? ""}
-                  onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], subline: e.target.value } }))}
-                  onMouseDown={e => e.stopPropagation()}
-                  placeholder="Role"
-                  className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
-                />
+                {!isPhone && (
+                  <input
+                    value={internData.subline ?? ""}
+                    onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], subline: e.target.value } }))}
+                    onMouseDown={e => e.stopPropagation()}
+                    placeholder="Role"
+                    className="work-input"
+                    style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                  />
+                )}
               </div>
               <CompanyLogo key={internData.companyDomain || ""} domain={internData.companyDomain} size={isPhone ? 17 : 34} />
               <button
