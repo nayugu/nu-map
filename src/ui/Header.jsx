@@ -20,7 +20,7 @@ export default function Header() {
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    coopGradConflicts, workPl, semOrders,
+    coopGradConflicts, workPl, internPl, semOrders,
     showViolLines, setShowViolLines,
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
@@ -56,7 +56,7 @@ export default function Header() {
     const concLabel  = conc   || "";
     const minor1Path = minor1 || "";
     const minor2Path = minor2 || "";
-    const npCovered  = getNuPathCoverage(placements, courseMap);
+    const npCovered  = getNuPathCoverage(placements, courseMap, workPl);
     // Build set of course keys that are placed in already-completed semesters
     const doneKeys = new Set();
     for (const [id, semId] of Object.entries(placements)) {
@@ -69,7 +69,7 @@ export default function Header() {
       npCovered, doneKeys, totalSHRequired: 0,
       placedOut, substitutions,
     };
-    exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl);
+    exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl, internPl);
   };
 
   const handleCopyHumanReadable = async () => {

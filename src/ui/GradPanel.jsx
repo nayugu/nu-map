@@ -465,6 +465,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 export default function GradPanel() {
   const {
     placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
+    workPl,
     major: majorPath, setMajor: setMajorPath,
     conc: selConc, setConc: setSelConc,
     minor1, setMinor1,
@@ -509,7 +510,7 @@ export default function GradPanel() {
     return new Map([["Concentrations", opts]]);
   }, [major]);
 
-  const npCovered  = useMemo(() => getNuPathCoverage(placements, courseMap), [placements, courseMap]);
+  const npCovered  = useMemo(() => getNuPathCoverage(placements, courseMap, workPl), [placements, courseMap, workPl]);
   const plannedSH  = totalSHPlaced - totalSHDone;
   const requiredSH = major?.totalCreditsRequired ?? 0;
 

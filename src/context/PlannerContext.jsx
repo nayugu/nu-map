@@ -10,7 +10,7 @@
 //   • Exposes a typed surface of state + actions to the UI layer
 // ═══════════════════════════════════════════════════════════════════
 import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
-import { DEFAULT_START_YEAR, NUM_YEARS, WORK_TERMS } from "../core/constants.js";
+import { DEFAULT_START_YEAR, NUM_YEARS, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { normalizeCourse, extractEdges, getOfferedFromTerms, getSemOfferedType } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
@@ -37,6 +37,7 @@ export function PlannerProvider({ children }) {
   const _saved = useMemo(() => loadSaved(), []);
   const [placements,       setPlacements]       = useState(() => (_saved?.persist && _saved.placements)       ? _saved.placements       : {});
   const [workPl,           setWorkPl]           = useState(() => (_saved?.persist && _saved.workPl)           ? _saved.workPl           : {});
+  const [internPl,         setInternPl]         = useState(() => (_saved?.persist && _saved.internPl)         ? _saved.internPl         : {});
   const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : `fall${DEFAULT_START_YEAR}`);
   const [persistEnabled,   setPersistEnabled]   = useState(() => _saved?.persist !== false);
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
@@ -177,7 +178,7 @@ export function PlannerProvider({ children }) {
   const undoStack     = useRef([]);
   const redoStack     = useRef([]);
   // Stale-closure escape hatches for keyboard handler
-  const stateRef      = useRef({ placements: {}, workPl: {}, semOrders: {} });
+  const stateRef      = useRef({ placements: {}, workPl: {}, internPl: {}, semOrders: {} });
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
   const onDropRef      = useRef(null);   // updated each render for touch drag
@@ -216,7 +217,7 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
+    saveState(persistEnabled, { placements, workPl, internPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
   }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
 
   useEffect(() => {
@@ -235,7 +236,7 @@ export function PlannerProvider({ children }) {
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    stateRef.current    = { placements, workPl, semOrders };
+    stateRef.current    = { placements, workPl, internPl, semOrders };
     allEdgesRef.current = allEdges;
     onDropRef.current     = onDrop;
     onDropBankRef.current  = onDropBank;
@@ -531,25 +532,112 @@ export function PlannerProvider({ children }) {
 
   const workStartMap = useMemo(() => {
     const m = {};
-    Object.entries(workPl).forEach(([wid, semId]) => { m[semId] = wid; });
+    Object.entries(workPl).forEach(([wid, data]) => {
+      const semId = data?.semId;
+      if (semId) m[semId] = wid;
+    });
     return m;
   }, [workPl]);
 
   const workContMap = useMemo(() => {
     const m = {};
-    Object.entries(workPl).forEach(([wid, semId]) => {
-      const nxt = SEM_NEXT[semId];
-      if (nxt) m[nxt] = wid;
+    Object.entries(workPl).forEach(([wid, data]) => {
+      const { semId, duration } = data || {};
+      if (!semId) return;
+      if (duration === 6) {
+        // 6-month: always spans to next semester
+        const nxt = SEM_NEXT[semId];
+        if (nxt) m[nxt] = wid;
+      } else if (duration === 4) {
+        // 4-month: spans only if placed on summer (sumA→sumB)
+        const sem = SEMESTERS.find(s => s.id === semId);
+        if (sem?.type === "summer") {
+          const nxt = SEM_NEXT[semId];
+          if (nxt) m[nxt] = wid;
+        }
+      }
     });
     return m;
-  }, [workPl, SEM_NEXT]);
+  }, [workPl, SEMESTERS, SEM_NEXT]);
+
+  // ── Internship derived maps ───────────────────────────────────
+  // internStartMap: { semId → instanceId } for the start semester of each placed internship.
+  // internContMap:  { semId → instanceId } for the continuation semester of 4-month summer spans only
+  //   (sumA→sumB always). Fall/spring 4-month internships occupy a single semester with no cont.
+  //   sumB drops are normalized to sumA on placement, so stored semIds are always sumA for summers.
+  const internStartMap = useMemo(() => {
+    const m = {};
+    Object.entries(internPl).forEach(([iid, { semId }]) => { m[semId] = iid; });
+    return m;
+  }, [internPl]);
+
+  const internContMap = useMemo(() => {
+    const m = {};
+    Object.entries(internPl).forEach(([iid, { semId, duration }]) => {
+      if (duration !== 4) return;
+      const sem = SEMESTERS.find(s => s.id === semId);
+      if (!sem || sem.type !== "summer") return; // fall/spring 4-month: no cont
+      const nxt = SEM_NEXT[semId];
+      if (nxt) m[nxt] = iid;
+    });
+    return m;
+  }, [internPl, SEMESTERS, SEM_NEXT]);
+
+  // Returns { valid, startId } for an intern drag of given duration onto semId.
+  // excludeId: instance being moved (its own slots are not treated as occupied).
+  const internDropValid = (duration, semId, excludeId = null) => {
+    const sem = SEMESTERS.find(s => s.id === semId);
+    if (!sem) return { valid: false };
+    // Both intern types block co-op semesters and other intern semesters
+    const coopBlocked = workStartMap[semId] || workContMap[semId];
+    if (coopBlocked) return { valid: false };
+
+    if (duration === 2) {
+      if (sem.type !== "summer") return { valid: false };
+      const occupying = internStartMap[semId];
+      if (occupying && occupying !== excludeId) return { valid: false };
+      return { valid: true, startId: semId };
+    }
+
+    if (duration === 4) {
+      if (sem.type === "fall" || sem.type === "spring") {
+        const occupying = internStartMap[semId];
+        if (occupying && occupying !== excludeId) return { valid: false };
+        return { valid: true, startId: semId };
+      }
+      if (sem.type === "summer") {
+        // Always normalize to sumA so the block is sumA→sumB, never sumB→fall.
+        let startId = semId;
+        if (sem.id.startsWith("sumB")) {
+          const prev = SEM_PREV[semId];
+          if (!prev) return { valid: false };
+          startId = prev;
+          // Check coop doesn't occupy startId either
+          if (workStartMap[startId] || workContMap[startId]) return { valid: false };
+        }
+        const nxt = SEM_NEXT[startId]; // always sumB
+        if (!nxt) return { valid: false };
+        if (workStartMap[nxt] || workContMap[nxt]) return { valid: false };
+        const occStart = internStartMap[startId];
+        const occCont  = internContMap[nxt];
+        if (occStart && occStart !== excludeId) return { valid: false };
+        if (occCont  && occCont  !== excludeId) return { valid: false };
+        return { valid: true, startId };
+      }
+    }
+    return { valid: false };
+  };
 
   const gradSemId = planGradSem === "fall" ? `fall${planGradYear}` : `spr${planGradYear}`;
-  const coopGradConflicts = useMemo(() => WORK_TERMS.filter(w => {
-    const startSem = workPl[w.id];
-    if (!startSem) return false;
-    return startSem === gradSemId || SEM_NEXT[startSem] === gradSemId;
-  }), [workPl, gradSemId, SEM_NEXT]);
+  const coopGradConflicts = useMemo(() =>
+    Object.entries(workPl)
+      .filter(([, data]) => {
+        const semId = data?.semId;
+        if (!semId) return false;
+        return semId === gradSemId || SEM_NEXT[semId] === gradSemId;
+      })
+      .map(([wid, data]) => ({ id: wid, label: "Co-op", ...data }))
+  , [workPl, gradSemId, SEM_NEXT]);
 
   const prereqViolations = useMemo(() => {
     const v = new Map();
@@ -630,45 +718,83 @@ export function PlannerProvider({ children }) {
   };
 
   // ── Drag / drop ───────────────────────────────────────────────
-  const onDragStart = (e, id, type, fromSem) => {
+  const onDragStart = (e, id, type, fromSem, extra = {}) => {
     e.stopPropagation();
-    setDragInfo({ id, type, fromSem: fromSem ?? null });
+    setDragInfo({ id, type, fromSem: fromSem ?? null, ...extra });
     e.dataTransfer.effectAllowed = "move";
   };
 
-  // Resolve the canonical co-op START semester from any of the 4 drop targets:
-  //   spring  → start is spring   (continues into sumA)
-  //   sumA    → start is spring   (the preceding semester)
-  //   sumB    → start is sumB     (continues into fall)
-  //   fall    → start is sumB     (the preceding semester)
-  const coopStartFor = semId => {
+  // Returns { valid, startId } for a co-op drag of given duration onto semId.
+  // 4-month: fall/spring (single sem) or sumA/sumB (normalizes to sumA, spans to sumB).
+  // 6-month: spring→sumA or sumB→fall (original co-op logic).
+  const coopDropValid = (duration, semId, excludeId = null) => {
     const sem = SEMESTERS.find(s => s.id === semId);
-    if (!sem) return null;
-    // Both sumA and sumB have type "summer" — discriminate by id prefix
-    if (sem.type === "spring" || sem.id.startsWith("sumB")) return semId;
-    // sumA or fall: the canonical start is the preceding semester
-    const prev = SEM_PREV[semId];
-    if (!prev) return null;
-    const prevSem = SEMESTERS.find(s => s.id === prev);
-    if (!prevSem) return null;
-    if (prevSem.type === "spring" || prevSem.id.startsWith("sumB")) return prev;
-    return null;
+    if (!sem) return { valid: false };
+    if (internStartMap[semId] || internContMap[semId]) return { valid: false };
+
+    if (duration === 4) {
+      if (sem.type === "fall" || sem.type === "spring") {
+        const occ = workStartMap[semId];
+        if (occ && occ !== excludeId) return { valid: false };
+        return { valid: true, startId: semId };
+      }
+      if (sem.type === "summer") {
+        let startId = semId;
+        if (sem.id.startsWith("sumB")) {
+          const prev = SEM_PREV[semId];
+          if (!prev) return { valid: false };
+          startId = prev;
+          if (internStartMap[startId] || internContMap[startId]) return { valid: false };
+        }
+        const nxt = SEM_NEXT[startId];
+        if (!nxt) return { valid: false };
+        if (internStartMap[nxt] || internContMap[nxt]) return { valid: false };
+        const occStart = workStartMap[startId];
+        const occCont  = workContMap[nxt];
+        if (occStart && occStart !== excludeId) return { valid: false };
+        if (occCont  && occCont  !== excludeId) return { valid: false };
+        return { valid: true, startId };
+      }
+    }
+
+    if (duration === 6) {
+      // Normalize to canonical start: spring or sumB
+      let startId;
+      if (sem.type === "spring" || sem.id.startsWith("sumB")) {
+        startId = semId;
+      } else {
+        const prev = SEM_PREV[semId];
+        if (!prev) return { valid: false };
+        const prevSem = SEMESTERS.find(s => s.id === prev);
+        if (!prevSem) return { valid: false };
+        if (prevSem.type === "spring" || prevSem.id.startsWith("sumB")) startId = prev;
+        else return { valid: false };
+      }
+      const contId = SEM_NEXT[startId];
+      if (!contId) return { valid: false };
+      if (internStartMap[startId] || internContMap[startId]) return { valid: false };
+      if (internStartMap[contId]  || internContMap[contId])  return { valid: false };
+      const occStart = workStartMap[startId];
+      const occCont  = workContMap[contId];
+      if (occStart && occStart !== excludeId) return { valid: false };
+      if (occCont  && occCont  !== excludeId) return { valid: false };
+      return { valid: true, startId };
+    }
+
+    return { valid: false };
   };
 
   const canDropSem = semId => {
     if (!dragInfo) return false;
     if (dragInfo.type === "work") {
-      const startId = coopStartFor(semId);
-      if (!startId) return false;
-      const contId = SEM_NEXT[startId];
-      if (!contId) return false;
-      // Reject if either semester in the block is already occupied by a different co-op
-      const occupying = dragInfo.id; // the co-op being dragged — its own old slot is fine
-      if (workStartMap[startId] && workStartMap[startId] !== occupying) return false;
-      if (workContMap[contId]   && workContMap[contId]   !== occupying) return false;
-      return true;
+      return coopDropValid(dragInfo.duration, semId, dragInfo.id).valid;
     }
+    if (dragInfo.type === "intern") {
+      return internDropValid(dragInfo.duration, semId, dragInfo.id).valid;
+    }
+    // Course drop — blocked by co-op OR internship occupying this semester
     if (workStartMap[semId] || workContMap[semId]) return false;
+    if (internStartMap[semId] || internContMap[semId]) return false;
     return !!SEMESTERS.find(s => s.id === semId);
   };
 
@@ -699,14 +825,26 @@ export function PlannerProvider({ children }) {
       });
     }
     if (type === "work") {
-      // Normalize the drop target to the canonical start of the co-op block
-      const startId = coopStartFor(semId);
-      if (!startId) { setDragInfo(null); return; }
-      setWorkPl(p => {
-        const n = { ...p };
-        Object.keys(n).forEach(k => { if (k === id) delete n[k]; });
-        n[id] = startId;
-        return n;
+      const { valid, startId } = coopDropValid(dragInfo.duration, semId, id);
+      if (!valid) { setDragInfo(null); return; }
+      const duration = dragInfo.duration;
+      setWorkPl(prev => {
+        const next = { ...prev };
+        if (id) delete next[id];
+        const newId = id || `coop-${Date.now()}`;
+        next[newId] = { semId: startId, duration };
+        return next;
+      });
+    } else if (type === "intern") {
+      const { valid, startId } = internDropValid(dragInfo.duration, semId, id);
+      if (!valid) { setDragInfo(null); return; }
+      const duration = dragInfo.duration;
+      setInternPl(prev => {
+        const next = { ...prev };
+        if (id) delete next[id]; // remove old placement if moving an existing instance
+        const newId = id || `int-${Date.now()}`;
+        next[newId] = { semId: startId, duration };
+        return next;
       });
     } else {
       const fromSem = placements[id];
@@ -758,6 +896,8 @@ export function PlannerProvider({ children }) {
     }
     if (type === "work") {
       setWorkPl(p => { const n = { ...p }; delete n[id]; return n; });
+    } else if (type === "intern") {
+      if (id) setInternPl(p => { const n = { ...p }; delete n[id]; return n; });
     } else {
       const coreqPartners = [...new Set(
         allEdges
@@ -920,9 +1060,10 @@ export function PlannerProvider({ children }) {
     const onTouchStart = (e) => {
       const cardEl = e.target.closest('[data-drag-id]');
       if (!cardEl) return;
-      const id      = cardEl.dataset.dragId;
-      const type    = cardEl.dataset.dragType;
-      const fromSem = cardEl.dataset.dragFrom || null;
+      const id       = cardEl.dataset.dragId || null;
+      const type     = cardEl.dataset.dragType;
+      const fromSem  = cardEl.dataset.dragFrom || null;
+      const duration = cardEl.dataset.dragDuration ? parseInt(cardEl.dataset.dragDuration, 10) : undefined;
       const touch   = e.touches[0];
       const rect    = cardEl.getBoundingClientRect();
 
@@ -955,7 +1096,7 @@ export function PlannerProvider({ children }) {
       touchDragIdRef.current = id;
       touchDragTypeRef.current = type;
       touchDragFromRef.current = fromSem;
-      setDragInfo({ id, type, fromSem });
+      setDragInfo({ id, type, fromSem, ...(duration != null ? { duration } : {}) });
     };
 
     const onTouchMove = (e) => {
@@ -1052,6 +1193,7 @@ export function PlannerProvider({ children }) {
   const resetPlanToDefaults = () => {
     setPlacements({});
     setWorkPl({});
+    setInternPl({});
     setSemOrders({});
     setOfferedOverrides({});
     setBonusSH(0);
@@ -1101,7 +1243,7 @@ export function PlannerProvider({ children }) {
     exported: new Date().toISOString(),
     entSem: planEntSem, entYear: planEntYear,
     gradSem: planGradSem, gradYear: planGradYear,
-    placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
+    placements, workPl, internPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
     major, conc, minor1, minor2,
     placedOut: [...placedOut],
@@ -1111,6 +1253,7 @@ export function PlannerProvider({ children }) {
   const restorePlan = (d) => {
     setPlacements(d.placements ?? {});
     setWorkPl(d.workPl ?? {});
+    setInternPl(d.internPl ?? {});
     setSemOrders(d.semOrders ?? {});
     setShOverrides(d.shOverrides ?? {});
     setOfferedOverrides(d.offeredOverrides ?? {});
@@ -1195,7 +1338,7 @@ export function PlannerProvider({ children }) {
       return;
     }
     saveCurrentPlanToSlot();
-  }, [placements, workPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, workPl, internPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -1204,7 +1347,7 @@ export function PlannerProvider({ children }) {
       exported: new Date().toISOString(),
       entSem: planEntSem, entYear: planEntYear,
       gradSem: planGradSem, gradYear: planGradYear,
-      placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
+      placements, workPl, internPl, semOrders, shOverrides, bonusSH, currentSemId,
       offeredOverrides, collapsedSubs,
       placedOut: [...placedOut], substitutions,
       major, conc, minor1, minor2,
@@ -1231,6 +1374,7 @@ export function PlannerProvider({ children }) {
         pushUndo();
         setPlacements(d.placements ?? {});
         setWorkPl(d.workPl ?? {});
+        setInternPl(d.internPl ?? {});
         setSemOrders(d.semOrders ?? {});
         setShOverrides(prev => d.shOverrides ?? prev);
         setOfferedOverrides(prev => d.offeredOverrides ?? prev);
@@ -1304,16 +1448,33 @@ export function PlannerProvider({ children }) {
     // Remap co-op placements
     if (snap.workPl) {
       const newWp = {};
-      for (const [wid, semId] of Object.entries(snap.workPl)) {
+      for (const [wid, data] of Object.entries(snap.workPl)) {
+        const semId = data?.semId;
+        if (!semId) continue;
         const idx = oldIds.indexOf(semId);
         if (idx !== -1 && idx < newIds.length) {
-          newWp[wid] = newIds[idx];
+          newWp[wid] = { ...data, semId: newIds[idx] };
         } else if (newIds.includes(semId)) {
-          newWp[wid] = semId;
+          newWp[wid] = data;
         }
-        // If the semester no longer exists at all, drop the co-op placement
+        // If the semester no longer exists, drop the co-op placement
       }
       setWorkPl(newWp);
+    }
+
+    // Remap internship placements
+    if (snap.internPl) {
+      const newIp = {};
+      for (const [iid, { semId, duration }] of Object.entries(snap.internPl)) {
+        const idx = oldIds.indexOf(semId);
+        if (idx !== -1 && idx < newIds.length) {
+          newIp[iid] = { semId: newIds[idx], duration };
+        } else if (newIds.includes(semId)) {
+          newIp[iid] = { semId, duration };
+        }
+        // If the semester no longer exists, drop the internship placement
+      }
+      setInternPl(newIp);
     }
   }, [SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1333,7 +1494,7 @@ export function PlannerProvider({ children }) {
     // Load state
     loading, loadErr, loadPct,
     // Planner state
-    placements, effectivePlacements, workPl, currentSemId, persistEnabled,
+    placements, effectivePlacements, workPl, internPl, currentSemId, persistEnabled,
     semOrders, offeredOverrides, collapsedSubs, shOverrides,
     // Semester grid
     SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
@@ -1351,7 +1512,7 @@ export function PlannerProvider({ children }) {
     panelHeight,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,
     // Derived
-    currentSemIdx, placedIds, workStartMap, workContMap,
+    currentSemIdx, placedIds, workStartMap, workContMap, internStartMap, internContMap,
     gradSemId, coopGradConflicts,
     prereqViolations, coreqViolations, connectedIds,
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
@@ -1373,7 +1534,7 @@ export function PlannerProvider({ children }) {
       if (value === null || value === undefined) delete next[id]; else next[id] = value;
       return next;
     }),
-    setPlacements, setWorkPl, setSemOrders, setCurrentSemId,
+    setPlacements, setWorkPl, setInternPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,

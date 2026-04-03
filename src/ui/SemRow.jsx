@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useState, useEffect } from "react";
-import { TYPE_BG, WORK_TERMS } from "../core/constants.js";
+import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
 
@@ -14,9 +14,10 @@ export default function SemRow({ sem }) {
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
     setHoveredZone, setHoveredSem,
-    workStartMap, workContMap,
+    workStartMap, workContMap, workPl,
+    internStartMap, internContMap, internPl, setInternPl,
     cardRefs, onDragStart,
-    SEMESTERS, SEM_NEXT,
+    SEMESTERS, SEM_NEXT, SEM_INDEX,
     setWorkPl, pushUndo, isPhone,
     bonusSH, setBonusSH,
   } = usePlanner();
@@ -26,8 +27,22 @@ export default function SemRow({ sem }) {
   const isActive   = semStatus === "inprogress";
   const workId     = workStartMap[sem.id];
   const contWorkId = workContMap[sem.id];
-  const workItem   = workId     ? WORK_TERMS.find(w => w.id === workId)     : null;
-  const contItem   = contWorkId ? WORK_TERMS.find(w => w.id === contWorkId) : null;
+  const workData   = workId     ? workPl[workId]     : null;
+  const contWorkData = contWorkId ? workPl[contWorkId] : null;
+  const workItem   = workData   ? { ...(COOP_TERMS.find(t => t.duration === workData.duration)     ?? COOP_TERMS[0]), id: workId,     duration: workData.duration }     : null;
+  const contItem   = contWorkData ? { ...(COOP_TERMS.find(t => t.duration === contWorkData.duration) ?? COOP_TERMS[0]), id: contWorkId, duration: contWorkData.duration } : null;
+
+  // Numbering: sort placed instances by semester order → 1-based index
+  const sortBySem = entries => entries
+    .filter(([, d]) => d?.semId)
+    .sort(([, a], [, b]) => (SEM_INDEX[a.semId] ?? 99) - (SEM_INDEX[b.semId] ?? 99));
+  const coopNum  = workId   ? sortBySem(Object.entries(workPl)).findIndex(([id]) => id === workId)   + 1 : 0;
+  const internNum = (internId) => sortBySem(Object.entries(internPl)).findIndex(([id]) => id === internId) + 1;
+
+  const internId     = internStartMap[sem.id];
+  const contInternId = internContMap[sem.id];
+  const internItem   = internId     ? { ...(INTERNSHIP_TERMS.find(t => t.duration === internPl[internId]?.duration)     ?? INTERNSHIP_TERMS[0]), id: internId,     duration: internPl[internId]?.duration }     : null;
+  const contInternItem = contInternId ? { ...(INTERNSHIP_TERMS.find(t => t.duration === internPl[contInternId]?.duration) ?? INTERNSHIP_TERMS[0]), id: contInternId, duration: internPl[contInternId]?.duration } : null;
   const courseIds  = getOrderedCourses(sem.id, placements, semOrders, courseMap);
   const crs        = courseIds.map(id => effectiveCourseMap[id] ?? courseMap[id]).filter(Boolean);
   const sh         = getSemSH(sem.id, placements, effectiveCourseMap);
@@ -88,6 +103,36 @@ export default function SemRow({ sem }) {
       {sh} SH{sh > 19 ? " ⚠" : ""}
     </span>
   ) : null;
+
+  // Continuation row for 4-month internship spanning from previous semester
+  if (contInternItem) {
+    return (
+      <div key={sem.id}
+        onClick={() => setCurrentSemId(sem.id)}
+        style={{
+          display: "flex", alignItems: "stretch", marginBottom: 3, cursor: "pointer",
+          background: "var(--card-bg)",
+          border: isActive ? "2px solid var(--active)" : `1px solid ${contInternItem.color}`,
+          borderRadius: 6, padding: "6px 10px",
+          opacity: isDone ? 0.9 : 1,
+          boxShadow: isActive ? "var(--shadow-active-row)" : "none",
+          transition: "opacity 0.15s",
+        }}
+      >
+        <div style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)", marginBottom: 1 }}>{sem.label}</div>
+          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 0 }}>{sem.sub}</div>
+        </div>
+        <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
+          <div style={{ width: 3, alignSelf: "stretch", background: contInternItem.color, borderRadius: 2 }} />
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 800, color: contInternItem.color }}>↕ INTERNSHIP CONTINUES</div>
+            <div style={{ fontSize: 10, color: "var(--text-4)" }}>4-month block · drag to move</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Continuation row (work term spanning from previous semester)
   if (contItem) {
@@ -207,8 +252,9 @@ export default function SemRow({ sem }) {
             draggable
             data-drag-id={workItem.id}
             data-drag-type="work"
+            data-drag-duration={workItem.duration}
             data-drag-from={sem.id}
-            onDragStart={e => onDragStart(e, workItem.id, "work", sem.id)}
+            onDragStart={e => onDragStart(e, workItem.id, "work", sem.id, { duration: workItem.duration })}
             style={{
               flex: 1, minHeight: 58, minWidth: 200,
               position: "relative",
@@ -228,13 +274,59 @@ export default function SemRow({ sem }) {
               title="Remove co-op"
             >✕</button>
             <div style={{ fontSize: 14, fontWeight: 900, color: workItem.color, letterSpacing: "0.06em" }}>
-              {workItem.label}
+              {workItem.label} {coopNum}
             </div>
-            {SEM_NEXT[sem.id] && (
-              <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
-                ↕ Spans into {SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (6-month block)
+            <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
+              {workContMap[SEM_NEXT[sem.id]] === workItem.id
+                ? `↕ Spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (${workItem.duration}-month block)`
+                : `${workItem.duration}-month co-op`}
+            </div>
+          </div>
+
+        ) : internItem ? (
+          // Full-width internship card
+          <div
+            ref={el => { cardRefs.current[internItem.id] = el; }}
+            draggable
+            data-drag-id={internItem.id}
+            data-drag-type="intern"
+            data-drag-duration={internItem.duration}
+            data-drag-from={sem.id}
+            onDragStart={e => onDragStart(e, internItem.id, "intern", sem.id, { duration: internItem.duration })}
+            style={{
+              flex: 1, minHeight: 58, minWidth: 200,
+              position: "relative",
+              background: "var(--card-bg)",
+              border: `2px solid ${internItem.color}`,
+              borderRadius: 6, padding: "8px 28px 8px 14px", cursor: "grab",
+              display: "flex", flexDirection: "column", justifyContent: "center",
+            }}
+          >
+            <button
+              onClick={e => { e.stopPropagation(); pushUndo(); setInternPl(p => { const n = { ...p }; delete n[internItem.id]; return n; }); }}
+              style={{
+                position: "absolute", top: 4, right: 8,
+                background: "none", border: "none", color: "var(--text-4)",
+                cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0,
+              }}
+              title="Remove internship"
+            >✕</button>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "space-between" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: internItem.color, letterSpacing: "0.06em" }}>
+                Full-Time Internship {internNum(internId)}
               </div>
-            )}
+              {(sem.type === "fall" || sem.type === "spring") && (
+                <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0, marginRight: 20 }}>
+                  <span style={{ fontSize: 14, color: "#facc15" }}>⚠</span>
+                  <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3 }}>requires petition<br/>for non-attendance</span>
+                </div>
+              )}
+            </div>
+            <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
+              {internItem.duration === 4 && internContMap[SEM_NEXT[sem.id]]
+                ? `↕ Spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (4-month block)`
+                : `${internItem.duration}-month internship`}
+            </div>
           </div>
 
         ) : mainSlots === null ? (

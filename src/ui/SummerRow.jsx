@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useState, useEffect } from "react";
-import { TYPE_BG, WORK_TERMS } from "../core/constants.js";
+import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
 
@@ -14,9 +14,10 @@ export default function SummerRow({ semA, semB }) {
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
     setHoveredZone, setHoveredSem,
-    workStartMap, workContMap,
+    workStartMap, workContMap, workPl,
+    internStartMap, internContMap, internPl, setInternPl,
     cardRefs, onDragStart,
-    SEMESTERS, SEM_NEXT,
+    SEMESTERS, SEM_NEXT, SEM_INDEX,
     setWorkPl, pushUndo, isPhone,
     collapseOtherCredits, setCollapseOtherCredits,
   } = usePlanner();
@@ -39,7 +40,14 @@ export default function SummerRow({ semA, semB }) {
   const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;
   const rowOpacity = combinedDone ? 0.9 : 1;
 
-  const removeWork = wid => { pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[wid]; return n; }); };
+  const removeWork   = wid => { pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[wid]; return n; }); };
+  const removeIntern = iid => { pushUndo(); setInternPl(p => { const n = { ...p }; delete n[iid]; return n; }); };
+
+  const sortBySem = entries => entries
+    .filter(([, d]) => d?.semId)
+    .sort(([, a], [, b]) => (SEM_INDEX[a.semId] ?? 99) - (SEM_INDEX[b.semId] ?? 99));
+  const coopNumFor   = id => sortBySem(Object.entries(workPl)).findIndex(([i]) => i === id) + 1;
+  const internNumFor = id => sortBySem(Object.entries(internPl)).findIndex(([i]) => i === id) + 1;
 
   const renderSession = sem => {
     if (!sem) return null;
@@ -49,8 +57,9 @@ export default function SummerRow({ semA, semB }) {
     const sessionLabel = isSessionA ? "Session A" : "Session B";
 
     // ── Co-op start card ─────────────────────────────────────────
-    const workId   = workStartMap[sem.id];
-    const workItem = workId ? WORK_TERMS.find(w => w.id === workId) : null;
+    const workId     = workStartMap[sem.id];
+    const workData   = workId ? workPl[workId] : null;
+    const workItem   = workData ? { ...(COOP_TERMS.find(t => t.duration === workData.duration) ?? COOP_TERMS[0]), id: workId, duration: workData.duration } : null;
     if (workItem) {
       return (
         <div key={sem.id} style={{
@@ -65,7 +74,11 @@ export default function SummerRow({ semA, semB }) {
           <div
             ref={el => { cardRefs.current[workItem.id] = el; }}
             draggable
-            onDragStart={e => onDragStart(e, workItem.id, "work", sem.id)}
+            data-drag-id={workItem.id}
+            data-drag-type="work"
+            data-drag-duration={workItem.duration}
+            data-drag-from={sem.id}
+            onDragStart={e => onDragStart(e, workItem.id, "work", sem.id, { duration: workItem.duration })}
             style={{
               position: "relative",
               width: "100%", minHeight: 58,
@@ -85,21 +98,22 @@ export default function SummerRow({ semA, semB }) {
               title="Remove co-op"
             >✕</button>
             <div style={{ fontSize: 13, fontWeight: 900, color: workItem.color, letterSpacing: "0.05em" }}>
-              {workItem.label}
+              {workItem.label} {coopNumFor(workItem.id)}
             </div>
-            {SEM_NEXT[sem.id] && (
-              <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 3 }}>
-                ↕ spans into {SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label}
-              </div>
-            )}
+            <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 3 }}>
+              {workContMap[SEM_NEXT[sem.id]] === workItem.id
+                ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (${workItem.duration}-month block)`
+                : `${workItem.duration}-month co-op`}
+            </div>
           </div>
         </div>
       );
     }
 
     // ── Co-op continuation block ──────────────────────────────────
-    const contWorkId = workContMap[sem.id];
-    const contItem   = contWorkId ? WORK_TERMS.find(w => w.id === contWorkId) : null;
+    const contWorkId   = workContMap[sem.id];
+    const contWorkData = contWorkId ? workPl[contWorkId] : null;
+    const contItem     = contWorkData ? { ...(COOP_TERMS.find(t => t.duration === contWorkData.duration) ?? COOP_TERMS[0]), id: contWorkId, duration: contWorkData.duration } : null;
     if (contItem) {
       return (
         <div key={sem.id} style={{
@@ -119,6 +133,84 @@ export default function SummerRow({ semA, semB }) {
           }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: contItem.color }}>↕ {contItem.label} CONT.</div>
             <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 2 }}>6-month block</div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Internship start card ─────────────────────────────────────
+    const internId   = internStartMap[sem.id];
+    const internData = internId ? internPl[internId] : null;
+    const internTerm = internData ? (INTERNSHIP_TERMS.find(t => t.duration === internData.duration) ?? INTERNSHIP_TERMS[0]) : null;
+    if (internTerm) {
+      return (
+        <div key={sem.id} style={{
+          flex: 1, minWidth: 0, overflow: "hidden",
+          border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
+          background: "var(--card-bg)",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
+            <span style={{ fontSize: 9, fontWeight: 700, color: internTerm.color }}>{sessionLabel}</span>
+            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
+          </div>
+          <div
+            ref={el => { cardRefs.current[internId] = el; }}
+            draggable
+            data-drag-id={internId}
+            data-drag-type="intern"
+            data-drag-duration={internData.duration}
+            data-drag-from={sem.id}
+            onDragStart={e => onDragStart(e, internId, "intern", sem.id, { duration: internData.duration })}
+            style={{
+              position: "relative",
+              width: "100%", minHeight: 58,
+              background: "var(--card-bg)",
+              border: `2px solid ${internTerm.color}`,
+              borderRadius: 6, padding: "8px 28px 8px 14px",
+              cursor: "grab", display: "flex", flexDirection: "column", justifyContent: "center",
+            }}
+          >
+            <button
+              onClick={e => { e.stopPropagation(); removeIntern(internId); }}
+              style={{ position: "absolute", top: 4, right: 6, background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0 }}
+              title="Remove internship"
+            >✕</button>
+            <div style={{ fontSize: 13, fontWeight: 900, color: internTerm.color, letterSpacing: "0.05em" }}>
+              Full-Time Internship {internNumFor(internId)}
+            </div>
+            <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 3 }}>
+              {internData.duration === 4
+                ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label}`
+                : `${internData.duration}-month internship`}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Internship continuation block ─────────────────────────────
+    const contInternId   = internContMap[sem.id];
+    const contInternData = contInternId ? internPl[contInternId] : null;
+    const contInternTerm = contInternData ? (INTERNSHIP_TERMS.find(t => t.duration === contInternData.duration) ?? INTERNSHIP_TERMS[0]) : null;
+    if (contInternTerm) {
+      return (
+        <div key={sem.id} style={{
+          flex: 1, minWidth: 0, overflow: "hidden",
+          border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
+          background: "var(--card-bg)",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
+            <span style={{ fontSize: 9, fontWeight: 700, color: contInternTerm.color }}>{sessionLabel}</span>
+            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
+          </div>
+          <div style={{
+            width: "100%", minHeight: 58,
+            border: `2px solid ${contInternTerm.color}`,
+            borderRadius: 6, padding: "8px 14px",
+            display: "flex", flexDirection: "column", justifyContent: "center",
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: contInternTerm.color }}>↕ INTERNSHIP CONT.</div>
+            <div style={{ fontSize: 9, color: "var(--text-4)", marginTop: 2 }}>4-month block</div>
           </div>
         </div>
       );

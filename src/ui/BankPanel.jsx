@@ -4,7 +4,7 @@
 import { useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
-import { WORK_TERMS } from "../core/constants.js";
+import { COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { subjectColor } from "../core/courseModel.js";
 import CourseCard  from "./CourseCard.jsx";
 import GradPanel   from "./GradPanel.jsx";
@@ -124,7 +124,7 @@ export default function BankPanel() {
     bankWidth, setBankWidth,
     showSubjectKeys, setShowSubjectKeys,
     starredIds, collapsedSubs, setCollapsedSubs,
-    workPl, onDropBank, onDragStart, cardRefs,
+    onDropBank, onDragStart,
     bankRef, bankResizing, uiScaleRef, isPhone,
     placedIds,
     placedOut, setPlacedOut,
@@ -184,7 +184,6 @@ export default function BankPanel() {
     return m;
   }, [bankCourses, q, bankTab]);
 
-  const bankWorkIds = new Set(WORK_TERMS.filter(w => !workPl[w.id]).map(w => w.id));
   const [sideMode, setSideMode] = useState("bank"); // "bank" | "grad"
 
   const [collapsePlacedOut, setCollapsePlacedOut] = useState(true);
@@ -525,23 +524,63 @@ export default function BankPanel() {
           </div>
         )}
 
-        {bankWorkIds.size > 0 && (
-          <div style={{ padding: "6px 7px 4px", borderBottom: "1px solid var(--border-1)" }}>
-            <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", marginBottom: 5 }}>CO-OPS</div>
-            {WORK_TERMS.filter(w => bankWorkIds.has(w.id)).map(wt => (
-              <div key={wt.id}
-                ref={el => { cardRefs.current[wt.id] = el; }}
+        {/* ── WORK EXPERIENCE ── */}
+        <div style={{ padding: "6px 7px 4px", borderBottom: "1px solid var(--border-1)" }}>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", marginBottom: 5 }}>WORK EXPERIENCE</div>
+
+          {/* Co-op templates — always visible, never consumed */}
+          <div style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: 3 }}>Co-ops</div>
+          {COOP_TERMS.map(ct => (
+            <div key={ct.id}
+              draggable
+              data-drag-id=""
+              data-drag-type="work"
+              data-drag-duration={ct.duration}
+              onDragStart={e => onDragStart(e, null, "work", null, { duration: ct.duration })}
+              style={{ background: "var(--card-bg)", border: `2px solid ${ct.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
+            >
+              <div style={{ fontSize: 11, fontWeight: 900, color: ct.color }}>{ct.label}</div>
+              <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{ct.duration} months · satisfies EX</div>
+            </div>
+          ))}
+
+          {/* Internship templates — always visible, never consumed */}
+          <div style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: 3, marginTop: 6 }}>Full-Time Internships</div>
+          {INTERNSHIP_TERMS.map(it => (
+            <div key={it.id}
+              draggable
+              data-drag-id=""
+              data-drag-type="intern"
+              data-drag-duration={it.duration}
+              onDragStart={e => onDragStart(e, null, "intern", null, { duration: it.duration })}
+              style={{ background: "var(--card-bg)", border: `2px solid ${it.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
+            >
+              <div style={{ fontSize: 11, fontWeight: 900, color: it.color }}>{it.label}</div>
+              <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{it.duration} months · does not satisfy EX</div>
+            </div>
+          ))}
+
+          {/* Placed internship instances — commented out (not shown in bank)
+          {Object.entries(internPl).map(([iid, { semId, duration }]) => {
+            const term = INTERNSHIP_TERMS.find(t => t.duration === duration) ?? INTERNSHIP_TERMS[0];
+            return (
+              <div key={iid}
+                ref={el => { cardRefs.current[iid] = el; }}
                 draggable
-                data-drag-id={wt.id}
-                data-drag-type="work"
-                onDragStart={e => onDragStart(e, wt.id, "work", null)}
-                style={{ background: "var(--card-bg)", border: `2px solid ${wt.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
+                data-drag-id={iid}
+                data-drag-type="intern"
+                data-drag-duration={duration}
+                data-drag-from={semId}
+                onDragStart={e => onDragStart(e, iid, "intern", semId, { duration })}
+                style={{ background: "var(--card-bg)", border: `2px dashed ${term.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5, opacity: 0.5 }}
               >
-                <div style={{ fontSize: 11, fontWeight: 900, color: wt.color }}>{wt.label}</div>
+                <div style={{ fontSize: 11, fontWeight: 900, color: term.color }}>Internship · {duration}mo</div>
+                <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>placed — drag back to remove</div>
               </div>
-            ))}
-          </div>
-        )}
+            );
+          })}
+          */}
+        </div>
 
         {/* Course list */}
         {bankBySubject ? (

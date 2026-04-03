@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { WORK_TERMS } from "./constants.js";
+import { WORK_TERMS, INTERNSHIP_TERMS } from "./constants.js";
 import { buildPlacedKeySet, allocateMajor } from "./gradRequirements.js";
 import { loadMajor } from "../data/majorLoader.js";
 import { loadMinor } from "../data/minorLoader.js";
@@ -133,7 +133,7 @@ function sectionHtml(sec, doneKeys) {
  * gradInfo: { majorPath, concLabel, minor1Path, minor2Path,
  *             npCovered (Set<string>), doneKeys (Set<string>), totalSHRequired }
  */
-export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, workPl = {}) {
+export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, workPl = {}, internPl = {}) {
   const curIdx = dynSemIdx[currentSemId] ?? 0;
   const date   = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
@@ -170,25 +170,50 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   }
   const workStartMap = {};
   const workContMap  = {};
-  Object.entries(workPl).forEach(([wid, semId]) => {
+  Object.entries(workPl).forEach(([wid, data]) => {
+    const { semId, duration } = data || {};
+    if (!semId) return;
     workStartMap[semId] = wid;
-    const nxt = semNextMap[semId];
-    if (nxt) workContMap[nxt] = wid;
+    if (duration === 6) {
+      const nxt = semNextMap[semId];
+      if (nxt) workContMap[nxt] = wid;
+    } else if (duration === 4) {
+      // Only spans if placed on summer
+      const sem = dynSems.find(s => s.id === semId);
+      if (sem?.type === "summer") {
+        const nxt = semNextMap[semId];
+        if (nxt) workContMap[nxt] = wid;
+      }
+    }
+  });
+  const internStartMap = {};
+  const internContMap  = {};
+  Object.entries(internPl).forEach(([iid, { semId, duration }]) => {
+    internStartMap[semId] = iid;
+    if (duration === 4) {
+      const sem = dynSems.find(s => s.id === semId);
+      if (sem?.type === "summer") {
+        const nxt = semNextMap[semId];
+        if (nxt) internContMap[nxt] = iid;
+      }
+    }
   });
   let doneSH = 0, plannedSH = 0;
   const semRows = [];
   dynSems.forEach(sem => {
     const ids = Object.keys(placements).filter(id => placements[id] === sem.id && courseMap[id]);
-    const hasWork = !!workStartMap[sem.id];
-    const hasCont = !!workContMap[sem.id];
-    if (ids.length === 0 && !hasWork && !hasCont) return;
+    const hasWork      = !!workStartMap[sem.id];
+    const hasCont      = !!workContMap[sem.id];
+    const hasIntern    = !!internStartMap[sem.id];
+    const hasInternCont = !!internContMap[sem.id];
+    if (ids.length === 0 && !hasWork && !hasCont && !hasIntern && !hasInternCont) return;
     const isDone = (dynSemIdx[sem.id] ?? 99) < curIdx;
     const isCur  = sem.id === currentSemId;
     ids.forEach(id => {
       const sh = courseMap[id]?.sh ?? 0;
       if (isDone) doneSH += sh; else plannedSH += sh;
     });
-    semRows.push({ sem, ids, isDone, isCur, hasWork, hasCont });
+    semRows.push({ sem, ids, isDone, isCur, hasWork, hasCont, hasIntern, hasInternCont });
   });
 
   // ── Requirements sections HTML ────────────────────────────────
@@ -222,7 +247,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   }).join("\n");
 
   // ── Semester blocks HTML ──────────────────────────────────────
-  const semHtml = semRows.map(({ sem, ids, isDone, isCur, hasWork, hasCont }) => {
+  const semHtml = semRows.map(({ sem, ids, isDone, isCur, hasWork, hasCont, hasIntern, hasInternCont }) => {
     const semSH = ids.reduce((s, id) => s + (courseMap[id]?.sh ?? 0), 0);
     const tag   = isDone ? " done" : isCur ? " current" : "";
 
@@ -263,6 +288,52 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
             <div>
               <div class="coop-title" style="color:${workItem.color}">${workItem.label}</div>
               <div class="coop-sub">${nextSem ? `Spans into ${nextSem.label} \u00b7 6-month block` : "6-month block"}</div>
+            </div>
+          </div>
+        </div>`;
+      }
+    }
+
+    // Internship continuation row
+    if (hasInternCont && !hasIntern) {
+      const contInternId   = internContMap[sem.id];
+      const contInternData = internPl[contInternId];
+      const contInternTerm = contInternData ? (INTERNSHIP_TERMS.find(t => t.duration === contInternData.duration) ?? INTERNSHIP_TERMS[0]) : null;
+      if (contInternTerm) {
+        return `<div class="sem-block${tag}">
+          <div class="sem-head">
+            <span class="sem-label">${sem.label}</span>
+            <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
+          </div>
+          <div class="coop-row" style="border-color:${contInternTerm.color}">
+            <div class="coop-bar" style="background:${contInternTerm.color}"></div>
+            <div>
+              <div class="coop-title" style="color:${contInternTerm.color}">\u2195 INTERNSHIP CONTINUES</div>
+              <div class="coop-sub">4-month block</div>
+            </div>
+          </div>
+        </div>`;
+      }
+    }
+
+    // Internship start row
+    if (hasIntern) {
+      const internId   = internStartMap[sem.id];
+      const internData = internPl[internId];
+      const internTerm = internData ? (INTERNSHIP_TERMS.find(t => t.duration === internData.duration) ?? INTERNSHIP_TERMS[0]) : null;
+      if (internTerm) {
+        const nextSem = dynSems.find(s => s.id === semNextMap[sem.id]);
+        const spansNext = internData.duration === 4 && nextSem && dynSems.find(s => s.id === sem.id)?.type === "summer";
+        return `<div class="sem-block${tag}">
+          <div class="sem-head">
+            <span class="sem-label">${sem.label}</span>
+            <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
+          </div>
+          <div class="coop-row" style="border-color:${internTerm.color}">
+            <div class="coop-bar" style="background:${internTerm.color}"></div>
+            <div>
+              <div class="coop-title" style="color:${internTerm.color}">Full-Time Internship</div>
+              <div class="coop-sub">${spansNext ? `Spans into ${nextSem.label} \u00b7 4-month block` : `${internData.duration}-month internship`}</div>
             </div>
           </div>
         </div>`;
