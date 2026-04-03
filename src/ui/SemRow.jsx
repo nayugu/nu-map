@@ -2,6 +2,7 @@
 // SEM ROW  — renders a single non-summer semester row (fall/spring/special)
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect } from "react";
 import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
@@ -23,6 +24,9 @@ export default function SemRow({ sem }) {
     setWorkPl, pushUndo, isPhone,
     bonusSH, setBonusSH,
   } = usePlanner();
+
+  const { themeName } = useTheme();
+  const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
 
   const semStatus  = getSemStatus(sem.id);
   const isDone     = semStatus === "completed";
@@ -269,21 +273,28 @@ export default function SemRow({ sem }) {
               <div style={{ fontSize: 14, fontWeight: 900, color: workItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNum}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, minWidth: 0 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
                 <CompanySearch
                   name={workData.company}
-                  color={workItem.color}
+                  color={companyColor}
                   fontSize={14}
-                  onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                  onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
-                <CompanyLogo domain={workData.companyDomain} size={40} />
-                <button
-                  onClick={e => { e.stopPropagation(); pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[workItem.id]; return n; }); }}
+                <input
+                  value={workData.subline ?? ""}
+                  onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
-                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, flexShrink: 0 }}
-                  title="Remove co-op"
-                >✕</button>
+                  placeholder="Role"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                />
               </div>
+              <CompanyLogo domain={workData.companyDomain} size={40} />
+              <button
+                onClick={e => { e.stopPropagation(); pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[workItem.id]; return n; }); }}
+                onMouseDown={e => e.stopPropagation()}
+                style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                title="Remove co-op"
+              >✕</button>
             </div>
             {/* <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
               {workContMap[SEM_NEXT[sem.id]] === workItem.id
@@ -326,21 +337,28 @@ export default function SemRow({ sem }) {
               <div style={{ fontSize: 14, fontWeight: 900, color: internItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNum(internId)}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, minWidth: 0 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
                 <CompanySearch
                   name={internPl[internItem.id]?.company}
-                  color={internItem.color}
+                  color={companyColor}
                   fontSize={14}
-                  onChange={v => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                  onChange={v => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
-                <CompanyLogo domain={internPl[internItem.id]?.companyDomain} size={40} />
-                <button
-                  onClick={e => { e.stopPropagation(); pushUndo(); setInternPl(p => { const n = { ...p }; delete n[internItem.id]; return n; }); }}
+                <input
+                  value={internPl[internItem.id]?.subline ?? ""}
+                  onChange={e => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
-                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, flexShrink: 0 }}
-                  title="Remove internship"
-                >✕</button>
+                  placeholder="Role"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                />
               </div>
+              <CompanyLogo domain={internPl[internItem.id]?.companyDomain} size={40} />
+              <button
+                onClick={e => { e.stopPropagation(); pushUndo(); setInternPl(p => { const n = { ...p }; delete n[internItem.id]; return n; }); }}
+                onMouseDown={e => e.stopPropagation()}
+                style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                title="Remove internship"
+              >✕</button>
             </div>
             {/* <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
               {internItem.duration === 4 && internContMap[SEM_NEXT[sem.id]]

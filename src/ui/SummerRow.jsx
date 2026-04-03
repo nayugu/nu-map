@@ -2,6 +2,7 @@
 // SUMMER ROW  — renders sumA + sumB as a single combined visual block
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect } from "react";
 import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { getSemSH, getOrderedCourses } from "../core/planModel.js";
@@ -23,6 +24,9 @@ export default function SummerRow({ semA, semB }) {
     setWorkPl, pushUndo, isPhone,
     collapseOtherCredits, setCollapseOtherCredits,
   } = usePlanner();
+
+  const { themeName } = useTheme();
+  const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
 
   // Collapsible state for other credits
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
@@ -93,21 +97,28 @@ export default function SummerRow({ semA, semB }) {
               <div style={{ fontSize: 13, fontWeight: 900, color: workItem.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNumFor(workItem.id)}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 5, flex: 1, minWidth: 0 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
                 <CompanySearch
                   name={workData.company}
-                  color={workItem.color}
+                  color={companyColor}
                   fontSize={13}
-                  onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                  onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
-                <CompanyLogo domain={workData.companyDomain} size={34} />
-                <button
-                  onClick={e => { e.stopPropagation(); removeWork(workItem.id); }}
+                <input
+                  value={workData.subline ?? ""}
+                  onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
-                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
-                  title="Remove co-op"
-                >✕</button>
+                  placeholder="Role"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                />
               </div>
+              <CompanyLogo domain={workData.companyDomain} size={34} />
+              <button
+                onClick={e => { e.stopPropagation(); removeWork(workItem.id); }}
+                onMouseDown={e => e.stopPropagation()}
+                style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                title="Remove co-op"
+              >✕</button>
             </div>
             {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {workContMap[SEM_NEXT[sem.id]] === workItem.id
@@ -182,21 +193,28 @@ export default function SummerRow({ semA, semB }) {
               <div style={{ fontSize: 13, fontWeight: 900, color: internTerm.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNumFor(internId)}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 5, flex: 1, minWidth: 0 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
                 <CompanySearch
                   name={internData.company}
-                  color={internTerm.color}
+                  color={companyColor}
                   fontSize={13}
-                  onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                  onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
-                <CompanyLogo domain={internData.companyDomain} size={34} />
-                <button
-                  onClick={e => { e.stopPropagation(); removeIntern(internId); }}
+                <input
+                  value={internData.subline ?? ""}
+                  onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
-                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
-                  title="Remove internship"
-                >✕</button>
+                  placeholder="Role"
+                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 400, color: companyColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                />
               </div>
+              <CompanyLogo domain={internData.companyDomain} size={34} />
+              <button
+                onClick={e => { e.stopPropagation(); removeIntern(internId); }}
+                onMouseDown={e => e.stopPropagation()}
+                style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                title="Remove internship"
+              >✕</button>
             </div>
             {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {internData.duration === 4
