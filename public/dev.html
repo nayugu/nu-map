@@ -1254,11 +1254,17 @@ function renderRun(run, deployedTs = null) {
     let detail = "";
     if (isFix) {
       const courses = run.courses ?? [];
+      const n = run.fixed ?? courses.length;
       detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
-        <div class="stat"><div class="val" style="font-size:22px;color:#f59e0b">${run.fixed ?? courses.length}</div><div class="lbl">Courses fixed</div></div>
+        <div class="stat"><div class="val" style="font-size:22px;color:#f59e0b">${n}</div><div class="lbl">Courses fixed</div></div>
       </div>`;
       if (courses.length) {
-        detail += `<div style="font-size:11px;color:var(--text2);margin-top:8px;word-break:break-all">${courses.map(c => escHtml(c)).join(", ")}</div>`;
+        detail += `<details style="margin-top:8px;font-size:11px">
+          <summary style="cursor:pointer;color:var(--text2)">${courses.length} course${courses.length !== 1 ? "s" : ""} updated</summary>
+          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+            ${courses.map(c => `<code style="font-size:10px;background:var(--bg3);padding:1px 5px;border-radius:3px">${escHtml(c)}</code>`).join("")}
+          </div>
+        </details>`;
       }
     } else if (run.stats) {
       const s = run.stats;
