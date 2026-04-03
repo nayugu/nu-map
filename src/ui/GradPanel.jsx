@@ -71,17 +71,24 @@ function CreditBar({ completedSH, plannedSH, requiredSH }) {
   );
 }
 
-function CheckBox({ sat }) {
+function CheckBox({ sat, dimmedCheck = false }) {
   const ctx = useContext(GradCtx);
   const ph  = ctx?.isPhone;
   const sz  = ph ? 12 : 14;
+  const base = { display: "inline-flex", alignItems: "center", justifyContent: "center",
+    width: sz, height: sz, borderRadius: ph ? 2 : 3, flexShrink: 0,
+    fontSize: ph ? 7 : 9, fontWeight: 900 };
+  if (dimmedCheck) return (
+    <span style={{ ...base, background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", color: "var(--text-5)", overflow: "hidden", position: "relative" }}>
+      <svg width={sz} height={sz} viewBox={`0 0 ${sz} ${sz}`} style={{ position: "absolute", top: 0, left: 0 }}>
+        <line x1="2" y1={sz - 2} x2={sz - 2} y2="2" stroke="var(--text-5)" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    </span>
+  );
   return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: sz, height: sz, borderRadius: ph ? 2 : 3, flexShrink: 0,
-      background:  sat ? "var(--success-bg)"     : "var(--bg-surface-2)",
+    <span style={{ ...base,
+      background: sat ? "var(--success-bg)"   : "var(--bg-surface-2)",
       border: `1px solid ${sat ? "var(--success-border)" : "var(--border-2)"}`,
-      fontSize: ph ? 7 : 9, fontWeight: 900,
       color: sat ? "var(--success)" : "var(--text-5)",
     }}>
       {sat ? "✓" : ""}
@@ -204,7 +211,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
 }
 // ── Requirement tree ─────────────────────────────────────────────
 
-function ReqNode({ r, depth = 0 }) {
+function ReqNode({ r, depth = 0, dimmed = false }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
   const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone } = useContext(GradCtx);
@@ -217,10 +224,9 @@ function ReqNode({ r, depth = 0 }) {
   if (r.type === "COURSE") {
     const course    = courseMap?.[r.key];
     const isSelected = selectedId === r.key;
-    // Show only the course code, without description (strip " — Description" part)
     const displayLabel = r.label.split(' — ')[0];
     return (
-      <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB }}>
+      <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
         <div
           style={{ display: "flex", alignItems: "center", gap: rowGap, cursor: course ? "grab" : "default" }}
           draggable={!!course}
@@ -235,7 +241,7 @@ function ReqNode({ r, depth = 0 }) {
           } : undefined}
           title={course ? (isPhone ? r.label : `Drag to place • click to preview`) : undefined}
         >
-          <CheckBox sat={r.sat} />
+          <CheckBox sat={r.sat} dimmedCheck={dimmed} />
           <span
             onMouseEnter={course ? () => setHov(true) : undefined}
             onMouseLeave={course ? () => setHov(false) : undefined}
@@ -251,8 +257,8 @@ function ReqNode({ r, depth = 0 }) {
   }
 
   if (r.type === "RANGE") return (
-    <div style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: pl + baseIndent, marginBottom: rowMB }}>
-      <CheckBox sat={r.sat} />
+    <div style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: pl + baseIndent, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
+      <CheckBox sat={r.sat} dimmedCheck={dimmed} />
       <span style={{ fontSize: nodeFz, color: r.sat ? "var(--text-2)" : "var(--text-4)" }}>
         {r.sat ? `${r.matched.slice(0, 3).join(", ")}${r.matched.length > 3 ? ` +${r.matched.length - 3}` : ""} (${r.subject} range)` : r.label}
       </span>
@@ -262,10 +268,10 @@ function ReqNode({ r, depth = 0 }) {
   if (r.type === "XOM") {
     const has = r.children?.length > 0;
     return (
-      <div style={{ paddingLeft: pl, marginBottom: rowMB }}>
+      <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
         <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
           style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
-          <CheckBox sat={r.sat} />
+          <CheckBox sat={r.sat} dimmedCheck={dimmed} />
           <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>
             {r.satSh}/{r.reqSh} SH from elective pool
           </span>
@@ -286,10 +292,10 @@ function ReqNode({ r, depth = 0 }) {
     r.title ?? r.label;
 
   return (
-    <div style={{ paddingLeft: pl, marginBottom: rowMB }}>
+    <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
       <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
         style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
-        <CheckBox sat={r.sat} />
+        <CheckBox sat={r.sat} dimmedCheck={dimmed} />
         <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>{heading}</span>
         {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
       </div>
@@ -342,7 +348,9 @@ function SectionBlock({ sec, defaultOpen = true }) {
               ⚠ {w}
             </div>
           ))}
-          {sec.children.map((r, i) => <ReqNode key={i} r={r} />)}
+          {sec.children.map((r, i) => (
+            <ReqNode key={i} r={r} dimmed={isPoolStructure && !r.sat && sec.satCount >= sec.minRequired} />
+          ))}
           {isPoolStructure && sec.minRequired > 0 && (
             <div style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginTop: ph ? 3 : 4, paddingLeft: 4, fontStyle: "italic" }}>
               Requires {sec.minRequired} of {sec.total}
