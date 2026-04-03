@@ -217,12 +217,76 @@ export function getTotalPlacedSH(placements, courseMap) {
 // ── Allocation functions (prevent double-counting within a major) ──
 
 /**
+ * Build General Electives section: tracks courses placed but unallocated to major requirements.
+ * These are "free choice" courses that count towards total credit hours but don't fulfill
+ * any specific major requirement (can exceed required minimum).
+ */
+function buildGeneralElectivesSection(placedSet, sectionResults, courseMap) {
+  // Collect all courses already allocated to major requirements
+  const allocatedKeys = new Set();
+  for (const section of sectionResults) {
+    if (section.allocatedCourses) {
+      section.allocatedCourses.forEach(k => allocatedKeys.add(k));
+    }
+  }
+
+  // Find placed courses that are NOT allocated
+  const generalElectiveKeys = [];
+  let generalElectiveSH = 0;
+  for (const key of placedSet) {
+    if (!allocatedKeys.has(key)) {
+      generalElectiveKeys.push(key);
+      const course = courseMap[key];
+      if (course) {
+        generalElectiveSH += course.sh ?? 4;
+      }
+    }
+  }
+
+  // Build children array: one course per child
+  const children = generalElectiveKeys.map(key => {
+    const course = courseMap[key];
+    return {
+      type: 'COURSE',
+      key,
+      sat: true,
+      label: course ? `${course.subject} ${course.number}` : key,
+    };
+  });
+
+  return {
+    type: 'SECTION',
+    title: 'General Electives',
+    warnings: [],
+    sat: true, // Always "satisfied" since it's flexible
+    satCount: generalElectiveKeys.length,
+    minRequired: 0, // No minimum (can go over required limit)
+    total: generalElectiveKeys.length,
+    children,
+    allocatedCourses: new Set(generalElectiveKeys),
+    // Add SH info for display
+    totalSH: generalElectiveSH,
+  };
+}
+
+/**
  * Allocate courses to sections of a major, ensuring each course is used at most once.
  * Returns an array of section result objects, each with an additional `allocatedCourses` Set.
+ * Automatically appends General Electives section at the end.
  */
 export function allocateMajor(major, placedSet, courseMap) {
   const used = new Set();
-  return allocateSections(major.requirementSections ?? [], placedSet, used, courseMap);
+  // Filter out "Required General Electives" placeholder - we generate our own
+  const sectionsToAllocate = (major.requirementSections ?? []).filter(
+    section => section.title !== 'Required General Electives'
+  );
+  const sectionResults = allocateSections(sectionsToAllocate, placedSet, used, courseMap);
+
+  // Add General Electives section (tracks unallocated courses)
+  const generalElectives = buildGeneralElectivesSection(placedSet, sectionResults, courseMap);
+  sectionResults.push(generalElectives);
+
+  return sectionResults;
 }
 
 /**
@@ -245,19 +309,82 @@ export function allocateSections(sections, placedSet, globalUsed, courseMap) {
 /**
  * Allocate courses to a single section.
  */
+/**
+ * Normalize "pick N from pool" sections by flattening nested choice nodes.
+ *
+ * Systematic approach to handle various structures:
+ * 1. SECTION with single choice wrapper (OR/AND with no explicit minRequirementCount):
+ *    SECTION { requirements: [OR { courses: [N courses] }] }
+ *    → Set minRequirementCount=1 and flatten choice node courses
+ *
+ * 2. SECTION with minRequirementCount < total containing mixed choice/course/range nodes:
+ *    SECTION { minRequirementCount: 1, requirements: [COURSE, OR { ... }, RANGE, AND { ... }, ...] }
+ *    → Flatten all choice nodes (OR/AND) to expose all options at same level
+ *
+ * This ensures all options appear as direct siblings, so minRequirementCount
+ * applies uniformly across the entire pool. Handles any number of choice nodes.
+ */
+function normalizePooledSection(section) {
+  if (section.type !== 'SECTION') return section;
+
+  const reqs = section.requirements ?? [];
+  if (!reqs.length) return section;
+
+  // Case 1: Single choice wrapper with no explicit minRequirementCount
+  if (reqs.length === 1 && !section.minRequirementCount) {
+    const node = reqs[0];
+    if ((node.type === 'OR' || node.type === 'AND') && node.courses?.length >= 2) {
+      return {
+        ...section,
+        minRequirementCount: 1,  // "Pick 1 of these"
+        requirements: node.courses,  // Flatten to direct children
+      };
+    }
+  }
+
+  // Case 2: Explicit pool structure with minRequirementCount < total
+  // Flatten all nested choice nodes (OR/AND) to expose all options at same level
+  if (section.minRequirementCount && section.minRequirementCount < reqs.length) {
+    const hasChoiceNode = reqs.some(req => req.type === 'OR' || req.type === 'AND');
+    if (hasChoiceNode) {
+      const flattened = [];
+      for (const req of reqs) {
+        if ((req.type === 'OR' || req.type === 'AND') && req.courses?.length) {
+          // Expand all options from choice nodes as direct siblings
+          flattened.push(...req.courses);
+        } else {
+          flattened.push(req);
+        }
+      }
+      // Return normalized structure if we actually modified it
+      if (flattened.length !== reqs.length) {
+        return {
+          ...section,
+          requirements: flattened,
+        };
+      }
+    }
+  }
+
+  return section;
+}
+
 export function allocateSection(section, placedSet, used, originalUsed, courseMap) {
-  const children = (section.requirements ?? []).map(req => allocateNode(req, placedSet, used, originalUsed, courseMap));
+  // Normalize pooled sections (flatten choice nodes in "pick N" structures)
+  const normalized = normalizePooledSection(section);
+
+  const children = (normalized.requirements ?? []).map(req => allocateNode(req, placedSet, used, originalUsed, courseMap));
   const satCount = children.filter(c => c.sat).length;
-  const sat = satCount >= section.minRequirementCount;
+  const sat = satCount >= normalized.minRequirementCount;
   const allocatedCourses = new Set();
   children.forEach(c => c.allocatedCourses?.forEach(k => allocatedCourses.add(k)));
   return {
     type: 'SECTION',
-    title: section.title ?? '',
-    warnings: section.warnings ?? [],
+    title: normalized.title ?? '',
+    warnings: normalized.warnings ?? [],
     sat,
     satCount,
-    minRequired: section.minRequirementCount,
+    minRequired: normalized.minRequirementCount,
     total: children.length,
     children,
     allocatedCourses,
@@ -455,6 +582,10 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
         children.push(childResult);
         if (!childResult.sat) allSat = false;
       }
+
+      // Count satisfied children for partial progress display
+      const satCount = children.filter(c => c.sat).length;
+
       if (allSat) {
         usedClone.forEach(k => used.add(k));
         const allocatedCourses = new Set();
@@ -480,7 +611,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
         return {
           type: 'AND',
           sat: false,
-          satCount: 0,
+          satCount,
           total: children.length,
           children: failedChildren,
           label: `All of (${(node.courses ?? []).map(c => c.label).join(', ')})`,
@@ -513,6 +644,8 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
       return {
         type: 'OR',
         sat: !!satisfiedChild,
+        satCount: satisfiedChild ? 1 : 0,
+        total: children.length,
         children,
         label: `One of (${children.map(c => c.label).join(', ')})`,
         allocatedCourses,
@@ -530,4 +663,56 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
         allocatedCourses: new Set(),
       };
   }
+}
+/**
+ * Calculate "General Electives" — all placed courses not allocated to major requirements.
+ * Returns a synthetic SECTION result with unallocated courses listed as children.
+ */
+export function calculateGeneralElectives(placedSet, allocatedSet, courseMap) {
+  const unallocated = [];
+  let totalSH = 0;
+
+  for (const key of placedSet) {
+    if (!allocatedSet.has(key)) {
+      const course = courseMap[key];
+      if (course) {
+        const sh = course.sh ?? 4;
+        unallocated.push({
+          type: 'COURSE',
+          key,
+          sat: true,
+          label: `${course.subject} ${course.number}`,
+          sh,
+        });
+        totalSH += sh;
+      }
+    }
+  }
+
+  return {
+    type: 'SECTION',
+    title: 'General Electives',
+    sat: true,
+    satCount: unallocated.length,
+    minRequired: 0,
+    total: unallocated.length,
+    children: unallocated,
+    allocatedCourses: new Set(unallocated.map(c => c.key)),
+    generalElectivesSH: totalSH,
+  };
+}
+
+/**
+ * Allocate all sections + calculate general electives.
+ * Returns sections array with general electives appended at end.
+ */
+export function allocateMajorWithElectives(major, placedSet, courseMap) {
+  const globalUsed = new Set();
+  // Filter out "Required General Electives" placeholder - we generate our own
+  const sectionsToAllocate = (major.requirementSections ?? []).filter(
+    section => section.title !== 'Required General Electives'
+  );
+  const sections = allocateSections(sectionsToAllocate, placedSet, globalUsed, courseMap);
+  const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap);
+  return { sections, generalElectives, allocatedSet: globalUsed };
 }

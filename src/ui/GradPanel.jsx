@@ -11,6 +11,7 @@ import { NUPATH_LABELS }      from "../core/constants.js";
 import {
   buildPlacedKeySet,
   allocateMajor,
+  allocateMajorWithElectives,
   allocateSections,
   getNuPathCoverage,
 } from "../core/gradRequirements.js";
@@ -281,7 +282,7 @@ function ReqNode({ r, depth = 0 }) {
   const has = r.children?.length > 0;
   const heading =
     r.type === "AND" ? `All of (${r.satCount ?? 0}/${r.total ?? 0})` :
-    r.type === "OR"  ? `One of` :
+    r.type === "OR"  ? `One of (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.title ?? r.label;
 
   return (
@@ -305,7 +306,13 @@ function SectionBlock({ sec, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   const ctx = useContext(GradCtx);
   const ph  = ctx?.isPhone;
-  const frac = sec.total > 0 ? sec.satCount / sec.total : 0;
+
+  // For pool structures (minRequired < total): display requirement satisfaction, not option count
+  const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < sec.total;
+  const displaySatCount = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
+  const displayTotal = isPoolStructure ? sec.minRequired : sec.total;
+
+  const frac = displayTotal > 0 ? displaySatCount / displayTotal : 0;
 
   return (
     <div style={{ marginBottom: ph ? 3 : 4, border: "1px solid var(--border-2)", borderRadius: 6, overflow: "hidden" }}>
@@ -320,7 +327,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {sec.title}
         </span>
-        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>{sec.satCount}/{sec.total}</span>
+        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>{displaySatCount}/{displayTotal}</span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>
       </div>
       {/* Progress sliver */}
@@ -336,7 +343,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
             </div>
           ))}
           {sec.children.map((r, i) => <ReqNode key={i} r={r} />)}
-          {sec.minRequired < sec.total && (
+          {isPoolStructure && sec.minRequired > 0 && (
             <div style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginTop: ph ? 3 : 4, paddingLeft: 4, fontStyle: "italic" }}>
               Requires {sec.minRequired} of {sec.total}
             </div>
@@ -415,7 +422,14 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
   }, [path]);
 
   const sections = useMemo(
-    () => (minor ? allocateMajor(minor, placedSet, courseMap) : []),
+    () => {
+      if (!minor) return [];
+      // Filter out "Required General Electives" placeholder
+      const minorSections = (minor.requirementSections ?? []).filter(
+        section => section.title !== 'Required General Electives'
+      );
+      return allocateSections(minorSections, placedSet, new Set(), courseMap);
+    },
     [minor, placedSet, courseMap]
   );
 
@@ -503,16 +517,32 @@ export default function GradPanel() {
   }, [major, selConc]);
 
   // ── Allocate all sections together (shared used set) ────────────────
+  // Major gets General Electives automatically appended
   const allocatedSections = useMemo(() => {
     if (!major) return [];
-    // Each major gets its own fresh global used set
-    return allocateSections(allSections, placedSet, new Set(), courseMap);
-  }, [allSections, placedSet, courseMap]);
 
-  // Split back for display: major sections (original count) and concentration (if any)
+    // Allocate major requirements + General Electives
+    const { sections: majorResults, generalElectives } = allocateMajorWithElectives(major, placedSet, courseMap);
+
+    // Add General Electives as the last major section
+    const majorWithElectives = [...majorResults, generalElectives];
+
+    // Allocate concentration if present
+    if (selConc && major.concentrations) {
+      const concSection = major.concentrations.concentrationOptions.find(c => c.title === selConc);
+      if (concSection) {
+        const concResults = allocateSections([concSection], placedSet, new Set(), courseMap);
+        return [...majorWithElectives, ...concResults];
+      }
+    }
+
+    return majorWithElectives;
+  }, [allSections, placedSet, courseMap, major, selConc]);
+
+  // Split back for display: major sections (including General Electives) and concentration (if any)
   const majorSectionsCount = major?.requirementSections?.length ?? 0;
-  const majorSections = allocatedSections.slice(0, majorSectionsCount);
-  const concSection = allocatedSections.length > majorSectionsCount ? allocatedSections[majorSectionsCount] : null;
+  const majorSections = allocatedSections.slice(0, majorSectionsCount + 1); // +1 for General Electives
+  const concSection = allocatedSections.length > majorSectionsCount + 1 ? allocatedSections[majorSectionsCount + 1] : null;
 
   const satSections = majorSections.filter(s => s.sat).length;
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
