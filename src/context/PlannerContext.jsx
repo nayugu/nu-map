@@ -186,6 +186,7 @@ export function PlannerProvider({ children }) {
   const onDropRef      = useRef(null);   // updated each render for touch drag
   const onDropBankRef   = useRef(null);   // updated each render for touch drag → bank
   const touchDragIdRef  = useRef(null);  // card id currently being touch-dragged
+  const touchDragElRef  = useRef(null);  // actual DOM element being touch-dragged (works for null-id templates)
   const ghostRef        = useRef(null);  // floating ghost element during touch drag
   const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
   const isFirstRender = useRef(true);
@@ -1095,6 +1096,7 @@ export function PlannerProvider({ children }) {
       cardEl.style.opacity       = '0.3';
       cardEl.style.pointerEvents = 'none';
 
+      touchDragElRef.current = cardEl;
       touchDragIdRef.current = id;
       touchDragTypeRef.current = type;
       touchDragFromRef.current = fromSem;
@@ -1102,7 +1104,7 @@ export function PlannerProvider({ children }) {
     };
 
     const onTouchMove = (e) => {
-      if (!touchDragIdRef.current) return;
+      if (!touchDragElRef.current && !touchDragIdRef.current) return;
       e.preventDefault();
       const touch = e.touches[0];
       if (ghostRef.current) {
@@ -1116,15 +1118,16 @@ export function PlannerProvider({ children }) {
 
     const onTouchEnd = (e) => {
       console.log('Touch end triggered');
-      if (!touchDragIdRef.current) {
+      if (!touchDragElRef.current && !touchDragIdRef.current) {
         console.log('No drag in progress');
         return;
       }
       const id = touchDragIdRef.current;
       const type = touchDragTypeRef.current;
       const fromSem = touchDragFromRef.current;
-      const cardEl = cardRefs.current[id];
+      const cardEl = touchDragElRef.current || cardRefs.current[id];
       if (cardEl) { cardEl.style.opacity = ''; cardEl.style.pointerEvents = ''; }
+      touchDragElRef.current = null;
       removeGhost();
       document.documentElement.style.userSelect = '';
       document.documentElement.style.webkitUserSelect = '';

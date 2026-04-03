@@ -728,9 +728,6 @@ export default function Header() {
           <span style={{ display: "inline-block", width: isPhone ? 10 : 12, height: isPhone ? 10 : 12, borderRadius: 3, border: "2px solid var(--warn-bright)", flexShrink: 0 }} />
           <span>Misplaced</span>
         </div>
-        {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)" }}>
-          · Click card to highlight relationships · Click semester label to mark as current
-        </span>}
       </div>
 
       {/* ── Co-op / graduation conflict warning ── */}

@@ -64,10 +64,11 @@ export default function SummerRow({ semA, semB }) {
     const workItem   = workData ? { ...(COOP_TERMS.find(t => t.duration === workData.duration) ?? COOP_TERMS[0]), id: workId, duration: workData.duration } : null;
     if (workItem) {
       return (
-        <div key={sem.id} style={{
+        <div key={sem.id} data-sem-id={sem.id} style={{
           flex: 1, minWidth: 0, overflow: "hidden",
-          border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
-          background: "var(--card-bg)",
+          border: `1px solid ${hoveredSem === sem.id ? "var(--active)" : "var(--border-slot)"}`, borderRadius: 4, padding: "4px 5px",
+          background: hoveredSem === sem.id ? "var(--active-bg)" : "var(--card-bg)",
+          transition: "background 0.1s, border-color 0.1s",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
             <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
@@ -134,7 +135,7 @@ export default function SummerRow({ semA, semB }) {
     const contItem     = contWorkData ? { ...(COOP_TERMS.find(t => t.duration === contWorkData.duration) ?? COOP_TERMS[0]), id: contWorkId, duration: contWorkData.duration } : null;
     if (contItem) {
       return (
-        <div key={sem.id} style={{
+        <div key={sem.id} data-sem-id={sem.id} style={{
           flex: 1, minWidth: 0, overflow: "hidden",
           border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
           background: "var(--card-bg)",
@@ -162,10 +163,11 @@ export default function SummerRow({ semA, semB }) {
     const internTerm = internData ? (INTERNSHIP_TERMS.find(t => t.duration === internData.duration) ?? INTERNSHIP_TERMS[0]) : null;
     if (internTerm) {
       return (
-        <div key={sem.id} style={{
+        <div key={sem.id} data-sem-id={sem.id} style={{
           flex: 1, minWidth: 0, overflow: "hidden",
-          border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
-          background: "var(--card-bg)",
+          border: `1px solid ${hoveredSem === sem.id ? "var(--active)" : "var(--border-slot)"}`, borderRadius: 4, padding: "4px 5px",
+          background: hoveredSem === sem.id ? "var(--active-bg)" : "var(--card-bg)",
+          transition: "background 0.1s, border-color 0.1s",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
             <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
@@ -232,7 +234,7 @@ export default function SummerRow({ semA, semB }) {
     const contInternTerm = contInternData ? (INTERNSHIP_TERMS.find(t => t.duration === contInternData.duration) ?? INTERNSHIP_TERMS[0]) : null;
     if (contInternTerm) {
       return (
-        <div key={sem.id} style={{
+        <div key={sem.id} data-sem-id={sem.id} style={{
           flex: 1, minWidth: 0, overflow: "hidden",
           border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
           background: "var(--card-bg)",

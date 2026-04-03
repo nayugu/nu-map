@@ -20,6 +20,8 @@
       .hdr-btn-dd:hover { border-color: var(--text-4, rgba(0,0,0,0.45)) !important; }
       input::placeholder { font-size: inherit; opacity: 0.45; }
       .work-input::placeholder { opacity: 1; color: inherit; }
+      /* Prevent browser text-selection on draggable cards (fixes serif font flash on touch) */
+      [data-drag-id] { -webkit-user-select: none; user-select: none; }
     </style>
   </head>
   <body>
