@@ -8,8 +8,6 @@ import { createPortal } from "react-dom";
 
 const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 
-const vpLock   = () => { const v = document.querySelector('meta[name=viewport]'); if (v) v.content = 'width=device-width, initial-scale=1, maximum-scale=1'; };
-const vpUnlock = () => { const v = document.querySelector('meta[name=viewport]'); if (v) v.content = 'width=device-width, initial-scale=1'; };
 
 export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company", phonePadding = false, align = "right" }) {
   const [query,   setQuery]   = useState(name ?? "");
@@ -108,23 +106,15 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
       <input
         value={query}
         onChange={handleChange}
-        onFocus={() => { vpLock(); if (results.length) { openAt(); setOpen(true); } }}
-        onBlur={() => vpUnlock()}
+        onFocus={() => { if (results.length) { openAt(); setOpen(true); } }}
         onMouseDown={e => e.stopPropagation()}
         placeholder={placeholder}
         style={{
           width: "100%", textAlign: align,
           fontFamily: "'Inter', sans-serif",
-          // iOS Safari zooms in on inputs with font-size < 16px; use 16px and
-          // visually scale down so the text still appears at the intended size.
-          fontSize: phonePadding ? 16 : fontSize,
-          transform: phonePadding ? `scale(${fontSize / 16})` : undefined,
-          transformOrigin: "right center",
-          fontWeight: 600, letterSpacing: "0.01em",
+          fontSize, fontWeight: 600, letterSpacing: "0.01em",
           color: query ? color : (emptyColor ?? "var(--text-5)"),
-          background: "transparent", border: "none", outline: "none",
-          padding: phonePadding ? "5px 0" : 0,
-          touchAction: "manipulation",
+          background: "transparent", border: "none", outline: "none", padding: 0,
         }}
         className="work-input"
       />
