@@ -58,6 +58,14 @@ export function PlannerProvider({ children }) {
     return saved ? new Set(saved) : new Set();
   });
 
+  // Substitutions: [{from: courseId, to: courseId}, ...]
+  // When "from" is placed, "to" is also virtually placed for requirement checking.
+  // Credits are only counted once (from the actual placed "from" course).
+  const [substitutions, setSubstitutions] = useState(() => {
+    const saved = _saved?.persist && _saved.substitutions;
+    return Array.isArray(saved) ? saved : [];
+  });
+
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
   const [stickyCourses, setStickyCourses] = useState(() => {
@@ -208,11 +216,11 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH });
-  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
+    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions });
+  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH });
+    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
   }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
@@ -292,6 +300,19 @@ export function PlannerProvider({ children }) {
     };
   }, [loading]);
 
+  // effectivePlacements: real placements + virtual entries for substitution targets.
+  // When CS3500 → CS4400 substitution exists and CS3500 is placed in fall2024,
+  // CS4400 is added as if placed in fall2024. Credits use only real `placements`.
+  const effectivePlacements = useMemo(() => {
+    if (!substitutions.length) return placements;
+    const result = { ...placements };
+    for (const { from, to } of substitutions) {
+      const fromSemId = placements[from];
+      if (fromSemId) result[to] = fromSemId;
+    }
+    return result;
+  }, [placements, substitutions]);
+
   // ── Effect: SVG lines ─────────────────────────────────────────
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
@@ -329,6 +350,25 @@ export function PlannerProvider({ children }) {
           }
           newLines.push({ ...rel, type, fp, tp });
         });
+
+        // Substitution-inherited prereq lines for selected course.
+        // Case 1: selected course IS the substituting course — draw lines to its inherited dependents.
+        // Case 2: selected course depends on a substituted course — draw line from the substituting course.
+        substitutions.forEach(({ from: subFrom, to: subTo }) => {
+          if (!placements[subFrom] || placements[subFrom] === "incoming") return;
+          allEdges.forEach(e => {
+            if (e.type !== "prerequisite" || e.from !== subTo) return;
+            if (!placements[e.to] || placements[e.to] === "incoming") return;
+            if (subFrom !== selectedId && e.to !== selectedId) return;
+            const fp = getCenter(subFrom);
+            const tp = getCenter(e.to);
+            if (!fp || !tp) return;
+            const subFromIdx = SEM_INDEX[placements[subFrom]] ?? -1;
+            const depIdx     = SEM_INDEX[placements[e.to]]    ?? -1;
+            const subType    = subFromIdx < depIdx ? "substitution-prereq" : "substitution-prereq-order";
+            newLines.push({ from: subFrom, to: e.to, type: subType, fp, tp });
+          });
+        });
       }
 
       // ── Always-on violation lines ────────────────────────────────
@@ -344,7 +384,7 @@ export function PlannerProvider({ children }) {
             const toCourse = courseMap[rel.to];
             if (!toCourse || !toCourse.prereqs?.length) return;
             const ti = SEM_INDEX[placements[rel.to]];
-            const prereqResult = evalPrereqTree(toCourse.prereqs, placements, SEM_INDEX, ti);
+            const prereqResult = evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti);
             if (prereqResult !== "order") return; // Only draw if unsatisfied due to order
             // Now, check if THIS edge is the one out of order
             const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
@@ -361,12 +401,32 @@ export function PlannerProvider({ children }) {
             newLines.push({ ...rel, type: "corequisite-viol", fp, tp });
           }
         });
+
+        // Substitution-inherited prereq lines (always-on).
+        // For each substitution, draw dashed green lines from the substituting course
+        // to every placed course that lists the substituted course as a direct prereq.
+        substitutions.forEach(({ from: subFrom, to: subTo }) => {
+          if (!placements[subFrom] || placements[subFrom] === "incoming") return;
+          allEdges.forEach(e => {
+            if (e.type !== "prerequisite" || e.from !== subTo) return;
+            if (!placements[e.to] || placements[e.to] === "incoming") return;
+            // Skip if already drawn by selection logic
+            if (selectedId && (subFrom === selectedId || e.to === selectedId)) return;
+            const fp = getCenter(subFrom);
+            const tp = getCenter(e.to);
+            if (!fp || !tp) return;
+            const subFromIdx = SEM_INDEX[placements[subFrom]] ?? -1;
+            const depIdx     = SEM_INDEX[placements[e.to]]    ?? -1;
+            const subType    = subFromIdx < depIdx ? "substitution-prereq" : "substitution-prereq-order";
+            newLines.push({ from: subFrom, to: e.to, type: subType, fp, tp });
+          });
+        });
       }
 
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, showViolLines, placements, workPl, scrollTick, allEdges, SEM_INDEX]);
+  }, [selectedId, showViolLines, placements, effectivePlacements, substitutions, workPl, scrollTick, allEdges, SEM_INDEX]);
 
   // ── Undo / redo ───────────────────────────────────────────────
   const pushUndo = () => {
@@ -499,11 +559,11 @@ export function PlannerProvider({ children }) {
       if (placedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[placements[c.id]];
-      const result = evalPrereqTree(c.prereqs, placements, SEM_INDEX, ti, placedOut);
+      const result = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, placedOut);
       if (result !== "satisfied") v.set(c.id, result);
     });
     return v;
-  }, [courses, placements, placedOut, SEM_INDEX]);
+  }, [courses, placements, effectivePlacements, placedOut, SEM_INDEX]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
@@ -1270,7 +1330,7 @@ export function PlannerProvider({ children }) {
     // Load state
     loading, loadErr, loadPct,
     // Planner state
-    placements, workPl, currentSemId, persistEnabled,
+    placements, effectivePlacements, workPl, currentSemId, persistEnabled,
     semOrders, offeredOverrides, collapsedSubs, shOverrides,
     // Semester grid
     SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
@@ -1316,6 +1376,13 @@ export function PlannerProvider({ children }) {
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,
+    substitutions,
+    addSubstitution: (fromId, toId) => setSubstitutions(prev =>
+      prev.some(s => s.from === fromId && s.to === toId) ? prev : [...prev, { from: fromId, to: toId }]
+    ),
+    removeSubstitution: (fromId, toId) => setSubstitutions(prev =>
+      prev.filter(s => !(s.from === fromId && s.to === toId))
+    ),
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard, onDropPlacedOut,
     canDropSem,
     doUndo, doRedo, pushUndo,

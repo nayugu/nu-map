@@ -1,12 +1,118 @@
 // ═══════════════════════════════════════════════════════════════════
 // BANK PANEL  — right-hand sidebar: Course Bank ↔ Graduation toggle
 // ═══════════════════════════════════════════════════════════════════
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
 import { WORK_TERMS } from "../core/constants.js";
 import { subjectColor } from "../core/courseModel.js";
 import CourseCard  from "./CourseCard.jsx";
 import GradPanel   from "./GradPanel.jsx";
+
+// ── Course search for substitution input ────────────────────────
+
+function CourseSearch({ courses, value, onChange, placeholder }) {
+  const [query, setQuery] = useState("");
+  const [open,  setOpen]  = useState(false);
+  const [rect,  setRect]  = useState(null);
+  const inputRef = useRef(null);
+
+  const q = query.trim().toLowerCase();
+  const filtered = useMemo(() => {
+    if (!q) return [];
+    const tokens = q.split(/\s+/).filter(Boolean);
+    const withScore = [];
+    courses.forEach(c => {
+      const subj    = c.subject.toLowerCase();
+      const num     = c.number.toLowerCase();
+      const codeHay = `${subj} ${num}`;
+      const fullHay = `${codeHay} ${c.title.toLowerCase()}`;
+      if (!tokens.every(tok => fullHay.includes(tok))) return;
+      const score = tokens.reduce((s, tok) => {
+        if (subj === tok)             return s + 8;
+        if (subj.startsWith(tok))    return s + 6;
+        if (codeHay.startsWith(tok)) return s + 4;
+        if (codeHay.includes(tok))   return s + 2;
+        return s + 1;
+      }, 0);
+      withScore.push({ c, score });
+    });
+    withScore.sort((a, b) => b.score - a.score || a.c.code.localeCompare(b.c.code));
+    return withScore.slice(0, 60).map(x => x.c);
+  }, [courses, q]);
+
+  const selected = value ? courses.find(c => c.id === value) : null;
+  const displayVal = selected ? `${selected.subject} ${selected.number}` : "";
+
+  const updateRect = () => { if (inputRef.current) setRect(inputRef.current.getBoundingClientRect()); };
+  const handleFocus  = () => { updateRect(); setQuery(""); setOpen(true); };
+  const handleBlur   = () => setTimeout(() => setOpen(false), 300);
+  const handleChange = e  => { setQuery(e.target.value); setOpen(true); updateRect(); };
+  const select       = id => { onChange(id); setOpen(false); setQuery(""); };
+
+  return (
+    <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
+      <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+        <input
+          ref={inputRef}
+          type="text"
+          value={open ? query : displayVal}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholder={placeholder}
+          style={{
+            flex: 1, fontSize: 10, padding: "4px 6px", minWidth: 0,
+            background: "var(--bg-surface-2)", color: "var(--text-2)",
+            border: "1px solid var(--border-2)", borderRadius: 4, outline: "none",
+          }}
+        />
+        {value && (
+          <button
+            onMouseDown={e => { e.preventDefault(); onChange(null); }}
+            onTouchStart={e => { e.preventDefault(); onChange(null); }}
+            style={{ background: "transparent", border: "none", color: "var(--text-4)", fontSize: 11, cursor: "pointer", padding: "0 2px", flexShrink: 0 }}
+          >✕</button>
+        )}
+      </div>
+      {open && rect && createPortal(
+        <div style={{
+          position: "fixed", zIndex: 9000,
+          top: rect.bottom + 2, left: rect.left,
+          width: rect.width,
+          maxHeight: 280, overflowY: "auto",
+          background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+          borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+          fontFamily: "'Inter', system-ui, sans-serif", fontSize: 12,
+        }}>
+          {!q ? (
+            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)", fontStyle: "italic" }}>Type to search…</div>
+          ) : filtered.length === 0 ? (
+            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)" }}>No results</div>
+          ) : filtered.map(c => (
+            <div key={c.id}
+              onMouseDown={() => select(c.id)}
+              onTouchStart={e => { e.preventDefault(); select(c.id); }}
+              style={{
+                padding: "5px 10px", fontSize: 11, cursor: "pointer",
+                background: c.id === value ? "var(--bg-surface-2)" : undefined,
+                color: c.id === value ? "var(--text-1)" : "var(--text-2)",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "var(--bg-surface-2)"}
+              onMouseLeave={e => e.currentTarget.style.background = c.id === value ? "var(--bg-surface-2)" : ""}
+            >
+              <div style={{ fontWeight: 600 }}>{c.subject} {c.number}</div>
+              <div style={{ fontSize: 10, color: "var(--text-5)" }}>{c.title}</div>
+            </div>
+          ))}
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────
 
 export default function BankPanel() {
   const {
@@ -26,6 +132,7 @@ export default function BankPanel() {
     onDropPlacedOut,
     selectedId, setSelectedId,
     setShowPanel,
+    substitutions, addSubstitution, removeSubstitution,
   } = usePlanner();
 
   const q = bankSearch.trim().toLowerCase();
@@ -82,6 +189,10 @@ export default function BankPanel() {
 
   const [collapsePlacedOut, setCollapsePlacedOut] = useState(true);
   const [hoveredPlacedOutId, setHoveredPlacedOutId] = useState(null);
+  const [collapseSubstitutions, setCollapseSubstitutions] = useState(true);
+  const [subFromId, setSubFromId] = useState(null);
+  const [subToId,   setSubToId]   = useState(null);
+  const [hoveredSubId, setHoveredSubId] = useState(null);
 
   return (
     <div style={{ display: "flex", width: bankWidth, flexShrink: 0 }}>
@@ -304,6 +415,7 @@ export default function BankPanel() {
             )}
           </div>
         )}
+
         </>}
         {/* ── End sticky header ── */}
         </div>
@@ -317,6 +429,100 @@ export default function BankPanel() {
 
         {/* Course bank content */}
         {sideMode === "bank" && <>
+
+        {/* ── Substitutions section ────────────────────────────── */}
+        <div
+          onClick={() => setCollapseSubstitutions(v => !v)}
+          style={{
+            display: "flex", alignItems: "center", gap: 5, padding: "6px 8px",
+            cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
+          }}
+        >
+          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
+            ⇄ SUBSTITUTIONS {substitutions.length > 0 ? `(${substitutions.length})` : ""}
+          </span>
+          <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapseSubstitutions ? "▶" : "▼"}</span>
+        </div>
+        {!collapseSubstitutions && (
+          <div style={{ padding: "0 8px 8px" }}>
+            <div style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)", marginBottom: 5, lineHeight: 1.4 }}>
+              Placing course A also satisfies course B's requirements. Credits count once (A only). Semester timing applies.
+            </div>
+
+            {substitutions.map(({ from, to }) => {
+              const fc = courseMap[from];
+              const tc = courseMap[to];
+              const fromPlaced = !!placements[from];
+              const underlineStyle = (id) => ({
+                textDecoration: selectedId === id || hoveredSubId === id ? "underline" : "none",
+                textDecorationStyle: "dotted",
+                textDecorationColor: "var(--text-4)",
+                textUnderlineOffset: 2,
+                cursor: "pointer",
+              });
+              return (
+                <div key={`${from}-${to}`} style={{
+                  display: "flex", alignItems: "center", gap: 5,
+                  padding: "3px 5px", marginBottom: 2,
+                  background: "var(--bg-surface-2)", borderRadius: 4,
+                  opacity: fromPlaced ? 1 : 0.55,
+                  fontSize: isPhone ? 8 : 10,
+                }}>
+                  {!fromPlaced && (
+                    <span title="Course A not yet placed in a semester" style={{ fontSize: 10, flexShrink: 0 }}>⚠</span>
+                  )}
+                  <span
+                    style={{ fontWeight: 700, color: "var(--link-1)", flexShrink: 0, ...underlineStyle(from) }}
+                    onClick={() => { setSelectedId(from); setShowPanel(true); }}
+                    onMouseEnter={() => setHoveredSubId(from)}
+                    onMouseLeave={() => setHoveredSubId(null)}
+                  >
+                    {fc ? `${fc.subject} ${fc.number}` : from}
+                  </span>
+                  <span style={{ fontSize: 9, color: "var(--text-5)", flexShrink: 0 }}>→</span>
+                  <span
+                    style={{ fontWeight: 700, color: "var(--text-2)", flex: 1, minWidth: 0, ...underlineStyle(to) }}
+                    onClick={() => { setSelectedId(to); setShowPanel(true); }}
+                    onMouseEnter={() => setHoveredSubId(to)}
+                    onMouseLeave={() => setHoveredSubId(null)}
+                  >
+                    {tc ? `${tc.subject} ${tc.number}` : to}
+                  </span>
+                  <button
+                    onClick={e => { e.stopPropagation(); removeSubstitution(from, to); }}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-4)", fontSize: 12, padding: "0 2px", lineHeight: 1, flexShrink: 0 }}
+                    title="Remove substitution"
+                  >✕</button>
+                </div>
+              );
+            })}
+
+            <div style={{ marginTop: substitutions.length ? 6 : 0 }}>
+              <div style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)", marginBottom: 4 }}>Add substitution:</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
+                <CourseSearch courses={courses} value={subFromId} onChange={setSubFromId} placeholder="Course A (placed)" />
+                <span style={{ fontSize: 10, color: "var(--text-5)", flexShrink: 0 }}>→</span>
+                <CourseSearch courses={courses} value={subToId} onChange={setSubToId} placeholder="Course B (satisfied)" />
+              </div>
+              <button
+                onClick={() => {
+                  if (!subFromId || !subToId || subFromId === subToId) return;
+                  addSubstitution(subFromId, subToId);
+                  setSubFromId(null);
+                  setSubToId(null);
+                }}
+                disabled={!subFromId || !subToId || subFromId === subToId}
+                style={{
+                  width: "100%", padding: "4px 0", fontSize: 10, borderRadius: 4,
+                  background: subFromId && subToId && subFromId !== subToId ? "var(--link-1)" : "var(--bg-surface-2)",
+                  color: subFromId && subToId && subFromId !== subToId ? "#fff" : "var(--text-4)",
+                  border: "1px solid var(--border-2)", cursor: subFromId && subToId && subFromId !== subToId ? "pointer" : "not-allowed",
+                }}
+              >Add substitution</button>
+            </div>
+          </div>
+        )}
+
         {bankWorkIds.size > 0 && (
           <div style={{ padding: "6px 7px 4px", borderBottom: "1px solid var(--border-1)" }}>
             <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", marginBottom: 5 }}>CO-OPS</div>

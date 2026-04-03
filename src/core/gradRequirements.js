@@ -35,7 +35,7 @@ function getCorequisiteKeys(course, courseMap) {
  */
 export function buildPlacedKeySet(placements, placedOut = new Set(), courseMap) {
   const keys = new Set();
-  // Add placed courses
+  // Add placed courses (pass effectivePlacements to include substitution targets)
   for (const id of Object.keys(placements)) {
     const c = courseMap[id];
     if (c) keys.add(courseKey(c.subject, c.number));

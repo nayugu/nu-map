@@ -456,7 +456,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 
 export default function GradPanel() {
   const {
-    placements, placedOut, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
+    placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
     major: majorPath, setMajor: setMajorPath,
     conc: selConc, setConc: setSelConc,
     minor1, setMinor1,
@@ -492,8 +492,8 @@ export default function GradPanel() {
   }, [major]);
 
   const placedSet = useMemo(
-    () => buildPlacedKeySet(placements, placedOut, courseMap),
-    [placements, placedOut, courseMap]
+    () => buildPlacedKeySet(effectivePlacements, placedOut, courseMap),
+    [effectivePlacements, placedOut, courseMap]
   );
 
   const concGroups = useMemo(() => {
