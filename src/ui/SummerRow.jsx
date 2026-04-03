@@ -9,7 +9,7 @@ import CourseCard from "./CourseCard.jsx";
 
 export default function SummerRow({ semA, semB }) {
   const {
-    placements, semOrders, courseMap,
+    placements, semOrders, effectiveCourseMap,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -33,7 +33,7 @@ export default function SummerRow({ semA, semB }) {
   const sems     = [semA, semB].filter(Boolean);
   const combinedDone   = sems.every(s => getSemStatus(s.id) === "completed");
   const combinedActive = sems.some(s => getSemStatus(s.id) === "inprogress");
-  const combinedSH     = sems.reduce((sum, s) => sum + getSemSH(s.id, placements, courseMap), 0);
+  const combinedSH     = sems.reduce((sum, s) => sum + getSemSH(s.id, placements, effectiveCourseMap), 0);
   const tb         = TYPE_BG.summer;
   const rowBg      = tb.bg;
   const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;
@@ -125,8 +125,8 @@ export default function SummerRow({ semA, semB }) {
     }
 
     // ── Normal course session ─────────────────────────────────────
-    const courseIds = getOrderedCourses(sem.id, placements, semOrders, courseMap);
-    const crs    = courseIds.map(id => courseMap[id]).filter(Boolean);
+    const courseIds = getOrderedCourses(sem.id, placements, semOrders, effectiveCourseMap);
+    const crs    = courseIds.map(id => effectiveCourseMap[id]).filter(Boolean);
     const main4  = crs.filter(c => c.sh >= 3);
     const others = crs.filter(c => c.sh <= 2);
 
@@ -164,14 +164,14 @@ export default function SummerRow({ semA, semB }) {
         }}
           onDragOver={e => {
             if (!dragInfo || dragInfo.type !== "course") return;
-            const c = courseMap[dragInfo.id]; if (!c || c.sh < 3) return;
+            const c = effectiveCourseMap[dragInfo.id]; if (!c || c.sh < 3) return;
             e.preventDefault(); e.stopPropagation();
             setHoveredZone({ semId: sem.id, zone: "main" }); setHoveredSem(null);
           }}
           onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
           onDrop={e => {
             if (!dragInfo || dragInfo.type !== "course") return;
-            const c = courseMap[dragInfo.id]; if (!c || c.sh < 3) return;
+            const c = effectiveCourseMap[dragInfo.id]; if (!c || c.sh < 3) return;
             e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
           }}
         >
@@ -185,7 +185,7 @@ export default function SummerRow({ semA, semB }) {
         </div>
 
         {/* Other <4 SH (collapsible) */}
-        {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 3) <= 2)) && (
+        {(others.length > 0 || (dragInfo?.type === "course" && (effectiveCourseMap[dragInfo.id]?.sh ?? 3) <= 2)) && (
           <div style={{ marginTop: 4 }}>
             <button
               onClick={() => {
@@ -216,14 +216,14 @@ export default function SummerRow({ semA, semB }) {
               }}
                 onDragOver={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;
-                  const c = courseMap[dragInfo.id]; if (!c || c.sh > 2) return;
+                  const c = effectiveCourseMap[dragInfo.id]; if (!c || c.sh > 2) return;
                   e.preventDefault(); e.stopPropagation();
                   setHoveredZone({ semId: sem.id, zone: "other" }); setHoveredSem(null);
                 }}
                 onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
                 onDrop={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;
-                  const c = courseMap[dragInfo.id]; if (!c || c.sh > 2) return;
+                  const c = effectiveCourseMap[dragInfo.id]; if (!c || c.sh > 2) return;
                   e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
                 }}
               >

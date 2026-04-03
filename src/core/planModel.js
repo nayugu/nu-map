@@ -83,7 +83,7 @@ function reqNodeHtml(r, doneKeys, depth = 0) {
   const isSat   = r.sat;
   const heading =
     r.type === "AND" ? `All of (${r.satCount ?? 0}/${r.total ?? 0})` :
-    r.type === "OR"  ? "One of" :
+    r.type === "OR"  ? `One of (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.type === "XOM" ? `${r.satSh ?? 0}/${r.reqSh ?? 0} SH from elective pool` :
     r.title ?? r.label ?? "";
   const childrenHtml = (r.children ?? []).map(c => reqNodeHtml(c, doneKeys, depth + 1)).join("");
@@ -97,16 +97,20 @@ function reqNodeHtml(r, doneKeys, depth = 0) {
 }
 
 function sectionHtml(sec, doneKeys) {
-  const pct       = sec.total > 0 ? Math.round(sec.satCount / sec.total * 100) : 0;
+  // Mirror SectionBlock's pool-structure logic exactly
+  const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < sec.total;
+  const displaySatCount = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
+  const displayTotal    = isPoolStructure ? sec.minRequired : sec.total;
+  const pct             = displayTotal > 0 ? Math.round(displaySatCount / displayTotal * 100) : 0;
   const warnHtml  = (sec.warnings ?? []).map(w =>
     `<div class="sec-warn">⚠ ${w}</div>`).join("");
-  const noteHtml  = sec.minRequired < sec.total
+  const noteHtml  = isPoolStructure && sec.minRequired > 0
     ? `<div class="sec-note">Requires ${sec.minRequired} of ${sec.total}</div>` : "";
   return `<div class="sec${sec.sat ? " sec-sat" : ""}">
     <div class="sec-head">
       <span class="sec-icon">${sec.sat ? "✓" : ""}</span>
       <span class="sec-title">${sec.title}</span>
-      <span class="sec-prog">${sec.satCount}/${sec.total}</span>
+      <span class="sec-prog">${displaySatCount}/${displayTotal}</span>
     </div>
     <div class="sec-bar"><div class="sec-bar-fill${sec.sat ? " sec-bar-sat" : ""}" style="width:${pct}%"></div></div>
     ${warnHtml}
@@ -129,8 +133,17 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const {
     majorPath = "", concLabel = "", minor1Path = "", minor2Path = "",
     npCovered = new Set(), doneKeys = new Set(), totalSHRequired = 0,
-    placedOut = new Set(),
+    placedOut = new Set(), substitutions = [],
   } = gradInfo;
+
+  // effectivePlacements: add virtual entries for substitution targets
+  const effectivePlacements = substitutions.length === 0 ? placements : (() => {
+    const ep = { ...placements };
+    for (const { from, to } of substitutions) {
+      if (placements[from]) ep[to] = placements[from];
+    }
+    return ep;
+  })();
 
   // ── Load major + minors (async) ───────────────────────────────
   const [major, minor1, minor2] = await Promise.all([
@@ -172,20 +185,23 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   });
 
   // ── Requirements sections HTML ────────────────────────────────
-  const placedSet = buildPlacedKeySet(placements, placedOut, courseMap);
+  const placedSet = buildPlacedKeySet(effectivePlacements, placedOut, courseMap);
 
-  function renderProgram(prog, doneKeysSet, headerLabel, name) {
+  function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true) {
     if (!prog) return "";
-    const sections = allocateMajor(prog, placedSet, courseMap);
+    let sections = allocateMajor(prog, placedSet, courseMap);
+    if (!showGeneralElectives) {
+      sections = sections.filter(s => s.title !== "General Electives");
+    }
     const sectionsHtml = sections.map(s => sectionHtml(s, doneKeysSet)).join("");
     return `<div class="section-title">${headerLabel}<span class="prog-name">${name}</span></div>
       ${sectionsHtml}`;
   }
 
   const reqHtml = [
-    renderProgram(major,  doneKeys, "Major Requirements — ",   major?.name ?? ""),
-    renderProgram(minor1, doneKeys, "Minor 1 Requirements — ", minor1?.name ?? ""),
-    renderProgram(minor2, doneKeys, "Minor 2 Requirements — ", minor2?.name ?? ""),
+    renderProgram(major,  doneKeys, "Major Requirements — ",   major?.name ?? "",  true),
+    renderProgram(minor1, doneKeys, "Minor 1 Requirements — ", minor1?.name ?? "", false),
+    renderProgram(minor2, doneKeys, "Minor 2 Requirements — ", minor2?.name ?? "", false),
   ].join("");
 
   // ── NUPath grid HTML ──────────────────────────────────────────
@@ -527,6 +543,32 @@ ${creditHtml}
 <div class="np-grid">${npHtml}</div>
 
 ${reqHtml}
+
+${placedOut.size > 0 ? `
+<div class="section-title">Placed Out <span class="prog-name">(satisfies prerequisites, no credit)</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
+${[...placedOut].map(id => {
+  const c = courseMap[id];
+  return c ? `<span style="font-size:10px;font-weight:700;background:#f3f4f6;border:1px solid #e0e0e0;border-radius:4px;padding:2px 7px">${c.code}</span>` : "";
+}).filter(Boolean).join("\n")}
+</div>` : ""}
+
+${substitutions.length > 0 ? `
+<div class="section-title">Substitutions <span class="prog-name">(course A placed, satisfies course B — credits count once)</span></div>
+<div style="display:flex;flex-direction:column;gap:3px;margin-bottom:8px">
+${substitutions.map(({ from, to }) => {
+  const fc = courseMap[from];
+  const tc = courseMap[to];
+  if (!fc || !tc) return "";
+  const placed = !!placements[from];
+  return `<div style="display:flex;align-items:center;gap:6px;font-size:10px;${placed ? "" : "opacity:0.5"}">
+    <span style="font-weight:700;color:#2563eb">${fc.code}</span>
+    <span style="color:#888">→ satisfies</span>
+    <span style="font-weight:700">${tc.code}</span>
+    ${placed ? "" : '<span style="color:#b45309;font-size:9px">⚠ not placed</span>'}
+  </div>`;
+}).filter(Boolean).join("\n")}
+</div>` : ""}
 
 <div class="page-break"></div>
 

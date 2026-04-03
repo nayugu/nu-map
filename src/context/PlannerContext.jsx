@@ -216,11 +216,11 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions });
+    saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
   }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions });
+    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
   }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
@@ -1206,6 +1206,7 @@ export function PlannerProvider({ children }) {
       gradSem: planGradSem, gradYear: planGradYear,
       placements, workPl, semOrders, shOverrides, bonusSH, currentSemId,
       offeredOverrides, collapsedSubs,
+      placedOut: [...placedOut], substitutions,
       major, conc, minor1, minor2,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -1235,6 +1236,8 @@ export function PlannerProvider({ children }) {
         setOfferedOverrides(prev => d.offeredOverrides ?? prev);
         setCollapsedSubs(prev => d.collapsedSubs ?? prev);
         setBonusSH(d.bonusSH ?? 0);
+        setPlacedOut(new Set(Array.isArray(d.placedOut) ? d.placedOut : []));
+        setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
         if (d.currentSemId) setCurrentSemId(d.currentSemId);
         if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem("ncp-ent-sem",  d.entSem);  } catch {} }
         if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem("ncp-ent-year", d.entYear); } catch {} }

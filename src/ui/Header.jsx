@@ -28,7 +28,7 @@ export default function Header() {
     exportPlanJSON, importPlanJSON,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
     major, conc, minor1, minor2,
-    placedOut,
+    placedOut, substitutions,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -67,7 +67,7 @@ export default function Header() {
     const gradInfo = {
       majorPath, concLabel, minor1Path, minor2Path,
       npCovered, doneKeys, totalSHRequired: 0,
-      placedOut,
+      placedOut, substitutions,
     };
     exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl);
   };
@@ -153,6 +153,20 @@ export default function Header() {
       appendixLines.push(`  Description: ${desc}`);
     }
 
+    const placedOutLines = placedOut.size > 0
+      ? ['\n--- Placed Out (no credit, satisfies prerequisites) ---',
+         ...[...placedOut].map(id => { const c = courseMap[id]; return c ? `  - ${c.code}: ${c.title}` : null; }).filter(Boolean)]
+      : [];
+
+    const substitutionLines = substitutions.length > 0
+      ? ['\n--- Substitutions (course A placed → satisfies course B, credits count once) ---',
+         ...substitutions.map(({ from, to }) => {
+           const fc = courseMap[from]; const tc = courseMap[to];
+           if (!fc || !tc) return null;
+           return `  - ${fc.code} → ${tc.code}${placements[from] ? '' : ' ⚠ not placed'}`;
+         }).filter(Boolean)]
+      : [];
+
     // Assemble final text
     const fullText = [
       `NU Map Plan: ${plans.find(p => p.id === activePlanId)?.name || 'Untitled'}`,
@@ -162,6 +176,8 @@ export default function Header() {
       '',
       '--- Semester Schedule ---',
       ...semLines,
+      ...placedOutLines,
+      ...substitutionLines,
       ...appendixLines,
     ].join('\n');
 
