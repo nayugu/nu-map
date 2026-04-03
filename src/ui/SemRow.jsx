@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
@@ -61,11 +61,6 @@ export default function SemRow({ sem }) {
   // Collapsible other credits
   const { collapseOtherCredits, collapsedSubs, setCollapsedSubs } = usePlanner();
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
-
-  // Sync local state with global collapseOtherCredits setting
-  useEffect(() => {
-    setShowOther(!collapseOtherCredits);
-  }, [collapseOtherCredits]);
 
   // Collapsed state for incoming credit section (per-semester)
   const isIncomingCollapsed = collapsedSubs[sem.id] !== false;
