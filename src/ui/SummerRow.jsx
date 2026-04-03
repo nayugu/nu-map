@@ -7,6 +7,7 @@ import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
+import CompanyLogo from "./CompanyLogo.jsx";
 
 export default function SummerRow({ semA, semB }) {
   const {
@@ -18,7 +19,7 @@ export default function SummerRow({ semA, semB }) {
     workStartMap, workContMap, workPl,
     internStartMap, internContMap, internPl, setInternPl,
     cardRefs, onDragStart,
-    SEMESTERS, SEM_NEXT, SEM_INDEX,
+    SEM_INDEX,
     setWorkPl, pushUndo, isPhone,
     collapseOtherCredits, setCollapseOtherCredits,
   } = usePlanner();
@@ -81,46 +82,38 @@ export default function SummerRow({ semA, semB }) {
             data-drag-from={sem.id}
             onDragStart={e => onDragStart(e, workItem.id, "work", sem.id, { duration: workItem.duration })}
             style={{
-              position: "relative",
               width: "100%", minHeight: 58,
               background: "var(--card-bg)",
               border: `2px solid ${workItem.color}`,
-              borderRadius: 6, padding: "8px 28px 8px 14px",
+              borderRadius: 6, padding: "8px 10px 8px 12px",
               cursor: "grab", display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
-            <button
-              onClick={e => { e.stopPropagation(); removeWork(workItem.id); }}
-              style={{
-                position: "absolute", top: 4, right: 6,
-                background: "none", border: "none", color: "var(--text-4)",
-                cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0,
-              }}
-              title="Remove co-op"
-            >✕</button>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <div style={{ fontSize: 13, fontWeight: 900, color: workItem.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNumFor(workItem.id)}
               </div>
-              <CompanySearch
-                name={workData.company}
-                domain={workData.companyDomain}
-                onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
-                inputStyle={{ fontSize: 10 }}
-              />
-              <input
-                value={workData.position ?? ""}
-                onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], position: e.target.value } }))}
-                onMouseDown={e => e.stopPropagation()}
-                placeholder="Role..."
-                style={{ flex: 1, minWidth: 0, fontSize: 10, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
-              />
+              <div style={{ display: "flex", alignItems: "center", gap: 5, flex: 1, minWidth: 0 }}>
+                <CompanySearch
+                  name={workData.company}
+                  color={workItem.color}
+                  fontSize={13}
+                  onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                />
+                <CompanyLogo domain={workData.companyDomain} size={34} />
+                <button
+                  onClick={e => { e.stopPropagation(); removeWork(workItem.id); }}
+                  onMouseDown={e => e.stopPropagation()}
+                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                  title="Remove co-op"
+                >✕</button>
+              </div>
             </div>
-            <div style={{ fontSize: 9, color: "var(--text-4)" }}>
+            {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {workContMap[SEM_NEXT[sem.id]] === workItem.id
                 ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (${workItem.duration}-month block)`
                 : `${workItem.duration}-month co-op`}
-            </div>
+            </div> */}
           </div>
         </div>
       );
@@ -178,42 +171,38 @@ export default function SummerRow({ semA, semB }) {
             data-drag-from={sem.id}
             onDragStart={e => onDragStart(e, internId, "intern", sem.id, { duration: internData.duration })}
             style={{
-              position: "relative",
               width: "100%", minHeight: 58,
               background: "var(--card-bg)",
               border: `2px solid ${internTerm.color}`,
-              borderRadius: 6, padding: "8px 28px 8px 14px",
+              borderRadius: 6, padding: "8px 10px 8px 12px",
               cursor: "grab", display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
-            <button
-              onClick={e => { e.stopPropagation(); removeIntern(internId); }}
-              style={{ position: "absolute", top: 4, right: 6, background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0 }}
-              title="Remove internship"
-            >✕</button>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <div style={{ fontSize: 13, fontWeight: 900, color: internTerm.color, letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNumFor(internId)}
               </div>
-              <CompanySearch
-                name={internData.company}
-                domain={internData.companyDomain}
-                onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
-                inputStyle={{ fontSize: 10 }}
-              />
-              <input
-                value={internData.position ?? ""}
-                onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], position: e.target.value } }))}
-                onMouseDown={e => e.stopPropagation()}
-                placeholder="Role..."
-                style={{ flex: 1, minWidth: 0, fontSize: 10, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
-              />
+              <div style={{ display: "flex", alignItems: "center", gap: 5, flex: 1, minWidth: 0 }}>
+                <CompanySearch
+                  name={internData.company}
+                  color={internTerm.color}
+                  fontSize={13}
+                  onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                />
+                <CompanyLogo domain={internData.companyDomain} size={34} />
+                <button
+                  onClick={e => { e.stopPropagation(); removeIntern(internId); }}
+                  onMouseDown={e => e.stopPropagation()}
+                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                  title="Remove internship"
+                >✕</button>
+              </div>
             </div>
-            <div style={{ fontSize: 9, color: "var(--text-4)" }}>
+            {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {internData.duration === 4
                 ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label}`
                 : `${internData.duration}-month internship`}
-            </div>
+            </div> */}
           </div>
         </div>
       );

@@ -1,24 +1,38 @@
 // ═══════════════════════════════════════════════════════════════════
 // COMPANY SEARCH  — autocomplete input backed by Clearbit suggest API
+// Dropdown rendered via portal so it escapes any overflow:hidden parent.
+// Logos use Google's favicon service (no API key, always works cross-origin).
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
-export default function CompanySearch({ name, domain, onChange, placeholder = "Company...", inputStyle }) {
+const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+
+export default function CompanySearch({ name, onChange, color, fontSize = 11, placeholder = "Company..." }) {
   const [query,   setQuery]   = useState(name ?? "");
   const [results, setResults] = useState([]);
   const [open,    setOpen]    = useState(false);
+  const [pos,     setPos]     = useState({ top: 0, right: 0 });
   const timerRef = useRef(null);
   const wrapRef  = useRef(null);
 
-  // Keep input in sync if parent resets the value externally
+  // Sync when parent resets the value
   useEffect(() => { setQuery(name ?? ""); }, [name]);
 
-  // Close dropdown on outside click
+  // Close on outside click
   useEffect(() => {
-    const handler = e => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
+    const handler = e => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  const openAt = () => {
+    if (!wrapRef.current) return;
+    const r = wrapRef.current.getBoundingClientRect();
+    setPos({ top: r.bottom + 5, right: window.innerWidth - r.right });
+  };
 
   const fetchSuggestions = q => {
     clearTimeout(timerRef.current);
@@ -26,8 +40,10 @@ export default function CompanySearch({ name, domain, onChange, placeholder = "C
     timerRef.current = setTimeout(async () => {
       try {
         const res  = await fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=${encodeURIComponent(q)}`);
+        if (!res.ok) return;
         const data = await res.json();
         setResults(Array.isArray(data) ? data.slice(0, 7) : []);
+        openAt();
         setOpen(true);
       } catch {
         setResults([]);
@@ -49,70 +65,57 @@ export default function CompanySearch({ name, domain, onChange, placeholder = "C
     else fetchSuggestions(v);
   };
 
-  return (
-    <div ref={wrapRef} style={{ position: "relative", flex: 1, minWidth: 0 }}>
-      {/* Input row — logo (if selected) + text field */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: 4,
-        borderBottom: "1px solid var(--border-sub)", paddingBottom: 1,
-      }}>
-        {domain && (
+  const dropdown = open && results.length > 0 && createPortal(
+    <div style={{
+      position: "fixed", top: pos.top, right: pos.right, zIndex: 99999,
+      background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+      borderRadius: 8, boxShadow: "0 6px 24px rgba(0,0,0,0.4)",
+      minWidth: 230, maxHeight: 280, overflowY: "auto",
+      fontFamily: "'Inter', sans-serif",
+    }}>
+      {results.map(c => (
+        <div
+          key={c.domain}
+          onMouseDown={e => { e.preventDefault(); select(c); }}
+          style={{
+            display: "flex", alignItems: "center", gap: 9,
+            padding: "6px 12px", cursor: "pointer",
+            fontSize: 12, color: "var(--text-1)",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = "var(--card-bg-hov)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+        >
           <img
-            key={domain}
-            src={`https://logo.clearbit.com/${domain}`}
+            src={faviconUrl(c.domain)}
             alt=""
-            style={{ width: 13, height: 13, borderRadius: 2, objectFit: "contain", flexShrink: 0 }}
+            style={{ width: 20, height: 20, objectFit: "contain", flexShrink: 0 }}
             onError={e => { e.target.style.display = "none"; }}
           />
-        )}
-        <input
-          value={query}
-          onChange={handleChange}
-          onFocus={() => { if (results.length) setOpen(true); }}
-          onMouseDown={e => e.stopPropagation()}
-          placeholder={placeholder}
-          style={{
-            fontSize: 11, fontWeight: domain ? 600 : 400,
-            color: "var(--text-1)", background: "transparent",
-            border: "none", outline: "none", width: "100%", padding: 0,
-            ...inputStyle,
-          }}
-        />
-      </div>
-
-      {/* Dropdown */}
-      {open && results.length > 0 && (
-        <div style={{
-          position: "absolute", top: "calc(100% + 5px)", left: 0, zIndex: 9999,
-          background: "var(--bg-surface)", border: "1px solid var(--border-2)",
-          borderRadius: 7, boxShadow: "0 6px 20px rgba(0,0,0,0.35)",
-          minWidth: 190, overflow: "hidden",
-        }}>
-          {results.map(c => (
-            <div
-              key={c.domain}
-              onMouseDown={e => { e.preventDefault(); select(c); }}
-              style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "5px 10px", cursor: "pointer",
-                fontSize: 12, color: "var(--text-1)",
-                transition: "background 0.08s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "var(--card-bg-hov)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-            >
-              <img
-                src={c.logo}
-                alt=""
-                style={{ width: 16, height: 16, borderRadius: 3, objectFit: "contain", flexShrink: 0 }}
-                onError={e => { e.target.style.display = "none"; e.target.nextSibling.style.paddingLeft = 0; }}
-              />
-              <span>{c.name}</span>
-              <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: "auto" }}>{c.domain}</span>
-            </div>
-          ))}
+          <span style={{ fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{c.name}</span>
+          <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: "auto" }}>{c.domain}</span>
         </div>
-      )}
+      ))}
+    </div>,
+    document.body
+  );
+
+  return (
+    <div ref={wrapRef} style={{ position: "relative", flex: 1, minWidth: 0 }}>
+      <input
+        value={query}
+        onChange={handleChange}
+        onFocus={() => { if (results.length) { openAt(); setOpen(true); } }}
+        onMouseDown={e => e.stopPropagation()}
+        placeholder={placeholder}
+        style={{
+          width: "100%", textAlign: "right",
+          fontFamily: "'Inter', sans-serif",
+          fontSize, fontWeight: 600, letterSpacing: "0.01em",
+          color: query ? color : "var(--text-5)",
+          background: "transparent", border: "none", outline: "none", padding: 0,
+        }}
+      />
+      {dropdown}
     </div>
   );
 }

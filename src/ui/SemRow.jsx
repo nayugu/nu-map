@@ -7,6 +7,7 @@ import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
+import CompanyLogo from "./CompanyLogo.jsx";
 
 export default function SemRow({ sem }) {
   const {
@@ -18,7 +19,7 @@ export default function SemRow({ sem }) {
     workStartMap, workContMap, workPl,
     internStartMap, internContMap, internPl, setInternPl,
     cardRefs, onDragStart,
-    SEMESTERS, SEM_NEXT, SEM_INDEX,
+    SEM_INDEX,
     setWorkPl, pushUndo, isPhone,
     bonusSH, setBonusSH,
   } = usePlanner();
@@ -258,44 +259,37 @@ export default function SemRow({ sem }) {
             onDragStart={e => onDragStart(e, workItem.id, "work", sem.id, { duration: workItem.duration })}
             style={{
               flex: 1, minHeight: 58, minWidth: 200,
-              position: "relative",
               background: `var(--card-bg)`,
               border: `2px solid ${workItem.color}`,
-              borderRadius: 6, padding: "8px 28px 8px 14px", cursor: "grab",
+              borderRadius: 6, padding: "8px 12px 8px 14px", cursor: "grab",
               display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
-            <button
-              onClick={e => { e.stopPropagation(); pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[workItem.id]; return n; }); }}
-              style={{
-                position: "absolute", top: 4, right: 8,
-                background: "none", border: "none", color: "var(--text-4)",
-                cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0,
-              }}
-              title="Remove co-op"
-            >✕</button>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: workItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {workItem.label} {coopNum}
               </div>
-              <CompanySearch
-                name={workData.company}
-                domain={workData.companyDomain}
-                onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
-              />
-              <input
-                value={workData.position ?? ""}
-                onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], position: e.target.value } }))}
-                onMouseDown={e => e.stopPropagation()}
-                placeholder="Role..."
-                style={{ flex: 1, minWidth: 0, fontSize: 11, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
-              />
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, minWidth: 0 }}>
+                <CompanySearch
+                  name={workData.company}
+                  color={workItem.color}
+                  fontSize={14}
+                  onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                />
+                <CompanyLogo domain={workData.companyDomain} size={40} />
+                <button
+                  onClick={e => { e.stopPropagation(); pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[workItem.id]; return n; }); }}
+                  onMouseDown={e => e.stopPropagation()}
+                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                  title="Remove co-op"
+                >✕</button>
+              </div>
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-4)" }}>
+            {/* <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
               {workContMap[SEM_NEXT[sem.id]] === workItem.id
                 ? `↕ Spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (${workItem.duration}-month block)`
                 : `${workItem.duration}-month co-op`}
-            </div>
+            </div> */}
           </div>
 
         ) : internItem ? (
@@ -313,47 +307,46 @@ export default function SemRow({ sem }) {
               position: "relative",
               background: "var(--card-bg)",
               border: `2px solid ${internItem.color}`,
-              borderRadius: 6, padding: "8px 28px 8px 14px", cursor: "grab",
+              borderRadius: 6, padding: "8px 12px 8px 14px", cursor: "grab",
               display: "flex", flexDirection: "column", justifyContent: "center",
             }}
           >
-            <button
-              onClick={e => { e.stopPropagation(); pushUndo(); setInternPl(p => { const n = { ...p }; delete n[internItem.id]; return n; }); }}
-              style={{
-                position: "absolute", top: 4, right: 8,
-                background: "none", border: "none", color: "var(--text-4)",
-                cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0,
-              }}
-              title="Remove internship"
-            >✕</button>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            {(sem.type === "fall" || sem.type === "spring") && (
+              <div style={{
+                position: "absolute", left: "50%", top: "50%",
+                transform: "translate(-50%, -50%)",
+                display: "flex", alignItems: "center", gap: 4,
+                pointerEvents: "none",
+              }}>
+                <span style={{ fontSize: 13, color: "#facc15" }}>⚠</span>
+                <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3, whiteSpace: "nowrap" }}>requires petition for non-attendance</span>
+              </div>
+            )}
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: internItem.color, letterSpacing: "0.06em", whiteSpace: "nowrap", flexShrink: 0 }}>
                 Full-Time Internship {internNum(internId)}
               </div>
-              <CompanySearch
-                name={internPl[internItem.id]?.company}
-                domain={internPl[internItem.id]?.companyDomain}
-                onChange={v => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
-              />
-              <input
-                value={internPl[internItem.id]?.position ?? ""}
-                onChange={e => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], position: e.target.value } }))}
-                onMouseDown={e => e.stopPropagation()}
-                placeholder="Role..."
-                style={{ flex: 1, minWidth: 0, fontSize: 11, color: "var(--text-3)", background: "transparent", border: "none", borderBottom: "1px solid var(--border-sub)", outline: "none", padding: "1px 0" }}
-              />
-              {(sem.type === "fall" || sem.type === "spring") && (
-                <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
-                  <span style={{ fontSize: 14, color: "#facc15" }}>⚠</span>
-                  <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3 }}>requires petition<br/>for non-attendance</span>
-                </div>
-              )}
+              <div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, minWidth: 0 }}>
+                <CompanySearch
+                  name={internPl[internItem.id]?.company}
+                  color={internItem.color}
+                  fontSize={14}
+                  onChange={v => setInternPl(p => ({ ...p, [internItem.id]: { ...p[internItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "", companyLogo: v?.logo ?? "" } }))}
+                />
+                <CompanyLogo domain={internPl[internItem.id]?.companyDomain} size={40} />
+                <button
+                  onClick={e => { e.stopPropagation(); pushUndo(); setInternPl(p => { const n = { ...p }; delete n[internItem.id]; return n; }); }}
+                  onMouseDown={e => e.stopPropagation()}
+                  style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, flexShrink: 0 }}
+                  title="Remove internship"
+                >✕</button>
+              </div>
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-4)" }}>
+            {/* <div style={{ fontSize: 10, color: "var(--text-4)", marginTop: 4 }}>
               {internItem.duration === 4 && internContMap[SEM_NEXT[sem.id]]
                 ? `↕ Spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (4-month block)`
                 : `${internItem.duration}-month internship`}
-            </div>
+            </div> */}
           </div>
 
         ) : mainSlots === null ? (
