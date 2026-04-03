@@ -95,30 +95,11 @@ export default function SummerRow({ semA, semB }) {
                 {workItem.label} {coopNumFor(workItem.id)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
-                <CompanySearch
-                  name={workData.company}
-                  color={companyColor}
-                  emptyColor={placeholderColor}
-                  fontSize={isPhone ? 7 : 13}
-                  phonePadding={isPhone}
-                  onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
-                />
-                <input
-                  value={workData.subline ?? ""}
-                  onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))}
-                  onMouseDown={e => e.stopPropagation()}
-                  placeholder="Role"
-                  className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
-                />
+                <CompanySearch name={workData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
+                <input value={workData.subline ?? ""} onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
               </div>
               <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={isPhone ? 17 : 34} />
-              <button
-                onClick={e => { e.stopPropagation(); removeWork(workItem.id); }}
-                onMouseDown={e => e.stopPropagation()}
-                style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
-                title="Remove co-op"
-              >✕</button>
+              <button onClick={e => { e.stopPropagation(); removeWork(workItem.id); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title="Remove co-op">✕</button>
             </div>
             {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {workContMap[SEM_NEXT[sem.id]] === workItem.id
@@ -192,33 +173,14 @@ export default function SummerRow({ semA, semB }) {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em", whiteSpace: "nowrap", flexShrink: 0 }}>
-                Full-Time Internship {internNumFor(internId)}
+                {isPhone ? "Internship" : "Full-Time Internship"} {internNumFor(internId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
-                <CompanySearch
-                  name={internData.company}
-                  color={companyColor}
-                  emptyColor={placeholderColor}
-                  fontSize={isPhone ? 7 : 13}
-                  phonePadding={isPhone}
-                  onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
-                />
-                <input
-                  value={internData.subline ?? ""}
-                  onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], subline: e.target.value } }))}
-                  onMouseDown={e => e.stopPropagation()}
-                  placeholder="Role"
-                  className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
-                />
+                <CompanySearch name={internData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
+                <input value={internData.subline ?? ""} onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
               </div>
               <CompanyLogo key={internData.companyDomain || ""} domain={internData.companyDomain} size={isPhone ? 17 : 34} />
-              <button
-                onClick={e => { e.stopPropagation(); removeIntern(internId); }}
-                onMouseDown={e => e.stopPropagation()}
-                style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }}
-                title="Remove internship"
-              >✕</button>
+              <button onClick={e => { e.stopPropagation(); removeIntern(internId); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title="Remove internship">✕</button>
             </div>
             {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
               {internData.duration === 4

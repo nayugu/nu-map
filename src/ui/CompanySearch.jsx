@@ -8,7 +8,7 @@ import { createPortal } from "react-dom";
 
 const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 
-export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company", phonePadding = false }) {
+export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company", phonePadding = false, align = "right" }) {
   const [query,   setQuery]   = useState(name ?? "");
   const [results, setResults] = useState([]);
   const [open,    setOpen]    = useState(false);
@@ -109,7 +109,7 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
         onMouseDown={e => e.stopPropagation()}
         placeholder={placeholder}
         style={{
-          width: "100%", textAlign: "right",
+          width: "100%", textAlign: align,
           fontFamily: "'Inter', sans-serif",
           // iOS Safari zooms in on inputs with font-size < 16px; use 16px and
           // visually scale down so the text still appears at the intended size.
