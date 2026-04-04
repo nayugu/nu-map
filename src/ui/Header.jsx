@@ -24,6 +24,7 @@ export default function Header() {
     showViolLines, setShowViolLines,
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
+    showContLogo, setShowContLogo,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
@@ -528,6 +529,15 @@ export default function Header() {
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {THEME_LABELS[themeName] ?? themeName}
+              </button>
+
+              {/* Continuation logo toggle */}
+              <button className="hdr-btn-dd" onClick={() => setShowContLogo(v => !v)}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 400, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)",
+                  color: showContLogo ? "var(--text-3)" : "var(--text-5)" }}>
+                {showContLogo ? "Continuation logo: on" : "Continuation logo: off"}
               </button>
 
               {/** Refresh catalog data (commented out)

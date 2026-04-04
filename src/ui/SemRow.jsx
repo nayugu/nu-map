@@ -59,7 +59,7 @@ export default function SemRow({ sem }) {
   const others     = crs.filter(c => c.sh <= 2);
 
   // Collapsible other credits
-  const { collapseOtherCredits, collapsedSubs, setCollapsedSubs } = usePlanner();
+  const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo } = usePlanner();
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
 
   // Collapsed state for incoming credit section (per-semester)
@@ -131,6 +131,8 @@ export default function SemRow({ sem }) {
             <div style={{ fontSize: isPhone ? 6 : 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Continues</div>
             <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)" }}>4-month block · drag to move</div>
           </div>
+          {showContLogo && <CompanyLogo key={internPl[contInternId]?.companyDomain || ""} domain={internPl[contInternId]?.companyDomain} size={isPhone ? 20 : 40} />}
+
         </div>
       </div>
     );
@@ -171,6 +173,7 @@ export default function SemRow({ sem }) {
             <div style={{ fontSize: isPhone ? 6 : 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONTINUES</div>
             <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)" }}>6-month block · drag to move</div>
           </div>
+          {showContLogo && <CompanyLogo key={contWorkData.companyDomain || ""} domain={contWorkData.companyDomain} size={isPhone ? 20 : 40} />}
         </div>
       </div>
     );

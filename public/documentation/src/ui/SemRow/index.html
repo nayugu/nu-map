@@ -54,8 +54,9 @@ graph TD
     <p>Completed semesters render with reduced opacity for their course cards (dimmed, "already done" visual).</p>
 
     <h2>Co-op and internship blocks</h2>
-    <p>If a co-op/internship is placed in this semester, a large colored block appears above the courses. It shows the company name, role, and duration. Clicking it opens a <code>CompanySearch</code> overlay for editing. Dragging it returns it to the bank.</p>
-    <p>6-month co-ops visually <em>span two rows</em>: the first semester shows the full block, and the second semester shows a continuation marker. This is handled by checking <code>workPl[id].duration === 6</code> and rendering accordingly in both SemRow instances.</p>
+    <p>If a co-op/internship is placed in this semester, a large block appears above the courses. The start row shows: type label + number (e.g. "CO-OP 1"), a <code>CompanySearch</code> field, a role/subline input, the company logo (via <code>CompanyLogo</code>), and a remove button.</p>
+    <p>Spanning blocks show a <strong>continuation row</strong> in the second semester. The continuation row shows the type label (e.g. "CO-OP CONTINUES"), the drag hint, and — if <code>showContLogo</code> is enabled — the same company logo at the same size as the start row. The logo is loaded from the same <code>companyDomain</code> field and stays hidden if the domain fails to load.</p>
+    <p><code>showContLogo</code> is a global preference toggled in the Settings popup and persisted as <code>ncp-show-cont-logo</code> (default <code>true</code>).</p>
 
     <h2>Drop zone behavior</h2>
     <p>The entire main courses section is a drop zone. While dragging, the row highlights (<code>hoveredSem === semId</code>). On drop, calls <code>onDrop(dragInfo.courseId, semId)</code>. The order of dropped courses within the row is managed by <code>onDropOnCard()</code> for reordering.</p>

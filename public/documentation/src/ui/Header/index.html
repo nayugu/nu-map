@@ -62,9 +62,13 @@ graph TD
     </ul>
 
     <h3>Settings popup (showAppSettings)</h3>
-    <p>Triggered by "⚙". Contains the documentation link and theme selector.</p>
+    <p>Triggered by "⚙". On phone this also contains the Cohort picker (since the standalone cohort button is hidden). Contains toggles for display preferences, a theme cycler, and links.</p>
     <ul>
-      <li>📖 Docs — opens <code>documentation/</code> in new tab</li>
+      <li><strong>Error lines</strong> — toggle <code>showViolLines</code>; when on, red prerequisite-order and corequisite-violation lines are always drawn across all placed courses</li>
+      <li><strong>Continuation logo</strong> — toggle <code>showContLogo</code> (default on); when on, continuation rows for co-op/internship blocks show the company logo. Persisted as <code>ncp-show-cont-logo</code></li>
+      <li><strong>Collapse other credits</strong> — toggle <code>collapseOtherCredits</code>; controls whether the ≤2 SH section starts collapsed. Persisted as <code>ncp-collapse-other-credits</code></li>
+      <li><strong>Theme</strong> — cycles through available themes (light, dark, …)</li>
+      <li><strong>LINKS</strong> — <code>/dev</code> opens the dev portal; <code>/documentation</code> opens this site. Both open in a new tab.</li>
     </ul>
 
     <h3>Plan management dropdown (showPlanMenu)</h3>

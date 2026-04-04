@@ -85,6 +85,15 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem("ncp-collapse-other-credits", String(val)); } catch {}
   };
 
+  // ── UI: Show logo on continuation rows ──
+  const [showContLogo, setShowContLogo] = useState(() => {
+    try { const v = localStorage.getItem("ncp-show-cont-logo"); return v === null ? true : v !== "false"; } catch { return true; }
+  });
+  const updateShowContLogo = (val) => {
+    setShowContLogo(val);
+    try { localStorage.setItem("ncp-show-cont-logo", String(val)); } catch {}
+  };
+
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
   const effectiveCourseMap = useMemo(() => {
     if (!Object.keys(shOverrides).length) return courseMap;
@@ -1515,6 +1524,7 @@ export function PlannerProvider({ children }) {
     // Settings
     showDisclaimer, showSettings,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
+    showContLogo, setShowContLogo: updateShowContLogo,
     stickyCourses, setStickyCourses,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
     panelHeight,

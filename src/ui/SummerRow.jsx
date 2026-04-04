@@ -23,7 +23,7 @@ export default function SummerRow({ semA, semB }) {
     cardRefs, onDragStart,
     SEM_INDEX,
     setWorkPl, pushUndo, isPhone,
-    collapseOtherCredits,
+    collapseOtherCredits, showContLogo,
   } = usePlanner();
 
   const { themeName } = useTheme();
@@ -131,10 +131,13 @@ export default function SummerRow({ semA, semB }) {
             width: "100%", minHeight: 58,
             border: "1px solid var(--border-card)",
             borderRadius: 6, padding: "8px 14px",
-            display: "flex", flexDirection: "column", justifyContent: "center",
+            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
           }}>
-            <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONT.</div>
-            <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>6-month block</div>
+            <div>
+              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONT.</div>
+              <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>6-month block</div>
+            </div>
+            {showContLogo && <CompanyLogo key={contWorkData.companyDomain || ""} domain={contWorkData.companyDomain} size={isPhone ? 17 : 34} />}
           </div>
         </div>
       );
@@ -212,10 +215,13 @@ export default function SummerRow({ semA, semB }) {
             width: "100%", minHeight: 58,
             border: "1px solid var(--border-card)",
             borderRadius: 6, padding: "8px 14px",
-            display: "flex", flexDirection: "column", justifyContent: "center",
+            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
           }}>
-            <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Cont.</div>
-            <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>4-month block</div>
+            <div>
+              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Cont.</div>
+              <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>4-month block</div>
+            </div>
+            {showContLogo && <CompanyLogo key={contInternData.companyDomain || ""} domain={contInternData.companyDomain} size={isPhone ? 17 : 34} />}
           </div>
         </div>
       );
