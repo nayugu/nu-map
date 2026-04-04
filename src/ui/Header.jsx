@@ -539,30 +539,6 @@ export default function Header() {
               </button>
               */}
 
-              {/* Dev portal link */}
-              <a href="https://nayugu.github.io/nu-map/dev.html" target="_blank" rel="noreferrer"
-                style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)", color: "var(--text-4)",
-                  textDecoration: "none", boxSizing: "border-box" }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
-              >
-                🛠 Dev portal
-              </a>
-
-              {/* Documentation link */}
-              <a href={`${import.meta.env.BASE_URL}documentation/`} target="_blank" rel="noreferrer"
-                style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)", color: "var(--text-4)",
-                  textDecoration: "none", boxSizing: "border-box" }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
-              >
-                📖 Documentation
-              </a>
-
               {/* Zoom */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>ZOOM</div>
@@ -584,7 +560,7 @@ export default function Header() {
               </div>
               {isPhone && (
                 <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>COHORT</div>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5, textTransform: "uppercase" }}>COHORT</div>
                   <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>Entry</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 6 }}>
                     {["fall","spring"].map(s => {
@@ -605,6 +581,33 @@ export default function Header() {
                   </div>
                 </div>
               )}
+
+              {/* Links */}
+              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7, display: "flex", flexDirection: "column", gap: 4 }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 1 }}>LINKS</div>
+                <a href="https://nayugu.github.io/nu-map/dev.html" target="_blank" rel="noreferrer"
+                  style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
+                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                    border: "1px solid var(--border-2)", color: "var(--text-4)",
+                    textDecoration: "none", boxSizing: "border-box",
+                    fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
+                >
+                  /dev
+                </a>
+                <a href={`${import.meta.env.BASE_URL}documentation/`} target="_blank" rel="noreferrer"
+                  style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
+                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                    border: "1px solid var(--border-2)", color: "var(--text-4)",
+                    textDecoration: "none", boxSizing: "border-box",
+                    fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
+                >
+                  /documentation
+                </a>
+              </div>
             </div>
           )}
         </div>
