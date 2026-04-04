@@ -157,8 +157,16 @@ export default function DisclaimerModal() {
         </a>
 
         {/* Footer */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <button
+            onClick={dismiss}
+            style={{
+              width: "100%", fontSize: 11, fontWeight: 700, padding: "7px 16px", borderRadius: 6,
+              background: "var(--link-bg)", border: "1px solid var(--link-1)",
+              color: "var(--link-1)", cursor: "pointer",
+            }}
+          >I understand — let me plan!</button>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
             <span style={{ fontSize: 10, color: "var(--text-6)" }}>Click outside or dismiss to continue.</span>
             <span style={{ fontSize: 10, color: "var(--text-6)" }}>
               Built with{" "}
@@ -169,14 +177,6 @@ export default function DisclaimerModal() {
               {" (Anthropic)"}
             </span>
           </div>
-          <button
-            onClick={dismiss}
-            style={{
-              fontSize: 11, fontWeight: 700, padding: "5px 16px", borderRadius: 6,
-              background: "var(--link-bg)", border: "1px solid var(--link-1)",
-              color: "var(--link-1)", cursor: "pointer",
-            }}
-          >I understand — let me plan!</button>
         </div>
       </div>
     </div>
