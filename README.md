@@ -5,8 +5,7 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 > Not affiliated with or endorsed by Northeastern University. Always verify your plan with an advisor and DegreeWorks.
 
 **Live:** https://nayugu.github.io/nu-map/  
-**Dev portal:** https://nayugu.github.io/nu-map/dev.html  
-**Mirror:** https://numap.netlify.app/
+**Documentation:** https://nayugu.github.io/nu-map/documentation/
 
 ---
 
@@ -29,6 +28,8 @@ npm install
 npm run dev      # http://localhost:5173 + catalog check server on :3333
 npm run build    # output → dist/
 ```
+
+For a full code walkthrough — every module, state shape, and interaction — see the **[developer documentation](https://nayugu.github.io/nu-map/documentation/)**.
 
 ---
 
