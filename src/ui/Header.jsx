@@ -560,7 +560,7 @@ export default function Header() {
                 onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
                 onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
               >
-                📖 Docs
+                📖 Documentation
               </a>
 
               {/* Zoom */}

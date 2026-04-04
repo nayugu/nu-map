@@ -138,6 +138,24 @@ export default function DisclaimerModal() {
           ))}
         </div>
 
+        {/* Documentation link */}
+        <a
+          href={`${import.meta.env.BASE_URL}documentation/`}
+          target="_blank" rel="noreferrer"
+          style={{
+            display: "block", width: "100%", textAlign: "center", boxSizing: "border-box",
+            padding: "9px 0", marginBottom: 14, borderRadius: 7,
+            background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+            fontSize: 11, fontWeight: 400, color: "var(--text-3)", textDecoration: "none",
+            fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
+            letterSpacing: "0.02em",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--text-4)"; e.currentTarget.style.color = "var(--text-2)"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-3)"; }}
+        >
+          /documentation
+        </a>
+
         {/* Footer */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>

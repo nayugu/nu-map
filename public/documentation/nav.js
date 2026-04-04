@@ -127,7 +127,7 @@
 
     // Patch brand text
     var brandName = document.querySelector('.brand-name');
-    if (brandName) brandName.textContent = 'nu-map (docs)';
+    if (brandName) brandName.textContent = 'nu-map/documentation';
     var brandSub = document.querySelector('.brand-sub');
     if (brandSub) brandSub.textContent = 'developer reference';
 
