@@ -83,7 +83,8 @@ Push to `main` → GitHub Actions builds and deploys to GitHub Pages (`gh-pages`
 
 | Source | Provides | Cadence |
 |---|---|---|
-| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, NUPath, prereqs/coreqs | Manual — `npm run data:scrape:write` |
+| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, prereqs/coreqs, scheduleType | Manual — `npm run data:scrape:write` |
+| [tableau.northeastern.edu](https://tableau.northeastern.edu) | NUPath attribute designations (authoritative) | Manual — `npm run data:nupath` |
 | [ninest/nu-courses](https://github.com/ninest/nu-courses) (SearchNEU) | Sections, term availability | Manual — `npm run data:fetch:write` |
 | [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) | Major/minor requirement JSON | Ad hoc |
 
