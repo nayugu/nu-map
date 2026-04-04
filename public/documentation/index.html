@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nu-Map — Developer Documentation</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div>
+    </div>
+    <div id="nav-tree"></div>
+    <hr class="nav-divider">
+    <a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <h1>nu-map</h1>
+    <p class="lead">A zero-backend, single-page React degree planner for Northeastern University. Every piece of logic runs in the browser — no server, no database, no auth. Plans live in localStorage and export as JSON.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Type</div><div class="nb-value">Root — entire application</div></div>
+      <div class="nb-group"><div class="nb-label">Entry</div><div class="nb-value"><code>src/main.jsx</code> → <code>src/App.jsx</code></div></div>
+      <div class="nb-group"><div class="nb-label">Deploy</div><div class="nb-value">GitHub Pages + Netlify (static SPA)</div></div>
+      <div class="nb-group"><div class="nb-label">Stack</div><div class="nb-value">React 18, Vite 5, vanilla CSS vars</div></div>
+    </div>
+
+    <h2>Architecture overview</h2>
+    <p>The app uses a strict 4-layer hexagonal architecture. Data flows upward only — core never imports UI, and data adapters never import context. <strong>PlannerContext is the hub</strong>: it calls core logic and data adapters, then exposes state to all UI components via <code>usePlanner()</code>.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TB
+    subgraph UI["🖼 UI Layer  (src/ui/)"]
+        H["Header"] --- BP["BankPanel"]
+        BP --- GP["GradPanel"]
+        GP --- SR["SemRow"]
+        SR --- CC["CourseCard"]
+        CC --- IP["InfoPanel"]
+    end
+    subgraph CTX["⚙️ Context Layer  (src/context/)"]
+        PC["PlannerContext\n★ hub of everything"]
+        TC["ThemeContext"]
+    end
+    subgraph CORE["⚡ Core Logic  (src/core/)"]
+        CM["courseModel"] --- GR["gradRequirements"]
+        GR --- PE["prereqEval"]
+        PE --- SG["semGrid"]
+        SG --- PM["planModel"]
+    end
+    subgraph DATA["🗂 Data Layer  (src/data/)"]
+        CL["courseLoader"] --- ML["majorLoader"]
+        ML --- PS["persistence"]
+    end
+
+    UI -->|"usePlanner()"| CTX
+    CTX -->|"pure fn calls"| CORE
+    CTX -->|"I/O"| DATA
+    DATA -->|"fetch"| FS[("public/\nall-courses.json")]
+    DATA -->|"fetch"| GN[("graduatenu/\nfork")]
+    DATA -->|"read/write"| LS[("localStorage")]
+
+    style UI fill:#ddf4ff,stroke:#0969da
+    style CTX fill:#fbefff,stroke:#8250df
+    style CORE fill:#dafbe1,stroke:#1a7f37
+    style DATA fill:#fff8c5,stroke:#9a6700
+      </div>
+      <div class="caption">Full dependency graph. Arrows show which layer calls/imports which.</div>
+    </div>
+
+    <h2>Source tree</h2>
+    <p>Navigate any node below to read its full documentation — methods, state, connections to siblings and parents.</p>
+
+    <div class="children-grid">
+      <a class="child-card" href="./src/">
+        <div class="cc-type">folder</div>
+        <div class="cc-name">src/</div>
+        <div class="cc-desc">All application source code: 4 layers, ~20 files, ~8,000 lines</div>
+      </a>
+    </div>
+
+    <h2>Key design decisions</h2>
+    <div class="two-col">
+      <div>
+        <h3>No backend, ever</h3>
+        <p>Zero hosting cost, no migrations, no auth. Plans persist in localStorage and export as JSON files. Course data is scraped and bundled at build time.</p>
+
+        <h3>React Context over Redux</h3>
+        <p>All state in <code>PlannerContext</code> (~1,600 lines). No action/reducer boilerplate. Any component reads or mutates any state with one <code>usePlanner()</code> call.</p>
+      </div>
+      <div>
+        <h3>CSS variables for theming</h3>
+        <p>ThemeContext injects ~100 CSS custom properties onto <code>&lt;html&gt;</code>. All components use <code>var(--token)</code> inline. No CSS-in-JS library.</p>
+
+        <h3>Fixed layout + CSS scale</h3>
+        <p>Components are written at desktop scale. On small screens, <code>App.jsx</code> applies <code>transform: scale(uiScale)</code> — one layout for all viewports.</p>
+      </div>
+    </div>
+
+    <h2>Data sources</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Source</th><th>Format</th><th>When loaded</th><th>Size</th></tr></thead>
+      <tbody>
+        <tr><td><code>public/all-courses.json</code></td><td>JSON array</td><td>App startup (primary)</td><td>6.5 MB, 4,800+ courses</td></tr>
+        <tr><td><code>husker.vercel.app/courses/all</code></td><td>JSON array</td><td>App startup fallback (if local JSON fails)</td><td>Same data via SearchNEU API</td></tr>
+        <tr><td><code>tableau.northeastern.edu</code></td><td>Playwright DOM scrape</td><td>NUPath Update tool (manual)</td><td>~4,800 course NUPath records</td></tr>
+        <tr><td><code>graduatenu/</code> fork</td><td>Major2 JSON</td><td>On major selection</td><td>1,471 files</td></tr>
+        <tr><td><code>localStorage</code></td><td>JSON strings</td><td>App startup + every mutation</td><td>~50 KB per plan</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Quick start</h2>
+    <pre><code>git clone https://github.com/nayugu/nu-map
+cd nu-map
+npm install
+npm run dev              # Vite on :5173 + catalog-check-server on :3333
+
+npm run data:scrape:write  # update course catalog from catalog.northeastern.edu
+npm run data:patch:write   # apply YAML corrections from data/patches/
+npm run build              # production bundle → dist/</code></pre>
+
+  </main>
+</div>
+<script src="./nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral', flowchart: { curve: 'basis' } });</script>
+</body>
+</html>

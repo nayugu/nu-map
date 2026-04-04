@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>persistence.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/data/persistence">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">Nu-Map</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">data/</a><span class="sep"> / </span><strong>persistence.js</strong>
+    </div>
+
+    <h1>persistence.js <span class="badge yellow">Data adapter</span></h1>
+    <p class="lead">Three functions that wrap localStorage. The simplest module in the project. All logic for <em>what</em> to save lives in PlannerContext — this module only handles the serialization/deserialization.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">data/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (loadSaved on mount, saveState on every change, clearState on reset)</div></div>
+    </div>
+
+    <h2>Exported functions</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">loadSaved() → SavedState | null</div>
+      <div class="fn-desc">Reads plan index and active plan from localStorage. Reads the active plan's data JSON. Returns a fully parsed object, or null if nothing is saved (first visit).</div>
+      <div class="fn-returns">Returns: <span>SavedState object with placements, cohort, major selections, etc. — or null</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">saveState(persist: boolean, obj: PlanState) → void</div>
+      <div class="fn-desc">If <code>persist = true</code>, serializes <code>obj</code> to JSON and writes it to <code>ncp-plan-data-{activePlanId}</code>. If <code>persist = false</code>, writes nothing (user has disabled auto-save). Also updates <code>ncp-plan-index</code> with the current plan's lastSaved timestamp.</div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">clearState() → void</div>
+      <div class="fn-desc">Removes all Nu-Map keys from localStorage. Called when the user clicks "Reset plan." Removes <code>ncp-plan-index</code>, <code>ncp-active-plan</code>, and all <code>ncp-plan-data-*</code> keys.</div>
+    </div>
+
+    <h2>localStorage key reference</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Key</th><th>Contents</th><th>Lifetime</th></tr></thead>
+      <tbody>
+        <tr><td><code>ncp-plan-index</code></td><td><code>[{id, name, lastSaved}]</code></td><td>Until clearState()</td></tr>
+        <tr><td><code>ncp-active-plan</code></td><td>Plan ID string</td><td>Until clearState()</td></tr>
+        <tr><td><code>ncp-plan-data-{id}</code></td><td>Full plan JSON (see below)</td><td>Until plan deleted or clearState()</td></tr>
+        <tr><td><code>ncp-theme</code></td><td>Theme name string</td><td>Permanent (not cleared by reset)</td></tr>
+        <tr><td><code>ncp-zoom</code></td><td>Number</td><td>Permanent</td></tr>
+        <tr><td><code>ncp-ent-sem/year</code></td><td>Cohort settings</td><td>Permanent</td></tr>
+        <tr><td><code>ncp-grad-sem/year</code></td><td>Cohort settings</td><td>Permanent</td></tr>
+        <tr><td><code>ncp-starred</code></td><td>string[] of courseIds</td><td>Permanent</td></tr>
+        <tr><td><code>ncp-sticky-courses</code></td><td>boolean</td><td>Permanent</td></tr>
+        <tr><td><code>ncp-collapse-other-credits</code></td><td>boolean (default true)</td><td>Permanent</td></tr>
+        <tr><td><code>ncp-seen-disclaimer</code></td><td>boolean</td><td>Permanent</td></tr>
+        <tr><td><code>ncp-state-v2</code></td><td>Legacy full state (old system)</td><td>Migrated on load</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Plan JSON structure</h3>
+    <pre><code>{
+  <span class="str">"version"</span>:      1,
+  <span class="str">"exported"</span>:     <span class="str">"2026-04-04T12:00:00Z"</span>,
+  <span class="str">"entSem"</span>:       <span class="str">"fall"</span>,  <span class="str">"entYear"</span>:  2026,
+  <span class="str">"gradSem"</span>:      <span class="str">"spring"</span>, <span class="str">"gradYear"</span>: 2031,
+  <span class="str">"placements"</span>:   { <span class="str">"CS3500"</span>: <span class="str">"fall2027"</span>, <span class="str">"CS2810"</span>: <span class="str">"spring2028"</span> },
+  <span class="str">"workPl"</span>:       { <span class="str">"coop-1234"</span>: { <span class="str">"semId"</span>: <span class="str">"sumA2028"</span>, <span class="str">"duration"</span>: 6, <span class="str">"company"</span>: <span class="str">"Microsoft"</span>, <span class="str">"companyDomain"</span>: <span class="str">"microsoft.com"</span>, <span class="str">"subline"</span>: <span class="str">"SWE Intern"</span> } },
+  <span class="str">"internPl"</span>:     {},
+  <span class="str">"semOrders"</span>:    { <span class="str">"fall2027"</span>: [<span class="str">"CS3500"</span>, <span class="str">"CS1800"</span>] },
+  <span class="str">"shOverrides"</span>:  { <span class="str">"CS1234"</span>: 3 },
+  <span class="str">"bonusSH"</span>:      { <span class="str">"fall2026"</span>: 8 },
+  <span class="str">"major"</span>:        <span class="str">"2024/computer-information-science/computer_science_bscs"</span>,
+  <span class="str">"conc"</span>:         <span class="kw">null</span>,
+  <span class="str">"minor1"</span>:       <span class="kw">null</span>, <span class="str">"minor2"</span>: <span class="kw">null</span>,
+  <span class="str">"placedOut"</span>:    [<span class="str">"CS1200"</span>],
+  <span class="str">"substitutions"</span>: [{ <span class="str">"from"</span>: <span class="str">"ENGW3302"</span>, <span class="str">"to"</span>: <span class="str">"ENGW3315"</span> }]
+}</code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

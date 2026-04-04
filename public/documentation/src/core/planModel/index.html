@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>planModel.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/planModel">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">Nu-Map</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>planModel.js</strong>
+    </div>
+
+    <h1>planModel.js <span class="badge green">Core logic</span></h1>
+    <p class="lead">Plan display helpers and PDF export. Provides functions for computing semester credit totals, retrieving ordered course lists, and finding edge connections. Also contains the async PDF export that builds a print-ready HTML document.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx, Header.jsx (exportReport)</div></div>
+      <div class="nb-group"><div class="nb-label">Note</div><div class="nb-value">exportReport is async but still "pure" in spirit — it takes all data as parameters</div></div>
+    </div>
+
+    <h2>Exported functions</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getSemSH(semId, placements, courseMap, shOverrides?, bonusSH?) → number</div>
+      <div class="fn-desc">Sums credit hours for all courses in a semester. Respects <code>shOverrides</code> for variable-credit courses. Adds <code>bonusSH[semId]</code> for AP/transfer credit. Used in semester row headers.</div>
+      <div class="fn-returns">Returns: <span>number — total SH for the semester</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getOrderedCourses(semId, placements, semOrders, courseMap) → string[]</div>
+      <div class="fn-desc">Returns course IDs for a semester in the user's preferred drag order. Starts with courses in <code>semOrders[semId]</code> (filtered to only those still in this semester), then appends any remaining courses not in the order array. Handles the case where a user places a new course without any explicit order for it.</div>
+      <div class="fn-returns">Returns: <span>string[] — course IDs in display order</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getConnections(courseId, edges) → Edge[]</div>
+      <div class="fn-desc">Returns all edges where the given course is either the <code>from</code> or <code>to</code> end. Used by <code>RelationLines</code> when a course is selected — it needs all related courses to draw lines to/from them. Each edge has <code>{ from, to, type }</code>.</div>
+      <div class="fn-returns">Returns: <span>Edge[] — all edges touching this course</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl, internPl) → void (async)</div>
+      <div class="fn-desc">
+        Builds a complete print-ready HTML document and opens it in a new browser window, then triggers the browser print dialog. No server, no third-party library — entirely browser-native.
+        <br><br><strong>Document contents:</strong>
+        <ul style="margin-top:4px;margin-bottom:0">
+          <li><strong>Page 1:</strong> NUPath coverage grid (12 attributes, WF excluded), major requirements tree, minor 1 and 2 trees, substitution list, total SH done/planned/required</li>
+          <li><strong>Page 2+:</strong> per-semester blocks — co-op/internship rows (company logo + role) or course rows (subject pill, NUPath badges, SH). Past semesters marked "completed", current "in progress".</li>
+        </ul>
+      </div>
+      <div class="fn-meta">Async because it awaits major/minor JSON fetches. All HTML generation is synchronous once data is loaded. Uses <code>-webkit-print-color-adjust: exact</code> to preserve colors in print.</div>
+    </div>
+
+    <h2>PDF export mechanism</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant H as Header.jsx
+    participant PM as planModel.js
+    participant ML as majorLoader / minorLoader
+    participant B as Browser
+
+    H->>PM: exportReport(placements, gradInfo, workPl, internPl)
+    PM->>ML: loadMajor() + loadMinor1() + loadMinor2() in parallel
+    ML-->>PM: requirement trees
+    PM->>PM: build full HTML string in memory
+    note over PM: page 1: NUPath grid + req trees<br/>page 2+: semester schedule blocks<br/>page-break CSS between pages
+    PM->>B: new Blob([html], {type:"text/html"})
+    PM->>B: URL.createObjectURL(blob) → blobUrl
+    PM->>B: window.open(blobUrl, "_blank") → w
+
+    alt pop-up blocked (w === null)
+        PM->>B: alert("Allow pop-ups…")
+        PM->>B: URL.revokeObjectURL(blobUrl)
+    else pop-up allowed
+        PM->>B: setTimeout(() => w.print(), 400ms)
+        note over B: 400ms lets new tab finish rendering
+        B->>B: print dialog opens
+        B-->>PM: w.onafterprint fires
+        PM->>B: w.close()
+        PM->>B: URL.revokeObjectURL(blobUrl)
+    end
+      </div>
+      <div class="caption">The 400 ms delay is not a debounce — it is a rendering buffer. The blob URL is always revoked after use to release memory.</div>
+    </div>
+
+    <h2>Company logo (CompanyLogo.jsx)</h2>
+    <p>Co-op and internship blocks display the company's logo. The logo is fetched from Google's S2 favicon service — no API key required, always cross-origin:</p>
+    <pre><code>https://www.google.com/s2/favicons?domain=microsoft.com&sz=128</code></pre>
+    <p>The <code>CompanyLogo</code> component starts with <code>visibility: hidden</code> (not <code>display: none</code>) so the <code>onLoad</code> event still fires. It becomes visible on successful load and stays hidden on error — so a missing or unknown domain simply shows nothing, no broken image icon. The parent must supply <code>key={domain}</code> so React remounts the component (and re-fetches) when the domain changes.</p>
+    <p>The same URL is used in the PDF export (via <code>pdfFaviconUrl()</code> in planModel.js) with an inline <code>onerror="this.style.display='none'"</code> fallback.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

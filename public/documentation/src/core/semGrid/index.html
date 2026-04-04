@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>semGrid.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/semGrid">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">Nu-Map</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>semGrid.js</strong>
+    </div>
+
+    <h1>semGrid.js <span class="badge green">Core logic</span></h1>
+    <p class="lead">Generates the ordered list of semesters for a student's cohort window and computes fast lookup maps. Called whenever entry or graduation dates change.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (useMemo on entry/grad dates)</div></div>
+      <div class="nb-group"><div class="nb-label">Output consumed by</div><div class="nb-value">SemRow, SummerRow, prereqEval, planModel</div></div>
+    </div>
+
+    <h2>Semester ID format</h2>
+    <p>Semester IDs are human-readable strings. They're used as stable keys across the whole app.</p>
+    <pre><code>"fall2026"    → Fall 2026 (regular semester)
+"spring2027"  → Spring 2027
+"sumA2027"    → Summer I 2027
+"sumB2027"    → Summer II 2027
+"incoming"    → Pre-matriculation (placed-out / AP credit)</code></pre>
+
+    <h2>Exported functions</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">buildCohortSemesters(entSem, entYear, gradSem, gradYear) → Semester[]</div>
+      <div class="fn-desc">
+        Main entry point. Generates the full ordered list of semesters between entry and graduation (inclusive). Prepends the special <code>"incoming"</code> slot. Calls <code>generateSemesters()</code> internally and trims to the cohort window.
+      </div>
+      <div class="fn-returns">Returns: <span>Semester[] — each is <code>{id, label, type, year}</code></span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">generateSemesters(startYear, numYears) → Semester[]</div>
+      <div class="fn-desc">Creates the raw full grid: 4 semesters per year (fall, spring, sumA, sumB) × numYears. Used internally by <code>buildCohortSemesters()</code>.</div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">deriveSemMaps(semesters) → { SEM_INDEX, SEM_NEXT, SEM_PREV }</div>
+      <div class="fn-desc">
+        Computes three O(1) lookup maps from the semester array. All are plain objects:
+        <ul style="margin-top:8px;margin-bottom:0">
+          <li><strong>SEM_INDEX</strong>: <code>{ semId → ordinal }</code> — used to compare "is A before B?"</li>
+          <li><strong>SEM_NEXT</strong>: <code>{ semId → nextSemId }</code> — used to advance one semester</li>
+          <li><strong>SEM_PREV</strong>: <code>{ semId → prevSemId }</code> — used to go back one semester</li>
+        </ul>
+      </div>
+      <div class="fn-returns">Returns: <span>{ SEM_INDEX, SEM_NEXT, SEM_PREV }</span></div>
+    </div>
+
+    <h2>Example: 5-year CS cohort (Fall 2026 → Spring 2031)</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    A["incoming\n(ordinal 0)"] --> B["fall2026\n(1)"] --> C["spring2027\n(2)"] --> D["sumA2027\n(3)"] --> E["sumB2027\n(4)"] --> F["fall2027\n(5)"] --> G["...\n..."] --> Z["spring2031\n(last)"]
+    style A fill:#f6f8fa,stroke:#d0d7de
+      </div>
+      <div class="caption">SEMESTERS array for a Fall 2026 entry, Spring 2031 graduation. Ordinals assigned left-to-right.</div>
+    </div>
+
+    <h2>Sticky courses: remapping on cohort change</h2>
+    <p>When the user adjusts entry/graduation dates, all placed courses need to stay in their "relative" semester position if <code>stickyCourses = true</code>. PlannerContext handles this: it reads <code>SEM_INDEX</code> for the old grid, then maps each course to the same ordinal position in the new grid.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

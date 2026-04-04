@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalog Check — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="dev-portal/catalog-check">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../">nu-map (docs)</a><span class="sep"> / </span><a href="../">dev-portal</a><span class="sep"> / </span><strong>catalog-check</strong>
+    </div>
+
+    <h1>Catalog Check <span class="badge blue">Work tab · local only</span></h1>
+
+    <!--
+      SCR setup
+      Situation:    all-courses.json must stay in sync with the live catalog, but manual comparison across 10k courses is impossible
+      Complication: the catalog changes constantly and not every change should be applied — some catalog entries are wrong, some diffs are low-priority noise
+      Resolution:   this page answers "how does Catalog Check work — what happens when I click Launch, and what does the data mean?"
+    -->
+    <p class="lead">Catalog Check scrapes catalog.northeastern.edu subject by subject and compares every field in <code>all-courses.json</code> against what the catalog says today. It streams results live so you can act before the full run finishes. The key skill is reading the four discrepancy categories — they have different priorities and different consequences when you apply fixes.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Scan endpoint</div><div class="nb-value"><code>GET http://localhost:3333/run</code> (Server-Sent Events stream)</div></div>
+      <div class="nb-group"><div class="nb-label">Fix endpoint</div><div class="nb-value"><code>POST http://localhost:3333/fix</code> (streaming response)</div></div>
+      <div class="nb-group"><div class="nb-label">Requires</div><div class="nb-value"><code>npm run dev</code> — starts Vite + the port 3333 server together</div></div>
+      <div class="nb-group"><div class="nb-label">Blocked on</div><div class="nb-value">GitHub Pages (HTTPS → HTTP mixed-content; tab is hidden entirely)</div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 1 — The check is an SSE stream, not a batch
+         (fundamental to understanding how to use it)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>The check is a live stream — stoppable at any time</h2>
+    <p>When you click <strong>Launch Check</strong>, the browser opens an <code>EventSource</code> connection to <code>localhost:3333/run</code>. The server scrapes one subject at a time and sends a <code>subject_done</code> event after each one. The stat cards, progress bar, and live log all update per-subject in real time — you do not have to wait for the full run.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    LAUNCH["Launch Check\nbrowser opens EventSource → localhost:3333/run"]
+    LAUNCH --> CONN{"Server reachable?"}
+    CONN -->|"onerror fires immediately"| FAIL["❌ 'Cannot connect — start the server'\nbuttons reset, badge hidden"]
+    CONN -->|"connected"| HELLO["type:hello → status message\ntype:start → total subjects + courses_in_db count"]
+
+    HELLO --> LOOP["For each subject:"]
+    LOOP --> SA["type:subject_start — updates status: [k/N] subject…"]
+    SA --> SD["type:subject_done — streams:\n• cumulative counters (matched / changed / range / added / missing)\n• changes[] with per-field diffs + isRangeOnly flag\n• added_courses[] with catalogData\n• missing_courses[]\n\nUI: updates stat cards, appends log row, feeds Inspector"]
+    SD --> MORE{"more subjects?"}
+    MORE -->|Yes| LOOP
+    MORE -->|No| DONE["type:done — final summary\nprogress → 100%, EventSource closed"]
+
+    LOOP -->|"click Stop"| STOPPED["EventSource.close()\nstatus: 'Stopped.'\npartial results remain in Inspector — still actionable"]
+    DONE --> INSP["Inspector populated — ready to act"]
+    STOPPED --> INSP
+      </div>
+    </div>
+
+    <h3>SSE event reference</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>type</th><th>Key payload fields</th><th>What the UI does with it</th></tr></thead>
+      <tbody>
+        <tr><td><code>hello</code>, <code>status</code></td><td><code>msg</code></td><td>Updates status text</td></tr>
+        <tr><td><code>start</code></td><td><code>total</code>, <code>courses_in_db</code></td><td>Sets progress denominator, updates status</td></tr>
+        <tr><td><code>subject_start</code></td><td><code>index</code>, <code>slug</code></td><td>Updates status to "[k/N] slug…"</td></tr>
+        <tr><td><code>subject_done</code></td><td>All counters, <code>changes[]</code>, <code>added_courses[]</code>, <code>missing_courses[]</code></td><td>Increments stat cards, appends log row, calls <code>ckAccumulate(d)</code></td></tr>
+        <tr><td><code>done</code></td><td>Final totals</td><td>Progress → 100%, buttons unlock, EventSource closed</td></tr>
+        <tr><td><code>error</code></td><td><code>msg</code></td><td>Error text in status, buttons unlock, EventSource closed</td></tr>
+      </tbody>
+    </table></div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 2 — Four discrepancy categories
+         (the core concept — determines what you do with results)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Four discrepancy categories — different meaning, different priority</h2>
+    <p>Each <code>subject_done</code> event feeds <code>ckAccumulate(d)</code>, which appends items to the module-level <code>ckDiscrepancies[]</code> array. Every item has one of four types. The type determines both <em>how urgently to act</em> and <em>what the fix does</em>:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Badge</th><th>type</th><th>What it means</th><th>Priority</th><th>Apply Fixes effect</th></tr></thead>
+      <tbody>
+        <tr><td>⚠ Need PR</td><td><code>changed</code></td><td>A real field changed — title, description, credits, NUPath codes, prereqs, scheduleType. Every diff in this item has <code>isRangeOnly: false</code>.</td><td>High</td><td>Overwrites the changed fields in <code>all-courses.json</code></td></tr>
+        <tr><td>≈ Range diff</td><td><code>range</code></td><td>Only numeric range fields differ (e.g. min/max credits shifted slightly). Every diff has <code>isRangeOnly: true</code>.</td><td>Low — usually ignore</td><td>Overwrites the range fields only</td></tr>
+        <tr><td>🆕 New courses</td><td><code>added</code></td><td>In the catalog but not in our database. Server attaches <code>catalogData</code> to the item so it can be inserted.</td><td>High — verify first</td><td>Inserts full course record from catalogData</td></tr>
+        <tr><td>❌ Not in catalog</td><td><code>missing</code></td><td>In our database but the scraper found no match. May be discontinued, renamed, or a transient catalog outage.</td><td>Medium — investigate before acting</td><td><strong>Deletes</strong> the course record — irreversible without git</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>How discrepancies accumulate in the Inspector</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    EVT["subject_done event\n{changes[], added_courses[], missing_courses[]}"]
+    EVT --> ACC["ckAccumulate(d)\n\nfor each {code, diffs} in changes:\n  allRange = every diff.isRangeOnly?\n  → push {code, type:'range'|'changed', diffs}\n\nfor each added_courses item:\n  → push {code, type:'added', catalogData}\n\nfor each code in missing_courses:\n  → push {code, type:'missing'}"]
+    ACC --> ARR["ckDiscrepancies[]\n(grows throughout the run)"]
+    ARR --> RENDER["ckRender()\n  apply type filter\n  apply search term\n  cap display at 500\n  update table + ck-fix-count label"]
+      </div>
+    </div>
+    <p>The Inspector renders live — you can filter and search while the check is still running. <strong>Export JSON</strong> downloads the full <code>ckDiscrepancies[]</code> array as <code>catalog-discrepancies-YYYY-MM-DD.json</code> for offline analysis.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 3 — Apply Fixes is a targeted mutation pipeline
+         (how the write operation actually works)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Apply Fixes — targeted mutation with a confirmation gate</h2>
+    <p>The filter you have active when you click <strong>☢ Apply Fixes</strong> determines exactly what gets sent to the server. This lets you be surgical — apply only the new courses without touching the field changes, for example.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Active filter</th><th>What gets sent to <code>POST /fix</code></th></tr></thead>
+      <tbody>
+        <tr><td>All</td><td>Every entry in <code>ckDiscrepancies[]</code></td></tr>
+        <tr><td>⚠ Changed</td><td>Only <code>type === 'changed'</code></td></tr>
+        <tr><td>≈ Range</td><td>Only <code>type === 'range'</code></td></tr>
+        <tr><td>🆕 New</td><td>Only <code>type === 'added'</code></td></tr>
+        <tr><td>❌ Missing</td><td>Only <code>type === 'missing'</code></td></tr>
+      </tbody>
+    </table></div>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant You
+    participant Portal as Browser
+    participant Modal as Confirmation modal
+    participant Server as localhost:3333/fix
+    participant FS as all-courses.json + change-log.json
+
+    You->>Portal: click "☢ Apply Fixes"
+    Portal->>Portal: ckGetFixable() — collect items matching current filter
+    Portal->>Modal: show count + type breakdown
+    You->>Modal: "Yes, override data"
+    Portal->>Server: POST /fix  body: ckDiscrepancies (filtered)
+
+    note over Server: For each item in order:\n  'changed'/'range' → overwrite specific fields\n  'added' → insert new course from catalogData\n  'missing' → delete course record\nWrite all-courses.json\nAppend 'nuclear-fix' entry to change-log.json
+
+    loop per course
+      Server-->>Portal: SSE: type:'fixed' {index, total, code, itemType}
+    end
+    Server-->>Portal: type:'done' {fixed, nChanged, nRange, nAdded, nRemoved, label}
+
+    Portal->>Portal: animate progress bar\non 'done': update stat-updated display\nsetTimeout(loadDataMeta, 600)\nsetTimeout(loadChangeLog, 600)
+    Portal-->>You: "✅ Applied N — updated to [label]. Rebuild to deploy."
+      </div>
+    </div>
+    <p><strong>Irreversibility:</strong> The only undo is <code>git checkout -- public/all-courses.json</code>. There is no in-portal rollback. After applying, run <code>npm run build</code>, verify in the Preview tab, then push to main.</p>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

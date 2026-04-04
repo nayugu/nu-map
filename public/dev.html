@@ -232,13 +232,13 @@
 
   <!-- ── Overview ─────────────────────────────────────────────── -->
   <div id="tab-overview" class="tab-panel active">
-    <div class="card" style="border:2px solid #f59e0b;background:rgba(245,158,11,0.07)">
+    <div class="card" style="border:2px solid var(--accent);background:var(--accent-bg)">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
         <div>
-          <h2 style="margin-bottom:4px">⚠️ Automated Catalog Updates Need Review</h2>
-          <p class="text2" style="margin:0">Every 3 days the scraper runs and opens a <strong>pull request</strong> with any field changes it found (title, description, credits, NUPath, prereqs). <strong>You must approve and merge the PR</strong> for changes to go live — nothing is auto-merged.</p>
+          <h2 style="margin-bottom:4px">Data updates are manual</h2>
+          <p class="text2" style="margin:0">There is no automated scraper. Run <strong>Catalog Check</strong> or <strong>NUPath Update</strong> locally, then use <strong>Review &amp; Push</strong> to commit directly to main. NUPath can also be triggered from GitHub Actions (workflow_dispatch).</p>
         </div>
-        <a class="btn" href="https://github.com/nayugu/nu-map/pulls" target="_blank" style="background:#f59e0b;border-color:#f59e0b;flex-shrink:0;font-size:14px;padding:10px 20px">🔀 Review Open PRs →</a>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/actions" target="_blank" style="flex-shrink:0;font-size:13px;padding:8px 18px">⚙ GitHub Actions →</a>
       </div>
     </div>
 
@@ -289,7 +289,7 @@
       <h2>Patch Creator</h2>
       <p class="text2" style="margin-bottom:16px">
         Generate a YAML patch file to add, update, or remove courses.
-        Copy the output into <code>data/patches/YYYY-MM-DD_description.yaml</code> and open a pull request.
+        Copy the output into <code>data/patches/YYYY-MM-DD_description.yaml</code>, then push to main via the Work tab.
       </p>
 
       <div class="action-tabs">
@@ -444,24 +444,29 @@
           <tr style="border-bottom:1px solid var(--border)">
             <th style="text-align:left;padding:8px 0;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">Source</th>
             <th style="text-align:left;padding:8px 12px;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">What it provides</th>
-            <th style="text-align:left;padding:8px 0;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">Update frequency</th>
+            <th style="text-align:left;padding:8px 0;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">How it's updated</th>
           </tr>
         </thead>
         <tbody>
           <tr style="border-bottom:1px solid var(--border)22">
             <td style="padding:10px 0"><a href="https://catalog.northeastern.edu/course-descriptions/" target="_blank">catalog.northeastern.edu</a></td>
-            <td style="padding:10px 12px;color:var(--text2)">Official titles, descriptions, credits, NUPath</td>
-            <td style="padding:10px 0"><span class="badge ok">Annually</span></td>
+            <td style="padding:10px 12px;color:var(--text2)">Titles, descriptions, credits, prereqs, scheduleType</td>
+            <td style="padding:10px 0">Work tab → <b>Catalog Check</b></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)22">
+            <td style="padding:10px 0"><a href="https://tableau.northeastern.edu" target="_blank">tableau.northeastern.edu</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">NUPath attribute designations (authoritative)</td>
+            <td style="padding:10px 0">Work tab → <b>NUPath Update</b>, or GH Actions workflow_dispatch</td>
           </tr>
           <tr style="border-bottom:1px solid var(--border)22">
             <td style="padding:10px 0"><a href="https://github.com/ninest/nu-courses" target="_blank">ninest/nu-courses (SearchNEU)</a></td>
-            <td style="padding:10px 12px;color:var(--text2)">Live sections, term availability (CRNs)</td>
-            <td style="padding:10px 0"><span class="badge warn">Each semester</span></td>
+            <td style="padding:10px 12px;color:var(--text2)">Term availability, live sections</td>
+            <td style="padding:10px 0"><code>npm run data:fetch:write</code></td>
           </tr>
           <tr>
             <td style="padding:10px 0"><a href="https://github.com/sandboxnu/graduatenu" target="_blank">sandboxnu/graduatenu</a></td>
-            <td style="padding:10px 12px;color:var(--text2)">Major/minor requirement JSON files</td>
-            <td style="padding:10px 0"><span class="badge warn">Ad hoc</span></td>
+            <td style="padding:10px 12px;color:var(--text2)">Major/minor requirement JSON trees</td>
+            <td style="padding:10px 0">Manual sync to <code>public/majors/</code></td>
           </tr>
         </tbody>
       </table>
@@ -472,23 +477,23 @@
       <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
         <div style="display:flex;gap:10px;align-items:flex-start">
           <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</span>
-          <div><b>Fetch fresh course list</b> from the SearchNEU API:<br><code>npm run data:fetch</code> → review diff → <code>npm run data:fetch:write</code></div>
+          <div><b>Check for catalog field changes</b> (titles, credits, prereqs):<br>Work tab → Catalog Check → Launch → review Inspector → Apply Fixes</div>
         </div>
         <div style="display:flex;gap:10px;align-items:flex-start">
           <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</span>
-          <div><b>Optionally scrape the catalog</b> for richer descriptions:<br><code>npm run data:scrape:write</code></div>
+          <div><b>Check for NUPath changes</b> (each semester):<br>Work tab → NUPath Update → Scan → review → Apply Selected Fixes</div>
         </div>
         <div style="display:flex;gap:10px;align-items:flex-start">
           <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</span>
-          <div><b>Re-apply manual patches</b>:<br><code>npm run data:patch:write</code></div>
+          <div><b>Apply any manual patches</b> for known errors:<br>Patches tab → generate YAML → save to <code>data/patches/</code> → <code>npm run data:patch:write</code></div>
         </div>
         <div style="display:flex;gap:10px;align-items:flex-start">
           <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</span>
-          <div><b>Build and verify</b>:<br><code>npm run build</code></div>
+          <div><b>Build and verify</b>:<br><code>npm run build</code> → Preview tab across devices</div>
         </div>
         <div style="display:flex;gap:10px;align-items:flex-start">
           <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">5</span>
-          <div><b>Open a pull request</b> — GitHub Actions validates and posts a diff summary.</div>
+          <div><b>Push to main</b>:<br>Work tab → Review &amp; Push (shows git diff) → Confirm → GitHub Actions deploys in ~2 min</div>
         </div>
       </div>
     </div>

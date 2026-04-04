@@ -68,7 +68,7 @@ jobs:
             ## Automated catalog data update
 
             **Subject scraped:** `${{ steps.scrape.outputs.subject }}`
-            **Triggered by:** scheduled rotate (every 3 days)
+            **Triggered by:** manual `workflow_dispatch` (scheduled rotation is disabled)
             **Requires developer approval before merging.**
 
             ### Changed files

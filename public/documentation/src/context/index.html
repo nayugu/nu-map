@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>context/ — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb"><a href="../../">Nu-Map</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>context/</strong></div>
+
+    <h1>context/ <span class="badge purple">State layer</span></h1>
+    <p class="lead">The bridge between UI and logic. Two React Contexts: <strong>PlannerContext</strong> owns all application state (placements, drag-drop, undo, plans), and <strong>ThemeContext</strong> manages CSS variable injection. Every UI component reads from here — nothing else.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Imports from</div><div class="nb-value">core/, data/</div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">All UI components via usePlanner() / useTheme()</div></div>
+    </div>
+
+    <h2>Children</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./PlannerContext/">
+        <div class="cc-type">context (~1,600 lines)</div>
+        <div class="cc-name">PlannerContext.jsx</div>
+        <div class="cc-desc">All application state: placements, cohort, drag-drop, undo/redo, multi-plan, violations, persistence. The hub of everything.</div>
+      </a>
+      <a class="child-card" href="./ThemeContext/">
+        <div class="cc-type">context (~65 lines)</div>
+        <div class="cc-name">ThemeContext.jsx</div>
+        <div class="cc-desc">Reads theme from localStorage, injects 100+ CSS variables onto &lt;html&gt;. Cycle between dark/light themes.</div>
+      </a>
+    </div>
+
+    <h2>How UI components consume context</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    PC["PlannerContext"]
+    TC["ThemeContext"]
+
+    PC -->|"usePlanner()"| H["Header"]
+    PC -->|"usePlanner()"| BP["BankPanel"]
+    PC -->|"usePlanner()"| GP["GradPanel"]
+    PC -->|"usePlanner()"| SR["SemRow / SummerRow"]
+    PC -->|"usePlanner()"| CC["CourseCard"]
+    PC -->|"usePlanner()"| IP["InfoPanel"]
+
+    TC -->|"useTheme()"| H
+    TC -->|"useTheme()"| App["App.jsx"]
+
+    style PC fill:#fbefff,stroke:#8250df
+    style TC fill:#fbefff,stroke:#8250df
+      </div>
+      <div class="caption">Every UI component calls usePlanner(). ThemeContext is only read by App.jsx and Header.</div>
+    </div>
+
+    <h2>The no-prop-drilling contract</h2>
+    <p>No component passes state down via props (except trivial configuration like <code>semId</code> to a row). All shared state comes from <code>usePlanner()</code>. This makes it easy to add features — any component can read or mutate any state without threading props through the tree.</p>
+    <p>The trade-off: adding new state means editing PlannerContext.jsx, which is already large. When adding state, check first whether it belongs in the context (shared across components) or as local component state (only needed in one place).</p>
+
+    <h2>Context initialization sequence</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant App
+    participant TC as ThemeContext
+    participant PC as PlannerContext
+    participant CL as courseLoader
+    participant PS as persistence
+
+    App->>TC: mount ThemeProvider
+    TC->>TC: read ncp-theme from localStorage
+    TC->>TC: inject CSS variables onto &lt;html&gt;
+
+    App->>PC: mount PlannerProvider
+    PC->>PS: loadSaved()
+    PS-->>PC: saved plan state (or defaults)
+    PC->>PC: hydrate placements, cohort, major, etc.
+    PC->>CL: fetchCourses()
+    CL-->>PC: Course[] (from all-courses.json)
+    PC->>PC: normalize → courseMap
+    PC->>PC: compute derived state (SEMESTERS, violations)
+      </div>
+      <div class="caption">Startup sequence. Theme is injected synchronously; courses load asynchronously.</div>
+    </div>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

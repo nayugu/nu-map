@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>core/ — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb"><a href="../../">Nu-Map</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>core/</strong></div>
+
+    <h1>core/ <span class="badge green">Pure logic</span></h1>
+    <p class="lead">Seven modules of pure domain logic. None import React, call fetch(), or touch localStorage. Every function takes inputs and returns outputs. This makes them trivially testable in Node without a DOM.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext.jsx (exclusively)</div></div>
+      <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">No React, no I/O, no side effects — pure functions only</div></div>
+    </div>
+
+    <h2>Children</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./gradRequirements/">
+        <div class="cc-type">module (~500 lines)</div>
+        <div class="cc-name">gradRequirements.js</div>
+        <div class="cc-desc">Validates placed courses against a Major2 requirement tree. The most algorithmically complex module.</div>
+      </a>
+      <a class="child-card" href="./prereqEval/">
+        <div class="cc-type">module (~80 lines)</div>
+        <div class="cc-name">prereqEval.js</div>
+        <div class="cc-desc">Evaluates whether a course's prerequisites are met. Returns satisfied / order-violation / missing.</div>
+      </a>
+      <a class="child-card" href="./courseModel/">
+        <div class="cc-type">module (~120 lines)</div>
+        <div class="cc-name">courseModel.js</div>
+        <div class="cc-desc">Normalizes raw catalog JSON into internal course objects. Extracts prereq/coreq edges. Hashes subject colors.</div>
+      </a>
+      <a class="child-card" href="./semGrid/">
+        <div class="cc-type">module (~80 lines)</div>
+        <div class="cc-name">semGrid.js</div>
+        <div class="cc-desc">Generates semester grids from cohort dates. Computes SEM_INDEX, SEM_NEXT, SEM_PREV lookup maps.</div>
+      </a>
+      <a class="child-card" href="./planModel/">
+        <div class="cc-type">module (~200 lines)</div>
+        <div class="cc-name">planModel.js</div>
+        <div class="cc-desc">Plan display helpers: SH totals, ordered course lists, edge lookups. Also: async PDF export via browser print.</div>
+      </a>
+      <a class="child-card" href="./constants/">
+        <div class="cc-type">constants + theme tokens</div>
+        <div class="cc-name">constants.js + themes.js</div>
+        <div class="cc-desc">Global compile-time constants (colors, labels, templates) and CSS variable token sets for each theme.</div>
+      </a>
+    </div>
+
+    <h2>Inter-module dependencies</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TD
+    GR["gradRequirements.js"]
+    PE["prereqEval.js"]
+    CM["courseModel.js"]
+    SG["semGrid.js"]
+    PM["planModel.js"]
+    TH["themes.js"]
+    CO["constants.js"]
+
+    GR -->|"uses NUPATH_LABELS"| CO
+    CM -->|"uses SUBJECT_PALETTE"| CO
+    SG -->|"uses SEMESTER_TYPES"| CO
+    PM -->|"calls loadMajor (via param)"| GR
+    TH -.->|"token values from"| CO
+
+    style CO fill:#fff8c5,stroke:#9a6700
+      </div>
+      <div class="caption">constants.js is the only internal dependency. All other modules are independent of each other.</div>
+    </div>
+
+    <h2>How PlannerContext uses core</h2>
+    <p>PlannerContext is the only file that imports from core/. It calls these functions during:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Event</th><th>Core function called</th></tr></thead>
+      <tbody>
+        <tr><td>Courses loaded</td><td><code>normalizeCourse()</code> for each, <code>buildCourseMap()</code></td></tr>
+        <tr><td>Entry/grad dates change</td><td><code>buildCohortSemesters()</code>, <code>deriveSemMaps()</code></td></tr>
+        <tr><td>Any placement change</td><td><code>evalPrereqTree()</code> for all placed courses → violations</td></tr>
+        <tr><td>User selects major</td><td><code>allocateMajorWithElectives()</code>, <code>getNuPathCoverage()</code></td></tr>
+        <tr><td>Course selected</td><td><code>getConnections()</code> → SVG line positions</td></tr>
+        <tr><td>PDF export triggered</td><td><code>exportReport()</code></td></tr>
+      </tbody>
+    </table></div>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

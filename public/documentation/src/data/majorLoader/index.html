@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>majorLoader.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/data/majorLoader">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">Nu-Map</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">data/</a><span class="sep"> / </span><strong>majorLoader.js + minorLoader.js</strong>
+    </div>
+
+    <h1>majorLoader.js + minorLoader.js <span class="badge yellow">Data adapters</span></h1>
+    <p class="lead">Async-fetch graduation requirement trees from the <code>graduatenu/</code> fork. Requirements are not bundled — they're fetched on demand when a user selects a major. Also provides the grouped option lists for the major/minor search dropdowns.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">data/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">GradPanel.jsx (on major/minor selection)</div></div>
+      <div class="nb-group"><div class="nb-label">Source data</div><div class="nb-value"><code>graduatenu/packages/api/src/major/majors/**/*.json</code></div></div>
+    </div>
+
+    <h2>graduatenu/ fork structure</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TD
+    A["graduatenu/\npackages/api/src/major/"] --> B["majors/"]
+    A --> C["minors/"]
+    B --> D["{year}/\ne.g. 2024/"]
+    D --> E["{college-slug}/\ne.g. computer-information-science/"]
+    E --> F["{major-slug}/\ne.g. computer_science_bscs/"]
+    F --> G["parsed.initial.json\n← the requirement tree"]
+    F --> H["concentrations/\n{conc-slug}/parsed.initial.json"]
+      </div>
+      <div class="caption">File layout. loadMajor(path) fetches the parsed.initial.json at the given path.</div>
+    </div>
+
+    <h2>Exported functions — majorLoader.js</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">loadMajor(path) → Promise&lt;Major2&gt;</div>
+      <div class="fn-desc">Fetches a major's requirement tree JSON from <code>{BASE_URL}{path}</code>. The path argument is the relative path within the <code>public/</code> directory, e.g. <code>"graduatenu/packages/api/src/major/majors/2024/computer-information-science/computer_science_bscs/parsed.initial.json"</code>.</div>
+      <div class="fn-returns">Returns: <span>Promise&lt;Major2&gt; — the requirement tree JSON</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getMajorOptionGroups() → OptionGroup[]</div>
+      <div class="fn-desc">Reads the generated major index and returns a grouped option structure for the SearchCombo dropdown in GradPanel. Grouped by: location → college → major name → catalog year → optional concentrations.</div>
+      <div class="fn-returns">Returns: <span>OptionGroup[] — hierarchical dropdown data</span></div>
+    </div>
+
+    <h2>Exported functions — minorLoader.js</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">loadMinor(path) → Promise&lt;Minor2&gt;</div>
+      <div class="fn-desc">Identical to <code>loadMajor()</code> but for minor requirement files under <code>graduatenu/.../minors/</code>.</div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getMinorOptionGroups() → OptionGroup[]</div>
+      <div class="fn-desc">Same structure as <code>getMajorOptionGroups()</code> but for minors.</div>
+    </div>
+
+    <h2>Major2 schema (what loadMajor returns)</h2>
+    <pre><code>{
+  <span class="str">"name"</span>: <span class="str">"Computer Science BSCS"</span>,
+  <span class="str">"requirementSections"</span>: [
+    {
+      <span class="str">"title"</span>: <span class="str">"CS Required Courses"</span>,
+      <span class="str">"requirements"</span>: [
+        { <span class="str">"type"</span>: <span class="str">"COURSE"</span>, <span class="str">"classId"</span>: 3500, <span class="str">"subject"</span>: <span class="str">"CS"</span> },
+        {
+          <span class="str">"type"</span>: <span class="str">"XOM"</span>, <span class="str">"numCreditsMin"</span>: 8,
+          <span class="str">"courses"</span>: [
+            { <span class="str">"type"</span>: <span class="str">"RANGE"</span>, <span class="str">"subject"</span>: <span class="str">"CS"</span>, <span class="str">"idRangeStart"</span>: 2500, <span class="str">"idRangeEnd"</span>: 9999 }
+          ]
+        }
+      ],
+      <span class="str">"minRequirementCount"</span>: 5
+    },
+    {
+      <span class="str">"title"</span>: <span class="str">"Required General Electives"</span>,
+      <span class="str">"requirements"</span>: [],
+      <span class="str">"minRequirementCount"</span>: 0,
+      <span class="str">"creditHoursRequired"</span>: 28   <span class="cmt">// may or may not be present</span>
+    }
+  ]
+}</code></pre>
+
+    <div class="callout warn">
+      <span class="ci">⚠️</span>
+      <div class="callout-body"><strong>Parser inconsistencies:</strong> The upstream graduatenu scraper generates inconsistent structures across catalog years. See <a href="../../core/gradRequirements/">gradRequirements.js</a> for the two known bugs and how they're fixed (one in data, one in code).</div>
+    </div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

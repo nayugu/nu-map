@@ -12,10 +12,12 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 
 ## Features
 
-- Drag-and-drop semester planning with co-op blocks and current-semester tracking
+- Drag-and-drop semester planning with co-op and internship blocks, touch/mobile support, and current-semester tracking
 - Live prereq/coreq validation (SVG overlay lines)
 - Graduation requirements panel — majors, concentrations, minors, NUPath
 - Course info panel with interactive prereq chips
+- Multiple named plans — create, switch, and delete independent degree plans
+- Import/export plans as JSON — share between devices or send to an advisor
 - PDF export, dark/light themes, auto-save, Cmd+Z undo
 
 ---
@@ -55,7 +57,7 @@ npm run data:validate       # validate all patches in data/patches/
 npm run data:patch          # preview what would change (dry run)
 ```
 
-Automated scraping rotates through all ~130 subjects every 3 days via GitHub Actions, opening a PR for developer review. Rotation state is in `data/scrape-state.json`. Each run is logged in `public/change-log.json` (capped at 600 entries, ~4.5 years of history).
+All data updates are manual — there is no automated scraper. Run Catalog Check or NUPath Update from the local dev portal, then push via the Work tab. Rotation state (for manual use of `data:scrape:rotate`) is in `data/scrape-state.json`. Each run is logged in `public/change-log.json` (capped at 600 entries, ~4.5 years of history).
 
 See [`data/patches/CONTRIBUTING.md`](data/patches/CONTRIBUTING.md) for the manual patch format.
 
@@ -81,8 +83,8 @@ Push to `main` → GitHub Actions builds and deploys to GitHub Pages (`gh-pages`
 
 | Source | Provides | Cadence |
 |---|---|---|
-| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, NUPath, prereqs/coreqs | Every 3 days |
-| [ninest/nu-courses](https://github.com/ninest/nu-courses) (SearchNEU) | Sections, term availability | Each semester |
+| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, NUPath, prereqs/coreqs | Manual — `npm run data:scrape:write` |
+| [ninest/nu-courses](https://github.com/ninest/nu-courses) (SearchNEU) | Sections, term availability | Manual — `npm run data:fetch:write` |
 | [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) | Major/minor requirement JSON | Ad hoc |
 
 ---

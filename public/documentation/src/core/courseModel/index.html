@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>courseModel.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/courseModel">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">Nu-Map</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>courseModel.js</strong>
+    </div>
+
+    <h1>courseModel.js <span class="badge green">Core logic</span></h1>
+    <p class="lead">Course normalization and edge extraction. Called once per course when the catalog loads. Transforms raw JSON from the catalog scraper into the internal <code>Course</code> shape used by all other modules.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (once at startup, for every course)</div></div>
+      <div class="nb-group"><div class="nb-label">Imports</div><div class="nb-value">constants.js (SUBJECT_PALETTE)</div></div>
+    </div>
+
+    <h2>The normalization transform</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    RAW["Raw catalog JSON\n{id, subject, number,\ntitle, credits, prereqs,\nterms, nuPath, ...}"]
+    NORM["normalizeCourse()"]
+    OUT["Internal Course object\n{id, subject, number, classId,\ntitle, description,\ncredits, shMin, shMax,\nprereqs, coreqs,\nofferedFall/Spring/SumA/SumB,\nnuPath, color, edges}"]
+
+    RAW --> NORM --> OUT
+      </div>
+    </div>
+
+    <h2>Exported functions</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">normalizeCourse(raw) → Course</div>
+      <div class="fn-desc">
+        Converts a raw catalog entry to the internal shape:
+        <ul style="margin-top:8px;margin-bottom:0">
+          <li><strong>id</strong>: <code>subject + number</code> with no space (e.g. <code>"CS3500"</code>)</li>
+          <li><strong>classId</strong>: <code>parseInt(number)</code> for numeric comparisons</li>
+          <li><strong>shMin / shMax</strong>: parsed from variable-credit ranges like "1-4 credits"</li>
+          <li><strong>offeredFall/Spring/SumA/SumB</strong>: derived from Banner term codes via <code>getOfferedFromTerms()</code></li>
+          <li><strong>color</strong>: deterministic hex color from <code>subjectColor(subject)</code></li>
+          <li><strong>edges</strong>: extracted prerequisite/corequisite edges via <code>extractEdges()</code></li>
+        </ul>
+      </div>
+      <div class="fn-returns">Returns: <span>Course object in internal format</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">extractEdges(courseId, prereqs, coreqs) → Edge[]</div>
+      <div class="fn-desc">
+        Walks the prereq and coreq trees recursively. At each leaf node (<code>{ subject, classId }</code>), emits one edge. Edges are used to draw SVG lines in <code>RelationLines</code> and list relationships in <code>InfoPanel</code>.
+      </div>
+      <div class="fn-returns">Returns: <span>Edge[] — each is <code>{ from: string, to: string, type: "prerequisite"|"corequisite" }</code></span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">subjectColor(subject) → string</div>
+      <div class="fn-desc">
+        Deterministic color hash. Sums the char codes of the subject string, then indexes into <code>SUBJECT_PALETTE</code> (25 CSS hex colors). Same subject always gets the same color across sessions and builds. Used for the left-edge stripe on CourseCard.
+      </div>
+      <div class="fn-returns">Returns: <span>CSS hex color string, e.g. "#4a90d9"</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getOfferedFromTerms(terms) → string[]</div>
+      <div class="fn-desc">
+        Maps Banner term codes to offering labels. Banner codes end in:
+        <code>10</code> = fall, <code>30</code> = spring, <code>40</code> = Summer I (sumA), <code>60</code> = Summer II (sumB).
+        Deduplicates and returns a subset of <code>["fall","spring","sumA","sumB"]</code>.
+      </div>
+      <div class="fn-returns">Returns: <span>string[] — offering type labels</span></div>
+    </div>
+
+    <h2>Internal Course schema</h2>
+    <pre><code>{
+  <span class="str">"id"</span>:           <span class="str">"CS3500"</span>,       <span class="cmt">// canonical key, no space</span>
+  <span class="str">"subject"</span>:      <span class="str">"CS"</span>,
+  <span class="str">"number"</span>:       <span class="str">"3500"</span>,
+  <span class="str">"classId"</span>:      3500,            <span class="cmt">// parseInt(number)</span>
+  <span class="str">"title"</span>:        <span class="str">"Object-Oriented Design"</span>,
+  <span class="str">"description"</span>:  <span class="str">"..."</span>,
+  <span class="str">"credits"</span>:      4,
+  <span class="str">"shMin"</span>:        4,               <span class="cmt">// same as credits if not variable</span>
+  <span class="str">"shMax"</span>:        4,               <span class="cmt">// shMin !== shMax → variable credit</span>
+  <span class="str">"prereqs"</span>: {                     <span class="cmt">// recursive AND/OR tree, or null</span>
+    <span class="str">"type"</span>: <span class="str">"or"</span>,
+    <span class="str">"courses"</span>: [
+      { <span class="str">"subject"</span>: <span class="str">"CS"</span>, <span class="str">"classId"</span>: 2510 },
+      { <span class="str">"subject"</span>: <span class="str">"CS"</span>, <span class="str">"classId"</span>: 2511 }
+    ]
+  },
+  <span class="str">"coreqs"</span>:       <span class="kw">null</span>,
+  <span class="str">"terms"</span>:        [<span class="str">"202510"</span>, <span class="str">"202530"</span>],  <span class="cmt">// Banner term codes</span>
+  <span class="str">"offeredFall"</span>:  <span class="kw">true</span>,
+  <span class="str">"offeredSpring"</span>: <span class="kw">true</span>,
+  <span class="str">"offeredSumA"</span>:  <span class="kw">false</span>,
+  <span class="str">"offeredSumB"</span>:  <span class="kw">false</span>,
+  <span class="str">"nuPath"</span>:       [<span class="str">"AD"</span>],
+  <span class="str">"color"</span>:        <span class="str">"#4a90d9"</span>,       <span class="cmt">// from subjectColor()</span>
+  <span class="str">"edges"</span>: [                       <span class="cmt">// from extractEdges()</span>
+    { <span class="str">"from"</span>: <span class="str">"CS3500"</span>, <span class="str">"to"</span>: <span class="str">"CS2510"</span>, <span class="str">"type"</span>: <span class="str">"prerequisite"</span> }
+  ]
+}</code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

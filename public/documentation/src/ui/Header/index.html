@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Header.jsx — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ui/Header">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">Nu-Map</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ui/</a><span class="sep"> / </span><strong>Header.jsx</strong>
+    </div>
+
+    <h1>Header.jsx <span class="badge blue">UI component</span></h1>
+    <p class="lead">The sticky top bar. Always visible above the semester timeline. Contains the plan title, credit hour counters, and all primary controls: theme, zoom, plan management, cohort settings, PDF export, and the relationship legend.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">ui/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">~780</div></div>
+      <div class="nb-group"><div class="nb-label">Context consumed</div><div class="nb-value">usePlanner() (nearly all state) + useTheme()</div></div>
+      <div class="nb-group"><div class="nb-label">Local state</div><div class="nb-value">showQuickSet, showPlanMenu, showIO, showAppSettings (popover visibility)</div></div>
+    </div>
+
+    <h2>Layout structure</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TD
+    H["Header (position: sticky, top: 0)"]
+    H --> R1["Row 1: Plan title + SH counters + export PDF"]
+    H --> R2["Row 2: Controls (theme, zoom, plans, cohort, settings, about)"]
+    H --> R3["Row 3: Relationship legend (prereq/coreq/substitution line styles)"]
+    H --> R4["Row 4: Co-op/grad conflict warning (conditional)"]
+
+    R2 --> T["Theme cycler"]
+    R2 --> V["Violation lines toggle"]
+    R2 --> Z["Zoom controls"]
+    R2 --> PL["Plan dropdown"]
+    R2 --> IO["Import/Export JSON"]
+    R2 --> COH["🎓 Cohort popup"]
+    R2 --> SET["⚙ Settings popup"]
+    R2 --> AB["ⓘ About"]
+      </div>
+    </div>
+
+    <h2>Popover controls</h2>
+
+    <h3>Cohort popup (showSettings)</h3>
+    <p>Triggered by "🎓 Cohort". Contains entry/graduation semester + year pickers and the sticky-courses toggle. Hidden on phones.</p>
+    <ul>
+      <li>Entry: Fall/Spring radio + ◀year▶ stepper</li>
+      <li>Graduation: Fall/Spring radio + ◀year▶ stepper</li>
+      <li>Validation: graduation ordinal must exceed entry ordinal</li>
+      <li>Summary: "Fall 2026 → Spring 2031 (~5 yrs)"</li>
+      <li>📌 Sticky: on/off toggle</li>
+    </ul>
+
+    <h3>Settings popup (showAppSettings)</h3>
+    <p>Triggered by "⚙". Contains the documentation link and theme selector.</p>
+    <ul>
+      <li>📖 Docs — opens <code>documentation/</code> in new tab</li>
+    </ul>
+
+    <h3>Plan management dropdown (showPlanMenu)</h3>
+    <p>Opens on clicking the plan name. Lists all saved plans. Actions: New plan, switch to a plan, rename (inline edit), delete. Closes on any outside click.</p>
+
+    <h3>Import/Export (showIO)</h3>
+    <ul>
+      <li><strong>Export JSON:</strong> downloads current plan as <code>plan-name.json</code></li>
+      <li><strong>Import JSON:</strong> <code>&lt;input type="file"&gt;</code> → <code>importPlanJSON(file)</code></li>
+      <li><strong>Export PDF:</strong> calls <code>exportReport()</code> from planModel.js → opens print window</li>
+      <li><strong>Copy as text:</strong> <code>handleCopyHumanReadable()</code> — builds a plain-text plan summary and copies to clipboard</li>
+    </ul>
+
+    <h2>Key functions</h2>
+
+    <div class="fn-block private">
+      <div class="fn-sig">handleExport(e)</div>
+      <div class="fn-desc">Assembles the <code>gradInfo</code> parameter (major path, NUPath coverage, done course keys, etc.) and calls <code>exportReport()</code> from <code>planModel.js</code>. This triggers the async PDF build and opens a new print window.</div>
+    </div>
+
+    <div class="fn-block private">
+      <div class="fn-sig">handleCopyHumanReadable()</div>
+      <div class="fn-desc">Builds a human-readable text representation of the full plan (all semesters, courses per semester, co-ops, SH totals) and copies it to the clipboard via the Clipboard API. Useful for sharing in messages or emails.</div>
+    </div>
+
+    <div class="fn-block private">
+      <div class="fn-sig">cycleTheme(e)</div>
+      <div class="fn-desc">Gets the current theme index in <code>themeNames</code>, increments modulo length, calls <code>setThemeName()</code>. The button displays a ← or theme name depending on viewport size.</div>
+    </div>
+
+    <h2>YearStepper helper component</h2>
+    <p>A small ◀year▶ widget defined at the bottom of Header.jsx. Props: <code>year</code>, <code>canDec</code>, <code>canInc</code>, <code>onDec</code>, <code>onInc</code>. Used in both the entry and graduation pickers.</p>
+
+    <h2>Co-op/graduation conflict warning</h2>
+    <p>If any co-op block overlaps the graduation semester (i.e., it starts before graduation but ends after it), Header renders a yellow warning banner below the controls row. The affected co-op names are listed. Computed by PlannerContext as <code>coopGradConflicts</code>.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

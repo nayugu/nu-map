@@ -36,7 +36,7 @@ export default function Header() {
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
 
-   useEffect(() => {
+  useEffect(() => {
     if (!showPlanMenu) return;
     const close = () => setShowPlanMenu(false);
     window.addEventListener("click", close);
@@ -549,6 +549,18 @@ export default function Header() {
                 onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
               >
                 🛠 Dev portal
+              </a>
+
+              {/* Documentation link */}
+              <a href={`${import.meta.env.BASE_URL}documentation/`} target="_blank" rel="noreferrer"
+                style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)",
+                  textDecoration: "none", boxSizing: "border-box" }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
+                onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
+              >
+                📖 Docs
               </a>
 
               {/* Zoom */}
