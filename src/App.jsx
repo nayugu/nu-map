@@ -84,8 +84,9 @@ function PlannerApp() {
         {/* Right-hand sidebar + panels */}
         <BankPanel />
         <InfoPanel />
-        <DisclaimerModal />
       </div>
+      {/* Rendered outside the scaled container so it's unaffected by zoom */}
+      <DisclaimerModal />
     </div>
   );
 }
