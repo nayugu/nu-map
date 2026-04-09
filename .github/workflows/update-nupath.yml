@@ -101,7 +101,7 @@ jobs:
           STRATEGY="${{ github.event.inputs.strategy || 'auto' }}"
           DATE=$(date -u '+%Y-%m-%d')
 
-          git add public/all-courses.json public/change-log.json
+          git add public/northeastern/all-courses.json public/northeastern/change-log.json
           git commit -m "data: update NUpath designations ($CHANGED changed) [$DATE]
 
           Source: $STRATEGY strategy (Tableau → catalog fallback)

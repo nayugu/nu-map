@@ -141,9 +141,9 @@ console.log("  CS 2100 scrape smoke test");
 console.log("══════════════════════════════════════════════════\n");
 
 // Load current data
-const allCoursesPath = resolve(ROOT, "public/all-courses.json");
+const allCoursesPath = resolve(ROOT, "public/northeastern/all-courses.json");
 if (!existsSync(allCoursesPath)) {
-  console.error("❌  public/all-courses.json not found.");
+  console.error("❌  public/northeastern/all-courses.json not found.");
   process.exit(1);
 }
 const allCourses = JSON.parse(readFileSync(allCoursesPath, "utf8"));

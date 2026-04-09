@@ -2,7 +2,7 @@
 /**
  * fetch-nupath.js
  *
- * Updates the nuPath field for every course in public/all-courses.json by
+ * Updates the nuPath field for every course in public/northeastern/all-courses.json by
  * pulling from the official NUpath source.
  *
  * Strategy (tried in order):
@@ -18,7 +18,7 @@
  *
  * Usage:
  *   node scripts/fetch-nupath.js               # dry run — shows diff
- *   node scripts/fetch-nupath.js --write        # write public/all-courses.json
+ *   node scripts/fetch-nupath.js --write        # write public/northeastern/all-courses.json
  *   node scripts/fetch-nupath.js --catalog      # force catalog strategy
  *   node scripts/fetch-nupath.js --tableau      # force Tableau strategy (errors if unavailable)
  *   node scripts/fetch-nupath.js --concurrency 8  # catalog parallel workers (default 6)
@@ -33,8 +33,8 @@ import { parse as parseHTML } from "node-html-parser";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
-const COURSES    = resolve(ROOT, "public/all-courses.json");
-const CHANGE_LOG = resolve(ROOT, "public/change-log.json");
+const COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
+const CHANGE_LOG = resolve(ROOT, "public/northeastern/change-log.json");
 
 const CHANGE_LOG_MAX = 600;
 

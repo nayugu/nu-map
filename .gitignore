@@ -3,4 +3,3 @@ dist/
 .DS_Store
 .mypy_cache/
 *.py
-*.py

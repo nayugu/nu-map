@@ -3,7 +3,7 @@
 // generate-dev-password.js
 //
 // Generates a PBKDF2-SHA256 hash for the dev portal password.
-// Run this script, then paste the output hash into public/dev.html → PW_HASH.
+// Run this script, then paste the output hash into public/northeastern/dev.html → PW_HASH.
 //
 // Usage:
 //   node scripts/generate-dev-password.js
@@ -33,7 +33,7 @@ async function main() {
 
   if (arg) {
     const h = await hash(arg);
-    console.log("\n✅ Hash generated. Paste this into public/dev.html → PW_HASH:\n");
+    console.log("\n✅ Hash generated. Paste this into public/northeastern/dev.html → PW_HASH:\n");
     console.log(`  const PW_HASH = "${h}";\n`);
     return;
   }

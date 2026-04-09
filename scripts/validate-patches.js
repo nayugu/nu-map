@@ -2,8 +2,8 @@
 /**
  * validate-patches.js
  *
- * Validates all YAML files in data/patches/ against the schema.
- * Run by CI on every PR that touches data/patches/.
+ * Validates all YAML files in data/northeastern/patches/ against the schema.
+ * Run by CI on every PR that touches data/northeastern/patches/.
  *
  * Exits with code 1 if any errors are found.
  *
@@ -20,8 +20,8 @@ import yaml from "js-yaml";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
-const PATCH_DIR  = resolve(ROOT, "data/patches");
-const COURSES    = resolve(ROOT, "public/all-courses.json");
+const PATCH_DIR  = resolve(ROOT, "data/northeastern/patches");
+const COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
 
 const JSON_OUT = process.argv.includes("--json");
 

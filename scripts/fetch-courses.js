@@ -7,7 +7,7 @@
  *
  * Usage:
  *   node scripts/fetch-courses.js           # dry run — shows diff, no write
- *   node scripts/fetch-courses.js --write   # write public/all-courses.json
+ *   node scripts/fetch-courses.js --write   # write public/northeastern/all-courses.json
  *
  * After fetching, run apply-patches.js to overlay local manual corrections.
  */
@@ -18,7 +18,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-const OUT_PATH      = resolve(ROOT, "public/all-courses.json");
+const OUT_PATH      = resolve(ROOT, "public/northeastern/all-courses.json");
 const META_SRC_PATH = resolve(ROOT, "src/core/dataMeta.json");   // compile-time import in Header
 const META_PUB_PATH = resolve(ROOT, "public/data-meta.json");      // served at runtime for dev portal
 const COURSES_API = "https://husker.vercel.app/courses/all";

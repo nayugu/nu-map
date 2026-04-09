@@ -2,7 +2,7 @@
 /**
  * apply-nupath-map.js
  *
- * Merges data/nupath-map.json into public/all-courses.json.
+ * Merges data/northeastern/nupath-map.json into public/northeastern/all-courses.json.
  * Overwrites the nuPath field for every course found in the map.
  * Courses NOT in the map are left unchanged.
  *
@@ -16,12 +16,12 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = resolve(__dirname, "..");
-const MAP_PATH  = resolve(ROOT, "data/nupath-map.json");
-const OUT_PATH  = resolve(ROOT, "public/all-courses.json");
+const MAP_PATH  = resolve(ROOT, "data/northeastern/nupath-map.json");
+const OUT_PATH  = resolve(ROOT, "public/northeastern/all-courses.json");
 const WRITE     = process.argv.includes("--write");
 
-if (!existsSync(MAP_PATH)) { console.error("data/nupath-map.json not found. Run npm run data:nupath:scan first."); process.exit(1); }
-if (!existsSync(OUT_PATH)) { console.error("public/all-courses.json not found. Run npm run data:fetch first."); process.exit(1); }
+if (!existsSync(MAP_PATH)) { console.error("data/northeastern/nupath-map.json not found. Run npm run data:nupath:scan first."); process.exit(1); }
+if (!existsSync(OUT_PATH)) { console.error("public/northeastern/all-courses.json not found. Run npm run data:fetch first."); process.exit(1); }
 
 const map     = JSON.parse(readFileSync(MAP_PATH, "utf8"));
 const courses = JSON.parse(readFileSync(OUT_PATH, "utf8"));

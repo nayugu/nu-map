@@ -6,7 +6,7 @@
  * faculty-maintained source for titles, descriptions, NUPath designations,
  * and credit hours.
  *
- * Output:  public/catalog-courses.json    (standalone catalog snapshot)
+ * Output:  public/northeastern/catalog-courses.json    (standalone catalog snapshot)
  *
  * Merge:   Pass --merge to overlay catalog fields (title, description,
  *          credits, nuPath) onto the existing all-courses.json while
@@ -31,13 +31,13 @@ import { parse as parseHTML } from "node-html-parser";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
-const ALL_COURSES    = resolve(ROOT, "public/all-courses.json");
-const CATALOG_OUT    = resolve(ROOT, "public/catalog-courses.json");
+const ALL_COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
+const CATALOG_OUT    = resolve(ROOT, "public/northeastern/catalog-courses.json");
 const META_SRC_PATH  = resolve(ROOT, "src/core/dataMeta.json");
 const META_PUB_PATH  = resolve(ROOT, "public/data-meta.json");
-const STATE_PATH      = resolve(ROOT, "data/scrape-state.json");
-const PUBLIC_STATE_PATH = resolve(ROOT, "public/scrape-state.json"); // served to dev portal
-const CHANGE_LOG_PATH = resolve(ROOT, "public/change-log.json");
+const STATE_PATH      = resolve(ROOT, "data/northeastern/scrape-state.json");
+const PUBLIC_STATE_PATH = resolve(ROOT, "public/northeastern/scrape-state.json"); // served to dev portal
+const CHANGE_LOG_PATH = resolve(ROOT, "public/northeastern/change-log.json");
 const CHANGE_LOG_MAX  = 600; // keep last 600 run entries
 const BASE_URL      = "https://catalog.northeastern.edu";
 const INDEX_URL     = `${BASE_URL}/course-descriptions/`;
@@ -508,9 +508,9 @@ async function runRotate() {
   console.log(`  ✅  Change log written → public/change-log.json`);
 
   // ── Write rotation state ─────────────────────────────────────────────────────
-  mkdirSync(resolve(ROOT, "data"), { recursive: true });
+  mkdirSync(resolve(ROOT, "data/northeastern"), { recursive: true });
   writeFileSync(STATE_PATH, JSON.stringify(state, null, 2) + "\n", "utf8");
-  console.log(`  ✅  State saved → data/scrape-state.json (nextIndex: ${state.nextIndex})`);
+  console.log(`  ✅  State saved → data/northeastern/scrape-state.json (nextIndex: ${state.nextIndex})`);
 
   // Write a public copy (no secrets — URLs are all catalog.northeastern.edu)
   writeFileSync(PUBLIC_STATE_PATH, JSON.stringify(state, null, 2) + "\n", "utf8");

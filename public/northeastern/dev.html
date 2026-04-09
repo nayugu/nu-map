@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="icon" type="image/png" href="/logo.png" />
   <title>NU Map — Developer Portal</title>
   <style>
     :root {
@@ -199,7 +199,7 @@
 ══════════════════════════════════════════════════════════════════ -->
 <div id="auth-screen">
   <div class="auth-card">
-    <h1><img class="site-logo" src="logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map · Dev Portal</h1>
+    <h1><img class="site-logo" src="/logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map · Dev Portal</h1>
     <p>Authorized access only.</p>
     <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password" />
     <button class="btn-primary" onclick="attemptLogin()">Unlock →</button>
@@ -212,7 +212,7 @@
 ══════════════════════════════════════════════════════════════════ -->
 <div id="dev-app">
   <header>
-    <h1><img class="site-logo" src="logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map</h1>
+    <h1><img class="site-logo" src="/logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map</h1>
     <span>Developer Portal</span>
     <span id="local-badge" style="display:none;color:#fff;font-weight:800;font-size:13px;letter-spacing:0.14em;margin-left:20px">LOCAL</span>
     <div style="flex:1"></div>
@@ -940,7 +940,7 @@ async function attemptLogin() {
 (function init() {
   // Dynamic logo + favicon + title based on environment
   const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
-  const logoSrc = isLocal ? "dev_logo.png" : "logo.png";
+  const logoSrc = isLocal ? "dev_logo.png" : "/logo.png";
   document.querySelectorAll(".site-logo").forEach(el => { el.src = logoSrc; });
   document.querySelector("link[rel='icon']").href = logoSrc;
   document.title = isLocal ? "NU Map — Local Dev" : "NU Map — Developer Portal";
@@ -1381,7 +1381,7 @@ function switchTab(name, btn) {
 // ── Data meta ───────────────────────────────────────────────────────────────
 async function loadDataMeta() {
   try {
-    const res  = await fetch("data-meta.json?" + Date.now()); // bust cache
+    const res  = await fetch("/data-meta.json?" + Date.now()); // bust cache — served at root, not northeastern/
     if (!res.ok) throw new Error("not found");
     const meta = await res.json();
     document.getElementById("stat-courses").textContent  = meta.courseCount?.toLocaleString() ?? "—";

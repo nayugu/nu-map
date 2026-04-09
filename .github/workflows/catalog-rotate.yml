@@ -72,8 +72,8 @@ jobs:
             **Requires developer approval before merging.**
 
             ### Changed files
-            - `public/all-courses.json` — course data for this subject updated
-            - `data/scrape-state.json` — rotation index advanced
+            - `public/northeastern/all-courses.json` — course data for this subject updated
+            - `data/northeastern/scrape-state.json` — rotation index advanced
             - `src/core/dataMeta.json` — lastUpdated timestamp refreshed
             - `public/data-meta.json` — lastUpdated timestamp refreshed
 

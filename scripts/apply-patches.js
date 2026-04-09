@@ -2,8 +2,8 @@
 /**
  * apply-patches.js
  *
- * Reads all YAML patch files from data/patches/*.yaml and overlays them
- * on top of public/all-courses.json.
+ * Reads all YAML patch files from data/northeastern/patches/*.yaml and overlays them
+ * on top of public/northeastern/all-courses.json.
  *
  * Patches are applied in filename order. A patch can:
  *   - add    : insert courses that don't exist (or were removed from upstream)
@@ -24,8 +24,8 @@ import yaml from "js-yaml";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
-const COURSES    = resolve(ROOT, "public/all-courses.json");
-const PATCH_DIR  = resolve(ROOT, "data/patches");
+const COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
+const PATCH_DIR  = resolve(ROOT, "data/northeastern/patches");
 
 const WRITE = process.argv.includes("--write");
 

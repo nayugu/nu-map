@@ -6,8 +6,8 @@ name: Data Change Review
 on:
   pull_request:
     paths:
-      - "data/patches/**"
-      - "public/all-courses.json"
+      - "data/northeastern/patches/**"
+      - "public/northeastern/all-courses.json"
       - "graduatenu/packages/api/src/major/**"
       - "graduatenu/packages/api/src/minor/**"
       - "scripts/fetch-courses.js"
@@ -69,7 +69,7 @@ jobs:
 
             let patchSection = '';
             const patchChanged = execSync(
-              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'data/patches/*.yaml' | grep -v TEMPLATE || true",
+              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'data/northeastern/patches/*.yaml' | grep -v TEMPLATE || true",
               { encoding: 'utf8' }
             ).trim();
 
@@ -96,17 +96,17 @@ jobs:
 
             let courseSection = '';
             const courseChanged = execSync(
-              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'public/all-courses.json' || true",
+              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'public/northeastern/all-courses.json' || true",
               { encoding: 'utf8' }
             ).trim();
 
             if (courseChanged) {
               try {
                 const before = JSON.parse(execSync(
-                  "git show origin/${{ github.base_ref }}:public/all-courses.json",
+                  "git show origin/${{ github.base_ref }}:public/northeastern/all-courses.json",
                   { encoding: 'utf8' }
                 ));
-                const after = JSON.parse(readFileSync('public/all-courses.json', 'utf8'));
+                const after = JSON.parse(readFileSync('public/northeastern/all-courses.json', 'utf8'));
                 const bk = new Set(before.map(c => `${c.subject} ${c.number}`));
                 const ak = new Set(after.map(c => `${c.subject} ${c.number}`));
                 const added   = [...ak].filter(k => !bk.has(k));

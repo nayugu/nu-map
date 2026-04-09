@@ -22,12 +22,12 @@ import { parse as parseHTML }   from "node-html-parser";
 
 const __dirname     = dirname(fileURLToPath(import.meta.url));
 const ROOT          = resolve(__dirname, "..");
-const ALL_COURSES   = resolve(ROOT, "public/all-courses.json");
+const ALL_COURSES   = resolve(ROOT, "public/northeastern/all-courses.json");
 const META_SRC_PATH = resolve(ROOT, "src/core/dataMeta.json");
 const META_PUB_PATH = resolve(ROOT, "public/data-meta.json");
-const CHANGE_LOG    = resolve(ROOT, "public/change-log.json");
+const CHANGE_LOG    = resolve(ROOT, "public/northeastern/change-log.json");
 const NUPATH_WORKFLOW   = resolve(ROOT, ".github/workflows/update-nupath.yml");
-const NUPATH_MAP_PATH   = resolve(ROOT, "data/nupath-map.json");
+const NUPATH_MAP_PATH   = resolve(ROOT, "data/northeastern/nupath-map.json");
 const NUPATH_SCHEDULE_COMMENT = `  # schedule:\n  #   - cron: "0 5 1 1,5,9 *"   # 05:00 UTC on the 1st of Jan, May, Sep`;
 const NUPATH_SCHEDULE_ACTIVE  = `  schedule:\n    - cron: "0 5 1 1,5,9 *"   # 05:00 UTC on the 1st of Jan, May, Sep`;
 const TABLEAU_EMBED_URL = "https://tableau.northeastern.edu/t/Registrar/views/NUpathAttributes/NUpathAttribute?%3Aembed=y&%3AisGuestRedirectFromVizportal=y";
@@ -398,7 +398,7 @@ async function runCheck(send) {
   send("status", { msg: "Loading all-courses.json…" });
 
   if (!existsSync(ALL_COURSES)) {
-    send("error", { msg: "public/all-courses.json not found. Run npm run data:fetch first." });
+    send("error", { msg: "public/northeastern/all-courses.json not found. Run npm run data:fetch first." });
     return;
   }
 
@@ -699,8 +699,8 @@ const server = createServer((req, res) => {
   // ── GET /git-status — diff of data files against HEAD ───────────────────────
   if (req.method === "GET" && url.pathname === "/git-status") {
     const GIT_FILES = [
-      "public/change-log.json",
-      "public/all-courses.json",
+      "public/northeastern/change-log.json",
+      "public/northeastern/all-courses.json",
       "public/data-meta.json",
       "src/core/dataMeta.json",
     ];
@@ -725,8 +725,8 @@ const server = createServer((req, res) => {
   // ── POST /git-push — commit changed data files and push ──────────────────────
   if (req.method === "POST" && url.pathname === "/git-push") {
     const GIT_FILES = [
-      "public/change-log.json",
-      "public/all-courses.json",
+      "public/northeastern/change-log.json",
+      "public/northeastern/all-courses.json",
       "public/data-meta.json",
       "src/core/dataMeta.json",
     ];
