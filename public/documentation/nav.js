@@ -9,6 +9,7 @@
   var TREE = {
     id: '', label: 'nu-map', type: 'root',
     children: [
+      { id: 'architecture', label: 'architecture', type: 'js' },
       {
         id: 'src', label: 'src/', type: 'dir',
         children: [

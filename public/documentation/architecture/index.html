@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="architecture">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../">nu-map/documentation</a><span class="sep"> / </span><strong>architecture</strong>
+    </div>
+
+    <h1>Architecture <span class="badge purple">Hexagonal</span></h1>
+    <p class="lead">A single import in <code>config.js</code> selects the active institution. Everything else — semester structure, gen-ed grid, co-op rules, course catalog URL, disclaimers — flows from that one file through a chain of contracts (ports), implementations (adapters), a context bridge (InstitutionContext), and out to every component via <code>usePort()</code>. The app core has zero institution-specific imports.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">The one file to change</div><div class="nb-value"><code>src/config.js</code> — swap the adapter import to fork for a new school</div></div>
+      <div class="nb-group"><div class="nb-label">The hard seam</div><div class="nb-value"><code>src/ports/</code> — JSDoc contracts that isolate institution logic from app logic</div></div>
+      <div class="nb-group"><div class="nb-label">Core invariant</div><div class="nb-value">No file under <code>src/core/</code> or <code>src/data/</code> may import from <code>src/adapters/</code></div></div>
+    </div>
+
+    <h2>The hexagonal boundary</h2>
+    <p>The fundamental split: everything inside the hexagon is institution-agnostic; everything outside is institution-specific. The port contracts are the seam — they define exactly what the inside needs from the outside.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    subgraph OUTSIDE["Outside — institution-specific"]
+        NU["adapters/northeastern/\ninstitution.js\ncalendar.js\ncreditSystem.js\nattributeSystem.js\nspecialTerms.js\nmajorRequirements.js\ncourseCatalog.js\nlocalization.js"]
+        GEN["adapters/generic/\n(fallback defaults)"]
+        CFG["config.js\nwire(northeasternOverrides)"]
+    end
+
+    subgraph SEAM["The seam — port contracts"]
+        P["ports/\nIInstitution\nICalendar\nICreditSystem\nIAttributeSystem\nISpecialTerms\nIMajorRequirements\nICourseCatalog\nILocalization"]
+    end
+
+    subgraph INSIDE["Inside — institution-agnostic"]
+        IC["InstitutionContext\nusePort() / useInstitution()"]
+        PC["PlannerContext\nall application state"]
+        CORE["core/\nsemGrid · courseModel\nplanModel · prereqEval\nspecialTermUtils\ngradRequirements"]
+        DATA["data/\ncourseLoader\nmajorLoader · minorLoader\npersistence"]
+        UI["ui/\nHeader · BankPanel · GradPanel\nSemRow · SummerRow\nCourseCard · InfoPanel"]
+    end
+
+    NU -->|"implements"| P
+    GEN -->|"implements"| P
+    CFG -->|"wire(overrides)"| IC
+    P -->|"usePort()"| IC
+    IC --> PC
+    IC --> UI
+    PC --> CORE
+    PC --> DATA
+    UI --> PC
+
+    style OUTSIDE fill:#ffe4e6,stroke:#e11d48
+    style SEAM fill:#fef3c7,stroke:#d97706
+    style INSIDE fill:#ddf4ff,stroke:#0969da
+      </div>
+      <div class="caption">The ports layer (yellow) is the only boundary between institution-specific code (red) and the app core (blue). Nothing inside ever imports from outside.</div>
+    </div>
+
+    <h2>Full layer dependency rules</h2>
+    <p>Six layers. Arrows point in the direction of imports. No arrow ever points from a lower layer to a higher one, and no layer inside the hexagon imports from <code>adapters/</code>.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TD
+    subgraph A["adapters/ + config.js"]
+        CFG2["config.js"]
+        W["wire.js"]
+        NUA["northeastern/"]
+        GENA["generic/"]
+    end
+    subgraph CTX["context/"]
+        IC2["InstitutionContext.jsx\nexports: usePort(), useInstitution(),\nInstitutionProvider"]
+        PC2["PlannerContext.jsx\nexports: usePlanner(), PlannerProvider"]
+        TC["ThemeContext.jsx\nexports: useTheme(), ThemeProvider"]
+    end
+    subgraph CORE2["core/"]
+        SG["semGrid.js"]
+        CM["courseModel.js"]
+        PM["planModel.js"]
+        PE["prereqEval.js"]
+        STU["specialTermUtils.js"]
+        GR["gradRequirements.js"]
+        CO["constants.js"]
+    end
+    subgraph DATA2["data/"]
+        CL["courseLoader.js"]
+        ML["majorLoader.js + minorLoader.js"]
+        PS["persistence.js"]
+    end
+    subgraph UI2["ui/"]
+        H["Header.jsx"]
+        BP["BankPanel.jsx"]
+        GP["GradPanel.jsx"]
+        SR["SemRow.jsx + SummerRow.jsx"]
+        CC["CourseCard.jsx"]
+        IP["InfoPanel.jsx"]
+    end
+
+    CFG2 --> W
+    NUA --> W
+    GENA --> W
+    W --> IC2
+    IC2 --> PC2
+    IC2 --> H
+    IC2 --> BP
+    IC2 --> GP
+    IC2 --> SR
+    PC2 --> H
+    PC2 --> BP
+    PC2 --> GP
+    PC2 --> SR
+    PC2 --> CC
+    PC2 --> IP
+    PC2 --> SG
+    PC2 --> CM
+    PC2 --> PM
+    PC2 --> PE
+    PC2 --> STU
+    PC2 --> CL
+    PC2 --> ML
+    PC2 --> PS
+
+    style A fill:#ffe4e6,stroke:#e11d48
+    style CTX fill:#fbefff,stroke:#8250df
+    style CORE2 fill:#dafbe1,stroke:#1a7f37
+    style DATA2 fill:#fff8c5,stroke:#9a6700
+    style UI2 fill:#ddf4ff,stroke:#0969da
+      </div>
+      <div class="caption">Imports go downward only. UI imports Context. Context imports Core and Data (passing ports as parameters, not importing adapters directly). Core and Data have zero adapter imports.</div>
+    </div>
+
+    <h2>The institution injection chain</h2>
+    <p>How a value defined in <code>northeastern/calendar.js</code> reaches a React component — traced end to end.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    F1["northeastern/calendar.js\nexport default {\n  semesterTypes: [...],\n  defaultStartYear: 2026\n}"]
+    F2["northeastern/index.js\nconst overrides = {\n  calendar: nuCalendar, ...\n}"]
+    F3["adapters/wire.js\nwire(overrides)\n→ { ...generic, ...overrides }"]
+    F4["config.js\nexport const institutionAdapter\n= wire(northeasternOverrides)"]
+    F5["App.jsx\n&lt;InstitutionProvider\n  adapter={institutionAdapter}&gt;"]
+    F6["InstitutionContext\nstores adapter bundle\nin React context"]
+    F7["any component\nconst calendar = usePort(ICalendar)\ncalendar.semesterTypes → [...]"]
+
+    F1 --> F2 --> F3 --> F4 --> F5 --> F6 --> F7
+      </div>
+      <div class="caption">One value in one adapter file reaches every component in the tree. Changing northeastern/calendar.js re-derives semester slots, span maps, year labels, and grid rendering simultaneously.</div>
+    </div>
+
+    <h2>How each layer uses institution config</h2>
+
+    <h3>PlannerContext — reads ports directly</h3>
+    <p>PlannerContext is the largest consumer. It calls <code>usePort()</code> for the four ports it needs at startup, then passes sub-values down as parameters to core and data functions.</p>
+    <pre><code><span class="cmt">// src/context/PlannerContext.jsx</span>
+const institution   = usePort(IInstitution);   <span class="cmt">// storagePrefix for localStorage keys</span>
+const calendar      = usePort(ICalendar);      <span class="cmt">// semester types → semGrid, year labels</span>
+const courseCatalog = usePort(ICourseCatalog); <span class="cmt">// URLs → fetchCourses(courseCatalog)</span>
+const specialTerms  = usePort(ISpecialTerms);  <span class="cmt">// types → span maps, drop validation</span>
+
+<span class="cmt">// Institution config is passed as explicit parameters — never imported inside the functions</span>
+fetchCourses(courseCatalog);
+loadSaved(institution.storagePrefix);
+exportReport(state, adapter);        <span class="cmt">// full adapter bundle for PDF export</span></code></pre>
+
+    <h3>UI components — split between usePlanner() and usePort()</h3>
+    <p>Most state comes from <code>usePlanner()</code>. Components call <code>usePort()</code> directly only for the ports they need that PlannerContext doesn't re-expose.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Component</th><th>usePlanner() for</th><th>usePort() / useInstitution() for</th></tr></thead>
+      <tbody>
+        <tr><td>Header.jsx</td><td>placements, plan list, settings</td><td><code>useInstitution()</code> — full adapter for PDF export</td></tr>
+        <tr><td>BankPanel.jsx</td><td>course bank, drag state</td><td><code>usePort(ISpecialTerms)</code> — term type list for drag sources</td></tr>
+        <tr><td>GradPanel.jsx</td><td>placements, major/minor selection</td><td><code>usePort(IAttributeSystem, ISpecialTerms, IMajorRequirements)</code></td></tr>
+        <tr><td>SemRow.jsx</td><td>placements, sem data, violations</td><td><code>usePort(ISpecialTerms)</code> — term types for grid rendering</td></tr>
+        <tr><td>SummerRow.jsx</td><td>placements, sem data</td><td><code>usePort(ISpecialTerms)</code> — term types for grid rendering</td></tr>
+        <tr><td>CourseCard.jsx</td><td>course data, drag state, offerings</td><td>—</td></tr>
+        <tr><td>InfoPanel.jsx</td><td>selected course, attribute labels</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Core modules — institution config as parameters only</h3>
+    <p>No file under <code>src/core/</code> imports from <code>src/adapters/</code>. When a core function needs institution config, the caller passes it in explicitly. This is the invariant that makes the core testable without any adapter setup.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Core function</th><th>Institution config received as</th></tr></thead>
+      <tbody>
+        <tr><td><code>buildCohortSemesters(startYear, numYears, semTypes)</code></td><td><code>semTypes</code> from <code>calendar.semesterTypes</code></td></tr>
+        <tr><td><code>resolveTermByDuration(durations, duration)</code></td><td><code>durations</code> from <code>specialTerms.types[n].durations</code></td></tr>
+        <tr><td><code>termSpans(termWeight, semSlotWeight)</code></td><td>both weights from adapter data, passed by PlannerContext</td></tr>
+        <tr><td><code>computeGrantedAttrs(specialTermPl, types)</code></td><td><code>types</code> from <code>specialTerms.types</code></td></tr>
+        <tr><td><code>exportReport(state, adapter)</code></td><td>full <code>adapter</code> bundle — destructures what it needs</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Weight-based span arithmetic</h2>
+    <p>The single most important cross-cutting mechanic. Both <code>ICalendar</code> semester types and <code>ISpecialTerms</code> duration options carry a <code>weight</code> on the same numeric scale. One rule replaces all institution-specific span tables:</p>
+
+    <div class="callout info"><div class="ci">ℹ</div><div class="callout-body"><strong>Span rule:</strong> A special term spans into the next consecutive semester slot when <code>termWeight &gt; semSlotWeight</code>. <code>specialTermUtils.termSpans(termWeight, semSlotWeight)</code> is the single site where this rule lives.</div></div>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Term</th><th>termWeight</th><th>Slot</th><th>semSlotWeight</th><th>Spans?</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>6-month co-op</td><td>2.0</td><td>Fall / Spring</td><td>1.0</td><td>Yes</td><td>2.0 &gt; 1.0</td></tr>
+        <tr><td>4-month co-op</td><td>1.0</td><td>Fall / Spring</td><td>1.0</td><td>No</td><td>1.0 = 1.0</td></tr>
+        <tr><td>4-month co-op</td><td>1.0</td><td>Summer A</td><td>0.5</td><td>Yes</td><td>1.0 &gt; 0.5</td></tr>
+        <tr><td>2-month internship</td><td>0.5</td><td>Summer A</td><td>0.5</td><td>No</td><td>0.5 = 0.5</td></tr>
+      </tbody>
+    </table></div>
+    <p>This arithmetic runs identically for any institution's terms — no <code>if (duration === 6)</code> checks anywhere in core logic.</p>
+
+    <h2>The three architectural invariants</h2>
+    <p>These rules must hold. Violating any one breaks the ability to fork for a new institution without touching core logic.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>Invariant</th><th>How to verify</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>core/ has zero adapter imports.</strong> No file under <code>src/core/</code> may import from <code>src/adapters/**</code>.</td>
+          <td><code>grep -r "from.*adapters" src/core/</code> → zero results</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Non-React functions receive ports as parameters.</strong> <code>planModel</code>, <code>courseLoader</code>, <code>majorLoader</code>, <code>persistence</code> cannot call <code>usePort()</code> — they receive whatever sub-ports they need as explicit arguments from their callers.</td>
+          <td><code>grep -r "usePort\|useInstitution" src/core/ src/data/</code> → zero results</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>UI components get institution config only through <code>usePort()</code>.</strong> No component imports from <code>src/adapters/**</code> directly.</td>
+          <td><code>grep -r "from.*adapters" src/ui/</code> → zero results</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <h2>File map — every file and its role</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>File</th><th>Layer</th><th>Knows about adapters?</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><code>src/config.js</code></td><td>—</td><td>Yes — the only non-adapter file that does</td><td>Selects the active institution. <strong>The one file to change when forking.</strong></td></tr>
+        <tr><td><code>src/adapters/wire.js</code></td><td>Adapters</td><td>Yes</td><td>Merges overrides onto generic defaults. Dev-mode unknown-key warning.</td></tr>
+        <tr><td><code>src/adapters/northeastern/</code></td><td>Adapters</td><td>Yes — is one</td><td>NU reference implementation: 8 files, 1 per port.</td></tr>
+        <tr><td><code>src/adapters/generic/</code></td><td>Adapters</td><td>Yes — is one</td><td>Fallback defaults for every port. Safe for development; override for production.</td></tr>
+        <tr><td><code>src/ports/I*.js</code></td><td>Ports</td><td>No — JSDoc only</td><td>Contracts. No logic, no imports. Each exports one string key constant.</td></tr>
+        <tr><td><code>src/context/InstitutionContext.jsx</code></td><td>Context</td><td>No</td><td>Injects adapter bundle into React tree. <code>usePort(key)</code> reads one port.</td></tr>
+        <tr><td><code>src/context/PlannerContext.jsx</code></td><td>Context</td><td>No</td><td>All application state. Reads 4 ports via <code>usePort()</code>. Passes config to core/data as parameters.</td></tr>
+        <tr><td><code>src/context/ThemeContext.jsx</code></td><td>Context</td><td>No</td><td>CSS variable injection from <code>themes.js</code>. Independent of institution.</td></tr>
+        <tr><td><code>src/core/semGrid.js</code></td><td>Core</td><td>No</td><td>Semester grid generation from cohort dates + semester type list (parameter).</td></tr>
+        <tr><td><code>src/core/courseModel.js</code></td><td>Core</td><td>No</td><td>Normalizes raw catalog JSON. Maps <code>raw.nuPath ?? raw.attributes</code> → <code>course.attributes</code>.</td></tr>
+        <tr><td><code>src/core/specialTermUtils.js</code></td><td>Core</td><td>No</td><td><code>resolveTermByDuration</code>, <code>termSpans</code>, <code>computeGrantedAttrs</code>. The bridge between adapter data and grid/coverage logic.</td></tr>
+        <tr><td><code>src/core/planModel.js</code></td><td>Core</td><td>No</td><td>SH totals, course ordering, PDF export. Receives full adapter bundle as parameter.</td></tr>
+        <tr><td><code>src/core/prereqEval.js</code></td><td>Core</td><td>No</td><td>Prerequisite tree evaluation. Fully structural — no institution data needed.</td></tr>
+        <tr><td><code>src/core/gradRequirements.js</code></td><td>Core</td><td>No</td><td>Major2 requirement tree allocation. Pure structural matching.</td></tr>
+        <tr><td><code>src/core/constants.js</code></td><td>Core</td><td>No</td><td>Generic UI constants: color palette, relation styles, NUM_YEARS.</td></tr>
+        <tr><td><code>src/data/courseLoader.js</code></td><td>Data</td><td>No</td><td><code>fetchCourses(courseCatalog)</code> — URLs come in as a parameter.</td></tr>
+        <tr><td><code>src/data/majorLoader.js</code></td><td>Data</td><td>No</td><td><code>getMajorOptions(majorRequirements)</code> — path helpers come in as a parameter. Vite glob is a build-time literal.</td></tr>
+        <tr><td><code>src/data/persistence.js</code></td><td>Data</td><td>No</td><td><code>loadSaved(prefix)</code>, <code>saveState(state, prefix)</code> — storage key namespace comes in as a parameter.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Adding a new institution — the four-step fork</h2>
+    <ol>
+      <li><strong>Copy the adapter folder:</strong> <code>cp -r src/adapters/northeastern/ src/adapters/myuniversity/</code></li>
+      <li><strong>Edit adapter files:</strong> At minimum, <code>institution.js</code> (identity) and <code>courseCatalog.js</code> (data URL). Edit others as needed for your semester structure, gen-ed system, work terms, and disclaimers.</li>
+      <li><strong>Change config.js:</strong> Replace the import on line 2. That's the only non-adapter file that needs to change.</li>
+      <li><strong>Add course data:</strong> Place your <code>all-courses.json</code> at the path set in <code>courseCatalog.js</code>.</li>
+    </ol>
+    <p>See <a href="src/adapters/generic/">adapters/generic/</a> for the full forking checklist and default behavior of each port.</p>
+
+  </main>
+</div>
+<script src="../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral', flowchart: { curve: 'basis' } });</script>
+</body>
+</html>
