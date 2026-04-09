@@ -31,46 +31,56 @@
     </div>
 
     <h2>Architecture overview</h2>
-    <p>The app uses a strict 4-layer hexagonal architecture. Data flows upward only — core never imports UI, and data adapters never import context. <strong>PlannerContext is the hub</strong>: it calls core logic and data adapters, then exposes state to all UI components via <code>usePlanner()</code>.</p>
+    <p>The app uses a hexagonal architecture with a hard boundary between institution-specific config and the app core. All NU-specific values (semester types, NUPath codes, co-op rules, course catalog URL, disclaimers) live in <code>src/adapters/northeastern/</code>. The core is institution-agnostic. <strong>Swap one import in <code>config.js</code></strong> and the planner reconfigures for a different school.</p>
 
     <div class="diagram-wrap">
       <div class="mermaid">
 graph TB
-    subgraph UI["🖼 UI Layer  (src/ui/)"]
+    subgraph ADAPT["Institution Layer  (src/adapters/ + src/ports/)"]
+        NU["northeastern/\n8 adapter files"]
+        GEN["generic/\nfallback defaults"]
+        W["wire(overrides)\n→ adapter bundle"]
+        NU --> W
+        GEN --> W
+    end
+    subgraph CTX["Context Layer  (src/context/)"]
+        IC["InstitutionContext\nusePort(IPortName)"]
+        PC["PlannerContext\nuseInstitution() + all state"]
+        TC["ThemeContext"]
+        W -->|"adapter bundle"| IC
+        IC -->|"useInstitution()"| PC
+    end
+    subgraph UI["UI Layer  (src/ui/)"]
         H["Header"] --- BP["BankPanel"]
         BP --- GP["GradPanel"]
-        GP --- SR["SemRow"]
+        GP --- SR["SemRow / SummerRow"]
         SR --- CC["CourseCard"]
         CC --- IP["InfoPanel"]
     end
-    subgraph CTX["⚙️ Context Layer  (src/context/)"]
-        PC["PlannerContext\n★ hub of everything"]
-        TC["ThemeContext"]
-    end
-    subgraph CORE["⚡ Core Logic  (src/core/)"]
+    subgraph CORE["Core Logic  (src/core/)"]
         CM["courseModel"] --- GR["gradRequirements"]
-        GR --- PE["prereqEval"]
-        PE --- SG["semGrid"]
-        SG --- PM["planModel"]
+        SG["semGrid"] --- PM["planModel"]
+        STU["specialTermUtils"]
     end
-    subgraph DATA["🗂 Data Layer  (src/data/)"]
+    subgraph DATA["Data Layer  (src/data/)"]
         CL["courseLoader"] --- ML["majorLoader"]
         ML --- PS["persistence"]
     end
 
-    UI -->|"usePlanner()"| CTX
-    CTX -->|"pure fn calls"| CORE
-    CTX -->|"I/O"| DATA
-    DATA -->|"fetch"| FS[("public/\nall-courses.json")]
-    DATA -->|"fetch"| GN[("graduatenu/\nfork")]
+    UI -->|"usePlanner()\nusePort()"| CTX
+    PC -->|"pure fn calls"| CORE
+    PC -->|"I/O (ports as params)"| DATA
+    DATA -->|"fetch"| FS[("public/northeastern/\nall-courses.json")]
+    DATA -->|"fetch"| GN[("external/graduatenu")]
     DATA -->|"read/write"| LS[("localStorage")]
 
-    style UI fill:#ddf4ff,stroke:#0969da
+    style ADAPT fill:#ffe4e6,stroke:#e11d48
     style CTX fill:#fbefff,stroke:#8250df
+    style UI fill:#ddf4ff,stroke:#0969da
     style CORE fill:#dafbe1,stroke:#1a7f37
     style DATA fill:#fff8c5,stroke:#9a6700
       </div>
-      <div class="caption">Full dependency graph. Arrows show which layer calls/imports which.</div>
+      <div class="caption">Full dependency graph. The red adapter layer is the only place with institution-specific values. Core has zero adapter imports.</div>
     </div>
 
     <h2>Source tree</h2>
@@ -80,13 +90,16 @@ graph TB
       <a class="child-card" href="./src/">
         <div class="cc-type">folder</div>
         <div class="cc-name">src/</div>
-        <div class="cc-desc">All application source code: 4 layers, ~20 files, ~8,000 lines</div>
+        <div class="cc-desc">All application source code: 6 layers, ~35 files, ~9,000 lines</div>
       </a>
     </div>
 
     <h2>Key design decisions</h2>
     <div class="two-col">
       <div>
+        <h3>Hexagonal architecture</h3>
+        <p>Institution-specific values (semester weights, NUPath grid, co-op rules) are isolated in <code>src/adapters/northeastern/</code> behind JSDoc port contracts. The core is institution-agnostic. Fork the planner for any school by replacing one folder and one import.</p>
+
         <h3>No backend, ever</h3>
         <p>Zero hosting cost, no migrations, no auth. Plans persist in localStorage and export as JSON files. Course data is scraped and bundled at build time.</p>
 
@@ -94,6 +107,9 @@ graph TB
         <p>All state in <code>PlannerContext</code> (~1,600 lines). No action/reducer boilerplate. Any component reads or mutates any state with one <code>usePlanner()</code> call.</p>
       </div>
       <div>
+        <h3>Weight-based span arithmetic</h3>
+        <p>Semester types carry a <code>weight</code> (fall/spring = 1.0, sumA/sumB = 0.5). Special term durations carry a matching weight. A term spans into the next semester when <code>termWeight &gt; semWeight</code> — no hardcoded duration checks anywhere.</p>
+
         <h3>CSS variables for theming</h3>
         <p>ThemeContext injects ~100 CSS custom properties onto <code>&lt;html&gt;</code>. All components use <code>var(--token)</code> inline. No CSS-in-JS library.</p>
 
@@ -106,10 +122,10 @@ graph TB
     <div class="table-wrap"><table>
       <thead><tr><th>Source</th><th>Format</th><th>When loaded</th><th>Size</th></tr></thead>
       <tbody>
-        <tr><td><code>public/all-courses.json</code></td><td>JSON array</td><td>App startup (primary)</td><td>6.5 MB, 4,800+ courses</td></tr>
+        <tr><td><code>public/northeastern/all-courses.json</code></td><td>JSON array</td><td>App startup (primary)</td><td>6.5 MB, 4,800+ courses</td></tr>
         <tr><td><code>husker.vercel.app/courses/all</code></td><td>JSON array</td><td>App startup fallback (if local JSON fails)</td><td>Same data via SearchNEU API</td></tr>
         <tr><td><code>tableau.northeastern.edu</code></td><td>Playwright DOM scrape</td><td>NUPath Update tool (manual)</td><td>~4,800 course NUPath records</td></tr>
-        <tr><td><code>graduatenu/</code> fork</td><td>Major2 JSON</td><td>On major selection</td><td>1,471 files</td></tr>
+        <tr><td><code>external/graduatenu/</code></td><td>Major2 JSON</td><td>On major selection</td><td>1,471 files</td></tr>
         <tr><td><code>localStorage</code></td><td>JSON strings</td><td>App startup + every mutation</td><td>~50 KB per plan</td></tr>
       </tbody>
     </table></div>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMajorRequirements — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/ports/IMajorRequirements">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>IMajorRequirements.js</strong>
+    </div>
+
+    <h1>IMajorRequirements <span class="badge blue">path helpers</span></h1>
+    <p class="lead">Two functions that translate raw folder names from the requirement data source into UI-ready display strings. The actual file fetching stays in the loaders — this port owns only the institution-specific name-parsing logic.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"majorRequirements"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">majorLoader.js, minorLoader.js (passed as parameter) → GradPanel major/minor selectors</div></div>
+      <div class="nb-group"><div class="nb-label">Vite constraint</div><div class="nb-value"><code>import.meta.glob()</code> requires string literals — glob patterns stay in the loaders, not here</div></div>
+      <div class="nb-group"><div class="nb-label">Override when</div><div class="nb-value">Your folder naming convention differs from snake_case or has location suffixes</div></div>
+    </div>
+
+    <h2>Contract</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>fmtLabel</code></td><td><code>(folderName: string) → string</code></td><td>Convert a raw data source folder name to a human-readable major/minor label shown in the selector dropdown.</td></tr>
+        <tr><td><code>fmtLocation</code></td><td><code>(folderName: string) → string</code></td><td>Extract a location tag from a folder name. Return empty string if the institution has no location concept for majors.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern reference implementation</h2>
+    <p>NU's requirement data (from <code>external/graduatenu</code>) uses folder names like <code>"computer_science_(boston)"</code> that embed a campus location in parentheses. The adapter strips the location tag for the label and extracts it separately.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Input folder name</th><th>fmtLabel result</th><th>fmtLocation result</th></tr></thead>
+      <tbody>
+        <tr><td><code>computer_science_(boston)</code></td><td>Computer Science</td><td>Boston</td></tr>
+        <tr><td><code>electrical_engineering_(oakland)</code></td><td>Electrical Engineering</td><td>Oakland</td></tr>
+        <tr><td><code>mathematics</code></td><td>Mathematics</td><td><em>(empty string)</em></td></tr>
+        <tr><td><code>bs-cs</code></td><td>BS CS</td><td><em>(empty string)</em></td></tr>
+      </tbody>
+    </table></div>
+    <p>Short all-lowercase words (≤3 chars) like "bs" and "cs" are uppercased as acronyms. Underscores and hyphens become spaces. Parenthetical location tags are stripped before title-casing.</p>
+
+    <h2>Generic default</h2>
+    <p>Same title-case logic as NU but without location extraction. <code>fmtLocation</code> always returns <code>""</code>.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Input</th><th>fmtLabel (generic)</th><th>fmtLabel (NU)</th><th>fmtLocation (generic)</th><th>fmtLocation (NU)</th></tr></thead>
+      <tbody>
+        <tr><td><code>computer_science_(boston)</code></td><td>Computer Science (Boston)</td><td>Computer Science</td><td><em>""</em></td><td>Boston</td></tr>
+        <tr><td><code>mathematics</code></td><td>Mathematics</td><td>Mathematics</td><td><em>""</em></td><td><em>""</em></td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">The generic default works fine for most naming conventions. Only override if your folder names have special characters, non-English text, or embedded metadata (like NU's campus tags) that need stripping.</div></div>
+
+    <h2>Why not in the loaders?</h2>
+    <p><code>import.meta.glob()</code> is a Vite build-time construct that requires string literals at the call site — it cannot be abstracted into a function call. This means <code>majorLoader.js</code> and <code>minorLoader.js</code> must contain the glob patterns directly. But the string-manipulation functions (<code>fmtLabel</code>, <code>fmtLocation</code>) are institution-specific logic that belongs in the adapter. This port is the seam between the two.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

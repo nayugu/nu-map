@@ -13,8 +13,29 @@
         id: 'src', label: 'src/', type: 'dir',
         children: [
           {
+            id: 'src/ports', label: 'ports/', type: 'dir',
+            children: [
+              { id: 'src/ports/IInstitution',       label: 'IInstitution.js',       type: 'js' },
+              { id: 'src/ports/ICalendar',          label: 'ICalendar.js',           type: 'js' },
+              { id: 'src/ports/ICreditSystem',      label: 'ICreditSystem.js',       type: 'js' },
+              { id: 'src/ports/IAttributeSystem',   label: 'IAttributeSystem.js',    type: 'js' },
+              { id: 'src/ports/ISpecialTerms',      label: 'ISpecialTerms.js',       type: 'js' },
+              { id: 'src/ports/IMajorRequirements', label: 'IMajorRequirements.js',  type: 'js' },
+              { id: 'src/ports/ICourseCatalog',     label: 'ICourseCatalog.js',      type: 'js' },
+              { id: 'src/ports/ILocalization',      label: 'ILocalization.js',       type: 'js' }
+            ]
+          },
+          {
+            id: 'src/adapters', label: 'adapters/', type: 'dir',
+            children: [
+              { id: 'src/adapters/northeastern', label: 'northeastern/', type: 'dir', children: [] },
+              { id: 'src/adapters/generic',      label: 'generic/',      type: 'dir', children: [] }
+            ]
+          },
+          {
             id: 'src/context', label: 'context/', type: 'dir',
             children: [
+              { id: 'src/context/InstitutionContext', label: 'InstitutionContext.jsx', type: 'jsx' },
               {
                 id: 'src/context/PlannerContext', label: 'PlannerContext.jsx', type: 'jsx',
                 children: [
@@ -29,12 +50,13 @@
           {
             id: 'src/core', label: 'core/', type: 'dir',
             children: [
-              { id: 'src/core/gradRequirements', label: 'gradRequirements.js', type: 'js' },
-              { id: 'src/core/prereqEval',       label: 'prereqEval.js',       type: 'js' },
-              { id: 'src/core/courseModel',      label: 'courseModel.js',      type: 'js' },
-              { id: 'src/core/semGrid',          label: 'semGrid.js',          type: 'js' },
-              { id: 'src/core/planModel',        label: 'planModel.js',        type: 'js' },
-              { id: 'src/core/constants',        label: 'constants + themes',  type: 'js' }
+              { id: 'src/core/gradRequirements',  label: 'gradRequirements.js',  type: 'js' },
+              { id: 'src/core/prereqEval',        label: 'prereqEval.js',        type: 'js' },
+              { id: 'src/core/courseModel',       label: 'courseModel.js',       type: 'js' },
+              { id: 'src/core/semGrid',           label: 'semGrid.js',           type: 'js' },
+              { id: 'src/core/planModel',         label: 'planModel.js',         type: 'js' },
+              { id: 'src/core/specialTermUtils',  label: 'specialTermUtils.js',  type: 'js' },
+              { id: 'src/core/constants',         label: 'constants + themes',   type: 'js' }
             ]
           },
           {

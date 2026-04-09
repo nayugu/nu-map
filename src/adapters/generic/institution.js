@@ -8,10 +8,10 @@
 
 /** @type {import('../../ports/IInstitution.js').IInstitution} */
 export default {
-  id:              "generic",
+  id:              "map",
   name:            "My University",
-  shortName:       "MU",
+  shortName:       "Map",
   portalName:      "Student Portal",
   degreeAuditName: "Degree Audit",
-  storagePrefix:   "myapp",
+  storagePrefix:   "map",
 };

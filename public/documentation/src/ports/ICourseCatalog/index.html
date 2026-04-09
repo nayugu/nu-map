@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICourseCatalog — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/ports/ICourseCatalog">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>ICourseCatalog.js</strong>
+    </div>
+
+    <h1>ICourseCatalog <span class="badge blue">data source</span></h1>
+    <p class="lead">Two URLs — that's the entire contract. <code>LOCAL_URL</code> points to your bundled course JSON; <code>API_URL</code> is an optional live fallback. Override both to point at your institution's data.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"courseCatalog"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">courseLoader.js (passed as parameter by PlannerContext)</div></div>
+      <div class="nb-group"><div class="nb-label">Override priority</div><div class="nb-value"><strong>Required</strong> — always set LOCAL_URL to your institution's course data path</div></div>
+    </div>
+
+    <h2>Contract</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>LOCAL_URL</code></td><td>string</td><td>Path to the bundled local course JSON in <code>public/</code>. Use <code>import.meta.env.BASE_URL</code> as a prefix so the path resolves correctly on any deploy base path. Fetched first on startup.</td></tr>
+        <tr><td><code>API_URL</code></td><td>string | null</td><td>Live API fallback endpoint. Fetched if the local JSON fetch fails (404 or network error). Set to <code>null</code> to disable the fallback — the app will show an error if the local fetch fails.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern reference implementation</h2>
+    <pre><code><span class="cmt">// src/adapters/northeastern/courseCatalog.js</span>
+export const LOCAL_URL = `${import.meta.env.BASE_URL}northeastern/all-courses.json`;
+export const API_URL   = "https://husker.vercel.app/courses/all";
+
+export default { LOCAL_URL, API_URL };</code></pre>
+    <p>The <code>northeastern/</code> prefix in the local path namespaces NU's data under <code>public/northeastern/</code>, keeping the public folder clean for future institutions or generic files.</p>
+
+    <h2>Generic default</h2>
+    <pre><code><span class="cmt">// src/adapters/generic/courseCatalog.js</span>
+export const LOCAL_URL = `${import.meta.env.BASE_URL}courses.json`;
+export const API_URL   = null;   <span class="cmt">// no live fallback by default</span>
+
+export default { LOCAL_URL, API_URL };</code></pre>
+    <p>Expects <code>courses.json</code> at the public root. No API fallback — if the file is missing the app shows a fetch error.</p>
+
+    <h2>Course JSON format</h2>
+    <p>The JSON file must be an array of course objects. The fields consumed by <code>normalizeCourse()</code> in <code>courseModel.js</code>:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Unique course identifier, e.g. <code>"CS3500"</code></td></tr>
+        <tr><td><code>name</code></td><td>string</td><td>Full course title</td></tr>
+        <tr><td><code>subject</code></td><td>string</td><td>Subject prefix, e.g. <code>"CS"</code>, <code>"MATH"</code>. Used for color assignment.</td></tr>
+        <tr><td><code>classId</code></td><td>string | number</td><td>Course number within the subject, e.g. <code>"3500"</code></td></tr>
+        <tr><td><code>credits</code></td><td>number</td><td>Credit hours. Falls back to <code>creditSystem.standardValue</code> if missing.</td></tr>
+        <tr><td><code>attributes</code></td><td>string[]</td><td>Attribute/gen-ed codes, e.g. <code>["ND", "EI"]</code>. Also accepts legacy <code>nuPath</code> field.</td></tr>
+        <tr><td><code>prereqs</code></td><td>object?</td><td>Prerequisite expression tree (Major2 format). Optional.</td></tr>
+        <tr><td><code>coreqs</code></td><td>object?</td><td>Corequisite expression tree (Major2 format). Optional.</td></tr>
+        <tr><td><code>desc</code></td><td>string?</td><td>Course description. Optional.</td></tr>
+        <tr><td><code>terms</code></td><td>string[]?</td><td>Term codes indicating when the course is offered. Optional — used for offering confidence display.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Attribute field name:</strong> Use <code>attributes</code> for new data. The legacy field name <code>nuPath</code> is still accepted via a compat shim in <code>normalizeCourse()</code>: <code>attributes: raw.attributes ?? raw.nuPath ?? []</code>.</div></div>
+
+    <h2>Implementing for your institution</h2>
+    <ol>
+      <li>Build or export a JSON array of courses in the format above.</li>
+      <li>Place it at <code>public/&lt;yourschool&gt;/all-courses.json</code> (namespace under your school's folder).</li>
+      <li>Set <code>LOCAL_URL = `${import.meta.env.BASE_URL}&lt;yourschool&gt;/all-courses.json`</code>.</li>
+      <li>Set <code>API_URL</code> to a live endpoint if one exists, or <code>null</code> for local-only.</li>
+    </ol>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

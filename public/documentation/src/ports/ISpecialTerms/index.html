@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISpecialTerms — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ports/ISpecialTerms">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>ISpecialTerms.js</strong>
+    </div>
+
+    <h1>ISpecialTerms <span class="badge blue">work terms</span></h1>
+    <p class="lead">Defines every type of non-course block the institution supports — co-ops, internships, exchanges, research terms, or any semester that displaces coursework. Leave <code>types</code> empty and the work-experience section in BankPanel disappears entirely.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"specialTerms"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">BankPanel (drag sources), SemRow/SummerRow (grid rendering), GradPanel (via computeGrantedAttrs), PlannerContext (drop validation, span maps), planModel (PDF export)</div></div>
+      <div class="nb-group"><div class="nb-label">Override when</div><div class="nb-value">Your institution has structured work experiences, exchanges, or leave semesters that occupy planner grid slots</div></div>
+    </div>
+
+    <h2>The duration vs weight distinction</h2>
+    <p>Every duration option has two numeric fields. Understanding this distinction is critical:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>What it is</th><th>Where it's used</th></tr></thead>
+      <tbody>
+        <tr><td><code>duration</code></td><td>Length in calendar months</td><td>Stored in plan state, used for display labels and drag-drop identity</td></tr>
+        <tr><td><code>weight</code></td><td>Grid weight on the ICalendar scale (1.0 = one full semester)</td><td>Span arithmetic: <code>termWeight &gt; semSlotWeight</code> → spans into next slot</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Contract — SpecialTermType fields</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Machine-readable type identifier, e.g. <code>"coop"</code>, <code>"intern"</code>. Stored as <code>typeId</code> in plan state. The planner iterates types generically — no type ID is hardcoded in core logic.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Display name shown in BankPanel, grid chips, and PDF export.</td></tr>
+        <tr><td><code>color</code></td><td>string</td><td>CSS hex color for grid chips and BankPanel headers.</td></tr>
+        <tr><td><code>durations</code></td><td>SpecialTermDuration[]</td><td>Available duration options. Each entry is draggable from BankPanel.</td></tr>
+        <tr><td><code>attributeGrants</code></td><td>string[]</td><td>Attribute codes automatically satisfied when any term of this type is placed. e.g. NU co-op grants <code>["EX"]</code>. Empty array for no grants.</td></tr>
+        <tr><td><code>occupiesSlot</code></td><td>boolean</td><td>True if this term displaces regular coursework. False for part-time or non-credit experiences.</td></tr>
+        <tr><td><code>creditValue</code></td><td>number</td><td>Credits awarded. <code>0</code> for unpaid co-ops; non-zero for credit-bearing exchanges or research terms.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Contract — SpecialTermDuration fields</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Machine-readable duration identifier, e.g. <code>"4mo"</code>, <code>"6mo"</code>. Used as part of the term's drag identity.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Display label in BankPanel and grid chips, e.g. <code>"4-month"</code>, <code>"6-month"</code>.</td></tr>
+        <tr><td><code>duration</code></td><td>number</td><td>Calendar months. Stored in plan state. Used by <code>resolveTermByDuration()</code> to find the right descriptor from a saved plan.</td></tr>
+        <tr><td><code>weight</code></td><td>number</td><td>Grid weight on the same scale as <code>ICalendar.SemesterType.weight</code>. <code>1.0</code> = occupies one full-semester slot. Controls span logic via <code>termSpans(termWeight, semSlotWeight)</code>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern reference implementation</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Type</th><th>id</th><th>Duration</th><th>Weight</th><th>Spans (fall/spring)</th><th>Spans (summer)</th><th>Grants</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2">Co-op</td><td rowspan="2"><code>coop</code></td><td>4 months</td><td>1.0</td><td>No (1.0 = 1.0)</td><td>Yes (1.0 &gt; 0.5)</td><td rowspan="2"><code>["EX"]</code></td></tr>
+        <tr><td>6 months</td><td>2.0</td><td>Yes (2.0 &gt; 1.0)</td><td>Yes (2.0 &gt; 0.5)</td></tr>
+        <tr><td rowspan="2">Internship</td><td rowspan="2"><code>intern</code></td><td>2 months</td><td>0.5</td><td>No (0.5 &lt; 1.0)</td><td>No (0.5 = 0.5)</td><td rowspan="2"><code>[]</code></td></tr>
+        <tr><td>4 months</td><td>1.0</td><td>No (1.0 = 1.0)</td><td>Yes (1.0 &gt; 0.5)</td></tr>
+      </tbody>
+    </table></div>
+    <p>Color: co-op <code>#f87171</code> (red-400), internship <code>#9ca3af</code> (gray-400). Both have <code>occupiesSlot: true</code>, <code>creditValue: 0</code>.</p>
+
+    <h2>Generic default</h2>
+    <pre><code><span class="cmt">// src/adapters/generic/specialTerms.js</span>
+export default { types: [] };</code></pre>
+    <p>Empty array → BankPanel's work-experience section is hidden. No drag sources, no grid slots for special terms.</p>
+
+    <h2>Implementing for your institution</h2>
+    <p>Add one entry to <code>types</code> for each distinct kind of non-course block your institution supports:</p>
+    <pre><code><span class="cmt">// Example: semester exchange program</span>
+{
+  id:              "exchange",
+  label:           "Semester Exchange",
+  color:           "#60a5fa",     <span class="cmt">// blue-400</span>
+  durations: [
+    { id: "1sem", label: "1-semester", duration: 5, weight: 1.0 }
+  ],
+  attributeGrants: ["IC"],        <span class="cmt">// exchange satisfies Interpreting Culture</span>
+  occupiesSlot:    true,
+  creditValue:     16,
+}</code></pre>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Weight must match ICalendar scale.</strong> If your institution uses fall/spring at weight 1.0 and a term occupies exactly one full semester, use weight 1.0. If it spans a full year, use 2.0. If it only uses a summer half-session, use 0.5.</div></div>
+    <p><strong>Attribute grants:</strong> The <code>attributeGrants</code> array is how you encode "a placed co-op counts as EX" without any hardcoded string in the core. <code>computeGrantedAttrs()</code> in <code>specialTermUtils.js</code> unions these arrays across all placed terms and passes the result to <code>getCoverage()</code>.</p>
+
+    <h2>How span logic works end-to-end</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    A["User drops 6-month co-op\nonto Fall 2026 slot\n(sem weight: 1.0)"]
+    B["PlannerContext stores\nspecialTermPl[termId] =\n{ typeId:'coop', duration:6, semId:'fall-2026' }"]
+    C["resolveTermByDuration(durations, 6)\n→ { weight: 2.0 }"]
+    D["termSpans(2.0, 1.0)\n→ true"]
+    E["specialTermStartMap['fall-2026'] = termId\nspecialTermContMap['spring-2027'] = termId"]
+    F["SemRow renders Fall 2026 as start block\nSemRow renders Spring 2027 as continuation block"]
+
+    A --> B --> C --> D --> E --> F
+      </div>
+      <div class="caption">The weight fields drive everything. No type ID is checked in the span logic — it's purely arithmetic.</div>
+    </div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

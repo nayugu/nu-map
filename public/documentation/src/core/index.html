@@ -17,12 +17,12 @@
     <div class="breadcrumb"><a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>core/</strong></div>
 
     <h1>core/ <span class="badge green">Pure logic</span></h1>
-    <p class="lead">Seven modules of pure domain logic. None import React, call fetch(), or touch localStorage. Every function takes inputs and returns outputs. This makes them trivially testable in Node without a DOM.</p>
+    <p class="lead">Eight modules of pure domain logic. None import React, call fetch(), touch localStorage, or import from adapters/. Every function takes inputs and returns outputs — trivially testable in Node without a DOM.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
-      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext.jsx (exclusively)</div></div>
-      <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">No React, no I/O, no side effects — pure functions only</div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext.jsx and UI components that call usePort() directly</div></div>
+      <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">No React, no I/O, no side effects, zero adapter imports — pure functions only</div></div>
     </div>
 
     <h2>Children</h2>
@@ -52,10 +52,15 @@
         <div class="cc-name">planModel.js</div>
         <div class="cc-desc">Plan display helpers: SH totals, ordered course lists, edge lookups. Also: async PDF export via browser print.</div>
       </a>
+      <a class="child-card" href="./specialTermUtils/">
+        <div class="cc-type">module (~40 lines)</div>
+        <div class="cc-name">specialTermUtils.js</div>
+        <div class="cc-desc">Three pure functions bridging ISpecialTerms adapter data and the planner grid: resolveTermByDuration, termSpans, computeGrantedAttrs.</div>
+      </a>
       <a class="child-card" href="./constants/">
         <div class="cc-type">constants + theme tokens</div>
         <div class="cc-name">constants.js + themes.js</div>
-        <div class="cc-desc">Global compile-time constants (colors, labels, templates) and CSS variable token sets for each theme.</div>
+        <div class="cc-desc">Generic compile-time constants (colors, label maps) and CSS variable token sets for each theme.</div>
       </a>
     </div>
 
@@ -67,32 +72,34 @@ graph TD
     PE["prereqEval.js"]
     CM["courseModel.js"]
     SG["semGrid.js"]
-    PM["planModel.js"]
+    PM["planModel.js\n(adapter passed as param)"]
+    STU["specialTermUtils.js"]
     TH["themes.js"]
     CO["constants.js"]
 
-    GR -->|"uses NUPATH_LABELS"| CO
     CM -->|"uses SUBJECT_PALETTE"| CO
-    SG -->|"uses SEMESTER_TYPES"| CO
-    PM -->|"calls loadMajor (via param)"| GR
     TH -.->|"token values from"| CO
+    PM -->|"uses IAttributeSystem\nISpecialTerms\nICalendar (via adapter param)"| STU
 
     style CO fill:#fff8c5,stroke:#9a6700
+    style STU fill:#dafbe1,stroke:#1a7f37
       </div>
-      <div class="caption">constants.js is the only internal dependency. All other modules are independent of each other.</div>
+      <div class="caption">Most core modules are fully independent. specialTermUtils.js is the bridge between adapter data and grid/coverage logic — it takes adapter data as parameters, never imports it directly.</div>
     </div>
 
     <h2>How PlannerContext uses core</h2>
-    <p>PlannerContext is the only file that imports from core/. It calls these functions during:</p>
+    <p>PlannerContext is the primary caller of core/ functions. Some UI components also call specialTermUtils directly after reading port data via usePort().</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Event</th><th>Core function called</th></tr></thead>
       <tbody>
         <tr><td>Courses loaded</td><td><code>normalizeCourse()</code> for each, <code>buildCourseMap()</code></td></tr>
         <tr><td>Entry/grad dates change</td><td><code>buildCohortSemesters()</code>, <code>deriveSemMaps()</code></td></tr>
         <tr><td>Any placement change</td><td><code>evalPrereqTree()</code> for all placed courses → violations</td></tr>
-        <tr><td>User selects major</td><td><code>allocateMajorWithElectives()</code>, <code>getNuPathCoverage()</code></td></tr>
+        <tr><td>User selects major</td><td><code>allocateMajorWithElectives()</code></td></tr>
         <tr><td>Course selected</td><td><code>getConnections()</code> → SVG line positions</td></tr>
-        <tr><td>PDF export triggered</td><td><code>exportReport()</code></td></tr>
+        <tr><td>PDF export triggered</td><td><code>exportReport(placements, …, adapter)</code></td></tr>
+        <tr><td>Special term placed/moved</td><td><code>resolveTermByDuration()</code>, <code>termSpans()</code> — via specialTermUtils</td></tr>
+        <tr><td>NUPath / gen-ed coverage</td><td><code>computeGrantedAttrs()</code> → passed to <code>attributeSystem.getCoverage()</code></td></tr>
       </tbody>
     </table></div>
 

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IAttributeSystem — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ports/IAttributeSystem">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>IAttributeSystem.js</strong>
+    </div>
+
+    <h1>IAttributeSystem <span class="badge blue">gen-ed / NUPath</span></h1>
+    <p class="lead">"Attributes" is the generic name for what NU calls NUPath, and what other schools call gen-ed, distribution requirements, or learning outcomes. The grad panel grid, course chips, and PDF export all read from this port. Leave <code>gridCodes</code> empty and the grid disappears entirely.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"attributeSystem"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">GradPanel (grid), Header (coverage badge), CourseCard (attribute chips), PDF export (labels), specialTermUtils (computeGrantedAttrs feeds here)</div></div>
+      <div class="nb-group"><div class="nb-label">Override when</div><div class="nb-value">Your institution has a codified gen-ed or distribution requirement framework</div></div>
+    </div>
+
+    <h2>Contract</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>systemName</code></td><td>string</td><td>Display name shown as the grad panel section title. e.g. <code>"NUPath"</code>, <code>"Gen Ed"</code>, <code>"GIRs"</code>. Empty string → section is hidden.</td></tr>
+        <tr><td><code>attributes</code></td><td>Attribute[]</td><td>Full list of attribute definitions including legacy codes that exist in course data but are no longer active requirements.</td></tr>
+        <tr><td><code>gridLayout</code></td><td>string[][]</td><td>2-D array of attribute codes for the grad panel grid, e.g. <code>[["ND","EI","IC","FQ"], ...]</code>. Excludes legacy-only codes. Row × column order is display order.</td></tr>
+        <tr><td><code>gridCodes</code></td><td>string[]</td><td>Flat ordered list from <code>gridLayout.flat()</code>. This is the source of truth for rendering and the coverage progress badge.</td></tr>
+        <tr><td><code>labels</code></td><td>Object&lt;string,string&gt;</td><td>Code → label map for <em>all</em> attributes including legacy codes. Used for PDF export and tooltip lookups — must include every code that appears in course data.</td></tr>
+        <tr><td><code>getCoverage(placements, courseMap, grantedAttrs?)</code></td><td>function</td><td>Returns <code>Set&lt;string&gt;</code> of covered attribute codes. See below.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>getCoverage() signature</h2>
+    <pre><code>getCoverage(
+  placements:   { [courseId: string]: semId: string },  <span class="cmt">// courses in the plan</span>
+  courseMap:    { [courseId: string]: Course },          <span class="cmt">// full course objects</span>
+  grantedAttrs: Set&lt;string&gt;                             <span class="cmt">// from computeGrantedAttrs()</span>
+): Set&lt;string&gt;</code></pre>
+    <p><code>grantedAttrs</code> is optional (defaults to empty Set). Compute it with <a href="../../core/specialTermUtils/"><code>computeGrantedAttrs(specialTermPl, types)</code></a> before calling <code>getCoverage</code>. This is how a placed co-op causes the EX cell to turn green — no hardcoded "EX" in the attribute system itself.</p>
+    <pre><code><span class="cmt">// Standard usage in GradPanel, Header</span>
+import { computeGrantedAttrs } from "../core/specialTermUtils.js";
+
+const grantedAttrs = computeGrantedAttrs(specialTermPl, specialTerms?.types);
+const npCovered    = attributeSystem.getCoverage(placements, courseMap, grantedAttrs);</code></pre>
+
+    <h2>Attribute typedef</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>code</code></td><td>string</td><td>Short code used in course data and as the grid cell key, e.g. <code>"ND"</code>, <code>"EX"</code>.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Display name shown in the grid cell and tooltips.</td></tr>
+        <tr><td><code>description</code></td><td>string?</td><td>Optional longer description for an info panel or tooltip. Not currently rendered.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern — NUPath</h2>
+    <p>13 attributes. 12 in the 3×4 grid. 1 legacy code (WF) in <code>labels</code> only — present in old course data and needed for PDF export but no longer displayed as an active requirement.</p>
+    <div class="two-col">
+      <div>
+        <h3>Grid layout (3×4, 12 codes)</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td>ND</td><td>EI</td><td>IC</td><td>FQ</td></tr>
+            <tr><td>SI</td><td>AD</td><td>DD</td><td>ER</td></tr>
+            <tr><td>WD</td><td>WI</td><td>EX</td><td>CE</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div>
+        <h3>Labels (13 entries, includes WF)</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td><code>ND</code></td><td>Natural/Designed World</td></tr>
+            <tr><td><code>EI</code></td><td>Creative Express/Innov</td></tr>
+            <tr><td><code>IC</code></td><td>Interpreting Culture</td></tr>
+            <tr><td><code>FQ</code></td><td>Formal/Quant Reasoning</td></tr>
+            <tr><td><code>SI</code></td><td>Societies/Institutions</td></tr>
+            <tr><td><code>AD</code></td><td>Analyzing/Using Data</td></tr>
+            <tr><td><code>DD</code></td><td>Difference/Diversity</td></tr>
+            <tr><td><code>ER</code></td><td>Ethical Reasoning</td></tr>
+            <tr><td><code>WF</code></td><td>1st Yr Writing <em>(legacy)</em></td></tr>
+            <tr><td><code>WD</code></td><td>Adv Writing Disc</td></tr>
+            <tr><td><code>WI</code></td><td>Writing Intensive</td></tr>
+            <tr><td><code>EX</code></td><td>Integration Experience</td></tr>
+            <tr><td><code>CE</code></td><td>Capstone Experience</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <p><code>systemName: "NUPath"</code>. <code>getCoverage</code> iterates <code>course.attributes</code> for all placed courses, then adds every code from <code>grantedAttrs</code>.</p>
+    <p><strong>Legacy code handling:</strong> WF appears in course data from before ~2018. It is in <code>attributes</code> and <code>labels</code> so PDF export resolves the label correctly, but it is <em>not</em> in <code>gridLayout</code> or <code>gridCodes</code>, so the grad panel never shows it as a requirement to satisfy.</p>
+
+    <h2>Generic default</h2>
+    <pre><code><span class="cmt">// src/adapters/generic/attributeSystem.js</span>
+export const systemName = "";   <span class="cmt">// no section title → grid hidden</span>
+export const attributes = [];
+export const gridLayout = [];
+export const gridCodes  = [];
+export const labels     = {};
+export function getCoverage() { return new Set(); }</code></pre>
+    <p>With an empty <code>gridCodes</code>, the GradPanel hides the attribute grid entirely. No errors, no empty boxes.</p>
+
+    <h2>Implementing for your institution</h2>
+    <ol>
+      <li>Define your attribute codes as <code>{ code, label }</code> objects in the <code>attributes</code> array.</li>
+      <li>Build <code>gridLayout</code> as a 2-D array — each inner array is one row of the grid. Arrange codes in the display order you want.</li>
+      <li>Derive <code>gridCodes = gridLayout.flat()</code>.</li>
+      <li>Derive <code>labels = Object.fromEntries(attributes.map(a => [a.code, a.label]))</code>. Add any legacy codes manually if they appear in your course data.</li>
+      <li>Implement <code>getCoverage</code>: iterate placed courses, union their <code>attributes</code> arrays, add <code>grantedAttrs</code>.</li>
+      <li>Set <code>systemName</code> to your framework's display name.</li>
+    </ol>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">Course objects use the generic field name <code>attributes</code> (not <code>nuPath</code>). Your course JSON should include an <code>attributes</code> array with the short codes, e.g. <code>"attributes": ["ND", "FQ"]</code>. The <code>normalizeCourse()</code> function in <code>courseModel.js</code> reads <code>raw.attributes ?? raw.nuPath</code> for backwards compatibility.</div></div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

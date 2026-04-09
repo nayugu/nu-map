@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ports/ — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ports">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>ports/</strong>
+    </div>
+
+    <h1>ports/ <span class="badge blue">Interface contracts</span></h1>
+    <p class="lead">Eight JSDoc-only files — no logic, no runtime behavior — that define exactly what data shape each institution adapter must provide. Everything institution-specific that the planner needs flows through one of these eight contracts.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Implemented by</div><div class="nb-value"><a href="../adapters/northeastern/">northeastern/</a> (NU), <a href="../adapters/generic/">generic/</a> (fallback defaults)</div></div>
+      <div class="nb-group"><div class="nb-label">Consumed via</div><div class="nb-value"><code>usePort(IPortName)</code> inside any component; <code>useInstitution()</code> for multi-port access</div></div>
+      <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">No logic, no imports. Pure JSDoc typedef + one named export for the port key string.</div></div>
+    </div>
+
+    <h2>The eight ports</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./IInstitution/">
+        <div class="cc-type">identity</div>
+        <div class="cc-name">IInstitution</div>
+        <div class="cc-desc">Name, short name, portal name, degree audit name, localStorage prefix. The minimum every fork must set.</div>
+      </a>
+      <a class="child-card" href="./ICalendar/">
+        <div class="cc-type">semester structure</div>
+        <div class="cc-name">ICalendar</div>
+        <div class="cc-desc">Semester types, weights, start year, year format. Weight is the foundation of all span arithmetic.</div>
+      </a>
+      <a class="child-card" href="./ICreditSystem/">
+        <div class="cc-type">credit units</div>
+        <div class="cc-name">ICreditSystem</div>
+        <div class="cc-desc">Unit name ("SH", "credits", "ECTS"), standard value, full-time min, semester max.</div>
+      </a>
+      <a class="child-card" href="./IAttributeSystem/">
+        <div class="cc-type">gen-ed / NUPath</div>
+        <div class="cc-name">IAttributeSystem</div>
+        <div class="cc-desc">Attribute grid layout, labels, getCoverage(). Empty grid if institution has no attribute system.</div>
+      </a>
+      <a class="child-card" href="./ISpecialTerms/">
+        <div class="cc-type">work terms</div>
+        <div class="cc-name">ISpecialTerms</div>
+        <div class="cc-desc">Co-op, internship, exchange — any non-course block that occupies semester slots. Empty if unused.</div>
+      </a>
+      <a class="child-card" href="./IMajorRequirements/">
+        <div class="cc-type">path helpers</div>
+        <div class="cc-name">IMajorRequirements</div>
+        <div class="cc-desc">fmtLabel and fmtLocation — translate raw folder names into display labels for the major/minor selector.</div>
+      </a>
+      <a class="child-card" href="./ICourseCatalog/">
+        <div class="cc-type">data source</div>
+        <div class="cc-name">ICourseCatalog</div>
+        <div class="cc-desc">LOCAL_URL (bundled JSON) and API_URL (live fallback). The two strings that tell the app where course data lives.</div>
+      </a>
+      <a class="child-card" href="./ILocalization/">
+        <div class="cc-type">UI copy</div>
+        <div class="cc-name">ILocalization</div>
+        <div class="cc-desc">Disclaimer bullets in the About modal. Institution names, portal names, and legal language.</div>
+      </a>
+    </div>
+
+    <h2>At-a-glance: all 8 ports</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Port</th><th>Key field(s)</th><th>Generic default</th><th>NU value</th><th>Override priority</th></tr></thead>
+      <tbody>
+        <tr><td><a href="./IInstitution/">IInstitution</a></td><td><code>id</code>, <code>name</code>, <code>storagePrefix</code></td><td><code>"map"</code>, <code>"My University"</code>, <code>"map"</code></td><td><code>"northeastern"</code>, <code>"Northeastern University"</code>, <code>"ncp"</code></td><td><strong>Required</strong> — always override</td></tr>
+        <tr><td><a href="./ICalendar/">ICalendar</a></td><td><code>semesterTypes[].weight</code></td><td>Fall + Spring, weight 1.0 each</td><td>Fall/Spring (1.0) + sumA/sumB (0.5)</td><td>Override if you have summer sessions or quarters</td></tr>
+        <tr><td><a href="./ICreditSystem/">ICreditSystem</a></td><td><code>unitName</code>, <code>standardValue</code></td><td><code>"credits"</code>, 3</td><td><code>"SH"</code>, 4</td><td>Override if unit name ≠ "credits"</td></tr>
+        <tr><td><a href="./IAttributeSystem/">IAttributeSystem</a></td><td><code>gridLayout</code>, <code>getCoverage()</code></td><td>Empty grid, always empty Set</td><td>NUPath — 12-code 3×4 grid</td><td>Override if institution has gen-ed framework</td></tr>
+        <tr><td><a href="./ISpecialTerms/">ISpecialTerms</a></td><td><code>types[].durations[].weight</code></td><td>Empty types array</td><td>Co-op (4mo/6mo), Internship (2mo/4mo)</td><td>Override if institution has co-ops or exchanges</td></tr>
+        <tr><td><a href="./IMajorRequirements/">IMajorRequirements</a></td><td><code>fmtLabel()</code>, <code>fmtLocation()</code></td><td>Title-case, no location</td><td>Strips <code>_(boston)</code>, title-case</td><td>Override only if folder naming differs</td></tr>
+        <tr><td><a href="./ICourseCatalog/">ICourseCatalog</a></td><td><code>LOCAL_URL</code>, <code>API_URL</code></td><td><code>courses.json</code> at root, no API</td><td>NU-namespaced JSON + SearchNEU fallback</td><td><strong>Required</strong> — always set LOCAL_URL</td></tr>
+        <tr><td><a href="./ILocalization/">ILocalization</a></td><td><code>disclaimers</code></td><td>Generic neutral disclaimers</td><td>NU-specific: MyNEU, DegreeWorks, NUpath</td><td>Override to insert institution names and legal copy</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>How ports are wired and consumed</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    P["src/ports/\nJSDoc contracts"]
+    NU["adapters/northeastern/\nNU implementation"]
+    GEN["adapters/generic/\nfallback defaults"]
+    W["wire(overrides)\n{ ...generic, ...overrides }"]
+    CFG["src/config.js\nexport institutionAdapter"]
+    APP["App.jsx\nInstitutionProvider"]
+    CTX["InstitutionContext\nusePort(IPortName)"]
+    C1["any component\nusePort(IAttributeSystem)"]
+
+    NU -->|"implements"| P
+    GEN -->|"implements"| P
+    NU --> W
+    GEN --> W
+    W --> CFG --> APP --> CTX --> C1
+      </div>
+      <div class="caption">Port keys flow from contracts → implementations → wire() → InstitutionProvider → usePort(). Components only see the implementation, never the adapter folder.</div>
+    </div>
+
+    <h2>Reading a port in a component</h2>
+    <pre><code><span class="cmt">// Import the port key constant and the hook</span>
+import { usePort }          from "../context/InstitutionContext.jsx";
+import { IAttributeSystem } from "../ports/IAttributeSystem.js";
+
+function MyComponent() {
+  const attributeSystem = usePort(IAttributeSystem);
+  <span class="cmt">// attributeSystem is the full implementation from the active adapter</span>
+  const covered = attributeSystem.getCoverage(placements, courseMap, grantedAttrs);
+}</code></pre>
+
+    <h2>Adding a new port</h2>
+    <p>Only add a port when multiple components need the same institution-specific value and it doesn't fit an existing port. Four files to touch:</p>
+    <ol>
+      <li>Create <code>src/ports/IMyPort.js</code> — export the key string constant and a <code>@typedef</code>.</li>
+      <li>Add a generic implementation in <code>src/adapters/generic/myPort.js</code> and wire it into <code>src/adapters/generic/index.js</code>.</li>
+      <li>Add the key string to <code>KNOWN_PORTS</code> in <code>src/adapters/wire.js</code>.</li>
+      <li>Add the optional field to <code>AdapterOverrides</code> in <code>src/ports/index.js</code>.</li>
+    </ol>
+    <p>The app core and all existing components are untouched. The new port is available to any component via <code>usePort(IMyPort)</code>.</p>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
