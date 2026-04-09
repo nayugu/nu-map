@@ -1,0 +1,9 @@
+[submodule "submodules/nu-courses"]
+	path = submodules/nu-courses
+	url = https://github.com/nayugu/nu-courses
+[submodule "submodules/graduatenu"]
+	path = submodules/graduatenu
+	url = https://github.com/nayugu/graduatenu
+[submodule "searchneu"]
+	path = searchneu
+	url = https://github.com/nayugu/searchneu
