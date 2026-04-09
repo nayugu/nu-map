@@ -48,7 +48,7 @@
     </div>
 
     <div class="fn-block exported">
-      <div class="fn-sig">exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl, internPl) → void (async)</div>
+      <div class="fn-sig">exportReport(placements, courseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter) → void (async)</div>
       <div class="fn-desc">
         Builds a complete print-ready HTML document and opens it in a new browser window, then triggers the browser print dialog. No server, no third-party library — entirely browser-native.
         <br><br><strong>Document contents:</strong>
@@ -69,7 +69,7 @@ sequenceDiagram
     participant ML as majorLoader / minorLoader
     participant B as Browser
 
-    H->>PM: exportReport(placements, gradInfo, workPl, internPl)
+    H->>PM: exportReport(placements, gradInfo, specialTermPl, adapter)
     PM->>ML: loadMajor() + loadMinor1() + loadMinor2() in parallel
     ML-->>PM: requirement trees
     PM->>PM: build full HTML string in memory

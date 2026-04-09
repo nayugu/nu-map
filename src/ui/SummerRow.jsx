@@ -4,8 +4,11 @@
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useState } from "react";
-import { TYPE_BG, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
+import { TYPE_BG } from "../core/constants.js";
 import { getSemSH, getOrderedCourses } from "../core/planModel.js";
+import { resolveTermByDuration } from "../core/specialTermUtils.js";
+import { usePort }        from "../context/InstitutionContext.jsx";
+import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
@@ -18,15 +21,15 @@ export default function SummerRow({ semA, semB }) {
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
     setHoveredZone, setHoveredSem,
-    workStartMap, workContMap, workPl,
-    internStartMap, internContMap, internPl, setInternPl,
+    specialTermStartMap, specialTermContMap, specialTermPl, setSpecialTermPl,
     cardRefs, onDragStart,
     SEM_INDEX,
-    setWorkPl, pushUndo, isPhone,
+    pushUndo, isPhone,
     collapseOtherCredits, showContLogo,
   } = usePlanner();
 
   const { themeName } = useTheme();
+  const specialTerms = usePort(ISpecialTerms);
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
   const placeholderColor = themeName === "dark" ? "#3e4856" : "#e4e4e4";
 
@@ -43,14 +46,12 @@ export default function SummerRow({ semA, semB }) {
   const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;
   const rowOpacity = combinedDone ? 0.9 : 1;
 
-  const removeWork   = wid => { pushUndo(); setWorkPl(p => { const n = { ...p }; delete n[wid]; return n; }); };
-  const removeIntern = iid => { pushUndo(); setInternPl(p => { const n = { ...p }; delete n[iid]; return n; }); };
+  const removeTerm = id => { pushUndo(); setSpecialTermPl(p => { const n = { ...p }; delete n[id]; return n; }); };
 
-  const sortBySem = entries => entries
-    .filter(([, d]) => d?.semId)
-    .sort(([, a], [, b]) => (SEM_INDEX[a.semId] ?? 99) - (SEM_INDEX[b.semId] ?? 99));
-  const coopNumFor   = id => sortBySem(Object.entries(workPl)).findIndex(([i]) => i === id) + 1;
-  const internNumFor = id => sortBySem(Object.entries(internPl)).findIndex(([i]) => i === id) + 1;
+  const termNum = (typeId, id) => Object.entries(specialTermPl)
+    .filter(([, d]) => d?.semId && d.typeId === typeId)
+    .sort(([, a], [, b]) => (SEM_INDEX[a.semId] ?? 99) - (SEM_INDEX[b.semId] ?? 99))
+    .findIndex(([eid]) => eid === id) + 1;
 
   const renderSession = sem => {
     if (!sem) return null;
@@ -59,11 +60,13 @@ export default function SummerRow({ semA, semB }) {
     const isSessionA = sem.id.startsWith("sumA");
     const sessionLabel = isSessionA ? "Session A" : "Session B";
 
-    // ── Co-op start card ─────────────────────────────────────────
-    const workId     = workStartMap[sem.id];
-    const workData   = workId ? workPl[workId] : null;
-    const workItem   = workData ? { ...(COOP_TERMS.find(t => t.duration === workData.duration) ?? COOP_TERMS[0]), id: workId, duration: workData.duration } : null;
-    if (workItem) {
+    // ── Special term start card ───────────────────────────────────
+    const termStartId   = specialTermStartMap[sem.id];
+    const termStartData = termStartId ? specialTermPl[termStartId] : null;
+    const termStartType = termStartData ? (specialTerms?.types ?? []).find(t => t.id === termStartData.typeId) : null;
+    const termStartDur  = termStartType ? resolveTermByDuration(termStartType.durations, termStartData.duration) : null;
+    if (termStartDur) {
+      const displayLabel = isPhone && termStartType.label === "Full-Time Internship" ? "Internship" : termStartType.label;
       return (
         <div key={sem.id} data-sem-id={sem.id} style={{
           flex: 1, minWidth: 0, overflow: "hidden",
@@ -76,13 +79,14 @@ export default function SummerRow({ semA, semB }) {
             <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
           </div>
           <div
-            ref={el => { cardRefs.current[workItem.id] = el; }}
+            ref={el => { cardRefs.current[termStartId] = el; }}
             draggable
-            data-drag-id={workItem.id}
-            data-drag-type="work"
-            data-drag-duration={workItem.duration}
+            data-drag-id={termStartId}
+            data-drag-type="specialTerm"
+            data-drag-typeid={termStartData.typeId}
+            data-drag-duration={termStartData.duration}
             data-drag-from={sem.id}
-            onDragStart={e => onDragStart(e, workItem.id, "work", sem.id, { duration: workItem.duration })}
+            onDragStart={e => onDragStart(e, termStartId, "specialTerm", sem.id, { duration: termStartData.duration, typeId: termStartData.typeId })}
             style={{
               width: "100%", minHeight: 58,
               background: "var(--card-bg)",
@@ -92,31 +96,27 @@ export default function SummerRow({ semA, semB }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
-                {workItem.label} {coopNumFor(workItem.id)}
+              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termStartData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termStartData.typeId === "coop" ? "uppercase" : "none", whiteSpace: "nowrap", flexShrink: 0 }}>
+                {displayLabel} {termNum(termStartData.typeId, termStartId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
-                <CompanySearch name={workData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
-                <input value={workData.subline ?? ""} onChange={e => setWorkPl(p => ({ ...p, [workItem.id]: { ...p[workItem.id], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: workData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
+                <CompanySearch name={termStartData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
+                <input value={termStartData.subline ?? ""} onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: termStartData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
               </div>
-              <CompanyLogo key={workData.companyDomain || ""} domain={workData.companyDomain} size={isPhone ? 17 : 34} />
-              <button onClick={e => { e.stopPropagation(); removeWork(workItem.id); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title="Remove co-op">✕</button>
+              <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} size={isPhone ? 17 : 34} />
+              <button onClick={e => { e.stopPropagation(); removeTerm(termStartId); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title={`Remove ${termStartType.label.toLowerCase()}`}>✕</button>
             </div>
-            {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
-              {workContMap[SEM_NEXT[sem.id]] === workItem.id
-                ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label} (${workItem.duration}-month block)`
-                : `${workItem.duration}-month co-op`}
-            </div> */}
           </div>
         </div>
       );
     }
 
-    // ── Co-op continuation block ──────────────────────────────────
-    const contWorkId   = workContMap[sem.id];
-    const contWorkData = contWorkId ? workPl[contWorkId] : null;
-    const contItem     = contWorkData ? { ...(COOP_TERMS.find(t => t.duration === contWorkData.duration) ?? COOP_TERMS[0]), id: contWorkId, duration: contWorkData.duration } : null;
-    if (contItem) {
+    // ── Special term continuation block ──────────────────────────
+    const termContId   = specialTermContMap[sem.id];
+    const termContData = termContId ? specialTermPl[termContId] : null;
+    const termContType = termContData ? (specialTerms?.types ?? []).find(t => t.id === termContData.typeId) : null;
+    const termContDur  = termContType ? resolveTermByDuration(termContType.durations, termContData.duration) : null;
+    if (termContDur && !termStartId) {
       return (
         <div key={sem.id} data-sem-id={sem.id} style={{
           flex: 1, minWidth: 0, overflow: "hidden",
@@ -134,94 +134,10 @@ export default function SummerRow({ semA, semB }) {
             display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
           }}>
             <div>
-              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{contItem.label} CONT.</div>
-              <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>6-month block</div>
+              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}>{termContType?.label} CONT.</div>
+              <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>{termContData.duration}-month block</div>
             </div>
-            {showContLogo && <CompanyLogo key={contWorkData.companyDomain || ""} domain={contWorkData.companyDomain} size={isPhone ? 17 : 34} />}
-          </div>
-        </div>
-      );
-    }
-
-    // ── Internship start card ─────────────────────────────────────
-    const internId   = internStartMap[sem.id];
-    const internData = internId ? internPl[internId] : null;
-    const internTerm = internData ? (INTERNSHIP_TERMS.find(t => t.duration === internData.duration) ?? INTERNSHIP_TERMS[0]) : null;
-    if (internTerm) {
-      return (
-        <div key={sem.id} data-sem-id={sem.id} style={{
-          flex: 1, minWidth: 0, overflow: "hidden",
-          border: `1px solid ${hoveredSem === sem.id ? "var(--active)" : "var(--border-slot)"}`, borderRadius: 4, padding: "4px 5px",
-          background: hoveredSem === sem.id ? "var(--active-bg)" : "var(--card-bg)",
-          transition: "background 0.1s, border-color 0.1s",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
-            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
-          </div>
-          <div
-            ref={el => { cardRefs.current[internId] = el; }}
-            draggable
-            data-drag-id={internId}
-            data-drag-type="intern"
-            data-drag-duration={internData.duration}
-            data-drag-from={sem.id}
-            onDragStart={e => onDragStart(e, internId, "intern", sem.id, { duration: internData.duration })}
-            style={{
-              width: "100%", minHeight: 58,
-              background: "var(--card-bg)",
-              border: "1px solid var(--border-card)",
-              borderRadius: 6, padding: "8px 10px 8px 12px",
-              cursor: "grab", display: "flex", flexDirection: "column", justifyContent: "center",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em", whiteSpace: "nowrap", flexShrink: 0 }}>
-                {isPhone ? "Internship" : "Full-Time Internship"} {internNumFor(internId)}
-              </div>
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
-                <CompanySearch name={internData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setInternPl(p => ({ ...p, [internId]: { ...p[internId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
-                <input value={internData.subline ?? ""} onChange={e => setInternPl(p => ({ ...p, [internId]: { ...p[internId], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: internData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
-              </div>
-              <CompanyLogo key={internData.companyDomain || ""} domain={internData.companyDomain} size={isPhone ? 17 : 34} />
-              <button onClick={e => { e.stopPropagation(); removeIntern(internId); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title="Remove internship">✕</button>
-            </div>
-            {/* <div style={{ fontSize: 9, color: "var(--text-4)" }}>
-              {internData.duration === 4
-                ? `↕ spans into ${SEMESTERS.find(s => s.id === SEM_NEXT[sem.id])?.label}`
-                : `${internData.duration}-month internship`}
-            </div> */}
-          </div>
-        </div>
-      );
-    }
-
-    // ── Internship continuation block ─────────────────────────────
-    const contInternId   = internContMap[sem.id];
-    const contInternData = contInternId ? internPl[contInternId] : null;
-    const contInternTerm = contInternData ? (INTERNSHIP_TERMS.find(t => t.duration === contInternData.duration) ?? INTERNSHIP_TERMS[0]) : null;
-    if (contInternTerm) {
-      return (
-        <div key={sem.id} data-sem-id={sem.id} style={{
-          flex: 1, minWidth: 0, overflow: "hidden",
-          border: "1px solid var(--border-slot)", borderRadius: 4, padding: "4px 5px",
-          background: "var(--card-bg)",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
-            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
-          </div>
-          <div style={{
-            width: "100%", minHeight: 58,
-            border: "1px solid var(--border-card)",
-            borderRadius: 6, padding: "8px 14px",
-            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
-          }}>
-            <div>
-              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>Internship Cont.</div>
-              <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>4-month block</div>
-            </div>
-            {showContLogo && <CompanyLogo key={contInternData.companyDomain || ""} domain={contInternData.companyDomain} size={isPhone ? 17 : 34} />}
+            {showContLogo && <CompanyLogo key={termContData.companyDomain || ""} domain={termContData.companyDomain} size={isPhone ? 17 : 34} />}
           </div>
         </div>
       );

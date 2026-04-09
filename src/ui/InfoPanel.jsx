@@ -3,8 +3,12 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
-import { REL_STYLE, SEMESTER_TYPES } from "../core/constants.js";
-import { NUPATH_LABELS, getOfferedFromTerms } from "../core/courseModel.js";
+import { usePort }                  from "../context/InstitutionContext.jsx";
+import { IAttributeSystem }         from "../ports/IAttributeSystem.js";
+import { ICreditSystem }            from "../ports/ICreditSystem.js";
+import { ICalendar }                from "../ports/ICalendar.js";
+import { REL_STYLE } from "../core/constants.js";
+import { getOfferedFromTerms }       from "../core/courseModel.js";
 import { getConnections } from "../core/planModel.js";
 
 export default function InfoPanel() {
@@ -147,6 +151,9 @@ export default function InfoPanel() {
 
 function CourseInfo({ selCourse, navTo }) {
   const { courseMap, onDragStart, placements } = usePlanner();
+  const attributeSystem = usePort(IAttributeSystem);
+  const creditSystem    = usePort(ICreditSystem);
+  const calendar        = usePort(ICalendar);
   const [codeHover, setCodeHover] = useState(false);
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -172,15 +179,15 @@ function CourseInfo({ selCourse, navTo }) {
         >{selCourse.code}</span>
         <span style={{ fontSize: 12, color: "var(--text-3)" }}>{selCourse.title}</span>
         <span style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 3, padding: "1px 6px" }}>
-          {selCourse.sh} SH
+          {selCourse.sh} {creditSystem.unitName}
         </span>
         {selCourse.scheduleType && (
           <span style={{ fontSize: 9, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 6px" }}>
             {selCourse.scheduleType}
           </span>
         )}
-        {selCourse.nuPath?.map(np => (
-          <span key={np} title={NUPATH_LABELS[np] || np}
+        {selCourse.attributes?.map(np => (
+          <span key={np} title={attributeSystem.labels[np] || np}
             style={{ fontSize: 9, color: "var(--nupath-text)", background: "var(--nupath-bg)", border: "1px solid var(--nupath-border)", borderRadius: 3, padding: "1px 5px", cursor: "default" }}>
             {np}
           </span>
@@ -338,6 +345,7 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
 }
 
 function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
+  const calendar = usePort(ICalendar);
   const defaults = getOfferedFromTerms(selCourse.terms) ?? ["fall", "spring"];
 
   return (
@@ -345,9 +353,8 @@ function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides, comp
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
         OFFERED IN
       </div>
-      {SEMESTER_TYPES.map(type => {
+      {calendar.semesterTypes.map(({ id: type, label }) => {
         const active = (offeredOverrides[selCourse.id] ?? defaults).includes(type);
-        const label  = { fall: "Fall", spring: "Spring", sumA: "Summer A", sumB: "Summer B" }[type];
         return (
           <label key={type} style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", marginBottom: 4, userSelect: "none" }}
             onClick={e => e.stopPropagation()}>

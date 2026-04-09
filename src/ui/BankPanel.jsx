@@ -5,8 +5,10 @@ import { useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
 import { subjectColor } from "../core/courseModel.js";
+import { resolveTermByDuration } from "../core/specialTermUtils.js";
+import { usePort }        from "../context/InstitutionContext.jsx";
+import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import CourseCard  from "./CourseCard.jsx";
 import GradPanel   from "./GradPanel.jsx";
 
@@ -193,9 +195,9 @@ export default function BankPanel() {
   const [subFromId, setSubFromId] = useState(null);
   const [subToId,   setSubToId]   = useState(null);
   const [hoveredSubId, setHoveredSubId] = useState(null);
-  const [coopsCollapsed,  setCoopsCollapsed]  = useState(false);
-  const [internsCollapsed, setInternsCollapsed] = useState(true);
+  const [typeCollapsed, setTypeCollapsed] = useState({});
   const { themeName } = useTheme();
+  const specialTerms = usePort(ISpecialTerms);
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
 
   return (
@@ -533,68 +535,37 @@ export default function BankPanel() {
         <div style={{ padding: "6px 7px 4px", borderBottom: "1px solid var(--border-1)" }}>
           <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", marginBottom: 5 }}>WORK EXPERIENCE</div>
 
-          {/* Co-op templates — always visible, never consumed */}
-          <div
-            onClick={() => setCoopsCollapsed(v => !v)}
-            style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: coopsCollapsed ? 0 : 3, cursor: "pointer", userSelect: "none", display: "flex", alignItems: "center", gap: 4 }}
-          >
-            <span style={{ fontSize: 7, opacity: 0.7 }}>{coopsCollapsed ? "▶" : "▼"}</span>Co-ops
-          </div>
-          {!coopsCollapsed && COOP_TERMS.map(ct => (
-            <div key={ct.id}
-              draggable
-              data-drag-id=""
-              data-drag-type="work"
-              data-drag-duration={ct.duration}
-              onDragStart={e => onDragStart(e, null, "work", null, { duration: ct.duration })}
-              style={{ background: "var(--card-bg)", border: "1px solid var(--border-card)", borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
-            >
-              <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}>{ct.label}</div>
-              <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{ct.duration} months · satisfies EX</div>
-            </div>
-          ))}
-
-          {/* Internship templates — always visible, never consumed */}
-          <div
-            onClick={() => setInternsCollapsed(v => !v)}
-            style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: internsCollapsed ? 0 : 3, marginTop: 6, cursor: "pointer", userSelect: "none", display: "flex", alignItems: "center", gap: 4 }}
-          >
-            <span style={{ fontSize: 7, opacity: 0.7 }}>{internsCollapsed ? "▶" : "▼"}</span>Full-Time Internships
-          </div>
-          {!internsCollapsed && INTERNSHIP_TERMS.map(it => (
-            <div key={it.id}
-              draggable
-              data-drag-id=""
-              data-drag-type="intern"
-              data-drag-duration={it.duration}
-              onDragStart={e => onDragStart(e, null, "intern", null, { duration: it.duration })}
-              style={{ background: "var(--card-bg)", border: "1px solid var(--border-card)", borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
-            >
-              <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.03em" }}>{it.label}</div>
-              <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{it.duration} months · does not satisfy EX</div>
-            </div>
-          ))}
-
-          {/* Placed internship instances — commented out (not shown in bank)
-          {Object.entries(internPl).map(([iid, { semId, duration }]) => {
-            const term = INTERNSHIP_TERMS.find(t => t.duration === duration) ?? INTERNSHIP_TERMS[0];
+          {(specialTerms?.types ?? []).map((type, idx) => {
+            const collapsed = typeCollapsed[type.id] ?? (idx > 0);
+            const attrText  = type.attributeGrants?.length
+              ? `satisfies ${type.attributeGrants.join(", ")}`
+              : "no attribute grants";
             return (
-              <div key={iid}
-                ref={el => { cardRefs.current[iid] = el; }}
-                draggable
-                data-drag-id={iid}
-                data-drag-type="intern"
-                data-drag-duration={duration}
-                data-drag-from={semId}
-                onDragStart={e => onDragStart(e, iid, "intern", semId, { duration })}
-                style={{ background: "var(--card-bg)", border: `2px dashed ${term.color}`, borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5, opacity: 0.5 }}
-              >
-                <div style={{ fontSize: 11, fontWeight: 900, color: term.color }}>Internship · {duration}mo</div>
-                <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>placed — drag back to remove</div>
+              <div key={type.id} style={{ marginTop: idx > 0 ? 6 : 0 }}>
+                <div
+                  onClick={() => setTypeCollapsed(p => ({ ...p, [type.id]: !collapsed }))}
+                  style={{ fontSize: 8, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em", marginBottom: collapsed ? 0 : 3, cursor: "pointer", userSelect: "none", display: "flex", alignItems: "center", gap: 4 }}
+                >
+                  <span style={{ fontSize: 7, opacity: 0.7 }}>{collapsed ? "▶" : "▼"}</span>{type.label}s
+                </div>
+                {!collapsed && (type.durations ?? []).map(d => (
+                  <div key={d.id}
+                    draggable
+                    data-drag-id=""
+                    data-drag-type="specialTerm"
+                    data-drag-typeid={type.id}
+                    data-drag-duration={d.duration}
+                    onDragStart={e => onDragStart(e, null, "specialTerm", null, { duration: d.duration, typeId: type.id })}
+                    style={{ background: "var(--card-bg)", border: "1px solid var(--border-card)", borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
+                  >
+                    <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em" }}>{d.label}</div>
+                    <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{d.duration} months · {attrText}</div>
+                  </div>
+                ))}
               </div>
             );
           })}
-          */}
+
         </div>
 
         {/* Course list */}

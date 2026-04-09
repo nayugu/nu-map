@@ -51,7 +51,7 @@ graph LR
     PC((PlannerContext))
 
     PC --> LD["📦 Loaded Data\ncourses · courseMap · effectiveCourseMap"]
-    PC --> PL["📍 Placement State\nplacements · workPl · internPl\nsemOrders · shOverrides · bonusSH\nplacedOut · substitutions"]
+    PC --> PL["📍 Placement State\nplacements · specialTermPl\nsemOrders · shOverrides · bonusSH\nplacedOut · substitutions"]
     PC --> CO["🗓 Cohort Settings\nentSem/Year · gradSem/Year · stickyCourses"]
     PC --> DV["⚡ Derived / Computed\nSEMESTERS · SEM_INDEX · currentSemId\nprereqViolations · coreqViolations"]
     PC --> GP["🎓 Graduation Panel\nmajor · conc · minor1 · minor2"]
@@ -73,8 +73,7 @@ graph LR
     <p>These are the core data structures that represent where courses live in the plan.</p>
 
     <div class="state-block"><div class="sb-name">placements</div><div class="sb-type">object</div><div class="sb-desc"><code>{ courseId → semId }</code>. The primary placement map. <code>"CS3500" → "fall2027"</code>. Every course-in-semester relationship is encoded here.</div></div>
-    <div class="state-block"><div class="sb-name">workPl</div><div class="sb-type">object</div><div class="sb-desc"><code>{ workId → { semId, duration, company, companyDomain, subline } }</code>. Co-op blocks. <code>duration</code> is 4 or 6 months. 6-month co-ops always span two semester rows. 4-month co-ops only span if placed on a summer semester. <code>company</code> is the display name; <code>companyDomain</code> is a bare domain (e.g. <code>microsoft.com</code>) used to fetch the company logo via Google's S2 favicon service. <code>subline</code> is the user-entered role/title. <strong>Any placed co-op grants the EX (Integration Experience) NUPath attribute</strong> — see <code>getNuPathCoverage()</code> in gradRequirements.</div></div>
-    <div class="state-block"><div class="sb-name">internPl</div><div class="sb-type">object</div><div class="sb-desc"><code>{ intId → { semId, duration, company, companyDomain, subline } }</code>. Internship blocks. <code>duration</code> is 2 or 4 months. 4-month internships span two rows only if placed on a summer semester. <strong>Internships do not grant EX NUPath</strong> — co-op only.</div></div>
+    <div class="state-block"><div class="sb-name">specialTermPl</div><div class="sb-type">object</div><div class="sb-desc"><code>{ termId → { typeId, semId, duration, company, companyDomain, subline } }</code>. All special work-experience blocks (co-ops, internships, and any future term types defined by the institution adapter). <code>typeId</code> matches a <code>specialTerms.types[n].id</code> from the adapter — e.g. <code>"coop"</code> or <code>"intern"</code> for NU. <code>duration</code> is in months. <code>company</code> is the display name; <code>companyDomain</code> is a bare domain (e.g. <code>microsoft.com</code>) used to fetch the company logo. <code>subline</code> is the user-entered role/title. Whether a term grants NUPath attributes is defined by <code>specialTerms.types[n].attributeGrants</code> in the adapter — for NU, co-ops grant <code>["EX"]</code> and internships grant <code>[]</code>. Span behavior (one row vs. two) is driven by the <code>weight</code> field on the duration descriptor, not hardcoded duration values. Old saved data with <code>workPl</code>/<code>internPl</code> is automatically migrated on load.</div></div>
 
     <h3>Duration spanning — which semesters get occupied</h3>
     <p>Each block type occupies one or two consecutive semester rows. The grid below shows what happens when a block is dropped on each semester type. <em>Shaded cells are the rows that become occupied.</em></p>
@@ -199,7 +198,7 @@ graph LR
     <h3>Undo / redo</h3>
     <div class="fn-block private">
       <div class="fn-sig">pushUndo()</div>
-      <div class="fn-desc">Snapshots the current placement state onto <code>undoStack</code> before any mutation. Clears <code>redoStack</code>. The snapshot includes: placements, workPl, internPl, semOrders, shOverrides, bonusSH, placedOut, substitutions.</div>
+      <div class="fn-desc">Snapshots the current placement state onto <code>undoStack</code> before any mutation. Clears <code>redoStack</code>. The snapshot includes: placements, specialTermPl, semOrders, shOverrides, bonusSH, placedOut, substitutions.</div>
     </div>
     <div class="fn-block exported">
       <div class="fn-sig">undo()</div>

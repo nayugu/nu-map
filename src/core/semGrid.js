@@ -1,13 +1,13 @@
 // ═══════════════════════════════════════════════════════════════════
 // SEMESTER GRID  (pure, no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { DEFAULT_START_YEAR, NUM_YEARS } from "./constants.js";
+import { NUM_YEARS } from "./constants.js";
 
 /**
  * Build the ordered list of semester objects for a given cohort window.
  * Always prepends the "Incoming Credit" slot.
  */
-export function generateSemesters(startYear = DEFAULT_START_YEAR, numYears = NUM_YEARS) {
+export function generateSemesters(startYear, numYears = NUM_YEARS) {
   const s = [
     { id: "incoming", label: "Incoming Credit", sub: "Transfer / AP / IB / Waiver", type: "special", maxSlots: 99 },
   ];

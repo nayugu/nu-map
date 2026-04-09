@@ -56,18 +56,19 @@ flowchart TD
     </div>
 
     <h2>dragInfo shape</h2>
-    <pre><code>{ id: string,        <span class="cmt">// item ID — null for new co-op/intern templates dragged from the bank</span>
-  type: string,      <span class="cmt">// "course" | "work" | "intern"</span>
+    <pre><code>{ id: string,        <span class="cmt">// item ID — null for new term templates dragged from the bank</span>
+  type: string,      <span class="cmt">// "course" | "specialTerm"</span>
+  typeId?: string,   <span class="cmt">// adapter term type — e.g. "coop" | "intern" — only for "specialTerm"</span>
   fromSem: string,   <span class="cmt">// source semId (null if dragging from bank/template)</span>
-  duration?: number  <span class="cmt">// months — only present for "work" / "intern"</span>
+  duration?: number  <span class="cmt">// months — only present for "specialTerm"</span>
 }</code></pre>
 
     <h2>Drop targets</h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Target</th><th>Data attribute</th><th>Types accepted</th><th>Effect</th></tr></thead>
       <tbody>
-        <tr><td>Semester zone</td><td><code>data-sem-id</code></td><td>course, work, intern</td><td><code>onDrop(semId)</code> — places or moves item. For courses: coreq partners move silently to the same semester.</td></tr>
-        <tr><td>Bank panel</td><td><code>data-drop-bank</code></td><td>course, work, intern</td><td><code>onDropBank()</code> — removes placement. Co-op/intern deleted entirely; course returns to bank.</td></tr>
+        <tr><td>Semester zone</td><td><code>data-sem-id</code></td><td>course, specialTerm</td><td><code>onDrop(semId)</code> — places or moves item. For courses: coreq partners move silently to the same semester.</td></tr>
+        <tr><td>Bank panel</td><td><code>data-drop-bank</code></td><td>course, specialTerm</td><td><code>onDropBank()</code> — removes placement. Special terms deleted entirely; course returns to bank.</td></tr>
         <tr><td>Placed-out zone</td><td><code>data-drop-placedout</code></td><td>course only</td><td><code>onDropPlacedOut()</code> — adds to <code>placedOut</code> set, removes from <code>placements</code>.</td></tr>
         <tr><td>Another course card</td><td><code>data-drag-id</code> on target</td><td>course only</td><td><code>onDropOnCard(targetId, semId)</code> — reorders within the semester by swapping positions in <code>semOrders</code>.</td></tr>
       </tbody>
@@ -78,11 +79,12 @@ flowchart TD
     <div class="table-wrap"><table>
       <thead><tr><th>Item</th><th>Duration</th><th>Valid semester types</th><th>Blocked if</th></tr></thead>
       <tbody>
-        <tr><td>Course</td><td>—</td><td>Any</td><td>Semester is occupied by a co-op or internship (start or continuation row)</td></tr>
-        <tr><td>Co-op</td><td>4-month</td><td>Fall or spring (single row); summer (normalizes to sumA, spans sumA→sumB)</td><td>Any internship in start or continuation slot; another co-op already there</td></tr>
-        <tr><td>Co-op</td><td>6-month</td><td>Spring→sumA or sumB→Fall only</td><td>Any internship or co-op in either of the two spanned semesters</td></tr>
-        <tr><td>Internship</td><td>2-month</td><td>Summer only (single row)</td><td>Co-op in that semester; another internship already there</td></tr>
-        <tr><td>Internship</td><td>4-month</td><td>Fall or spring (single); summer (normalizes to sumA, spans sumA→sumB)</td><td>Co-op or internship in start or continuation slot</td></tr>
+        <tr><td>Course</td><td>—</td><td>Any</td><td>Semester is occupied by a special term (start or continuation row)</td></tr>
+        <tr><td>Co-op (<code>typeId: "coop"</code>)</td><td>4-month</td><td>Fall or spring (single row); summer (normalizes to sumA, spans sumA→sumB)</td><td>Any other term in start or continuation slot</td></tr>
+        <tr><td>Co-op (<code>typeId: "coop"</code>)</td><td>6-month</td><td>Spring→sumA or sumB→Fall only</td><td>Any other term in either of the two spanned semesters</td></tr>
+        <tr><td>Internship (<code>typeId: "intern"</code>)</td><td>2-month</td><td>Summer only (single row)</td><td>Any other term already there</td></tr>
+        <tr><td>Internship (<code>typeId: "intern"</code>)</td><td>4-month</td><td>Fall or spring (single); summer (normalizes to sumA, spans sumA→sumB)</td><td>Any other term in start or continuation slot</td></tr>
+        <tr><td>Custom type</td><td>any</td><td>Determined by weight-based span logic</td><td>Any slot already occupied (<code>isSlotOccupied</code>)</td></tr>
       </tbody>
     </table></div>
 

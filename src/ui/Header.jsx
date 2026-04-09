@@ -5,10 +5,11 @@
 import { useState, useEffect } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { REL_STYLE, WORK_TERMS } from "../core/constants.js";
+import { REL_STYLE } from "../core/constants.js";
 import { exportReport, getOrderedCourses } from "../core/planModel.js";
+import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
-import { getNuPathCoverage } from "../core/gradRequirements.js";
+import { useInstitution } from "../context/InstitutionContext.jsx";
 import dataMeta from "../core/dataMeta.json";
 
 export default function Header() {
@@ -20,7 +21,7 @@ export default function Header() {
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    coopGradConflicts, workPl, internPl, semOrders,
+    coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap, semOrders,
     showViolLines, setShowViolLines,
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
@@ -33,6 +34,10 @@ export default function Header() {
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
+  const adapter = useInstitution();
+  const { attributeSystem, specialTerms, calendar, creditSystem } = adapter;
+  const getSemWeight    = (semType) => (calendar.semesterTypes ?? []).find(t => t.id === semType)?.weight ?? 1;
+  const unitName        = creditSystem.unitName ?? "SH";
   const [showQuickSet, setShowQuickSet] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
@@ -57,7 +62,7 @@ export default function Header() {
     const concLabel  = conc   || "";
     const minor1Path = minor1 || "";
     const minor2Path = minor2 || "";
-    const npCovered  = getNuPathCoverage(placements, courseMap, workPl);
+    const npCovered  = attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms.types));
     // Build set of course keys that are placed in already-completed semesters
     const doneKeys = new Set();
     for (const [id, semId] of Object.entries(placements)) {
@@ -70,7 +75,7 @@ export default function Header() {
       npCovered, doneKeys, totalSHRequired: 0,
       placedOut, substitutions,
     };
-    exportReport(placements, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, workPl, internPl);
+    exportReport(placements, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
   };
 
   const handleCopyHumanReadable = async () => {
@@ -91,103 +96,46 @@ export default function Header() {
     // Collect all placed course IDs for the appendix
     const allPlacedIds = Object.keys(placements);
 
-    // Helper to format co‑op and internship blocks
-    const workStartMap = {};
-    const workContMap = {};
-    Object.entries(workPl).forEach(([wid, data]) => {
-      const semId = data?.semId;
-      if (!semId) return;
-      workStartMap[semId] = wid;
-      if (data.duration === 6) {
-        const nxt = SEM_NEXT[semId];
-        if (nxt) workContMap[nxt] = wid;
-      } else if (data.duration === 4) {
-        const sem = SEMESTERS.find(s => s.id === semId);
-        if (sem?.type === "summer") {
-          const nxt = SEM_NEXT[semId];
-          if (nxt) workContMap[nxt] = wid;
-        }
-      }
-    });
-    const internStartMap = {};
-    const internContMap = {};
-    Object.entries(internPl).forEach(([iid, data]) => {
-      const semId = data?.semId;
-      if (!semId) return;
-      internStartMap[semId] = iid;
-      if (data.duration === 4) {
-        const sem = SEMESTERS.find(s => s.id === semId);
-        if (sem?.type === "summer") {
-          const nxt = SEM_NEXT[semId];
-          if (nxt) internContMap[nxt] = iid;
-        }
-      }
-    });
-
     // Iterate through semesters in order
     for (const sem of SEMESTERS) {
       const semId = sem.id;
       const idsInSem = getOrderedCourses(semId, placements, semOrders, courseMap);
-      const hasWork = !!workStartMap[semId];
-      const hasCont = !!workContMap[semId];
-
-      const hasIntern     = !!internStartMap[semId];
-      const hasInternCont = !!internContMap[semId];
+      const hasStart = !!specialTermStartMap[semId];
+      const hasCont  = !!specialTermContMap[semId];
 
       // Skip empty semesters
-      if (idsInSem.length === 0 && !hasWork && !hasCont && !hasIntern && !hasInternCont) continue;
+      if (idsInSem.length === 0 && !hasStart && !hasCont) continue;
 
       const semLabel = sem.label;
       const isDone = (SEM_INDEX[semId] ?? 99) < currentIdx;
       const status = isDone ? ' (completed)' : (semId === currentSemId ? ' (in progress)' : '');
       semLines.push(`\n${semLabel}${status}`);
 
-      // Co‑op continuation row
-      if (hasCont && !hasWork) {
-        const contWorkId   = workContMap[semId];
-        const contWorkData = workPl[contWorkId];
-        const workItem     = contWorkData ? (WORK_TERMS.find(w => w.duration === contWorkData.duration) ?? WORK_TERMS[0]) : null;
-        if (workItem) {
-          const co = contWorkData.company ? ` @ ${contWorkData.company}` : '';
-          semLines.push(`  ⤷ ${workItem.label}${co} (continues)`);
+      // Special term continuation row
+      if (hasCont && !hasStart) {
+        const contId   = specialTermContMap[semId];
+        const contData = specialTermPl[contId];
+        const contType = contData ? (specialTerms.types ?? []).find(t => t.id === contData.typeId) : null;
+        const contDur  = contType ? resolveTermByDuration(contType.durations, contData.duration) : null;
+        if (contDur) {
+          const co = contData.company ? ` @ ${contData.company}` : '';
+          semLines.push(`  ⤷ ${contType.label}${co} (continues)`);
         }
       }
 
-      // Co‑op start row
-      if (hasWork) {
-        const workId   = workStartMap[semId];
-        const workData = workPl[workId];
-        const workItem = workData ? (WORK_TERMS.find(w => w.duration === workData.duration) ?? WORK_TERMS[0]) : null;
-        if (workItem) {
+      // Special term start row
+      if (hasStart) {
+        const startId   = specialTermStartMap[semId];
+        const startData = specialTermPl[startId];
+        const startType = startData ? (specialTerms.types ?? []).find(t => t.id === startData.typeId) : null;
+        const startDur  = startType ? resolveTermByDuration(startType.durations, startData.duration) : null;
+        if (startDur) {
           const nextSemId = SEM_NEXT[semId];
-          const contPart  = nextSemId ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
-          const co        = workData.company  ? ` @ ${workData.company}`  : '';
-          const role      = workData.subline  ? ` · ${workData.subline}`  : '';
-          semLines.push(`  ⤷ ${workItem.label}${co}${role}${contPart}`);
-        }
-      }
-
-      // Internship continuation row
-      if (hasInternCont && !hasIntern) {
-        const contInternId   = internContMap[semId];
-        const contInternData = internPl[contInternId];
-        if (contInternData) {
-          const co = contInternData.company ? ` @ ${contInternData.company}` : '';
-          semLines.push(`  ⤷ Full-Time Internship${co} (continues)`);
-        }
-      }
-
-      // Internship start row
-      if (hasIntern) {
-        const internId   = internStartMap[semId];
-        const internData = internPl[internId];
-        if (internData) {
-          const nextSemId  = SEM_NEXT[semId];
-          const spansNext  = internData.duration === 4 && nextSemId && SEMESTERS.find(s => s.id === semId)?.type === "summer";
-          const contPart   = spansNext ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
-          const co         = internData.company ? ` @ ${internData.company}` : '';
-          const role       = internData.subline ? ` · ${internData.subline}` : '';
-          semLines.push(`  ⤷ Full-Time Internship${co}${role}${contPart}`);
+          const spansNext = termSpans(startDur.weight, getSemWeight(sem.type)) && !!nextSemId;
+          const contPart  = spansNext ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
+          const co        = startData.company ? ` @ ${startData.company}` : '';
+          const role      = startData.subline ? ` · ${startData.subline}` : '';
+          semLines.push(`  ⤷ ${startType.label}${co}${role}${contPart}`);
         }
       }
 
@@ -195,7 +143,7 @@ export default function Header() {
       for (const id of idsInSem) {
         const c = courseMap[id];
         if (!c) continue;
-        semLines.push(`  - ${c.code}: ${c.title} (${c.sh} SH)`);
+        semLines.push(`  - ${c.code}: ${c.title} (${c.sh} ${unitName})`);
       }
     }
 
@@ -206,7 +154,7 @@ export default function Header() {
       if (!c) continue;
       const desc = c.desc?.trim() || c.description?.trim() || 'No description available.';
       appendixLines.push(`\n${c.code}: ${c.title}`);
-      appendixLines.push(`  Credits: ${c.sh} SH`);
+      appendixLines.push(`  Credits: ${c.sh} ${unitName}`);
       appendixLines.push(`  Description: ${desc}`);
     }
 

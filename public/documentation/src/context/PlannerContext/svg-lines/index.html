@@ -19,7 +19,7 @@
     </div>
 
     <h1>SVG Prerequisite Lines <span class="badge purple">PlannerContext subsystem</span></h1>
-    <p class="lead">Lines connecting course cards are recomputed inside a <code>requestAnimationFrame</code> callback whenever <code>selectedId</code>, <code>placements</code>, <code>showViolLines</code>, <code>substitutions</code>, <code>workPl</code>, or <code>scrollTick</code> changes. Each line is a <code>{ from, to, type, fp, tp }</code> object where <code>fp</code> and <code>tp</code> are center-point coordinates in SVG space.</p>
+    <p class="lead">Lines connecting course cards are recomputed inside a <code>requestAnimationFrame</code> callback whenever <code>selectedId</code>, <code>placements</code>, <code>showViolLines</code>, <code>substitutions</code>, <code>specialTermPl</code>, or <code>scrollTick</code> changes. Each line is a <code>{ from, to, type, fp, tp }</code> object where <code>fp</code> and <code>tp</code> are center-point coordinates in SVG space.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">PlannerContext.jsx</a></div></div>
@@ -49,7 +49,7 @@
     <div class="diagram-wrap">
       <div class="mermaid">
 flowchart TD
-    TICK["Effect triggers\nselectedId / placements / showViolLines\nsubstitutions / workPl / scrollTick"]
+    TICK["Effect triggers\nselectedId / placements / showViolLines\nsubstitutions / specialTermPl / scrollTick"]
     TICK --> SEL{"selectedId\nset?"}
 
     SEL -->|"Yes — Selection mode"| SM["Draw ALL edge types\nfor every edge touching selected course"]

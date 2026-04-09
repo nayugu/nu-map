@@ -3,7 +3,6 @@
 // Domain logic for working with current semester offerings
 // ═══════════════════════════════════════════════════════════════════
 
-import { SEMESTER_TYPES } from "./constants.js";
 import { getSemOfferedType } from "./courseModel.js";
 
 /**
@@ -27,9 +26,7 @@ export function isCurrentlyOffered(course) {
  */
 export function getCurrentOfferings(course) {
   if (!hasCurrentOfferings(course)) return [];
-  return Object.keys(course.currentOfferings).filter(sem => 
-    SEMESTER_TYPES.includes(sem)
-  );
+  return Object.keys(course.currentOfferings);
 }
 
 /**

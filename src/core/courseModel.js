@@ -1,9 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 // COURSE MODEL  (pure domain logic — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { SUBJECT_PALETTE, NUPATH_LABELS } from "./constants.js";
-
-export { NUPATH_LABELS };
+import { SUBJECT_PALETTE } from "./constants.js";
 
 // ── Subject colour ───────────────────────────────────────────────
 
@@ -77,7 +75,7 @@ export function normalizeCourse(raw) {
     prereqs:      raw.prereqs ?? raw.prerequisites ?? [],
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],
     terms,
-    nuPath:       raw.nuPath ?? [],
+    attributes:   raw.nuPath ?? raw.attributes ?? [],  // nuPath: legacy ninest field name
     color:        subjectColor(subject),
   };
 }

@@ -1,25 +1,24 @@
 // ═══════════════════════════════════════════════════════════════════
 // DISCLAIMER / ABOUT MODAL
 // ═══════════════════════════════════════════════════════════════════
-import { usePlanner } from "../context/PlannerContext.jsx";
+import { usePlanner }     from "../context/PlannerContext.jsx";
+import { usePort }        from "../context/InstitutionContext.jsx";
+import { IInstitution }   from "../ports/IInstitution.js";
+import { ILocalization }  from "../ports/ILocalization.js";
 
 export default function DisclaimerModal() {
   const { showDisclaimer, setShowDisclaimer } = usePlanner();
+  const institution  = usePort(IInstitution);
+  const localization = usePort(ILocalization);
 
   const dismiss = () => {
     setShowDisclaimer(false);
-    try { localStorage.setItem("ncp-seen-disclaimer", "1"); } catch {}
+    try { localStorage.setItem(`${institution.storagePrefix}-seen-disclaimer`, "1"); } catch {}
   };
 
   if (!showDisclaimer) return null;
 
-  const disclaimers = [
-    "This is NOT an official Northeastern University tool and is not affiliated with or endorsed by Northeastern.",
-    "This does NOT replace your official degree audit. Always verify your plan with your academic advisor and through MyNEU / DegreeWorks.",
-    "Course availability, prerequisites, credit hours, and NUpath designations may be outdated or incorrect. Always confirm with the official course catalog.",
-    "Your saved plan lives in your browser's localStorage only. Clearing browser data will erase it.",
-    "Use at your own risk.",
-  ];
+  const disclaimers = localization.disclaimers;
 
   return (
     <div

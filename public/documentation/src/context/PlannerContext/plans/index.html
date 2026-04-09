@@ -87,8 +87,7 @@ sequenceDiagram
     <p>Every call to <code>captureCurrentPlan()</code> snapshots the current React state into a plain object. This is identical to the export JSON — File → Export and the auto-save write the same structure.</p>
     <pre><code>{
   placements,      <span class="cmt">// { courseId → semId }</span>
-  workPl,          <span class="cmt">// { workId → { semId, duration, company, companyDomain, subline } }</span>
-  internPl,        <span class="cmt">// { intId  → { semId, duration, company, companyDomain, subline } }</span>
+  specialTermPl,   <span class="cmt">// { termId → { typeId, semId, duration, company, companyDomain, subline } }</span>
   semOrders,       <span class="cmt">// { semId → courseId[] }</span>
   shOverrides,     <span class="cmt">// { courseId → number }</span>
   bonusSH,         <span class="cmt">// { semId → number }</span>

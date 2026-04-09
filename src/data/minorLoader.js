@@ -6,35 +6,25 @@
 // ═══════════════════════════════════════════════════════════════════
 
 const _moduleMap = import.meta.glob(
-  '../../graduatenu/packages/api/src/minor/minors/**/parsed.initial.json',
+  '../../external/graduatenu/packages/api/src/minor/minors/**/parsed.initial.json',
   { eager: false }
 );
 
-// ── Helpers ─────────────────────────────────────────────────────
-
-function fmtLabel(raw) {
-  return raw
-    .replace(/[-_]+/g, ' ')
-    .replace(/\s*\([^)]*\)/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .split(' ')
-    .map(w => w.length <= 3 && w === w.toLowerCase() ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
-function fmtLocation(folder) {
-  const m = folder.match(/\(([^)]+)\)/);
-  return m ? m[1].charAt(0).toUpperCase() + m[1].slice(1) : '';
-}
-
 // ── Public API ───────────────────────────────────────────────────
+// Path-parsing helpers (fmtLabel, fmtLocation) come from the
+// majorRequirements port passed by the caller — same port as majors.
 
-let _cachedOptions = null;
+let _cachedOptions   = null;
+let _cachedMajorReqs = null;
 
-export function getMinorOptions() {
-  if (_cachedOptions) return _cachedOptions;
+/**
+ * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
+ */
+export function getMinorOptions(majorRequirements) {
+  if (_cachedOptions && _cachedMajorReqs === majorRequirements) return _cachedOptions;
 
+  const { fmtLabel, fmtLocation } = majorRequirements;
+  _cachedMajorReqs = majorRequirements;
   _cachedOptions = Object.keys(_moduleMap)
     .map(path => {
       const parts = path.split('/');
@@ -63,9 +53,12 @@ export function getMinorOptions() {
   return _cachedOptions;
 }
 
-export function getMinorOptionGroups() {
+/**
+ * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
+ */
+export function getMinorOptionGroups(majorRequirements) {
   const map = new Map();
-  for (const opt of getMinorOptions()) {
+  for (const opt of getMinorOptions(majorRequirements)) {
     const key = `${opt.year} — ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
@@ -73,8 +66,15 @@ export function getMinorOptionGroups() {
   return map;
 }
 
+export function canonicalizeMinorPath(path) {
+  if (_moduleMap[path]) return path;
+  const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
+  return _moduleMap[migrated] ? migrated : path;
+}
+
 export async function loadMinor(path) {
-  const fn = _moduleMap[path];
+  const canonical = canonicalizeMinorPath(path);
+  const fn = _moduleMap[canonical];
   if (!fn) throw new Error(`Minor not found in registry: ${path}`);
   const mod = await fn();
   return mod.default ?? mod;

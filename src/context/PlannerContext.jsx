@@ -10,17 +10,30 @@
 //   • Exposes a typed surface of state + actions to the UI layer
 // ═══════════════════════════════════════════════════════════════════
 import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
-import { DEFAULT_START_YEAR, NUM_YEARS, COOP_TERMS, INTERNSHIP_TERMS } from "../core/constants.js";
+import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { normalizeCourse, extractEdges, getOfferedFromTerms, getSemOfferedType } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.js";
 import { fetchCourses } from "../data/courseLoader.js";
 import { loadSaved, saveState } from "../data/persistence.js";
+import { usePort }         from "./InstitutionContext.jsx";
+import { IInstitution }   from "../ports/IInstitution.js";
+import { ICalendar }      from "../ports/ICalendar.js";
+import { ICourseCatalog } from "../ports/ICourseCatalog.js";
+import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
+import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 
 const PlannerContext = createContext(null);
 
 export function PlannerProvider({ children }) {
+  const institution    = usePort(IInstitution);
+  const calendar       = usePort(ICalendar);
+  const courseCatalog  = usePort(ICourseCatalog);
+  const specialTerms   = usePort(ISpecialTerms);
+  const storagePrefix    = institution.storagePrefix;
+  const defaultStartYear = calendar.defaultStartYear;
+
   // ── API state ────────────────────────────────────────────────
   const [courses,  setCourses]  = useState([]);
   const [loading,  setLoading]  = useState(true);
@@ -34,11 +47,19 @@ export function PlannerProvider({ children }) {
 
 
   // ── Persistent planner state ─────────────────────────────────
-  const _saved = useMemo(() => loadSaved(), []);
+  const _saved = useMemo(() => loadSaved(storagePrefix), [storagePrefix]);
   const [placements,       setPlacements]       = useState(() => (_saved?.persist && _saved.placements)       ? _saved.placements       : {});
-  const [workPl,           setWorkPl]           = useState(() => (_saved?.persist && _saved.workPl)           ? _saved.workPl           : {});
-  const [internPl,         setInternPl]         = useState(() => (_saved?.persist && _saved.internPl)         ? _saved.internPl         : {});
-  const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : `fall${DEFAULT_START_YEAR}`);
+  const [specialTermPl,    setSpecialTermPl]    = useState(() => {
+    if (!_saved?.persist) return {};
+    // New format
+    if (_saved.specialTermPl) return _saved.specialTermPl;
+    // Migrate old workPl + internPl into unified map
+    const result = {};
+    if (_saved.workPl)   for (const [id, data] of Object.entries(_saved.workPl))   result[id] = { typeId: "coop",   ...data };
+    if (_saved.internPl) for (const [id, data] of Object.entries(_saved.internPl)) result[id] = { typeId: "intern", ...data };
+    return result;
+  });
+  const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : `fall${defaultStartYear}`);
   const [persistEnabled,   setPersistEnabled]   = useState(() => _saved?.persist !== false);
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
@@ -133,9 +154,9 @@ export function PlannerProvider({ children }) {
     try { return !localStorage.getItem("ncp-seen-disclaimer"); } catch { return true; }
   });
   const [planEntSem,   setPlanEntSem]   = useState(() => { try { return localStorage.getItem("ncp-ent-sem")  || "fall";   } catch { return "fall";   } });
-  const [planEntYear,  setPlanEntYear]  = useState(() => { try { return parseInt(localStorage.getItem("ncp-ent-year")  || String(DEFAULT_START_YEAR), 10) || DEFAULT_START_YEAR; } catch { return DEFAULT_START_YEAR; } });
+  const [planEntYear,  setPlanEntYear]  = useState(() => { try { return parseInt(localStorage.getItem("ncp-ent-year")  || String(defaultStartYear), 10) || defaultStartYear; } catch { return defaultStartYear; } });
   const [planGradSem,  setPlanGradSem]  = useState(() => { try { return localStorage.getItem("ncp-grad-sem") || "spring"; } catch { return "spring"; } });
-  const [planGradYear, setPlanGradYear] = useState(() => { try { return parseInt(localStorage.getItem("ncp-grad-year") || String(DEFAULT_START_YEAR + NUM_YEARS), 10) || DEFAULT_START_YEAR + NUM_YEARS; } catch { return DEFAULT_START_YEAR + NUM_YEARS; } });
+  const [planGradYear, setPlanGradYear] = useState(() => { try { return parseInt(localStorage.getItem("ncp-grad-year") || String(defaultStartYear + NUM_YEARS), 10) || defaultStartYear + NUM_YEARS; } catch { return defaultStartYear + NUM_YEARS; } });
   const [showSettings, setShowSettings] = useState(false);
 
   // ── Layout state ─────────────────────────────────────────────
@@ -189,7 +210,7 @@ export function PlannerProvider({ children }) {
   const undoStack     = useRef([]);
   const redoStack     = useRef([]);
   // Stale-closure escape hatches for keyboard handler
-  const stateRef      = useRef({ placements: {}, workPl: {}, internPl: {}, semOrders: {} });
+  const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {} });
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
   const onDropRef      = useRef(null);   // updated each render for touch drag
@@ -207,7 +228,7 @@ export function PlannerProvider({ children }) {
   useEffect(() => {
     let mounted = true;
     setLoading(true); setLoadPct(5);
-    fetchCourses()
+    fetchCourses(courseCatalog)
       .then(raw => {
         if (!mounted) return;
         setLoadPct(70);
@@ -229,14 +250,14 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(persistEnabled, { placements, workPl, internPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
-  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
+    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
+  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
+    const h = () => saveState(persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, workPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
+  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
@@ -248,7 +269,7 @@ export function PlannerProvider({ children }) {
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    stateRef.current    = { placements, workPl, internPl, semOrders };
+    stateRef.current    = { placements, specialTermPl, semOrders };
     allEdgesRef.current = allEdges;
     onDropRef.current     = onDrop;
     onDropBankRef.current  = onDropBank;
@@ -439,14 +460,14 @@ export function PlannerProvider({ children }) {
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, showViolLines, placements, effectivePlacements, substitutions, workPl, scrollTick, allEdges, SEM_INDEX]);
+  }, [selectedId, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX]);
 
   // ── Undo / redo ───────────────────────────────────────────────
   const pushUndo = () => {
     const snap = {
-      placements: stateRef.current.placements,
-      workPl:     stateRef.current.workPl,
-      semOrders:  stateRef.current.semOrders,
+      placements:    stateRef.current.placements,
+      specialTermPl: stateRef.current.specialTermPl,
+      semOrders:     stateRef.current.semOrders,
     };
     undoStack.current = [...undoStack.current.slice(-49), snap];
     redoStack.current = [];
@@ -456,13 +477,13 @@ export function PlannerProvider({ children }) {
     if (!undoStack.current.length) return;
     const snap = undoStack.current[undoStack.current.length - 1];
     redoStack.current = [...redoStack.current, {
-      placements: stateRef.current.placements,
-      workPl:     stateRef.current.workPl,
-      semOrders:  stateRef.current.semOrders,
+      placements:    stateRef.current.placements,
+      specialTermPl: stateRef.current.specialTermPl,
+      semOrders:     stateRef.current.semOrders,
     }];
     undoStack.current = undoStack.current.slice(0, -1);
     setPlacements(snap.placements);
-    setWorkPl(snap.workPl);
+    setSpecialTermPl(snap.specialTermPl);
     setSemOrders(snap.semOrders);
   };
 
@@ -470,13 +491,13 @@ export function PlannerProvider({ children }) {
     if (!redoStack.current.length) return;
     const snap = redoStack.current[redoStack.current.length - 1];
     undoStack.current = [...undoStack.current, {
-      placements: stateRef.current.placements,
-      workPl:     stateRef.current.workPl,
-      semOrders:  stateRef.current.semOrders,
+      placements:    stateRef.current.placements,
+      specialTermPl: stateRef.current.specialTermPl,
+      semOrders:     stateRef.current.semOrders,
     }];
     redoStack.current = redoStack.current.slice(0, -1);
     setPlacements(snap.placements);
-    setWorkPl(snap.workPl);
+    setSpecialTermPl(snap.specialTermPl);
     setSemOrders(snap.semOrders);
   };
 
@@ -542,114 +563,155 @@ export function PlannerProvider({ children }) {
     [placements, placedOut]
   );
 
-  const workStartMap = useMemo(() => {
-    const m = {};
-    Object.entries(workPl).forEach(([wid, data]) => {
-      const semId = data?.semId;
-      if (semId) m[semId] = wid;
-    });
-    return m;
-  }, [workPl]);
-
-  const workContMap = useMemo(() => {
-    const m = {};
-    Object.entries(workPl).forEach(([wid, data]) => {
-      const { semId, duration } = data || {};
+  // ── Unified special-term derived maps ────────────────────────
+  // specialTermStartMap: { semId → instanceId } for the starting semester of each placed term.
+  // specialTermContMap:  { semId → instanceId } for continuation semesters (weight-based span).
+  const [specialTermStartMap, specialTermContMap] = useMemo(() => {
+    const startMap = {};
+    const contMap  = {};
+    const types    = specialTerms?.types ?? [];
+    Object.entries(specialTermPl).forEach(([id, data]) => {
+      const { typeId, semId, duration } = data || {};
       if (!semId) return;
-      if (duration === 6) {
-        // 6-month: always spans to next semester
+      startMap[semId] = id;
+      const type = types.find(t => t.id === typeId);
+      if (!type) return;
+      const durationDesc = resolveTermByDuration(type.durations, duration);
+      if (!durationDesc) return;
+      const sem = SEMESTERS.find(s => s.id === semId);
+      if (!sem) return;
+      const semTypeDesc = (calendar.semesterTypes ?? []).find(t => t.id === sem.type);
+      const semWeight   = semTypeDesc?.weight ?? 1;
+      if (termSpans(durationDesc.weight, semWeight)) {
         const nxt = SEM_NEXT[semId];
-        if (nxt) m[nxt] = wid;
-      } else if (duration === 4) {
-        // 4-month: spans only if placed on summer (sumA→sumB)
-        const sem = SEMESTERS.find(s => s.id === semId);
-        if (sem?.type === "summer") {
-          const nxt = SEM_NEXT[semId];
-          if (nxt) m[nxt] = wid;
-        }
+        if (nxt) contMap[nxt] = id;
       }
     });
-    return m;
-  }, [workPl, SEMESTERS, SEM_NEXT]);
+    return [startMap, contMap];
+  }, [specialTermPl, specialTerms, calendar, SEMESTERS, SEM_NEXT]);
 
-  // ── Internship derived maps ───────────────────────────────────
-  // internStartMap: { semId → instanceId } for the start semester of each placed internship.
-  // internContMap:  { semId → instanceId } for the continuation semester of 4-month summer spans only
-  //   (sumA→sumB always). Fall/spring 4-month internships occupy a single semester with no cont.
-  //   sumB drops are normalized to sumA on placement, so stored semIds are always sumA for summers.
-  const internStartMap = useMemo(() => {
-    const m = {};
-    Object.entries(internPl).forEach(([iid, { semId }]) => { m[semId] = iid; });
-    return m;
-  }, [internPl]);
+  // Returns true if a slot (start or cont) is occupied by any special term other than excludeId.
+  const isSlotOccupied = (semId, excludeId = null) => {
+    const s = specialTermStartMap[semId]; if (s && s !== excludeId) return true;
+    const c = specialTermContMap[semId];  if (c && c !== excludeId) return true;
+    return false;
+  };
 
-  const internContMap = useMemo(() => {
-    const m = {};
-    Object.entries(internPl).forEach(([iid, { semId, duration }]) => {
-      if (duration !== 4) return;
-      const sem = SEMESTERS.find(s => s.id === semId);
-      if (!sem || sem.type !== "summer") return; // fall/spring 4-month: no cont
-      const nxt = SEM_NEXT[semId];
-      if (nxt) m[nxt] = iid;
-    });
-    return m;
-  }, [internPl, SEMESTERS, SEM_NEXT]);
-
-  // Returns { valid, startId } for an intern drag of given duration onto semId.
-  // excludeId: instance being moved (its own slots are not treated as occupied).
-  const internDropValid = (duration, semId, excludeId = null) => {
+  // Returns { valid, startId } for a special-term drag.
+  // Dispatches to type-aware sub-rules (NU-specific start restrictions) for known types;
+  // falls back to weight-based logic for custom types added by other institutions.
+  const specialTermDropValid = (typeId, duration, semId, excludeId = null) => {
+    const type = (specialTerms?.types ?? []).find(t => t.id === typeId);
+    if (!type || !type.occupiesSlot) return { valid: false };
     const sem = SEMESTERS.find(s => s.id === semId);
     if (!sem) return { valid: false };
-    // Both intern types block co-op semesters and other intern semesters
-    const coopBlocked = workStartMap[semId] || workContMap[semId];
-    if (coopBlocked) return { valid: false };
 
-    if (duration === 2) {
-      if (sem.type !== "summer") return { valid: false };
-      const occupying = internStartMap[semId];
-      if (occupying && occupying !== excludeId) return { valid: false };
-      return { valid: true, startId: semId };
+    if (typeId === "coop") {
+      if (duration === 4) {
+        if (sem.type === "fall" || sem.type === "spring") {
+          if (isSlotOccupied(semId, excludeId)) return { valid: false };
+          return { valid: true, startId: semId };
+        }
+        if (sem.type === "summer") {
+          let startId = semId;
+          if (sem.id.startsWith("sumB")) {
+            const prev = SEM_PREV[semId];
+            if (!prev) return { valid: false };
+            startId = prev;
+            if (isSlotOccupied(startId, excludeId)) return { valid: false };
+          }
+          const nxt = SEM_NEXT[startId];
+          if (!nxt || isSlotOccupied(nxt, excludeId)) return { valid: false };
+          return { valid: true, startId };
+        }
+      }
+      if (duration === 6) {
+        // 6-month: only spring or sumB are valid starts (NU academic calendar rule)
+        let startId;
+        if (sem.type === "spring" || sem.id.startsWith("sumB")) {
+          startId = semId;
+        } else {
+          const prev = SEM_PREV[semId];
+          if (!prev) return { valid: false };
+          const prevSem = SEMESTERS.find(s => s.id === prev);
+          if (!prevSem) return { valid: false };
+          if (prevSem.type === "spring" || prevSem.id.startsWith("sumB")) startId = prev;
+          else return { valid: false };
+        }
+        const contId = SEM_NEXT[startId];
+        if (!contId) return { valid: false };
+        if (isSlotOccupied(startId, excludeId) || isSlotOccupied(contId, excludeId)) return { valid: false };
+        return { valid: true, startId };
+      }
+      return { valid: false };
     }
 
-    if (duration === 4) {
-      if (sem.type === "fall" || sem.type === "spring") {
-        const occupying = internStartMap[semId];
-        if (occupying && occupying !== excludeId) return { valid: false };
+    if (typeId === "intern") {
+      if (duration === 2) {
+        if (sem.type !== "summer") return { valid: false };
+        if (isSlotOccupied(semId, excludeId)) return { valid: false };
         return { valid: true, startId: semId };
       }
+      if (duration === 4) {
+        if (sem.type === "fall" || sem.type === "spring") {
+          if (isSlotOccupied(semId, excludeId)) return { valid: false };
+          return { valid: true, startId: semId };
+        }
+        if (sem.type === "summer") {
+          let startId = semId;
+          if (sem.id.startsWith("sumB")) {
+            const prev = SEM_PREV[semId];
+            if (!prev) return { valid: false };
+            startId = prev;
+            if (isSlotOccupied(startId, excludeId)) return { valid: false };
+          }
+          const nxt = SEM_NEXT[startId];
+          if (!nxt || isSlotOccupied(nxt, excludeId)) return { valid: false };
+          return { valid: true, startId };
+        }
+      }
+      return { valid: false };
+    }
+
+    // Generic fallback for custom term types: weight-based span logic
+    const durationDesc = resolveTermByDuration(type.durations, duration);
+    const semTypeDesc  = (calendar.semesterTypes ?? []).find(t => t.id === sem.type);
+    const semWeight    = semTypeDesc?.weight ?? 1;
+    if (termSpans(durationDesc.weight, semWeight)) {
       if (sem.type === "summer") {
-        // Always normalize to sumA so the block is sumA→sumB, never sumB→fall.
         let startId = semId;
         if (sem.id.startsWith("sumB")) {
           const prev = SEM_PREV[semId];
           if (!prev) return { valid: false };
           startId = prev;
-          // Check coop doesn't occupy startId either
-          if (workStartMap[startId] || workContMap[startId]) return { valid: false };
+          if (isSlotOccupied(startId, excludeId)) return { valid: false };
         }
-        const nxt = SEM_NEXT[startId]; // always sumB
-        if (!nxt) return { valid: false };
-        if (workStartMap[nxt] || workContMap[nxt]) return { valid: false };
-        const occStart = internStartMap[startId];
-        const occCont  = internContMap[nxt];
-        if (occStart && occStart !== excludeId) return { valid: false };
-        if (occCont  && occCont  !== excludeId) return { valid: false };
+        const nxt = SEM_NEXT[startId];
+        if (!nxt || isSlotOccupied(nxt, excludeId)) return { valid: false };
         return { valid: true, startId };
       }
+      const nxt = SEM_NEXT[semId];
+      if (!nxt || isSlotOccupied(semId, excludeId) || isSlotOccupied(nxt, excludeId)) return { valid: false };
+      return { valid: true, startId: semId };
     }
-    return { valid: false };
+    if (isSlotOccupied(semId, excludeId)) return { valid: false };
+    return { valid: true, startId: semId };
   };
 
   const gradSemId = planGradSem === "fall" ? `fall${planGradYear}` : `spr${planGradYear}`;
-  const coopGradConflicts = useMemo(() =>
-    Object.entries(workPl)
+  const coopGradConflicts = useMemo(() => {
+    const types = specialTerms?.types ?? [];
+    return Object.entries(specialTermPl)
       .filter(([, data]) => {
         const semId = data?.semId;
         if (!semId) return false;
         return semId === gradSemId || SEM_NEXT[semId] === gradSemId;
       })
-      .map(([wid, data]) => ({ id: wid, label: "Co-op", ...data }))
-  , [workPl, gradSemId, SEM_NEXT]);
+      .map(([id, data]) => {
+        const type = types.find(t => t.id === data.typeId);
+        return { id, label: type?.label ?? data.typeId, ...data };
+      });
+  }, [specialTermPl, gradSemId, SEM_NEXT, specialTerms]);
 
   const prereqViolations = useMemo(() => {
     const v = new Map();
@@ -736,77 +798,13 @@ export function PlannerProvider({ children }) {
     e.dataTransfer.effectAllowed = "move";
   };
 
-  // Returns { valid, startId } for a co-op drag of given duration onto semId.
-  // 4-month: fall/spring (single sem) or sumA/sumB (normalizes to sumA, spans to sumB).
-  // 6-month: spring→sumA or sumB→fall (original co-op logic).
-  const coopDropValid = (duration, semId, excludeId = null) => {
-    const sem = SEMESTERS.find(s => s.id === semId);
-    if (!sem) return { valid: false };
-    if (internStartMap[semId] || internContMap[semId]) return { valid: false };
-
-    if (duration === 4) {
-      if (sem.type === "fall" || sem.type === "spring") {
-        const occ = workStartMap[semId];
-        if (occ && occ !== excludeId) return { valid: false };
-        return { valid: true, startId: semId };
-      }
-      if (sem.type === "summer") {
-        let startId = semId;
-        if (sem.id.startsWith("sumB")) {
-          const prev = SEM_PREV[semId];
-          if (!prev) return { valid: false };
-          startId = prev;
-          if (internStartMap[startId] || internContMap[startId]) return { valid: false };
-        }
-        const nxt = SEM_NEXT[startId];
-        if (!nxt) return { valid: false };
-        if (internStartMap[nxt] || internContMap[nxt]) return { valid: false };
-        const occStart = workStartMap[startId];
-        const occCont  = workContMap[nxt];
-        if (occStart && occStart !== excludeId) return { valid: false };
-        if (occCont  && occCont  !== excludeId) return { valid: false };
-        return { valid: true, startId };
-      }
-    }
-
-    if (duration === 6) {
-      // Normalize to canonical start: spring or sumB
-      let startId;
-      if (sem.type === "spring" || sem.id.startsWith("sumB")) {
-        startId = semId;
-      } else {
-        const prev = SEM_PREV[semId];
-        if (!prev) return { valid: false };
-        const prevSem = SEMESTERS.find(s => s.id === prev);
-        if (!prevSem) return { valid: false };
-        if (prevSem.type === "spring" || prevSem.id.startsWith("sumB")) startId = prev;
-        else return { valid: false };
-      }
-      const contId = SEM_NEXT[startId];
-      if (!contId) return { valid: false };
-      if (internStartMap[startId] || internContMap[startId]) return { valid: false };
-      if (internStartMap[contId]  || internContMap[contId])  return { valid: false };
-      const occStart = workStartMap[startId];
-      const occCont  = workContMap[contId];
-      if (occStart && occStart !== excludeId) return { valid: false };
-      if (occCont  && occCont  !== excludeId) return { valid: false };
-      return { valid: true, startId };
-    }
-
-    return { valid: false };
-  };
-
   const canDropSem = semId => {
     if (!dragInfo) return false;
-    if (dragInfo.type === "work") {
-      return coopDropValid(dragInfo.duration, semId, dragInfo.id).valid;
+    if (dragInfo.type === "specialTerm") {
+      return specialTermDropValid(dragInfo.typeId, dragInfo.duration, semId, dragInfo.id).valid;
     }
-    if (dragInfo.type === "intern") {
-      return internDropValid(dragInfo.duration, semId, dragInfo.id).valid;
-    }
-    // Course drop — blocked by co-op OR internship occupying this semester
-    if (workStartMap[semId] || workContMap[semId]) return false;
-    if (internStartMap[semId] || internContMap[semId]) return false;
+    // Course drop — blocked by any occupying special term
+    if (specialTermStartMap[semId] || specialTermContMap[semId]) return false;
     return !!SEMESTERS.find(s => s.id === semId);
   };
 
@@ -836,26 +834,16 @@ export function PlannerProvider({ children }) {
         return next;
       });
     }
-    if (type === "work") {
-      const { valid, startId } = coopDropValid(dragInfo.duration, semId, id);
+    if (type === "specialTerm") {
+      const { typeId } = dragInfo;
+      const { valid, startId } = specialTermDropValid(typeId, dragInfo.duration, semId, id);
       if (!valid) { setDragInfo(null); return; }
       const duration = dragInfo.duration;
-      setWorkPl(prev => {
+      setSpecialTermPl(prev => {
         const next = { ...prev };
         if (id) delete next[id];
-        const newId = id || `coop-${Date.now()}`;
-        next[newId] = { ...(id ? prev[id] : {}), semId: startId, duration };
-        return next;
-      });
-    } else if (type === "intern") {
-      const { valid, startId } = internDropValid(dragInfo.duration, semId, id);
-      if (!valid) { setDragInfo(null); return; }
-      const duration = dragInfo.duration;
-      setInternPl(prev => {
-        const next = { ...prev };
-        if (id) delete next[id]; // remove old placement if moving an existing instance
-        const newId = id || `int-${Date.now()}`;
-        next[newId] = { ...(id ? prev[id] : {}), semId: startId, duration };
+        const newId = id || `${typeId}-${Date.now()}`;
+        next[newId] = { ...(id ? prev[id] : {}), typeId, semId: startId, duration };
         return next;
       });
     } else {
@@ -906,10 +894,8 @@ export function PlannerProvider({ children }) {
         return next;
       });
     }
-    if (type === "work") {
-      setWorkPl(p => { const n = { ...p }; delete n[id]; return n; });
-    } else if (type === "intern") {
-      if (id) setInternPl(p => { const n = { ...p }; delete n[id]; return n; });
+    if (type === "specialTerm") {
+      if (id) setSpecialTermPl(p => { const n = { ...p }; delete n[id]; return n; });
     } else {
       const coreqPartners = [...new Set(
         allEdges
@@ -1209,8 +1195,7 @@ export function PlannerProvider({ children }) {
   // ── Reset ────────────────────────────────────────────────────
   const resetPlanToDefaults = () => {
     setPlacements({});
-    setWorkPl({});
-    setInternPl({});
+    setSpecialTermPl({});
     setSemOrders({});
     setOfferedOverrides({});
     setBonusSH(0);
@@ -1221,15 +1206,15 @@ export function PlannerProvider({ children }) {
     setPlacedOut(new Set());
     // Reset cohort to defaults
     setPlanEntSem("fall");
-    setPlanEntYear(DEFAULT_START_YEAR);
+    setPlanEntYear(defaultStartYear);
     setPlanGradSem("spring");
-    setPlanGradYear(DEFAULT_START_YEAR + NUM_YEARS);
+    setPlanGradYear(defaultStartYear + NUM_YEARS);
     // Also clear any per‑plan localStorage items for cohort (optional, but safe)
     try {
       localStorage.setItem("ncp-ent-sem", "fall");
-      localStorage.setItem("ncp-ent-year", String(DEFAULT_START_YEAR));
+      localStorage.setItem("ncp-ent-year", String(defaultStartYear));
       localStorage.setItem("ncp-grad-sem", "spring");
-      localStorage.setItem("ncp-grad-year", String(DEFAULT_START_YEAR + NUM_YEARS));
+      localStorage.setItem("ncp-grad-year", String(defaultStartYear + NUM_YEARS));
     } catch {}
   };
   const resetAll = resetPlanToDefaults;
@@ -1260,17 +1245,25 @@ export function PlannerProvider({ children }) {
     exported: new Date().toISOString(),
     entSem: planEntSem, entYear: planEntYear,
     gradSem: planGradSem, gradYear: planGradYear,
-    placements, workPl, internPl, semOrders, shOverrides, bonusSH, currentSemId,
+    placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
     major, conc, minor1, minor2,
     placedOut: [...placedOut],
   });
 
   // Restore a plan data object into all state
+  // Migrate old workPl+internPl format (saved before specialTermPl refactor)
+  const migrateSpecialTermPl = (d) => {
+    if (d.specialTermPl) return d.specialTermPl;
+    const result = {};
+    if (d.workPl)   for (const [id, data] of Object.entries(d.workPl))   result[id] = { typeId: "coop",   ...data };
+    if (d.internPl) for (const [id, data] of Object.entries(d.internPl)) result[id] = { typeId: "intern", ...data };
+    return result;
+  };
+
   const restorePlan = (d) => {
     setPlacements(d.placements ?? {});
-    setWorkPl(d.workPl ?? {});
-    setInternPl(d.internPl ?? {});
+    setSpecialTermPl(migrateSpecialTermPl(d));
     setSemOrders(d.semOrders ?? {});
     setShOverrides(d.shOverrides ?? {});
     setOfferedOverrides(d.offeredOverrides ?? {});
@@ -1355,7 +1348,7 @@ export function PlannerProvider({ children }) {
       return;
     }
     saveCurrentPlanToSlot();
-  }, [placements, workPl, internPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -1364,7 +1357,7 @@ export function PlannerProvider({ children }) {
       exported: new Date().toISOString(),
       entSem: planEntSem, entYear: planEntYear,
       gradSem: planGradSem, gradYear: planGradYear,
-      placements, workPl, internPl, semOrders, shOverrides, bonusSH, currentSemId,
+      placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
       offeredOverrides, collapsedSubs,
       placedOut: [...placedOut], substitutions,
       major, conc, minor1, minor2,
@@ -1375,7 +1368,7 @@ export function PlannerProvider({ children }) {
     const planName = plans.find(p => p.id === activePlanId)?.name || 'Untitled';
     const sanitizedPlanName = planName.replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
     const dateStr = new Date().toISOString().slice(0, 10);
-    a.download = `${sanitizedPlanName || 'Plan'} - NU Map - ${dateStr}.json`;
+    a.download = `${sanitizedPlanName || 'Plan'} - ${institution.shortName ?? institution.name} Map - ${dateStr}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1390,8 +1383,7 @@ export function PlannerProvider({ children }) {
         if (d.version !== 1) { alert("Unrecognized plan file format."); return; }
         pushUndo();
         setPlacements(d.placements ?? {});
-        setWorkPl(d.workPl ?? {});
-        setInternPl(d.internPl ?? {});
+        setSpecialTermPl(migrateSpecialTermPl(d));
         setSemOrders(d.semOrders ?? {});
         setShOverrides(prev => d.shOverrides ?? prev);
         setOfferedOverrides(prev => d.offeredOverrides ?? prev);
@@ -1418,22 +1410,22 @@ export function PlannerProvider({ children }) {
   // ── Cohort setters that also persist to localStorage ─────────
   // When stickyCourses is on, snapshot placements + SEMESTERS before changing
   const setEntSem = sem => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanEntSem(sem);
     try { localStorage.setItem("ncp-ent-sem", sem); } catch {}
   };
   const setEntYear = year => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanEntYear(year);
     try { localStorage.setItem("ncp-ent-year", year); } catch {}
   };
   const setGradSem = sem => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanGradSem(sem);
     try { localStorage.setItem("ncp-grad-sem", sem); } catch {}
   };
   const setGradYear = year => {
-    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, workPl: { ...workPl }, sems: [...SEMESTERS] };
+    if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanGradYear(year);
     try { localStorage.setItem("ncp-grad-year", year); } catch {}
   };
@@ -1462,36 +1454,21 @@ export function PlannerProvider({ children }) {
     }
     setPlacements(newPl);
 
-    // Remap co-op placements
-    if (snap.workPl) {
-      const newWp = {};
-      for (const [wid, data] of Object.entries(snap.workPl)) {
+    // Remap special term placements
+    if (snap.specialTermPl) {
+      const newStp = {};
+      for (const [id, data] of Object.entries(snap.specialTermPl)) {
         const semId = data?.semId;
         if (!semId) continue;
         const idx = oldIds.indexOf(semId);
         if (idx !== -1 && idx < newIds.length) {
-          newWp[wid] = { ...data, semId: newIds[idx] };
+          newStp[id] = { ...data, semId: newIds[idx] };
         } else if (newIds.includes(semId)) {
-          newWp[wid] = data;
+          newStp[id] = data;
         }
-        // If the semester no longer exists, drop the co-op placement
+        // If the semester no longer exists, drop the placement
       }
-      setWorkPl(newWp);
-    }
-
-    // Remap internship placements
-    if (snap.internPl) {
-      const newIp = {};
-      for (const [iid, { semId, duration }] of Object.entries(snap.internPl)) {
-        const idx = oldIds.indexOf(semId);
-        if (idx !== -1 && idx < newIds.length) {
-          newIp[iid] = { semId: newIds[idx], duration };
-        } else if (newIds.includes(semId)) {
-          newIp[iid] = { semId, duration };
-        }
-        // If the semester no longer exists, drop the internship placement
-      }
-      setInternPl(newIp);
+      setSpecialTermPl(newStp);
     }
   }, [SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1511,7 +1488,7 @@ export function PlannerProvider({ children }) {
     // Load state
     loading, loadErr, loadPct,
     // Planner state
-    placements, effectivePlacements, workPl, internPl, currentSemId, persistEnabled,
+    placements, effectivePlacements, specialTermPl, currentSemId, persistEnabled,
     semOrders, offeredOverrides, collapsedSubs, shOverrides,
     // Semester grid
     SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
@@ -1530,7 +1507,7 @@ export function PlannerProvider({ children }) {
     panelHeight,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,
     // Derived
-    currentSemIdx, placedIds, workStartMap, workContMap, internStartMap, internContMap,
+    currentSemIdx, placedIds, specialTermStartMap, specialTermContMap,
     gradSemId, coopGradConflicts,
     prereqViolations, coreqViolations, connectedIds,
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
@@ -1552,7 +1529,7 @@ export function PlannerProvider({ children }) {
       if (value === null || value === undefined) delete next[id]; else next[id] = value;
       return next;
     }),
-    setPlacements, setWorkPl, setInternPl, setSemOrders, setCurrentSemId,
+    setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,

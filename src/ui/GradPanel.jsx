@@ -7,18 +7,19 @@
 import { useState, useMemo, useEffect, useContext, createContext, useRef } from "react";
 import { createPortal } from "react-dom";
 import { usePlanner }         from "../context/PlannerContext.jsx";
-import { NUPATH_LABELS }      from "../core/constants.js";
+import { usePort }             from "../context/InstitutionContext.jsx";
+import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
+import { IMajorRequirements } from "../ports/IMajorRequirements.js";
+import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
+import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import {
   buildPlacedKeySet,
   allocateMajor,
   allocateMajorWithElectives,
   allocateSections,
-  getNuPathCoverage,
 } from "../core/gradRequirements.js";
 import { getMajorOptionGroups, loadMajor } from "../data/majorLoader.js";
 import { getMinorOptionGroups, loadMinor } from "../data/minorLoader.js";
-
-const ALL_NUPATHS = Object.keys(NUPATH_LABELS).filter(k => k !== "WF");
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
@@ -365,7 +366,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
 // ── NUPath grid ──────────────────────────────────────────────────
 
 function NuPathGrid({ covered }) {
-  const { isPhone } = useContext(GradCtx);
+  const { isPhone, attributeSystem } = useContext(GradCtx);
   return (
     <div style={{
       display: "grid",
@@ -379,7 +380,7 @@ function NuPathGrid({ covered }) {
       gap: isPhone ? 2 : 3,
       marginBottom: 6,
     }}>
-      {ALL_NUPATHS.map(key => {
+      {attributeSystem.gridCodes.map(key => {
         const sat = covered.has(key);
         return (
           <div key={key} style={{
@@ -402,7 +403,7 @@ function NuPathGrid({ covered }) {
             }}>{key}</span>
             {!isPhone && (
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {NUPATH_LABELS[key]}
+                {attributeSystem.labels[key]}
               </span>
             )}
           </div>
@@ -465,7 +466,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 export default function GradPanel() {
   const {
     placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
-    workPl,
+    specialTermPl,
     major: majorPath, setMajor: setMajorPath,
     conc: selConc, setConc: setSelConc,
     minor1, setMinor1,
@@ -475,8 +476,12 @@ export default function GradPanel() {
   const selPath    = majorPath || "";
   const setSelPath = setMajorPath;
 
-  const majorGroups  = useMemo(() => getMajorOptionGroups(), []);
-  const minorGroups  = useMemo(() => getMinorOptionGroups(), []);
+  const attributeSystem   = usePort(IAttributeSystem);
+  const majorRequirements = usePort(IMajorRequirements);
+  const specialTerms      = usePort(ISpecialTerms);
+
+  const majorGroups  = useMemo(() => getMajorOptionGroups(majorRequirements), [majorRequirements]);
+  const minorGroups  = useMemo(() => getMinorOptionGroups(majorRequirements), [majorRequirements]);
 
   const [major,    setMajor]    = useState(null);
   const [loadErr,  setLoadErr]  = useState(null);
@@ -510,7 +515,7 @@ export default function GradPanel() {
     return new Map([["Concentrations", opts]]);
   }, [major]);
 
-  const npCovered  = useMemo(() => getNuPathCoverage(placements, courseMap, workPl), [placements, courseMap, workPl]);
+  const npCovered  = useMemo(() => attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.types)), [attributeSystem, placements, courseMap, specialTermPl, specialTerms]);
   const plannedSH  = totalSHPlaced - totalSHDone;
   const requiredSH = major?.totalCreditsRequired ?? 0;
 
@@ -557,7 +562,7 @@ export default function GradPanel() {
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
   return (
-    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone }}>
+    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, attributeSystem }}>
       <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
         {/* ── Major selector ─────────────────────────────────── */}
@@ -651,7 +656,7 @@ export default function GradPanel() {
             display: "flex", alignItems: "center", gap: 5, cursor: "pointer", marginBottom: 4, userSelect: "none",
           }}>
             <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>
-              NUPATH <span style={{ fontWeight: 400, color: "var(--text-5)" }}>({npCovered.size}/{ALL_NUPATHS.length})</span>
+              {attributeSystem.systemName} <span style={{ fontWeight: 400, color: "var(--text-5)" }}>({npCovered.size}/{attributeSystem.gridCodes.length})</span>
             </span>
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{showNP ? "▲" : "▼"}</span>
           </div>

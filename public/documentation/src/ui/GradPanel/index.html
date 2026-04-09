@@ -68,7 +68,7 @@ flowchart TD
     <p>COURSE nodes are draggable — you can drag them directly from the GradPanel requirement tree into a semester row.</p>
 
     <h2>NUPath coverage grid</h2>
-    <p>Below the major requirement sections, a 12-cell grid shows NUPath attribute coverage. Each cell shows the attribute code and name. Green = satisfied (at least one placed course carries this attribute). Dim = not yet satisfied. Computed by <code>getNuPathCoverage(placements, courseMap, workPl)</code>.</p>
+    <p>Below the major requirement sections, a 12-cell grid shows NUPath attribute coverage. Each cell shows the attribute code and name. Green = satisfied (at least one placed course carries this attribute). Dim = not yet satisfied. Computed by <code>attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms.types))</code>.</p>
 
     <h2>General Electives section</h2>
     <p>Automatically appended at the end. Shows all placed courses that weren't allocated to any major requirement. Displays credit hours total. Built by <code>buildGeneralElectivesSection()</code> from <code>gradRequirements.js</code>. The <code>creditHoursRequired</code> comes from the major JSON's <code>creditHoursRequired</code> field (if present).</p>

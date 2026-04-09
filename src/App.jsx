@@ -1,6 +1,8 @@
 // APP  -- composition root (hexagonal architecture)
 import { PlannerProvider, usePlanner } from './context/PlannerContext.jsx';
-import { ThemeProvider } from './context/ThemeContext.jsx';
+import { ThemeProvider }               from './context/ThemeContext.jsx';
+import { InstitutionProvider }         from './context/InstitutionContext.jsx';
+import { institutionAdapter }          from './config.js';
 import LoadingScreen   from './ui/LoadingScreen.jsx';
 import RelationLines   from './ui/RelationLines.jsx';
 import Header          from './ui/Header.jsx';
@@ -91,13 +93,18 @@ function PlannerApp() {
   );
 }
 
-// Root -- wraps everything in the context provider
+// Root -- wraps everything in context providers
+// InstitutionProvider must be outside PlannerProvider because PlannerContext
+// (and any component) can call usePort() to read the active adapter.
+// wire() merges the institution's overrides on top of the generic defaults.
 export default function App() {
   return (
     <ThemeProvider>
-      <PlannerProvider>
-        <PlannerApp />
-      </PlannerProvider>
+      <InstitutionProvider adapter={institutionAdapter}>
+        <PlannerProvider>
+          <PlannerApp />
+        </PlannerProvider>
+      </InstitutionProvider>
     </ThemeProvider>
   );
 }

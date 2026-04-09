@@ -2,8 +2,11 @@
 // COURSE CARD  — individual draggable course tile
 // ═══════════════════════════════════════════════════════════════════
 import { useState } from "react";
-import { usePlanner } from "../context/PlannerContext.jsx";
-import { REL_STYLE, SEMESTER_TYPES } from "../core/constants.js";
+import { usePlanner }     from "../context/PlannerContext.jsx";
+import { usePort }        from "../context/InstitutionContext.jsx";
+import { ICreditSystem }  from "../ports/ICreditSystem.js";
+import { ICalendar }      from "../ports/ICalendar.js";
+import { REL_STYLE } from "../core/constants.js";
 import { getOfferedFromTerms, getSemOfferedType } from "../core/courseModel.js";
 
 /**
@@ -21,6 +24,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     onDragStart, onDropOnCard, cardRefs,
     isPhone, shOverrides, setShOverride,
   } = usePlanner();
+  const creditSystem = usePort(ICreditSystem);
+  const calendar     = usePort(ICalendar);
+  const defaultOffered = (calendar.semesterTypes ?? []).filter(t => !t.optional).map(t => t.id);
 
   const [editingSh, setEditingSh] = useState(false);
 
@@ -39,7 +45,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const semMeta       = semId ? SEMESTERS.find(s => s.id === semId) : null;
   const offeredList   = offeredOverrides[course.id]
     ?? getOfferedFromTerms(course.terms)
-    ?? ["fall", "spring"];
+    ?? defaultOffered;
   const notOffered = inSem && semOffType && semMeta?.type !== "special" && !offeredList.includes(semOffType);
 
   let borderColor = isCardHov ? "var(--active)" : "var(--border-card)";
@@ -266,17 +272,17 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           ) : (
             <span
               onClick={e => { e.stopPropagation(); setEditingSh(true); }}
-              title={`Variable credit: ${course.shMin ?? course.sh}–${course.shMax} SH — click to set`}
+              title={`Variable credit: ${course.shMin ?? course.sh}–${course.shMax} ${creditSystem.unitName} — click to set`}
               style={{ fontSize: 9, color: "var(--active)", background: "var(--badge-bg)",
                 borderRadius: 3, padding: "1px 4px", cursor: "text",
                 borderBottom: "1px dashed var(--active)", userSelect: "none" }}
             >
-              {shOverrides[course.id] ?? course.sh}/{course.shMax} SH
+              {shOverrides[course.id] ?? course.sh}/{course.shMax} {creditSystem.unitName}
             </span>
           )
         ) : (
           <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 4px" }}>
-            {course.sh} SH
+            {course.sh} {creditSystem.unitName}
           </span>
         )}
         {isViolated && violationType === "order" && (

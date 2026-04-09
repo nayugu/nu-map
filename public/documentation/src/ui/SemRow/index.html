@@ -34,8 +34,8 @@
 graph TD
     SR["SemRow (semId)"]
     SR --> SH["Semester header: label + status dot + SH total"]
-    SR --> CB["Co-op block (if workPl has entry for this semId)"]
-    SR --> IB["Internship block (if internPl has entry)"]
+    SR --> CB["Special term block (if specialTermStartMap has entry for this semId)"]
+    SR --> IB["Special term continuation (if specialTermContMap has entry)"]
     SR --> MC["Main courses drop zone"]
     MC --> CC["CourseCard ×N (credits ≥ 3)"]
     SR --> OC["Other credits toggle (credits ≤ 2)"]

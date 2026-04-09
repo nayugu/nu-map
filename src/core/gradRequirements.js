@@ -195,15 +195,16 @@ export function validateMajor(major, placedSet, courseMap) {
 // ── NUPath ───────────────────────────────────────────────────────
 
 /** Return a Set of NUPath keys (e.g. "FQ", "ND") covered by placed courses.
- *  Pass workPl ({ coopId → semId }) so that any placed co-op grants EX (Integration Experience).
- *  Internships intentionally excluded — they do not satisfy EX. */
-export function getNuPathCoverage(placements, courseMap, workPl = {}) {
+ *  Pass grantedAttrs (Set<string>) from computeGrantedAttrs() to include attributes
+ *  granted by placed special terms (e.g. EX from co-ops).
+ *  @deprecated Prefer attributeSystem.getCoverage() from the adapter instead. */
+export function getNuPathCoverage(placements, courseMap, grantedAttrs = new Set()) {
   const covered = new Set();
   for (const id of Object.keys(placements)) {
     const c = courseMap[id];
-    if (c?.nuPath) c.nuPath.forEach(np => covered.add(np));
+    if (c?.attributes) c.attributes.forEach(np => covered.add(np));
   }
-  if (Object.values(workPl).some(d => d?.semId != null)) covered.add("EX");
+  for (const attr of grantedAttrs) covered.add(attr);
   return covered;
 }
 

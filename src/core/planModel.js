@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { WORK_TERMS, INTERNSHIP_TERMS } from "./constants.js";
 import { buildPlacedKeySet, allocateMajor } from "./gradRequirements.js";
 import { loadMajor } from "../data/majorLoader.js";
 import { loadMinor } from "../data/minorLoader.js";
+import { resolveTermByDuration, termSpans } from "./specialTermUtils.js";
 
 
 /** Convert a CSS hex colour to "r,g,b" string (for use in rgba()). */
@@ -48,17 +48,6 @@ export function getConnections(id, edges) {
 // ── PDF export ───────────────────────────────────────────────────
 
 const pdfFaviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
-
-const NP_LABELS = {
-  ND:"Natural/Designed World", EI:"Creative Express/Innov",
-  IC:"Interpreting Culture",   FQ:"Formal/Quant Reasoning",
-  SI:"Societies/Institutions", AD:"Analyzing/Using Data",
-  DD:"Difference/Diversity",   ER:"Ethical Reasoning",
-  WF:"1st Yr Writing",         WD:"Adv Writing Disc",
-  WI:"Writing Intensive",      EX:"Integration Experience",
-  CE:"Capstone Experience",
-};
-const ALL_NP = Object.keys(NP_LABELS).filter(k => k !== "WF");
 
 // ── Requirement tree → HTML ───────────────────────────────────────
 
@@ -160,7 +149,17 @@ function sectionHtml(sec, doneKeys) {
  * gradInfo: { majorPath, concLabel, minor1Path, minor2Path,
  *             npCovered (Set<string>), doneKeys (Set<string>), totalSHRequired }
  */
-export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, workPl = {}, internPl = {}) {
+export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, specialTermPl = {}, adapter = {}) {
+  const { attributeSystem = {}, specialTerms = {}, calendar = {}, creditSystem = {}, institution = {} } = adapter;
+  const gridCodes    = attributeSystem.gridCodes  ?? [];
+  const attrLabels   = attributeSystem.labels     ?? {};
+  const attrName     = attributeSystem.systemName ?? "";
+  const termTypes    = specialTerms.types ?? [];
+  const unitName     = creditSystem.unitName ?? "SH";
+  const semTypes     = calendar.semesterTypes ?? [];
+  const getSemWeight = (semType) => semTypes.find(t => t.id === semType)?.weight ?? 1;
+  const appName      = `${institution.shortName ?? institution.name ?? "Map"} Map`;
+
   const curIdx = dynSemIdx[currentSemId] ?? 0;
   const date   = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
@@ -190,57 +189,41 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const effectiveTotalSHRequired = totalSHRequired || (major?.totalCreditsRequired ?? 0);
 
   // ── Compute totals ────────────────────────────────────────────
-  // ── Co-op maps ──────────────────────────────────────────────────
+  // ── Special term maps ─────────────────────────────────────────
   const semNextMap = {};
   for (let i = 0; i < dynSems.length - 1; i++) {
     semNextMap[dynSems[i].id] = dynSems[i + 1].id;
   }
-  const workStartMap = {};
-  const workContMap  = {};
-  Object.entries(workPl).forEach(([wid, data]) => {
-    const { semId, duration } = data || {};
+  const termStartMap = {};
+  const termContMap  = {};
+  Object.entries(specialTermPl).forEach(([tid, data]) => {
+    const { semId, duration, typeId } = data || {};
     if (!semId) return;
-    workStartMap[semId] = wid;
-    if (duration === 6) {
+    termStartMap[semId] = tid;
+    const type      = termTypes.find(t => t.id === typeId);
+    if (!type) return;
+    const template  = resolveTermByDuration(type.durations, duration);
+    const sem       = dynSems.find(s => s.id === semId);
+    const semWeight = getSemWeight(sem?.type);
+    if (template && termSpans(template.weight, semWeight)) {
       const nxt = semNextMap[semId];
-      if (nxt) workContMap[nxt] = wid;
-    } else if (duration === 4) {
-      // Only spans if placed on summer
-      const sem = dynSems.find(s => s.id === semId);
-      if (sem?.type === "summer") {
-        const nxt = semNextMap[semId];
-        if (nxt) workContMap[nxt] = wid;
-      }
-    }
-  });
-  const internStartMap = {};
-  const internContMap  = {};
-  Object.entries(internPl).forEach(([iid, { semId, duration }]) => {
-    internStartMap[semId] = iid;
-    if (duration === 4) {
-      const sem = dynSems.find(s => s.id === semId);
-      if (sem?.type === "summer") {
-        const nxt = semNextMap[semId];
-        if (nxt) internContMap[nxt] = iid;
-      }
+      if (nxt) termContMap[nxt] = tid;
     }
   });
   let doneSH = 0, plannedSH = 0;
   const semRows = [];
   dynSems.forEach(sem => {
     const ids = Object.keys(placements).filter(id => placements[id] === sem.id && courseMap[id]);
-    const hasWork      = !!workStartMap[sem.id];
-    const hasCont      = !!workContMap[sem.id];
-    const hasIntern    = !!internStartMap[sem.id];
-    const hasInternCont = !!internContMap[sem.id];
-    if (ids.length === 0 && !hasWork && !hasCont && !hasIntern && !hasInternCont) return;
+    const hasStart = !!termStartMap[sem.id];
+    const hasCont  = !!termContMap[sem.id];
+    if (ids.length === 0 && !hasStart && !hasCont) return;
     const isDone = (dynSemIdx[sem.id] ?? 99) < curIdx;
     const isCur  = sem.id === currentSemId;
     ids.forEach(id => {
       const sh = courseMap[id]?.sh ?? 0;
       if (isDone) doneSH += sh; else plannedSH += sh;
     });
-    semRows.push({ sem, ids, isDone, isCur, hasWork, hasCont, hasIntern, hasInternCont });
+    semRows.push({ sem, ids, isDone, isCur, hasStart, hasCont });
   });
 
   // ── Requirements sections HTML ────────────────────────────────
@@ -264,115 +247,69 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   ].join("");
 
   // ── NUPath grid HTML ──────────────────────────────────────────
-  const npHtml = ALL_NP.map(key => {
+  const npHtml = gridCodes.map(key => {
     const sat = npCovered.has(key);
     return `<div class="np-cell${sat ? " sat" : ""}">
       <span class="np-check">${sat ? "✓" : "·"}</span>
       <span class="np-key">${key}</span>
-      <span class="np-lbl">${NP_LABELS[key]}</span>
+      <span class="np-lbl">${attrLabels[key] ?? key}</span>
     </div>`;
   }).join("\n");
 
   // ── Semester blocks HTML ──────────────────────────────────────
-  const semHtml = semRows.map(({ sem, ids, isDone, isCur, hasWork, hasCont, hasIntern, hasInternCont }) => {
+  const semHtml = semRows.map(({ sem, ids, isDone, isCur, hasStart, hasCont }) => {
     const semSH = ids.reduce((s, id) => s + (courseMap[id]?.sh ?? 0), 0);
     const tag   = isDone ? " done" : isCur ? " current" : "";
 
-    // Co-op continuation row
-    if (hasCont && !hasWork) {
-      const contWorkId   = workContMap[sem.id];
-      const contWorkData = workPl[contWorkId];
-      const contItem     = contWorkData ? (WORK_TERMS.find(w => w.duration === contWorkData.duration) ?? WORK_TERMS[0]) : null;
-      if (contItem) {
-        const contCompany = contWorkData.company || "";
-        const contRole    = contWorkData.subline  || "";
+    // Special term continuation row
+    if (hasCont && !hasStart) {
+      const contId   = termContMap[sem.id];
+      const contData = specialTermPl[contId];
+      const contType = contData ? termTypes.find(t => t.id === contData.typeId) : null;
+      const contDur  = contType ? resolveTermByDuration(contType.durations, contData.duration) : null;
+      if (contDur) {
+        const contCompany = contData.company || "";
+        const contRole    = contData.subline  || "";
         return `<div class="sem-block${tag}">
           <div class="sem-head">
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon">${contWorkData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(contWorkData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div class="coop-icon">${contData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(contData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
             <div style="flex:1">
-              <div class="coop-title">${contItem.label} CONTINUES${contCompany ? `<span style="text-transform:none"> \u00b7 ${contCompany}</span>` : ""}</div>
+              <div class="coop-title">${contType.label} CONTINUES${contCompany ? `<span style="text-transform:none"> \u00b7 ${contCompany}</span>` : ""}</div>
               ${contRole ? `<div class="coop-role">${contRole}</div>` : ""}
-              <div class="coop-sub">6-month block</div>
+              <div class="coop-sub">${contData.duration}-month block</div>
             </div>
           </div>
         </div>`;
       }
     }
 
-    // Co-op start row
-    if (hasWork) {
-      const workId   = workStartMap[sem.id];
-      const workData2 = workPl[workId];
-      const workItem = workData2 ? (WORK_TERMS.find(w => w.duration === workData2.duration) ?? WORK_TERMS[0]) : null;
-      if (workItem) {
-        const nextSem  = dynSems.find(s => s.id === semNextMap[sem.id]);
-        const company  = workData2.company  || "";
-        const role     = workData2.subline  || "";
+    // Special term start row
+    if (hasStart) {
+      const startId   = termStartMap[sem.id];
+      const startData = specialTermPl[startId];
+      const startType = startData ? termTypes.find(t => t.id === startData.typeId) : null;
+      const startDur  = startType ? resolveTermByDuration(startType.durations, startData.duration) : null;
+      if (startDur) {
+        const nextSem    = dynSems.find(s => s.id === semNextMap[sem.id]);
+        const spansNext  = termSpans(startDur.weight, getSemWeight(sem.type)) && !!nextSem;
+        const company    = startData.company || "";
+        const role       = startData.subline || "";
+        const blockLabel = `${startData.duration}-month block`;
         return `<div class="sem-block${tag}">
           <div class="sem-head">
             <span class="sem-label">${sem.label}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon">${workData2.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(workData2.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div class="coop-icon">${startData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(startData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
             <div style="flex:1">
-              <div class="coop-title">${workItem.label}${company ? `<span style="text-transform:none"> \u00b7 ${company}</span>` : ""}</div>
+              <div class="coop-title">${startType.label}${company ? `<span style="text-transform:none"> \u00b7 ${company}</span>` : ""}</div>
               ${role ? `<div class="coop-role">${role}</div>` : ""}
-              <div class="coop-sub">${nextSem ? `Spans into ${nextSem.label} \u00b7 6-month block` : "6-month block"}</div>
-            </div>
-          </div>
-        </div>`;
-      }
-    }
-
-    // Internship continuation row
-    if (hasInternCont && !hasIntern) {
-      const contInternId   = internContMap[sem.id];
-      const contInternData = internPl[contInternId];
-      const contInternTerm = contInternData ? (INTERNSHIP_TERMS.find(t => t.duration === contInternData.duration) ?? INTERNSHIP_TERMS[0]) : null;
-      if (contInternTerm) {
-        const contInternCompany = contInternData.company || "";
-        const contInternRole    = contInternData.subline  || "";
-        return `<div class="sem-block${tag}">
-          <div class="sem-head">
-            <span class="sem-label">${sem.label}</span>
-            <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
-          </div>
-          <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon">${contInternData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(contInternData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
-            <div style="flex:1">
-              <div class="coop-title" style="text-transform:none;letter-spacing:0.03em">Internship Continues${contInternCompany ? ` \u00b7 ${contInternCompany}` : ""}</div>
-              ${contInternRole ? `<div class="coop-role">${contInternRole}</div>` : ""}
-              <div class="coop-sub">4-month block</div>
-            </div>
-          </div>
-        </div>`;
-      }
-    }
-
-    // Internship start row
-    if (hasIntern) {
-      const internId   = internStartMap[sem.id];
-      const internData = internPl[internId];
-      const internTerm = internData ? (INTERNSHIP_TERMS.find(t => t.duration === internData.duration) ?? INTERNSHIP_TERMS[0]) : null;
-      if (internTerm) {
-        const nextSem = dynSems.find(s => s.id === semNextMap[sem.id]);
-        const spansNext = internData.duration === 4 && nextSem && dynSems.find(s => s.id === sem.id)?.type === "summer";
-        return `<div class="sem-block${tag}">
-          <div class="sem-head">
-            <span class="sem-label">${sem.label}</span>
-            <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
-          </div>
-          <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon">${internData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(internData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
-            <div style="flex:1">
-              <div class="coop-title" style="text-transform:none;letter-spacing:0.03em">Full-Time Internship${internData.company ? ` \u00b7 ${internData.company}` : ""}</div>
-              ${internData.subline ? `<div class="coop-role">${internData.subline}</div>` : ""}
-              <div class="coop-sub">${spansNext ? `Spans into ${nextSem.label} \u00b7 4-month block` : `${internData.duration}-month internship`}</div>
+              <div class="coop-sub">${spansNext ? `Spans into ${nextSem.label} \u00b7 ${blockLabel}` : blockLabel}</div>
             </div>
           </div>
         </div>`;
@@ -384,13 +321,13 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
       const c = courseMap[id];
       if (!c) return "";
       const pill     = `<span class="pill" style="background:${c.color}">${c.subject ?? c.id}</span>`;
-      const nuBadges = (c.nuPath ?? []).map(np => `<span class="np-badge">${np}</span>`).join("");
+      const nuBadges = (c.attributes ?? []).map(np => `<span class="np-badge">${np}</span>`).join("");
       return `<div class="course-row">
         ${pill}
         <span class="ccode">${c.code ?? c.id}</span>
         <span class="ctitle">${c.title ?? ""}</span>
         ${nuBadges ? `<span class="np-badges">${nuBadges}</span>` : ""}
-        <span class="csh">${c.shMax ? `${c.sh}\u2013${c.shMax}` : c.sh} SH</span>
+        <span class="csh">${c.shMax ? `${c.sh}\u2013${c.shMax}` : c.sh} ${unitName}</span>
       </div>`;
     }).join("\n");
     return `<div class="sem-block${tag}">
@@ -418,7 +355,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
             <span class="pill" style="background:${c.color}; display: inline-block; width: 100%; text-align: center;">${c.subject}</span>
             <span class="ccode">${c.code}</span>
             <span class="ctitle">${c.title}</span>
-            <span class="csh">${c.sh} SH</span>
+            <span class="csh">${c.sh} ${unitName}</span>
           </div>
           <div class="appendix-course-description">${desc.replace(/\n/g, '<br>')}</div>
         </div>
@@ -441,10 +378,10 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   // ── Credit summary ────────────────────────────────────────────
   const reqPct = effectiveTotalSHRequired > 0 ? Math.min(100, (doneSH / effectiveTotalSHRequired) * 100).toFixed(0) : null;
   const creditHtml = `<div class="credit-row">
-    <div class="credit-num">${doneSH}<span class="credit-unit"> SH completed</span></div>
+    <div class="credit-num">${doneSH}<span class="credit-unit"> ${unitName} completed</span></div>
     <div class="credit-sep">+</div>
-    <div class="credit-num">${plannedSH}<span class="credit-unit"> SH planned</span></div>
-    ${effectiveTotalSHRequired > 0 ? `<div class="credit-sep">/</div><div class="credit-num">${effectiveTotalSHRequired}<span class="credit-unit"> SH required</span></div>` : ""}
+    <div class="credit-num">${plannedSH}<span class="credit-unit"> ${unitName} planned</span></div>
+    ${effectiveTotalSHRequired > 0 ? `<div class="credit-sep">/</div><div class="credit-num">${effectiveTotalSHRequired}<span class="credit-unit"> ${unitName} required</span></div>` : ""}
     ${reqPct !== null ? `<div class="credit-pct">${reqPct}%</div>` : ""}
   </div>`;
 
@@ -452,7 +389,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const html = `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<title>NU Map</title>
+<title>${appName}</title>
 <style>
   @page { margin: 18mm 15mm; }
   * { box-sizing: border-box; }
@@ -658,7 +595,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 </head><body>
 
 <!-- ── PAGE 1: Graduation summary ── -->
-<h1>NU Map</h1>
+<h1>${appName}</h1>
 <div class="date">Generated ${date}</div>
 
 ${metaLines ? `<div class="section-title">Program</div>${metaLines}` : ""}
@@ -666,7 +603,7 @@ ${metaLines ? `<div class="section-title">Program</div>${metaLines}` : ""}
 <div class="section-title">Credits</div>
 ${creditHtml}
 
-<div class="section-title">NUPath <span class="prog-name">(${npCovered.size}/${ALL_NP.length} fulfilled)</span></div>
+<div class="section-title">${attrName} <span class="prog-name">(${npCovered.size}/${gridCodes.length} fulfilled)</span></div>
 <div class="np-grid">${npHtml}</div>
 
 ${reqHtml}
@@ -700,7 +637,7 @@ ${substitutions.map(({ from, to }) => {
 <div class="page-break"></div>
 
 <!-- ── PAGE 2+: Semester schedule ── -->
-<h1>NU Map: Course Schedule</h1>
+<h1>${appName}: Course Schedule</h1>
 <div class="date">Generated ${date}</div>
 <br>
 ${semHtml}

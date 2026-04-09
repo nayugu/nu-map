@@ -1,9 +1,9 @@
 // ═══════════════════════════════════════════════════════════════════
 // CORE CONSTANTS
-// Pure domain values — no React, no I/O dependencies.
+// Universal domain values — no React, no I/O, no institution specifics.
+// Institution-specific values live in src/adapters/<institution>/.
 // ═══════════════════════════════════════════════════════════════════
 
-export const DEFAULT_START_YEAR = 2026;
 export const NUM_YEARS = 5;
 
 // 25 distinct dark-theme subject colours
@@ -35,36 +35,5 @@ export const REL_STYLE = {
   "substitution-prereq":         { color: "#3dd8a0", dash: "4 3", label: "Substituted prereq",              arrow: true },
   "substitution-prereq-order":   { color: "#f85149", dash: "4 3", label: "Substituted prereq (wrong order)", arrow: true },
 };
-
-export const NUPATH_LABELS = {
-  ND: "Natural/Designed World", EI: "Creative Express/Innov",
-  IC: "Interpreting Culture",   FQ: "Formal/Quant Reasoning",
-  SI: "Societies/Institutions", AD: "Analyzing/Using Data",
-  DD: "Difference/Diversity",   ER: "Ethical Reasoning",
-  WD: "Adv Writing Disc",
-  WI: "Writing Intensive",      EX: "Integration Experience",
-  CE: "Capstone Experience",
-};
-
-export const SEMESTER_TYPES = ["fall", "spring", "sumA", "sumB"];
-
-// Two fixed co-op templates — always visible in bank, never consumed.
-// duration: months (4 = single fall/spring OR sumA+sumB span; 6 = spring+sumA or sumB+fall).
-// Co-ops satisfy EX (Integration Experience); internships do not.
-export const COOP_TERMS = [
-  { id: "COOP_4MO", label: "Co-op", duration: 4, color: "#f87171" },
-  { id: "COOP_6MO", label: "Co-op", duration: 6, color: "#f87171" },
-];
-
-// Kept for any legacy references; prefer COOP_TERMS.
-export const WORK_TERMS = COOP_TERMS;
-
-// Two fixed internship templates — always visible in bank, never consumed.
-// duration: months (2 = single summer; 4 = single fall/spring OR sumA+sumB span).
-// Internships do NOT satisfy EX (Integration Experience); co-ops do.
-export const INTERNSHIP_TERMS = [
-  { id: "INT_2MO", label: "Full-Time Internship", duration: 2, color: "#9ca3af" },
-  { id: "INT_4MO", label: "Full-Time Internship", duration: 4, color: "#9ca3af" },
-];
 
 

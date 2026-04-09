@@ -135,8 +135,8 @@ flowchart TD
     </div>
 
     <div class="fn-block exported">
-      <div class="fn-sig">getNuPathCoverage(placements, courseMap, workPl) → Set&lt;string&gt;</div>
-      <div class="fn-desc">Returns the set of NUPath attribute codes satisfied by all placed courses. Co-op placements do not contribute NUPath. Used by GradPanel to render the 12-cell coverage grid.</div>
+      <div class="fn-sig">getNuPathCoverage(placements, courseMap, grantedAttrs?) → Set&lt;string&gt;</div>
+      <div class="fn-desc"><span class="badge yellow">Deprecated</span> Returns the set of NUPath attribute codes satisfied by all placed courses, plus any codes in <code>grantedAttrs</code> (a <code>Set&lt;string&gt;</code>). Use <code>attributeSystem.getCoverage()</code> from the institution adapter instead. <code>grantedAttrs</code> should be computed via <code>computeGrantedAttrs(specialTermPl, specialTerms.types)</code> from <code>specialTermUtils.js</code>.</div>
       <div class="fn-returns">Returns: <span>Set&lt;string&gt; — subset of {"ND","EI","IC","FQ","SI","AD","DD","ER","WF","WD","WI","EX"}</span></div>
     </div>
 
