@@ -12,17 +12,15 @@
 import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
 import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
-import { normalizeCourse, extractEdges, getOfferedFromTerms, getSemOfferedType } from "../core/courseModel.js";
+import { extractEdges, getOfferedFromTerms } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.js";
-import { fetchCourses } from "../data/courseLoader.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
-import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 
 const PlannerContext = createContext(null);
 
@@ -32,7 +30,7 @@ export function PlannerProvider({ children }) {
   const courseCatalog  = usePort(ICourseCatalog);
   const specialTerms   = usePort(ISpecialTerms);
   const storagePrefix    = institution.storagePrefix;
-  const defaultStartYear = calendar.defaultStartYear;
+  const defaultStartYear = calendar.getDefaultStartYear();
 
   // ── API state ────────────────────────────────────────────────
   const [courses,  setCourses]  = useState([]);
@@ -59,7 +57,9 @@ export function PlannerProvider({ children }) {
     if (_saved.internPl) for (const [id, data] of Object.entries(_saved.internPl)) result[id] = { typeId: "intern", ...data };
     return result;
   });
-  const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : `fall${defaultStartYear}`);
+  const _defSemType = calendar.getSemesterTypes().filter(t => !t.optional)[0];
+  const _defSemId   = `${_defSemType?.idPrefix ?? _defSemType?.id ?? "fall"}${defaultStartYear}`;
+  const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : _defSemId);
   const [persistEnabled,   setPersistEnabled]   = useState(() => _saved?.persist !== false);
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
@@ -153,9 +153,13 @@ export function PlannerProvider({ children }) {
   const [showDisclaimer, setShowDisclaimer] = useState(() => {
     try { return !localStorage.getItem("ncp-seen-disclaimer"); } catch { return true; }
   });
-  const [planEntSem,   setPlanEntSem]   = useState(() => { try { return localStorage.getItem("ncp-ent-sem")  || "fall";   } catch { return "fall";   } });
+  // Default entry/grad sem: first and last non-optional semester types
+  const _primarySems = calendar.getSemesterTypes().filter(t => !t.optional);
+  const _defEntSem   = _primarySems[0]?.id           ?? "fall";
+  const _defGradSem  = _primarySems.at?.(-1)?.id     ?? _defEntSem;
+  const [planEntSem,   setPlanEntSem]   = useState(() => { try { return localStorage.getItem("ncp-ent-sem")  || _defEntSem;  } catch { return _defEntSem;  } });
   const [planEntYear,  setPlanEntYear]  = useState(() => { try { return parseInt(localStorage.getItem("ncp-ent-year")  || String(defaultStartYear), 10) || defaultStartYear; } catch { return defaultStartYear; } });
-  const [planGradSem,  setPlanGradSem]  = useState(() => { try { return localStorage.getItem("ncp-grad-sem") || "spring"; } catch { return "spring"; } });
+  const [planGradSem,  setPlanGradSem]  = useState(() => { try { return localStorage.getItem("ncp-grad-sem") || _defGradSem; } catch { return _defGradSem; } });
   const [planGradYear, setPlanGradYear] = useState(() => { try { return parseInt(localStorage.getItem("ncp-grad-year") || String(defaultStartYear + NUM_YEARS), 10) || defaultStartYear + NUM_YEARS; } catch { return defaultStartYear + NUM_YEARS; } });
   const [showSettings, setShowSettings] = useState(false);
 
@@ -192,14 +196,17 @@ export function PlannerProvider({ children }) {
   // ── Dynamic semester grid (cohort-trimmed) ───────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const SEMESTERS = useMemo(
-    () => buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear),
+    () => buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear, calendar),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [planEntSem, planEntYear, planGradSem, planGradYear]
   );
   const { SEM_INDEX, SEM_NEXT, SEM_PREV } = useMemo(() => deriveSemMaps(SEMESTERS), [SEMESTERS]);
 
-  // Ordinal helpers to enforce grad > entry
-  const entOrd  = planEntYear  * 2 + (planEntSem  === "spring" ? 1 : 0);
-  const gradOrd = planGradYear * 2 + (planGradSem === "spring" ? 1 : 0);
+  // Ordinal helpers to enforce grad > entry (institution-agnostic)
+  const _semTypes = calendar.getSemesterTypes();
+  const _semOrd   = (typeId, year) => year * 100 + Math.max(0, _semTypes.findIndex(t => t.id === typeId));
+  const entOrd  = _semOrd(planEntSem,  planEntYear);
+  const gradOrd = _semOrd(planGradSem, planGradYear);
 
   // ── Refs ─────────────────────────────────────────────────────
   const panelResizing = useRef(null);
@@ -228,14 +235,11 @@ export function PlannerProvider({ children }) {
   useEffect(() => {
     let mounted = true;
     setLoading(true); setLoadPct(5);
-    fetchCourses(courseCatalog)
-      .then(raw => {
+    courseCatalog.fetchAll()
+      .then(courses => {
         if (!mounted) return;
         setLoadPct(70);
-        const base = Object.fromEntries(
-          raw.map(normalizeCourse).filter(Boolean).map(c => [c.id, c])
-        );
-
+        const base = Object.fromEntries(courses.map(c => [c.id, c]));
         setLoadPct(100);
         setCourses(Object.values(base));
         setLoading(false);
@@ -300,7 +304,7 @@ export function PlannerProvider({ children }) {
 
   // ── Effect: keep currentSemId valid on cohort change ─────────
   useEffect(() => {
-    const sems = buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear);
+    const sems = buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear, calendar);
     setCurrentSemId(cur => sems.find(s => s.id === cur) ? cur : (sems[1]?.id ?? sems[0].id));
   }, [planEntSem, planEntYear, planGradSem, planGradYear]);
 
@@ -569,7 +573,7 @@ export function PlannerProvider({ children }) {
   const [specialTermStartMap, specialTermContMap] = useMemo(() => {
     const startMap = {};
     const contMap  = {};
-    const types    = specialTerms?.types ?? [];
+    const types    = specialTerms?.getTypes() ?? [];
     Object.entries(specialTermPl).forEach(([id, data]) => {
       const { typeId, semId, duration } = data || {};
       if (!semId) return;
@@ -580,7 +584,7 @@ export function PlannerProvider({ children }) {
       if (!durationDesc) return;
       const sem = SEMESTERS.find(s => s.id === semId);
       if (!sem) return;
-      const semTypeDesc = (calendar.semesterTypes ?? []).find(t => t.id === sem.type);
+      const semTypeDesc = (calendar.getSemesterTypes() ?? []).find(t => t.id === sem.type);
       const semWeight   = semTypeDesc?.weight ?? 1;
       if (termSpans(durationDesc.weight, semWeight)) {
         const nxt = SEM_NEXT[semId];
@@ -598,109 +602,19 @@ export function PlannerProvider({ children }) {
   };
 
   // Returns { valid, startId } for a special-term drag.
-  // Dispatches to type-aware sub-rules (NU-specific start restrictions) for known types;
-  // falls back to weight-based logic for custom types added by other institutions.
-  const specialTermDropValid = (typeId, duration, semId, excludeId = null) => {
-    const type = (specialTerms?.types ?? []).find(t => t.id === typeId);
-    if (!type || !type.occupiesSlot) return { valid: false };
-    const sem = SEMESTERS.find(s => s.id === semId);
-    if (!sem) return { valid: false };
+  // Delegates to specialTerms.validateDrop() — all placement rules live in the adapter.
+  const specialTermDropValid = (typeId, duration, semId, excludeId = null) =>
+    specialTerms.validateDrop(typeId, duration, semId, {
+      SEMESTERS,
+      SEM_PREV,
+      SEM_NEXT,
+      isOccupied: (sid) => isSlotOccupied(sid, excludeId),
+    });
 
-    if (typeId === "coop") {
-      if (duration === 4) {
-        if (sem.type === "fall" || sem.type === "spring") {
-          if (isSlotOccupied(semId, excludeId)) return { valid: false };
-          return { valid: true, startId: semId };
-        }
-        if (sem.type === "summer") {
-          let startId = semId;
-          if (sem.id.startsWith("sumB")) {
-            const prev = SEM_PREV[semId];
-            if (!prev) return { valid: false };
-            startId = prev;
-            if (isSlotOccupied(startId, excludeId)) return { valid: false };
-          }
-          const nxt = SEM_NEXT[startId];
-          if (!nxt || isSlotOccupied(nxt, excludeId)) return { valid: false };
-          return { valid: true, startId };
-        }
-      }
-      if (duration === 6) {
-        // 6-month: only spring or sumB are valid starts (NU academic calendar rule)
-        let startId;
-        if (sem.type === "spring" || sem.id.startsWith("sumB")) {
-          startId = semId;
-        } else {
-          const prev = SEM_PREV[semId];
-          if (!prev) return { valid: false };
-          const prevSem = SEMESTERS.find(s => s.id === prev);
-          if (!prevSem) return { valid: false };
-          if (prevSem.type === "spring" || prevSem.id.startsWith("sumB")) startId = prev;
-          else return { valid: false };
-        }
-        const contId = SEM_NEXT[startId];
-        if (!contId) return { valid: false };
-        if (isSlotOccupied(startId, excludeId) || isSlotOccupied(contId, excludeId)) return { valid: false };
-        return { valid: true, startId };
-      }
-      return { valid: false };
-    }
-
-    if (typeId === "intern") {
-      if (duration === 2) {
-        if (sem.type !== "summer") return { valid: false };
-        if (isSlotOccupied(semId, excludeId)) return { valid: false };
-        return { valid: true, startId: semId };
-      }
-      if (duration === 4) {
-        if (sem.type === "fall" || sem.type === "spring") {
-          if (isSlotOccupied(semId, excludeId)) return { valid: false };
-          return { valid: true, startId: semId };
-        }
-        if (sem.type === "summer") {
-          let startId = semId;
-          if (sem.id.startsWith("sumB")) {
-            const prev = SEM_PREV[semId];
-            if (!prev) return { valid: false };
-            startId = prev;
-            if (isSlotOccupied(startId, excludeId)) return { valid: false };
-          }
-          const nxt = SEM_NEXT[startId];
-          if (!nxt || isSlotOccupied(nxt, excludeId)) return { valid: false };
-          return { valid: true, startId };
-        }
-      }
-      return { valid: false };
-    }
-
-    // Generic fallback for custom term types: weight-based span logic
-    const durationDesc = resolveTermByDuration(type.durations, duration);
-    const semTypeDesc  = (calendar.semesterTypes ?? []).find(t => t.id === sem.type);
-    const semWeight    = semTypeDesc?.weight ?? 1;
-    if (termSpans(durationDesc.weight, semWeight)) {
-      if (sem.type === "summer") {
-        let startId = semId;
-        if (sem.id.startsWith("sumB")) {
-          const prev = SEM_PREV[semId];
-          if (!prev) return { valid: false };
-          startId = prev;
-          if (isSlotOccupied(startId, excludeId)) return { valid: false };
-        }
-        const nxt = SEM_NEXT[startId];
-        if (!nxt || isSlotOccupied(nxt, excludeId)) return { valid: false };
-        return { valid: true, startId };
-      }
-      const nxt = SEM_NEXT[semId];
-      if (!nxt || isSlotOccupied(semId, excludeId) || isSlotOccupied(nxt, excludeId)) return { valid: false };
-      return { valid: true, startId: semId };
-    }
-    if (isSlotOccupied(semId, excludeId)) return { valid: false };
-    return { valid: true, startId: semId };
-  };
-
-  const gradSemId = planGradSem === "fall" ? `fall${planGradYear}` : `spr${planGradYear}`;
+  const _gradSemType = calendar.getSemesterTypes().find(t => t.id === planGradSem);
+  const gradSemId    = `${_gradSemType?.idPrefix ?? _gradSemType?.id ?? planGradSem}${planGradYear}`;
   const coopGradConflicts = useMemo(() => {
-    const types = specialTerms?.types ?? [];
+    const types = specialTerms?.getTypes() ?? [];
     return Object.entries(specialTermPl)
       .filter(([, data]) => {
         const semId = data?.semId;
@@ -1205,15 +1119,15 @@ export function PlannerProvider({ children }) {
     setMinor2("");
     setPlacedOut(new Set());
     // Reset cohort to defaults
-    setPlanEntSem("fall");
+    setPlanEntSem(_defEntSem);
     setPlanEntYear(defaultStartYear);
-    setPlanGradSem("spring");
+    setPlanGradSem(_defGradSem);
     setPlanGradYear(defaultStartYear + NUM_YEARS);
     // Also clear any per‑plan localStorage items for cohort (optional, but safe)
     try {
-      localStorage.setItem("ncp-ent-sem", "fall");
+      localStorage.setItem("ncp-ent-sem",  _defEntSem);
       localStorage.setItem("ncp-ent-year", String(defaultStartYear));
-      localStorage.setItem("ncp-grad-sem", "spring");
+      localStorage.setItem("ncp-grad-sem", _defGradSem);
       localStorage.setItem("ncp-grad-year", String(defaultStartYear + NUM_YEARS));
     } catch {}
   };

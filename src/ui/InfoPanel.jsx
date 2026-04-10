@@ -7,9 +7,11 @@ import { usePort }                  from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }         from "../ports/IAttributeSystem.js";
 import { ICreditSystem }            from "../ports/ICreditSystem.js";
 import { ICalendar }                from "../ports/ICalendar.js";
+import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getOfferedFromTerms }       from "../core/courseModel.js";
 import { getConnections } from "../core/planModel.js";
+import { useLanguage } from "../context/LanguageContext.jsx";
 
 export default function InfoPanel() {
   const {
@@ -154,6 +156,9 @@ function CourseInfo({ selCourse, navTo }) {
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
   const calendar        = usePort(ICalendar);
+  const courseCatalog   = usePort(ICourseCatalog);
+  const { t } = useLanguage();
+  const catalogUrl = courseCatalog?.courseUrl?.(selCourse) ?? null;
   const [codeHover, setCodeHover] = useState(false);
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -168,7 +173,7 @@ function CourseInfo({ selCourse, navTo }) {
           onDragStart={e => onDragStart(e, selCourse.id, "course", null)}
           onMouseEnter={() => setCodeHover(true)}
           onMouseLeave={() => setCodeHover(false)}
-          title="drag to place"
+          title={t("info.drag.title")}
           style={{
             fontSize: 14, fontWeight: 800, cursor: "grab", userSelect: "none",
             textDecoration: codeHover ? "underline" : "none",
@@ -179,7 +184,7 @@ function CourseInfo({ selCourse, navTo }) {
         >{selCourse.code}</span>
         <span style={{ fontSize: 12, color: "var(--text-3)" }}>{selCourse.title}</span>
         <span style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 3, padding: "1px 6px" }}>
-          {selCourse.sh} {creditSystem.unitName}
+          {selCourse.sh} {creditSystem.getUnitName()}
         </span>
         {selCourse.scheduleType && (
           <span style={{ fontSize: 9, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 6px" }}>
@@ -187,11 +192,19 @@ function CourseInfo({ selCourse, navTo }) {
           </span>
         )}
         {selCourse.attributes?.map(np => (
-          <span key={np} title={attributeSystem.labels[np] || np}
+          <span key={np} title={attributeSystem.getLabel(np)}
             style={{ fontSize: 9, color: "var(--nupath-text)", background: "var(--nupath-bg)", border: "1px solid var(--nupath-border)", borderRadius: 3, padding: "1px 5px", cursor: "default" }}>
             {np}
           </span>
         ))}
+        {catalogUrl && (
+          <a href={catalogUrl} target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: 9, color: "var(--text-5)", textDecoration: "none", marginLeft: 2 }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--text-3)"; e.currentTarget.style.textDecoration = "underline"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--text-5)"; e.currentTarget.style.textDecoration = "none"; }}>
+            {t("info.catalog.link")}
+          </a>
+        )}
       </div>
       {selCourse.desc && (
         <div style={{ fontSize: 11, color: "var(--text-3)", lineHeight: 1.55, marginBottom: 4 }}>
@@ -206,7 +219,7 @@ function CourseInfo({ selCourse, navTo }) {
       )}
       {selCourse.prereqs?.length > 0 && (
         <div style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: 1.9 }}>
-          <span style={{ color: "var(--error)", fontWeight: 700 }}>Prereqs: </span>
+          <span style={{ color: "var(--error)", fontWeight: 700 }}>{t("info.prereqs")} </span>
           <PrereqChips nodes={selCourse.prereqs} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
         </div>
       )}
@@ -312,10 +325,11 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
 }
 
 function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
+  const { t } = useLanguage();
   return (
     <div style={{ width: compact ? "100%" : 240, flexShrink: 0, display: "flex", flexDirection: "column" }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 5 }}>
-        RELATIONSHIPS
+        {t("info.relationships.title")}
       </div>
       <div style={{ overflowY: "auto", maxHeight: 220 }}>
         {selEdges.map((rel, i) => {
@@ -346,14 +360,16 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
 
 function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const calendar = usePort(ICalendar);
-  const defaults = getOfferedFromTerms(selCourse.terms) ?? ["fall", "spring"];
+  const { t } = useLanguage();
+  const primarySems = calendar.getSemesterTypes().filter(t => !t.optional).map(t => t.id);
+  const defaults = getOfferedFromTerms(selCourse.terms, calendar.decodeTermCode) ?? primarySems;
 
   return (
     <div style={{ width: compact ? "100%" : 155, flexShrink: 0 }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
-        OFFERED IN
+        {t("info.offered.title")}
       </div>
-      {calendar.semesterTypes.map(({ id: type, label }) => {
+      {calendar.getSemesterTypes().map(({ id: type, label }) => {
         const active = (offeredOverrides[selCourse.id] ?? defaults).includes(type);
         return (
           <label key={type} style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", marginBottom: 4, userSelect: "none" }}
@@ -373,7 +389,7 @@ function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides, comp
         );
       })}
       <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 4, lineHeight: 1.4 }}>
-        Availability may vary by year — override with checkboxes if needed.
+        {t("info.offered.hint")}
       </div>
     </div>
   );

@@ -11,7 +11,9 @@ import { usePort }             from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
+import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
+import { useLanguage }          from "../context/LanguageContext.jsx";
 import {
   buildPlacedKeySet,
   allocateMajor,
@@ -104,6 +106,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
   const [open,  setOpen]  = useState(false);
   const [rect,  setRect]  = useState(null);
   const inputRef = useRef(null);
+  const { t } = useLanguage();
 
   const updateRect = () => {
     if (inputRef.current) setRect(inputRef.current.getBoundingClientRect());
@@ -180,9 +183,9 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
             }}
           >— None —</div>
           {!q ? (
-            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)", fontStyle: "italic" }}>Type to search…</div>
+            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)", fontStyle: "italic" }}>{t("bank.search.empty.typing")}</div>
           ) : filtered.length === 0 ? (
-            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)" }}>No results</div>
+            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)" }}>{t("bank.search.empty.none")}</div>
           ) : (
             filtered.map(o => (
               <div
@@ -380,7 +383,7 @@ function NuPathGrid({ covered }) {
       gap: isPhone ? 2 : 3,
       marginBottom: 6,
     }}>
-      {attributeSystem.gridCodes.map(key => {
+      {attributeSystem.getGridCodes().map(key => {
         const sat = covered.has(key);
         return (
           <div key={key} style={{
@@ -403,7 +406,7 @@ function NuPathGrid({ covered }) {
             }}>{key}</span>
             {!isPhone && (
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {attributeSystem.labels[key]}
+                {attributeSystem.getLabel(key)}
               </span>
             )}
           </div>
@@ -479,6 +482,9 @@ export default function GradPanel() {
   const attributeSystem   = usePort(IAttributeSystem);
   const majorRequirements = usePort(IMajorRequirements);
   const specialTerms      = usePort(ISpecialTerms);
+  const creditSystem      = usePort(ICreditSystem);
+  const unitName          = creditSystem.getUnitName();
+  const { t } = useLanguage();
 
   const majorGroups  = useMemo(() => getMajorOptionGroups(majorRequirements), [majorRequirements]);
   const minorGroups  = useMemo(() => getMinorOptionGroups(majorRequirements), [majorRequirements]);
@@ -515,7 +521,7 @@ export default function GradPanel() {
     return new Map([["Concentrations", opts]]);
   }, [major]);
 
-  const npCovered  = useMemo(() => attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.types)), [attributeSystem, placements, courseMap, specialTermPl, specialTerms]);
+  const npCovered  = useMemo(() => attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [])), [attributeSystem, placements, courseMap, specialTermPl, specialTerms]);
   const plannedSH  = totalSHPlaced - totalSHDone;
   const requiredSH = major?.totalCreditsRequired ?? 0;
 
@@ -568,13 +574,13 @@ export default function GradPanel() {
         {/* ── Major selector ─────────────────────────────────── */}
         <div style={{ marginBottom: 3 }}>
           <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
-            MAJOR
+            {t("grad.major.label")}
           </div>
           <SearchCombo
             value={selPath}
             onChange={setSelPath}
             groups={majorGroups}
-            placeholder={isPhone ? "⌕ search" : "⌕ search majors"}
+            placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
           />
         </div>
 
@@ -582,9 +588,9 @@ export default function GradPanel() {
         {major?.concentrations?.concentrationOptions?.length > 0 && (
           <div style={{ marginBottom: 8, marginTop: 8 }}>
             <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
-              CONCENTRATION
+              {t("grad.conc.label")}
             </div>
-            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? "⌕ search" : "⌕ search concentrations"} />
+            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} />
             {major.concentrations.minOptions > 0 && !selConc && (
               <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
                 ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
@@ -596,10 +602,10 @@ export default function GradPanel() {
         {/* ── Minor selectors ──────────────────────────────────── */}
         {/* Phone: single column (full-width like MAJOR). Tablet/desktop: side-by-side. */}
         <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
-          {[["MINOR 1", minor1, setMinor1], ["MINOR 2", minor2, setMinor2]].map(([lbl, val, set]) => (
+          {[[t("grad.minor1.label"), minor1, setMinor1], [t("grad.minor2.label"), minor2, setMinor2]].map(([lbl, val, set]) => (
             <div key={lbl} style={{ minWidth: 0, overflow: "hidden" }}>
               <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? "⌕ search" : "⌕ search minors"} />
+              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
             </div>
           ))}
         </div>
@@ -616,7 +622,7 @@ export default function GradPanel() {
               </div>
               {!isPhone && (
                 <div style={{ fontSize: 9, color: "var(--text-4)" }}>
-                  SH done{plannedSH > 0 ? " + planned" : ""}{requiredSH > 0 ? " / required" : ""}
+                  {t("grad.credits.done", { unit: unitName })}{plannedSH > 0 ? t("grad.credits.planned") : ""}{requiredSH > 0 ? t("grad.credits.required") : ""}
                 </div>
               )}
             </div>
@@ -650,22 +656,24 @@ export default function GradPanel() {
           )}
         </div>
 
-        {/* ── NUPath — always visible ───────────────────────────── */}
+        {/* ── Attribute grid — hidden when adapter has no attributes ── */}
+        {attributeSystem.getGridCodes().length > 0 && (
         <div style={{ marginBottom: 8 }}>
           <div onClick={(e) => { e.stopPropagation(); setShowNP(v => !v); }} style={{
             display: "flex", alignItems: "center", gap: 5, cursor: "pointer", marginBottom: 4, userSelect: "none",
           }}>
             <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>
-              {attributeSystem.systemName} <span style={{ fontWeight: 400, color: "var(--text-5)" }}>({npCovered.size}/{attributeSystem.gridCodes.length})</span>
+              {attributeSystem.getSystemName()} <span style={{ fontWeight: 400, color: "var(--text-5)" }}>({npCovered.size}/{attributeSystem.getGridCodes().length})</span>
             </span>
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{showNP ? "▲" : "▼"}</span>
           </div>
           {showNP && <NuPathGrid covered={npCovered} />}
         </div>
+        )}
 
         {/* ── Loading / error ─────────────────────────────────── */}
         {fetching && (
-          <div style={{ fontSize: 10, color: "var(--text-4)", padding: "12px 0", textAlign: "center" }}>Loading…</div>
+          <div style={{ fontSize: 10, color: "var(--text-4)", padding: "12px 0", textAlign: "center" }}>{t("grad.loading")}</div>
         )}
         {loadErr && (
           <div style={{ fontSize: 10, color: "var(--error-text)", background: "var(--error-bg)", border: "1px solid var(--error)", borderRadius: 4, padding: "6px 8px", marginBottom: 8 }}>
@@ -679,7 +687,7 @@ export default function GradPanel() {
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: isPhone ? 3 : 5, marginTop: isPhone ? 2 : 4 }}>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: isPhone ? 9 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
-                  REQUIREMENTS
+                  {t("grad.requirements.title")}
                   <span style={{ fontWeight: 400, color: "var(--text-5)", marginLeft: 5 }}>
                     ({satSections}/{majorSections.length})
                   </span>
@@ -688,7 +696,7 @@ export default function GradPanel() {
                   {major.name}
                   {major.metadata?.verified && (
                     <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px", verticalAlign: "middle" }}>
-                      verified
+                      {t("grad.verified")}
                     </span>
                   )}
                 </div>
@@ -706,7 +714,7 @@ export default function GradPanel() {
             {concSection && (
               <>
                 <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 10 }}>
-                  CONCENTRATION
+                  {t("grad.conc.label")}
                 </div>
                 <SectionBlock sec={concSection} defaultOpen={true} />
               </>
@@ -715,13 +723,13 @@ export default function GradPanel() {
         )}
 
         {/* ── Minor requirement sections ───────────────────────── */}
-        <MinorBlock path={minor1} placedSet={placedSet} label="MINOR 1" />
-        <MinorBlock path={minor2} placedSet={placedSet} label="MINOR 2" />
+        <MinorBlock path={minor1} placedSet={placedSet} label={t("grad.minor1.label")} />
+        <MinorBlock path={minor2} placedSet={placedSet} label={t("grad.minor2.label")} />
 
                 {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !minor1 && !minor2 && !fetching && !loadErr && (
-          <div style={{ textAlign: "center", color: "var(--text-5)", fontSize: 10, paddingTop: 12, lineHeight: 1.7 }}>
-            Search for your major above<br />to check graduation requirements<br />against your current plan.
+          <div style={{ textAlign: "center", color: "var(--text-5)", fontSize: 10, paddingTop: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+            {t("grad.empty")}
           </div>
         )}
       </div> {/* closes the main padding div */}

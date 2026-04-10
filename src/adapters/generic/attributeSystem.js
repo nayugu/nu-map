@@ -2,20 +2,21 @@
 // ADAPTER: generic/attributeSystem  (implements IAttributeSystem)
 //
 // Default: no attribute system.
-// The grad panel attribute grid is hidden when gridCodes is empty.
+// The grad panel attribute grid is hidden when getGridCodes() is empty.
 //
 // Override to add your institution's gen-ed / distribution /
 // learning-outcome requirements (NUPath, Gen Ed, GIRs, etc.)
 // ═══════════════════════════════════════════════════════════════════
 
-export const systemName  = "";
-export const attributes  = [];
-export const gridLayout  = [];
-export const gridCodes   = [];
-export const labels      = {};
-
-/** @returns {Set<string>} always empty — no attributes to cover */
-export function getCoverage() { return new Set(); }
-
 /** @type {import('../../ports/IAttributeSystem.js').IAttributeSystem} */
-export default { systemName, attributes, gridLayout, gridCodes, labels, getCoverage };
+export default {
+  getSystemName()         { return ""; },
+  getAttributes()         { return []; },
+  getGridLayout()         { return []; },
+  getGridCodes()          { return []; },
+  getLabel(code)          { return code; },
+  canDoubleDip()          { return true; },
+  getMaxPerAttribute()    { return null; },
+  /** @returns {Set<string>} always empty — no attributes to cover */
+  getCoverage()           { return new Set(); },
+};

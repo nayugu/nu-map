@@ -2,7 +2,8 @@
 // HEADER  — sticky timeline header: title, SH counters, controls,
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
@@ -10,6 +11,7 @@ import { exportReport, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
+import { useLanguage }    from "../context/LanguageContext.jsx";
 import dataMeta from "../core/dataMeta.json";
 
 export default function Header() {
@@ -34,10 +36,10 @@ export default function Header() {
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
+  const { t, locale, setLocale, locales } = useLanguage();
   const adapter = useInstitution();
-  const { attributeSystem, specialTerms, calendar, creditSystem } = adapter;
-  const getSemWeight    = (semType) => (calendar.semesterTypes ?? []).find(t => t.id === semType)?.weight ?? 1;
-  const unitName        = creditSystem.unitName ?? "SH";
+  const { attributeSystem, specialTerms, calendar, creditSystem, institution } = adapter;
+  const unitName        = creditSystem.getUnitName();
   const [showQuickSet, setShowQuickSet] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
@@ -62,7 +64,7 @@ export default function Header() {
     const concLabel  = conc   || "";
     const minor1Path = minor1 || "";
     const minor2Path = minor2 || "";
-    const npCovered  = attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms.types));
+    const npCovered  = attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms.getTypes()));
     // Build set of course keys that are placed in already-completed semesters
     const doneKeys = new Set();
     for (const [id, semId] of Object.entries(placements)) {
@@ -115,7 +117,7 @@ export default function Header() {
       if (hasCont && !hasStart) {
         const contId   = specialTermContMap[semId];
         const contData = specialTermPl[contId];
-        const contType = contData ? (specialTerms.types ?? []).find(t => t.id === contData.typeId) : null;
+        const contType = contData ? (specialTerms.getTypes() ?? []).find(t => t.id === contData.typeId) : null;
         const contDur  = contType ? resolveTermByDuration(contType.durations, contData.duration) : null;
         if (contDur) {
           const co = contData.company ? ` @ ${contData.company}` : '';
@@ -127,11 +129,11 @@ export default function Header() {
       if (hasStart) {
         const startId   = specialTermStartMap[semId];
         const startData = specialTermPl[startId];
-        const startType = startData ? (specialTerms.types ?? []).find(t => t.id === startData.typeId) : null;
+        const startType = startData ? (specialTerms.getTypes() ?? []).find(t => t.id === startData.typeId) : null;
         const startDur  = startType ? resolveTermByDuration(startType.durations, startData.duration) : null;
         if (startDur) {
           const nextSemId = SEM_NEXT[semId];
-          const spansNext = termSpans(startDur.weight, getSemWeight(sem.type)) && !!nextSemId;
+          const spansNext = termSpans(startDur.weight, sem.weight ?? 1) && !!nextSemId;
           const contPart  = spansNext ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
           const co        = startData.company ? ` @ ${startData.company}` : '';
           const role      = startData.subline ? ` · ${startData.subline}` : '';
@@ -174,7 +176,7 @@ export default function Header() {
 
     // Assemble final text
     const fullText = [
-      `NU Map Plan: ${plans.find(p => p.id === activePlanId)?.name || 'Untitled'}`,
+      `${institution.appName} Plan: ${plans.find(p => p.id === activePlanId)?.name || 'Untitled'}`,
       `Entry: ${entry}`,
       `Graduation: ${grad}`,
       `Total SH: ${totalSH} (completed: ${completedSH}, planned: ${plannedSH})`,
@@ -188,15 +190,15 @@ export default function Header() {
 
     try {
       await navigator.clipboard.writeText(fullText);
-      alert('Plan copied to clipboard!');
+      alert(t("header.io.copy.done") ?? "Plan copied to clipboard!");
     } catch (err) {
-      alert('Failed to copy: ' + err.message);
+      alert("Failed to copy: " + err.message);
     }
   };
 
   const handleReset = e => {
     e.stopPropagation();
-    if (!confirm("Reset all placements?")) return;
+    if (!confirm(t("header.reset.confirm"))) return;
     resetAll();
   };
 
@@ -216,11 +218,11 @@ export default function Header() {
       }}>
         {/* Row 1: title + info — last-updated anchored right, never wraps */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "nowrap", minWidth: 0, overflow: "hidden" }}>
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="NU Map" style={{ height: 20, width: 20, objectFit: "contain", flexShrink: 0 }} />
-          <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", flexShrink: 0 }}>NU Map</span>
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt={institution.appName} style={{ height: 20, width: 20, objectFit: "contain", flexShrink: 0 }} />
+          <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", flexShrink: 0 }}>{institution.appName}</span>
           <span style={{ fontSize: 10, color: "var(--text-6)", flexShrink: 0 }}>·</span>
           {!isPhone && (
-            <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{courses.length.toLocaleString()} courses</span>
+            <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{t("header.courses.count", { n: courses.length.toLocaleString() })}</span>
           )}
           {!isPhone && (__COMMIT_DATE__ || dataMeta.lastUpdated) && (
             <span style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
@@ -281,10 +283,10 @@ export default function Header() {
         <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", minWidth: 0 }}>
           {/* SH badges — left side */}
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px", flexShrink: 0 }}>
-            {totalSHDone} SH ✓
+            {t("header.credits.done", { n: totalSHDone, unit: unitName })}
           </span>
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, padding: isPhone ? "1px 4px" : "2px 7px", flexShrink: 0 }}>
-            {totalSHPlaced} SH placed
+            {t("header.credits.placed", { n: totalSHPlaced, unit: unitName })}
           </span>
 
           {/* Buttons — right side, icon-only on mobile/tablet */}
@@ -310,7 +312,7 @@ export default function Header() {
               fontSize: isPhone ? 9 : 11,
             }}>
               <div style={{fontSize: 8, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", padding: "3px 10px 6px", borderBottom: "1px solid var(--border-1)" }}>
-                SAVED PLANS
+                {t("header.plans.title")}
               </div>
 
               {plans.map(p => (
@@ -329,15 +331,15 @@ export default function Header() {
                   {/* Rename */}
                   <button onClick={e => {
                     e.stopPropagation();
-                    const name = prompt("Rename plan:", p.name);
+                    const name = prompt(t("header.plan.rename.prompt"), p.name);
                     if (name?.trim()) renamePlan(p.id, name.trim());
                   }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px" }}
-                    title="Rename">✎</button>
+                    title={t("header.plan.rename.title")}>✎</button>
                   {/* Delete */}
                   {plans.length > 1 && (
                     <button onClick={e => {
                       e.stopPropagation();
-                      if (confirm(`Delete "${p.name}"?`)) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
+                      if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
                     }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px" }}
                       title="Delete">✕</button>
                   )}
@@ -347,14 +349,14 @@ export default function Header() {
               <div style={{ borderTop: "1px solid var(--border-1)", padding: "4px 10px 3px" }}>
                 <button onClick={e => {
                   e.stopPropagation();
-                  const name = prompt("New plan name:");
+                  const name = prompt(t("header.plan.new.prompt"));
                   if (name?.trim()) { createPlan(name.trim()); setShowPlanMenu(false); }
                 }} style={{
                   width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--accent)", textAlign: "left",
                 }}>
-                  + New plan
+                  {t("header.plan.new")}
                 </button>
               </div>
             </div>
@@ -373,7 +375,7 @@ export default function Header() {
               background: showIO ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px solid ${showIO ? "var(--active)" : "var(--border-2)"}`,
               borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", whiteSpace: "nowrap" }}>
-            {isMobile ? "⇅" : "⇅ Input/Output"}
+            {isMobile ? "⇅" : `⇅ ${t("header.io.button")}`}
           </button>
           {showIO && (
             <div onClick={e => e.stopPropagation()} style={{
@@ -382,31 +384,31 @@ export default function Header() {
               padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
             }}>
-              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title="Copy human-readable plan to clipboard"
+              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title={t("header.io.copy.title")}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                Copy summary
+                {t("header.io.copy")}
               </button>
-              <button className="hdr-btn-dd" onClick={handleExport} title="Export PDF"
+              <button className="hdr-btn-dd" onClick={handleExport} title={t("header.io.export.pdf.title")}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                Export PDF
+                {t("header.io.export.pdf")}
               </button>
-              <button className="hdr-btn-dd" onClick={exportPlanJSON} title="Export plan as JSON"
+              <button className="hdr-btn-dd" onClick={exportPlanJSON} title={t("header.io.export.json.title")}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  Save
+                  {t("header.io.export.json")}
               </button>
               <input type="file" id="plan-import-input" accept=".json" style={{ display: "none" }}
                 onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
-              <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()} title="Import plan from JSON"
+              <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()} title={t("header.io.import.json.title")}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  Load
+                  {t("header.io.import.json")}
               </button>
             </div>
           )}
@@ -427,7 +429,7 @@ export default function Header() {
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border:    `1px solid ${showQuickSet ? "var(--active)" : "var(--border-2)"}`,
               borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", whiteSpace: "nowrap" }}>
-            {isMobile ? "⚙" : "⚙ Settings"}
+            {isMobile ? "⚙" : `⚙ ${t("header.settings.button")}`}
           </button>
 
           {showQuickSet && (
@@ -450,7 +452,7 @@ export default function Header() {
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: `1px solid ${persistEnabled ? "var(--success-border)" : "var(--border-2)"}`,
                   color: persistEnabled ? "var(--success)" : "var(--text-4)" }}>
-                {persistEnabled ? "Saving on" : "Saving off"}
+                {persistEnabled ? t("header.settings.save.on") : t("header.settings.save.off")}
               </button>
 
               {/* Error lines toggle */}
@@ -459,7 +461,7 @@ export default function Header() {
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: `1px solid ${showViolLines ? "var(--error)" : "var(--border-2)"}`,
                   color: showViolLines ? "var(--error)" : "var(--text-4)" }}>
-                {showViolLines ? "Error lines: on" : "Error lines: off"}
+                {showViolLines ? t("header.settings.violations.on") : t("header.settings.violations.off")}
               </button>
 
               {/* Collapse other credits toggle */}
@@ -468,7 +470,7 @@ export default function Header() {
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: `1px solid ${collapseOtherCredits ? "var(--active)" : "var(--border-2)"}`,
                   color: collapseOtherCredits ? "var(--active)" : "var(--text-4)" }}>
-                {collapseOtherCredits ? "Collapse other credits: on" : "Collapse other credits: off"}
+                {collapseOtherCredits ? t("header.settings.collapse.on") : t("header.settings.collapse.off")}
               </button>
 
               {/* Theme toggle */}
@@ -476,7 +478,7 @@ export default function Header() {
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 600, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                {THEME_LABELS[themeName] ?? themeName}
+                {t(`header.settings.theme.${themeName}`) || THEME_LABELS[themeName] || themeName}
               </button>
 
               {/* Continuation logo toggle */}
@@ -485,7 +487,7 @@ export default function Header() {
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)",
                   color: showContLogo ? "var(--text-3)" : "var(--text-5)" }}>
-                {showContLogo ? "Continuation logo: on" : "Continuation logo: off"}
+                {showContLogo ? t("header.settings.contlogo.on") : t("header.settings.contlogo.off")}
               </button>
 
               {/** Refresh catalog data (commented out)
@@ -499,11 +501,11 @@ export default function Header() {
 
               {/* Zoom */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>ZOOM</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.zoom")}</div>
                 <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
                   {[null, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(v => {
                     const isActive = v === null ? manualZoom == null : manualZoom === v;
-                    const label = v == null ? "auto" : `${Math.round(v * 100)}%`;
+                    const label = v == null ? t("header.settings.zoom.auto") : `${Math.round(v * 100)}%`;
                     return (
                       <button key={label} onClick={() => setManualZoom(v)} style={{
                         flex: "1 1 auto", fontSize: 9, padding: "3px 4px", borderRadius: 4, cursor: "pointer",
@@ -518,31 +520,39 @@ export default function Header() {
               </div>
               {isPhone && (
                 <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5, textTransform: "uppercase" }}>COHORT</div>
-                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>Entry</div>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5, textTransform: "uppercase" }}>{t("header.cohort.title")}</div>
+                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>{t("header.cohort.entry")}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 6 }}>
                     {["fall","spring"].map(s => {
                       const wouldBe = planEntYear * 2 + (s === "spring" ? 1 : 0);
                       const blocked = wouldBe >= gradOrd;
-                      return (<button key={s} onClick={() => { if (!blocked) setEntSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? "Fall" : "Spring"}</button>);
+                      return (<button key={s} onClick={() => { if (!blocked) setEntSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>);
                     })}
                     <YearStepper year={planEntYear} min={2010} max={2040} canInc={entOrd + 2 < gradOrd} onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }} onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < 2040) setEntYear(planEntYear + 1); }} />
                   </div>
-                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>Graduation</div>
+                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>{t("header.cohort.graduation")}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
                     {["fall","spring"].map(s => {
                       const wouldBe = planGradYear * 2 + (s === "spring" ? 1 : 0);
                       const blocked = wouldBe <= entOrd;
-                      return (<button key={s} onClick={() => { if (!blocked) setGradSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planGradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planGradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? "Fall" : "Spring"}</button>);
+                      return (<button key={s} onClick={() => { if (!blocked) setGradSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planGradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planGradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>);
                     })}
                     <YearStepper year={planGradYear} min={2010} max={2040} canDec={gradOrd - 2 > entOrd} onDec={() => { if (gradOrd - 2 > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }} onInc={() => { if (planGradYear < 2040) setGradYear(planGradYear + 1); }} />
                   </div>
                 </div>
               )}
 
+              {/* Language picker */}
+              {locales.length > 1 && (
+                <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.language")}</div>
+                  <LanguagePicker locale={locale} locales={locales} setLocale={setLocale} />
+                </div>
+              )}
+
               {/* Links */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7, display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 1 }}>LINKS</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 1 }}>{t("header.links.title")}</div>
                 <a href="https://nayugu.github.io/nu-map/dev.html" target="_blank" rel="noreferrer"
                   style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
                     background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -575,7 +585,7 @@ export default function Header() {
           <button
             className="hdr-btn"
             onClick={e => { e.stopPropagation(); setShowSettings(v => !v); }}
-            title="Set entry & graduation semester"
+            title={t("header.cohort.button.title")}
             style={{
               fontSize: 10, cursor: "pointer", whiteSpace: "nowrap",
             color: showSettings ? "var(--text-2)" : "var(--text-4)",
@@ -583,7 +593,7 @@ export default function Header() {
             border: `1px solid ${showSettings ? "var(--active)" : "var(--border-2)"}`,
               borderRadius: 5, padding: "3px 8px", whiteSpace: "nowrap",
             }}
-          >{isMobile ? "🎓" : "🎓 Cohort"}</button>
+          >{isMobile ? "🎓" : `🎓 ${t("header.cohort.button")}`}</button>
 
           {showSettings && (
             <div onClick={e => e.stopPropagation()} style={{
@@ -592,11 +602,11 @@ export default function Header() {
               padding: "14px 16px", minWidth: 270, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 12,
             }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>COHORT DATES</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>{t("header.cohort.title")}</div>
 
               {/* Entry */}
               <div>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>ENTRY</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>{t("header.cohort.entry")}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                   {["fall", "spring"].map(s => {
                     const wouldBe = planEntYear * 2 + (s === "spring" ? 1 : 0);
@@ -612,7 +622,7 @@ export default function Header() {
                           color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
                           fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
                         }}
-                      >{s === "fall" ? "Fall" : "Spring"}</button>
+                      >{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>
                     );
                   })}
                   <YearStepper
@@ -626,7 +636,7 @@ export default function Header() {
 
               {/* Graduation */}
               <div>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>GRADUATION</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>{t("header.cohort.graduation")}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                   {["fall", "spring"].map(s => {
                     const wouldBe = planGradYear * 2 + (s === "spring" ? 1 : 0);
@@ -642,7 +652,7 @@ export default function Header() {
                           color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
                           fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
                         }}
-                      >{s === "fall" ? "Fall" : "Spring"}</button>
+                      >{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>
                     );
                   })}
                   <YearStepper
@@ -656,11 +666,11 @@ export default function Header() {
 
               {/* Summary */}
               <div style={{ fontSize: 9, color: "var(--text-6)", lineHeight: 1.6, borderTop: "1px solid var(--border-1)", paddingTop: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                <span>{planEntSem === "fall" ? "Fall" : "Spring"} {planEntYear} → {planGradSem === "fall" ? "Fall" : "Spring"} {planGradYear}</span>
+                <span>{planEntSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {planEntYear} → {planGradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {planGradYear}</span>
                 {(planGradYear < planEntYear || (planGradYear === planEntYear && planGradSem === "fall" && planEntSem === "spring"))
-                  ? <span style={{ color: "var(--error)" }}>⚠ grad before entry</span>
+                  ? <span style={{ color: "var(--error)" }}>{t("header.cohort.error")}</span>
                   : <span style={{ color: "var(--success)" }}>
-                      ~{((planGradYear * 2 + (planGradSem === "fall" ? 0 : 1)) - (planEntYear * 2 + (planEntSem === "fall" ? 0 : 1))) / 2} yrs
+                      {t("header.cohort.duration", { yrs: ((planGradYear * 2 + (planGradSem === "fall" ? 0 : 1)) - (planEntYear * 2 + (planEntSem === "fall" ? 0 : 1))) / 2 })}
                     </span>
                 }
               </div>
@@ -670,7 +680,7 @@ export default function Header() {
                   style={{ fontSize: 9, fontWeight: 700, cursor: "pointer", background: "var(--bg-surface)", padding: "3px 8px", borderRadius: 4,
                     border: `1px solid ${stickyCourses ? "var(--active)" : "var(--border-2)"}`,
                     color: stickyCourses ? "var(--active)" : "var(--text-5)" }}>
-                  {stickyCourses ? "📌 Sticky: on" : "📌 Sticky: off"}
+                  {stickyCourses ? t("header.cohort.sticky.on") : t("header.cohort.sticky.off")}
                 </button>
               </div>
             </div>
@@ -681,9 +691,9 @@ export default function Header() {
         <button
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
-          title="About & disclaimer"
+          title={t("header.about.title")}
           style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}
-        >{isMobile ? "ⓘ" : "ⓘ About"}</button>
+        >{isMobile ? "ⓘ" : `ⓘ ${t("header.about.button")}`}</button>
         </div>{/* end controls row */}
       </div>{/* end header */}
 
@@ -694,12 +704,12 @@ export default function Header() {
             <svg width={isPhone ? 14 : 18} height="6">
               <line x1="0" y1="3" x2={isPhone ? 14 : 18} y2="3" stroke={s.color} strokeWidth="1.5" strokeDasharray={s.dash || ""} />
             </svg>
-            <span>{s.label}</span>
+            <span>{t(`legend.${type}`) || s.label}</span>
           </div>
         ))}
         <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isPhone ? 8 : 9, color: "var(--text-4)", flexShrink: 0 }}>
           <span style={{ display: "inline-block", width: isPhone ? 10 : 12, height: isPhone ? 10 : 12, borderRadius: 3, border: "2px solid var(--warn-bright)", flexShrink: 0 }} />
-          <span>Misplaced</span>
+          <span>{t("legend.corequisite-viol")}</span>
         </div>
       </div>
 
@@ -713,18 +723,132 @@ export default function Header() {
           <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>⚠️</span>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: "var(--warn-bright)", marginBottom: 2 }}>
-              Co-op overlaps graduation semester
+              {t("header.coop.conflict.title")}
             </div>
             <div style={{ fontSize: 10, color: "var(--warn)", lineHeight: 1.5 }}>
-              {coopGradConflicts.map(w => w.label).join(" and ")}{" "}
-              {coopGradConflicts.length === 1 ? "spans" : "span"} your graduation semester (
-              {planGradSem === "fall" ? "Fall" : "Spring"} {planGradYear}).
-              You cannot graduate while on co-op — move the co-op block or adjust your graduation date.
+              {coopGradConflicts.length === 1
+                ? t("header.coop.conflict.single", {
+                    label: coopGradConflicts[0].label,
+                    sem: planGradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring"),
+                    year: planGradYear,
+                  })
+                : t("header.coop.conflict.multi", {
+                    labels: coopGradConflicts.map(w => w.label).join(", "),
+                    sem: planGradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring"),
+                    year: planGradYear,
+                  })
+              }
             </div>
           </div>
         </div>
       )}
     </>
+  );
+}
+
+/**
+ * Language search input with portal dropdown — mirrors CompanySearch UX.
+ * Placeholder shows the active locale's native name. Typing filters locales;
+ * selecting commits the change and clears the query.
+ */
+function LanguagePicker({ locale, locales, setLocale }) {
+  const [query, setQuery] = useState("");
+  const [open,  setOpen]  = useState(false);
+  const [pos,   setPos]   = useState({ top: 0, left: 0, width: 0 });
+  const wrapRef = useRef(null);
+  const dropRef = useRef(null);
+
+  useEffect(() => {
+    const handler = e => {
+      if (wrapRef.current?.contains(e.target)) return;
+      if (dropRef.current?.contains(e.target)) return;
+      setOpen(false);
+      setQuery("");
+    };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, []);
+
+  const openAt = () => {
+    if (!wrapRef.current) return;
+    const r = wrapRef.current.getBoundingClientRect();
+    setPos({ top: r.bottom + 4, left: r.left, width: r.width });
+  };
+
+  const handleChange = e => {
+    const v = e.target.value;
+    setQuery(v);
+    if (v.trim()) { openAt(); setOpen(true); }
+    else setOpen(false);
+  };
+
+  const select = l => {
+    setLocale(l.code);
+    setQuery("");
+    setOpen(false);
+  };
+
+  const filtered = query.trim()
+    ? locales.filter(l => {
+        const q = query.toLowerCase();
+        return l.nativeName.toLowerCase().includes(q)
+          || l.name.toLowerCase().includes(q)
+          || l.code.toLowerCase().includes(q);
+      })
+    : [];
+
+  const currentNativeName = locales.find(l => l.code === locale)?.nativeName ?? "";
+
+  const dropdown = open && filtered.length > 0 && createPortal(
+    <div ref={dropRef} style={{
+      position: "fixed", top: pos.top, left: pos.left, width: pos.width,
+      zIndex: 99999,
+      background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+      borderRadius: 6, boxShadow: "0 6px 24px rgba(0,0,0,0.35)",
+      maxHeight: 200, overflowY: "auto",
+      fontFamily: "'Inter', system-ui, sans-serif",
+    }}>
+      {filtered.map(l => (
+        <div key={l.code}
+          onMouseDown={e => { e.preventDefault(); select(l); }}
+          onTouchEnd={e => { e.preventDefault(); select(l); }}
+          style={{
+            padding: "7px 10px", cursor: "pointer", fontSize: 11,
+            color: l.code === locale ? "var(--active)" : "var(--text-2)",
+            fontWeight: l.code === locale ? 700 : 400,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = "var(--card-bg-hov)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+        >
+          {l.nativeName}
+          {l.code === locale && <span style={{ fontSize: 9, marginLeft: 6 }}>✓</span>}
+        </div>
+      ))}
+    </div>,
+    document.body
+  );
+
+  return (
+    <div ref={wrapRef} style={{ position: "relative" }}>
+      <input
+        value={query}
+        onChange={handleChange}
+        onFocus={() => { if (filtered.length) { openAt(); setOpen(true); } }}
+        onMouseDown={e => e.stopPropagation()}
+        placeholder={currentNativeName}
+        style={{
+          width: "100%", boxSizing: "border-box",
+          fontSize: 10, padding: "4px 7px", borderRadius: 4,
+          border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
+          color: "var(--text-3)", outline: "none",
+        }}
+      />
+      {dropdown}
+    </div>
   );
 }
 

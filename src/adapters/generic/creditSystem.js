@@ -12,10 +12,9 @@
 
 /** @type {import('../../ports/ICreditSystem.js').ICreditSystem} */
 export default {
-  unitName:      "credits",
-  unitLabel:     "Credits",
-  standardValue: 3,
-  fullTimeMin:   12,
-  partTimeMax:   11,
-  semesterMax:   21,
+  getUnitName()      { return "credits"; },
+  getUnitLabel()     { return "Credits"; },
+  getStandardValue() { return 3; },
+  getFullTimeMin()   { return 12; },
+  getSemesterMax()   { return 21; },
 };

@@ -21,6 +21,21 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 
 ---
 
+## Architecture
+
+Nu-map uses a **hexagonal architecture** — all institution-specific logic lives in one place (`src/adapters/northeastern/`) and the rest of the app has zero NU-specific imports. Swapping the adapter is the only change needed to fork for a new university.
+
+```
+Adapters (NU-specific)  →  Ports (contracts)  →  Core + UI (institution-agnostic)
+src/adapters/northeastern/   src/ports/I*.js       src/core/, src/ui/
+```
+
+Eight ports cover everything: `IInstitution`, `ICalendar`, `ICreditSystem`, `IAttributeSystem`, `ISpecialTerms`, `IMajorRequirements`, `ICourseCatalog`, `ILocalization`. UI components read adapters via `usePort()`. Core functions receive adapter config as explicit parameters.
+
+For the full dependency graph, invariants, and forking guide, see the **[architecture docs](https://nayugu.github.io/nu-map/documentation/architecture/)**.
+
+---
+
 ## Getting started
 
 ```bash

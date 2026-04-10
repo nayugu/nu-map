@@ -9,6 +9,7 @@ import { getSemSH, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
+import { useLanguage }    from "../context/LanguageContext.jsx";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
@@ -30,6 +31,7 @@ export default function SummerRow({ semA, semB }) {
 
   const { themeName } = useTheme();
   const specialTerms = usePort(ISpecialTerms);
+  const { t } = useLanguage();
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
   const placeholderColor = themeName === "dark" ? "#3e4856" : "#e4e4e4";
 
@@ -63,7 +65,7 @@ export default function SummerRow({ semA, semB }) {
     // ── Special term start card ───────────────────────────────────
     const termStartId   = specialTermStartMap[sem.id];
     const termStartData = termStartId ? specialTermPl[termStartId] : null;
-    const termStartType = termStartData ? (specialTerms?.types ?? []).find(t => t.id === termStartData.typeId) : null;
+    const termStartType = termStartData ? (specialTerms?.getTypes() ?? []).find(t => t.id === termStartData.typeId) : null;
     const termStartDur  = termStartType ? resolveTermByDuration(termStartType.durations, termStartData.duration) : null;
     if (termStartDur) {
       const displayLabel = isPhone && termStartType.label === "Full-Time Internship" ? "Internship" : termStartType.label;
@@ -101,10 +103,10 @@ export default function SummerRow({ semA, semB }) {
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
                 <CompanySearch name={termStartData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
-                <input value={termStartData.subline ?? ""} onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder="Role" className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: termStartData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
+                <input value={termStartData.subline ?? ""} onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder={t("sem.work.role.placeholder")} className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: termStartData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
               </div>
               <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} size={isPhone ? 17 : 34} />
-              <button onClick={e => { e.stopPropagation(); removeTerm(termStartId); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title={`Remove ${termStartType.label.toLowerCase()}`}>✕</button>
+              <button onClick={e => { e.stopPropagation(); removeTerm(termStartId); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title={t("sem.term.remove", { type: termStartType.label.toLowerCase() })}>✕</button>
             </div>
           </div>
         </div>
@@ -114,7 +116,7 @@ export default function SummerRow({ semA, semB }) {
     // ── Special term continuation block ──────────────────────────
     const termContId   = specialTermContMap[sem.id];
     const termContData = termContId ? specialTermPl[termContId] : null;
-    const termContType = termContData ? (specialTerms?.types ?? []).find(t => t.id === termContData.typeId) : null;
+    const termContType = termContData ? (specialTerms?.getTypes() ?? []).find(t => t.id === termContData.typeId) : null;
     const termContDur  = termContType ? resolveTermByDuration(termContType.durations, termContData.duration) : null;
     if (termContDur && !termStartId) {
       return (
@@ -134,7 +136,7 @@ export default function SummerRow({ semA, semB }) {
             display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
           }}>
             <div>
-              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}>{termContType?.label} CONT.</div>
+              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}>{termContType?.label} {t("sem.cont.abbr")}</div>
               <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>{termContData.duration}-month block</div>
             </div>
             {showContLogo && <CompanyLogo key={termContData.companyDomain || ""} domain={termContData.companyDomain} size={isPhone ? 17 : 34} />}
@@ -212,13 +214,13 @@ export default function SummerRow({ semA, semB }) {
                 fontSize: 9, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left"
               }}
               aria-expanded={showOther}
-              title={showOther ? "Hide other credits" : "Show other credits"}
+              title={showOther ? t("sem.other.title.hide") : t("sem.other.title.show")}
             >
               {showOther
-                ? "▼ other credits"
+                ? t("sem.other.label.open")
                 : (!isPhone && others.length > 0)
                   ? `► ${others.map(c => `${c.subject} ${c.number}`).join(", ")}`
-                  : "► other credits"
+                  : t("sem.other.label.closed")
               }
             </button>
             {showOther && (

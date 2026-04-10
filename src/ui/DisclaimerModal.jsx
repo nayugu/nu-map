@@ -5,11 +5,13 @@ import { usePlanner }     from "../context/PlannerContext.jsx";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
 import { ILocalization }  from "../ports/ILocalization.js";
+import { useLanguage }    from "../context/LanguageContext.jsx";
 
 export default function DisclaimerModal() {
   const { showDisclaimer, setShowDisclaimer } = usePlanner();
   const institution  = usePort(IInstitution);
   const localization = usePort(ILocalization);
+  const { t }        = useLanguage();
 
   const dismiss = () => {
     setShowDisclaimer(false);
@@ -18,7 +20,7 @@ export default function DisclaimerModal() {
 
   if (!showDisclaimer) return null;
 
-  const disclaimers = localization.disclaimers;
+  const disclaimers = localization.getDisclaimers();
 
   return (
     <div
@@ -42,8 +44,8 @@ export default function DisclaimerModal() {
         {/* Title */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-1)" }}>NU Map</div>
-            <div style={{ fontSize: 10, color: "var(--text-3)" }}>Unofficial student planning tool</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-1)" }}>{institution.appName}</div>
+            <div style={{ fontSize: 10, color: "var(--text-3)" }}>{t("modal.subtitle")}</div>
           </div>
         </div>
 
@@ -164,9 +166,9 @@ export default function DisclaimerModal() {
               background: "var(--link-bg)", border: "1px solid var(--link-1)",
               color: "var(--link-1)", cursor: "pointer",
             }}
-          >I understand — let me plan!</button>
+          >{t("modal.dismiss")}</button>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <span style={{ fontSize: 10, color: "var(--text-6)" }}>Click outside or dismiss to continue.</span>
+            <span style={{ fontSize: 10, color: "var(--text-6)" }}>{t("modal.hint")}</span>
             <span style={{ fontSize: 10, color: "var(--text-6)" }}>
               Built with{" "}
               <a href="https://www.anthropic.com/claude" target="_blank" rel="noreferrer"

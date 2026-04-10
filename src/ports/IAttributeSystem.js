@@ -1,13 +1,20 @@
 // ═══════════════════════════════════════════════════════════════════
 // PORT: IAttributeSystem
-// Course attribute (gen-ed / learning outcome) definitions and coverage.
+// Course attribute / gen-ed / learning-outcome definitions and coverage.
 //
-// "Attributes" is the generic name for what NU calls NUpath, what other
-// schools call gen-ed, distribution requirements, or learning outcomes.
-// The attribute system is intentionally separate from the requirement
-// tree (gradRequirements.js) because attributes appear in multiple
-// contexts: course chips, the grid panel, PDF exports, and requirement
-// validation.
+// "Attributes" is the generic term for what different institutions call:
+//   NUPath (Northeastern), Gen Ed (many US schools), GIRs (MIT),
+//   Distribution Requirements (Harvard, Princeton), CORE (Boston College),
+//   Areas of Inquiry (Indiana), Writing Intensive tags, etc.
+//
+// Attributes appear in four places in the planner:
+//   1. Course chips — small badges on each placed course card
+//   2. Attribute grid — visual coverage grid in the graduation panel
+//   3. Coverage badge — "(n / total) covered" summary statistic
+//   4. PDF export — attribute labels in the printed plan
+//
+// Institutions with no attribute system should implement:
+//   getSystemName() → ""   getGridCodes() → []   getGridLayout() → []
 // ═══════════════════════════════════════════════════════════════════
 
 /** Port key — use with wire() and usePort() */
@@ -17,43 +24,66 @@ export const IAttributeSystem = "attributeSystem";
  * One attribute definition.
  *
  * @typedef {Object} Attribute
- * @property {string}  code         - Short code used internally and in course data, e.g. "ND"
- * @property {string}  label        - Display label, e.g. "Natural/Designed World"
- * @property {string}  [description] - Longer description for tooltips or info panels (optional)
+ * @property {string}  code         - Short machine-readable code stored in course data,
+ *                                    e.g. "ND", "FQ", "WI".  This is the primary key.
+ * @property {string}  label        - Display label shown in chips and the grid,
+ *                                    e.g. "Natural/Designed World", "Writing Intensive".
+ * @property {string}  [description] - Longer description for tooltips or info panels.
+ *                                    Optional — the UI falls back to label if absent.
  */
 
 /**
  * @typedef {Object} IAttributeSystem
- * @property {string}                   systemName  - Display name for this attribute system,
- *                                                   e.g. "NUPath", "Gen Ed", "GIRs".
- *                                                   Used as the section title in the grad panel.
- *                                                   Empty string if the institution has no
- *                                                   attribute system.
- * @property {Attribute[]}              attributes  - Full list of attribute definitions.
- *                                                   May include legacy codes (e.g. NU's "WF")
- *                                                   that appear in course data and labels but
- *                                                   are excluded from the display grid.
- * @property {string[][]}               gridLayout  - 2-D layout for the attribute grid panel,
- *                                                   e.g. [["ND","EI","IC","FQ"], ...].
- *                                                   Excludes legacy-only codes.
- * @property {string[]}                 gridCodes   - Flat ordered list derived from gridLayout.
- *                                                   Source of truth for grid rendering and
- *                                                   the (covered / total) progress badge.
- * @property {Object.<string,string>}   labels      - Map of code → label for ALL attributes
- *                                                   including legacy codes (used for PDF export
- *                                                   and tooltip lookups).
- * @property {function(Object, Object, Set=): Set<string>} getCoverage
- *   - getCoverage(placements, courseMap, grantedAttrs?) → Set of covered attribute codes
- *   - placements    : { [courseId]: semId }  — courses placed in the plan
- *   - courseMap     : { [courseId]: Course } — full course objects with attribute arrays
- *   - grantedAttrs  : Set<string> — attribute codes already granted by placed special terms
- *                     (compute with computeGrantedAttrs from specialTermUtils)
  *
- * Future fields (Stage 2, when requirement validation is expanded):
- *   canDoubleDipWithMajor : boolean
- *     — whether a course can satisfy both an attribute requirement and a major requirement
- *       simultaneously.  Most US universities allow this; some have restrictions.
- *   maxCoursesPerAttribute : number | null
- *     — cap on how many courses can satisfy any single attribute (null = unlimited).
- *       Used when the institution limits double-counting within the attribute grid.
+ * @property {() => string} getSystemName
+ *   Human-readable name for the entire attribute system, e.g. "NUPath", "Gen Ed",
+ *   "Distribution Requirements".  Used as the section title in the graduation panel.
+ *   Returns empty string if this institution has no attribute system.
+ *
+ * @property {() => Attribute[]} getAttributes
+ *   Complete list of attribute definitions — every code that can appear in course data
+ *   must have an entry here.  This includes legacy codes that no longer appear in the
+ *   official requirements grid but may still exist on older courses in the catalog
+ *   (they need display labels for the PDF export and tooltip lookups).
+ *
+ * @property {() => string[][]} getGridLayout
+ *   Two-dimensional layout for the visual attribute grid in the graduation panel.
+ *   Each inner array is one row; each string is an attribute code.
+ *   Only includes codes that are part of the current requirements (excludes legacy-only).
+ *   A school with a list-style display can use a single-row layout: [[all, codes, here]].
+ *   Returns empty array if getSystemName() is "".
+ *
+ * @property {() => string[]} getGridCodes
+ *   Flat ordered list of all codes appearing in getGridLayout() (i.e. getGridLayout().flat()).
+ *   Used as the denominator for the "(n / total) covered" progress badge and as
+ *   the iteration source for grid rendering.  Must be consistent with getGridLayout().
+ *
+ * @property {(code: string) => string} getLabel
+ *   Return the display label for an attribute code.
+ *   Includes legacy codes excluded from getGridCodes().  Used for lookups in PDF export,
+ *   course card chips, and any context where only the code is available.
+ *   Falls back to the code itself if no label is found.
+ *
+ * @property {() => boolean} canDoubleDip
+ *   Whether a course can simultaneously satisfy an attribute requirement AND a major
+ *   or minor requirement.  Returns true at most institutions (including NU).
+ *   Returns false at institutions that require attribute courses to be outside the major.
+ *   The graduation auditor uses this to decide whether already-counted courses are
+ *   eligible for attribute credit.
+ *
+ * @property {() => number|null} getMaxPerAttribute
+ *   Maximum number of courses that can satisfy any single attribute (null = unlimited).
+ *   Some institutions cap double-counting within the attribute grid.  null for most schools.
+ *
+ * @property {(placements: Object, courseMap: Object, grantedCodes?: Set<string>) => Set<string>} getCoverage
+ *   Compute the set of attribute codes covered by the current plan.
+ *
+ *   placements   : { [courseId: string]: semId: string }  — all placed courses
+ *   courseMap    : { [courseId: string]: Course }         — course records with .attributes[]
+ *   grantedCodes : Set<string>, optional                  — attribute codes directly granted by
+ *                  non-course activities (e.g. placed special terms that carry attributeGrants).
+ *                  Pass an empty Set or omit if no special terms are placed.
+ *
+ *   Returns a Set of attribute codes that are covered.  The UI computes
+ *   coverage = returned Set ∩ getGridCodes()  to exclude legacy codes from the progress badge.
  */

@@ -9,6 +9,7 @@ import { subjectColor } from "../core/courseModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
+import { useLanguage }    from "../context/LanguageContext.jsx";
 import CourseCard  from "./CourseCard.jsx";
 import GradPanel   from "./GradPanel.jsx";
 
@@ -197,6 +198,7 @@ export default function BankPanel() {
   const [hoveredSubId, setHoveredSubId] = useState(null);
   const [typeCollapsed, setTypeCollapsed] = useState({});
   const { themeName } = useTheme();
+  const { t } = useLanguage();
   const specialTerms = usePort(ISpecialTerms);
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
 
@@ -236,7 +238,7 @@ export default function BankPanel() {
                   border: `1px solid ${sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--border-2)"}`,
                   color: sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--text-4)",
                   fontWeight: sideMode === "bank" ? 700 : 400,
-                }}>{sideMode === "bank" && bankTab === "starred" ? "★ Saved" : "Courses"}</button>
+                }}>{sideMode === "bank" && bankTab === "starred" ? t("bank.tab.saved") : t("bank.tab.courses")}</button>
               <button
                 onClick={() => setSideMode("grad")}
                 style={{
@@ -245,14 +247,14 @@ export default function BankPanel() {
                   border: `1px solid ${sideMode === "grad" ? "var(--active)" : "var(--border-2)"}`,
                   color: sideMode === "grad" ? "var(--active)" : "var(--text-4)",
                   fontWeight: sideMode === "grad" ? 700 : 400,
-                }}>Grad</button>
+                }}>{t("bank.tab.grad")}</button>
             </div>
           )}
 
           {/* Desktop: Bank ↔ Graduation toggle */}
           {!isPhone && (
             <div style={{ padding: "7px 8px 5px", display: "flex", gap: 3 }}>
-              {[["bank", "Course Bank"], ["grad", "Graduation"]].map(([mode, label]) => (
+              {[["bank", t("bank.mode.bank")], ["grad", t("bank.mode.grad")]].map(([mode, label]) => (
                 <button key={mode} onClick={() => setSideMode(mode)} style={{
                   flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4, cursor: "pointer",
                   background:  sideMode === mode ? "var(--bg-surface)" : "transparent",
@@ -267,7 +269,7 @@ export default function BankPanel() {
         {/* ── Bank-only header controls (desktop: title + subject key + tabs) ── */}
         {!isPhone && sideMode === "bank" && <>
           <div style={{ padding: "0px 9px 4px", display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>COURSE BANK</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>{t("bank.title")}</span>
             <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface)", borderRadius: 99, padding: "1px 6px" }}>
               {bankCourseIds.size}
             </span>
@@ -291,7 +293,7 @@ export default function BankPanel() {
 
           {/* Tabs */}
           <div style={{ padding: "5px 8px 2px", display: "flex", gap: 4 }}>
-            {([["all", "All Courses"], ["starred", `★ Saved${starredIds.size ? ` (${starredIds.size})` : ""}`]]).map(([key, label]) => (
+            {([["all", t("bank.tab.all")], ["starred", `${t("bank.tab.saved")}${starredIds.size ? ` (${starredIds.size})` : ""}`]]).map(([key, label]) => (
               <button key={key} onClick={() => setBankTab(key)} style={{
                 flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4, cursor: "pointer",
                 background: bankTab === key ? (key === "starred" ? "var(--warn-bg)" : "var(--bg-surface)") : "transparent",
@@ -310,7 +312,7 @@ export default function BankPanel() {
             <input
               value={bankSearch}
               onChange={e => setBankSearch(e.target.value)}
-              placeholder="⌕ search"
+              placeholder={t("bank.search.placeholder")}
               style={{
                 width: "100%", boxSizing: "border-box",
                 background: "var(--bg-surface)", border: `1px solid ${q ? "var(--active)" : "var(--border-2)"}`,
@@ -339,7 +341,7 @@ export default function BankPanel() {
           }}
         >
           <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
-            ↪ PLACED OUT {placedOut.size > 0 ? `(${placedOut.size})` : ""}
+            {t("bank.section.placedout")}{placedOut.size > 0 ? ` (${placedOut.size})` : ""}
           </span>
           <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut ? "▶" : "▼"}</span>
         </div>
@@ -416,7 +418,7 @@ export default function BankPanel() {
               })
             ) : (
               <div style={{ textAlign: "center", padding: "4px", fontSize: isPhone ? 7 : 10 }}>
-                Drag courses here to place them out (no credit, but satisfy prerequisites)
+                {t("bank.placedout.hint")}
               </div>
             )}
           </div>
@@ -445,7 +447,7 @@ export default function BankPanel() {
           }}
         >
           <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
-            ⇄ SUBSTITUTIONS {substitutions.length > 0 ? `(${substitutions.length})` : ""}
+            {t("bank.section.substitutions")}{substitutions.length > 0 ? ` (${substitutions.length})` : ""}
           </span>
           <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapseSubstitutions ? "▶" : "▼"}</span>
         </div>
@@ -453,7 +455,7 @@ export default function BankPanel() {
           <div style={{ padding: "0 8px 8px" }}>
             {!isPhone && (
               <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 5, lineHeight: 1.4 }}>
-                Placing course A also satisfies course B's requirements. Credits count once (A only). Semester timing applies.
+                {t("bank.sub.desc")}
               </div>
             )}
 
@@ -506,11 +508,11 @@ export default function BankPanel() {
             })}
 
             <div style={{ marginTop: substitutions.length ? 6 : 0 }}>
-              <div style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)", marginBottom: 4 }}>Add substitution:</div>
+              <div style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)", marginBottom: 4 }}>{t("bank.sub.add.label")}</div>
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
-                <CourseSearch courses={courses} value={subFromId} onChange={setSubFromId} placeholder="Course A (placed)" isPhone={isPhone} />
+                <CourseSearch courses={courses} value={subFromId} onChange={setSubFromId} placeholder={t("bank.sub.courseA.placeholder")} isPhone={isPhone} />
                 <span style={{ fontSize: 10, color: "var(--text-5)", flexShrink: 0 }}>→</span>
-                <CourseSearch courses={courses} value={subToId} onChange={setSubToId} placeholder="Course B (satisfied)" isPhone={isPhone} />
+                <CourseSearch courses={courses} value={subToId} onChange={setSubToId} placeholder={t("bank.sub.courseB.placeholder")} isPhone={isPhone} />
               </div>
               <button
                 onClick={() => {
@@ -526,16 +528,16 @@ export default function BankPanel() {
                   color: subFromId && subToId && subFromId !== subToId ? "#fff" : "var(--text-4)",
                   border: "1px solid var(--border-2)", cursor: subFromId && subToId && subFromId !== subToId ? "pointer" : "not-allowed",
                 }}
-              >Add substitution</button>
+              >{t("bank.sub.add.button")}</button>
             </div>
           </div>
         )}
 
         {/* ── WORK EXPERIENCE ── */}
         <div style={{ padding: "6px 7px 4px", borderBottom: "1px solid var(--border-1)" }}>
-          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", marginBottom: 5 }}>WORK EXPERIENCE</div>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", marginBottom: 5 }}>{t("bank.section.work")}</div>
 
-          {(specialTerms?.types ?? []).map((type, idx) => {
+          {(specialTerms?.getTypes() ?? []).map((type, idx) => {
             const collapsed = typeCollapsed[type.id] ?? (idx > 0);
             const attrText  = type.attributeGrants?.length
               ? `satisfies ${type.attributeGrants.join(", ")}`
@@ -602,8 +604,8 @@ export default function BankPanel() {
             {bankCourses.length === 0 ? (
               <div style={{ padding: "18px 8px", fontSize: 10, color: "var(--text-6)", textAlign: "center", lineHeight: 1.6 }}>
                 {bankTab === "starred" ? (
-                  <><div style={{ fontSize: 20, marginBottom: 6 }}>☆</div>No saved courses yet.<br /><span style={{ fontSize: 9 }}>Click ☆ on any course row to save it.</span></>
-                ) : "No courses match."}
+                  <><div style={{ fontSize: 20, marginBottom: 6 }}>☆</div>{t("bank.empty.saved")}<br /><span style={{ fontSize: 9 }}>{t("bank.empty.saved.hint")}</span></>
+                ) : t("bank.empty.search")}
               </div>
             ) : bankCourses.map(c => {
               return (

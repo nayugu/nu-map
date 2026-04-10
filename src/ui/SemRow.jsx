@@ -9,6 +9,8 @@ import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
+import { ICreditSystem }  from "../ports/ICreditSystem.js";
+import { useLanguage }    from "../context/LanguageContext.jsx";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
@@ -29,6 +31,9 @@ export default function SemRow({ sem }) {
 
   const { themeName } = useTheme();
   const specialTerms = usePort(ISpecialTerms);
+  const creditSystem = usePort(ICreditSystem);
+  const unitName     = creditSystem.getUnitName();
+  const { t } = useLanguage();
   const companyColor     = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
   const placeholderColor = themeName === "dark" ? "#3e4856" : "#e4e4e4";
 
@@ -39,12 +44,12 @@ export default function SemRow({ sem }) {
   // Generic special term for this semester
   const termStartId   = specialTermStartMap[sem.id];
   const termStartData = termStartId ? specialTermPl[termStartId] : null;
-  const termStartType = termStartData ? (specialTerms.types ?? []).find(t => t.id === termStartData.typeId) : null;
+  const termStartType = termStartData ? (specialTerms.getTypes() ?? []).find(t => t.id === termStartData.typeId) : null;
   const termStartDur  = termStartType ? resolveTermByDuration(termStartType.durations, termStartData.duration) : null;
 
   const termContId   = specialTermContMap[sem.id];
   const termContData = termContId ? specialTermPl[termContId] : null;
-  const termContType = termContData ? (specialTerms.types ?? []).find(t => t.id === termContData.typeId) : null;
+  const termContType = termContData ? (specialTerms.getTypes() ?? []).find(t => t.id === termContData.typeId) : null;
   const termContDur  = termContType ? resolveTermByDuration(termContType.durations, termContData.duration) : null;
 
   // Numbering: 1-based index among placements of the same type, sorted by semester
@@ -254,7 +259,7 @@ export default function SemRow({ sem }) {
                   value={termStartData.subline ?? ""}
                   onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))}
                   onMouseDown={e => e.stopPropagation()}
-                  placeholder="Role"
+                  placeholder={t("sem.work.role.placeholder")}
                   className="work-input"
                   style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 10, fontWeight: 400, color: termStartData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
                 />
@@ -264,20 +269,20 @@ export default function SemRow({ sem }) {
                 onClick={e => { e.stopPropagation(); pushUndo(); setSpecialTermPl(p => { const n = { ...p }; delete n[termStartId]; return n; }); }}
                 onMouseDown={e => e.stopPropagation()}
                 style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 12, lineHeight: 1, padding: 0, flexShrink: 0 }}
-                title={`Remove ${termStartType?.label ?? "term"}`}
+                title={t("sem.term.remove", { type: (termStartType?.label ?? "term").toLowerCase() })}
               >✕</button>
             </div>
             {/* Warning for internship in fall/spring (requires non-attendance petition at NU) */}
             {termStartData.typeId === "intern" && (sem.type === "fall" || sem.type === "spring") && !isPhone && (
               <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", display: "flex", alignItems: "center", gap: 4, pointerEvents: "none" }}>
                 <span style={{ fontSize: 13, color: "#facc15" }}>⚠</span>
-                <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3, whiteSpace: "nowrap" }}>requires petition for non-attendance</span>
+                <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3, whiteSpace: "nowrap" }}>{t("sem.intern.petition")}</span>
               </div>
             )}
             {termStartData.typeId === "intern" && (sem.type === "fall" || sem.type === "spring") && isPhone && (
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6, pointerEvents: "none" }}>
                 <span style={{ fontSize: 11, color: "#facc15" }}>⚠</span>
-                <span style={{ fontSize: 8, color: "#facc15", lineHeight: 1.3 }}>requires petition for non-attendance</span>
+                <span style={{ fontSize: 8, color: "#facc15", lineHeight: 1.3 }}>{t("sem.intern.petition")}</span>
               </div>
             )}
           </div>
@@ -291,7 +296,7 @@ export default function SemRow({ sem }) {
                 fontSize: 10, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left", alignSelf: "flex-start"
               }}
               aria-expanded={!isIncomingCollapsed}
-              title={isIncomingCollapsed ? "Show incoming credit details" : "Hide incoming credit details"}
+              title={isIncomingCollapsed ? t("sem.incoming.title.show") : t("sem.incoming.title.hide")}
             >
               {isIncomingCollapsed
                 ? `► general SH: ${bonusSH || 0}${crs.length > 0 ? ' | ' : ''}${crs.map(c => c.code || (c.subject + ' ' + c.number)).join(", ")}`
@@ -321,7 +326,7 @@ export default function SemRow({ sem }) {
                   }}
                 >
                   <span style={{ fontSize: 9, color: "var(--text-5)", fontStyle: "italic", pointerEvents: "none" }}>
-                    {hoveredZone?.semId === sem.id && hoveredZone?.zone === "append" ? "drop to add" : "+ add"}
+                    {hoveredZone?.semId === sem.id && hoveredZone?.zone === "append" ? t("sem.slot.drop") : t("sem.slot.add")}
                   </span>
                 </div>
               </div>
@@ -386,7 +391,7 @@ export default function SemRow({ sem }) {
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}
               >
-                <span style={{ fontSize: 9, color: "var(--text-4)", letterSpacing: "0.04em" }}>+ override limit</span>
+                <span style={{ fontSize: 9, color: "var(--text-4)", letterSpacing: "0.04em" }}>{t("sem.override.label")}</span>
               </div>
             )}
 
@@ -399,13 +404,13 @@ export default function SemRow({ sem }) {
                     fontSize: 9, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left"
                   }}
                   aria-expanded={showOther}
-                  title={showOther ? "Hide other credits" : "Show other credits"}
+                  title={showOther ? t("sem.other.title.hide") : t("sem.other.title.show")}
                 >
                   {showOther
-                    ? "▼ other credits"
+                    ? t("sem.other.label.open")
                     : (!isPhone && others.length > 0)
                       ? `► ${others.map(c => `${c.subject} ${c.number}`).join(", ")}`
-                      : "► other credits"
+                      : t("sem.other.label.closed")
                   }
                 </button>
                 {showOther && (
@@ -435,7 +440,7 @@ export default function SemRow({ sem }) {
                     {others.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
                     {others.length === 0 && (
                       <span style={{ fontSize: 9, color: "var(--text-5)", fontStyle: "italic", alignSelf: "center" }}>
-                        drop &lt;4 SH here
+                        {t("sem.other.drop", { unit: unitName })}
                       </span>
                     )}
                   </div>

@@ -12,7 +12,24 @@
 //   3. Change the import below to point at your new folder.
 // ═══════════════════════════════════════════════════════════════════
 
-import { wire }                from './adapters/wire.js';
-import northeasternOverrides   from './adapters/northeastern/index.js';
+import { wire }              from './adapters/wire.js';
+import institution       from './adapters/northeastern/institution.js';
+import calendar          from './adapters/northeastern/calendar.js';
+import creditSystem      from './adapters/northeastern/creditSystem.js';
+import attributeSystem   from './adapters/northeastern/attributeSystem.js';
+import specialTerms      from './adapters/northeastern/specialTerms.js';
+import majorRequirements from './adapters/northeastern/majorRequirements.js';
+import courseCatalog     from './adapters/northeastern/courseCatalog.js';
+import localization      from './adapters/northeastern/localization.js';
 
-export const institutionAdapter = wire(northeasternOverrides);
+// Comment out any line to fall back to the generic default for that port.
+export const institutionAdapter = wire({
+  institution,
+  calendar,
+  creditSystem,
+  attributeSystem,
+  specialTerms,
+  majorRequirements,
+  courseCatalog,
+  localization,
+});

@@ -150,15 +150,12 @@ function sectionHtml(sec, doneKeys) {
  *             npCovered (Set<string>), doneKeys (Set<string>), totalSHRequired }
  */
 export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, specialTermPl = {}, adapter = {}) {
-  const { attributeSystem = {}, specialTerms = {}, calendar = {}, creditSystem = {}, institution = {} } = adapter;
-  const gridCodes    = attributeSystem.gridCodes  ?? [];
-  const attrLabels   = attributeSystem.labels     ?? {};
-  const attrName     = attributeSystem.systemName ?? "";
-  const termTypes    = specialTerms.types ?? [];
-  const unitName     = creditSystem.unitName ?? "SH";
-  const semTypes     = calendar.semesterTypes ?? [];
-  const getSemWeight = (semType) => semTypes.find(t => t.id === semType)?.weight ?? 1;
-  const appName      = `${institution.shortName ?? institution.name ?? "Map"} Map`;
+  const { attributeSystem, specialTerms, creditSystem, institution = {} } = adapter;
+  const gridCodes    = attributeSystem?.getGridCodes()   ?? [];
+  const attrName     = attributeSystem?.getSystemName()  ?? "";
+  const termTypes    = specialTerms?.getTypes()          ?? [];
+  const unitName     = creditSystem?.getUnitName()       ?? "SH";
+  const appName      = institution.appName ?? `${institution.shortName ?? institution.name ?? "Map"} Map`;
 
   const curIdx = dynSemIdx[currentSemId] ?? 0;
   const date   = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
@@ -204,7 +201,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     if (!type) return;
     const template  = resolveTermByDuration(type.durations, duration);
     const sem       = dynSems.find(s => s.id === semId);
-    const semWeight = getSemWeight(sem?.type);
+    const semWeight = sem?.weight ?? 1;
     if (template && termSpans(template.weight, semWeight)) {
       const nxt = semNextMap[semId];
       if (nxt) termContMap[nxt] = tid;
@@ -252,7 +249,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     return `<div class="np-cell${sat ? " sat" : ""}">
       <span class="np-check">${sat ? "✓" : "·"}</span>
       <span class="np-key">${key}</span>
-      <span class="np-lbl">${attrLabels[key] ?? key}</span>
+      <span class="np-lbl">${attributeSystem?.getLabel(key) ?? key}</span>
     </div>`;
   }).join("\n");
 
@@ -295,7 +292,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
       const startDur  = startType ? resolveTermByDuration(startType.durations, startData.duration) : null;
       if (startDur) {
         const nextSem    = dynSems.find(s => s.id === semNextMap[sem.id]);
-        const spansNext  = termSpans(startDur.weight, getSemWeight(sem.type)) && !!nextSem;
+        const spansNext  = termSpans(startDur.weight, sem.weight ?? 1) && !!nextSem;
         const company    = startData.company || "";
         const role       = startData.subline || "";
         const blockLabel = `${startData.duration}-month block`;

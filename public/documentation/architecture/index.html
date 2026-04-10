@@ -185,8 +185,8 @@ exportReport(state, adapter);        <span class="cmt">// full adapter bundle fo
         <tr><td>GradPanel.jsx</td><td>placements, major/minor selection</td><td><code>usePort(IAttributeSystem, ISpecialTerms, IMajorRequirements)</code></td></tr>
         <tr><td>SemRow.jsx</td><td>placements, sem data, violations</td><td><code>usePort(ISpecialTerms)</code> — term types for grid rendering</td></tr>
         <tr><td>SummerRow.jsx</td><td>placements, sem data</td><td><code>usePort(ISpecialTerms)</code> — term types for grid rendering</td></tr>
-        <tr><td>CourseCard.jsx</td><td>course data, drag state, offerings</td><td>—</td></tr>
-        <tr><td>InfoPanel.jsx</td><td>selected course, attribute labels</td><td>—</td></tr>
+        <tr><td>CourseCard.jsx</td><td>course data, drag state, offerings</td><td><code>usePort(ICreditSystem, ICalendar)</code></td></tr>
+        <tr><td>InfoPanel.jsx</td><td>selected course, edges, offered overrides</td><td><code>usePort(IAttributeSystem, ICreditSystem, ICalendar, ICourseCatalog)</code></td></tr>
       </tbody>
     </table></div>
 
@@ -255,7 +255,7 @@ exportReport(state, adapter);        <span class="cmt">// full adapter bundle fo
         <tr><td><code>src/context/PlannerContext.jsx</code></td><td>Context</td><td>No</td><td>All application state. Reads 4 ports via <code>usePort()</code>. Passes config to core/data as parameters.</td></tr>
         <tr><td><code>src/context/ThemeContext.jsx</code></td><td>Context</td><td>No</td><td>CSS variable injection from <code>themes.js</code>. Independent of institution.</td></tr>
         <tr><td><code>src/core/semGrid.js</code></td><td>Core</td><td>No</td><td>Semester grid generation from cohort dates + semester type list (parameter).</td></tr>
-        <tr><td><code>src/core/courseModel.js</code></td><td>Core</td><td>No</td><td>Normalizes raw catalog JSON. Maps <code>raw.nuPath ?? raw.attributes</code> → <code>course.attributes</code>.</td></tr>
+        <tr><td><code>src/core/courseModel.js</code></td><td>Core</td><td>No</td><td>Normalizes raw catalog JSON. Maps <code>raw.nuPath ?? raw.attributes</code> → <code>course.attributes</code>. <code>getOfferedFromTerms(terms, decodeTermCode)</code> accepts an optional <code>ICalendar.decodeTermCode</code> parameter; falls back to NU Banner convention when omitted.</td></tr>
         <tr><td><code>src/core/specialTermUtils.js</code></td><td>Core</td><td>No</td><td><code>resolveTermByDuration</code>, <code>termSpans</code>, <code>computeGrantedAttrs</code>. The bridge between adapter data and grid/coverage logic.</td></tr>
         <tr><td><code>src/core/planModel.js</code></td><td>Core</td><td>No</td><td>SH totals, course ordering, PDF export. Receives full adapter bundle as parameter.</td></tr>
         <tr><td><code>src/core/prereqEval.js</code></td><td>Core</td><td>No</td><td>Prerequisite tree evaluation. Fully structural — no institution data needed.</td></tr>

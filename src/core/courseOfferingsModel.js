@@ -3,7 +3,7 @@
 // Domain logic for working with current semester offerings
 // ═══════════════════════════════════════════════════════════════════
 
-import { getSemOfferedType } from "./courseModel.js";
+// courseOfferingsModel: domain helpers for current semester offerings.
 
 /**
  * Check if a course has current offering data.
@@ -132,21 +132,22 @@ export function getOfferingDescription(course, options = {}) {
 }
 
 /**
- * Check if a course can be taken in a specific semester (semId from planner).
- * This considers both historical terms and current offerings.
+ * Check if a course can be taken in a specific semester.
+ *
+ * @param {object} course
+ * @param {string} semTypeId - The semester type ID (e.g. "fall", "spring", "sumA") from sem.semTypeId.
  */
-export function canTakeInSemester(course, semId) {
-  const semType = getSemOfferedType(semId);
-  if (!semType) return false;
-  
+export function canTakeInSemester(course, semTypeId) {
+  if (!semTypeId) return false;
+
   // Check current offerings first (most accurate)
   if (hasCurrentOfferings(course)) {
-    return isOfferedInSemester(course, semType);
+    return isOfferedInSemester(course, semTypeId);
   }
-  
+
   // Fall back to historical terms if no current data
   const { historical } = compareHistoricalVsCurrent(course);
-  return historical.includes(semType);
+  return historical.includes(semTypeId);
 }
 
 /**

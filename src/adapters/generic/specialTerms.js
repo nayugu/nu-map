@@ -11,5 +11,6 @@
 
 /** @type {import('../../ports/ISpecialTerms.js').ISpecialTerms} */
 export default {
-  types: [],
+  getTypes() { return []; },
+  validateDrop(_typeId, _duration, _semId, _ctx) { return { valid: false }; },
 };

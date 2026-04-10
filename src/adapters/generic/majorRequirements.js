@@ -36,4 +36,21 @@ export function fmtLabel(raw) {
 export function fmtLocation() { return ''; }
 
 /** @type {import('../../ports/IMajorRequirements.js').IMajorRequirements} */
-export default { fmtLabel, fmtLocation };
+export default {
+  fmtLabel,
+  fmtLocation,
+
+  /** No program data in generic adapter — returns empty list. */
+  getMajorOptions() { return Promise.resolve([]); },
+
+  /** No program data in generic adapter — returns empty list. */
+  getMinorOptions() { return Promise.resolve([]); },
+
+  auditMajor(_id, _plan, _courseMap) {
+    throw new Error("auditMajor() not implemented in generic adapter.");
+  },
+
+  auditMinor(_id, _plan, _courseMap) {
+    throw new Error("auditMinor() not implemented in generic adapter.");
+  },
+};

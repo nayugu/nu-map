@@ -7,7 +7,8 @@ import { usePort }        from "../context/InstitutionContext.jsx";
 import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
-import { getOfferedFromTerms, getSemOfferedType } from "../core/courseModel.js";
+import { useLanguage } from "../context/LanguageContext.jsx";
+import { getOfferedFromTerms } from "../core/courseModel.js";
 
 /**
  * @param {object} course   - normalised course object
@@ -26,7 +27,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   } = usePlanner();
   const creditSystem = usePort(ICreditSystem);
   const calendar     = usePort(ICalendar);
-  const defaultOffered = (calendar.semesterTypes ?? []).filter(t => !t.optional).map(t => t.id);
+  const { t }        = useLanguage();
+  const defaultOffered = calendar.getSemesterTypes().filter(t => !t.optional).map(t => t.id);
 
   const [editingSh, setEditingSh] = useState(false);
 
@@ -41,8 +43,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const isCardHov     = hoveredCardId === course.id && dragInfo?.id !== course.id;
 
   // Offered-semester warning
-  const semOffType    = inSem && semId ? getSemOfferedType(semId) : null;
   const semMeta       = semId ? SEMESTERS.find(s => s.id === semId) : null;
+  const semOffType    = inSem ? semMeta?.semTypeId ?? null : null;
   const offeredList   = offeredOverrides[course.id]
     ?? getOfferedFromTerms(course.terms)
     ?? defaultOffered;
@@ -238,7 +240,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         fontSize: 10, color: "var(--text-3)", lineHeight: 1.25,
         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginBottom: 2,
       }}>
-        {course.title || <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>No title</span>}
+        {course.title || <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
       </div>
 
       {/* Badges */}
@@ -272,17 +274,17 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           ) : (
             <span
               onClick={e => { e.stopPropagation(); setEditingSh(true); }}
-              title={`Variable credit: ${course.shMin ?? course.sh}–${course.shMax} ${creditSystem.unitName} — click to set`}
+              title={`Variable credit: ${course.shMin ?? course.sh}–${course.shMax} ${creditSystem.getUnitName()} — click to set`}
               style={{ fontSize: 9, color: "var(--active)", background: "var(--badge-bg)",
                 borderRadius: 3, padding: "1px 4px", cursor: "text",
                 borderBottom: "1px dashed var(--active)", userSelect: "none" }}
             >
-              {shOverrides[course.id] ?? course.sh}/{course.shMax} {creditSystem.unitName}
+              {shOverrides[course.id] ?? course.sh}/{course.shMax} {creditSystem.getUnitName()}
             </span>
           )
         ) : (
           <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 4px" }}>
-            {course.sh} {creditSystem.unitName}
+            {course.sh} {creditSystem.getUnitName()}
           </span>
         )}
         {isViolated && violationType === "order" && (

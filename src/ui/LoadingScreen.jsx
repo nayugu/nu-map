@@ -1,7 +1,13 @@
 // ═══════════════════════════════════════════════════════════════════
 // LOADING SCREEN
 // ═══════════════════════════════════════════════════════════════════
+import { usePort }       from "../context/InstitutionContext.jsx";
+import { IInstitution } from "../ports/IInstitution.js";
+import { useLanguage }  from "../context/LanguageContext.jsx";
+
 export default function LoadingScreen({ loadErr, loadPct }) {
+  const institution = usePort(IInstitution);
+  const { t } = useLanguage();
   const handleRetry = () => {
     try { localStorage.removeItem("ncp-state-v2"); } catch {}
     window.location.reload();
@@ -17,12 +23,12 @@ export default function LoadingScreen({ loadErr, loadPct }) {
         <>
           <div style={{ fontSize: 32 }}>⚠️</div>
           <div style={{ color: "var(--error-text)", fontSize: 14, fontWeight: 700 }}>
-            Failed to load course catalog
+            {t("loading.error.title")}
           </div>
           <div style={{ fontSize: 12, color: "var(--text-4)", maxWidth: 420, textAlign: "center", lineHeight: 1.6 }}>
             {loadErr}<br />
             <span style={{ fontSize: 11 }}>
-              Check your internet connection. The catalog loads from GitHub the first time, then caches locally.
+              {t("loading.error.hint")}
             </span>
           </div>
           <button
@@ -32,12 +38,12 @@ export default function LoadingScreen({ loadErr, loadPct }) {
               border: "1px solid var(--border-2)", background: "var(--bg-surface)",
               color: "var(--text-2)", cursor: "pointer", fontSize: 12,
             }}
-          >↺ Clear cache &amp; retry</button>
+          >{t("loading.error.retry")}</button>
         </>
       ) : (
         <>
           <div style={{ fontSize: 16, fontWeight: 800, color: "var(--text-2)", letterSpacing: "-0.02em" }}>
-            NU Map
+            {institution.appName}
           </div>
           <div style={{ width: 260, height: 4, background: "var(--border-1)", borderRadius: 99, overflow: "hidden" }}>
             <div style={{
@@ -46,8 +52,8 @@ export default function LoadingScreen({ loadErr, loadPct }) {
               transition: "width 0.5s", borderRadius: 99,
             }} />
           </div>
-          <div style={{ fontSize: 11, color: "var(--text-4)" }}>Loading course catalog from GitHub…</div>
-          <div style={{ fontSize: 10, color: "var(--text-5)" }}>First load ~2–4 s · then cached 24 h locally</div>
+          <div style={{ fontSize: 11, color: "var(--text-4)" }}>{t("loading.progress")}</div>
+          <div style={{ fontSize: 10, color: "var(--text-5)" }}>{t("loading.note")}</div>
         </>
       )}
     </div>
