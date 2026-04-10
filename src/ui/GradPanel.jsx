@@ -416,10 +416,10 @@ function NuPathGrid({ covered }) {
 
 // ── Minor block (loads + validates a minor's requirement sections) ─
 
-function MinorBlock({ path, placedSet, label = "MINOR" }) {
+function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
   const { courseMap, majorRequirements } = useContext(GradCtx);
-  const [minor,   setMinor]   = useState(null);
-  const [err,     setErr]     = useState(null);
+  const [minor, setMinor] = useState(null);
+  const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -431,22 +431,48 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
       .finally(() => setLoading(false));
   }, [path]);
 
-  const sections = useMemo(
-    () => {
-      if (!minor) return [];
-      // Filter out "Required General Electives" placeholder
-      const minorSections = (minor.requirementSections ?? []).filter(
-        section => section.title !== 'Required General Electives'
-      );
-      return allocateSections(minorSections, placedSet, new Set(), courseMap);
-    },
-    [minor, placedSet, courseMap]
-  );
+  const sections = useMemo(() => {
+    if (!minor) return [];
+    const minorSections = (minor.requirementSections ?? []).filter(
+      section => section.title !== 'Required General Electives'
+    );
+    return allocateSections(minorSections, placedSet, new Set(), courseMap);
+  }, [minor, placedSet, courseMap]);
 
-  if (!path)   return null;
+  const doneSections = useMemo(() => {
+    if (!minor || !doneSet) return [];
+    const minorSections = (minor.requirementSections ?? []).filter(
+      section => section.title !== 'Required General Electives'
+    );
+    return allocateSections(minorSections, doneSet, new Set(), courseMap);
+  }, [minor, doneSet, courseMap]);
+
+  // Sum using the SAME logic as SectionBlock's display numbers
+  const { totalSat, totalReq, doneSat } = useMemo(() => {
+    let sumSat = 0, sumReq = 0, sumDone = 0;
+    for (let i = 0; i < sections.length; i++) {
+      const sec = sections[i];
+      const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < (sec.total ?? 0);
+      const displayTotal = isPoolStructure ? sec.minRequired : (sec.total ?? 0);
+      if (displayTotal > 0) {
+        sumSat += isPoolStructure ? Math.min(sec.satCount ?? 0, sec.minRequired) : (sec.satCount ?? 0);
+        sumReq += displayTotal;
+        if (doneSections[i]) {
+          const ds = doneSections[i];
+          sumDone += isPoolStructure ? Math.min(ds.satCount ?? 0, sec.minRequired) : (ds.satCount ?? 0);
+        }
+      }
+    }
+    return { totalSat: sumSat, totalReq: sumReq, doneSat: sumDone };
+  }, [sections, doneSections]);
+
+  const plannedSat = totalSat - doneSat;
+  const showBar = totalReq > 0;
+
+  if (!path) return null;
   if (loading) return <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0" }}>Loading…</div>;
-  if (err)     return <div style={{ fontSize: 9, color: "var(--error-text)" }}>Error: {err}</div>;
-  if (!minor)  return null;
+  if (err) return <div style={{ fontSize: 9, color: "var(--error-text)" }}>Error: {err}</div>;
+  if (!minor) return null;
 
   return (
     <>
@@ -457,6 +483,49 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
           <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>verified</span>
         )}
       </div>
+
+      {showBar && (
+        <div style={{
+          border: "1px solid var(--border-2)",
+          borderRadius: 4,
+          padding: "4px 6px",
+          margin: "6px 0 8px 0",
+          background: "var(--bg-surface)"
+        }}>
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: 8,
+            color: "var(--text-5)",
+            marginBottom: 4
+          }}>
+            <span>
+              <span style={{ color: "var(--success)" }}>{doneSat}</span>
+              {plannedSat > 0 && <span style={{ color: "var(--link-1)" }}>+{plannedSat}</span>}
+              <span>/{totalReq} courses</span>
+            </span>
+            <span>{Math.round(totalSat / totalReq * 100)}%</span>
+          </div>
+          <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
+            {plannedSat > 0 && (
+              <div style={{
+                position: "absolute", left: 0,
+                width: `${Math.min(100, totalSat / totalReq * 100)}%`,
+                height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45,
+              }} />
+            )}
+            {doneSat > 0 && (
+              <div style={{
+                position: "absolute", left: 0,
+                width: `${Math.min(100, doneSat / totalReq * 100)}%`,
+                height: "100%", background: "var(--success)", borderRadius: 3,
+                transition: "width 0.2s",
+              }} />
+            )}
+          </div>
+        </div>
+      )}
+
       {sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
     </>
   );
@@ -474,6 +543,7 @@ export default function GradPanel() {
     conc: selConc, setConc: setSelConc,
     minor1, setMinor1,
     minor2, setMinor2,
+    getSemStatus,
   } = usePlanner();
 
   const selPath    = majorPath || "";
@@ -515,6 +585,13 @@ export default function GradPanel() {
     () => buildPlacedKeySet(effectivePlacements, placedOut, courseMap),
     [effectivePlacements, placedOut, courseMap]
   );
+
+  const doneSet = useMemo(() => {
+    const donePlacements = Object.fromEntries(
+      Object.entries(effectivePlacements).filter(([, semId]) => getSemStatus(semId) === "completed")
+    );
+    return buildPlacedKeySet(donePlacements, placedOut, courseMap);
+  }, [effectivePlacements, placedOut, courseMap, getSemStatus]);
 
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));
@@ -795,8 +872,8 @@ export default function GradPanel() {
         )}
 
         {/* ── Minor requirement sections ───────────────────────── */}
-        <MinorBlock path={minor1} placedSet={placedSet} label={t("grad.minor1.label")} />
-        <MinorBlock path={minor2} placedSet={placedSet} label={t("grad.minor2.label")} />
+        <MinorBlock path={minor1} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />
+        <MinorBlock path={minor2} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />
 
                 {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !minor1 && !minor2 && !fetching && !loadErr && (
