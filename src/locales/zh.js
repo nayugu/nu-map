@@ -57,6 +57,7 @@ export const strings = {
   "sem.cont.abbr":             "\u7eed.",
   "sem.intern.petition":       "\u5b9e\u4e60\u5728\u79cb\u6625\u5b66\u671f\u9700\u63d0\u4ea4\u7533\u8bf7",
   "sem.term.remove":           "\u79fb\u9664 {type}",
+  "sem.work.company.placeholder": "\u516c\u53f8",
   "sem.work.role.placeholder": "\u804c\u4f4d",
   "sem.override.label":        "+ \u8986\u76d6\u9650\u5236",
 

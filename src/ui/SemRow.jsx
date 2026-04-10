@@ -253,6 +253,7 @@ export default function SemRow({ sem }) {
                   color={companyColor}
                   emptyColor={placeholderColor}
                   fontSize={isPhone ? 7 : 14}
+                  placeholder={t("sem.work.company.placeholder")}
                   onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                 />
                 <input

@@ -102,7 +102,7 @@ export default function SummerRow({ semA, semB }) {
                 {displayLabel} {termNum(termStartData.typeId, termStartId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
-                <CompanySearch name={termStartData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
+                <CompanySearch name={termStartData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} placeholder={t("sem.work.company.placeholder")} onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
                 <input value={termStartData.subline ?? ""} onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))} onMouseDown={e => e.stopPropagation()} placeholder={t("sem.work.role.placeholder")} className="work-input" style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 9, fontWeight: 400, color: termStartData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }} />
               </div>
               <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} size={isPhone ? 17 : 34} />

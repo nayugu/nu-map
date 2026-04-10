@@ -406,8 +406,7 @@ document.querySelectorAll('.chip[data-device]').forEach(btn => {
     document.querySelectorAll('.chip[data-device]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     applyDevice();
-    // Reset the app so zoom/panels/bankWidth reinit from the new viewport size
-    try { iframe.contentWindow.localStorage.removeItem('ncp-state-v2'); } catch(e) {}
+    // Reload the app so zoom/panels/bankWidth reinit from the new viewport size
     iframe.src = iframe.src;
   });
 });
