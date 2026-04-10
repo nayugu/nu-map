@@ -1,7 +1,7 @@
 {
   "site":       "https://numap.netlify.app/",
   "siteBackup": "https://nayugu.github.io/nu-map/",
-  "devPortal":  "https://numap.netlify.app/northeastern/dev.html",
+  "devPortal":  "https://nayugu.github.io/nu-map/northeastern/dev.html",
   "github":     "https://github.com/nayugu/nu-map",
   "catalog": {
     "courseDescriptions": "https://catalog.northeastern.edu/course-descriptions/",
