@@ -40,16 +40,17 @@ export default {
   fmtLabel,
   fmtLocation,
 
-  /** No program data in generic adapter — returns empty list. */
-  getMajorOptions() { return Promise.resolve([]); },
+  getMajorOptions()      { return []; },
+  getMinorOptions()      { return []; },
+  getMajorOptionGroups() { return new Map(); },
+  getMinorOptionGroups() { return new Map(); },
 
-  /** No program data in generic adapter — returns empty list. */
-  getMinorOptions() { return Promise.resolve([]); },
+  loadMajor(_path) { return Promise.reject(new Error("loadMajor() not implemented in generic adapter.")); },
+  loadMinor(_path) { return Promise.reject(new Error("loadMinor() not implemented in generic adapter.")); },
 
   auditMajor(_id, _plan, _courseMap) {
     throw new Error("auditMajor() not implemented in generic adapter.");
   },
-
   auditMinor(_id, _plan, _courseMap) {
     throw new Error("auditMinor() not implemented in generic adapter.");
   },

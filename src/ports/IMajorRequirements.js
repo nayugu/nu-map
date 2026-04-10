@@ -88,12 +88,25 @@ export const IMajorRequirements = "majorRequirements";
 /**
  * @typedef {Object} IMajorRequirements
  *
- * @property {() => Promise<ProgramOption[]>} getMajorOptions
- *   Return all available major and concentration options for the search dropdown.
- *   The returned list is used to populate the major/concentration pickers in the grad panel.
+ * @property {() => ProgramOption[]} getMajorOptions
+ *   Return all available major options (flat list).
  *
- * @property {() => Promise<ProgramOption[]>} getMinorOptions
- *   Return all available minor (and certificate) options for the search dropdown.
+ * @property {() => ProgramOption[]} getMinorOptions
+ *   Return all available minor options (flat list).
+ *
+ * @property {() => Map<string, ProgramOption[]>} getMajorOptionGroups
+ *   Return major options grouped by year/college for use in search dropdowns.
+ *   Keys are group labels (e.g. "2025 — Khoury College"); values are option arrays.
+ *
+ * @property {() => Map<string, ProgramOption[]>} getMinorOptionGroups
+ *   Same as getMajorOptionGroups but for minors.
+ *
+ * @property {(path: string) => Promise<object>} loadMajor
+ *   Load the raw program definition JSON for a given option id/path.
+ *   The returned shape is adapter-specific; GradPanel consumes it via gradRequirements.js.
+ *
+ * @property {(path: string) => Promise<object>} loadMinor
+ *   Same as loadMajor but for a minor.
  *
  * @property {(id: string, plan: PlanSnapshot, courseMap: Object) => Promise<Program>} auditMajor
  *   Load a major by id and audit its requirements against the given plan.

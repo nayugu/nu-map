@@ -2,8 +2,6 @@
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
 import { buildPlacedKeySet, allocateMajor } from "./gradRequirements.js";
-import { loadMajor } from "../data/majorLoader.js";
-import { loadMinor } from "../data/minorLoader.js";
 import { resolveTermByDuration, termSpans } from "./specialTermUtils.js";
 
 
@@ -150,7 +148,7 @@ function sectionHtml(sec, doneKeys) {
  *             npCovered (Set<string>), doneKeys (Set<string>), totalSHRequired }
  */
 export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, specialTermPl = {}, adapter = {}) {
-  const { attributeSystem, specialTerms, creditSystem, institution = {} } = adapter;
+  const { attributeSystem, specialTerms, creditSystem, institution = {}, majorRequirements } = adapter;
   const gridCodes    = attributeSystem?.getGridCodes()   ?? [];
   const attrName     = attributeSystem?.getSystemName()  ?? "";
   const termTypes    = specialTerms?.getTypes()          ?? [];
@@ -177,9 +175,9 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 
   // ── Load major + minors (async) ───────────────────────────────
   const [major, minor1, minor2] = await Promise.all([
-    majorPath  ? loadMajor(majorPath).catch(() => null)  : null,
-    minor1Path ? loadMinor(minor1Path).catch(() => null) : null,
-    minor2Path ? loadMinor(minor2Path).catch(() => null) : null,
+    majorPath  ? majorRequirements?.loadMajor(majorPath).catch(() => null)  : null,
+    minor1Path ? majorRequirements?.loadMinor(minor1Path).catch(() => null) : null,
+    minor2Path ? majorRequirements?.loadMinor(minor2Path).catch(() => null) : null,
   ]);
 
   // Use major's totalCreditsRequired if caller didn't supply one

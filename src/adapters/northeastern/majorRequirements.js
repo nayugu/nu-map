@@ -9,8 +9,8 @@
 // auditMajor() / auditMinor() are not yet implemented here — GradPanel
 // calls loadMajor() + gradRequirements.js directly (Stage 2 migration).
 // ═══════════════════════════════════════════════════════════════════
-import { getMajorOptions as _getMajorOptions } from "../../data/majorLoader.js";
-import { getMinorOptions as _getMinorOptions } from "../../data/minorLoader.js";
+import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor } from "../../data/majorLoader.js";
+import { getMinorOptions as _getMinorOptions, getMinorOptionGroups as _getMinorOptionGroups, loadMinor as _loadMinor } from "../../data/minorLoader.js";
 
 /**
  * Parse a snake_case / hyphenated folder name into a readable label.
@@ -51,21 +51,29 @@ export default {
   fmtLabel,
   fmtLocation,
 
-  /** @returns {Promise<import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
-  getMajorOptions() { return Promise.resolve(_getMajorOptions(_self)); },
+  /** @returns {import('../../ports/IMajorRequirements.js').ProgramOption[]} */
+  getMajorOptions() { return _getMajorOptions(_self); },
 
-  /** @returns {Promise<import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
-  getMinorOptions() { return Promise.resolve(_getMinorOptions(_self)); },
+  /** @returns {import('../../ports/IMajorRequirements.js').ProgramOption[]} */
+  getMinorOptions() { return _getMinorOptions(_self); },
 
-  /**
-   * Not yet implemented — GradPanel calls loadMajor() + gradRequirements.js directly.
-   * Stage 2: move audit logic into this method.
-   */
+  /** @returns {Map<string, import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
+  getMajorOptionGroups() { return _getMajorOptionGroups(_self); },
+
+  /** @returns {Map<string, import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
+  getMinorOptionGroups() { return _getMinorOptionGroups(_self); },
+
+  /** @returns {Promise<object>} Raw graduatenu Major2 JSON */
+  loadMajor(path) { return _loadMajor(path); },
+
+  /** @returns {Promise<object>} Raw graduatenu minor JSON */
+  loadMinor(path) { return _loadMinor(path); },
+
   auditMajor(_id, _plan, _courseMap) {
-    throw new Error("auditMajor() not yet implemented in northeastern adapter — GradPanel uses loadMajor() directly.");
+    throw new Error("auditMajor() not yet implemented — GradPanel uses loadMajor() + gradRequirements.js directly.");
   },
 
   auditMinor(_id, _plan, _courseMap) {
-    throw new Error("auditMinor() not yet implemented in northeastern adapter — GradPanel uses loadMinor() directly.");
+    throw new Error("auditMinor() not yet implemented — GradPanel uses loadMinor() + gradRequirements.js directly.");
   },
 };

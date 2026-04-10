@@ -20,8 +20,6 @@ import {
   allocateMajorWithElectives,
   allocateSections,
 } from "../core/gradRequirements.js";
-import { getMajorOptionGroups, loadMajor } from "../data/majorLoader.js";
-import { getMinorOptionGroups, loadMinor } from "../data/minorLoader.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
@@ -419,7 +417,7 @@ function NuPathGrid({ covered }) {
 // ── Minor block (loads + validates a minor's requirement sections) ─
 
 function MinorBlock({ path, placedSet, label = "MINOR" }) {
-  const { courseMap }    = useContext(GradCtx);
+  const { courseMap, majorRequirements } = useContext(GradCtx);
   const [minor,   setMinor]   = useState(null);
   const [err,     setErr]     = useState(null);
   const [loading, setLoading] = useState(false);
@@ -427,7 +425,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
   useEffect(() => {
     if (!path) { setMinor(null); setErr(null); return; }
     setLoading(true); setErr(null);
-    loadMinor(path)
+    majorRequirements.loadMinor(path)
       .then(setMinor)
       .catch(e => setErr(e.message))
       .finally(() => setLoading(false));
@@ -486,8 +484,8 @@ export default function GradPanel() {
   const unitName          = creditSystem.getUnitName();
   const { t } = useLanguage();
 
-  const majorGroups  = useMemo(() => getMajorOptionGroups(majorRequirements), [majorRequirements]);
-  const minorGroups  = useMemo(() => getMinorOptionGroups(majorRequirements), [majorRequirements]);
+  const majorGroups  = useMemo(() => majorRequirements.getMajorOptionGroups(), [majorRequirements]);
+  const minorGroups  = useMemo(() => majorRequirements.getMinorOptionGroups(), [majorRequirements]);
 
   const [major,    setMajor]    = useState(null);
   const [loadErr,  setLoadErr]  = useState(null);
@@ -498,7 +496,7 @@ export default function GradPanel() {
   useEffect(() => {
     if (!selPath) { setMajor(null); setLoadErr(null); return; }
     setFetching(true); setLoadErr(null); setMajor(null); setSelConc("");
-    loadMajor(selPath)
+    majorRequirements.loadMajor(selPath)
       .then(setMajor)
       .catch(e => setLoadErr(e.message))
       .finally(() => setFetching(false));
@@ -568,7 +566,7 @@ export default function GradPanel() {
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
   return (
-    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, attributeSystem }}>
+    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, attributeSystem, majorRequirements }}>
       <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
         {/* ── Major selector ─────────────────────────────────── */}
