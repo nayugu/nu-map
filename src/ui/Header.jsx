@@ -504,7 +504,8 @@ export default function Header() {
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.zoom")}</div>
                 <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-                  {[null, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(v => {
+                  {/* use [null, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0] to included auto mode */}
+                  {[0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(v => {
                     const isActive = v === null ? manualZoom == null : manualZoom === v;
                     const label = v == null ? t("header.settings.zoom.auto") : `${Math.round(v * 100)}%`;
                     return (
