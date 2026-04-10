@@ -554,7 +554,7 @@ export default function Header() {
               {/* Links */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7, display: "flex", flexDirection: "column", gap: 4 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 1 }}>{t("header.links.title")}</div>
-                <a href="https://nayugu.github.io/nu-map/dev.html" target="_blank" rel="noreferrer"
+                <a href="/northeastern/dev.html" target="_blank" rel="noreferrer"
                   style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
                     background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                     border: "1px solid var(--border-2)", color: "var(--text-4)",
