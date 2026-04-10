@@ -15,6 +15,7 @@ import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges, getOfferedFromTerms } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.js";
+import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
