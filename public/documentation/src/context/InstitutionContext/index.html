@@ -57,6 +57,13 @@ function MyComponent() {
   <span class="cmt">// ...</span>
 }</code></pre>
 
+    <h2>getAllSources() — data attribution</h2>
+    <p><code>wire()</code> adds an extra method to the adapter bundle: <code>getAllSources()</code>. It aggregates <code>getSources()</code> across all active ports, deduplicates by <code>SourceInfo.id</code>, and merges <code>usedFor</code> arrays when two ports reference the same upstream source. The About / Disclaimer modal calls this to build its attribution list without knowing which ports exist.</p>
+    <pre><code><span class="cmt">// DisclaimerModal.jsx</span>
+const adapter = useInstitution();
+const sources = adapter.getAllSources();  <span class="cmt">// aggregated across all 8 ports</span></code></pre>
+    <p>See <a href="../../ports/IAttributable/">IAttributable</a> for the <code>SourceInfo</code> shape and how to implement <code>getSources()</code>.</p>
+
     <h2>usePort() vs useInstitution()</h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Hook</th><th>Returns</th><th>When to use</th></tr></thead>

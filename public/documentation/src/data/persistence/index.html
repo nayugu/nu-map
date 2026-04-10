@@ -17,66 +17,73 @@
       <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">data/</a><span class="sep"> / </span><strong>persistence.js</strong>
     </div>
 
-    <h1>persistence.js <span class="badge yellow">Data adapter</span></h1>
-    <p class="lead">Three functions that wrap localStorage. The simplest module in the project. All logic for <em>what</em> to save lives in PlannerContext — this module only handles the serialization/deserialization.</p>
+    <h1>persistence.js <span class="badge yellow">Data module</span></h1>
+    <p class="lead">Four thin functions that wrap <code>localStorage</code> for the main plan state. The storage key is derived from <code>institution.storagePrefix</code> so institution forks never collide in the same browser. All logic for <em>what</em> to save lives in PlannerContext — this module only handles serialization and key construction.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">data/</a></div></div>
-      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (loadSaved on mount, saveState on every change, clearState on reset)</div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (on mount and every state change), Header.jsx, LoadingScreen.jsx (storageKey only)</div></div>
+      <div class="nb-group"><div class="nb-label">Key format</div><div class="nb-value"><code>{storagePrefix}-state-v2</code> — namespace from IInstitution, version suffix for schema migration</div></div>
     </div>
 
     <h2>Exported functions</h2>
 
     <div class="fn-block exported">
-      <div class="fn-sig">loadSaved() → SavedState | null</div>
-      <div class="fn-desc">Reads plan index and active plan from localStorage. Reads the active plan's data JSON. Returns a fully parsed object, or null if nothing is saved (first visit).</div>
-      <div class="fn-returns">Returns: <span>SavedState object with placements, cohort, major selections, etc. — or null</span></div>
+      <div class="fn-sig">storageKey(prefix: string) → string</div>
+      <div class="fn-desc">Builds the namespaced localStorage key for the main plan state. Returns <code>`${prefix}-state-v2`</code>. Exported separately so Header and LoadingScreen can clear the key without importing the full module. The schema version suffix (<code>-state-v2</code>) must be bumped when the saved state shape changes in a breaking way.</div>
+      <div class="fn-returns">Returns: <span>string — e.g. <code>"ncp-state-v2"</code> for Northeastern</span></div>
     </div>
 
     <div class="fn-block exported">
-      <div class="fn-sig">saveState(persist: boolean, obj: PlanState) → void</div>
-      <div class="fn-desc">If <code>persist = true</code>, serializes <code>obj</code> to JSON and writes it to <code>ncp-plan-data-{activePlanId}</code>. If <code>persist = false</code>, writes nothing (user has disabled auto-save). Also updates <code>ncp-plan-index</code> with the current plan's lastSaved timestamp.</div>
+      <div class="fn-sig">loadSaved(prefix: string) → SavedState | null</div>
+      <div class="fn-desc">Reads the saved planner state from localStorage. Returns the parsed object if found, or <code>null</code> on first visit or after a reset. The caller (PlannerContext) is responsible for providing defaults when null is returned.</div>
+      <div class="fn-returns">Returns: <span>Parsed SavedState object, or null if nothing saved</span></div>
     </div>
 
     <div class="fn-block exported">
-      <div class="fn-sig">clearState() → void</div>
-      <div class="fn-desc">Removes all Nu-Map keys from localStorage. Called when the user clicks "Reset plan." Removes <code>ncp-plan-index</code>, <code>ncp-active-plan</code>, and all <code>ncp-plan-data-*</code> keys.</div>
+      <div class="fn-sig">saveState(prefix: string, persist: boolean, obj: object) → void</div>
+      <div class="fn-desc">Persists the planner state. When <code>persist = true</code>, writes <code>{ persist: true, ...obj }</code>. When <code>persist = false</code>, writes only <code>{ persist: false }</code> — this sentinel tells the next <code>loadSaved()</code> call not to restore the state. localStorage quota errors are swallowed silently.</div>
     </div>
 
-    <h2>localStorage key reference</h2>
+    <div class="fn-block exported">
+      <div class="fn-sig">clearState(prefix: string) → void</div>
+      <div class="fn-desc">Removes the plan state key from localStorage. Called when the user resets the planner. The theme and other permanent preferences live under separate keys managed directly in PlannerContext and are not cleared by this function.</div>
+    </div>
+
+    <h2>localStorage key structure</h2>
+    <p>This module manages only the main state blob under a single key. All other keys (theme, zoom, cohort settings, plan index, etc.) are managed directly in PlannerContext via the <code>key(name)</code> helper which produces <code>${storagePrefix}-${name}</code>.</p>
+
     <div class="table-wrap"><table>
-      <thead><tr><th>Key</th><th>Contents</th><th>Lifetime</th></tr></thead>
+      <thead><tr><th>Key</th><th>Contents</th><th>Managed by</th></tr></thead>
       <tbody>
-        <tr><td><code>ncp-plan-index</code></td><td><code>[{id, name, lastSaved}]</code></td><td>Until clearState()</td></tr>
-        <tr><td><code>ncp-active-plan</code></td><td>Plan ID string</td><td>Until clearState()</td></tr>
-        <tr><td><code>ncp-plan-data-{id}</code></td><td>Full plan JSON (see below)</td><td>Until plan deleted or clearState()</td></tr>
-        <tr><td><code>ncp-theme</code></td><td>Theme name string</td><td>Permanent (not cleared by reset)</td></tr>
-        <tr><td><code>ncp-zoom</code></td><td>Number</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-ent-sem/year</code></td><td>Cohort settings</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-grad-sem/year</code></td><td>Cohort settings</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-starred</code></td><td>string[] of courseIds</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-sticky-courses</code></td><td>boolean</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-collapse-other-credits</code></td><td>boolean (default true)</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-show-cont-logo</code></td><td>boolean (default true) — show company logo on co-op/internship continuation rows</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-seen-disclaimer</code></td><td>boolean</td><td>Permanent</td></tr>
-        <tr><td><code>ncp-state-v2</code></td><td>Legacy full state (old system)</td><td>Migrated on load</td></tr>
+        <tr><td><code>{prefix}-state-v2</code></td><td>Full serialized plan state (placements, cohort, major, settings)</td><td><code>persistence.js</code></td></tr>
+        <tr><td><code>{prefix}-theme</code></td><td>Theme name string</td><td>ThemeContext</td></tr>
+        <tr><td><code>{prefix}-zoom</code></td><td>Number (zoom level)</td><td>PlannerContext directly</td></tr>
+        <tr><td><code>{prefix}-ent-sem / -ent-year</code></td><td>Entry semester/year</td><td>PlannerContext directly</td></tr>
+        <tr><td><code>{prefix}-grad-sem / -grad-year</code></td><td>Grad semester/year</td><td>PlannerContext directly</td></tr>
+        <tr><td><code>{prefix}-starred</code></td><td>string[] of starred courseIds</td><td>PlannerContext directly</td></tr>
+        <tr><td><code>{prefix}-seen-disclaimer</code></td><td>"1" when dismissed</td><td>DisclaimerModal directly</td></tr>
+        <tr><td><code>{prefix}-plan-index</code></td><td>Plan list metadata</td><td>PlannerContext directly</td></tr>
+        <tr><td><code>{prefix}-active-plan</code></td><td>Active plan ID</td><td>PlannerContext directly</td></tr>
+        <tr><td><code>{prefix}-plan-data-{id}</code></td><td>Per-plan placements/majors JSON</td><td>PlannerContext directly</td></tr>
       </tbody>
     </table></div>
 
-    <h3>Plan JSON structure</h3>
+    <div class="callout info"><div class="ci">ℹ</div><div class="callout-body">PlannerContext accesses most keys directly using a <code>key(name)</code> helper: <code>const key = n =&gt; `${storagePrefix}-${n}`</code>. Only the main state blob (plan-data, index, active) goes through the module-level pattern above. This separation keeps the module minimal while giving PlannerContext full control over key lifecycle.</div></div>
+
+    <h2>State shape (what saveState writes)</h2>
     <pre><code>{
-  <span class="str">"version"</span>:      1,
-  <span class="str">"exported"</span>:     <span class="str">"2026-04-04T12:00:00Z"</span>,
+  <span class="str">"persist"</span>:      <span class="kw">true</span>,
   <span class="str">"entSem"</span>:       <span class="str">"fall"</span>,  <span class="str">"entYear"</span>:  2026,
   <span class="str">"gradSem"</span>:      <span class="str">"spring"</span>, <span class="str">"gradYear"</span>: 2031,
-  <span class="str">"placements"</span>:   { <span class="str">"CS3500"</span>: <span class="str">"fall2027"</span>, <span class="str">"CS2810"</span>: <span class="str">"spring2028"</span> },
-  <span class="str">"specialTermPl"</span>: { <span class="str">"coop-1234"</span>: { <span class="str">"typeId"</span>: <span class="str">"coop"</span>, <span class="str">"semId"</span>: <span class="str">"sumA2028"</span>, <span class="str">"duration"</span>: 6, <span class="str">"company"</span>: <span class="str">"Microsoft"</span>, <span class="str">"companyDomain"</span>: <span class="str">"microsoft.com"</span>, <span class="str">"subline"</span>: <span class="str">"SWE Intern"</span> } },
+  <span class="str">"placements"</span>:   { <span class="str">"CS3500"</span>: <span class="str">"fall2027"</span>, ... },
+  <span class="str">"specialTermPl"</span>: { <span class="str">"coop-1234"</span>: { <span class="str">"typeId"</span>: <span class="str">"coop"</span>, <span class="str">"semId"</span>: <span class="str">"sumA2028"</span>, ... } },
   <span class="str">"semOrders"</span>:    { <span class="str">"fall2027"</span>: [<span class="str">"CS3500"</span>, <span class="str">"CS1800"</span>] },
   <span class="str">"shOverrides"</span>:  { <span class="str">"CS1234"</span>: 3 },
   <span class="str">"bonusSH"</span>:      { <span class="str">"fall2026"</span>: 8 },
   <span class="str">"major"</span>:        <span class="str">"2024/computer-information-science/computer_science_bscs"</span>,
   <span class="str">"conc"</span>:         <span class="kw">null</span>,
-  <span class="str">"minor1"</span>:       <span class="kw">null</span>, <span class="str">"minor2"</span>: <span class="kw">null</span>,
+  <span class="str">"minor1"</span>:       <span class="kw">null</span>,
   <span class="str">"placedOut"</span>:    [<span class="str">"CS1200"</span>],
   <span class="str">"substitutions"</span>: [{ <span class="str">"from"</span>: <span class="str">"ENGW3302"</span>, <span class="str">"to"</span>: <span class="str">"ENGW3315"</span> }]
 }</code></pre>

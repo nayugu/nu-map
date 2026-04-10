@@ -17,30 +17,30 @@
     <div class="breadcrumb"><a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>data/</strong></div>
 
     <h1>data/ <span class="badge yellow">I/O layer</span></h1>
-    <p class="lead">Four thin I/O adapters. No business logic. Each module wraps one type of external resource: the course catalog JSON, the major/minor requirement JSON files, and browser localStorage. Called exclusively by PlannerContext.</p>
+    <p class="lead">Three thin I/O modules. No business logic. Each wraps one type of external resource: major/minor requirement JSON files and browser localStorage. Course fetching and normalization belong entirely to the <a href="./courseLoader/">ICourseCatalog adapter</a> — there is no courseLoader module.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
       <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (exclusively)</div></div>
-      <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">I/O only — no business logic, no React</div></div>
+      <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">I/O only — no business logic, no React, no institution imports</div></div>
     </div>
 
     <h2>Children</h2>
     <div class="children-grid">
       <a class="child-card" href="./courseLoader/">
-        <div class="cc-type">module</div>
-        <div class="cc-name">courseLoader.js</div>
-        <div class="cc-desc">Fetches the 6.5 MB course catalog JSON. Tries bundled file first, falls back to live API.</div>
+        <div class="cc-type">concept</div>
+        <div class="cc-name">course loading</div>
+        <div class="cc-desc">Course loading lives in the ICourseCatalog adapter (courseCatalog.fetchAll()). No separate module exists — the adapter owns fetch and normalize.</div>
       </a>
       <a class="child-card" href="./majorLoader/">
         <div class="cc-type">module</div>
         <div class="cc-name">majorLoader.js + minorLoader.js</div>
-        <div class="cc-desc">Async-fetches Major2 requirement JSON from the graduatenu fork. Provides grouped dropdown options.</div>
+        <div class="cc-desc">Async-fetches Major2 requirement JSON from the graduatenu fork. Provides grouped dropdown options for the major/minor selector.</div>
       </a>
       <a class="child-card" href="./persistence/">
         <div class="cc-type">module</div>
         <div class="cc-name">persistence.js</div>
-        <div class="cc-desc">Reads and writes plan state to browser localStorage. Three functions: loadSaved, saveState, clearState.</div>
+        <div class="cc-desc">Reads and writes the main plan state blob to localStorage. Four functions: storageKey, loadSaved, saveState, clearState — all take storagePrefix as a parameter.</div>
       </a>
     </div>
 
@@ -50,22 +50,27 @@
 sequenceDiagram
     participant App as App startup
     participant PS as persistence.js
-    participant CL as courseLoader.js
+    participant CC as courseCatalog adapter
     participant LS as localStorage
     participant FS as public/ (static files)
+    participant API as live API (fallback)
     participant ML as majorLoader.js
     participant GN as graduatenu/ fork
 
-    App->>PS: loadSaved()
-    PS->>LS: read ncp-plan-index, ncp-active-plan, ncp-plan-data-{id}
+    App->>PS: loadSaved(storagePrefix)
+    PS->>LS: read {prefix}-state-v2
     LS-->>PS: saved JSON or null
     PS-->>App: hydrated state (or defaults)
 
-    App->>CL: fetchCourses()
-    CL->>FS: GET /all-courses.json
-    FS-->>CL: 6.5 MB JSON array
-    CL-->>App: Course[] (raw)
-    Note over App: normalizeCourse() called for each
+    App->>CC: courseCatalog.fetchAll()
+    CC->>FS: GET /northeastern/all-courses.json
+    alt local file ok
+      FS-->>CC: 6.5 MB JSON array
+    else local file fails
+      CC->>API: GET husker.vercel.app/courses/all
+      API-->>CC: JSON array
+    end
+    CC-->>App: Course[] (already normalized)
 
     Note over App: User selects major in GradPanel
     App->>ML: loadMajor(path)
@@ -74,17 +79,17 @@ sequenceDiagram
     ML-->>App: major JSON
 
     Note over App: Any state mutation
-    App->>PS: saveState(persist, planObj)
-    PS->>LS: write ncp-plan-data-{id}
+    App->>PS: saveState(prefix, persist, planObj)
+    PS->>LS: write {prefix}-state-v2
       </div>
-      <div class="caption">Complete data flow from app start through user interaction. All I/O goes through this layer.</div>
+      <div class="caption">Complete data flow. Course loading is handled by the adapter — fetchAll() owns both fetch strategy and normalization.</div>
     </div>
 
     <h2>External data sources</h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Source</th><th>What it is</th><th>How updated</th></tr></thead>
       <tbody>
-        <tr><td><code>public/all-courses.json</code></td><td>4,800+ normalized course objects. 6.5 MB. Bundled at build.</td><td><code>npm run scrape</code> + <code>npm run patch</code> + commit</td></tr>
+        <tr><td><code>public/northeastern/all-courses.json</code></td><td>4,800+ normalized course objects. 6.5 MB. Bundled at build.</td><td><code>npm run data:scrape:write</code> + <code>npm run data:patch:write</code> + commit</td></tr>
         <tr><td><code>graduatenu/packages/api/src/major/</code></td><td>1,471 Major2 JSON files. Served as static assets.</td><td>Scraped from Northeastern catalog. Patched by <code>fix-pooled-requirements.js</code>.</td></tr>
         <tr><td><code>localStorage</code></td><td>Plan data, settings, theme. Per-browser.</td><td>Auto-saved on every state mutation (when persistEnabled=true)</td></tr>
         <tr><td><code>husker.vercel.app/courses/all</code></td><td>Live course API (fallback only)</td><td>Maintained by nu-courses author. Only used if bundled JSON fails to load.</td></tr>

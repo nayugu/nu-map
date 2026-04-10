@@ -16,6 +16,7 @@
           {
             id: 'src/ports', label: 'ports/', type: 'dir',
             children: [
+              { id: 'src/ports/IAttributable',      label: 'IAttributable.js',       type: 'js' },
               { id: 'src/ports/IInstitution',       label: 'IInstitution.js',       type: 'js' },
               { id: 'src/ports/ICalendar',          label: 'ICalendar.js',           type: 'js' },
               { id: 'src/ports/ICreditSystem',      label: 'ICreditSystem.js',       type: 'js' },
@@ -63,7 +64,7 @@
           {
             id: 'src/data', label: 'data/', type: 'dir',
             children: [
-              { id: 'src/data/courseLoader', label: 'courseLoader.js',           type: 'js' },
+              { id: 'src/data/courseLoader', label: 'course loading',            type: 'js' },
               { id: 'src/data/majorLoader',  label: 'majorLoader + minorLoader', type: 'js' },
               { id: 'src/data/persistence',  label: 'persistence.js',            type: 'js' }
             ]

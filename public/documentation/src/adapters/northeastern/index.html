@@ -53,7 +53,7 @@
         <tr><td><code>sumB</code></td><td>Summer 2</td><td>0.5</td><td>true</td><td>Jul–Aug</td></tr>
       </tbody>
     </table></div>
-    <p>Year total: 1.0 + 1.0 + 0.5 + 0.5 = 3.0. <code>calendar.js</code> also exports Stage 1 compat shims (<code>DEFAULT_START_YEAR</code>, <code>SEMESTER_TYPES</code>) for backwards compatibility with code that imports from <code>constants.js</code>.</p>
+    <p>Year total: 1.0 + 1.0 + 0.5 + 0.5 = 3.0. The <code>weight</code> field on each semester type is the sole input to span arithmetic — <code>termSpans(termWeight, semWeight)</code> in <code>specialTermUtils.js</code> uses these values directly.</p>
 
     <h2>specialTerms.js — co-op and internship</h2>
     <p>The two term types reflect NU's co-op program and optional internship policy. The key insight is the <code>weight</code> vs. <code>duration</code> distinction: <code>duration</code> is the calendar length stored in the plan; <code>weight</code> drives the span logic in the grid.</p>

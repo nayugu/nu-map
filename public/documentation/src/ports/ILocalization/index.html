@@ -28,40 +28,41 @@
 
     <h2>Contract</h2>
     <div class="table-wrap"><table>
-      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <thead><tr><th>Method</th><th>Signature</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td><code>disclaimers</code></td><td>string[]</td><td>Ordered list of bullet points shown in the About / Disclaimer modal. Rendered as an unordered list. Include unofficial-status language, degree audit authority, data freshness, and storage limitations.</td></tr>
+        <tr><td><code>getDisclaimers()</code></td><td><code>() → string[]</code></td><td>Ordered list of disclaimer bullet points shown in the About / Disclaimer modal. Include unofficial-status language, degree audit authority, data freshness, and storage limitations.</td></tr>
+        <tr><td><code>getSources()</code></td><td><code>() → SourceInfo[]</code></td><td>External data sources. See <a href="../IAttributable/">IAttributable</a>. Typically returns <code>[]</code> for localization.</td></tr>
       </tbody>
     </table></div>
 
     <h2>Northeastern reference implementation</h2>
-    <pre><code>export default {
-  disclaimers: [
-    "This is NOT an official Northeastern University tool and is not affiliated
-     with or endorsed by Northeastern.",
-    "This does NOT replace your official degree audit. Always verify your plan
-     with your academic advisor and through MyNEU / DegreeWorks.",
-    "Course availability, prerequisites, credit hours, and NUpath designations
-     may be outdated or incorrect.",
-    "Your saved plan lives in your browser's localStorage only. Clearing
-     browser data will erase it.",
-    "Use at your own risk.",
-  ],
+    <pre><code><span class="cmt">// src/adapters/northeastern/localization.js</span>
+export default {
+  getDisclaimers() {
+    return [
+      "This is NOT an official Northeastern University tool and is not affiliated with or endorsed by Northeastern.",
+      "This does NOT replace your official degree audit. Always verify your plan with your academic advisor and through MyNEU / DegreeWorks.",
+      "Course availability, prerequisites, credit hours, and NUpath designations may be outdated or incorrect.",
+      "Your saved plan lives in your browser's localStorage only. Clearing browser data will erase it.",
+      "Use at your own risk.",
+    ];
+  },
+  getSources() { return []; },
 };</code></pre>
 
     <h2>Generic default</h2>
-    <pre><code>export default {
-  disclaimers: [
-    "This is an unofficial academic planning tool and is not affiliated with
-     or endorsed by your institution.",
-    "This does NOT replace your official degree audit. Always verify your plan
-     with your academic advisor.",
-    "Course availability, prerequisites, and credit values may change. Confirm
-     with your official course catalog.",
-    "Your saved plan is stored in your browser only. Clearing browser data will
-     erase it.",
-    "Use at your own risk.",
-  ],
+    <pre><code><span class="cmt">// src/adapters/generic/localization.js</span>
+export default {
+  getDisclaimers() {
+    return [
+      "This is an unofficial academic planning tool and is not affiliated with or endorsed by your institution.",
+      "This does NOT replace your official degree audit. Always verify your plan with your academic advisor.",
+      "Course availability, prerequisites, and credit values may change. Confirm with your official course catalog.",
+      "Your saved plan is stored in your browser only. Clearing browser data will erase it.",
+      "Use at your own risk.",
+    ];
+  },
+  getSources() { return []; },
 };</code></pre>
     <p>The generic default is institution-neutral. It's usable as-is if you don't need custom legal language — but you should override to at least insert your institution's name and portal/audit tool names.</p>
 

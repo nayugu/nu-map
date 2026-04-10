@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IAttributable — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/ports/IAttributable">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>IAttributable.js</strong>
+    </div>
+
+    <h1>IAttributable <span class="badge blue">base interface</span></h1>
+    <p class="lead">Every port adapter must implement <code>getSources()</code>. Adapters that draw from external data return one <code>SourceInfo</code> per upstream source. Adapters that own their own data return <code>[]</code>. <code>wire().getAllSources()</code> aggregates across all active ports and deduplicates by <code>id</code> — the About modal calls this one method to build its complete attribution list.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">File</div><div class="nb-value"><code>src/ports/IAttributable.js</code></div></div>
+      <div class="nb-group"><div class="nb-label">Implemented by</div><div class="nb-value">All 8 port adapters (northeastern/ and generic/) via <code>getSources()</code></div></div>
+      <div class="nb-group"><div class="nb-label">Aggregated by</div><div class="nb-value"><code>wire().getAllSources()</code> → consumed by DisclaimerModal</div></div>
+    </div>
+
+    <h2>SourceInfo shape</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Yes</td><td>Stable unique key for deduplication. Must be the same across all ports that reference the same upstream source — e.g. both <code>courseCatalog</code> and a hypothetical future port could both claim <code>"nu-courses"</code> and <code>getAllSources()</code> would merge them. Never change this value after deployment.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Yes</td><td>Repository or dataset name as shown in the About modal. Typically <code>"org/repo"</code> format, e.g. <code>"sandboxnu/graduatenu"</code>.</td></tr>
+        <tr><td><code>url</code></td><td>string</td><td>Yes</td><td>Canonical URL — GitHub repo, dataset page, or project site.</td></tr>
+        <tr><td><code>author</code></td><td>string</td><td>No</td><td>GitHub username or org. Shown as <code>@username</code> next to the label. Omit if attribution is already clear from the label.</td></tr>
+        <tr><td><code>usedFor</code></td><td>string</td><td>Yes</td><td>Plain-English description of what this source provides, shown as "used for ___" in the About modal. E.g. <code>"graduation requirement definitions"</code>, <code>"course catalog data"</code>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>How getAllSources() works</h2>
+    <p><code>wire(overrides)</code> adds a <code>getAllSources()</code> method to the merged adapter bundle. It iterates all active port implementations, calls <code>getSources()</code> on each, and deduplicates by <code>id</code>. When two ports return the same <code>id</code>, their <code>usedFor</code> descriptions are merged into an array so the About modal shows a single source entry with multiple uses.</p>
+
+    <pre><code><span class="cmt">// Simplified wire.js logic</span>
+merged.getAllSources = () => {
+  const map = new Map();
+  Object.values(merged)
+    .filter(p => typeof p?.getSources === "function")
+    .flatMap(p => p.getSources())
+    .forEach(s => {
+      if (map.has(s.id)) {
+        const existing = map.get(s.id);
+        map.set(s.id, { ...existing, usedFor: [existing.usedFor, s.usedFor].flat() });
+      } else {
+        map.set(s.id, { ...s, usedFor: [s.usedFor] });
+      }
+    });
+  return [...map.values()];
+};</code></pre>
+
+    <h2>Current source map (Northeastern)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Port</th><th>Source id</th><th>usedFor</th></tr></thead>
+      <tbody>
+        <tr><td>courseCatalog</td><td><code>"nu-courses"</code></td><td>course catalog data</td></tr>
+        <tr><td>majorRequirements</td><td><code>"graduatenu"</code></td><td>graduation requirement definitions</td></tr>
+        <tr><td>institution, calendar, creditSystem, attributeSystem, specialTerms, localization</td><td>(none)</td><td><code>getSources()</code> returns <code>[]</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Adding getSources() to an adapter</h2>
+    <pre><code><span class="cmt">// In any adapter file that uses an external data source:</span>
+export default {
+  <span class="cmt">// ... other port methods ...</span>
+  getSources() {
+    return [{
+      id:      "my-source",
+      label:   "myorg/myrepo",
+      url:     "https://github.com/myorg/myrepo",
+      author:  "myorg",
+      usedFor: "course catalog data",
+    }];
+  },
+};</code></pre>
+    <p>If the adapter owns its own data and has no external upstream: <code>getSources() { return []; }</code>.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

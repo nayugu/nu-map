@@ -24,7 +24,7 @@
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
       <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext.jsx, GradPanel.jsx</div></div>
-      <div class="nb-group"><div class="nb-label">Imports</div><div class="nb-value">constants.js (NUPATH_LABELS)</div></div>
+      <div class="nb-group"><div class="nb-label">Imports</div><div class="nb-value">None — pure structural logic, no institution or adapter imports</div></div>
     </div>
 
     <h2>Requirement type hierarchy</h2>
@@ -132,12 +132,6 @@ flowchart TD
     <div class="fn-block exported">
       <div class="fn-sig">buildGeneralElectivesSection(placedSet, allocatedSet, courseMap, creditHoursRequired?) → Section</div>
       <div class="fn-desc">Creates a synthetic SECTION for courses not allocated to any major requirement. Computes total credit hours of unallocated courses. The <code>creditHoursRequired</code> comes from the major JSON's <code>creditHoursRequired</code> field (if present). Returns a section object compatible with the GradPanel SectionBlock renderer.</div>
-    </div>
-
-    <div class="fn-block exported">
-      <div class="fn-sig">getNuPathCoverage(placements, courseMap, grantedAttrs?) → Set&lt;string&gt;</div>
-      <div class="fn-desc"><span class="badge yellow">Deprecated</span> Returns the set of NUPath attribute codes satisfied by all placed courses, plus any codes in <code>grantedAttrs</code> (a <code>Set&lt;string&gt;</code>). Use <code>attributeSystem.getCoverage()</code> from the institution adapter instead. <code>grantedAttrs</code> should be computed via <code>computeGrantedAttrs(specialTermPl, specialTerms.types)</code> from <code>specialTermUtils.js</code>.</div>
-      <div class="fn-returns">Returns: <span>Set&lt;string&gt; — subset of {"ND","EI","IC","FQ","SI","AD","DD","ER","WF","WD","WI","EX"}</span></div>
     </div>
 
     <h2>Dynamic normalization helpers (private)</h2>

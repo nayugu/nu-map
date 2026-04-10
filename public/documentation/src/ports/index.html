@@ -19,13 +19,22 @@
     </div>
 
     <h1>ports/ <span class="badge blue">Interface contracts</span></h1>
-    <p class="lead">Eight JSDoc-only files — no logic, no runtime behavior — that define exactly what data shape each institution adapter must provide. Everything institution-specific that the planner needs flows through one of these eight contracts.</p>
+    <p class="lead">Nine JSDoc-only files — no logic, no runtime behavior — that define exactly what data shape each institution adapter must provide. <code>IAttributable</code> is the base interface all ports extend. The remaining eight define institution-specific behavior.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
       <div class="nb-group"><div class="nb-label">Implemented by</div><div class="nb-value"><a href="../adapters/northeastern/">northeastern/</a> (NU), <a href="../adapters/generic/">generic/</a> (fallback defaults)</div></div>
       <div class="nb-group"><div class="nb-label">Consumed via</div><div class="nb-value"><code>usePort(IPortName)</code> inside any component; <code>useInstitution()</code> for multi-port access</div></div>
       <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">No logic, no imports. Pure JSDoc typedef + one named export for the port key string.</div></div>
+    </div>
+
+    <h2>Base interface</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./IAttributable/">
+        <div class="cc-type">base interface</div>
+        <div class="cc-name">IAttributable</div>
+        <div class="cc-desc">All ports extend this. Defines getSources() → SourceInfo[]. wire().getAllSources() aggregates across all active ports to build the About modal attribution list.</div>
+      </a>
     </div>
 
     <h2>The eight ports</h2>
@@ -63,7 +72,7 @@
       <a class="child-card" href="./ICourseCatalog/">
         <div class="cc-type">data source</div>
         <div class="cc-name">ICourseCatalog</div>
-        <div class="cc-desc">LOCAL_URL (bundled JSON) and API_URL (live fallback). The two strings that tell the app where course data lives.</div>
+        <div class="cc-desc">fetchAll(), normalize(), courseUrl(). The adapter owns the full fetch-and-normalize pipeline — PlannerContext calls fetchAll() and receives Course[] already normalized.</div>
       </a>
       <a class="child-card" href="./ILocalization/">
         <div class="cc-type">UI copy</div>
@@ -82,8 +91,8 @@
         <tr><td><a href="./IAttributeSystem/">IAttributeSystem</a></td><td><code>gridLayout</code>, <code>getCoverage()</code></td><td>Empty grid, always empty Set</td><td>NUPath — 12-code 3×4 grid</td><td>Override if institution has gen-ed framework</td></tr>
         <tr><td><a href="./ISpecialTerms/">ISpecialTerms</a></td><td><code>types[].durations[].weight</code></td><td>Empty types array</td><td>Co-op (4mo/6mo), Internship (2mo/4mo)</td><td>Override if institution has co-ops or exchanges</td></tr>
         <tr><td><a href="./IMajorRequirements/">IMajorRequirements</a></td><td><code>fmtLabel()</code>, <code>fmtLocation()</code></td><td>Title-case, no location</td><td>Strips <code>_(boston)</code>, title-case</td><td>Override only if folder naming differs</td></tr>
-        <tr><td><a href="./ICourseCatalog/">ICourseCatalog</a></td><td><code>LOCAL_URL</code>, <code>API_URL</code></td><td><code>courses.json</code> at root, no API</td><td>NU-namespaced JSON + SearchNEU fallback</td><td><strong>Required</strong> — always set LOCAL_URL</td></tr>
-        <tr><td><a href="./ILocalization/">ILocalization</a></td><td><code>disclaimers</code></td><td>Generic neutral disclaimers</td><td>NU-specific: MyNEU, DegreeWorks, NUpath</td><td>Override to insert institution names and legal copy</td></tr>
+        <tr><td><a href="./ICourseCatalog/">ICourseCatalog</a></td><td><code>fetchAll()</code>, <code>normalize()</code>, <code>courseUrl()</code></td><td><code>courses.json</code> at root, no API fallback</td><td>NU-namespaced JSON + SearchNEU fallback, Banner term decoding</td><td><strong>Required</strong> — always implement fetchAll()</td></tr>
+        <tr><td><a href="./ILocalization/">ILocalization</a></td><td><code>getDisclaimers()</code></td><td>Generic neutral disclaimer bullets</td><td>NU-specific: MyNEU, DegreeWorks, NUpath</td><td>Override to insert institution names and legal copy</td></tr>
       </tbody>
     </table></div>
 

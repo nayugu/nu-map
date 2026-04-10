@@ -139,7 +139,7 @@ graph LR
         <tr><td><code>core/specialTermUtils.js</code></td><td>Core</td><td>~40</td><td>resolveTermByDuration, termSpans, computeGrantedAttrs</td></tr>
         <tr><td><code>core/themes.js</code></td><td>Core</td><td>~160</td><td>CSS variable token sets</td></tr>
         <tr><td><code>core/constants.js</code></td><td>Core</td><td>~60</td><td>Generic compile-time constants (colors, palette)</td></tr>
-        <tr><td><code>data/courseLoader.js</code></td><td>Data</td><td>~30</td><td>Fetch course catalog (takes courseCatalog port)</td></tr>
+        <tr><td><em>course loading</em></td><td>Adapter</td><td>—</td><td>Handled by <code>courseCatalog.fetchAll()</code> — no standalone module</td></tr>
         <tr><td><code>data/majorLoader.js</code></td><td>Data</td><td>~50</td><td>Fetch major requirements (takes majorRequirements port)</td></tr>
         <tr><td><code>data/minorLoader.js</code></td><td>Data</td><td>~40</td><td>Fetch minor requirements (takes majorRequirements port)</td></tr>
         <tr><td><code>data/persistence.js</code></td><td>Data</td><td>~30</td><td>localStorage read/write (takes storagePrefix)</td></tr>
