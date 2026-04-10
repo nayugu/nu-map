@@ -12,6 +12,7 @@ import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
+import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
 import {
@@ -535,7 +536,11 @@ function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
 
 export default function GradPanel() {
   const [showMajorDetails, setShowMajorDetails] = useState(false);
-    const [showProgram, setShowProgram] = useState(true);
+  const institution = usePort(IInstitution);
+  const pfx = institution.storagePrefix;
+  const [showProgram, setShowProgram] = useState(() => {
+    try { const v = localStorage.getItem(`${pfx}-grad-show-program`); return v === null ? true : v !== "false"; } catch { return true; }
+  });
   const {
     placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
     specialTermPl,
@@ -562,7 +567,11 @@ export default function GradPanel() {
   const [major,    setMajor]    = useState(null);
   const [loadErr,  setLoadErr]  = useState(null);
   const [fetching, setFetching] = useState(false);
-  const [showNP,   setShowNP]   = useState(true);
+  const [showNP,   setShowNP]   = useState(() => {
+    try { const v = localStorage.getItem(`${pfx}-grad-show-np`); return v === null ? true : v !== "false"; } catch { return true; }
+  });
+  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-program`, String(showProgram)); } catch {} }, [showProgram]);
+  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-np`,      String(showNP));      } catch {} }, [showNP]);
 
   // Fetch major JSON on path change
   useEffect(() => {
@@ -801,7 +810,7 @@ export default function GradPanel() {
                 {t("grad.major.label")}
               </div>
               {showMajorDetails && (
-                <div style={{ margin: isPhone ? "2px 0 6px 0" : "3px 0 8px 0", color: "var(--text-2)", fontWeight: 600, fontSize: isPhone ? 9 : 10, textAlign: "left" }}>
+                <div style={{ margin: isPhone ? "2px 0 6px 0" : "3px 0 8px 0", color: "var(--text-2)", fontWeight: 600, fontSize: isPhone ? 9 : 10, textAlign: "center" }}>
                   {major.name}
                   {selConc && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 2 }}>Concentration: {selConc}</div>}
                 </div>
