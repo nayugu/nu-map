@@ -834,12 +834,16 @@ export default function GradPanel() {
                   </div>
                   {major && !isPhone && (
                     <div style={{ marginLeft: "auto", textAlign: "right" }}>
+                      {/* 
+                      // catalog year
                       <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)" }}>{major.yearVersion}</div>
-                      <div style={{ fontSize: 9, color: "var(--text-4)" }}>catalog</div>
+                      <div style={{ fontSize: 9, color: "var(--text-4)" }}>catalog</div> */}
                     </div>
                   )}
                 </div>
                 <CreditBar completedSH={totalSHDone} plannedSH={plannedSH} requiredSH={requiredSH} />
+                {/* 
+                // Legend for progress bar
                 {!isPhone && (
                 <div style={{ display: "flex", gap: 10, marginTop: 3 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -859,7 +863,7 @@ export default function GradPanel() {
                     </div>
                   )}
                 </div>
-                )}
+                )} */}
               </div>
               
               <div style={{ marginTop: 8 }}>
