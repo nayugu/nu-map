@@ -301,7 +301,7 @@ export default function Header() {
               background: showPlanMenu ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`,
               borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", whiteSpace: "nowrap" }}>
-            {isPhone ? `${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾` : isMobile ? "📋" : `📋 ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
+            {isPhone ? `${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾` : isMobile ? "/" : `/ ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
           </button>
 
           {showPlanMenu && (
