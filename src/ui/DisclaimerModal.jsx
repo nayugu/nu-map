@@ -20,7 +20,8 @@ export default function DisclaimerModal() {
 
   if (!showDisclaimer) return null;
 
-  const disclaimers = localization.getDisclaimers();
+  const disclaimers        = localization.getDisclaimers();
+  const attributionBlocks  = localization.getAttributionBlocks();
 
   return (
     <div
@@ -49,76 +50,36 @@ export default function DisclaimerModal() {
           </div>
         </div>
 
-        {/* Attribution */}
-        <div style={{
-          background: "var(--badge-bg)", border: "1px solid var(--border-1)",
-          borderRadius: 8, padding: "10px 12px", marginBottom: 10,
-        }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 5, letterSpacing: "0.04em" }}>
-            DATA SOURCE
+        {/* Attribution blocks — institution-specific, sourced from localization adapter */}
+        {attributionBlocks.map((block, i) => (
+          <div key={i} style={{
+            background: "var(--badge-bg)", border: "1px solid var(--border-1)",
+            borderRadius: 8, padding: "10px 12px", marginBottom: 10,
+          }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 5, letterSpacing: "0.04em" }}>
+              {block.title}
+            </div>
+            <div style={{ fontSize: 11, lineHeight: 1.5, color: "var(--text-2)" }}>
+              {block.body}
+            </div>
+            {block.links.length > 0 && (
+              <div style={{ marginTop: 7, display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {block.links.map((link, j) => (
+                  <a key={j} href={link.href} target="_blank" rel="noreferrer"
+                    style={{
+                      fontSize: 10, textDecoration: "none", borderRadius: 4, padding: "2px 8px",
+                      ...(link.primary
+                        ? { color: "var(--link-1)", background: "var(--link-bg)", border: "1px solid var(--link-border)" }
+                        : { color: "var(--text-3)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)" }
+                      ),
+                    }}>
+                    {link.label} ↗
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
-          <div style={{ fontSize: 11, lineHeight: 1.5, color: "var(--text-2)" }}>
-            Course catalog data is sourced from{" "}
-            <a href="https://github.com/ninest/nu-courses" target="_blank" rel="noreferrer"
-              style={{ color: "var(--link-1)", textDecoration: "none", fontWeight: 700 }}>
-              ninest/nu-courses
-            </a>{" "}— built and maintained by{" "}
-            <a href="https://github.com/ninest" target="_blank" rel="noreferrer"
-              style={{ color: "var(--link-2)", textDecoration: "none", fontWeight: 700 }}>
-              @ninest
-            </a>.
-            Data is scraped from Northeastern's Banner registration system.
-          </div>
-          <div style={{ marginTop: 7, display: "flex", gap: 6, flexWrap: "wrap" }}>
-            <a href="https://github.com/ninest/nu-courses" target="_blank" rel="noreferrer"
-              style={{ fontSize: 10, color: "var(--link-1)", background: "var(--link-bg)", border: "1px solid var(--link-border)", borderRadius: 4, padding: "2px 8px", textDecoration: "none" }}>
-              github.com/ninest/nu-courses ↗
-            </a>
-            <a href="https://husker.vercel.app" target="_blank" rel="noreferrer"
-              style={{ fontSize: 10, color: "var(--text-3)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 4, padding: "2px 8px", textDecoration: "none" }}>
-              husker.vercel.app ↗
-            </a>
-          </div>
-        </div>
-
-        {/* Requirements engine attribution */}
-        <div style={{
-          background: "var(--badge-bg)", border: "1px solid var(--border-1)",
-          borderRadius: 8, padding: "10px 12px", marginBottom: 10,
-        }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 5, letterSpacing: "0.04em" }}>
-            GRADUATION REQUIREMENTS
-          </div>
-          <div style={{ fontSize: 11, lineHeight: 1.5, color: "var(--text-2)" }}>
-            Graduation requirement data and validation logic is derived from{" "}
-            <a href="https://github.com/sandboxnu/graduatenu" target="_blank" rel="noreferrer"
-              style={{ color: "var(--link-1)", textDecoration: "none", fontWeight: 700 }}>
-              sandboxnu/graduatenu
-            </a>{" "}— built by{" "}
-            <a href="https://github.com/denniwang" target="_blank" rel="noreferrer"
-              style={{ color: "var(--link-2)", textDecoration: "none", fontWeight: 700 }}>
-              @denniwang
-            </a>{" "}and{" "}
-            <a href="https://github.com/sandboxnu" target="_blank" rel="noreferrer"
-              style={{ color: "var(--link-2)", textDecoration: "none", fontWeight: 700 }}>
-              Sandbox
-            </a>.
-          </div>
-          <div style={{ marginTop: 7, display: "flex", gap: 6, flexWrap: "wrap" }}>
-            <a href="https://github.com/sandboxnu/graduatenu" target="_blank" rel="noreferrer"
-              style={{ fontSize: 10, color: "var(--link-1)", background: "var(--link-bg)", border: "1px solid var(--link-border)", borderRadius: 4, padding: "2px 8px", textDecoration: "none" }}>
-              github.com/sandboxnu/graduatenu ↗
-            </a>
-            <a href="https://github.com/denniwang" target="_blank" rel="noreferrer"
-              style={{ fontSize: 10, color: "var(--text-3)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 4, padding: "2px 8px", textDecoration: "none" }}>
-              @denniwang ↗
-            </a>
-            <a href="https://github.com/sandboxnu" target="_blank" rel="noreferrer"
-              style={{ fontSize: 10, color: "var(--text-3)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 4, padding: "2px 8px", textDecoration: "none" }}>
-              Sandbox ↗
-            </a>
-          </div>
-        </div>
+        ))}
 
         {/* Disclaimers */}
         <div style={{

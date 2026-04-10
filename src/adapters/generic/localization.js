@@ -16,5 +16,6 @@ const _disclaimers = [
 
 /** @type {import('../../ports/ILocalization.js').ILocalization} */
 export default {
-  getDisclaimers() { return _disclaimers; },
+  getDisclaimers()       { return _disclaimers; },
+  getAttributionBlocks() { return []; },
 };

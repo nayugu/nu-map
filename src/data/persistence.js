@@ -8,7 +8,13 @@
 
 const STATE_SUFFIX = "-state-v2";
 
-function storageKey(prefix) {
+/**
+ * Build a namespaced localStorage key for the main plan state.
+ * Exported so Header/LoadingScreen can remove the key without importing
+ * the full persistence module's internal helpers.
+ * @param {string} prefix  institution.storagePrefix  (e.g. "ncp")
+ */
+export function storageKey(prefix) {
   return `${prefix}${STATE_SUFFIX}`;
 }
 

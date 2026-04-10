@@ -192,22 +192,6 @@ export function validateMajor(major, placedSet, courseMap) {
   return (major.requirementSections ?? []).map(s => checkSection(s, placedSet, courseMap));
 }
 
-// ── NUPath ───────────────────────────────────────────────────────
-
-/** Return a Set of NUPath keys (e.g. "FQ", "ND") covered by placed courses.
- *  Pass grantedAttrs (Set<string>) from computeGrantedAttrs() to include attributes
- *  granted by placed special terms (e.g. EX from co-ops).
- *  @deprecated Prefer attributeSystem.getCoverage() from the adapter instead. */
-export function getNuPathCoverage(placements, courseMap, grantedAttrs = new Set()) {
-  const covered = new Set();
-  for (const id of Object.keys(placements)) {
-    const c = courseMap[id];
-    if (c?.attributes) c.attributes.forEach(np => covered.add(np));
-  }
-  for (const attr of grantedAttrs) covered.add(attr);
-  return covered;
-}
-
 // ── Credit totals ────────────────────────────────────────────────
 
 /** Total SH of all placed courses. */

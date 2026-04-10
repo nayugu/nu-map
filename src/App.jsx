@@ -100,7 +100,7 @@ function PlannerApp() {
 // wire() merges the institution's overrides on top of the generic defaults.
 export default function App() {
   return (
-    <ThemeProvider>
+    <ThemeProvider storagePrefix={institutionAdapter.institution.storagePrefix}>
       <InstitutionProvider adapter={institutionAdapter}>
         <LanguageProvider>
           <PlannerProvider>

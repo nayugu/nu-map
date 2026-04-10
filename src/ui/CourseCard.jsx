@@ -46,7 +46,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const semMeta       = semId ? SEMESTERS.find(s => s.id === semId) : null;
   const semOffType    = inSem ? semMeta?.semTypeId ?? null : null;
   const offeredList   = offeredOverrides[course.id]
-    ?? getOfferedFromTerms(course.terms)
+    ?? getOfferedFromTerms(course.terms, calendar.decodeTermCode)
     ?? defaultOffered;
   const notOffered = inSem && semOffType && semMeta?.type !== "special" && !offeredList.includes(semOffType);
 

@@ -10,6 +10,7 @@ import { REL_STYLE } from "../core/constants.js";
 import { exportReport, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
+import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import dataMeta from "../core/dataMeta.json";
@@ -204,7 +205,7 @@ export default function Header() {
 
   const handleRefresh = e => {
     e.stopPropagation();
-    try { localStorage.removeItem("ncp-state-v2"); } catch {}
+    try { localStorage.removeItem(storageKey(institution.storagePrefix)); } catch {}
     window.location.reload();
   };
 
@@ -446,7 +447,7 @@ export default function Header() {
                   e.stopPropagation();
                   const next = !persistEnabled;
                   setPersistEnabled(next);
-                  if (!next) { try { localStorage.setItem("ncp-state-v2", JSON.stringify({ persist: false })); } catch {} }
+                  if (!next) { try { localStorage.setItem(storageKey(institution.storagePrefix), JSON.stringify({ persist: false })); } catch {} }
                 }}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,

@@ -12,7 +12,7 @@
 import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
 import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
-import { extractEdges, getOfferedFromTerms } from "../core/courseModel.js";
+import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
@@ -31,6 +31,7 @@ export function PlannerProvider({ children }) {
   const courseCatalog  = usePort(ICourseCatalog);
   const specialTerms   = usePort(ISpecialTerms);
   const storagePrefix    = institution.storagePrefix;
+  const key              = n => `${storagePrefix}-${n}`;
   const defaultStartYear = calendar.getDefaultStartYear();
 
   // ── API state ────────────────────────────────────────────────
@@ -92,28 +93,28 @@ export function PlannerProvider({ children }) {
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
   const [stickyCourses, setStickyCourses] = useState(() => {
-    try { return localStorage.getItem("ncp-sticky-courses") !== "false"; } catch { return true; }
+    try { return localStorage.getItem(key("sticky-courses")) !== "false"; } catch { return true; }
   });
   useEffect(() => {
-    try { localStorage.setItem("ncp-sticky-courses", String(stickyCourses)); } catch {}
+    try { localStorage.setItem(key("sticky-courses"), String(stickyCourses)); } catch {}
   }, [stickyCourses]);
 
   // ── UI: Other credits collapse setting ──
   const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => {
-    try { const v = localStorage.getItem("ncp-collapse-other-credits"); return v === null ? true : v !== "false"; } catch { return true; }
+    try { const v = localStorage.getItem(key("collapse-other-credits")); return v === null ? true : v !== "false"; } catch { return true; }
   });
   const updateCollapseOtherCredits = (val) => {
     setCollapseOtherCredits(val);
-    try { localStorage.setItem("ncp-collapse-other-credits", String(val)); } catch {}
+    try { localStorage.setItem(key("collapse-other-credits"), String(val)); } catch {}
   };
 
   // ── UI: Show logo on continuation rows ──
   const [showContLogo, setShowContLogo] = useState(() => {
-    try { const v = localStorage.getItem("ncp-show-cont-logo"); return v === null ? true : v !== "false"; } catch { return true; }
+    try { const v = localStorage.getItem(key("show-cont-logo")); return v === null ? true : v !== "false"; } catch { return true; }
   });
   const updateShowContLogo = (val) => {
     setShowContLogo(val);
-    try { localStorage.setItem("ncp-show-cont-logo", String(val)); } catch {}
+    try { localStorage.setItem(key("show-cont-logo"), String(val)); } catch {}
   };
 
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
@@ -147,21 +148,21 @@ export function PlannerProvider({ children }) {
   const [bankWidth,       setBankWidth]       = useState(() => window.innerWidth < 600 ? 88 : Math.min(300, Math.max(200, window.innerWidth * 0.21)));
   const [showSubjectKeys, setShowSubjectKeys] = useState(false);
   const [starredIds,      setStarredIds]      = useState(() => {
-    try { return new Set(JSON.parse(localStorage.getItem("ncp-starred") || "[]")); } catch { return new Set(); }
+    try { return new Set(JSON.parse(localStorage.getItem(key("starred")) || "[]")); } catch { return new Set(); }
   });
 
   // ── Settings / modal state ───────────────────────────────────
   const [showDisclaimer, setShowDisclaimer] = useState(() => {
-    try { return !localStorage.getItem("ncp-seen-disclaimer"); } catch { return true; }
+    try { return !localStorage.getItem(key("seen-disclaimer")); } catch { return true; }
   });
   // Default entry/grad sem: first and last non-optional semester types
   const _primarySems = calendar.getSemesterTypes().filter(t => !t.optional);
   const _defEntSem   = _primarySems[0]?.id           ?? "fall";
   const _defGradSem  = _primarySems.at?.(-1)?.id     ?? _defEntSem;
-  const [planEntSem,   setPlanEntSem]   = useState(() => { try { return localStorage.getItem("ncp-ent-sem")  || _defEntSem;  } catch { return _defEntSem;  } });
-  const [planEntYear,  setPlanEntYear]  = useState(() => { try { return parseInt(localStorage.getItem("ncp-ent-year")  || String(defaultStartYear), 10) || defaultStartYear; } catch { return defaultStartYear; } });
-  const [planGradSem,  setPlanGradSem]  = useState(() => { try { return localStorage.getItem("ncp-grad-sem") || _defGradSem; } catch { return _defGradSem; } });
-  const [planGradYear, setPlanGradYear] = useState(() => { try { return parseInt(localStorage.getItem("ncp-grad-year") || String(defaultStartYear + NUM_YEARS), 10) || defaultStartYear + NUM_YEARS; } catch { return defaultStartYear + NUM_YEARS; } });
+  const [planEntSem,   setPlanEntSem]   = useState(() => { try { return localStorage.getItem(key("ent-sem"))  || _defEntSem;  } catch { return _defEntSem;  } });
+  const [planEntYear,  setPlanEntYear]  = useState(() => { try { return parseInt(localStorage.getItem(key("ent-year"))  || String(defaultStartYear), 10) || defaultStartYear; } catch { return defaultStartYear; } });
+  const [planGradSem,  setPlanGradSem]  = useState(() => { try { return localStorage.getItem(key("grad-sem")) || _defGradSem; } catch { return _defGradSem; } });
+  const [planGradYear, setPlanGradYear] = useState(() => { try { return parseInt(localStorage.getItem(key("grad-year")) || String(defaultStartYear + NUM_YEARS), 10) || defaultStartYear + NUM_YEARS; } catch { return defaultStartYear + NUM_YEARS; } });
   const [showSettings, setShowSettings] = useState(false);
 
   // ── Layout state ─────────────────────────────────────────────
@@ -181,14 +182,14 @@ export function PlannerProvider({ children }) {
   );
   const [manualZoom, setManualZoomRaw] = useState(() => {
     try {
-      const stored = localStorage.getItem("ncp-zoom");
+      const stored = localStorage.getItem(key("zoom"));
       if (stored !== null) { const v = parseFloat(stored); return isNaN(v) ? null : v; }
       return window.innerWidth < PHONE_BP ? null : 1.25;
     } catch { return window.innerWidth < PHONE_BP ? null : 1.25; }
   });
   const setManualZoom = v => {
     setManualZoomRaw(v);
-    try { if (v == null) localStorage.removeItem("ncp-zoom"); else localStorage.setItem("ncp-zoom", String(v)); } catch {}
+    try { if (v == null) localStorage.removeItem(key("zoom")); else localStorage.setItem(key("zoom"), String(v)); } catch {}
   };
   const uiScale = manualZoom ?? autoScale;
   uiScaleRef.current  = uiScale;
@@ -585,8 +586,9 @@ export function PlannerProvider({ children }) {
       if (!durationDesc) return;
       const sem = SEMESTERS.find(s => s.id === semId);
       if (!sem) return;
-      const semTypeDesc = (calendar.getSemesterTypes() ?? []).find(t => t.id === sem.type);
-      const semWeight   = semTypeDesc?.weight ?? 1;
+      // sem.weight is already set by semGrid.js from the SemesterType definition.
+      // Use it directly — sem.type is the theme ("summer") not the type id ("sumA"/"sumB").
+      const semWeight = sem.weight ?? 1;
       if (termSpans(durationDesc.weight, semWeight)) {
         const nxt = SEM_NEXT[semId];
         if (nxt) contMap[nxt] = id;
@@ -620,13 +622,21 @@ export function PlannerProvider({ children }) {
       .filter(([, data]) => {
         const semId = data?.semId;
         if (!semId) return false;
-        return semId === gradSemId || SEM_NEXT[semId] === gradSemId;
+        if (semId === gradSemId) return true; // starts in grad sem — always a conflict
+        if (SEM_NEXT[semId] !== gradSemId) return false; // not adjacent
+        // Adjacent: only a conflict if the term actually spans into the grad semester.
+        const type = types.find(t => t.id === data.typeId);
+        if (!type) return false;
+        const durationDesc = resolveTermByDuration(type.durations, data.duration);
+        if (!durationDesc) return false;
+        const sem = SEMESTERS.find(s => s.id === semId);
+        return termSpans(durationDesc.weight, sem?.weight ?? 1);
       })
       .map(([id, data]) => {
         const type = types.find(t => t.id === data.typeId);
         return { id, label: type?.label ?? data.typeId, ...data };
       });
-  }, [specialTermPl, gradSemId, SEM_NEXT, specialTerms]);
+  }, [specialTermPl, gradSemId, SEM_NEXT, specialTerms, SEMESTERS]);
 
   const prereqViolations = useMemo(() => {
     const v = new Map();
@@ -701,7 +711,7 @@ export function PlannerProvider({ children }) {
     setStarredIds(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id); else next.add(id);
-      try { localStorage.setItem("ncp-starred", JSON.stringify([...next])); } catch {}
+      try { localStorage.setItem(key("starred"), JSON.stringify([...next])); } catch {}
       return next;
     });
   };
@@ -1126,10 +1136,10 @@ export function PlannerProvider({ children }) {
     setPlanGradYear(defaultStartYear + NUM_YEARS);
     // Also clear any per‑plan localStorage items for cohort (optional, but safe)
     try {
-      localStorage.setItem("ncp-ent-sem",  _defEntSem);
-      localStorage.setItem("ncp-ent-year", String(defaultStartYear));
-      localStorage.setItem("ncp-grad-sem", _defGradSem);
-      localStorage.setItem("ncp-grad-year", String(defaultStartYear + NUM_YEARS));
+      localStorage.setItem(key("ent-sem"),  _defEntSem);
+      localStorage.setItem(key("ent-year"), String(defaultStartYear));
+      localStorage.setItem(key("grad-sem"), _defGradSem);
+      localStorage.setItem(key("grad-year"), String(defaultStartYear + NUM_YEARS));
     } catch {}
   };
   const resetAll = resetPlanToDefaults;
@@ -1137,21 +1147,21 @@ export function PlannerProvider({ children }) {
   // ── Multi-plan management ────────────────────────────────────
   const [plans, setPlans] = useState(() => {
     try {
-      const raw = localStorage.getItem("ncp-plan-index");
+      const raw = localStorage.getItem(key("plan-index"));
       if (raw) return JSON.parse(raw);
     } catch {}
     return [{ id: "default", name: "Plan 1" }];
   });
   const [activePlanId, setActivePlanId] = useState(() => {
-    try { return localStorage.getItem("ncp-active-plan") || "default"; } catch { return "default"; }
+    try { return localStorage.getItem(key("active-plan")) || "default"; } catch { return "default"; }
   });
 
   // Persist plan index whenever it changes
   useEffect(() => {
-    try { localStorage.setItem("ncp-plan-index", JSON.stringify(plans)); } catch {}
+    try { localStorage.setItem(key("plan-index"), JSON.stringify(plans)); } catch {}
   }, [plans]);
   useEffect(() => {
-    try { localStorage.setItem("ncp-active-plan", activePlanId); } catch {}
+    try { localStorage.setItem(key("active-plan"), activePlanId); } catch {}
   }, [activePlanId]);
 
   // Capture full plan state as a serializable object
@@ -1185,10 +1195,10 @@ export function PlannerProvider({ children }) {
     setCollapsedSubs(d.collapsedSubs ?? {});
     setBonusSH(d.bonusSH ?? 0);
     if (d.currentSemId) setCurrentSemId(d.currentSemId);
-    if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem("ncp-ent-sem",  d.entSem);  } catch {} }
-    if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem("ncp-ent-year", d.entYear); } catch {} }
-    if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem("ncp-grad-sem", d.gradSem); } catch {} }
-    if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem("ncp-grad-year",d.gradYear);} catch {} }
+    if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem(key("ent-sem"),  d.entSem);  } catch {} }
+    if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem(key("ent-year"), d.entYear); } catch {} }
+    if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem(key("grad-sem"), d.gradSem); } catch {} }
+    if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
     setMajor(d.major ?? "");
     setConc(d.conc ?? "");
     setMinor1(d.minor1 ?? "");
@@ -1198,7 +1208,7 @@ export function PlannerProvider({ children }) {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(`ncp-plan-data-${activePlanId}`);
+      const raw = localStorage.getItem(key(`plan-data-${activePlanId}`));
       if (raw) {
         const d = JSON.parse(raw);
         restorePlan(d);
@@ -1217,7 +1227,7 @@ export function PlannerProvider({ children }) {
 
   // Save current plan to its localStorage slot
   const saveCurrentPlanToSlot = () => {
-    try { localStorage.setItem(`ncp-plan-data-${activePlanId}`, JSON.stringify(captureCurrentPlan())); } catch {}
+    try { localStorage.setItem(key(`plan-data-${activePlanId}`), JSON.stringify(captureCurrentPlan())); } catch {}
   };
 
   // Switch to a different plan
@@ -1242,7 +1252,7 @@ export function PlannerProvider({ children }) {
   // Delete a plan
   const deletePlan = (id) => {
     if (plans.length <= 1) return; // can't delete last plan
-    try { localStorage.removeItem(`ncp-plan-data-${id}`); } catch {}
+    try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
     const remaining = plans.filter(p => p.id !== id);
     setPlans(remaining);
     if (id === activePlanId) {
@@ -1307,10 +1317,10 @@ export function PlannerProvider({ children }) {
         setPlacedOut(new Set(Array.isArray(d.placedOut) ? d.placedOut : []));
         setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
         if (d.currentSemId) setCurrentSemId(d.currentSemId);
-        if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem("ncp-ent-sem",  d.entSem);  } catch {} }
-        if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem("ncp-ent-year", d.entYear); } catch {} }
-        if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem("ncp-grad-sem", d.gradSem); } catch {} }
-        if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem("ncp-grad-year",d.gradYear);} catch {} }
+        if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem(key("ent-sem"),  d.entSem);  } catch {} }
+        if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem(key("ent-year"), d.entYear); } catch {} }
+        if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem(key("grad-sem"), d.gradSem); } catch {} }
+        if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
         setMajor(d.major ?? "");
         setConc(d.conc ?? "");
         setMinor1(d.minor1 ?? "");
@@ -1327,22 +1337,22 @@ export function PlannerProvider({ children }) {
   const setEntSem = sem => {
     if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanEntSem(sem);
-    try { localStorage.setItem("ncp-ent-sem", sem); } catch {}
+    try { localStorage.setItem(key("ent-sem"), sem); } catch {}
   };
   const setEntYear = year => {
     if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanEntYear(year);
-    try { localStorage.setItem("ncp-ent-year", year); } catch {}
+    try { localStorage.setItem(key("ent-year"), year); } catch {}
   };
   const setGradSem = sem => {
     if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanGradSem(sem);
-    try { localStorage.setItem("ncp-grad-sem", sem); } catch {}
+    try { localStorage.setItem(key("grad-sem"), sem); } catch {}
   };
   const setGradYear = year => {
     if (stickyCourses) stickySnapshotRef.current = { placements: { ...placements }, specialTermPl: { ...specialTermPl }, sems: [...SEMESTERS] };
     setPlanGradYear(year);
-    try { localStorage.setItem("ncp-grad-year", year); } catch {}
+    try { localStorage.setItem(key("grad-year"), year); } catch {}
   };
 
   // ── Sticky: remap placements + co-ops after SEMESTERS regenerates ──

@@ -8,8 +8,6 @@ import { THEMES, DEFAULT_THEME } from '../core/themes.js';
 
 const ThemeCtx = createContext(null);
 
-const LS_KEY = 'ncp-theme';
-
 /** Write all CSS custom properties for `tokens` onto <html>. */
 function applyTheme(tokens) {
   const root = document.documentElement;
@@ -30,7 +28,9 @@ function applyTheme(tokens) {
   `;
 }
 
-export function ThemeProvider({ children }) {
+export function ThemeProvider({ storagePrefix = 'app', children }) {
+  const LS_KEY = `${storagePrefix}-theme`;
+
   const [themeName, setThemeState] = useState(() => {
     try {
       const saved = localStorage.getItem(LS_KEY);

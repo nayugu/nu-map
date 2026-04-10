@@ -4,12 +4,13 @@
 import { usePort }       from "../context/InstitutionContext.jsx";
 import { IInstitution } from "../ports/IInstitution.js";
 import { useLanguage }  from "../context/LanguageContext.jsx";
+import { storageKey }   from "../data/persistence.js";
 
 export default function LoadingScreen({ loadErr, loadPct }) {
   const institution = usePort(IInstitution);
   const { t } = useLanguage();
   const handleRetry = () => {
-    try { localStorage.removeItem("ncp-state-v2"); } catch {}
+    try { localStorage.removeItem(storageKey(institution.storagePrefix)); } catch {}
     window.location.reload();
   };
 
