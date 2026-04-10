@@ -22,7 +22,7 @@ export default function Header() {
     resetAll, setShowDisclaimer,
     showSettings, setShowSettings,
     planEntSem, planEntYear, planGradSem, planGradYear,
-    entOrd, gradOrd,
+    entOrd, gradOrd, semOrd,
     setEntSem, setEntYear, setGradSem, setGradYear,
     coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap, semOrders,
     showViolLines, setShowViolLines,
@@ -525,7 +525,7 @@ export default function Header() {
                   <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>{t("header.cohort.entry")}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 6 }}>
                     {["fall","spring"].map(s => {
-                      const wouldBe = planEntYear * 2 + (s === "spring" ? 1 : 0);
+                      const wouldBe = semOrd(s, planEntYear);
                       const blocked = wouldBe >= gradOrd;
                       return (<button key={s} onClick={() => { if (!blocked) setEntSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>);
                     })}
@@ -534,7 +534,7 @@ export default function Header() {
                   <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>{t("header.cohort.graduation")}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
                     {["fall","spring"].map(s => {
-                      const wouldBe = planGradYear * 2 + (s === "spring" ? 1 : 0);
+                      const wouldBe = semOrd(s, planGradYear);
                       const blocked = wouldBe <= entOrd;
                       return (<button key={s} onClick={() => { if (!blocked) setGradSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planGradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planGradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>);
                     })}
@@ -610,7 +610,7 @@ export default function Header() {
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>{t("header.cohort.entry")}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                   {["fall", "spring"].map(s => {
-                    const wouldBe = planEntYear * 2 + (s === "spring" ? 1 : 0);
+                    const wouldBe = semOrd(s, planEntYear);
                     const blocked = wouldBe >= gradOrd;
                     return (
                       <button key={s}
@@ -640,7 +640,7 @@ export default function Header() {
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>{t("header.cohort.graduation")}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                   {["fall", "spring"].map(s => {
-                    const wouldBe = planGradYear * 2 + (s === "spring" ? 1 : 0);
+                    const wouldBe = semOrd(s, planGradYear);
                     const blocked = wouldBe <= entOrd;
                     return (
                       <button key={s}

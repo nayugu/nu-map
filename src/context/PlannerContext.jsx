@@ -1273,7 +1273,7 @@ export function PlannerProvider({ children }) {
       return;
     }
     saveCurrentPlanToSlot();
-  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -1428,7 +1428,7 @@ export function PlannerProvider({ children }) {
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     showContLogo, setShowContLogo: updateShowContLogo,
     stickyCourses, setStickyCourses,
-    planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd,
+    planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd, semOrd: _semOrd,
     panelHeight,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,
     // Derived
