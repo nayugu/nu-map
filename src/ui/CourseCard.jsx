@@ -8,7 +8,6 @@ import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
-import { getOfferedFromTerms } from "../core/courseModel.js";
 
 /**
  * @param {object} course   - normalised course object
@@ -46,7 +45,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const semMeta       = semId ? SEMESTERS.find(s => s.id === semId) : null;
   const semOffType    = inSem ? semMeta?.semTypeId ?? null : null;
   const offeredList   = offeredOverrides[course.id]
-    ?? getOfferedFromTerms(course.terms, calendar.decodeTermCode)
+    ?? (course.terms?.length ? course.terms : null)
     ?? defaultOffered;
   const notOffered = inSem && semOffType && semMeta?.type !== "special" && !offeredList.includes(semOffType);
 

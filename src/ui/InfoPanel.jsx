@@ -9,7 +9,6 @@ import { ICreditSystem }            from "../ports/ICreditSystem.js";
 import { ICalendar }                from "../ports/ICalendar.js";
 import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
-import { getOfferedFromTerms }       from "../core/courseModel.js";
 import { getConnections } from "../core/planModel.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 
@@ -362,7 +361,7 @@ function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides, comp
   const calendar = usePort(ICalendar);
   const { t } = useLanguage();
   const primarySems = calendar.getSemesterTypes().filter(t => !t.optional).map(t => t.id);
-  const defaults = getOfferedFromTerms(selCourse.terms, calendar.decodeTermCode) ?? primarySems;
+  const defaults = (selCourse.terms?.length ? selCourse.terms : null) ?? primarySems;
 
   return (
     <div style={{ width: compact ? "100%" : 155, flexShrink: 0 }}>
