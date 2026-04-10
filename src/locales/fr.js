@@ -78,6 +78,7 @@ export const strings = {
   "grad.verified":          "vérifié",
   "grad.loading":           "Chargement…",
   "grad.empty":             "Recherchez votre majeure ci-dessus\npour vérifier les exigences de diplôme\npar rapport à votre plan actuel.",
+  "grad.programSelection": "Sélection du programme",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sans titre",

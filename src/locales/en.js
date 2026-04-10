@@ -79,6 +79,7 @@ export const strings = {
   "grad.verified":          "verified",
   "grad.loading":           "Loading\u2026",
   "grad.empty":             "Search for your major above\nto check graduation requirements\nagainst your current plan.",
+  "grad.programSelection": "Program Selection",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "No title",

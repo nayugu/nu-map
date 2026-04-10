@@ -450,7 +450,7 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 
   return (
     <>
-      <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 10 }}>
+      <div style={{ textAlign: "center", fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 12 }}>
         {label}
         <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{minor.name}</span>
         {minor.metadata?.verified && (
@@ -465,6 +465,8 @@ function MinorBlock({ path, placedSet, label = "MINOR" }) {
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel() {
+  const [showMajorDetails, setShowMajorDetails] = useState(false);
+    const [showProgram, setShowProgram] = useState(true);
   const {
     placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
     specialTermPl,
@@ -569,88 +571,87 @@ export default function GradPanel() {
     <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, attributeSystem, majorRequirements }}>
       <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
-        {/* ── Major selector ─────────────────────────────────── */}
-        <div style={{ marginBottom: 3 }}>
-          <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
-            {t("grad.major.label")}
-          </div>
-          <SearchCombo
-            value={selPath}
-            onChange={setSelPath}
-            groups={majorGroups}
-            placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
-          />
-        </div>
-
-        {/* ── Concentration selector ──────────────────────────── */}
-        {major?.concentrations?.concentrationOptions?.length > 0 && (
-          <div style={{ marginBottom: 8, marginTop: 8 }}>
-            <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
-              {t("grad.conc.label")}
+        {/* ── Program selection (collapsible) ─────────────────── */}
+        <div style={{ marginBottom: 10, position: "relative" }}>
+          {/* Collapsed: show header with triangle and text */}
+          {!showProgram && (
+            <div
+              onClick={() => setShowProgram(v => !v)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+                userSelect: "none",
+                fontSize: isPhone ? 9 : 11,
+                fontWeight: 500,
+                color: "var(--text-4)",
+                margin: 0,
+                padding: 0,
+                letterSpacing: 0,
+                gap: 5,
+              }}
+            >
+              <span style={{ fontSize: isPhone ? 9 : 10, color: "var(--text-5)", lineHeight: 1 }}>{"▶"}</span>
+              <span style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11 }}>{t("grad.programSelection")}</span>
             </div>
-            <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} />
-            {major.concentrations.minOptions > 0 && !selConc && (
-              <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
-                ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
+          )}
+          {/* Expanded: show triangle in upper right corner */}
+          {showProgram && (
+            <>
+              <span
+                onClick={() => setShowProgram(false)}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  fontSize: isPhone ? 9 : 10,
+                  color: "var(--text-5)",
+                  cursor: "pointer",
+                  userSelect: "none",
+                  padding: isPhone ? "2px 4px" : "3px 6px"
+                }}
+                title={t("grad.programSelection")}
+              >
+                ▼
+              </span>
+              {/* Major selector */}
+              <div style={{ marginBottom: 3 }}>
+                <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
+                  {t("grad.major.label")}
+                </div>
+                <SearchCombo
+                  value={selPath}
+                  onChange={setSelPath}
+                  groups={majorGroups}
+                  placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
+                />
               </div>
-            )}
-          </div>
-        )}
 
-        {/* ── Minor selectors ──────────────────────────────────── */}
-        {/* Phone: single column (full-width like MAJOR). Tablet/desktop: side-by-side. */}
-        <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
-          {[[t("grad.minor1.label"), minor1, setMinor1], [t("grad.minor2.label"), minor2, setMinor2]].map(([lbl, val, set]) => (
-            <div key={lbl} style={{ minWidth: 0, overflow: "hidden" }}>
-              <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-              <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
-            </div>
-          ))}
-        </div>
-
-        {/* ── Credit bar — always visible ───────────────────────── */}
-        <div style={{ marginBottom: 8, padding: "7px 9px", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 6 }}>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 10, marginBottom: 4 }}>
-            <div>
-              <div style={{ fontSize: isPhone ? 12 : 16, fontWeight: 900, lineHeight: 1.1,
-                color: requiredSH > 0 && totalSHPlaced >= requiredSH ? "var(--success)" : "var(--text-1)" }}>
-                {totalSHDone}
-                {plannedSH  > 0 && <span style={{ fontSize: 11, color: "var(--text-4)", fontWeight: 500 }}>+{plannedSH}</span>}
-                {requiredSH > 0 && <span style={{ fontSize: 11, color: "var(--text-5)", fontWeight: 400 }}>/{requiredSH}</span>}
-              </div>
-              {!isPhone && (
-                <div style={{ fontSize: 9, color: "var(--text-4)" }}>
-                  {t("grad.credits.done", { unit: unitName })}{plannedSH > 0 ? t("grad.credits.planned") : ""}{requiredSH > 0 ? t("grad.credits.required") : ""}
+              {/* Concentration selector */}
+              {major?.concentrations?.concentrationOptions?.length > 0 && (
+                <div style={{ marginBottom: 8, marginTop: 8 }}>
+                  <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
+                    {t("grad.conc.label")}
+                  </div>
+                  <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} />
+                  {major.concentrations.minOptions > 0 && !selConc && (
+                    <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
+                      ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-            {major && !isPhone && (
-              <div style={{ marginLeft: "auto", textAlign: "right" }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)" }}>{major.yearVersion}</div>
-                <div style={{ fontSize: 9, color: "var(--text-4)" }}>catalog</div>
+
+              {/* Minor selectors */}
+              <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
+                {[[t("grad.minor1.label"), minor1, setMinor1], [t("grad.minor2.label"), minor2, setMinor2]].map(([lbl, val, set]) => (
+                  <div key={lbl} style={{ minWidth: 0, overflow: "hidden" }}>
+                    <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
+                    <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
-          <CreditBar completedSH={totalSHDone} plannedSH={plannedSH} requiredSH={requiredSH} />
-          {!isPhone && (
-          <div style={{ display: "flex", gap: 10, marginTop: 3 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-              <div style={{ width: 8, height: 8, borderRadius: 1, background: "var(--success)" }} />
-              <span style={{ fontSize: 8.5, color: "var(--text-5)" }}>completed</span>
-            </div>
-            {plannedSH > 0 && (
-              <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                <div style={{ width: 8, height: 8, borderRadius: 1, background: "var(--link-1)", opacity: 0.65 }} />
-                <span style={{ fontSize: 8.5, color: "var(--text-5)" }}>planned</span>
-              </div>
-            )}
-            {requiredSH > 0 && (
-              <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                <div style={{ width: 2, height: 8, borderRadius: 1, background: "var(--text-3)" }} />
-                <span style={{ fontSize: 8.5, color: "var(--text-5)" }}>required</span>
-              </div>
-            )}
-          </div>
+            </>
           )}
         </div>
 
@@ -682,6 +683,7 @@ export default function GradPanel() {
                 {/* ── Major requirement sections ───────────────────────── */}
         {major && !fetching && (
           <>
+            {/*
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: isPhone ? 3 : 5, marginTop: isPhone ? 2 : 4 }}>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: isPhone ? 9 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
@@ -704,9 +706,81 @@ export default function GradPanel() {
               </div>
             </div>
             <ProgressBar frac={overallFrac} />
-            <div style={{ marginTop: 8 }}>
-              {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+            */}
+            <div>
+              <div
+                onClick={() => setShowMajorDetails(v => !v)}
+                style={{
+                  textAlign: "center",
+                  fontSize: isPhone ? 10 : 12,
+                  fontWeight: 700,
+                  color: "var(--text-3)",
+                  margin: isPhone ? "8px 0 4px 0" : "12px 0 7px 0",
+                  letterSpacing: "0.05em",
+                  cursor: "pointer",
+                  userSelect: "none"
+                }}
+              >
+                {t("grad.major.label")}
+              </div>
+              {showMajorDetails && (
+                <div style={{ margin: isPhone ? "2px 0 6px 0" : "3px 0 8px 0", color: "var(--text-2)", fontWeight: 600, fontSize: isPhone ? 9 : 10, textAlign: "left" }}>
+                  {major.name}
+                  {selConc && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 2 }}>Concentration: {selConc}</div>}
+                </div>
+              )}
+              
+              {/* ── Credit bar — always visible ───────────────────────── */}
+              <div style={{ marginBottom: 8, padding: "7px 9px", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 6 }}>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 10, marginBottom: 4 }}>
+                  <div>
+                    <div style={{ fontSize: isPhone ? 12 : 16, fontWeight: 900, lineHeight: 1.1,
+                      color: requiredSH > 0 && totalSHPlaced >= requiredSH ? "var(--success)" : "var(--text-1)" }}>
+                      {totalSHDone}
+                      {plannedSH  > 0 && <span style={{ fontSize: 11, color: "var(--text-4)", fontWeight: 500 }}>+{plannedSH}</span>}
+                      {requiredSH > 0 && <span style={{ fontSize: 11, color: "var(--text-5)", fontWeight: 400 }}>/{requiredSH}</span>}
+                    </div>
+                    {!isPhone && (
+                      <div style={{ fontSize: 9, color: "var(--text-4)" }}>
+                        {t("grad.credits.done", { unit: unitName })}{plannedSH > 0 ? t("grad.credits.planned") : ""}{requiredSH > 0 ? t("grad.credits.required") : ""}
+                      </div>
+                    )}
+                  </div>
+                  {major && !isPhone && (
+                    <div style={{ marginLeft: "auto", textAlign: "right" }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)" }}>{major.yearVersion}</div>
+                      <div style={{ fontSize: 9, color: "var(--text-4)" }}>catalog</div>
+                    </div>
+                  )}
+                </div>
+                <CreditBar completedSH={totalSHDone} plannedSH={plannedSH} requiredSH={requiredSH} />
+                {!isPhone && (
+                <div style={{ display: "flex", gap: 10, marginTop: 3 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: 1, background: "var(--success)" }} />
+                    <span style={{ fontSize: 8.5, color: "var(--text-5)" }}>completed</span>
+                  </div>
+                  {plannedSH > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                      <div style={{ width: 8, height: 8, borderRadius: 1, background: "var(--link-1)", opacity: 0.65 }} />
+                      <span style={{ fontSize: 8.5, color: "var(--text-5)" }}>planned</span>
+                    </div>
+                  )}
+                  {requiredSH > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                      <div style={{ width: 2, height: 8, borderRadius: 1, background: "var(--text-3)" }} />
+                      <span style={{ fontSize: 8.5, color: "var(--text-5)" }}>required</span>
+                    </div>
+                  )}
+                </div>
+                )}
+              </div>
+              
+              <div style={{ marginTop: 8 }}>
+                {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+              </div>
             </div>
+
 
             {/* Concentration */}
             {concSection && (

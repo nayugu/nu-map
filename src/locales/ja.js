@@ -79,6 +79,7 @@ export const strings = {
   "grad.verified":          "確認済み",
   "grad.loading":           "読み込み中…",
   "grad.empty":             "上で専攻を検索して\n卒業要件を現在の計画と照合します。",
+  "grad.programSelection": "プログラム選択",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "タイトルなし",

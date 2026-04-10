@@ -78,6 +78,8 @@ export const strings = {
   "grad.verified":          "verificado",
   "grad.loading":           "Cargando…",
   "grad.empty":             "Busca tu carrera arriba\npara verificar los requisitos de graduación\ncon tu plan actual.",
+  "grad.programSelection": "Selección de programa",
+  "grad.major.button": "CARRERA PRINCIPAL",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sin título",

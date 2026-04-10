@@ -77,6 +77,7 @@ export const strings = {
   "grad.verified":           "\u5df2\u9a8c\u8bc1",
   "grad.loading":            "\u52a0\u8f7d\u4e2d\u2026",
   "grad.empty":              "\u5728\u4e0a\u65b9\u641c\u7d22\u4e13\u4e1a\n\u4ee5\u6a21\u62df\u6bd5\u4e1a\u8981\u6c42\n\u5bf9\u5e94\u4f60\u7684\u8bbe\u8bfe\u8ba1\u5212\u3002",
+  "grad.programSelection": "专业选择",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":          "{n} \u95e8\u8bfe\u7a0b",

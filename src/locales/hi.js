@@ -78,6 +78,7 @@ export const strings = {
   "grad.verified":          "सत्यापित",
   "grad.loading":           "लोड हो रहा है…",
   "grad.empty":             "ऊपर अपने मुख्य विषय की खोज करें\nस्नातक आवश्यकताओं की जाँच के लिए\nअपने वर्तमान योजना के साथ।",
+  "grad.programSelection": "प्रोग्राम चयन",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "कोई शीर्षक नहीं",

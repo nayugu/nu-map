@@ -78,6 +78,8 @@ export const strings = {
   "grad.verified":          "تم التحقق",
   "grad.loading":           "جارٍ التحميل…",
   "grad.empty":             "ابحث عن تخصصك أعلاه\nللتحقق من متطلبات التخرج\nمقارنة بخطتك الحالية.",
+  "grad.programSelection": "اختيار البرنامج",
+  "grad.major.button": "التخصص الرئيسي",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "بدون عنوان",
