@@ -560,8 +560,8 @@ export default function BankPanel() {
                     onDragStart={e => onDragStart(e, null, "specialTerm", null, { duration: d.duration, typeId: type.id })}
                     style={{ background: "var(--card-bg)", border: "1px solid var(--border-card)", borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
                   >
-                    <div style={{ fontSize: 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em" }}>{d.label}</div>
-                    <div style={{ fontSize: 8, color: "var(--text-3)", marginTop: 1 }}>{d.duration} months · {attrText}</div>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em" }}>{d.label}</div>
+                    <div style={{ fontSize: 7, color: "var(--text-3)", marginTop: 1 }}>{d.duration} months · {attrText}</div>
                   </div>
                 ))}
               </div>
