@@ -54,4 +54,5 @@ export default {
   auditMinor(_id, _plan, _courseMap) {
     throw new Error("auditMinor() not implemented in generic adapter.");
   },
+  getSources() { return []; },
 };

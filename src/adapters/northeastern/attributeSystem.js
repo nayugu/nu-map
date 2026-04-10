@@ -65,4 +65,6 @@ export default {
     for (const attr of grantedAttrs) covered.add(attr);
     return covered;
   },
+
+  getSources() { return []; },
 };

@@ -69,5 +69,31 @@ export function wire(overrides = {}) {
       }
     }
   }
-  return { ...genericDefaults, ...overrides };
+  const merged = { ...genericDefaults, ...overrides };
+
+  /**
+   * Aggregate attribution across all wired ports.
+   * Deduplicates by SourceInfo.id; merges usedFor into an array
+   * so a source that feeds multiple ports appears only once.
+   *
+   * @returns {{ id: string, label: string, url: string, author?: string, usedFor: string[] }[]}
+   */
+  merged.getAllSources = () => {
+    const map = new Map();
+    Object.values(merged)
+      .filter(p => p !== null && typeof p === "object" && typeof p.getSources === "function")
+      .flatMap(p => p.getSources())
+      .forEach(s => {
+        if (map.has(s.id)) {
+          const existing = map.get(s.id);
+          const next = [existing.usedFor, s.usedFor].flat().filter(Boolean);
+          map.set(s.id, { ...existing, usedFor: next });
+        } else {
+          map.set(s.id, { ...s, usedFor: [s.usedFor].filter(Boolean) });
+        }
+      });
+    return [...map.values()];
+  };
+
+  return merged;
 }

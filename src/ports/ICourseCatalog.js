@@ -96,4 +96,7 @@ export const ICourseCatalog = "courseCatalog";
  *   Returns null (or may be omitted) if per-course URLs are not available.
  *   Used in InfoPanel to render the external link icon next to the course title.
  *   Example (NU): course => `https://catalog.northeastern.edu/course-descriptions/${course.subject.toLowerCase()}/`
+ *
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  */

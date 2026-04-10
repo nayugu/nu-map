@@ -9,4 +9,5 @@ export default {
   getStandardValue() { return 4; },
   getFullTimeMin()   { return 12; },
   getSemesterMax()   { return 22; },
+  getSources()       { return []; },
 };

@@ -63,6 +63,8 @@ const calendar = {
     if (suffix === "60") return "sumB";
     return null;
   },
+
+  getSources() { return []; },
 };
 
 export default calendar;

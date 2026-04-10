@@ -130,4 +130,16 @@ export default {
   courseUrl(course) {
     return `https://catalog.northeastern.edu/course-descriptions/${course.subject.toLowerCase()}/`;
   },
+
+  getSources() {
+    return [
+      {
+        id:      "nu-courses",
+        label:   "ninest/nu-courses",
+        url:     "https://github.com/ninest/nu-courses",
+        author:  "ninest",
+        usedFor: "course catalog data",
+      },
+    ];
+  },
 };

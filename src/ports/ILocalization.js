@@ -14,25 +14,6 @@
 export const ILocalization = "localization";
 
 /**
-/**
- * One link chip rendered below an attribution block's body text.
- *
- * @typedef {Object} AttributionLink
- * @property {string}  href     - URL
- * @property {string}  label    - Display text (without the "↗" arrow — UI adds it)
- * @property {boolean} [primary] - If true, use the accent link style; otherwise use muted style.
- */
-
-/**
- * One institution-specific attribution section in the About / Disclaimer modal.
- *
- * @typedef {Object} AttributionBlock
- * @property {string}            title  - Section header shown in ALL CAPS, e.g. "DATA SOURCE"
- * @property {string}            body   - Plain-text description paragraph
- * @property {AttributionLink[]} links  - Link chips rendered below the body text
- */
-
-/**
  * @typedef {Object} ILocalization
  *
  * @property {() => string[]} getDisclaimers
@@ -41,10 +22,8 @@ export const ILocalization = "localization";
  *   of the general locale string system.
  *   Returns empty array if no institution-specific disclaimers are needed.
  *
- * @property {() => AttributionBlock[]} getAttributionBlocks
- *   Institution-specific data attribution sections shown in the About modal.
- *   Each block renders as a card with a title, body paragraph, and link chips.
- *   Returns empty array if no attributions are needed (e.g. generic adapter).
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  *
  * Design note: cross-locale UI translation (the t() function, locale switching,
  * locale file discovery) lives in LanguageContext — it is cross-cutting

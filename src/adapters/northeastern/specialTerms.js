@@ -154,4 +154,6 @@ export default {
     if (isOccupied(semId)) return { valid: false };
     return { valid: true, startId: semId };
   },
+
+  getSources() { return []; },
 };

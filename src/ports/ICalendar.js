@@ -80,4 +80,7 @@ export const ICalendar = "calendar";
  *   30 = spring, 40 = sumA, 60 = sumB); other registrars use different conventions.
  *   Consumed by courseModel.getOfferedFromTerms and InfoPanel's offering grid.
  *   Example: decodeTermCode("202430") → "spring"
+ *
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  */

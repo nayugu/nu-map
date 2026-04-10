@@ -17,4 +17,5 @@ export default {
   portalName:      "Student Portal",
   degreeAuditName: "Degree Audit",
   storagePrefix:   "map",
+  getSources()     { return []; },
 };

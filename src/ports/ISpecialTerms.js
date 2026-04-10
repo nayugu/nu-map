@@ -103,4 +103,7 @@ export const ISpecialTerms = "specialTerms";
  *   The adapter implements all institution-specific rules here:
  *   which semester types allow which term types, span requirements, etc.
  *   For institutions with no special terms, return {valid: false} always.
+ *
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  */

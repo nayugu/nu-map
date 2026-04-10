@@ -116,4 +116,7 @@ export const IMajorRequirements = "majorRequirements";
  *
  * @property {(id: string, plan: PlanSnapshot, courseMap: Object) => Promise<Program>} auditMinor
  *   Same as auditMajor but for a minor or certificate program.
+ *
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  */

@@ -13,4 +13,5 @@
 export default {
   getTypes() { return []; },
   validateDrop(_typeId, _duration, _semId, _ctx) { return { valid: false }; },
+  getSources() { return []; },
 };

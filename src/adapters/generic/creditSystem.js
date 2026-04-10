@@ -17,4 +17,5 @@ export default {
   getStandardValue() { return 3; },
   getFullTimeMin()   { return 12; },
   getSemesterMax()   { return 21; },
+  getSources()       { return []; },
 };

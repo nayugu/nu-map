@@ -86,4 +86,7 @@ export const IAttributeSystem = "attributeSystem";
  *
  *   Returns a Set of attribute codes that are covered.  The UI computes
  *   coverage = returned Set ∩ getGridCodes()  to exclude legacy codes from the progress badge.
+ *
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  */

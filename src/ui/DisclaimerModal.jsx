@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════════════════════
 // DISCLAIMER / ABOUT MODAL
 // ═══════════════════════════════════════════════════════════════════
-import { usePlanner }     from "../context/PlannerContext.jsx";
-import { usePort }        from "../context/InstitutionContext.jsx";
-import { IInstitution }   from "../ports/IInstitution.js";
-import { ILocalization }  from "../ports/ILocalization.js";
-import { useLanguage }    from "../context/LanguageContext.jsx";
+import { usePlanner }       from "../context/PlannerContext.jsx";
+import { usePort, useInstitution } from "../context/InstitutionContext.jsx";
+import { IInstitution }     from "../ports/IInstitution.js";
+import { ILocalization }    from "../ports/ILocalization.js";
+import { useLanguage }      from "../context/LanguageContext.jsx";
 
 export default function DisclaimerModal() {
   const { showDisclaimer, setShowDisclaimer } = usePlanner();
@@ -20,8 +20,9 @@ export default function DisclaimerModal() {
 
   if (!showDisclaimer) return null;
 
-  const disclaimers        = localization.getDisclaimers();
-  const attributionBlocks  = localization.getAttributionBlocks();
+  const adapter      = useInstitution();
+  const disclaimers  = localization.getDisclaimers();
+  const sources      = adapter.getAllSources();
 
   return (
     <div
@@ -50,36 +51,40 @@ export default function DisclaimerModal() {
           </div>
         </div>
 
-        {/* Attribution blocks — institution-specific, sourced from localization adapter */}
-        {attributionBlocks.map((block, i) => (
-          <div key={i} style={{
+        {/* Data sources — aggregated from all ports via wire().getAllSources() */}
+        {sources.length > 0 && (
+          <div style={{
             background: "var(--badge-bg)", border: "1px solid var(--border-1)",
             borderRadius: 8, padding: "10px 12px", marginBottom: 10,
           }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 5, letterSpacing: "0.04em" }}>
-              {block.title}
+            <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 7, letterSpacing: "0.04em" }}>
+              DATA SOURCES
             </div>
-            <div style={{ fontSize: 11, lineHeight: 1.5, color: "var(--text-2)" }}>
-              {block.body}
-            </div>
-            {block.links.length > 0 && (
-              <div style={{ marginTop: 7, display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {block.links.map((link, j) => (
-                  <a key={j} href={link.href} target="_blank" rel="noreferrer"
-                    style={{
-                      fontSize: 10, textDecoration: "none", borderRadius: 4, padding: "2px 8px",
-                      ...(link.primary
-                        ? { color: "var(--link-1)", background: "var(--link-bg)", border: "1px solid var(--link-border)" }
-                        : { color: "var(--text-3)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)" }
-                      ),
-                    }}>
-                    {link.label} ↗
+            {sources.map((src, i) => (
+              <div key={src.id} style={{
+                display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8,
+                marginBottom: i < sources.length - 1 ? 7 : 0,
+              }}>
+                <div style={{ minWidth: 0 }}>
+                  <a href={src.url} target="_blank" rel="noreferrer"
+                    style={{ fontSize: 11, fontWeight: 700, color: "var(--link-1)", textDecoration: "none" }}>
+                    {src.label}
                   </a>
-                ))}
+                  {src.author && (
+                    <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: 5 }}>by @{src.author}</span>
+                  )}
+                  <div style={{ fontSize: 10, color: "var(--text-3)", marginTop: 1, lineHeight: 1.4 }}>
+                    used for {src.usedFor.join(", ")}
+                  </div>
+                </div>
+                <a href={src.url} target="_blank" rel="noreferrer"
+                  style={{ fontSize: 10, color: "var(--link-1)", background: "var(--link-bg)", border: "1px solid var(--link-border)", borderRadius: 4, padding: "2px 8px", textDecoration: "none", flexShrink: 0 }}>
+                  ↗
+                </a>
               </div>
-            )}
+            ))}
           </div>
-        ))}
+        )}
 
         {/* Disclaimers */}
         <div style={{

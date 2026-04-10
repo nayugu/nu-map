@@ -38,4 +38,7 @@ export const ICreditSystem = "creditSystem";
  * @property {() => number} getSemesterMax - Maximum credits registrar allows per term before an
  *                                         overload petition is required.  e.g. 22 SH.
  *                                         Plans exceeding this receive an overload warning.
+ *
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  */

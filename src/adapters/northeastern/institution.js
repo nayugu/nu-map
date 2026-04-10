@@ -13,4 +13,5 @@ export default {
   portalName:       "MyNEU",
   degreeAuditName:  "DegreeWorks",
   storagePrefix:    "ncp",
+  getSources()      { return []; },
 };

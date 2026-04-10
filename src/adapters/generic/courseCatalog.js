@@ -59,4 +59,6 @@ export default {
   normalize: normalizeCourse,
 
   courseUrl() { return null; },
+
+  getSources() { return []; },
 };

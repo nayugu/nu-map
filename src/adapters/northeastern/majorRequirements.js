@@ -76,4 +76,16 @@ export default {
   auditMinor(_id, _plan, _courseMap) {
     throw new Error("auditMinor() not yet implemented — GradPanel uses loadMinor() + gradRequirements.js directly.");
   },
+
+  getSources() {
+    return [
+      {
+        id:      "graduatenu",
+        label:   "sandboxnu/graduatenu",
+        url:     "https://github.com/sandboxnu/graduatenu",
+        author:  "sandboxnu",
+        usedFor: "graduation requirement definitions",
+      },
+    ];
+  },
 };

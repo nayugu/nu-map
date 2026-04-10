@@ -19,4 +19,5 @@ export default {
   getMaxPerAttribute()    { return null; },
   /** @returns {Set<string>} always empty — no attributes to cover */
   getCoverage()           { return new Set(); },
+  getSources()            { return []; },
 };

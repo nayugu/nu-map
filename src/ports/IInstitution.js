@@ -48,4 +48,7 @@ export const IInstitution = "institution";
  * @property {string}       [logoUrl]        - URL to the institution wordmark or app logo.
  *                                             Relative paths are resolved from BASE_URL.
  *                                             Falls back to the default logo if omitted.
+ *
+ * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
+ *   External data sources this adapter draws from.  See IAttributable.
  */
