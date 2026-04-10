@@ -503,7 +503,7 @@ function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
             <span>
               <span style={{ color: "var(--success)" }}>{doneSat}</span>
               {plannedSat > 0 && <span style={{ color: "var(--link-1)" }}>+{plannedSat}</span>}
-              <span>/{totalReq} courses</span>
+              <span>/{totalReq}</span>
             </span>
             <span>{Math.round(totalSat / totalReq * 100)}%</span>
           </div>
