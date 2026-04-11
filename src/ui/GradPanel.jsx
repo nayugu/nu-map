@@ -356,7 +356,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
           ))}
           {isPoolStructure && sec.minRequired > 0 && (
             <div style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginTop: ph ? 3 : 4, paddingLeft: 4, fontStyle: "italic" }}>
-              Requires {sec.minRequired} of {sec.total}
+              Requires {sec.minRequired} of {sec.children?.length ?? sec.total}
             </div>
           )}
         </div>
