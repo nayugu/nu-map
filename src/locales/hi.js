@@ -80,6 +80,11 @@ export const strings = {
   "grad.empty":             "ऊपर अपने मुख्य विषय की खोज करें\nस्नातक आवश्यकताओं की जाँच के लिए\nअपने वर्तमान योजना के साथ।",
   "grad.programSelection": "प्रोग्राम चयन",
 
+  // Grad requirement phrases
+  "grad.allOf": "सभी ({count}/{total})",
+  "grad.oneOf": "इनमें से एक ({count}/{total})",
+  "grad.requiresOutOf": "{total} में से {count} आवश्यक",
+
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "कोई शीर्षक नहीं",
   "info.prereqs":                 "पूर्व-आवश्यकताएँ:",

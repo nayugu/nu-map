@@ -79,7 +79,11 @@ export const strings = {
   "grad.loading":           "Cargando…",
   "grad.empty":             "Busca tu carrera arriba\npara verificar los requisitos de graduación\ncon tu plan actual.",
   "grad.programSelection": "Selección de programa",
-  "grad.major.button": "CARRERA PRINCIPAL",
+
+  // Grad requirement phrases
+  "grad.allOf": "Todos ({count}/{total})",
+  "grad.oneOf": "Uno de ({count}/{total})",
+  "grad.requiresOutOf": "Requiere {count} de {total}",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sin título",

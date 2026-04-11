@@ -81,6 +81,11 @@ export const strings = {
   "grad.empty":             "Search for your major above\nto check graduation requirements\nagainst your current plan.",
   "grad.programSelection": "Program Selection",
 
+  // Grad requirement phrases
+  "grad.allOf": "All of ({count}/{total})",
+  "grad.oneOf": "One of ({count}/{total})",
+  "grad.requiresOutOf": "Requires {count} out of {total}",
+
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "No title",
   "info.prereqs":                 "Prereqs:",

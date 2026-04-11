@@ -79,7 +79,10 @@ export const strings = {
   "grad.loading":           "جارٍ التحميل…",
   "grad.empty":             "ابحث عن تخصصك أعلاه\nللتحقق من متطلبات التخرج\nمقارنة بخطتك الحالية.",
   "grad.programSelection": "اختيار البرنامج",
-  "grad.major.button": "التخصص الرئيسي",
+  // Grad requirement phrases
+  "grad.allOf": "جميعها ({count}/{total})",
+  "grad.oneOf": "واحد من ({count}/{total})",
+  "grad.requiresOutOf": "يتطلب {count} من {total}",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "بدون عنوان",

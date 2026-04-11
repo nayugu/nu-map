@@ -80,6 +80,11 @@ export const strings = {
   "grad.empty":             "Recherchez votre majeure ci-dessus\npour vérifier les exigences de diplôme\npar rapport à votre plan actuel.",
   "grad.programSelection": "Sélection du programme",
 
+  // Grad requirement phrases
+  "grad.allOf": "Tous ({count}/{total})",
+  "grad.oneOf": "Un sur ({count}/{total})",
+  "grad.requiresOutOf": "Nécessite {count} sur {total}",
+
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sans titre",
   "info.prereqs":                 "Prérequis :",
