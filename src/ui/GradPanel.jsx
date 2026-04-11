@@ -317,9 +317,11 @@ function SectionBlock({ sec, defaultOpen = true }) {
   const ph  = ctx?.isPhone;
 
   // For pool structures (minRequired < total): display requirement satisfaction, not option count
-  const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < sec.total;
+  // Use children.length for the denominator to count only top-level requirements
+  const topLevelTotal = sec.children?.length ?? sec.total;
+  const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < topLevelTotal;
   const displaySatCount = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
-  const displayTotal = isPoolStructure ? sec.minRequired : sec.total;
+  const displayTotal = isPoolStructure ? topLevelTotal : sec.total;
 
   const frac = displayTotal > 0 ? displaySatCount / displayTotal : 0;
 
@@ -356,7 +358,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
           ))}
           {isPoolStructure && sec.minRequired > 0 && (
             <div style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginTop: ph ? 3 : 4, paddingLeft: 4, fontStyle: "italic" }}>
-              Requires {sec.minRequired} of {sec.total}
+              Requires {sec.minRequired} of {topLevelTotal}
             </div>
           )}
         </div>
