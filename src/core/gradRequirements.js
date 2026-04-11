@@ -429,8 +429,28 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
   // Normalize pooled sections (flatten choice nodes in "pick N" structures)
   const normalized = normalizePooledSection(section);
 
-  const children = (normalized.requirements ?? []).map(req => allocateNode(req, placedSet, used, originalUsed, courseMap));
-  const satCount = children.filter(c => c.sat).length;
+  // Context-sensitive: pass poolContext flag so RANGE/XOM nodes count all matches only in pools
+  let children, satCount, total;
+  const isPool = normalized.minRequirementCount && normalized.minRequirementCount < (normalized.requirements?.length ?? 0);
+  if (isPool) {
+    satCount = 0;
+    total = 0;
+    children = (normalized.requirements ?? []).map(req => {
+      const child = allocateNode(req, placedSet, used, originalUsed, courseMap, true);
+      if (typeof child.satCount === 'number' && typeof child.total === 'number') {
+        satCount += child.satCount;
+        total += child.total;
+      } else {
+        satCount += child.sat ? 1 : 0;
+        total += 1;
+      }
+      return child;
+    });
+  } else {
+    children = (normalized.requirements ?? []).map(req => allocateNode(req, placedSet, used, originalUsed, courseMap, false));
+    satCount = children.filter(c => c.sat).length;
+    total = children.length;
+  }
   const sat = satCount >= normalized.minRequirementCount;
   const allocatedCourses = new Set();
   children.forEach(c => c.allocatedCourses?.forEach(k => allocatedCourses.add(k)));
@@ -441,13 +461,13 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
     sat,
     satCount,
     minRequired: normalized.minRequirementCount,
-    total: children.length,
+    total,
     children,
     allocatedCourses,
   };
 }
 
-function allocateNode(node, placedSet, used, originalUsed, courseMap) {
+function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContext = false) {
   switch (node.type) {
     case 'COURSE': {
       const key = courseKey(node.subject, node.classId);
@@ -497,17 +517,35 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
           }
         }
       }
-      const sat = matched.length > 0;
-      return {
-        type: 'RANGE',
-        sat,
-        matched,
-        subject: node.subject,
-        start: node.idRangeStart,
-        end: node.idRangeEnd,
-        label: `Any ${node.subject} ${node.idRangeStart}–${node.idRangeEnd}`,
-        allocatedCourses,
-      };
+      if (poolContext) {
+        // In a pool, count all matches
+        const sat = matched.length > 0;
+        return {
+          type: 'RANGE',
+          sat,
+          matched,
+          subject: node.subject,
+          start: node.idRangeStart,
+          end: node.idRangeEnd,
+          label: `Any ${node.subject} ${node.idRangeStart}–${node.idRangeEnd}`,
+          allocatedCourses,
+          satCount: matched.length,
+          total: matched.length,
+        };
+      } else {
+        // In standard requirements, only one match is needed
+        const sat = matched.length > 0;
+        return {
+          type: 'RANGE',
+          sat,
+          matched,
+          subject: node.subject,
+          start: node.idRangeStart,
+          end: node.idRangeEnd,
+          label: `Any ${node.subject} ${node.idRangeStart}–${node.idRangeEnd}`,
+          allocatedCourses,
+        };
+      }
     }
 
     case 'XOM': {
