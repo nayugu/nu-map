@@ -538,9 +538,18 @@ function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel() {
-  const [showMajorDetails, setShowMajorDetails] = useState(false);
+  // Persist showMajorDetails state in localStorage
   const institution = usePort(IInstitution);
   const pfx = institution.storagePrefix;
+  const [showMajorDetails, setShowMajorDetails] = useState(() => {
+    try {
+      const v = localStorage.getItem(`${pfx}-grad-show-major-details`);
+      return v === null ? false : v !== "false";
+    } catch {
+      return false;
+    }
+  });
+
   const [showProgram, setShowProgram] = useState(() => {
     try { const v = localStorage.getItem(`${pfx}-grad-show-program`); return v === null ? true : v !== "false"; } catch { return true; }
   });
@@ -575,6 +584,7 @@ export default function GradPanel() {
   });
   useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-program`, String(showProgram)); } catch {} }, [showProgram]);
   useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-np`,      String(showNP));      } catch {} }, [showNP]);
+  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-major-details`, String(showMajorDetails)); } catch {} }, [showMajorDetails]);
 
   // Fetch major JSON on path change
   useEffect(() => {
