@@ -513,70 +513,40 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
     }
 
     case 'XOM': {
-      const possibleCourses = new Map(); // key -> SH
-
-      function collect(node) {
-        if (node.type === 'COURSE') {
-          const key = courseKey(node.subject, node.classId);
-          const c = courseMap[key];
-          if (!c) return;
-          if (placedSet.has(key) && !used.has(key) && !possibleCourses.has(key)) {
-            const coreqKeys = getCorequisiteKeys(c, courseMap);
-            const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
-            if (!anyCoreqUsedInOriginal) {
-              possibleCourses.set(key, c.sh);
-            }
-          }
-        } else if (node.type === 'RANGE') {
-          for (const key of placedSet) {
-            const c = courseMap[key];
-            if (!c || c.subject !== node.subject) continue;
-            const num = parseInt(c.number, 10);
-            if (isNaN(num)) continue;
-            if (num < node.idRangeStart || num > node.idRangeEnd) continue;
-            const isExc = (node.exceptions ?? []).some(
-              ex => courseKey(ex.subject, ex.classId) === key
-            );
-            if (isExc) continue;
-            if (!used.has(key) && !possibleCourses.has(key)) {
-              const coreqKeys = getCorequisiteKeys(c, courseMap);
-              const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
-              if (!anyCoreqUsedInOriginal) {
-                possibleCourses.set(key, c.sh);
-              }
-            }
-          }
-        }
-        // For AND/OR, we could recursively collect, but we'll assume not present.
-      }
-
-      for (const child of node.courses ?? []) {
-        collect(child);
-      }
-
-      const sorted = Array.from(possibleCourses.entries()).sort((a, b) => b[1] - a[1]);
-      const allocated = [];
-      let sum = 0;
-      for (const [key, sh] of sorted) {
-        if (sum >= node.numCreditsMin) break;
-        const c = courseMap[key];
-        const coreqKeys = getCorequisiteKeys(c, courseMap);
-        // Check if any coreq is already used (either in originalUsed or from previous picks in this XOM)
-        const anyCoreqUsed = coreqKeys.some(k => used.has(k));
-        if (anyCoreqUsed) continue;
-        allocated.push(key);
-        sum += sh;
-        used.add(key);
-        coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
-      }
-      const sat = sum >= node.numCreditsMin;
-      const satSh = sum;
-
+      // Recursively allocate all children
       const children = (node.courses ?? []).map(child =>
         allocateNode(child, placedSet, used, originalUsed, courseMap)
       );
 
-      const allocatedCourses = new Set(allocated);
+      // Helper: recursively sum credits from all satisfied leaf COURSEs
+      function sumSatisfiedCredits(node) {
+        if (!node) return 0;
+        if (node.type === 'COURSE' && node.sat) {
+          const c = courseMap[node.key];
+          return c?.sh ?? 4;
+        }
+        if (node.children && node.children.length > 0) {
+          return node.children.reduce((sum, child) => sum + sumSatisfiedCredits(child), 0);
+        }
+        return 0;
+      }
+
+      const satSh = children.reduce((sum, child) => sum + sumSatisfiedCredits(child), 0);
+      const sat = satSh >= node.numCreditsMin;
+
+      // Collect all allocated course keys from satisfied children
+      function collectAllocated(node, outSet) {
+        if (!node) return;
+        if (node.type === 'COURSE' && node.sat) {
+          outSet.add(node.key);
+        }
+        if (node.children && node.children.length > 0) {
+          node.children.forEach(child => collectAllocated(child, outSet));
+        }
+      }
+      const allocatedCourses = new Set();
+      children.forEach(child => collectAllocated(child, allocatedCourses));
+
       return {
         type: 'XOM',
         sat,
