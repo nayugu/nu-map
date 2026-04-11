@@ -473,7 +473,8 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
     }
 
     case 'RANGE': {
-      const candidates = [];
+      const matched = [];
+      const allocatedCourses = new Set();
       for (const key of placedSet) {
         const c = courseMap[key];
         if (!c || c.subject !== node.subject) continue;
@@ -487,23 +488,20 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
         if (!originalUsed.has(key)) {
           const coreqKeys = getCorequisiteKeys(c, courseMap);
           const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
-          if (!anyCoreqUsedInOriginal) candidates.push(key);
+          if (!anyCoreqUsedInOriginal) {
+            matched.push(`${c.subject} ${c.number}`);
+            allocatedCourses.add(key);
+            coreqKeys.forEach(k => { if (placedSet.has(k)) allocatedCourses.add(k); });
+            used.add(key);
+            coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
+          }
         }
       }
-      const chosen = candidates.length > 0 ? candidates[0] : null;
-      let coreqKeys = [];
-      if (chosen) {
-        used.add(chosen);
-        const c = courseMap[chosen];
-        coreqKeys = getCorequisiteKeys(c, courseMap);
-        coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
-      }
-      const sat = !!chosen;
-      const allocatedCourses = sat ? new Set([chosen, ...coreqKeys.filter(k => placedSet.has(k))]) : new Set();
+      const sat = matched.length > 0;
       return {
         type: 'RANGE',
         sat,
-        matched: sat ? [`${courseMap[chosen].subject} ${courseMap[chosen].number}`] : [],
+        matched,
         subject: node.subject,
         start: node.idRangeStart,
         end: node.idRangeEnd,
