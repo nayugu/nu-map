@@ -289,10 +289,11 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
 
   // AND / OR / nested SECTION
   const has = r.children?.length > 0;
+  const { t } = useLanguage(); // Moved this line to the top of the function
   const heading =
-    r.type === "AND" ? `All of (${r.satCount ?? 0}/${r.total ?? 0})` :
-    r.type === "OR"  ? `One of (${r.satCount ?? 0}/${r.total ?? 0})` :
-    r.title ?? r.label;
+    r.type === "AND" ? t("grad.allOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
+    r.type === "OR"  ? t("grad.oneOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
+    r.title ?? r.label; // Ensure t is available for heading
 
   return (
     <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
@@ -315,6 +316,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   const ctx = useContext(GradCtx);
   const ph  = ctx?.isPhone;
+  const { t } = useLanguage(); // Added this line to use t in this function
 
   // For pool structures (minRequired < total): display requirement satisfaction, not option count
   const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < sec.total;
@@ -356,7 +358,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
           ))}
           {isPoolStructure && sec.minRequired > 0 && (
             <div style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginTop: ph ? 3 : 4, paddingLeft: 4, fontStyle: "italic" }}>
-              Requires {sec.minRequired} of {sec.children?.length ?? sec.total}
+              {t("grad.requiresOutOf", { count: sec.minRequired, total: sec.children?.length ?? sec.total })}
             </div>
           )}
         </div>
