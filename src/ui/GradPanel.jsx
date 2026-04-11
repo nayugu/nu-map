@@ -128,7 +128,8 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
     : [];                        // never render all ~1500 items unfiltered
 
   const sel = value ? allOptions.find(o => o.path === value) : null;
-  const displayVal = sel ? `${sel.label}${sel.location ? ` (${sel.location})` : ""}` : "";
+  // Always show the selected label when not editing, otherwise show the query
+  const displayVal = open ? query : (sel ? `${sel.label}${sel.location ? ` (${sel.location})` : ""}` : "");
 
   const handleFocus  = () => { updateRect(); setQuery(""); setOpen(true); };
   // Use 300ms so touch-tap can fire mousedown/touchstart before dropdown closes
@@ -142,7 +143,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
         <input
           ref={inputRef}
           type="text"
-          value={open ? query : displayVal}
+          value={displayVal}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
