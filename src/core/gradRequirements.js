@@ -371,14 +371,14 @@ function normalizePooledSection(section) {
   }
 
   // Case 2: Explicit pool structure with minRequirementCount < total
-  // Flatten all nested choice nodes (OR/AND) to expose all options at same level
+  // Flatten only OR nodes (not AND) to expose all options at same level
   if (section.minRequirementCount && section.minRequirementCount < reqs.length) {
-    const hasChoiceNode = reqs.some(req => req.type === 'OR' || req.type === 'AND');
-    if (hasChoiceNode) {
+    const hasOrNode = reqs.some(req => req.type === 'OR');
+    if (hasOrNode) {
       const flattened = [];
       for (const req of reqs) {
-        if ((req.type === 'OR' || req.type === 'AND') && req.courses?.length) {
-          // Expand all options from choice nodes as direct siblings
+        if (req.type === 'OR' && req.courses?.length) {
+          // Expand all options from OR nodes as direct siblings
           flattened.push(...req.courses);
         } else {
           flattened.push(req);
