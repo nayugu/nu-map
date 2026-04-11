@@ -572,50 +572,9 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap) {
       const sat = sum >= node.numCreditsMin;
       const satSh = sum;
 
-      const children = (node.courses ?? []).map(child => {
-        if (child.type === 'COURSE') {
-          const key = courseKey(child.subject, child.classId);
-          const childSat = allocated.includes(key);
-          const desc = child.description ? ` — ${child.description}` : '';
-          return {
-            type: 'COURSE',
-            key,
-            sat: childSat,
-            label: `${child.subject} ${child.classId}${desc}`,
-            allocatedCourses: childSat ? new Set([key]) : new Set(),
-          };
-        } else if (child.type === 'RANGE') {
-          const matched = allocated.filter(key => {
-            const c = courseMap[key];
-            if (!c || c.subject !== child.subject) return false;
-            const num = parseInt(c.number, 10);
-            if (isNaN(num)) return false;
-            if (num < child.idRangeStart || num > child.idRangeEnd) return false;
-            const isExc = (child.exceptions ?? []).some(
-              ex => courseKey(ex.subject, ex.classId) === key
-            );
-            return !isExc;
-          });
-          const childSat = matched.length > 0;
-          return {
-            type: 'RANGE',
-            sat: childSat,
-            matched: matched.map(key => `${courseMap[key].subject} ${courseMap[key].number}`),
-            subject: child.subject,
-            start: child.idRangeStart,
-            end: child.idRangeEnd,
-            label: `Any ${child.subject} ${child.idRangeStart}–${child.idRangeEnd}`,
-            allocatedCourses: childSat ? new Set(matched) : new Set(),
-          };
-        } else {
-          return {
-            type: child.type,
-            sat: false,
-            label: 'Unsupported',
-            allocatedCourses: new Set(),
-          };
-        }
-      });
+      const children = (node.courses ?? []).map(child =>
+        allocateNode(child, placedSet, used, originalUsed, courseMap)
+      );
 
       const allocatedCourses = new Set(allocated);
       return {
