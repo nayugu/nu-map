@@ -394,6 +394,34 @@ function normalizePooledSection(section) {
     }
   }
 
+  // Case 3: N/N all-RANGE (pooled electives) → wrap in XOM
+  if (
+    section.minRequirementCount === reqs.length &&
+    reqs.length >= 2 &&
+    reqs.every(r => r.type === 'RANGE' || r.type === 'COURSE') &&
+    reqs.some(r => r.type === 'RANGE') &&
+    !reqs.some(r => r.type === 'AND' || r.type === 'OR' || r.type === 'SECTION')
+  ) {
+    // Prefer explicit numCreditsMin if present
+    let numCreditsMin = section.numCreditsMin;
+    if (numCreditsMin == null) {
+      // Sum any child numCreditsMin if present
+      const childSum = reqs.reduce((sum, r) => sum + (r.numCreditsMin || 0), 0);
+      numCreditsMin = childSum > 0 ? childSum : section.minRequirementCount * 4;
+    }
+    return {
+      ...section,
+      minRequirementCount: 1,
+      requirements: [
+        {
+          type: 'XOM',
+          numCreditsMin,
+          courses: reqs
+        }
+      ]
+    };
+  }
+
   return section;
 }
 
