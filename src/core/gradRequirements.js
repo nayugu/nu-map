@@ -429,13 +429,25 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
   // Normalize pooled sections (flatten choice nodes in "pick N" structures)
   const normalized = normalizePooledSection(section);
 
-  // Context-sensitive: pass poolContext flag so RANGE/XOM nodes count all matches only in pools
+  // Enhanced pool detection: treat SECTIONs with a single XOM or RANGE child (with numCreditsMin or similar) as pools
   let children, satCount, total;
-  const isPool = normalized.minRequirementCount && normalized.minRequirementCount < (normalized.requirements?.length ?? 0);
+  const reqs = normalized.requirements ?? [];
+  let isPool = false;
+  if (normalized.minRequirementCount && reqs.length > 1 && normalized.minRequirementCount < reqs.length) {
+    isPool = true;
+  } else if (
+    reqs.length === 1 &&
+    (
+      (reqs[0].type === 'XOM' && (reqs[0].numCreditsMin || reqs[0].numCreditsMin === 0)) ||
+      (reqs[0].type === 'RANGE' && (normalized.numCreditsMin || reqs[0].numCreditsMin))
+    )
+  ) {
+    isPool = true;
+  }
   if (isPool) {
     satCount = 0;
     total = 0;
-    children = (normalized.requirements ?? []).map(req => {
+    children = reqs.map(req => {
       const child = allocateNode(req, placedSet, used, originalUsed, courseMap, true);
       if (typeof child.satCount === 'number' && typeof child.total === 'number') {
         satCount += child.satCount;
@@ -447,7 +459,7 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
       return child;
     });
   } else {
-    children = (normalized.requirements ?? []).map(req => allocateNode(req, placedSet, used, originalUsed, courseMap, false));
+    children = reqs.map(req => allocateNode(req, placedSet, used, originalUsed, courseMap, false));
     satCount = children.filter(c => c.sat).length;
     total = children.length;
   }
@@ -554,12 +566,21 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         allocateNode(child, placedSet, used, originalUsed, courseMap)
       );
 
-      // Helper: recursively sum credits from all satisfied leaf COURSEs
+
+      // Helper: recursively sum credits from all satisfied leaf COURSEs and matched RANGEs
       function sumSatisfiedCredits(node) {
         if (!node) return 0;
         if (node.type === 'COURSE' && node.sat) {
           const c = courseMap[node.key];
           return c?.sh ?? 4;
+        }
+        if (node.type === 'RANGE' && node.sat && node.matched) {
+          // matched contains "MATH 4581" etc
+          return node.matched.reduce((sum, key) => {
+            const normKey = key.replace(/\s+/g, '');
+            const c = courseMap[normKey];
+            return sum + (c?.sh ?? 4);
+          }, 0);
         }
         if (node.children && node.children.length > 0) {
           return node.children.reduce((sum, child) => sum + sumSatisfiedCredits(child), 0);
