@@ -1,0 +1,203 @@
+{
+  "version": 1,
+  "exported": "2026-04-04T16:00:21.992Z",
+  "entSem": "fall",
+  "entYear": 2025,
+  "gradSem": "spring",
+  "gradYear": 2029,
+  "placements": {
+    "PHYS1161": "incoming",
+    "PHYS1162": "incoming",
+    "PHYS1163": "incoming",
+    "PHYS1165": "incoming",
+    "PHYS1166": "incoming",
+    "PHYS1167": "incoming",
+    "MATH1341": "incoming",
+    "MATH1342": "incoming",
+    "CS1990": "incoming",
+    "ENGW1111": "incoming",
+    "ARCH1310": "incoming",
+    "CS1800": "fall2025",
+    "CS1802": "fall2025",
+    "CS2100": "fall2025",
+    "CS2101": "fall2025",
+    "MATH2321": "fall2025",
+    "POLS1150": "fall2025",
+    "CS1200": "fall2025",
+    "CS3100": "spr2026",
+    "CS3101": "spr2026",
+    "MATH2341": "spr2026",
+    "MATH3081": "spr2026",
+    "MATH3527": "spr2026",
+    "ENGW3302": "sumA2026",
+    "MATH2331": "sumB2026",
+    "PHYS1151": "sumB2026",
+    "PHYS1152": "sumB2026",
+    "PHYS1153": "sumB2026",
+    "CS3000": "fall2026",
+    "CS3001": "fall2026",
+    "IE2310": "fall2026",
+    "IE2311": "fall2026",
+    "IE4515": "fall2026",
+    "GE1111": "fall2026",
+    "CS3650": "spr2027",
+    "IE4510": "spr2027",
+    "IE4525": "spr2027",
+    "IE4530": "spr2027",
+    "IE4531": "spr2027",
+    "CS4180": "fall2027",
+    "CS4530": "fall2027",
+    "IE4516": "fall2027",
+    "IE4522": "spr2029",
+    "IE4523": "spr2029",
+    "CS4730": "fall2028",
+    "CS5330": "fall2028",
+    "GE1110": "fall2028",
+    "IE4512": "fall2028",
+    "MEIE4701": "fall2028",
+    "CHEM1151": "spr2029",
+    "CHEM1153": "spr2029",
+    "IE4520": "spr2029",
+    "MEIE4702": "spr2029",
+    "PHYS2371": "fall2027",
+    "PHYS2372": "fall2027",
+    "ARTF1230": "spr2029"
+  },
+  "workPl": {
+    "WORK1": "spr2028",
+    "coop-1775318301091": {
+      "semId": "spr2028",
+      "duration": 6,
+      "company": "Amazon",
+      "companyDomain": "amazon.com",
+      "subline": "Industrial Engineer"
+    }
+  },
+  "internPl": {
+    "int-1775318318731": {
+      "semId": "sumA2027",
+      "duration": 4,
+      "company": "Google",
+      "companyDomain": "google.com",
+      "subline": "Software Engineer"
+    }
+  },
+  "semOrders": {
+    "incoming": [
+      "PHYS1161",
+      "PHYS1162",
+      "PHYS1163",
+      "PHYS1165",
+      "PHYS1166",
+      "PHYS1167",
+      "MATH1341",
+      "MATH1342",
+      "CS1990",
+      "ENGW1111",
+      "ARCH1310"
+    ],
+    "fall2025": [
+      "CS1800",
+      "CS1802",
+      "CS2100",
+      "CS2101",
+      "MATH2321",
+      "POLS1150",
+      "CS1200"
+    ],
+    "spr2026": [
+      "CS3100",
+      "CS3101",
+      "MATH2341",
+      "MATH3081",
+      "MATH3527"
+    ],
+    "sumA2026": [
+      "ENGW3302"
+    ],
+    "sumB2026": [
+      "PHYS1151",
+      "PHYS1152",
+      "PHYS1153",
+      "MATH2331"
+    ],
+    "fall2026": [
+      "CS3000",
+      "CS3001",
+      "IE2310",
+      "IE2311",
+      "IE4515",
+      "GE1111"
+    ],
+    "spr2027": [
+      "CS3650",
+      "IE4510",
+      "IE4525",
+      "IE4530",
+      "IE4531"
+    ],
+    "fall2027": [
+      "CS4180",
+      "CS4530",
+      "IE4516",
+      "PHYS2372",
+      "PHYS2371"
+    ],
+    "fall2028": [
+      "CS4730",
+      "CS5330",
+      "GE1110",
+      "IE4512",
+      "MEIE4701"
+    ],
+    "spr2029": [
+      "CHEM1151",
+      "CHEM1153",
+      "IE4520",
+      "MEIE4702",
+      "IE4522",
+      "IE4523",
+      "ARTF1230"
+    ],
+    "sumB2027": [],
+    "sumB2028": []
+  },
+  "shOverrides": {
+    "CS1990": 4
+  },
+  "bonusSH": 0,
+  "currentSemId": "spr2026",
+  "offeredOverrides": {
+    "CS3000": [
+      "sumA",
+      "spring",
+      "fall"
+    ]
+  },
+  "collapsedSubs": {
+    "ENCP": false,
+    "incoming": true
+  },
+  "placedOut": [
+    "CS2000",
+    "CS2001"
+  ],
+  "substitutions": [
+    {
+      "from": "MATH3081",
+      "to": "IE3412"
+    },
+    {
+      "from": "GE1111",
+      "to": "GE1502"
+    },
+    {
+      "from": "GE1110",
+      "to": "GE1501"
+    }
+  ],
+  "major": "../../graduatenu/packages/api/src/major/majors/2025/engineering/industrial_engineering_and_computer_science_bsie_(boston)/parsed.initial.json",
+  "conc": "",
+  "minor1": "",
+  "minor2": ""
+}
