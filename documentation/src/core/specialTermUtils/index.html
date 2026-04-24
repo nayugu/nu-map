@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>specialTermUtils.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/specialTermUtils">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../../">src/</a><span class="sep"> / </span><a href="../../">core/</a><span class="sep"> / </span><strong>specialTermUtils.js</strong>
+    </div>
+
+    <h1>specialTermUtils.js <span class="badge green">Pure utilities</span></h1>
+    <p class="lead">Three pure functions that bridge the ISpecialTerms adapter data and the planner's grid and coverage logic. These are the only functions that know how to interpret a <code>SpecialTermDuration</code>'s <code>weight</code> field — all span and attribute-grant computations run through here.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext, planModel, Header, GradPanel, BankPanel, SemRow, SummerRow</div></div>
+      <div class="nb-group"><div class="nb-label">Rule</div><div class="nb-value">No React, no I/O. Pure functions only.</div></div>
+    </div>
+
+    <h2>Functions</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">resolveTermByDuration(durations, duration) → SpecialTermDuration | null</div>
+      <div class="fn-desc">
+        Finds the <code>SpecialTermDuration</code> descriptor that matches a stored <code>duration</code> value (in calendar months). Falls back to the first entry if no exact match is found — ensures the planner never crashes on edge-case plan data.
+        <br><br>
+        <strong>Why this is needed:</strong> The plan state only stores the integer month count (e.g. <code>4</code> or <code>6</code>). The descriptor object is needed to get the <code>weight</code> for span arithmetic and the <code>label</code> for display. This function is the bridge between stored state and runtime descriptor.
+      </div>
+      <div class="fn-returns">Returns: <span>The matching descriptor, or the first descriptor if no match, or <code>null</code> if <code>durations</code> is empty</span></div>
+    </div>
+    <pre><code><span class="cmt">// Usage — wherever a stored duration needs to become a descriptor</span>
+const type  = specialTerms.types.find(t => t.id === termData.typeId);
+const descr = resolveTermByDuration(type.durations, termData.duration);
+<span class="cmt">// descr.weight — for span logic</span>
+<span class="cmt">// descr.label  — for display</span></code></pre>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">termSpans(termWeight, semSlotWeight) → boolean</div>
+      <div class="fn-desc">
+        Returns <code>true</code> if a term with the given grid weight overflows into the next consecutive semester slot.
+        <br><br>
+        <strong>Rule:</strong> <code>termWeight &gt; semSlotWeight</code>. A term spans when its weight exceeds the weight of the slot it's placed in.
+        <br><br>
+        <strong>NU examples:</strong>
+        <ul>
+          <li>6-month co-op (<code>weight 2.0</code>) in fall (<code>weight 1.0</code>) → <code>2.0 &gt; 1.0</code> → spans into spring ✓</li>
+          <li>4-month co-op (<code>weight 1.0</code>) in sumA (<code>weight 0.5</code>) → <code>1.0 &gt; 0.5</code> → spans into sumB ✓</li>
+          <li>4-month co-op (<code>weight 1.0</code>) in fall (<code>weight 1.0</code>) → <code>1.0 &gt; 1.0</code> → false, single slot ✓</li>
+          <li>2-month internship (<code>weight 0.5</code>) in sumA (<code>weight 0.5</code>) → <code>0.5 &gt; 0.5</code> → false, single slot ✓</li>
+        </ul>
+        This replaces hardcoded <code>if (duration === 6)</code> and <code>if (duration === 4 &amp;&amp; summer)</code> checks that existed before the refactor.
+      </div>
+      <div class="fn-returns">Returns: <span>boolean — true if the term extends into the next semester</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">computeGrantedAttrs(specialTermPl, types) → Set&lt;string&gt;</div>
+      <div class="fn-desc">
+        Computes the set of attribute codes automatically granted by all currently placed special terms. Iterates every entry in <code>specialTermPl</code> that has a valid <code>semId</code> (is actually placed), finds the term type's descriptor, and unions the <code>attributeGrants</code> arrays.
+        <br><br>
+        <strong>Primary use case:</strong> The result is passed as <code>grantedAttrs</code> to <code>attributeSystem.getCoverage()</code>. This is how a placed co-op causes the EX (Integration Experience) NUPath cell to turn green in the grad panel — without any hardcoding of "EX" outside the NU adapter.
+        <br><br>
+        This was previously hardcoded as <code>covered.add("EX")</code> in 8+ places across the codebase whenever a co-op was present. The refactor centralized it here and moved the "EX" string into the adapter definition where it belongs.
+      </div>
+      <div class="fn-returns">Returns: <span>Set&lt;string&gt; — all attribute codes granted by placed special terms. Empty set if none placed or no grants defined.</span></div>
+    </div>
+    <pre><code><span class="cmt">// Usage in GradPanel, Header, etc.</span>
+import { computeGrantedAttrs } from "../core/specialTermUtils.js";
+
+const grantedAttrs = computeGrantedAttrs(specialTermPl, specialTerms?.types);
+const npCovered    = attributeSystem.getCoverage(placements, courseMap, grantedAttrs);</code></pre>
+
+    <h2>How the three functions compose</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    A["specialTermPl\n{ termId → { typeId, semId, duration } }"]
+    B["ISpecialTerms.types\n[ { id, durations, attributeGrants } ]"]
+
+    A --> CGR["computeGrantedAttrs()\nunions attributeGrants\nfor all placed terms"]
+    A --> RBD["resolveTermByDuration()\nduration int → descriptor object\n(weight + label)"]
+    RBD --> TS["termSpans(termWeight, semWeight)\n→ boolean"]
+
+    CGR --> COV["attributeSystem.getCoverage(grantedAttrs)\n→ Set of covered codes"]
+    TS  --> SM["specialTermStartMap / ContMap\nin PlannerContext"]
+    B --> CGR
+    B --> RBD
+      </div>
+      <div class="caption">All three functions take data from specialTermPl and the adapter's types array. Nothing institution-specific lives in these functions themselves.</div>
+    </div>
+
+  </main>
+</div>
+<script src="../../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

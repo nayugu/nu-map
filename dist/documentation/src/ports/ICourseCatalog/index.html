@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICourseCatalog — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/ports/ICourseCatalog">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>ICourseCatalog.js</strong>
+    </div>
+
+    <h1>ICourseCatalog <span class="badge blue">data source</span></h1>
+    <p class="lead">The adapter owns the full course loading pipeline: fetch strategy, normalization, Banner term code decoding, and fallback logic. PlannerContext calls <code>fetchAll()</code> once on mount and receives <code>Course[]</code> already normalized — no raw catalog format ever reaches the core.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"courseCatalog"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext (fetchAll on mount), InfoPanel (courseUrl for external link)</div></div>
+      <div class="nb-group"><div class="nb-label">Override priority</div><div class="nb-value"><strong>Required</strong> — always implement fetchAll() to point at your institution's data</div></div>
+      <div class="nb-group"><div class="nb-label">Also extends</div><div class="nb-value"><a href="../IAttributable/">IAttributable</a> — must implement getSources()</div></div>
+    </div>
+
+    <h2>Contract</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Method</th><th>Signature</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>fetchAll()</code></td><td><code>() → Promise&lt;Course[]&gt;</code></td><td>Fetch and normalize the full course catalog. The adapter chooses the strategy — static file, remote API, fallback chain, etc. Returns courses already in the <code>Course</code> shape. Called once by PlannerContext on mount.</td></tr>
+        <tr><td><code>normalize(raw)</code></td><td><code>(raw: object) → Course|null</code></td><td>Normalize one raw catalog record into the <code>Course</code> shape. Returns null if the record lacks required identity fields. Exposed separately so individual records can be refreshed without re-fetching the full catalog.</td></tr>
+        <tr><td><code>courseUrl(course)</code></td><td><code>(course: Course) → string|null</code></td><td>Return the official course detail URL in the registrar catalog. Returns null if per-course URLs are not available. Used in InfoPanel for the external link icon. Optional — may be omitted.</td></tr>
+        <tr><td><code>getSources()</code></td><td><code>() → SourceInfo[]</code></td><td>External data sources this adapter draws from. See <a href="../IAttributable/">IAttributable</a>. Used by <code>wire().getAllSources()</code> to build the About modal attribution list.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Course shape</h2>
+    <p>Every normalized record must conform to this shape. Fields the core relies on:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Primary key — <code>subject + number</code>, e.g. <code>"CS3500"</code>. Used in placements map, courseMap, etc.</td></tr>
+        <tr><td><code>subject</code></td><td>string</td><td>Uppercase subject code, e.g. <code>"CS"</code>, <code>"MATH"</code>. Used for color assignment.</td></tr>
+        <tr><td><code>number</code></td><td>string</td><td>Course number, e.g. <code>"3500"</code>.</td></tr>
+        <tr><td><code>code</code></td><td>string</td><td>Human-readable combined code, e.g. <code>"CS 3500"</code>.</td></tr>
+        <tr><td><code>title</code></td><td>string</td><td>Full course title.</td></tr>
+        <tr><td><code>sh</code></td><td>number</td><td>Credit hours (minimum for variable-credit courses). Named <code>sh</code> for historical reasons; the actual unit name comes from ICreditSystem.</td></tr>
+        <tr><td><code>shMin / shMax</code></td><td>number|null</td><td>Null for fixed-credit courses. Non-null when the course has a credit range.</td></tr>
+        <tr><td><code>terms</code></td><td>string[]</td><td>Semester type IDs when offered, e.g. <code>["fall", "spring"]</code>. <strong>Already decoded</strong> from raw registrar codes by the adapter. Empty array means offering data is unavailable.</td></tr>
+        <tr><td><code>attributes</code></td><td>string[]</td><td>Gen-ed / attribute codes, e.g. <code>["ND", "FQ"]</code>. Codes defined by IAttributeSystem. Empty array if none.</td></tr>
+        <tr><td><code>prereqs</code></td><td>PrereqNode[]</td><td>Prerequisite expression tree (Major2 format). Empty array means no prerequisites.</td></tr>
+        <tr><td><code>coreqs</code></td><td>CourseRef[]</td><td>Flat corequisite list. Empty array means none.</td></tr>
+        <tr><td><code>color</code></td><td>string</td><td>Deterministic hex color derived from subject code via <code>subjectColor()</code> in courseModel.js.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Attribute field name:</strong> Use <code>attributes</code> in new course data. The legacy field name <code>nuPath</code> is still accepted: <code>raw.attributes ?? raw.nuPath ?? []</code>. Terms must be decoded by the adapter — the core only sees semester type IDs like <code>"fall"</code>, never raw Banner codes like <code>"202430"</code>.</div></div>
+
+    <h2>Northeastern reference implementation</h2>
+    <pre><code><span class="cmt">// src/adapters/northeastern/courseCatalog.js</span>
+export default {
+  async fetchAll() {
+    <span class="cmt">// try local bundled JSON first, fall back to live API</span>
+    let json;
+    try {
+      json = await tryFetch(LOCAL_URL);
+    } catch {
+      json = await tryFetch(API_URL);  <span class="cmt">// SearchNEU API</span>
+    }
+    return json.map(normalizeCourse).filter(Boolean);
+  },
+
+  normalize: normalizeCourse,  <span class="cmt">// decodes Banner terms, maps raw fields</span>
+
+  courseUrl(course) {
+    return `https://catalog.northeastern.edu/course-descriptions/${course.subject.toLowerCase()}/`;
+  },
+
+  getSources() {
+    return [{
+      id: "nu-courses", label: "ninest/nu-courses",
+      url: "https://github.com/ninest/nu-courses",
+      author: "ninest", usedFor: "course catalog data",
+    }];
+  },
+};</code></pre>
+    <p><code>normalizeCourse()</code> handles Banner term code decoding (<code>"202430" → "spring"</code>), maps the legacy <code>nuPath</code> field to <code>attributes</code>, and sanitizes description strings. All of this is an adapter concern — the core never sees raw ninest records.</p>
+
+    <h2>Generic default</h2>
+    <pre><code><span class="cmt">// src/adapters/generic/courseCatalog.js</span>
+export default {
+  async fetchAll() {
+    const res = await fetch(`${import.meta.env.BASE_URL}courses.json`);
+    const raw = await res.json();
+    return raw.map(normalizeCourse).filter(Boolean);
+  },
+  normalize: normalizeCourse,
+  courseUrl() { return null; },
+  getSources() { return []; },
+};</code></pre>
+    <p>Points to <code>public/courses.json</code> at the root. No live API fallback — if the file is missing, the app shows a fetch error.</p>
+
+    <h2>Implementing for your institution</h2>
+    <ol>
+      <li>Build a JSON array of courses. Minimum required fields: <code>subject</code>, <code>number</code>, <code>title</code>.</li>
+      <li>Place it at <code>public/&lt;yourschool&gt;/all-courses.json</code>.</li>
+      <li>Implement <code>fetchAll()</code>: fetch the file, map each record through your <code>normalize()</code> function, filter nulls.</li>
+      <li>Implement <code>normalize(raw)</code>: map your raw format to the <code>Course</code> shape. Decode any term codes to semester type IDs here.</li>
+      <li>Optionally implement <code>courseUrl(course)</code> if your registrar has per-course URLs.</li>
+      <li>Implement <code>getSources()</code>: return attribution info for the About modal (or return <code>[]</code> if you own the data).</li>
+    </ol>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlannerContext — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context/PlannerContext">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">context/</a><span class="sep"> / </span><strong>PlannerContext.jsx</strong>
+    </div>
+
+    <h1>PlannerContext.jsx <span class="badge purple">Hub</span></h1>
+    <p class="lead">The brain of the entire application. ~1,600 lines of React state, computed values, side effects, and action handlers. Every UI component reads from it via <code>usePlanner()</code>. Understanding this file means understanding how the app works.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">context/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Hook</div><div class="nb-value"><code>const {...} = usePlanner()</code></div></div>
+      <div class="nb-group"><div class="nb-label">Imports from core</div><div class="nb-value">gradRequirements, prereqEval, semGrid, planModel, specialTermUtils, constants</div></div>
+      <div class="nb-group"><div class="nb-label">Imports from data</div><div class="nb-value">majorLoader, minorLoader, persistence (course loading via courseCatalog.fetchAll())</div></div>
+    </div>
+
+    <h2>Subsystems</h2>
+    <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 28px">
+      <a href="drag-drop/" style="display:block;padding:16px;border:1px solid var(--border-2);border-radius:8px;text-decoration:none;color:inherit;background:var(--bg-surface)">
+        <div style="font-weight:600;font-size:14px;margin-bottom:6px">Drag &amp; Drop</div>
+        <div style="font-size:12px;color:var(--text-4);line-height:1.5">HTML5 DnD + custom touch system. Ghost element, elementFromPoint routing, drop validation, coreq partner movement.</div>
+      </a>
+      <a href="svg-lines/" style="display:block;padding:16px;border:1px solid var(--border-2);border-radius:8px;text-decoration:none;color:inherit;background:var(--bg-surface)">
+        <div style="font-weight:600;font-size:14px;margin-bottom:6px">SVG Lines</div>
+        <div style="font-size:12px;color:var(--text-4);line-height:1.5">Prerequisite and corequisite lines drawn between course cards. Two modes: selection (all types) and always-on (violations only).</div>
+      </a>
+      <a href="plans/" style="display:block;padding:16px;border:1px solid var(--border-2);border-radius:8px;text-decoration:none;color:inherit;background:var(--bg-surface)">
+        <div style="font-weight:600;font-size:14px;margin-bottom:6px">Plans &amp; Persistence</div>
+        <div style="font-size:12px;color:var(--text-4);line-height:1.5">Multi-plan localStorage layout, switchPlan sequence, captureCurrentPlan serialization, and debounced auto-save.</div>
+      </a>
+    </div>
+
+    <h2>State overview</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    PC((PlannerContext))
+
+    PC --> LD["📦 Loaded Data\ncourses · courseMap · effectiveCourseMap"]
+    PC --> PL["📍 Placement State\nplacements · specialTermPl\nsemOrders · shOverrides · bonusSH\nplacedOut · substitutions"]
+    PC --> CO["🗓 Cohort Settings\nentSem/Year · gradSem/Year · stickyCourses"]
+    PC --> DV["⚡ Derived / Computed\nSEMESTERS · SEM_INDEX · currentSemId\nprereqViolations · coreqViolations"]
+    PC --> GP["🎓 Graduation Panel\nmajor · conc · minor1 · minor2"]
+    PC --> UI["🖼 UI State\nselectedId · dragInfo · showPanel\nbankSearch · uiScale · isPhone"]
+    PC --> PE["💾 Persistence\nplans · activePlanId\nundoStack · redoStack"]
+
+    style LD fill:#ddf4ff,stroke:#0969da
+    style PL fill:#dafbe1,stroke:#1a7f37
+    style CO fill:#fff8c5,stroke:#9a6700
+    style DV fill:#fbefff,stroke:#8250df
+    style GP fill:#ffd8d3,stroke:#cf222e
+    style UI fill:#f6f8fa,stroke:#656d76
+    style PE fill:#ddf4ff,stroke:#0969da
+      </div>
+      <div class="caption">Seven state categories. Details for each are in the sections below. Subsystem-specific state (drag refs, SVG lines, plan switching) is documented in the sub-pages above.</div>
+    </div>
+
+    <h2>Placement state</h2>
+    <p>These are the core data structures that represent where courses live in the plan.</p>
+
+    <div class="state-block"><div class="sb-name">placements</div><div class="sb-type">object</div><div class="sb-desc"><code>{ courseId → semId }</code>. The primary placement map. <code>"CS3500" → "fall2027"</code>. Every course-in-semester relationship is encoded here.</div></div>
+    <div class="state-block"><div class="sb-name">specialTermPl</div><div class="sb-type">object</div><div class="sb-desc"><code>{ termId → { typeId, semId, duration, company, companyDomain, subline } }</code>. All special work-experience blocks (co-ops, internships, and any future term types defined by the institution adapter). <code>typeId</code> matches a <code>specialTerms.types[n].id</code> from the adapter — e.g. <code>"coop"</code> or <code>"intern"</code> for NU. <code>duration</code> is in months. <code>company</code> is the display name; <code>companyDomain</code> is a bare domain (e.g. <code>microsoft.com</code>) used to fetch the company logo. <code>subline</code> is the user-entered role/title. Whether a term grants NUPath attributes is defined by <code>specialTerms.types[n].attributeGrants</code> in the adapter — for NU, co-ops grant <code>["EX"]</code> and internships grant <code>[]</code>. Span behavior (one row vs. two) is driven by the <code>weight</code> field on the duration descriptor, not hardcoded duration values. Old saved data with <code>workPl</code>/<code>internPl</code> is automatically migrated on load.</div></div>
+
+    <h3>Duration spanning — which semesters get occupied</h3>
+    <p>Each block type occupies one or two consecutive semester rows. The grid below shows what happens when a block is dropped on each semester type. <em>Shaded cells are the rows that become occupied.</em></p>
+    <div style="overflow-x:auto;margin:12px 0 20px">
+      <table style="border-collapse:collapse;font-size:12px;min-width:500px">
+        <thead>
+          <tr style="background:var(--bg-surface)">
+            <th style="text-align:left;padding:7px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:10px;text-transform:uppercase;letter-spacing:.05em">Block</th>
+            <th style="padding:7px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-4);font-size:10px">Fall</th>
+            <th style="padding:7px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-4);font-size:10px">Spring</th>
+            <th style="padding:7px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-4);font-size:10px">sumA</th>
+            <th style="padding:7px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-4);font-size:10px">sumB</th>
+            <th style="padding:7px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-4);font-size:10px">Fall</th>
+            <th style="padding:7px 14px;text-align:left;border:1px solid var(--border-2);color:var(--text-4);font-size:10px">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);white-space:nowrap"><strong>Co-op 4-mo</strong> on fall/spring</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#fecaca;font-size:11px">co-op</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:11px">Single row</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);white-space:nowrap"><strong>Co-op 4-mo</strong> on summer</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#fecaca;font-size:11px">start</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#fecaca;font-size:11px">cont.</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:11px">Normalizes to sumA; spans sumA→sumB</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);white-space:nowrap"><strong>Co-op 6-mo</strong> spring start</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#fecaca;font-size:11px">start</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#fecaca;font-size:11px">cont.</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:11px">Spring → sumA</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);white-space:nowrap"><strong>Co-op 6-mo</strong> sumB start</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#fecaca;font-size:11px">start</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#fecaca;font-size:11px">cont.</td>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:11px">sumB → Fall</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);white-space:nowrap"><strong>Internship 2-mo</strong></td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#d1d5db;font-size:11px">intern</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:11px">Summer only, single row</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);white-space:nowrap"><strong>Internship 4-mo</strong> on fall/spring</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#d1d5db;font-size:11px">intern</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:11px">Single row</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);white-space:nowrap"><strong>Internship 4-mo</strong> on summer</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#d1d5db;font-size:11px">start</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);background:#d1d5db;font-size:11px">cont.</td>
+            <td style="padding:6px 10px;text-align:center;border:1px solid var(--border-2);color:var(--text-5)">—</td>
+            <td style="padding:6px 14px;border:1px solid var(--border-2);color:var(--text-4);font-size:11px">Normalizes to sumA; spans sumA→sumB</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Co-ops and internships are mutually exclusive per semester slot — a co-op blocks internship drops and vice versa. A course cannot be dropped into any semester occupied by either type.</p>
+
+    <div class="state-block"><div class="sb-name">semOrders</div><div class="sb-type">object</div><div class="sb-desc"><code>{ semId → courseId[] }</code>. User-defined ordering within a semester. When a user drags courses to reorder them, this array is updated. Courses not in the array appear at the end.</div></div>
+    <div class="state-block"><div class="sb-name">shOverrides</div><div class="sb-type">object</div><div class="sb-desc"><code>{ courseId → number }</code>. User-set credit hours for variable-credit courses (those with shMin ≠ shMax). Overrides the default <code>course.credits</code>.</div></div>
+    <div class="state-block"><div class="sb-name">bonusSH</div><div class="sb-type">object</div><div class="sb-desc"><code>{ semId → number }</code>. Extra credit hours added to a semester (AP credit, transfer credit applied to a specific term). Shown in the semester header SH count.</div></div>
+    <div class="state-block"><div class="sb-name">placedOut</div><div class="sb-type">string[]</div><div class="sb-desc">CourseIds credited by exam, AP, or transfer without appearing in any semester. Count toward graduation requirements but not in the timeline.</div></div>
+    <div class="state-block"><div class="sb-name">substitutions</div><div class="sb-type">array</div><div class="sb-desc"><code>[{ from, to }]</code>. "ENGW3302 counts as ENGW3315." The <code>effectiveCourseMap</code> applies substitutions so grad requirements see the target course.</div></div>
+
+    <h2>Computed/derived state (useMemo)</h2>
+    <p>These values are recomputed automatically when their dependencies change. Never set directly.</p>
+
+    <div class="state-block" style="border-left-color:var(--green)"><div class="sb-name">SEMESTERS</div><div class="sb-type">Semester[]</div><div class="sb-desc">Ordered semester array for the cohort window. Rebuilt when entry/grad dates change. Each element: <code>{ id, label, type, year }</code>.</div></div>
+    <div class="state-block" style="border-left-color:var(--green)"><div class="sb-name">SEM_INDEX</div><div class="sb-type">object</div><div class="sb-desc"><code>{ semId → ordinal }</code>. Used for "is course A before course B?" comparisons. Built by <code>deriveSemMaps()</code>.</div></div>
+    <div class="state-block" style="border-left-color:var(--green)"><div class="sb-name">currentSemId</div><div class="sb-type">string</div><div class="sb-desc">The real-world current semester (computed from today's date). Used to mark completed vs upcoming semesters in UI.</div></div>
+    <div class="state-block" style="border-left-color:var(--green)"><div class="sb-name">effectivePlacements</div><div class="sb-type">object</div><div class="sb-desc">Like <code>placements</code> but with substitution targets applied. Used as input to graduation requirement checking.</div></div>
+    <div class="state-block" style="border-left-color:var(--green)"><div class="sb-name">prereqViolations</div><div class="sb-type">Map</div><div class="sb-desc"><code>courseId → { type: "order"|"unsatisfied", ... }</code>. Computed by running <code>evalPrereqTree()</code> for every placed course. Used to show warning icons and draw red SVG lines.</div></div>
+    <div class="state-block" style="border-left-color:var(--green)"><div class="sb-name">coreqViolations</div><div class="sb-type">Map</div><div class="sb-desc">Courses whose corequisites are not in the same semester. Computed inline (no separate module).</div></div>
+    <div class="state-block" style="border-left-color:var(--green)"><div class="sb-name">coopGradConflicts</div><div class="sb-type">WorkBlock[]</div><div class="sb-desc">Co-op blocks whose semester span overlaps the graduation semester. Triggers a warning in Header.</div></div>
+
+    <h2>Key actions and setters</h2>
+    <h3>Placement mutations (all call pushUndo() first)</h3>
+    <div class="fn-block exported">
+      <div class="fn-sig">onDrop(courseId, semId)</div>
+      <div class="fn-desc">Places a course into a semester. If course was already placed elsewhere, removes it from the old location. Updates <code>placements</code> and <code>semOrders</code>.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">onDropBank(courseId)</div>
+      <div class="fn-desc">Returns a course to the unplaced bank. Removes from <code>placements</code>. Does not affect <code>placedOut</code>.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">onDropOnCard(dragId, targetId, semId)</div>
+      <div class="fn-desc">Reorders two courses within a semester. Updates <code>semOrders[semId]</code> by swapping positions.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">onDropPlacedOut(courseId)</div>
+      <div class="fn-desc">Marks a course as placed-out (test/AP/transfer credit). Removes from <code>placements</code> and adds to <code>placedOut</code> array.</div>
+    </div>
+
+    <h3>Undo / redo</h3>
+    <div class="fn-block private">
+      <div class="fn-sig">pushUndo()</div>
+      <div class="fn-desc">Snapshots the current placement state onto <code>undoStack</code> before any mutation. Clears <code>redoStack</code>. The snapshot includes: placements, specialTermPl, semOrders, shOverrides, bonusSH, placedOut, substitutions.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">undo()</div>
+      <div class="fn-desc">Pops from undoStack, pushes current onto redoStack, restores the snapshot. Triggered by Cmd+Z.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">redo()</div>
+      <div class="fn-desc">Pops from redoStack, pushes current onto undoStack, restores. Triggered by Cmd+Y / Cmd+Shift+Z.</div>
+    </div>
+
+    <h3>Multi-plan management</h3>
+    <div class="fn-block exported">
+      <div class="fn-sig">createPlan()</div>
+      <div class="fn-desc">Generates a new UUID plan ID, creates empty plan data, adds to <code>plans</code> index, saves to localStorage, then calls <code>switchPlan(newId)</code>.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">switchPlan(id)</div>
+      <div class="fn-desc">Saves current plan state to localStorage immediately (non-debounced), loads the target plan's JSON, and rehydrates all placement/cohort/graduation state. See <a href="plans/">plans/</a> for the full sequence.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">deletePlan(id)</div>
+      <div class="fn-desc">Removes plan from <code>plans</code> index and deletes its localStorage key. If active plan was deleted, switches to the first remaining plan.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">exportPlanJSON()</div>
+      <div class="fn-desc">Serializes current state to the plan JSON format and triggers a browser download of <code>plan-name.json</code>.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">importPlanJSON(file)</div>
+      <div class="fn-desc">Reads an uploaded JSON file, validates its version field, creates a new plan from it, and switches to it.</div>
+    </div>
+
+    <h2>Side effects (useEffect)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Dependency</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Mount (once)</td><td>Load localStorage state, fetch courses</td></tr>
+        <tr><td><code>selectedId, placements, scrollTick</code></td><td>Recompute SVG prerequisite line positions — see <a href="svg-lines/">svg-lines/</a></td></tr>
+        <tr><td>Any persisted state change</td><td>Debounced auto-save to localStorage (when persistEnabled) — see <a href="plans/">plans/</a></td></tr>
+        <tr><td><code>planEntSem/Year, planGradSem/Year</code></td><td>Rebuild SEMESTERS, optionally remap courses (stickyCourses)</td></tr>
+        <tr><td><code>courses</code> loaded</td><td>Build courseMap, compute initial violations</td></tr>
+        <tr><td>Window resize</td><td>Update isPhone, isMobile, uiScale</td></tr>
+        <tr><td>Keyboard events</td><td>Cmd+Z undo, Cmd+Y redo, Delete remove, Escape close panel</td></tr>
+      </tbody>
+    </table></div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

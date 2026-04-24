@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUPath Update — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="dev-portal/nupath-update">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">dev-portal</a><span class="sep"> / </span><strong>nupath-update</strong>
+    </div>
+
+    <h1>NUPath Update <span class="badge blue">Work tab · local only</span></h1>
+
+    <!--
+      SCR setup
+      Situation:    NUPath attributes change each semester and the catalog HTML is not the most reliable source for them
+      Complication: Tableau is more authoritative but automation that trusts it blindly could corrupt data if the source has bad entries
+      Resolution:   this page answers "how does NUPath Update work — what are the two modes, how does the scan pipeline operate, and how does selective apply work?"
+    -->
+    <p class="lead">NUPath Update fetches the authoritative attribute list from <code>tableau.northeastern.edu</code> via a Playwright headless browser, diffs it against the current database, and lets you apply changes. The central design choice is a toggle between <strong>Manual</strong> (you review each course before applying) and <strong>Automatic</strong> (GitHub Actions applies everything on a cron schedule without review). That trade-off — control vs automation — is what the tool is built around.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Scan endpoint</div><div class="nb-value"><code>GET http://localhost:3333/nupath-scan</code> (SSE stream)</div></div>
+      <div class="nb-group"><div class="nb-label">Apply endpoint</div><div class="nb-value"><code>POST http://localhost:3333/nupath-fix</code></div></div>
+      <div class="nb-group"><div class="nb-label">Mode endpoint</div><div class="nb-value"><code>GET/POST http://localhost:3333/nupath-schedule</code></div></div>
+      <div class="nb-group"><div class="nb-label">Primary source</div><div class="nb-value">Tableau (Playwright DOM) — falls back to catalog.northeastern.edu</div></div>
+      <div class="nb-group"><div class="nb-label">Cron schedule</div><div class="nb-value">Jan 1, May 1, Sep 1 — <code>.github/workflows/update-nupath.yml</code> — <strong>currently commented out</strong>; toggle via <code>POST /nupath-schedule</code> in the portal</div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 1 — Two modes, different trust levels
+         (the governing design decision — explain it first)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Two modes — the trade-off between control and automation</h2>
+    <p>Mode is persisted on the server (<code>POST /nupath-schedule</code>). When you open the Work tab, the portal fetches the current mode (<code>GET /nupath-schedule</code>) and renders accordingly. Switching mode saves immediately.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    subgraph Manual["Manual mode"]
+      direction TB
+      M1["You trigger the scan"]
+      M2["SSE stream — live log + progress"]
+      M3["Inspector appears after scan"]
+      M4["You review, deselect courses you don't trust"]
+      M5["POST /nupath-fix with your selection"]
+      M6["change-log: nupath-manual-fix entry"]
+    end
+    subgraph Auto["Automatic mode"]
+      direction TB
+      A1["GitHub Actions cron: Jan 1 / May 1 / Sep 1"]
+      A2["Same Playwright Tableau scrape"]
+      A3["All changes applied — no review step"]
+      A4["Commits directly to main"]
+      A5["Triggers redeploy (~1 min)"]
+      A6["change-log: nupath-auto-update entry\nwith runId linking to GH Actions run"]
+    end
+      </div>
+    </div>
+    <p><strong>Risk of Automatic mode:</strong> if Tableau returns bad data for a semester, every affected course gets its NUPath silently corrupted and deployed. The Changes tab records each auto-run with a discrepancy list (first 5 shown, full count), so you can audit after the fact. If a bad auto-update lands, run a Manual scan, deselect the wrong entries, and apply only the corrections.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 2 — The scan pipeline
+         (what actually happens when you hit Scan)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Manual scan — what happens under the hood</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant You
+    participant Portal as Browser
+    participant Server as localhost:3333
+    participant Tableau as tableau.northeastern.edu
+    participant Catalog as catalog.northeastern.edu
+
+    You->>Portal: click "↺ Scan for Changes"
+    Portal->>Server: EventSource GET /nupath-scan
+    note over Portal: progress bar starts simulated animation\n(setInterval +0.3% every 400ms, caps at 88%)\nbecause real per-course % isn't known until done
+
+    Server->>Tableau: Playwright headless browser — fetch NUPath data
+    alt Tableau reachable
+      Tableau-->>Server: NUPath attribute set for all courses
+      Server-->>Portal: type:log "Source: Tableau (Playwright …)"
+    else Tableau unreachable / timeout
+      Server->>Catalog: fallback HTML scrape
+      Catalog-->>Server: NUPath from catalog pages
+      Server-->>Portal: type:log "Source: catalog"
+    end
+
+    loop per course
+      Server->>Server: compare old nuPath set vs new nuPath set
+      Server-->>Portal: type:progress {done, total, msg}
+      note over Portal: real % now available — clears simulated animation
+    end
+
+    Server-->>Portal: type:done {ok, discrepancies[], scanned, source}
+    Portal->>Portal: npRenderInspector(d)\nall courses pre-selected into npSelected Set\nInspector panel shown
+      </div>
+    </div>
+    <p><strong>Simulated progress bar:</strong> during the Playwright scrape phase, the server has no per-item progress to report — it's doing one big fetch. A <code>setInterval</code> advances the bar to 88% at a fixed rate, then the real <code>type:progress</code> events snap it to accurate percentages once the per-course comparison loop begins. This is cosmetic — it does not affect accuracy.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 3 — Three diff types + selective apply
+         (what the results mean and how to act on them)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Three diff types and selective apply</h2>
+    <p>Unlike Catalog Check which uses a type filter, NUPath Update uses <strong>individual checkboxes</strong>. Every course in the Inspector starts pre-selected (<code>npSelected = new Set(all keys)</code>). You uncheck specific courses before applying.</p>
+
+    <h3>The three types</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Type</th><th>Condition</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><strong>+ Gained</strong></td><td><code>added.length &gt; 0 &amp;&amp; removed.length === 0</code></td><td>Course gained one or more NUPath attributes this semester</td></tr>
+        <tr><td><strong>− Lost</strong></td><td><code>removed.length &gt; 0 &amp;&amp; added.length === 0</code></td><td>Course lost one or more NUPath attributes</td></tr>
+        <tr><td><strong>± Mixed</strong></td><td>both <code>added.length &gt; 0</code> and <code>removed.length &gt; 0</code></td><td>Course swapped one attribute for another — inspect carefully</td></tr>
+      </tbody>
+    </table></div>
+    <p>The table columns show <code>old</code> NUPath codes (removed codes in red) and <code>new</code> NUPath codes (added codes in green). Results are sorted by number of NUPath codes affected — most-changed courses first. The dot indicators (●●○) show count at a glance.</p>
+
+    <h3>Selective apply pipeline</h3>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    SEL["Inspector — checkboxes per course\nAll pre-selected in npSelected Set"]
+    SEL --> UNCHECK["Uncheck courses you don't trust\nnpToggle(key, false) → removes from npSelected\nSel count badge updates live"]
+    UNCHECK --> APPLY["☢ Apply Selected Fixes\nnpSelected.size must be > 0"]
+    APPLY --> POST["POST /nupath-fix\nbody: [{subject, number, newNuPath}]\nfor each key in npSelected"]
+    POST --> SERVER["Server:\nFor each course: write newNuPath to all-courses.json\nnuPath field only — no other fields touched\nAppend nupath-manual-fix entry to change-log.json\n  (fixed count + list of course codes)"]
+    SERVER --> RESULT["Result banner in portal\n{fixed: N, courses: [list]}"]
+    RESULT --> NEXT["npm run build → Preview → push to main"]
+      </div>
+    </div>
+    <p><strong>Key constraint:</strong> NUPath Update writes <em>only</em> the <code>nuPath</code> field. It does not touch title, credits, description, or any other field. If those also need updating, use Catalog Check or a patch file.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SUPPORTING DATA — Auto mode cron details, schedule logic
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Automatic mode — scheduled run details</h2>
+    <p>The cron schedule aligns with Northeastern's semester start dates — NUPath assignments are typically updated before each semester begins.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    CRON["GitHub Actions cron fires\nJan 1 / May 1 / Sep 1\n(.github/workflows/update-nupath.yml)"]
+    CRON --> SCRAPE["Checkout repo + npm install\nPlaywright Tableau scrape"]
+    SCRAPE --> DIFF["Compare all-courses.json against Tableau data\nBuild discrepancies list"]
+    DIFF --> APPLYALL["Apply ALL discrepancies\nno human review, no filtering"]
+    APPLYALL --> WRITE["Write all-courses.json\nAppend nupath-auto-update entry:\n  {type, runId, triggeredBy:'cron', stats, discrepancies[]}"]
+    WRITE --> COMMIT["git commit + push → triggers deploy.yml\nSite updated in ~1 min"]
+      </div>
+    </div>
+    <p>The <strong>next scheduled date</strong> display in the portal is computed by <code>npNextRunDate()</code>: picks the first of Jan/May/Sep strictly after today, falling back to next Jan 1. The currently-upcoming date card is highlighted with an accent color.</p>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

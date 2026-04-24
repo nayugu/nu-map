@@ -1,0 +1,2386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <title>NU Map — Developer Portal</title>
+  <style>
+    :root {
+      --bg:        #111317;
+      --bg2:       #1a1d24;
+      --bg3:       #222630;
+      --border:    #2e3340;
+      --text:      #e4e8f0;
+      --text2:     #9aa5bb;
+      --text3:     #5c667a;
+      --accent:    #5b8dee;
+      --accent-bg: #5b8dee14;
+      --success:   #4caf7d;
+      --warn:      #f5a623;
+      --error:     #e8655a;
+      --radius:    8px;
+      --mono:      "Fira Code", "Cascadia Code", ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Auth screen ──────────────────────────────────────────── */
+    #auth-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 24px;
+    }
+    .auth-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 40px 36px; width: 100%; max-width: 400px;
+    }
+    .auth-card h1 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .auth-card p  { font-size: 12px; color: var(--text2); margin-bottom: 24px; }
+    .auth-card input {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text); padding: 10px 14px;
+      font-size: 14px; margin-bottom: 12px; outline: none;
+      transition: border-color 0.15s;
+    }
+    .auth-card input:focus { border-color: var(--accent); }
+    .auth-card .btn-primary {
+      width: 100%; background: var(--accent); border: none; color: #fff;
+      border-radius: var(--radius); padding: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer;
+    }
+    .auth-card .btn-primary:hover { opacity: 0.9; }
+    .auth-card .btn-primary {
+      width: 100%; background: var(--accent); border: none; color: #fff;
+      border-radius: var(--radius); padding: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer; margin-top: 2px;
+    }
+    .auth-card .btn-primary:hover { opacity: 0.9; }
+    .auth-error { color: var(--error); font-size: 12px; margin-top: 10px; display: none; }
+
+    /* ── App shell ────────────────────────────────────────────── */
+    #dev-app { display: none; }
+
+    header {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 12px 24px; display: flex; align-items: center; gap: 12px;
+    }
+    header h1  { font-size: 15px; font-weight: 700; }
+    header span { font-size: 11px; color: var(--text3); background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; }
+    header button.logout { margin-left: auto; background: none; border: 1px solid var(--border); color: var(--text2); border-radius: var(--radius); padding: 5px 12px; font-size: 12px; cursor: pointer; }
+    header button.logout:hover { border-color: var(--error); color: var(--error); }
+
+    nav { background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; padding: 0 24px; gap: 2px; }
+    nav button {
+      background: none; border: none; color: var(--text2);
+      padding: 12px 16px; font-size: 13px; cursor: pointer;
+      border-bottom: 2px solid transparent; transition: color 0.12s, border-color 0.12s;
+    }
+    nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+    nav button:hover:not(.active) { color: var(--text); }
+
+    .tab-panel { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
+    .tab-panel.active { display: block; }
+
+    /* ── Shared card ──────────────────────────────────────────── */
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+    }
+    .card h2 { font-size: 13px; font-weight: 700; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+    .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+
+    /* ── Stats grid ───────────────────────────────────────────── */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+    .stat { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+    .stat .val { font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .stat .lbl { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+    /* ── Form controls ────────────────────────────────────────── */
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: var(--text2); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 5px; }
+    .field input, .field select, .field textarea {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text); padding: 8px 10px;
+      font-size: 13px; outline: none; transition: border-color 0.12s;
+      font-family: inherit;
+    }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+    .field select option { background: var(--bg3); }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); border: none; color: #fff; border-radius: var(--radius); padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn:hover { opacity: 0.88; }
+    .btn.sec { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+    .btn.sec:hover { border-color: var(--text2); }
+    .btn.danger { background: var(--error); }
+
+    /* ── YAML output ──────────────────────────────────────────── */
+    .yaml-out {
+      background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 14px; font-family: var(--mono); font-size: 12px; color: #c9d1d9;
+      white-space: pre; overflow: auto; max-height: 340px;
+      margin-top: 14px; display: none;
+    }
+    .yaml-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+    /* ── Action tabs (add/update/remove) ──────────────────────── */
+    .action-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .action-tab { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer; }
+    .action-tab.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+
+    /* ── Preview tab ──────────────────────────────────────────── */
+    #tab-preview { padding: 0; max-width: none; margin: 0; height: calc(100vh - 52px); }
+    .tab-panel.active#tab-preview { display: flex; flex-direction: column; }
+    #preview-toolbar { display:flex; align-items:center; gap:8px; padding:8px 14px; background:var(--bg3); border-bottom:1px solid var(--border); flex-shrink:0; flex-wrap:wrap; }
+    #preview-toolbar h2 { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:0.06em; text-transform:uppercase; margin:0 4px 0 0; }
+    .pv-sep { width:1px; height:18px; background:var(--border); flex-shrink:0; }
+    .pv-chip { height:26px; padding:0 10px; border-radius:5px; border:1px solid var(--border); background:transparent; color:var(--text3); font-size:11px; font-weight:500; cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; text-decoration:none; }
+    .pv-chip:hover { border-color:#555; color:var(--text); }
+    .pv-chip.active { background:rgba(79,142,247,0.12); border-color:var(--accent); color:var(--accent); font-weight:700; }
+    #pv-scale-badge { font-size:10px; color:var(--text3); background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2px 7px; min-width:46px; text-align:center; }
+    #pv-dim-read { font-size:10px; color:var(--text3); white-space:nowrap; min-width:120px; }
+    #preview-stage { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; background:#111; }
+    #pv-device-wrap { transform-origin:center center; position:relative; flex-shrink:0; }
+    #pv-bezel { position:absolute; inset:0; pointer-events:none; z-index:2; display:none; box-shadow:0 0 0 1px #3a3a3c,0 0 0 2px #1c1c1e,0 24px 60px rgba(0,0,0,0.9); }
+    #pv-notch { position:absolute; left:50%; transform:translateX(-50%); background:#1c1c1e; z-index:3; display:none; border-radius:0 0 18px 18px; }
+    #pv-home-bar { position:absolute; left:50%; transform:translateX(-50%); width:120px; height:4px; background:#5a5a5e; border-radius:99px; z-index:3; display:none; }
+    #pv-screen-bg { position:absolute; background:#fff; z-index:0; display:none; }
+    #pv-frame { display:block; border:none; position:absolute; background:#fff; z-index:1; }
+    #pv-device-wrap.no-frame #pv-bezel,#pv-device-wrap.no-frame #pv-notch,#pv-device-wrap.no-frame #pv-home-bar { display:none !important; }
+    #pv-device-wrap.no-frame #pv-frame { border-radius:4px; box-shadow:0 0 0 1px var(--border),0 20px 60px rgba(0,0,0,0.5); }
+
+    /* ── Chip list ────────────────────────────────────────────── */
+    .chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-bg); border: 1px solid var(--accent)55; color: var(--accent); border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; }
+    .chip .chip-rm { color: var(--text3); font-size: 10px; }
+    .chip:hover .chip-rm { color: var(--error); }
+    .chip-input-row { display: flex; gap: 6px; margin-top: 6px; }
+    .chip-input-row input { flex: 1; }
+
+    /* ── Misc ─────────────────────────────────────────────────── */
+    .text2 { color: var(--text2); font-size: 12px; }
+    .badge { display: inline-block; font-size: 10px; border-radius: 3px; padding: 1px 6px; }
+    .badge.ok  { background: #4caf7d22; color: var(--success); }
+    .badge.warn{ background: #f5a62322; color: var(--warn); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    code { font-family: var(--mono); font-size: 12px; background: var(--bg3); border-radius: 3px; padding: 1px 5px; }
+
+    /* ── Catalog Check tab ───────────────────────────────────────── */
+    .launch-btn { height:46px; padding:0 32px; font-size:15px; font-weight:700; background:#c0392b; border:2px solid #e74c3c; border-radius:8px; color:#fff; cursor:pointer; letter-spacing:0.03em; box-shadow:0 0 26px rgba(192,57,43,0.5); transition:all 0.15s; }
+    .launch-btn:hover:not(:disabled) { background:#e74c3c; box-shadow:0 0 42px rgba(231,76,60,0.7); transform:translateY(-1px); }
+    .launch-btn:disabled { background:#444; border-color:#555; box-shadow:none; transform:none; cursor:not-allowed; opacity:0.6; }
+    @keyframes ck-pulse { 0%,100% { opacity:1 } 50% { opacity:0.45 } }
+    #ck-status-badge { font-size:9px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:3px; background:rgba(76,175,125,0.15); color:var(--success); border:1px solid rgba(76,175,125,0.4); animation:ck-pulse 1.4s ease-in-out infinite; }
+    .ck-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px 16px; text-align:center; }
+    .ck-val  { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--text); line-height:1.1; }
+    .ck-lbl  { font-size:11px; color:var(--text3); margin-top:5px; }
+    /* Inspector panel */
+    .ck-filter-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; align-items:center; }
+    .ck-filter-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:5px; padding:4px 12px; font-size:11px; cursor:pointer; transition:all 0.12s; }
+    .ck-filter-btn.active { background:var(--accent-bg); border-color:var(--accent); color:var(--accent); }
+    .ck-filter-btn:hover:not(.active) { border-color:var(--text3); color:var(--text); }
+    #ck-inspector-table { width:100%; border-collapse:collapse; font-size:11px; }
+    #ck-inspector-table th { text-align:left; padding:5px 8px; color:var(--text3); border-bottom:1px solid var(--border); font-weight:600; }
+    #ck-inspector-table td { padding:3px 8px; border-bottom:1px solid var(--bg3); vertical-align:top; }
+    #ck-inspector-table tbody tr:hover { background:var(--bg3); }
+    #check-log::-webkit-scrollbar { width: 5px; }
+    #check-log::-webkit-scrollbar-track { background: transparent; }
+    #check-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <h1><img class="site-logo" src="../logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map · Dev Portal</h1>
+    <p>Authorized access only.</p>
+    <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password" />
+    <button class="btn-primary" onclick="attemptLogin()">Unlock →</button>
+    <p class="auth-error" id="auth-error">Incorrect password.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DEV APP
+══════════════════════════════════════════════════════════════════ -->
+<div id="dev-app">
+  <header>
+    <h1><img class="site-logo" src="/logo.png" alt="" style="height:22px;width:22px;object-fit:contain;vertical-align:middle;margin-right:7px">NU Map</h1>
+    <span>Developer Portal</span>
+    <span id="local-badge" style="display:none;color:#fff;font-weight:800;font-size:13px;letter-spacing:0.14em;margin-left:20px">LOCAL</span>
+    <div style="flex:1"></div>
+    <a id="remote-link-btn" href="https://nayugu.github.io/nu-map/dev.html" target="_blank" class="btn sec" style="display:none;font-size:11px;padding:4px 12px;height:auto;text-decoration:none">Open on GitHub Pages →</a>
+    <button id="local-link-btn" onclick="openLocalPortal()" class="btn sec" style="display:none;font-size:11px;padding:4px 12px">Open Local →</button>
+    <button class="logout" id="logout-btn" onclick="logout()">Log out</button>
+  </header>
+
+  <nav>
+    <button class="active" onclick="switchTab('overview', this)">📊 Overview</button>
+    <button onclick="switchTab('changes', this)">📋 Changes</button>
+    <button onclick="switchTab('preview', this)">📱 Preview</button>
+    <button id="nav-work-btn" onclick="switchTab('work', this)">⚙ Work</button>
+    <button onclick="switchTab('patches', this)" style="margin-left:auto">🩹 Patches</button>
+    <button onclick="switchTab('data', this)">🔄 Data Sources</button>
+  </nav>
+
+  <!-- ── Overview ─────────────────────────────────────────────── -->
+  <div id="tab-overview" class="tab-panel active">
+    <div class="card" style="border:2px solid var(--accent);background:var(--accent-bg)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="margin-bottom:4px">Data updates are manual</h2>
+          <p class="text2" style="margin:0">There is no automated scraper. Run <strong>Catalog Check</strong> or <strong>NUPath Update</strong> locally, then use <strong>Review &amp; Push</strong> to commit directly to main. NUPath can also be triggered from GitHub Actions (workflow_dispatch).</p>
+        </div>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/actions" target="_blank" style="flex-shrink:0;font-size:13px;padding:8px 18px">⚙ GitHub Actions →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Data Status</h2>
+      <div class="stats" id="data-stats">
+        <div class="stat"><div class="val" id="stat-courses">—</div><div class="lbl">Courses in database</div></div>
+        <div class="stat"><div class="val" id="stat-updated">—</div><div class="lbl">Last updated</div></div>
+      </div>
+    </div>
+
+    <!-- Only show local-tools shortcut on non-local visits -->
+    <div class="card" id="remote-work-hint" style="display:none;border:1px solid var(--accent);background:var(--accent-bg)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="color:var(--accent);margin-bottom:4px">⚙ Work tools are local-only</h2>
+          <p class="text2" style="margin:0 0 10px">Catalog check, data fixes, and push to GitHub need the local dev server.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:8px 12px">
+            <code style="font-size:12px">npm run dev</code>
+            <button class="btn sec" onclick="copyCmd('npm run dev')" style="font-size:11px;padding:3px 10px;height:auto">Copy</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span style="font-size:11px;color:var(--text3)">Port:</span>
+          <input id="local-portal-port" type="number" value="5173" min="1024" max="65535"
+            style="width:64px;font-size:12px;padding:4px 6px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text)">
+          <button class="btn" onclick="openLocalPortal()" style="font-size:13px;padding:8px 18px">Open Local Dev Portal →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Repository</h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn sec" href="https://github.com/nayugu/nu-map" target="_blank">📦 nayugu/nu-map</a>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/pulls" target="_blank">🔀 Pull Requests</a>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/actions" target="_blank">⚙ Actions</a>
+        <a class="btn sec" href="https://github.com/nayugu/nu-map/tree/main/data/patches" target="_blank">🩹 Patches folder</a>
+        <a class="btn sec" href="./" target="_blank">🌍 Live Site</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Course Patches ─────────────────────────────────────────── -->
+  <div id="tab-patches" class="tab-panel">
+    <div class="card" style="margin-bottom:0">
+      <h2>Patch Creator</h2>
+      <p class="text2" style="margin-bottom:16px">
+        Generate a YAML patch file to add, update, or remove courses.
+        Copy the output into <code>data/patches/YYYY-MM-DD_description.yaml</code>, then push to main via the Work tab.
+      </p>
+
+      <div class="action-tabs">
+        <div class="action-tab active" id="act-add" onclick="setAction('add')">➕ Add course</div>
+        <div class="action-tab" id="act-update" onclick="setAction('update')">✏️ Update course</div>
+        <div class="action-tab" id="act-remove" onclick="setAction('remove')">🗑 Remove course</div>
+      </div>
+
+      <!-- Meta fields (always shown) -->
+      <div class="row2">
+        <div class="field"><label>Patch date</label><input type="date" id="p-date" /></div>
+        <div class="field"><label>Reason</label><input type="text" id="p-reason" placeholder="e.g. New course added in Spring 2026 catalog" /></div>
+      </div>
+      <hr>
+
+      <!-- ADD fields -->
+      <div id="fields-add">
+        <h3>Course to add</h3>
+        <div class="row3">
+          <div class="field"><label>Subject *</label><input id="a-subj" placeholder="CS" maxlength="6" style="text-transform:uppercase" /></div>
+          <div class="field"><label>Number *</label><input id="a-num" placeholder="3700" maxlength="5" /></div>
+          <div class="field"><label>Credits *</label><input id="a-credits" type="number" min="1" max="8" placeholder="4" /></div>
+        </div>
+        <div class="field"><label>Title *</label><input id="a-title" placeholder="Networks and Distributed Systems" /></div>
+        <div class="row2">
+          <div class="field">
+            <label>Schedule type</label>
+            <select id="a-sched">
+              <option>Lecture</option><option>Lab</option><option>Seminar</option>
+              <option>Studio</option><option>Individual Instruction</option><option>Off-campus instruction</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>NUPath codes</label>
+            <div class="chip-input-row">
+              <input id="a-np-input" placeholder="e.g. FQ" maxlength="4" style="text-transform:uppercase" onkeydown="if(event.key==='Enter'){addChip('np');event.preventDefault()}" />
+              <button class="btn sec" onclick="addChip('np')" style="white-space:nowrap;flex-shrink:0">Add</button>
+            </div>
+            <div class="chip-list" id="a-np-chips"></div>
+          </div>
+        </div>
+        <div class="field"><label>Prerequisites (text)</label><input id="a-prereq" placeholder="CS 2500" /></div>
+        <div class="field"><label>Description</label><textarea id="a-desc" placeholder="Introduces networks…"></textarea></div>
+      </div>
+
+      <!-- UPDATE fields -->
+      <div id="fields-update" style="display:none">
+        <h3>Course to update</h3>
+        <div class="row2">
+          <div class="field"><label>Subject *</label><input id="u-subj" placeholder="CS" maxlength="6" style="text-transform:uppercase" /></div>
+          <div class="field"><label>Number *</label><input id="u-num" placeholder="3700" maxlength="5" /></div>
+        </div>
+        <p class="text2" style="margin-bottom:12px">Fill in only the fields you want to change:</p>
+        <div class="row2">
+          <div class="field"><label>New title</label><input id="u-title" /></div>
+          <div class="field"><label>New credits</label><input id="u-credits" type="number" min="1" max="8" /></div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Schedule type</label>
+            <select id="u-sched"><option value="">— no change —</option>
+              <option>Lecture</option><option>Lab</option><option>Seminar</option>
+              <option>Studio</option><option>Individual Instruction</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>NUPath codes (replaces existing)</label>
+            <div class="chip-input-row">
+              <input id="u-np-input" placeholder="e.g. SI" maxlength="4" style="text-transform:uppercase" onkeydown="if(event.key==='Enter'){addChip('unp');event.preventDefault()}" />
+              <button class="btn sec" onclick="addChip('unp')" style="white-space:nowrap;flex-shrink:0">Add</button>
+            </div>
+            <div class="chip-list" id="u-np-chips"></div>
+          </div>
+        </div>
+        <div class="field"><label>New description</label><textarea id="u-desc"></textarea></div>
+      </div>
+
+      <!-- REMOVE fields -->
+      <div id="fields-remove" style="display:none">
+        <h3>Course to remove</h3>
+        <div class="row3">
+          <div class="field"><label>Subject *</label><input id="r-subj" placeholder="CS" maxlength="6" style="text-transform:uppercase" /></div>
+          <div class="field"><label>Number *</label><input id="r-num" placeholder="9999" maxlength="5" /></div>
+          <div class="field"><label>Reason</label><input id="r-reason" placeholder="Discontinued after Spring 2026" /></div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;display:flex;gap:10px">
+        <button class="btn" onclick="generateYAML()">Generate YAML</button>
+        <button class="btn sec" onclick="clearPatchForm()">Clear</button>
+      </div>
+
+      <pre class="yaml-out" id="yaml-output"></pre>
+      <div class="yaml-actions" id="yaml-actions" style="display:none">
+        <button class="btn" onclick="copyYAML()">📋 Copy YAML</button>
+        <a id="yaml-dl" class="btn sec" download>⬇ Download .yaml</a>
+        <a id="yaml-gh" class="btn sec" href="https://github.com/nayugu/nu-map/tree/main/data/patches" target="_blank">Open patches folder →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Preview tab ────────────────────────────────────────────── -->
+  <div id="tab-preview" class="tab-panel">
+    <div id="preview-toolbar">
+      <h2>Preview</h2>
+      <span id="pv-local-label" style="display:none;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#f59e0b;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);border-radius:4px;padding:2px 8px">&#9679; Local build</span>
+      <span id="pv-remote-label" style="display:none;font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);border:1px solid rgba(79,142,247,0.4);border-radius:4px;padding:2px 8px">&#9679; Deployed build</span>
+      <div class="pv-sep"></div>
+      <button class="pv-chip active" data-dev="iphoneX">📱 iPhone X</button>
+      <div class="pv-sep"></div>
+      <button class="pv-chip" data-dev="ipadAir">⬛ iPad Air</button>
+      <button class="pv-chip" data-dev="ipadPro">⬛ iPad Pro 11&quot;</button>
+      <div class="pv-sep"></div>
+      <button class="pv-chip" data-dev="macbook">💻 MacBook</button>
+      <button class="pv-chip" data-dev="desktop1080">🖥 1080p</button>
+      <div class="pv-sep"></div>
+      <button class="pv-chip" id="pv-orient-btn" title="Rotate">⟳ Rotate</button>
+      <button class="pv-chip active" id="pv-frame-btn">Frame: on</button>
+      <div class="pv-sep"></div>
+      <span id="pv-dim-read">375 × 812</span>
+      <span id="pv-scale-badge">100%</span>
+      <div class="pv-sep"></div>
+      <button class="pv-chip" id="pv-reload-btn" style="margin-left:auto">↺ Reload</button>
+      <button class="pv-chip" id="pv-reset-btn">🗑 Reset state</button>
+      <button class="pv-chip" id="pv-open-btn">Open ↗</button>
+    </div>
+    <div id="pv-local-banner" style="display:none;background:#f59e0b;color:#0d0d0d;font-size:11px;font-weight:700;text-align:center;padding:5px 14px;letter-spacing:0.03em;flex-shrink:0">
+      Previewing local build — changes here are <em>not yet deployed</em>. Use <strong>Work → Push to GitHub</strong> to deploy.
+    </div>
+    <div id="pv-remote-banner" style="display:none;background:var(--accent);color:#fff;font-size:11px;font-weight:700;text-align:center;padding:5px 14px;letter-spacing:0.03em;flex-shrink:0">
+      Previewing the <em>deployed</em> build at nayugu.github.io/nu-map — to preview unreleased changes, run <code style="background:rgba(255,255,255,0.2);color:#fff">npm run dev</code> and use the local portal.
+    </div>
+    <div id="preview-stage">
+      <div id="pv-device-wrap">
+        <div id="pv-bezel"></div>
+        <div id="pv-screen-bg"></div>
+        <div id="pv-notch"></div>
+        <div id="pv-home-bar"></div>
+        <div id="pv-mask-top"></div>
+        <div id="pv-mask-bot"></div>
+        <iframe id="pv-frame" src="about:blank" title="App Preview"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Data Sources tab ───────────────────────────────────────── -->
+  <div id="tab-data" class="tab-panel">
+    <div class="card">
+      <h2>Course Data Sources</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border)">
+            <th style="text-align:left;padding:8px 0;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">Source</th>
+            <th style="text-align:left;padding:8px 12px;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">What it provides</th>
+            <th style="text-align:left;padding:8px 0;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em">How it's updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)22">
+            <td style="padding:10px 0"><a href="https://catalog.northeastern.edu/course-descriptions/" target="_blank">catalog.northeastern.edu</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">Titles, descriptions, credits, prereqs, scheduleType</td>
+            <td style="padding:10px 0">Work tab → <b>Catalog Check</b></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)22">
+            <td style="padding:10px 0"><a href="https://tableau.northeastern.edu" target="_blank">tableau.northeastern.edu</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">NUPath attribute designations (authoritative)</td>
+            <td style="padding:10px 0">Work tab → <b>NUPath Update</b>, or GH Actions workflow_dispatch</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)22">
+            <td style="padding:10px 0"><a href="https://github.com/ninest/nu-courses" target="_blank">ninest/nu-courses (SearchNEU)</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">Term availability, live sections</td>
+            <td style="padding:10px 0"><code>npm run data:fetch:write</code></td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0"><a href="https://github.com/sandboxnu/graduatenu" target="_blank">sandboxnu/graduatenu</a></td>
+            <td style="padding:10px 12px;color:var(--text2)">Major/minor requirement JSON trees</td>
+            <td style="padding:10px 0">Manual sync to <code>public/majors/</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Update Workflow</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</span>
+          <div><b>Check for catalog field changes</b> (titles, credits, prereqs):<br>Work tab → Catalog Check → Launch → review Inspector → Apply Fixes</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</span>
+          <div><b>Check for NUPath changes</b> (each semester):<br>Work tab → NUPath Update → Scan → review → Apply Selected Fixes</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</span>
+          <div><b>Apply any manual patches</b> for known errors:<br>Patches tab → generate YAML → save to <code>data/patches/</code> → <code>npm run data:patch:write</code></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</span>
+          <div><b>Build and verify</b>:<br><code>npm run build</code> → Preview tab across devices</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">5</span>
+          <div><b>Push to main</b>:<br>Work tab → Review &amp; Push (shows git diff) → Confirm → GitHub Actions deploys in ~2 min</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Patch Files</h2>
+      <p class="text2">
+        Manual corrections live in <code>data/patches/</code>.
+        Use the <a href="#" onclick='switchTab("patches", document.querySelector("nav button[onclick*=patches]"));return false'>Patch Creator</a> tab to generate YAML,
+        then place it in that folder and open a PR.
+        Naming convention: <code>YYYY-MM-DD_short-description.yaml</code>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Change Log tab ────────────────────────────────────────── -->
+<div id="tab-changes" class="tab-panel">
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px">
+      <h2 style="margin:0">Scrape History</h2>
+      <button class="btn sec" onclick="loadChangeLog()">↻ Refresh</button>
+    </div>
+    <p class="text2" style="margin-bottom:12px">Each rotating scrape run is logged here. Runs open a PR — merge only after reviewing the diff.</p>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap">
+      <input id="cl-search" type="text" placeholder="Search subject or date…" oninput="clFilter()"
+        style="flex:1;min-width:160px;font-size:12px;padding:5px 9px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none">
+      <select id="cl-sort" onchange="clFilter()"
+        style="font-size:12px;padding:5px 9px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none;cursor:pointer">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="changes">Most changes</option>
+        <option value="subject">Subject A–Z</option>
+      </select>
+    </div>
+    <div id="change-log-list"><p class="text2">Loading…</p></div>
+  </div>
+
+  <div class="card">
+    <h2>Rotation Status</h2>
+    <div id="rotate-state"><p class="text2">Loading…</p></div>
+  </div>
+</div>
+
+  <!-- ── Work tab (local-only: Push + Catalog Check) ──────────────────── -->
+  <div id="tab-work" class="tab-panel">
+    <!-- Quick Actions -->
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <p class="text2" style="margin-bottom:14px">Run these commands in the repo root. Build afterwards to apply changes.</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Annual course refresh</div>
+            <code>npm run data:fetch:write && npm run data:patch:write && npm run build</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:fetch:write && npm run data:patch:write && npm run build')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Scrape from catalog.northeastern.edu</div>
+            <code>npm run data:scrape:write && npm run build</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:scrape:write && npm run build')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Validate all patches</div>
+            <code>npm run data:validate</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run data:validate')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Push card -->
+    <div class="card" id="git-push-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h2 style="margin:0 0 4px">Push to GitHub</h2>
+          <p class="text2" style="margin:0;font-size:12px">Commits <code>change-log.json</code>, <code>all-courses.json</code>, and data-meta files, then pushes to <code>main</code>.</p>
+        </div>
+        <button class="btn" style="background:#238636;border-color:#2ea043;font-size:14px;padding:10px 22px;flex-shrink:0" onclick="gitReviewAndPush()">⬆ Review & Push</button>
+      </div>
+      <div id="git-push-result" style="display:none;margin-top:12px;font-size:12px;padding:8px 12px;border-radius:6px"></div>
+    </div>
+    <div class="card">
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <span style="font-size:28px;line-height:1">☢</span>
+        <div>
+          <h2 style="margin:0">Catalog Check</h2>
+          <p class="text2" style="margin:2px 0 0">Full catalog comparison — runs locally against <code>public/all-courses.json</code></p>
+        </div>
+      </div>
+
+      <!-- Launch row (hidden when on HTTPS non-localhost) -->
+      <div id="ck-launch-row">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:var(--radius);padding:10px 14px;margin:18px 0 12px">
+          <div>
+            <div style="font-size:13px;font-weight:600">Start dev server + catalog check server</div>
+            <code>npm run dev</code>
+          </div>
+          <button class="btn sec" onclick="copyCmd('npm run dev')">Copy</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px">
+          <button class="launch-btn" id="check-run-btn" onclick="startCheck()">🚀 Launch Check</button>
+          <button class="btn sec" id="check-stop-btn" onclick="stopCheck()" disabled style="height:46px;padding:0 20px">■ Stop</button>
+          <span id="ck-status-badge" style="display:none">● Running</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)">
+            Port: <input id="check-port" value="3333" type="number" min="1024" max="65535"
+              style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+          </span>
+        </div>
+      </div>
+      <!-- HTTPS guard — shown instead of launch row when accessed from GitHub Pages -->
+      <div id="ck-local-only-banner" style="display:none;margin:18px 0">
+        <p style="font-size:11px;color:var(--text3);margin:0 0 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span>The catalog check server runs on your local machine and can&rsquo;t be reached over HTTPS. Start it with <code>npm run dev</code>, then open the local dev portal directly:</span>
+          <button class="btn sec" style="font-size:11px;padding:3px 10px;height:auto" onclick="copyCmd('npm run dev')">Copy</button>
+        </p>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <button class="launch-btn" onclick="ckOpenLocal()">🚀 Open Local Dev Portal</button>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)">
+            Dev server port: <input id="ck-local-port" value="5173" type="number" min="1024" max="65535"
+              style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+          </span>
+        </div>
+      </div>
+
+      <!-- Progress section (hidden until run starts) -->
+      <div id="check-progress-wrap" style="display:none">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span id="check-status-msg" style="font-size:11px;color:var(--text2)">Starting…</span>
+          <span id="check-pct" style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums">0%</span>
+        </div>
+        <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:20px">
+          <div id="check-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#c0392b,#e74c3c);border-radius:4px;transition:width 0.25s ease"></div>
+        </div>
+
+        <!-- Stat cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px">
+          <div class="ck-card"><div class="ck-val" id="ck-matched" style="color:var(--success)">0</div><div class="ck-lbl">✓ Correct</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-changed" style="color:var(--warn)">0</div><div class="ck-lbl">⚠ Need PR</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-range"   style="color:#a78bfa">0</div><div class="ck-lbl">≈ Range diff</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-added"   style="color:var(--accent)">0</div><div class="ck-lbl">🆕 New courses</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-missing" style="color:var(--error)">0</div><div class="ck-lbl">❌ Not in catalog</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-read">0</div><div class="ck-lbl">Total scanned</div></div>
+          <div class="ck-card"><div class="ck-val" id="ck-subjects">0</div><div class="ck-lbl">Subjects done</div></div>
+        </div>
+
+        <!-- Subject-by-subject log -->
+        <div id="check-log" style="max-height:360px;overflow-y:auto;border-top:1px solid var(--border);padding-top:8px"></div>
+
+        <!-- ── Discrepancy Inspector ───────────────────────────────────────────────── -->
+        <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+            <h3 style="margin:0;font-size:13px">Discrepancy Inspector</h3>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="ck-inspector-count" style="font-size:11px;color:var(--text3)">0 items</span>
+              <button class="btn sec" style="font-size:11px;padding:4px 10px" onclick="ckExport()">Export JSON</button>
+            </div>
+          </div>
+          <div class="ck-filter-bar">
+            <button class="ck-filter-btn active" onclick="ckSetFilter('all',this)">All</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('changed',this)">⚠ Changed</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('range',this)">≈ Range</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('added',this)">🆕 New</button>
+            <button class="ck-filter-btn" onclick="ckSetFilter('missing',this)">❌ Missing</button>
+            <input id="ck-search" placeholder="Search course code…" oninput="ckRender()"
+              style="margin-left:auto;width:180px;font-size:11px;padding:4px 8px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none">
+          </div>
+          <div style="max-height:400px;overflow-y:auto">
+            <table id="ck-inspector-table">
+              <thead><tr><th>Code</th><th>Type</th><th>Field</th><th>Was</th><th>Now</th></tr></thead>
+              <tbody id="ck-inspector-body"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Run a check to populate</td></tr></tbody>
+            </table>
+          </div>
+
+          <!-- ── Apply Fixes — danger zone ──────────────────────────────── -->
+          <div style="margin-top:20px;border-top:2px solid #e74c3c44;padding-top:18px">
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+              <div style="flex:1;min-width:220px">
+                <p style="font-size:13px;font-weight:700;color:#e74c3c;margin:0 0 5px">☢ Data Override Zone</p>
+                <p style="font-size:11px;color:var(--text2);margin:0;line-height:1.55">
+                  Overwrites field changes, inserts new courses, and removes missing ones directly in <code>all-courses.json</code>.
+                  Applies <span id="ck-fix-count" style="font-weight:700;color:#e74c3c">0</span> <span id="ck-fix-type-desc" style="color:var(--text2)">fixable</span> course(s) from the current filter.
+                  <span style="color:var(--error)">Irreversible without git.</span>
+                </p>
+              </div>
+              <button id="ck-fix-btn" class="launch-btn" onclick="ckApplyFixes()"
+                style="background:#7b0000;border-color:#e74c3c;box-shadow:0 0 26px rgba(231,76,60,0.5);font-size:14px;height:auto;padding:12px 28px;flex-shrink:0">
+                ☢ Apply Fixes
+              </button>
+            </div>
+            <!-- Fix progress (shown during apply) -->
+            <div id="ck-fix-progress" style="display:none;margin-top:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span id="ck-fix-status" style="font-size:11px;color:var(--text2)">Applying…</span>
+                <span id="ck-fix-pct"    style="font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums">0%</span>
+              </div>
+              <div style="height:7px;background:var(--bg3);border-radius:4px;overflow:hidden">
+                <div id="ck-fix-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#7b0000,#e74c3c);border-radius:4px;transition:width 0.2s ease"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- NUpath Update card -->
+    <div class="card">
+
+      <!-- ── Header row ─────────────────────────────────────────────── -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <span style="font-size:28px;line-height:1">🎓</span>
+        <div style="flex:1">
+          <h2 style="margin:0">NUpath Update</h2>
+          <p class="text2" style="margin:2px 0 0">Fetch from <code>tableau.northeastern.edu</code> (official source) · falls back to catalog</p>
+        </div>
+        <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0">
+          <button id="np-mode-manual" onclick="npSetMode('manual')"
+            style="padding:5px 14px;font-size:11px;font-weight:600;border:none;cursor:pointer;background:var(--accent);color:#fff;border-right:1px solid var(--border)">Manual</button>
+          <button id="np-mode-auto" onclick="npSetMode('auto')"
+            style="padding:5px 14px;font-size:11px;font-weight:600;border:none;cursor:pointer;background:var(--bg3);color:var(--text2)">Automatic</button>
+        </div>
+      </div>
+
+      <!-- ── Manual mode panel ──────────────────────────────────────── -->
+      <div id="np-manual-panel">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="launch-btn" id="np-run-btn" onclick="npRun()">↺ Scan for Changes</button>
+          <button class="btn sec" id="np-stop-btn" onclick="npStop()" disabled style="height:46px;padding:0 20px">■ Stop</button>
+          <span id="np-status-badge" style="display:none;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:3px;background:rgba(76,175,125,0.15);color:var(--success);border:1px solid rgba(76,175,125,0.4);animation:ck-pulse 1.4s ease-in-out infinite">● Scanning</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text3)">
+            Port: <input id="np-port" value="3333" type="number" min="1024" max="65535"
+              style="width:60px;font-size:11px;padding:2px 5px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text)">
+          </span>
+        </div>
+
+        <!-- progress bar + log -->
+        <div id="np-progress-wrap" style="display:none;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span id="np-progress-msg" style="font-size:11px;color:var(--text2)">Scanning…</span>
+            <span id="np-progress-pct" style="font-size:11px;color:var(--text3)"></span>
+          </div>
+          <div style="height:6px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:10px">
+            <div id="np-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#7eb3ff);border-radius:4px;transition:width 0.3s ease"></div>
+          </div>
+          <div id="np-log" style="max-height:160px;overflow-y:auto;font-family:var(--mono);font-size:10.5px;color:var(--text2);background:var(--bg3);border-radius:6px;padding:8px 12px;line-height:1.5;white-space:pre-wrap;word-break:break-all"></div>
+        </div>
+
+        <!-- ── Discrepancy inspector (appears after scan) ─────────────── -->
+        <div id="np-inspector" style="display:none">
+
+          <!-- stat cards -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:14px">
+            <div class="ck-card"><div class="ck-val" id="np-stat-scanned">0</div><div class="ck-lbl">Scanned</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-gainedonly" style="color:var(--success)">0</div><div class="ck-lbl">+ Gained only</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-lostonly" style="color:var(--error)">0</div><div class="ck-lbl">− Lost only</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-mixed" style="color:var(--warn)">0</div><div class="ck-lbl">± Mixed</div></div>
+            <div class="ck-card"><div class="ck-val" id="np-stat-source" style="font-size:11px;color:var(--accent)">—</div><div class="ck-lbl">Source</div></div>
+          </div>
+
+          <!-- filter + search row -->
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <div class="ck-filter-bar" style="margin:0">
+              <button class="ck-filter-btn active" onclick="npSetFilter('all',this)">All</button>
+              <button class="ck-filter-btn" onclick="npSetFilter('gained',this)">+ Gained</button>
+              <button class="ck-filter-btn" onclick="npSetFilter('lost',this)">− Lost</button>
+              <button class="ck-filter-btn" onclick="npSetFilter('mixed',this)">± Mixed</button>
+            </div>
+            <input id="np-search" type="text" placeholder="Search course…"
+              oninput="npRenderRows()"
+              style="flex:1;min-width:120px;max-width:200px;font-size:11px;padding:4px 8px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);outline:none">
+            <span style="font-size:10px;color:var(--text3)">sorted by # NUpath codes</span>
+            <span id="np-sel-count" style="font-size:11px;color:var(--text3)">0 selected</span>
+          </div>
+
+          <!-- select all / none -->
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <button class="btn sec" style="font-size:11px;padding:3px 10px" onclick="npSelectAll(true)">Select All</button>
+            <button class="btn sec" style="font-size:11px;padding:3px 10px" onclick="npSelectAll(false)">None</button>
+          </div>
+
+          <!-- table -->
+          <div style="max-height:340px;overflow-y:auto;margin-bottom:14px">
+            <table style="width:100%;border-collapse:collapse;font-size:11px">
+              <thead>
+                <tr>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600;width:20px"></th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Course</th>
+                  <th style="text-align:center;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600"># NUpath</th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Old</th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">New</th>
+                  <th style="text-align:left;padding:5px 6px;color:var(--text3);border-bottom:1px solid var(--border);font-weight:600">Type</th>
+                </tr>
+              </thead>
+              <tbody id="np-inspector-body">
+                <tr><td colspan="6" style="text-align:center;color:var(--text3);padding:20px 0">Run a scan to see discrepancies</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- apply fixes -->
+          <div style="border-top:2px solid #e74c3c44;padding-top:14px">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="flex:1;min-width:200px">
+                <p style="font-size:13px;font-weight:700;color:#e74c3c;margin:0 0 3px">☢ Apply Selected Fixes</p>
+                <p style="font-size:11px;color:var(--text2);margin:0">
+                  Overwrites <code>nuPath</code> for <span id="np-fix-count" style="font-weight:700;color:#e74c3c">0</span> course(s) in <code>all-courses.json</code>.
+                  <span style="color:var(--error)">Irreversible without git.</span>
+                </p>
+              </div>
+              <button id="np-fix-btn" class="launch-btn" onclick="npApplyFixes()"
+                style="background:#7b0000;border-color:#e74c3c;box-shadow:0 0 20px rgba(231,76,60,0.4);font-size:14px;height:auto;padding:10px 22px;flex-shrink:0">
+                ☢ Apply Fixes
+              </button>
+            </div>
+            <div id="np-fix-result" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Automatic mode panel ───────────────────────────────────── -->
+      <div id="np-auto-panel" style="display:none">
+        <div style="background:var(--bg3);border-radius:var(--radius);padding:12px 16px;margin-bottom:12px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px">Scheduled runs</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div id="np-sched-jan" style="background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 14px;font-size:11px;text-align:center">
+              <div style="font-weight:700">Jan 1</div><div style="color:var(--text3);font-size:10px">Winter refresh</div>
+            </div>
+            <div id="np-sched-may" style="background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 14px;font-size:11px;text-align:center">
+              <div style="font-weight:700">May 1</div><div style="color:var(--text3);font-size:10px">Spring refresh</div>
+            </div>
+            <div id="np-sched-sep" style="background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:6px 14px;font-size:11px;text-align:center">
+              <div style="font-weight:700">Sep 1</div><div style="color:var(--text3);font-size:10px">Fall refresh</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--text2)">
+            Next run: <strong id="np-next-run" style="color:var(--text)">—</strong>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--text3);margin:0">
+          GitHub Actions fetches from Tableau and commits updated NUpath data directly to <code>main</code>.
+          Schedule is in <code>.github/workflows/update-nupath.yml</code>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div><!-- /#dev-app -->
+
+<!-- ── Push to GitHub confirmation modal ─────────────────────────── -->
+<div id="git-push-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:9999;align-items:center;justify-content:center"
+     onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--bg2);border:2px solid #2ea043;border-radius:12px;padding:28px 32px;max-width:600px;width:92%;box-shadow:0 0 60px rgba(46,160,67,0.35);display:flex;flex-direction:column;gap:16px">
+    <h2 style="color:#2ea043;margin:0;font-size:18px">⬆ Review Changes Before Push</h2>
+    <div id="git-push-modal-status" style="font-size:12px;color:var(--text2);line-height:1.6">
+      <span style="color:var(--text3)">Loading diff…</span>
+    </div>
+    <pre id="git-push-modal-diff" style="display:none;background:var(--bg3);border-radius:6px;padding:12px;font-size:10.5px;line-height:1.5;overflow:auto;max-height:280px;margin:0;white-space:pre-wrap;word-break:break-all;color:var(--text2)"></pre>
+    <p style="color:var(--text3);font-size:11px;margin:0">Commits to <code>main</code> then runs <code>git push</code>. GitHub Actions will redeploy the site in ~1 min.</p>
+    <div style="display:flex;gap:12px;justify-content:flex-end">
+      <button class="btn sec" onclick="document.getElementById('git-push-modal').style.display='none'">Cancel</button>
+      <button id="git-push-confirm-btn" class="btn" style="background:#238636;border-color:#2ea043" onclick="gitDoPush()">⬆ Confirm & Push</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Apply Fixes confirmation modal ──────────────────────────── -->
+<div id="ck-fix-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:9999;align-items:center;justify-content:center"
+     onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--bg2);border:2px solid #e74c3c;border-radius:12px;padding:28px 32px;max-width:480px;width:90%;box-shadow:0 0 80px rgba(231,76,60,0.45)">
+    <h2 style="color:#e74c3c;margin:0 0 14px;font-size:18px">☢ Confirm Data Override</h2>
+    <p style="color:var(--text2);font-size:13px;line-height:1.6;margin:0 0 10px">
+      Will apply <strong id="ck-fix-modal-count" style="color:#fff">N courses</strong>
+      to <code>all-courses.json</code>: overwrite changed/range fields, insert new courses, delete removed ones.
+    </p>
+    <p style="color:var(--text3);font-size:11px;line-height:1.55;margin:0 0 22px">
+      🆕 New courses are inserted with catalog data. ❌ Missing courses are deleted from the database.<br>
+      <strong style="color:#e74c3c">This cannot be undone without reverting via git.</strong>
+    </p>
+    <div style="display:flex;gap:12px;justify-content:flex-end">
+      <button class="btn sec" onclick="document.getElementById('ck-fix-modal').style.display='none'">Cancel</button>
+      <button class="launch-btn" style="height:auto;padding:10px 28px;font-size:14px" onclick="ckDoApplyFixes()">☢ Yes, override data</button>
+    </div>
+  </div>
+</div>
+<script>
+// ── Constants ────────────────────────────────────────────────────────────────
+const PREVIEW_STATE = "ncp-state-v2";
+const SESSION_KEY   = "numap-dev-session"; // sessionStorage — clears on tab close
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── ACCESS CONTROL ─────────────────────────────────────────────────────────
+//
+// Password hash is generated by running:   node scripts/generate-dev-password.js
+// Then paste the output hash into PW_HASH below and push.
+//
+// Security: PBKDF2-SHA256 with 300,000 iterations. The hash is visible in the
+// public repo but cracking a strong password at this iteration count takes
+// billions of years on modern hardware. Use 12+ mixed characters.
+// ═══════════════════════════════════════════════════════════════════════════
+const PW_HASH = "bae0e76b2bad39f8ee95a18bf8ec7502273e76cd9a1ce0f0bee1bc283725f3a6";
+const PW_SALT = "numap-dev-portal-2026"; // public, non-secret — just prevents rainbow tables
+const PW_ITER = 300_000;
+
+async function pbkdf2Hex(password) {
+  const enc  = new TextEncoder();
+  const key  = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt: enc.encode(PW_SALT), iterations: PW_ITER, hash: "SHA-256" },
+    key, 256
+  );
+  return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+document.getElementById("pw-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") attemptLogin();
+});
+
+async function attemptLogin() {
+  const pw  = document.getElementById("pw-input").value;
+  const btn = document.querySelector(".btn-primary");
+  if (!pw) return;
+  btn.disabled = true;
+  btn.textContent = "Checking…";
+  try {
+    const hash = await pbkdf2Hex(pw);
+    if (hash === PW_HASH) {
+      sessionStorage.setItem(SESSION_KEY, "1");
+      showApp();
+    } else {
+      document.getElementById("auth-error").style.display = "block";
+      document.getElementById("pw-input").value = "";
+      document.getElementById("pw-input").focus();
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Unlock →";
+  }
+}
+
+// ── Initialization ───────────────────────────────────────────────────────────
+(function init() {
+  // Dynamic logo + favicon + title based on environment
+  const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
+  const logoSrc = isLocal ? "dev_logo.png" : "/logo.png";
+  document.querySelectorAll(".site-logo").forEach(el => { el.src = logoSrc; });
+  document.querySelector("link[rel='icon']").href = logoSrc;
+  document.title = isLocal ? "NU Map — Local Dev" : "NU Map — Developer Portal";
+  document.querySelector("header span").textContent = isLocal ? "Local Dev" : "Developer Portal";
+
+  // Show Local badge + GitHub Pages link; hide Log out (auth is bypassed on localhost)
+  if (isLocal) {
+    document.getElementById("local-badge").style.display      = "inline-block";
+    document.getElementById("remote-link-btn").style.display  = "inline-flex";
+    document.getElementById("logout-btn").style.display       = "none";
+    document.getElementById("pv-local-label").style.display   = "inline-block";
+    document.getElementById("pv-local-banner").style.display  = "block";
+  } else {
+    // On remote: show persistent header link, hint card, and deployed preview label
+    document.getElementById("local-link-btn").style.display    = "inline-flex";
+    document.getElementById("remote-work-hint").style.display  = "block";
+    document.getElementById("pv-remote-label").style.display   = "inline-block";
+    document.getElementById("pv-remote-banner").style.display  = "block";
+  }
+
+  // Restore session (survives page refresh, clears on tab close)
+  // Skip auth entirely on localhost — no point protecting your own machine
+  if (isLocal || sessionStorage.getItem(SESSION_KEY) === "1") { showApp(); return; }
+
+  // Pre-fill today's date in patch creator
+  const dateEl = document.getElementById("p-date");
+  if (dateEl) dateEl.value = new Date().toISOString().substring(0, 10);
+})();
+
+function showApp() {
+  document.getElementById("auth-screen").style.display = "none";
+  document.getElementById("dev-app").style.display     = "block";
+  const dateEl = document.getElementById("p-date");
+  if (dateEl) dateEl.value = new Date().toISOString().substring(0, 10);
+  loadDataMeta();
+  loadChangeLog();
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById("auth-screen").style.display = "flex";
+  document.getElementById("dev-app").style.display     = "none";
+  document.getElementById("auth-error").style.display  = "none";
+  document.getElementById("pw-input").value = "";
+}
+
+// ── Push to GitHub ───────────────────────────────────────────────────────────
+async function gitReviewAndPush() {
+  const port      = document.getElementById("check-port")?.value || "3333";
+  const modal     = document.getElementById("git-push-modal");
+  const statusEl  = document.getElementById("git-push-modal-status");
+  const diffEl    = document.getElementById("git-push-modal-diff");
+  const confirmBtn = document.getElementById("git-push-confirm-btn");
+
+  statusEl.innerHTML = '<span style="color:var(--text3)">Loading diff…</span>';
+  diffEl.style.display = "none";
+  diffEl.textContent = "";
+  confirmBtn.disabled = false;
+  confirmBtn.style.opacity = "";
+  confirmBtn.textContent = "⬆ Confirm & Push";
+  modal.style.display = "flex";
+
+  try {
+    const res  = await fetch(`http://localhost:${port}/git-status`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "Server error");
+
+    if (!data.dirty) {
+      statusEl.innerHTML = '<span style="color:var(--success)">✓ Nothing to commit — all data files already match HEAD.</span>';
+      confirmBtn.disabled = true;
+      confirmBtn.style.opacity = "0.4";
+      return;
+    }
+
+    const lines = data.status.split("\n").map(l => {
+      const sym  = l.substring(0, 2).trim();
+      const file = l.substring(3);
+      const col  = sym === "M" ? "var(--warn)" : sym === "A" ? "var(--success)" : "var(--text2)";
+      return `<span style="color:${col};font-family:monospace;font-weight:700">${sym || "?"}</span>&nbsp;<code>${file}</code>`;
+    }).join("<br>");
+    statusEl.innerHTML = `<strong style="font-size:12px">Changed files:</strong><br>${lines}`;
+
+    if (data.diff) {
+      diffEl.textContent = data.diff;
+      diffEl.style.display = "block";
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span style="color:var(--error)">Could not reach server on :${port} — is <code>npm run dev</code> running?<br>${e.message}</span>`;
+    confirmBtn.disabled = true;
+    confirmBtn.style.opacity = "0.4";
+  }
+}
+
+async function gitDoPush() {
+  const port       = document.getElementById("check-port")?.value || "3333";
+  const confirmBtn = document.getElementById("git-push-confirm-btn");
+  const statusEl   = document.getElementById("git-push-modal-status");
+  const resultEl   = document.getElementById("git-push-result");
+
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Pushing…";
+  statusEl.innerHTML = '<span style="color:var(--text3)">Running git commit + push…</span>';
+
+  try {
+    const res  = await fetch(`http://localhost:${port}/git-push`, { method: "POST" });
+    const data = await res.json();
+    document.getElementById("git-push-modal").style.display = "none";
+    resultEl.style.display = "block";
+    if (data.ok) {
+      resultEl.style.cssText += ";background:rgba(46,160,67,0.12);color:var(--success)";
+      resultEl.textContent = `✓ ${data.msg}`;
+    } else {
+      resultEl.style.cssText += ";background:rgba(231,76,60,0.12);color:var(--error)";
+      resultEl.textContent = `✗ ${data.error}`;
+    }
+  } catch (e) {
+    document.getElementById("git-push-modal").style.display = "none";
+    resultEl.style.display = "block";
+    resultEl.style.cssText += ";background:rgba(231,76,60,0.12);color:var(--error)";
+    resultEl.textContent = `✗ Could not reach server: ${e.message}`;
+  }
+}
+
+// ── Change Log ──────────────────────────────────────────────────────────────
+let clAllRuns    = [];
+let clDeployedTs = null;
+let clFiltered   = [];
+let clPage       = 0;
+const CL_PAGE_SIZE = 50;
+
+function clFilter() {
+  const query = (document.getElementById("cl-search")?.value ?? "").trim().toLowerCase();
+  const sort  = document.getElementById("cl-sort")?.value ?? "newest";
+
+  let runs = [...clAllRuns];
+
+  if (query) {
+    runs = runs.filter(r => {
+      const subj = (r.subject ?? "").toLowerCase();
+      const ts   = new Date(r.timestamp).toLocaleString("en-US",
+        { month:"short", day:"numeric", year:"numeric" }).toLowerCase();
+      return subj.includes(query) || ts.includes(query);
+    });
+  }
+
+  if (sort === "oldest") {
+    runs = [...runs].reverse();
+  } else if (sort === "changes") {
+    runs = [...runs].sort((a, b) => {
+      const n = r => (r.added?.length ?? 0) + (r.modified?.length ?? 0) +
+                     (r.removedFromCatalog?.length ?? 0) + (r.fixed ?? 0) +
+                     (r.stats?.needPR ?? 0);
+      return n(b) - n(a);
+    });
+  } else if (sort === "subject") {
+    runs = [...runs].sort((a, b) => (a.subject ?? "").localeCompare(b.subject ?? ""));
+  }
+
+  clFiltered = runs;
+  clPage = 0;
+  clRenderPage();
+}
+
+function clGoPage(n) {
+  clPage = n;
+  clRenderPage();
+  document.getElementById("change-log-list")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function clRenderPage() {
+  const listEl = document.getElementById("change-log-list");
+  if (!listEl) return;
+  const query = (document.getElementById("cl-search")?.value ?? "").trim();
+
+  if (!clFiltered.length) {
+    listEl.innerHTML = query
+      ? `<p class="text2">No runs match "${escHtml(query)}".</p>`
+      : '<p class="text2">No runs recorded yet.</p>';
+    return;
+  }
+
+  const totalPages = Math.ceil(clFiltered.length / CL_PAGE_SIZE);
+  const page = Math.min(clPage, totalPages - 1);
+  const slice = clFiltered.slice(page * CL_PAGE_SIZE, (page + 1) * CL_PAGE_SIZE);
+
+  const pageBar = totalPages > 1 ? `
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(0)" ${page === 0 ? "disabled" : ""}>«</button>
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(${page - 1})" ${page === 0 ? "disabled" : ""}>‹</button>
+      ${Array.from({ length: totalPages }, (_, i) => {
+        if (totalPages <= 7 || Math.abs(i - page) <= 2 || i === 0 || i === totalPages - 1) {
+          return `<button class="btn ${i === page ? "" : "sec"}" style="padding:3px 10px;font-size:12px;min-width:32px" onclick="clGoPage(${i})">${i + 1}</button>`;
+        } else if (Math.abs(i - page) === 3) {
+          return `<span style="color:var(--text4);font-size:12px">…</span>`;
+        }
+        return "";
+      }).filter(Boolean).join("")}
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(${page + 1})" ${page === totalPages - 1 ? "disabled" : ""}>›</button>
+      <button class="btn sec" style="padding:3px 10px;font-size:12px" onclick="clGoPage(${totalPages - 1})" ${page === totalPages - 1 ? "disabled" : ""}>»</button>
+      <span style="font-size:11px;color:var(--text4);margin-left:4px">Page ${page + 1} of ${totalPages} · ${clFiltered.length} runs</span>
+    </div>` : `<div style="font-size:11px;color:var(--text4);margin-top:8px;text-align:right">${clFiltered.length} run${clFiltered.length !== 1 ? "s" : ""}</div>`;
+
+  listEl.innerHTML = slice.map(run => renderRun(run, clDeployedTs)).join("") + pageBar;
+}
+
+async function loadChangeLog() {
+  const listEl  = document.getElementById("change-log-list");
+  const stateEl = document.getElementById("rotate-state");
+  if (!listEl) return;
+  try {
+    const isLocalHost = ["localhost", "127.0.0.1", ""].includes(location.hostname);
+    const [logRes, stateRes, deployedRes] = await Promise.all([
+      fetch("change-log.json?"  + Date.now()),
+      fetch("scrape-state.json?" + Date.now()).catch(() => null),
+      isLocalHost
+        ? fetch("https://nayugu.github.io/nu-map/change-log.json?" + Date.now()).catch(() => null)
+        : Promise.resolve(null),
+    ]);
+    const log   = logRes.ok   ? await logRes.json()   : { runs: [] };
+    const state = stateRes?.ok ? await stateRes.json() : null;
+
+    // Build set of timestamps that are already in the deployed changelog
+    let deployedTs = null;
+    if (deployedRes?.ok) {
+      try {
+        const deployed = await deployedRes.json();
+        deployedTs = new Set(deployed.runs?.map(r => r.timestamp) ?? []);
+      } catch { /* ignore — just means no pending-push badges */ }
+    }
+
+    // Render rotation state card
+    if (stateEl) {
+      if (!state) {
+        stateEl.innerHTML = '<p class="text2">scrape-state.json not yet published. Run <code>data:scrape:rotate:write</code> once first.</p>';
+      } else {
+        const nextSubj = state.subjects?.[state.nextIndex]?.[0] ?? '—';
+        const total    = state.subjects?.length ?? 0;
+        stateEl.innerHTML = `
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">
+            <div class="stat"><div class="val">${state.nextIndex ?? '—'}/${total}</div><div class="lbl">Next subject index</div></div>
+            <div class="stat"><div class="val" style="font-size:14px">${nextSubj}</div><div class="lbl">Next subject</div></div>
+            <div class="stat"><div class="val" style="font-size:13px">${state.lastRun ? new Date(state.lastRun).toLocaleDateString() : '—'}</div><div class="lbl">Last run</div></div>
+            <div class="stat"><div class="val">${total}</div><div class="lbl">Total subjects</div></div>
+          </div>`;
+      }
+    }
+
+    // Render run list
+    clAllRuns    = log.runs ?? [];
+    clDeployedTs = deployedTs;
+    if (!clAllRuns.length) {
+      listEl.innerHTML = '<p class="text2">No runs recorded yet. The change log is written each time <code>data:scrape:rotate:write</code> completes.</p>';
+      return;
+    }
+    clFilter();
+  } catch (err) {
+    listEl.innerHTML = `<p class="text2">Could not load change-log.json: ${err.message}</p>`;
+  }
+}
+
+function renderRun(run, deployedTs = null) {
+  const ts = new Date(run.timestamp).toLocaleString("en-US",
+    { month:"short", day:"numeric", year:"numeric", hour:"2-digit", minute:"2-digit" });
+
+  const isPending    = deployedTs !== null && !deployedTs.has(run.timestamp);
+  const pendingBadge = isPending
+    ? `<span style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b55;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap">⏳ Pending push</span>`
+    : '';
+
+  // Special entries: catalog check launched, nuclear fix applied
+  if (run.type === "catalog-check" || run.type === "nuclear-fix") {
+    const isCheck = run.type === "catalog-check";
+    const color   = isCheck ? "var(--accent)" : "#e74c3c";
+    let detail = "";
+    if (!isCheck && run.fixed != null) {
+      const fixItems = [
+        { val: run.fixed,    lbl: "Courses overridden", col: "#e74c3c" },
+        { val: run.nChanged, lbl: "⚠ Field changes",    col: "var(--warn)" },
+        { val: run.nRange,   lbl: "≈ Range fixes",       col: "#a78bfa" },
+      ].filter(x => x.val != null);
+      const labelLine = run.label ? `<div style="font-size:11px;color:var(--text3);margin-top:8px">Data timestamp updated → <strong style="color:var(--text2)">${run.label}</strong></div>` : "";
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        ${fixItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+      </div>${labelLine}`;
+    }
+    if (isCheck && run.stats) {
+      const s = run.stats;
+      const statItems = [
+        { val: s.correct,      lbl: "✓ Correct",       col: "var(--success)" },
+        { val: s.needPR,       lbl: "△ Need PR",        col: "var(--warn)" },
+        { val: s.rangeDiff,    lbl: "≈ Range diff",     col: "#a78bfa" },
+        { val: s.newCourses,   lbl: "NEW New courses",  col: "var(--accent)" },
+        { val: s.notInCatalog, lbl: "✕ Not in catalog", col: "var(--error)" },
+        { val: s.totalScanned, lbl: "Total scanned",    col: "var(--text)" },
+        { val: s.subjectsDone, lbl: "Subjects done",    col: "var(--text2)" },
+      ].filter(x => x.val != null);
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        ${statItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+      </div>`;
+    }
+    return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div style="font-size:14px;font-weight:700;color:${color}">${run.subject}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+      </div>
+      ${detail}
+    </div>`;
+  }
+
+  // NUpath entries
+  if (run.type === "nupath-scan" || run.type === "nupath-auto-update" || run.type === "nupath-manual-fix") {
+    const isAuto  = run.type === "nupath-auto-update";
+    const isFix   = run.type === "nupath-manual-fix";
+    const color   = isAuto ? "#a78bfa" : isFix ? "#f59e0b" : "var(--accent)";
+
+    let detail = "";
+    if (isFix) {
+      const courses = run.courses ?? [];
+      const n = run.fixed ?? courses.length;
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        <div class="stat"><div class="val" style="font-size:22px;color:#f59e0b">${n}</div><div class="lbl">Courses fixed</div></div>
+      </div>`;
+      if (courses.length) {
+        detail += `<details style="margin-top:8px;font-size:11px">
+          <summary style="cursor:pointer;color:var(--text2)">${courses.length} course${courses.length !== 1 ? "s" : ""} updated</summary>
+          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+            ${courses.map(c => `<code style="font-size:10px;background:var(--bg3);padding:1px 5px;border-radius:3px">${escHtml(c)}</code>`).join("")}
+          </div>
+        </details>`;
+      }
+    } else if (run.stats) {
+      const s = run.stats;
+      const statItems = [
+        { val: s.scanned,    lbl: "Scanned",    col: "var(--text)" },
+        { val: s.changed,    lbl: "Changed",    col: s.changed ? "var(--warn)" : "var(--text2)" },
+        { val: s.gainedOnly, lbl: "+ Gained",   col: "var(--success)" },
+        { val: s.lostOnly,   lbl: "− Lost",     col: "var(--error)" },
+        { val: s.mixed,      lbl: "± Mixed",    col: "#f59e0b" },
+      ].filter(x => x.val != null);
+      detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:10px">
+        ${statItems.map(x => `<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+      </div>`;
+      const meta = [];
+      if (run.source)      meta.push(`Source: <strong style="color:var(--accent)">${escHtml(run.source)}</strong>`);
+      if (run.triggeredBy) meta.push(`By: <strong style="color:var(--text2)">${escHtml(run.triggeredBy)}</strong>`);
+      if (run.runId)       meta.push(`Run: <a href="https://github.com/nayugu/nu-map/actions/runs/${escHtml(run.runId)}" target="_blank" style="color:var(--accent)">#${escHtml(run.runId)}</a>`);
+      if (meta.length) detail += `<div style="font-size:11px;color:var(--text3);margin-top:8px">${meta.join(" · ")}</div>`;
+
+      // Sample discrepancies (first 5)
+      if (run.discrepancies?.length) {
+        const samples = run.discrepancies.slice(0, 5);
+        detail += `<details style="margin-top:8px;font-size:11px">
+          <summary style="cursor:pointer;color:var(--text2)">${run.discrepancies.length} discrepanc${run.discrepancies.length !== 1 ? "ies" : "y"}</summary>
+          <div style="margin-top:6px;display:flex;flex-direction:column;gap:3px">
+            ${samples.map(d => {
+              const gained  = d.added?.map(c => `<span style="color:var(--success)">+${c}</span>`).join(" ") ?? "";
+              const lost    = d.removed?.map(c => `<span style="color:var(--error)">−${c}</span>`).join(" ") ?? "";
+              return `<div style="color:var(--text2)"><strong>${escHtml(d.subject)} ${escHtml(String(d.number))}</strong>  ${gained} ${lost}</div>`;
+            }).join("")}
+            ${run.discrepancies.length > 5 ? `<div style="color:var(--text4)">… and ${run.discrepancies.length - 5} more</div>` : ""}
+          </div>
+        </details>`;
+      }
+    }
+
+    return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div style="font-size:14px;font-weight:700;color:${color}">${run.subject ?? run.type}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+      </div>
+      ${detail}
+    </div>`;
+  }
+
+  const totalChanges = (run.added?.length ?? 0) + (run.modified?.length ?? 0) + (run.removedFromCatalog?.length ?? 0);
+  const badge = totalChanges
+    ? `<span class="badge warn">${totalChanges} change${totalChanges !== 1 ? "s" : ""}</span>`
+    : `<span class="badge ok">No changes</span>`;
+
+  let detail = "";
+  if (run.added?.length) {
+    detail += `<div style="margin-top:8px"><b style="color:var(--accent)">+ ${run.added.length} added</b>
+      <div style="font-size:11px;color:var(--text2);margin-top:2px;word-break:break-all">${run.added.join(", ")}</div></div>`;
+  }
+  if (run.removedFromCatalog?.length) {
+    detail += `<div style="margin-top:8px"><b style="color:#e94560">⚠ ${run.removedFromCatalog.length} no longer in catalog (kept in data)</b>
+      <div style="font-size:11px;color:var(--text2);margin-top:2px">${run.removedFromCatalog.join(", ")}</div></div>`;
+  }
+  if (run.modified?.length) {
+    detail += `<div style="margin-top:8px"><b style="color:#f59e0b">✎ ${run.modified.length} field change${run.modified.length !== 1 ? "s" : ""}</b>`;
+    for (const { code, changes } of run.modified) {
+      const fields = changes.map(c => c.field).join(", ");
+      detail += `<details style="margin-top:4px;padding-left:10px;font-size:11px">
+        <summary style="cursor:pointer;color:var(--text2)"><b>${code}</b>: ${fields}</summary>
+        <table style="margin-top:4px;border-collapse:collapse;width:100%;font-size:11px">`;
+      for (const { field, before, after } of changes) {
+        const b = JSON.stringify(before)?.slice(0, 80) ?? "null";
+        const a = JSON.stringify(after) ?.slice(0, 80) ?? "null";
+        detail += `<tr><td style="padding:2px 8px 2px 0;color:var(--text2);white-space:nowrap;vertical-align:top">${field}</td>
+          <td style="padding:2px 0;color:#e94560;word-break:break-all">${escHtml(b)}</td>
+          <td style="padding:2px 6px;color:var(--text2)">→</td>
+          <td style="padding:2px 0;color:var(--accent);word-break:break-all">${escHtml(a)}</td></tr>`;
+      }
+      detail += `</table></details>`;
+    }
+    detail += `</div>`;
+  }
+
+  return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+      <div style="font-size:14px;font-weight:700">${run.subject}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        ${badge}
+        ${pendingBadge}
+        <span style="font-size:11px;color:var(--text2)">${ts}</span>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:3px">${run.unchanged ?? 0} unchanged</div>
+    ${detail}
+  </div>`;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── Tabs ────────────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  document.getElementById(`tab-${name}`).classList.add("active");
+  if (btn) btn.classList.add("active");
+  if (name === "preview") pvInitPreview();
+  if (name === "changes") loadChangeLog();
+  if (name === "work")    npLoadMode();
+}
+
+// ── Data meta ───────────────────────────────────────────────────────────────
+async function loadDataMeta() {
+  try {
+    const res  = await fetch("/data-meta.json?" + Date.now()); // bust cache — served at root, not northeastern/
+    if (!res.ok) throw new Error("not found");
+    const meta = await res.json();
+    document.getElementById("stat-courses").textContent  = meta.courseCount?.toLocaleString() ?? "—";
+    document.getElementById("stat-updated").textContent  = meta.lastUpdated ?? "—";
+  } catch {
+    // Fallback: try src path at build time via compile-time injected value
+    document.getElementById("stat-courses").textContent = "run npm run build to see";
+    document.getElementById("stat-updated").textContent = "—";
+  }
+}
+
+// ── Preview ─────────────────────────────────────────────────────────────────
+// ── Device Preview ──────────────────────────────────────────────────────────
+const PV_DEVICES = {
+  // notchH = status-bar height in points (the full area the OS reserves at top)
+  // iPhone X:  safe-area-inset-top = 44pt; notch itself = 30pt; status bar = 44pt
+  //            user reports ~35pt visible cut — use 44 for correct safe-area sim
+  // iPhone 14 Pro: Dynamic Island; safe-area-inset-top = 59pt
+  // homeH = home-indicator height from bottom edge of iframe (pt)
+  iphoneX:     { w:375,  h:812,  dpr:3, ppi:458, type:'phone',   bezelR:40, bezelT:12, notchW:209, notchH:44, homeH:34, notch:true,  home:true  },
+  ipadAir:     { w:820,  h:1180, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:20, notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
+  ipadPro:     { w:834,  h:1194, dpr:2, ppi:264, type:'tablet',  bezelR:20, bezelT:14, notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
+  macbook:     { w:1440, h:900,  dpr:2, ppi:224, type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
+  desktop1080: { w:1920, h:1080, dpr:1, ppi:96,  type:'desktop', bezelR:0,  bezelT:0,  notchW:0,   notchH:0,  homeH:0,  notch:false, home:false },
+};
+let pvKey   = 'iphoneX';
+let pvLand  = false;
+let pvFrame = true;
+let pvReady = false;
+
+function pvGetUrl() {
+  // Derive base from current page path: /nu-map/dev.html → /nu-map/  or  /dev.html → /
+  return window.location.pathname.replace(/\/[^/]*$/, '/');
+}
+
+function pvApply() {
+  const d = PV_DEVICES[pvKey];
+  const w = pvLand ? d.h : d.w;
+  const h = pvLand ? d.w : d.h;
+  const isDesktop = d.type === 'desktop';
+  const bt = (pvFrame && !isDesktop) ? d.bezelT : 0;
+  const br = pvLand ? Math.round(d.bezelR * 0.55) : d.bezelR;
+  const outerW = w + 2 * bt, outerH = h + 2 * bt;
+  const stage  = document.getElementById('preview-stage');
+  const fit    = Math.min(1, (stage.clientWidth - 40) / outerW, (stage.clientHeight - 40) / outerH);
+  const wrap   = document.getElementById('pv-device-wrap');
+  const frame  = document.getElementById('pv-frame');
+  const bezel  = document.getElementById('pv-bezel');
+  const notchEl= document.getElementById('pv-notch');
+  const homeEl = document.getElementById('pv-home-bar');
+  const screenBg = document.getElementById('pv-screen-bg');
+  // Safe-area offsets: notch occupies top notchH pt; home bar occupies bottom homeH pt
+  const showNotch = d.notch && !pvLand && pvFrame && !isDesktop;
+  const showHome  = d.home  && !pvLand && pvFrame && !isDesktop;
+  const safeTop   = showNotch ? d.notchH : 0;
+  const safeBot   = showHome  ? (d.homeH || 8) : 0;
+  // Iframe is clipped to safe area only; screen-bg fills the full screen behind it
+  frame.style.left   = bt + 'px';
+  frame.style.top    = (bt + safeTop) + 'px';
+  frame.style.width  = w + 'px';
+  frame.style.height = (h - safeTop - safeBot) + 'px';
+  wrap.style.width   = outerW + 'px';
+  wrap.style.height  = outerH + 'px';
+  wrap.style.transform = `scale(${fit.toFixed(4)})`;
+  if (pvFrame && !isDesktop) {
+    wrap.classList.remove('no-frame');
+    bezel.style.display = 'block';
+    bezel.style.borderRadius = br + 'px';
+    bezel.style.border = bt + 'px solid #1c1c1e';
+    const screenR = Math.max(0, br - bt);
+    frame.style.borderRadius = showHome ? `0 0 ${screenR}px ${screenR}px` : `0 0 ${screenR}px ${screenR}px`;
+    // Screen background covers the full device screen area (status bar + safe zone + home area)
+    screenBg.style.left         = bt + 'px';
+    screenBg.style.top          = bt + 'px';
+    screenBg.style.width        = w + 'px';
+    screenBg.style.height       = h + 'px';
+    screenBg.style.borderRadius = screenR + 'px';
+    screenBg.style.display      = 'block';
+    // Notch overlaid on the white status-bar area
+    notchEl.style.top    = bt + 'px';
+    notchEl.style.width  = d.notchW + 'px';
+    notchEl.style.height = d.notchH + 'px';
+    notchEl.style.display = showNotch ? 'block' : 'none';
+    // Home bar sits over the white home-area below the iframe
+    homeEl.style.bottom  = (bt + Math.round((d.homeH || 8) / 2) - 2) + 'px';
+    homeEl.style.display = showHome ? 'block' : 'none';
+  } else {
+    wrap.classList.add('no-frame');
+    bezel.style.display = notchEl.style.display = homeEl.style.display = screenBg.style.display = 'none';
+    frame.style.borderRadius = isDesktop ? '4px' : '12px';
+  }
+  document.getElementById('pv-dim-read').textContent    = `${w} × ${h}  (${d.ppi}ppi ×${d.dpr})`;
+  document.getElementById('pv-scale-badge').textContent = Math.round(fit * 100) + '%';
+}
+
+function pvInitPreview() {
+  if (!pvReady) {
+    pvReady = true;
+    document.getElementById('pv-frame').src = pvGetUrl();
+  }
+  pvApply();
+}
+
+document.querySelectorAll('.pv-chip[data-dev]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.dev === pvKey) return;
+    pvKey = btn.dataset.dev; pvLand = false;
+    document.querySelectorAll('.pv-chip[data-dev]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    pvApply();
+    const f = document.getElementById('pv-frame');
+    try { f.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
+    f.src = pvGetUrl() + '?t=' + Date.now();
+  });
+});
+document.getElementById('pv-orient-btn').addEventListener('click', () => { pvLand = !pvLand; pvApply(); });
+document.getElementById('pv-frame-btn').addEventListener('click', () => {
+  pvFrame = !pvFrame;
+  const b = document.getElementById('pv-frame-btn');
+  b.textContent = 'Frame: ' + (pvFrame ? 'on' : 'off');
+  b.classList.toggle('active', pvFrame);
+  pvApply();
+});
+document.getElementById('pv-reload-btn').addEventListener('click', () => {
+  pvApply();
+  document.getElementById('pv-frame').src = pvGetUrl() + '?t=' + Date.now();
+});
+document.getElementById('pv-reset-btn').addEventListener('click', () => {
+  const f = document.getElementById('pv-frame');
+  try { f.contentWindow.localStorage.removeItem(PREVIEW_STATE); } catch {}
+  pvApply();
+  f.src = pvGetUrl() + '?t=' + Date.now();
+});
+document.getElementById('pv-open-btn').addEventListener('click', () => {
+  window.open(pvGetUrl(), '_blank');
+});
+window.addEventListener('resize', () => { if (pvReady) pvApply(); });
+
+// ── Catalog Check ────────────────────────────────────────────────────────────
+// HTTPS guard: catalog check talks to http://localhost:3333 which browsers
+// block as mixed content when the page itself is served over HTTPS remotely.
+(function() {
+  const onHttpsRemote = location.protocol === 'https:' &&
+    !['localhost', '127.0.0.1'].includes(location.hostname);
+  if (onHttpsRemote) {
+    document.getElementById('ck-launch-row').style.display       = 'none';
+    document.getElementById('ck-local-only-banner').style.display = 'block';
+    document.getElementById('git-push-card').style.display       = 'none';
+    document.getElementById('nav-work-btn').style.display        = 'none';
+  }
+})();
+
+// Opens the local dev portal — reads port from whichever input is visible
+function openLocalPortal() {
+  const port = document.getElementById('local-portal-port')?.value
+            || document.getElementById('ck-local-port')?.value
+            || '5173';
+  window.open(`http://localhost:${port}/dev.html`, '_blank');
+}
+
+function ckOpenLocal() { openLocalPortal(); }
+
+let checkEvtSource = null;
+
+function startCheck() {
+  const port = document.getElementById('check-port').value || '3333';
+  const url  = `http://localhost:${port}/run`;
+
+  document.getElementById('check-progress-wrap').style.display = 'block';
+  document.getElementById('check-log').innerHTML = '';
+  document.getElementById('check-run-btn').disabled  = true;
+  document.getElementById('check-stop-btn').disabled = false;
+  ['ck-subjects','ck-read','ck-matched','ck-changed','ck-range','ck-added','ck-missing'].forEach(id =>
+    document.getElementById(id).textContent = '0');
+  document.getElementById('check-bar').style.width = '0%';
+  document.getElementById('check-pct').textContent  = '0%';
+  document.getElementById('check-status-msg').textContent = 'Connecting to server…';
+  document.getElementById('ck-status-badge').style.display = 'inline-block';
+  // Reset inspector
+  ckDiscrepancies.length = 0;
+  ckSetFilter('all', document.querySelector('.ck-filter-btn'));
+  document.getElementById('ck-search').value = '';
+  ckRender();
+
+  if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
+  checkEvtSource = new EventSource(url);
+
+  let total = 0;
+
+  checkEvtSource.onmessage = e => {
+    const d = JSON.parse(e.data);
+
+    if (d.type === 'hello' || d.type === 'status') {
+      document.getElementById('check-status-msg').textContent = d.msg;
+    }
+    if (d.type === 'start') {
+      total = d.total;
+      document.getElementById('check-status-msg').textContent =
+        `Checking ${d.total} subjects against ${(d.courses_in_db ?? 0).toLocaleString()} courses…`;
+    }
+    if (d.type === 'subject_start') {
+      document.getElementById('check-status-msg').textContent =
+        `[${d.index + 1}/${d.total}] ${d.slug}…`;
+    }
+    if (d.type === 'subject_done') {
+      if (total > 0) {
+        const pct = Math.round((d.index + 1) / total * 100);
+        document.getElementById('check-bar').style.width = pct + '%';
+        document.getElementById('check-pct').textContent = pct + '%';
+      }
+      document.getElementById('ck-subjects').textContent = d.subjects_done;
+      document.getElementById('ck-read').textContent     = (d.courses_read ?? 0).toLocaleString();
+      document.getElementById('ck-matched').textContent  = (d.matched  ?? 0).toLocaleString();
+      document.getElementById('ck-changed').textContent  = (d.changed  ?? 0).toLocaleString();
+      document.getElementById('ck-range').textContent    = (d.range_only ?? 0).toLocaleString();
+      document.getElementById('ck-added').textContent    = (d.added    ?? 0).toLocaleString();
+      document.getElementById('ck-missing').textContent  = (d.missing  ?? 0).toLocaleString();
+
+      // Accumulate into inspector
+      ckAccumulate(d);
+      ckRender();
+
+      // Build log row
+      const log  = document.getElementById('check-log');
+      const row  = document.createElement('div');
+      row.style.cssText = 'border-bottom:1px solid var(--border);padding:6px 0;font-size:11px';
+
+      const hasRealChange = d.subject_changed > 0;
+      const hasRange      = d.subject_range_only > 0;
+      const icon  = d.error ? '❌' : hasRealChange ? '⚠️' : hasRange ? '≈' : d.subject_added > 0 ? '🆕' : '✓';
+      const color = d.error ? 'var(--error)' : hasRealChange ? 'var(--warn)' :
+                    hasRange ? '#a78bfa' : d.subject_added > 0 ? 'var(--accent)' : 'var(--success)';
+
+      let html = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-weight:700;min-width:80px;color:${color}">${icon} ${d.slug.split(' ')[0]}</span>
+        <span style="color:var(--text3)">${d.subject_courses_read ?? 0} read</span>
+        <span style="color:var(--success)">✓ ${d.subject_matched ?? 0}</span>
+        ${d.subject_changed     ? `<span style="color:var(--warn)">⚠ ${d.subject_changed} changed</span>` : ''}
+        ${d.subject_range_only  ? `<span style="color:#a78bfa">≈ ${d.subject_range_only} range</span>` : ''}
+        ${d.subject_added       ? `<span style="color:var(--accent)">+ ${d.subject_added} new</span>` : ''}
+        ${d.subject_missing     ? `<span style="color:var(--error)">− ${d.subject_missing} missing</span>` : ''}
+        ${d.error ? `<span style="color:var(--error)">${escHtml(d.error)}</span>` : ''}
+      </div>`;
+
+      // Real content diffs (expanded by default); range diffs collapsed separately
+      const realChanges  = (d.changes ?? []).filter(c => c.diffs.some(df => !df.isRangeOnly));
+      const rangeChanges = (d.changes ?? []).filter(c => c.diffs.every(df => df.isRangeOnly));
+      if (realChanges.length > 0) {
+        html += `<details open style="margin-top:3px"><summary style="cursor:pointer;color:var(--text3);font-size:10px">${realChanges.length} real change(s)</summary>
+          <table style="margin-top:3px;border-collapse:collapse;font-size:10px;width:100%">`;
+        for (const { code, diffs } of realChanges) {
+          for (const { field, was, now } of diffs.filter(df => !df.isRangeOnly)) {
+            const b = JSON.stringify(was  ?? null)?.slice(0, 80) ?? 'null';
+            const a = JSON.stringify(now  ?? null)?.slice(0, 80) ?? 'null';
+            html += `<tr>
+              <td style="padding:1px 8px 1px 0;color:var(--text3);white-space:nowrap">${code}</td>
+              <td style="padding:1px 6px 1px 0;color:var(--text3);white-space:nowrap">${field}</td>
+              <td style="padding:1px 0;color:#e94560;word-break:break-all">${escHtml(b)}</td>
+              <td style="padding:1px 6px;color:var(--text3)">→</td>
+              <td style="padding:1px 0;color:var(--accent);word-break:break-all">${escHtml(a)}</td>
+            </tr>`;
+          }
+        }
+        html += `</table></details>`;
+      }
+      if (rangeChanges.length > 0) {
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:#a78bfa;font-size:10px">≈ ${rangeChanges.length} range-only diff(s) (low priority)</summary>
+          <table style="margin-top:3px;border-collapse:collapse;font-size:10px;width:100%">`;
+        for (const { code, diffs } of rangeChanges) {
+          for (const { field, was, now } of diffs) {
+            html += `<tr>
+              <td style="padding:1px 8px 1px 0;color:var(--text3);white-space:nowrap">${code}</td>
+              <td style="padding:1px 6px 1px 0;color:#a78bfa;white-space:nowrap">${field}</td>
+              <td style="padding:1px 0;color:#e94560;word-break:break-all;font-size:10px">${escHtml(String(was ?? 'null'))}</td>
+              <td style="padding:1px 6px;color:var(--text3)">→</td>
+              <td style="padding:1px 0;color:#a78bfa;word-break:break-all;font-size:10px">${escHtml(String(now ?? 'null'))}</td>
+            </tr>`;
+          }
+        }
+        html += `</table></details>`;
+      }
+      if (d.added_courses?.length) {
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--accent);font-size:10px">🆕 ${d.added_courses.length} new course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.added_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
+      }
+      if (d.missing_courses?.length) {
+        html += `<details style="margin-top:2px"><summary style="cursor:pointer;color:var(--error);font-size:10px">❌ ${d.missing_courses.length} missing course(s)</summary><div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">${d.missing_courses.map(c => `<code style="font-size:9px">${escHtml(c)}</code>`).join('')}</div></details>`;
+      }
+      row.innerHTML = html;
+      log.appendChild(row);
+      log.scrollTop = log.scrollHeight;
+    }
+    if (d.type === 'done') {
+      document.getElementById('check-status-msg').textContent =
+        `✅ Done — ${d.subjects_done} subjects, ${(d.courses_read ?? 0).toLocaleString()} courses checked. ` +
+        `${d.changed ?? 0} need PR · ${d.range_only ?? 0} range diffs · ${d.added ?? 0} new · ${d.missing ?? 0} missing.`;
+      document.getElementById('check-bar').style.width = '100%';
+      document.getElementById('check-pct').textContent = '100%';
+      document.getElementById('check-run-btn').disabled  = false;
+      document.getElementById('check-stop-btn').disabled = true;
+      document.getElementById('ck-status-badge').style.display = 'none';
+      checkEvtSource.close(); checkEvtSource = null;
+    }
+    if (d.type === 'error') {
+      document.getElementById('check-status-msg').textContent = `\u274c ${d.msg}`;
+      document.getElementById('check-run-btn').disabled  = false;
+      document.getElementById('check-stop-btn').disabled = true;
+      document.getElementById('ck-status-badge').style.display = 'none';
+    }
+    if (d.type === 'end') { checkEvtSource.close(); checkEvtSource = null; }
+  };
+
+  checkEvtSource.onerror = () => {
+    document.getElementById('check-status-msg').textContent =
+      '\u274c Cannot connect \u2014 start the server: node scripts/catalog-check-server.js';
+    document.getElementById('check-run-btn').disabled  = false;
+    document.getElementById('check-stop-btn').disabled = true;
+    document.getElementById('ck-status-badge').style.display = 'none';
+    if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
+  };
+}
+
+function stopCheck() {
+  if (checkEvtSource) { checkEvtSource.close(); checkEvtSource = null; }
+  document.getElementById('check-status-msg').textContent = 'Stopped.';
+  document.getElementById('check-run-btn').disabled  = false;
+  document.getElementById('check-stop-btn').disabled = true;
+  document.getElementById('ck-status-badge').style.display = 'none';
+}
+
+// ── Discrepancy Inspector ────────────────────────────────────────────────────────
+const ckDiscrepancies = [];  // { code, type:'changed'|'range'|'added'|'missing', diffs }
+let   ckFilter = 'all';
+
+function ckAccumulate(d) {
+  for (const { code, diffs } of (d.changes ?? [])) {
+    const allRange = diffs.every(df => df.isRangeOnly);
+    ckDiscrepancies.push({ code, type: allRange ? 'range' : 'changed', diffs });
+  }
+  for (const item of (d.added_courses ?? [])) {
+    // item may be a plain string (legacy) or {code, catalogData} (new)
+    const code = typeof item === 'string' ? item : item.code;
+    const catalogData = typeof item === 'object' ? item.catalogData : null;
+    ckDiscrepancies.push({ code, type: 'added', diffs: [], catalogData });
+  }
+  for (const code of (d.missing_courses ?? [])) ckDiscrepancies.push({ code, type: 'missing', diffs: [] });
+}
+
+function ckGetFixable() {
+  if (ckFilter === 'changed') return ckDiscrepancies.filter(x => x.type === 'changed');
+  if (ckFilter === 'range')   return ckDiscrepancies.filter(x => x.type === 'range');
+  if (ckFilter === 'added')   return ckDiscrepancies.filter(x => x.type === 'added');
+  if (ckFilter === 'missing') return ckDiscrepancies.filter(x => x.type === 'missing');
+  // 'all' — everything is actionable
+  return [...ckDiscrepancies];
+}
+
+function ckSetFilter(f, btn) {
+  ckFilter = f;
+  document.querySelectorAll('.ck-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  ckRender();
+}
+
+
+// Helper to format prereq/coreq token arrays as human-readable text
+function formatPrereqTokens(val) {
+  if (!val) return '(none)';
+  if (!Array.isArray(val)) return String(val);
+  if (val.length === 0) return '(none)';
+  return val.map(tok => {
+    if (typeof tok === 'string') return tok;
+    if (tok && tok.subject && tok.number) return tok.subject + ' ' + tok.number;
+    if (Array.isArray(tok)) return '(' + formatPrereqTokens(tok) + ')';
+    return String(tok);
+  }).join(' ');
+}
+
+function ckRender() {
+  const search = (document.getElementById('ck-search')?.value ?? '').trim().toUpperCase();
+  let items = ckDiscrepancies;
+  if (ckFilter !== 'all') items = items.filter(x => x.type === ckFilter);
+  if (search) items = items.filter(x => x.code.toUpperCase().includes(search));
+
+  const MAX = 500;
+  const visible = items.slice(0, MAX);
+  const tbody = document.getElementById('ck-inspector-body');
+
+  document.getElementById('ck-inspector-count').textContent =
+    `${visible.length} of ${items.length}${items.length > MAX ? ` (capped at ${MAX})` : ''}`;
+
+  // Keep the danger-zone fix count + description live (reflects current filter)
+  const fixable    = ckGetFixable();
+  const nCh        = fixable.filter(x => x.type === 'changed').length;
+  const nRng       = fixable.filter(x => x.type === 'range').length;
+  const nAdd       = fixable.filter(x => x.type === 'added').length;
+  const nMiss      = fixable.filter(x => x.type === 'missing').length;
+  const fixCount   = fixable.length;
+  const fixCountEl = document.getElementById('ck-fix-count');
+  const fixDescEl  = document.getElementById('ck-fix-type-desc');
+  if (fixCountEl) fixCountEl.textContent = fixCount;
+  if (fixDescEl) {
+    const parts = [];
+    if (nCh)   parts.push(`${nCh} ⚠ changed`);
+    if (nRng)  parts.push(`${nRng} ≈ range`);
+    if (nAdd)  parts.push(`${nAdd} 🆕 new`);
+    if (nMiss) parts.push(`${nMiss} ❌ removed`);
+    fixDescEl.textContent = parts.length ? `(${parts.join(', ')})` : 'fixable';
+  }
+
+  if (!visible.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">${ckDiscrepancies.length ? 'No items match filter/search' : 'Run a check to populate'}</td></tr>`;
+    return;
+  }
+
+  const rows = [];
+  for (const item of visible) {
+    if (item.type === 'added') {
+      rows.push(`<tr><td style="white-space:nowrap">${escHtml(item.code)}</td><td><span style="background:#5b8dee22;color:var(--accent);border-radius:3px;padding:1px 5px;font-size:10px">🆕 new</span></td><td colspan="3" style="color:var(--text3)">Not in our database</td></tr>`);
+      continue;
+    }
+    if (item.type === 'missing') {
+      rows.push(`<tr><td style="white-space:nowrap">${escHtml(item.code)}</td><td><span style="background:#e8655a22;color:var(--error);border-radius:3px;padding:1px 5px;font-size:10px">❌ missing</span></td><td colspan="3" style="color:var(--text3)">Removed from catalog</td></tr>`);
+      continue;
+    }
+    for (const { field, was, now, isRangeOnly } of item.diffs) {
+      let b = was;
+      let a = now;
+      // Use human-readable formatting for prereq/coreq fields
+      if (field === 'prereqs' || field === 'coreqs') {
+        b = formatPrereqTokens(was);
+        a = formatPrereqTokens(now);
+      } else {
+        b = String(was ?? 'null').slice(0, 80);
+        a = String(now ?? 'null').slice(0, 80);
+      }
+      const badge = isRangeOnly
+        ? `<span style="background:#a78bfa22;color:#a78bfa;border-radius:3px;padding:1px 5px;font-size:10px">≈ range</span>`
+        : `<span style="background:#f5a62322;color:var(--warn);border-radius:3px;padding:1px 5px;font-size:10px">⚠ changed</span>`;
+      rows.push(`<tr>
+        <td style="white-space:nowrap">${escHtml(item.code)}</td>
+        <td>${badge}</td>
+        <td style="color:var(--text3);white-space:nowrap">${field}</td>
+        <td style="color:#e94560;word-break:break-all;max-width:340px">${escHtml(b)}</td>
+        <td style="color:var(--accent);word-break:break-all;max-width:340px">${escHtml(a)}</td>
+      </tr>`);
+    }
+  }
+  tbody.innerHTML = rows.join('');
+}
+
+function ckExport() {
+  const blob = new Blob([JSON.stringify(ckDiscrepancies, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `catalog-discrepancies-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function ckApplyFixes() {
+  const items = ckGetFixable();
+  if (!items.length) {
+    alert(ckDiscrepancies.length ? 'No items match the current filter.' : 'No fixable items — run a check first.');
+    return;
+  }
+  const nCh   = items.filter(x => x.type === 'changed').length;
+  const nRng  = items.filter(x => x.type === 'range').length;
+  const nAdd  = items.filter(x => x.type === 'added').length;
+  const nMiss = items.filter(x => x.type === 'missing').length;
+  const parts = [];
+  if (nCh)   parts.push(`${nCh} ⚠ changed`);
+  if (nRng)  parts.push(`${nRng} ≈ range`);
+  if (nAdd)  parts.push(`${nAdd} 🆕 added`);
+  if (nMiss) parts.push(`${nMiss} ❌ removed`);
+  const label = `${items.length} course${items.length !== 1 ? 's' : ''} (${parts.join(', ')})`;
+  document.getElementById('ck-fix-modal-count').textContent = label;
+  const modal = document.getElementById('ck-fix-modal');
+  modal.style.display = 'flex';
+}
+
+async function ckDoApplyFixes() {
+  document.getElementById('ck-fix-modal').style.display = 'none';
+  const items = ckGetFixable();
+  const port  = document.getElementById('check-port').value || '3333';
+  const btn   = document.getElementById('ck-fix-btn');
+  const progressWrap = document.getElementById('ck-fix-progress');
+  const statusEl     = document.getElementById('ck-fix-status');
+  const pctEl        = document.getElementById('ck-fix-pct');
+  const barEl        = document.getElementById('ck-fix-bar');
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Fixing…';
+  progressWrap.style.display = 'block';
+  barEl.style.width = '0%'; pctEl.textContent = '0%';
+  statusEl.textContent = 'Connecting…';
+
+  try {
+    const r = await fetch(`http://localhost:${port}/fix`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(items)
+    });
+    if (!r.ok) { throw new Error(`Server error ${r.status}`); }
+
+    const reader  = r.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const parts = buf.split('\n\n');
+      buf = parts.pop();
+      for (const part of parts) {
+        const line = part.trim();
+        if (!line.startsWith('data: ')) continue;
+        let d; try { d = JSON.parse(line.slice(6)); } catch { continue; }
+        if (d.type === 'fixed') {
+          const pct = Math.round(d.index / d.total * 100);
+          const typeLabel = d.itemType === 'range'   ? '≈ range'
+                          : d.itemType === 'added'   ? '🆕 added'
+                          : d.itemType === 'missing' ? '❌ removed'
+                          : '⚠ changed';
+          statusEl.textContent = `[${d.index}/${d.total}] ${d.code} — ${typeLabel}`;
+          pctEl.textContent    = pct + '%';
+          barEl.style.width    = pct + '%';
+        }
+        if (d.type === 'done') {
+          barEl.style.width    = '100%';
+          pctEl.textContent    = '100%';
+          const parts = [];
+          if (d.nChanged) parts.push(`${d.nChanged} ⚠ changed`);
+          if (d.nRange)   parts.push(`${d.nRange} ≈ range`);
+          if (d.nAdded)   parts.push(`${d.nAdded} 🆕 added`);
+          if (d.nRemoved) parts.push(`${d.nRemoved} ❌ removed`);
+          const breakdown = parts.length ? ` (${parts.join(', ')})` : '';
+          statusEl.textContent = `✅ Applied ${d.fixed}${breakdown} — data updated to ${d.label}. Rebuild to deploy.`;
+          document.getElementById('check-status-msg').textContent =
+            `☢ Applied ${d.fixed}${breakdown} — updated to ${d.label}. Rebuild to deploy.`;
+          btn.textContent = `✅ Applied ${d.fixed}`;
+          // Reflect updated lastUpdated immediately in the dashboard
+          const updEl = document.getElementById('stat-updated');
+          if (updEl && d.label) updEl.textContent = d.label;
+          setTimeout(loadDataMeta,  600);
+          setTimeout(loadChangeLog, 600);
+        }
+        if (d.type === 'error') {
+          statusEl.textContent = `❌ ${d.msg}`;
+          btn.disabled = false; btn.textContent = '☢ Apply Fixes';
+        }
+      }
+    }
+  } catch (e) {
+    statusEl.textContent = `❌ ${e.message}`;
+    btn.disabled = false;
+    btn.textContent = '☢ Apply Fixes';
+  }
+}
+
+// ── Patch builder ───────────────────────────────────────────────────────────
+let currentAction = "add";
+const npChips   = { np: [], unp: [] };
+
+function setAction(action) {
+  currentAction = action;
+  ["add","update","remove"].forEach(a => {
+    document.getElementById(`act-${a}`).classList.toggle("active", a === action);
+    document.getElementById(`fields-${a}`).style.display = a === action ? "" : "none";
+  });
+  document.getElementById("yaml-output").style.display = "none";
+  document.getElementById("yaml-actions").style.display = "none";
+}
+
+function addChip(key) {
+  const inputId = key === "np" ? "a-np-input" : "u-np-input";
+  const val = document.getElementById(inputId).value.trim().toUpperCase();
+  if (!val) return;
+  document.getElementById(inputId).value = "";
+  if (npChips[key].includes(val)) return;
+  npChips[key].push(val);
+  renderChips(key);
+}
+
+function removeChip(key, val) {
+  npChips[key] = npChips[key].filter(v => v !== val);
+  renderChips(key);
+}
+
+function renderChips(key) {
+  const containerId = key === "np" ? "a-np-chips" : "u-np-chips";
+  const el = document.getElementById(containerId);
+  el.innerHTML = npChips[key].map(v =>
+    `<span class="chip">${v} <span class="chip-rm" onclick="removeChip('${key}','${v}')">✕</span></span>`
+  ).join("");
+}
+
+function v(id) { return document.getElementById(id)?.value?.trim() ?? ""; }
+
+function generateYAML() {
+  const date   = v("p-date")   || new Date().toISOString().substring(0, 10);
+  const reason = v("p-reason") || "Manual data correction";
+
+  let courseSection = "";
+
+  if (currentAction === "add") {
+    const subj  = v("a-subj").toUpperCase();
+    const num   = v("a-num");
+    const title = v("a-title");
+    const credRaw = v("a-credits");
+    if (!subj || !num || !title || !credRaw) {
+      alert("Subject, number, title, and credits are required."); return;
+    }
+    const npLine = npChips.np.length
+      ? `      nuPath:\n${npChips.np.map(c => `        - ${c}`).join("\n")}\n` : "";
+    const prereqLine = v("a-prereq") ? `      prereqs: ["${v("a-prereq")}"]\n` : "";
+    const descLine   = v("a-desc")   ? `      description: >\n        ${v("a-desc").replace(/\n/g, "\n        ")}\n` : "";
+
+    courseSection = `  add:\n    - subject: ${subj}\n      number: "${num}"\n      title: "${title}"\n      credits: ${credRaw}\n      scheduleType: ${v("a-sched") || "Lecture"}\n${npLine}${prereqLine}${descLine}`;
+  }
+
+  else if (currentAction === "update") {
+    const subj = v("u-subj").toUpperCase();
+    const num  = v("u-num");
+    if (!subj || !num) { alert("Subject and number are required."); return; }
+
+    const fields = [];
+    if (v("u-title"))   fields.push(`        title: "${v("u-title")}"`);
+    if (v("u-credits")) fields.push(`        credits: ${v("u-credits")}`);
+    if (v("u-sched"))   fields.push(`        scheduleType: ${v("u-sched")}`);
+    if (npChips.unp.length) fields.push(`        nuPath: [${npChips.unp.map(c => `"${c}"`).join(", ")}]`);
+    if (v("u-desc"))    fields.push(`        description: >\n          ${v("u-desc").replace(/\n/g, "\n          ")}`);
+    if (!fields.length) { alert("Fill in at least one field to update."); return; }
+
+    courseSection = `  update:\n    - subject: ${subj}\n      number: "${num}"\n      fields:\n${fields.join("\n")}\n`;
+  }
+
+  else if (currentAction === "remove") {
+    const subj = v("r-subj").toUpperCase();
+    const num  = v("r-num");
+    if (!subj || !num) { alert("Subject and number are required."); return; }
+    const reasonLine = v("r-reason") ? `\n      reason: "${v("r-reason")}"` : "";
+    courseSection = `  remove:\n    - subject: ${subj}\n      number: "${num}"${reasonLine}\n`;
+  }
+
+  const yaml =
+`# Generated by NU Map Developer Portal
+meta:
+  date: "${date}"
+  author: "developer"
+  reason: "${reason}"
+
+courses:
+${courseSection}`;
+
+  const outEl = document.getElementById("yaml-output");
+  outEl.textContent = yaml;
+  outEl.style.display = "block";
+  document.getElementById("yaml-actions").style.display = "flex";
+
+  // Setup download link
+  const blob = new Blob([yaml], { type: "text/yaml" });
+  const dl   = document.getElementById("yaml-dl");
+  dl.href = URL.createObjectURL(blob);
+  dl.download = `${date}_${currentAction}-course.yaml`;
+}
+
+function copyYAML() {
+  navigator.clipboard.writeText(document.getElementById("yaml-output").textContent)
+    .then(() => alert("Copied!"));
+}
+
+function clearPatchForm() {
+  ["a-subj","a-num","a-credits","a-title","a-prereq","a-desc","u-subj","u-num","u-title","u-credits","u-desc","r-subj","r-num","r-reason","p-reason"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  npChips.np  = []; npChips.unp = [];
+  renderChips("np"); renderChips("unp");
+  document.getElementById("yaml-output").style.display = "none";
+  document.getElementById("yaml-actions").style.display = "none";
+}
+
+function copyCmd(cmd) {
+  navigator.clipboard.writeText(cmd).then(() => alert("Copied: " + cmd));
+}
+
+// ── NUpath Update ─────────────────────────────────────────────────────────────
+
+let npCurrentMode   = "manual";
+let npEvtSource     = null;
+let npRunning       = false;
+let npDiscrepancies = [];
+let npFilter        = "all";
+let npSelected      = new Set();
+
+// ── Mode / schedule ───────────────────────────────────────────────────────────
+
+function npNextRunDate() {
+  const now  = new Date();
+  const year = now.getFullYear();
+  const candidates = [
+    new Date(year, 0, 1), new Date(year, 4, 1), new Date(year, 8, 1),
+    new Date(year + 1, 0, 1),
+  ];
+  const next = candidates.find(d => d > now) ?? candidates[candidates.length - 1];
+  return next.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+}
+
+function npHighlightNext() {
+  const month = new Date().getMonth() + 1;
+  const upcoming = [1, 5, 9].find(m => m > month) ?? 1;
+  ["jan","may","sep"].forEach((id, i) => {
+    const el = document.getElementById(`np-sched-${id}`);
+    if (!el) return;
+    const isNext = [1,5,9][i] === upcoming;
+    el.style.borderColor = isNext ? "var(--accent)"    : "var(--border)";
+    el.style.background  = isNext ? "var(--accent-bg)" : "var(--bg2)";
+    el.style.color       = isNext ? "var(--accent)"    : "";
+  });
+  const el = document.getElementById("np-next-run");
+  if (el) el.textContent = npNextRunDate();
+}
+
+async function npLoadMode() {
+  const port = document.getElementById("np-port")?.value || "3333";
+  try {
+    const r = await fetch(`http://localhost:${port}/nupath-schedule`);
+    if (!r.ok) return;
+    const { mode } = await r.json();
+    npApplyMode(mode, false);
+  } catch {}
+}
+
+function npApplyMode(mode, save = true) {
+  npCurrentMode = mode;
+  const isAuto = mode === "auto";
+  const manBtn  = document.getElementById("np-mode-manual");
+  const autoBtn = document.getElementById("np-mode-auto");
+  manBtn.style.background  = isAuto ? "var(--bg3)"    : "var(--accent)";
+  manBtn.style.color       = isAuto ? "var(--text2)"  : "#fff";
+  autoBtn.style.background = isAuto ? "var(--accent)" : "var(--bg3)";
+  autoBtn.style.color      = isAuto ? "#fff"           : "var(--text2)";
+  document.getElementById("np-manual-panel").style.display = isAuto ? "none"  : "block";
+  document.getElementById("np-auto-panel").style.display   = isAuto ? "block" : "none";
+  if (isAuto) npHighlightNext();
+  if (save) {
+    const port = document.getElementById("np-port")?.value || "3333";
+    fetch(`http://localhost:${port}/nupath-schedule`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode }),
+    }).catch(() => {});
+  }
+}
+
+function npSetMode(mode) { npApplyMode(mode, true); }
+
+// ── Scan ──────────────────────────────────────────────────────────────────────
+
+function npRun() {
+  if (npRunning) return;
+  const port = document.getElementById("np-port")?.value || "3333";
+
+  const logEl   = document.getElementById("np-log");
+  const barEl   = document.getElementById("np-bar");
+  const wrapEl  = document.getElementById("np-progress-wrap");
+  const msgEl   = document.getElementById("np-progress-msg");
+  const pctEl   = document.getElementById("np-progress-pct");
+  const runBtn  = document.getElementById("np-run-btn");
+  const stopBtn = document.getElementById("np-stop-btn");
+  const badge   = document.getElementById("np-status-badge");
+  const inspEl  = document.getElementById("np-inspector");
+
+  logEl.textContent = "";
+  barEl.style.width = "0%";
+  wrapEl.style.display = "block";
+  inspEl.style.display = "none";
+  msgEl.textContent    = "Connecting\u2026";
+  pctEl.textContent    = "";
+  runBtn.disabled  = true;
+  stopBtn.disabled = false;
+  badge.style.display = "inline";
+  npRunning = true;
+
+  let barPct = 0;
+  const barTick = setInterval(() => {
+    barPct = Math.min(barPct + 0.3, 88);
+    barEl.style.width = barPct + "%";
+  }, 400);
+
+  npEvtSource = new EventSource(`http://localhost:${port}/nupath-scan`);
+
+  npEvtSource.onmessage = (e) => {
+    const d = JSON.parse(e.data);
+    if (d.type === "log") {
+      logEl.textContent += d.msg + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
+      msgEl.textContent = d.msg.slice(0, 80);
+    }
+    if (d.type === "progress") {
+      const pct = Math.round(d.done / d.total * 100);
+      clearInterval(barTick);
+      barEl.style.width = pct + "%";
+      msgEl.textContent = d.msg;
+      pctEl.textContent = pct + "%";
+    }
+    if (d.type === "error") {
+      logEl.textContent += "\u2717 " + d.msg + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    if (d.type === "done") {
+      clearInterval(barTick);
+      barEl.style.width   = "100%";
+      badge.style.display = "none";
+      runBtn.disabled     = false;
+      stopBtn.disabled    = true;
+      npRunning           = false;
+      npEvtSource.close();
+      msgEl.textContent = d.ok
+        ? `Scan complete \u2014 ${d.discrepancies?.length ?? 0} discrepancies found.`
+        : "Scan failed.";
+      pctEl.textContent = "";
+      if (d.ok && d.discrepancies) {
+        npDiscrepancies = d.discrepancies;
+        npSelected = new Set(d.discrepancies.map(x => `${x.subject} ${x.number}`));
+        npRenderInspector(d);
+        inspEl.style.display = "block";
+      }
+    }
+  };
+
+  npEvtSource.onerror = () => {
+    clearInterval(barTick);
+    badge.style.display = "none";
+    runBtn.disabled = false; stopBtn.disabled = true;
+    npRunning = false; npEvtSource.close();
+    msgEl.style.color = "var(--error)";
+    msgEl.textContent = "\u2717 Cannot reach dev server \u2014 run  npm run dev  first.";
+  };
+}
+
+function npStop() {
+  if (npEvtSource) { npEvtSource.close(); npEvtSource = null; }
+  npRunning = false;
+  document.getElementById("np-run-btn").disabled  = false;
+  document.getElementById("np-stop-btn").disabled = true;
+  document.getElementById("np-status-badge").style.display = "none";
+}
+
+// ── Inspector rendering ───────────────────────────────────────────────────────
+
+function npSetFilter(f, btn) {
+  npFilter = f;
+  document.querySelectorAll("#np-inspector .ck-filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  npRenderRows();
+}
+
+function npCodeBadge(code, variant) {
+  const color = variant === "add" ? "var(--success)" : variant === "rem" ? "var(--error)" : "var(--text2)";
+  return `<span style="display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--bg3);color:${color};margin:1px">${code}</span>`;
+}
+
+function npRowKey(x) { return `${x.subject} ${x.number}`; }
+
+function npVisible() {
+  const q = (document.getElementById("np-search")?.value ?? "").trim().toUpperCase();
+  return npDiscrepancies.filter(x => {
+    if (npFilter === "gained" && !(x.added.length > 0 && x.removed.length === 0)) return false;
+    if (npFilter === "lost"   && !(x.removed.length > 0 && x.added.length === 0)) return false;
+    if (npFilter === "mixed"  && !(x.added.length > 0 && x.removed.length > 0))   return false;
+    if (q) {
+      const key = `${x.subject} ${x.number}`;
+      return key.includes(q) || x.subject.includes(q);
+    }
+    return true;
+  });
+}
+
+function npDots(n) {
+  const filled = Math.min(n, 5);
+  return "<span style='font-size:10px;letter-spacing:1px;color:var(--text2)'>"
+    + "\u25CF".repeat(filled)
+    + (n > 5 ? `+${n - 5}` : "\u25CB".repeat(Math.max(0, 3 - filled)))
+    + "</span>";
+}
+
+function npRenderRows() {
+  const tbody   = document.getElementById("np-inspector-body");
+  const selEl   = document.getElementById("np-sel-count");
+  const fixEl   = document.getElementById("np-fix-count");
+  const visible = npVisible();
+
+  if (visible.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:20px 0">No discrepancies match this filter</td></tr>`;
+    selEl.textContent = "0 selected";
+    if (fixEl) fixEl.textContent = "0";
+    return;
+  }
+
+  tbody.innerHTML = visible.map(x => {
+    const key     = npRowKey(x);
+    const checked = npSelected.has(key);
+    const oldB = x.oldNuPath.map(c => npCodeBadge(c, x.removed.includes(c) ? "rem" : "neutral")).join("") || `<span style="color:var(--text3);font-size:10px">none</span>`;
+    const newB = x.newNuPath.map(c => npCodeBadge(c, x.added.includes(c)   ? "add" : "neutral")).join("") || `<span style="color:var(--text3);font-size:10px">none</span>`;
+    const typeLabel = x.added.length > 0 && x.removed.length > 0 ? "mixed"
+                    : x.added.length > 0  ? "gained"
+                    : "lost";
+    const typeStyle = typeLabel === "gained" ? "color:var(--success);background:rgba(76,175,125,0.12);border:1px solid rgba(76,175,125,0.35)"
+                    : typeLabel === "lost"   ? "color:var(--error);background:rgba(232,101,90,0.12);border:1px solid rgba(232,101,90,0.35)"
+                    : "color:var(--warn);background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.35)";
+    const typeText  = typeLabel === "gained" ? "+ Gained" : typeLabel === "lost" ? "− Lost" : "± Mixed";
+    return `<tr style="border-bottom:1px solid var(--bg3)" onmouseenter="this.style.background='var(--bg3)'" onmouseleave="this.style.background=''">
+      <td style="padding:4px 6px;vertical-align:middle"><input type="checkbox" ${checked ? "checked" : ""} onchange="npToggle('${key.replace(/'/g,"\\'")}',this.checked)" style="cursor:pointer;accent-color:var(--accent)"></td>
+      <td style="padding:4px 6px;vertical-align:middle"><div style="font-weight:600;font-size:11px">${x.subject} ${x.number}</div><div style="font-size:9px;color:var(--text3);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${x.title}</div></td>
+      <td style="padding:4px 6px;text-align:center;vertical-align:middle">${npDots(x.newNuPath.length)}</td>
+      <td style="padding:4px 6px;vertical-align:middle">${oldB}</td>
+      <td style="padding:4px 6px;vertical-align:middle">${newB}</td>
+      <td style="padding:4px 6px;vertical-align:middle"><span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;${typeStyle}">${typeText}</span></td>
+    </tr>`;
+  }).join("");
+
+  const visible_keys = new Set(visible.map(x => npRowKey(x)));
+  const selCount = [...npSelected].filter(k => visible_keys.has(k)).length;
+  selEl.textContent = `${selCount} selected`;
+  if (fixEl) fixEl.textContent = npSelected.size;
+}
+
+function npRenderInspector(d) {
+  const gainedOnly = d.discrepancies.filter(x => x.added.length > 0 && x.removed.length === 0).length;
+  const lostOnly   = d.discrepancies.filter(x => x.removed.length > 0 && x.added.length === 0).length;
+  const mixed      = d.discrepancies.filter(x => x.added.length > 0 && x.removed.length > 0).length;
+  document.getElementById("np-stat-scanned").textContent    = (d.scanned ?? 0).toLocaleString();
+  document.getElementById("np-stat-gainedonly").textContent = gainedOnly;
+  document.getElementById("np-stat-lostonly").textContent   = lostOnly;
+  document.getElementById("np-stat-mixed").textContent      = mixed;
+  document.getElementById("np-stat-source").textContent     = d.source === "Tableau (Playwright download)" || d.source === "Tableau (Playwright DOM)" || d.source === "Tableau" ? "Tableau" : "catalog";
+  npFilter = "all";
+  const npSearchEl = document.getElementById("np-search");
+  if (npSearchEl) npSearchEl.value = "";
+  document.querySelectorAll("#np-inspector .ck-filter-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
+  npRenderRows();
+}
+
+function npToggle(key, checked) {
+  if (checked) npSelected.add(key); else npSelected.delete(key);
+  const visible_keys = new Set(npVisible().map(x => npRowKey(x)));
+  const selCount = [...npSelected].filter(k => visible_keys.has(k)).length;
+  document.getElementById("np-sel-count").textContent = `${selCount} selected`;
+  const fixEl = document.getElementById("np-fix-count");
+  if (fixEl) fixEl.textContent = npSelected.size;
+}
+
+function npSelectAll(checked) {
+  if (checked) npVisible().forEach(x => npSelected.add(npRowKey(x)));
+  else         npVisible().forEach(x => npSelected.delete(npRowKey(x)));
+  npRenderRows();
+}
+
+// ── Apply fixes ───────────────────────────────────────────────────────────────
+
+async function npApplyFixes() {
+  if (npSelected.size === 0) { alert("No courses selected."); return; }
+  const port   = document.getElementById("np-port")?.value || "3333";
+  const fixBtn = document.getElementById("np-fix-btn");
+  const fixRes = document.getElementById("np-fix-result");
+  const items  = npDiscrepancies
+    .filter(x => npSelected.has(npRowKey(x)))
+    .map(x => ({ subject: x.subject, number: x.number, newNuPath: x.newNuPath }));
+
+  fixBtn.disabled = true;
+  fixBtn.textContent = "Applying\u2026";
+  fixRes.style.display = "none";
+
+  try {
+    const r    = await fetch(`http://localhost:${port}/nupath-fix`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(items),
+    });
+    const data = await r.json();
+    fixRes.style.display = "block";
+    if (data.ok) {
+      fixRes.style.cssText = "display:block;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(76,175,125,0.12);border:1px solid rgba(76,175,125,0.4);color:var(--success)";
+      fixRes.textContent   = `\u2713 Updated nuPath for ${data.fixed} course(s). Re-scan to verify.`;
+      const applied = new Set(items.map(i => `${i.subject} ${i.number}`));
+      npDiscrepancies = npDiscrepancies.filter(x => !applied.has(npRowKey(x)));
+      npSelected      = new Set([...npSelected].filter(k => !applied.has(k)));
+      npRenderRows();
+    } else {
+      fixRes.style.cssText = "display:block;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(232,101,90,0.12);border:1px solid rgba(232,101,90,0.4);color:var(--error)";
+      fixRes.textContent   = `\u2717 ${data.error}`;
+    }
+  } catch (e) {
+    fixRes.style.cssText = "display:block;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(232,101,90,0.12);border:1px solid rgba(232,101,90,0.4);color:var(--error)";
+    fixRes.textContent   = `\u2717 ${e.message}`;
+  } finally {
+    fixBtn.disabled = false;
+    fixBtn.textContent = "\u2622 Apply Fixes";
+  }
+}
+</script>
+</body>
+</html>

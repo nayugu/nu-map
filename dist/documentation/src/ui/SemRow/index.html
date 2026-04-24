@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SemRow + SummerRow — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ui/SemRow">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ui/</a><span class="sep"> / </span><strong>SemRow.jsx + SummerRow.jsx</strong>
+    </div>
+
+    <h1>SemRow.jsx + SummerRow.jsx <span class="badge blue">UI components</span></h1>
+    <p class="lead">The timeline rows. SemRow renders a single non-summer semester (fall/spring/special). SummerRow renders a paired sumA+sumB layout side by side. Both are structurally similar and share the same interaction patterns.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">ui/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Lines each</div><div class="nb-value">~850</div></div>
+      <div class="nb-group"><div class="nb-label">Key prop</div><div class="nb-value"><code>semId</code> (or <code>semIdA</code> + <code>semIdB</code> for SummerRow)</div></div>
+      <div class="nb-group"><div class="nb-label">Children</div><div class="nb-value">CourseCard ×N per semester</div></div>
+    </div>
+
+    <h2>SemRow anatomy</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TD
+    SR["SemRow (semId)"]
+    SR --> SH["Semester header: label + status dot + SH total"]
+    SR --> CB["Special term block (if specialTermStartMap has entry for this semId)"]
+    SR --> IB["Special term continuation (if specialTermContMap has entry)"]
+    SR --> MC["Main courses drop zone"]
+    MC --> CC["CourseCard ×N (credits ≥ 3)"]
+    SR --> OC["Other credits toggle (credits ≤ 2)"]
+    OC --> CC2["CourseCard ×N (small-SH courses)"]
+    SR --> BSH["Bonus SH input"]
+      </div>
+    </div>
+
+    <h2>Semester header</h2>
+    <p>Shows the semester label (e.g. "Fall 2026"), a status dot, and the total SH count for that semester.</p>
+    <ul>
+      <li><span style="color:var(--green)">●</span> <strong>Done</strong>: <code>SEM_INDEX[semId] &lt; SEM_INDEX[currentSemId]</code></li>
+      <li><span style="color:var(--yellow)">▶</span> <strong>Current</strong>: <code>semId === currentSemId</code></li>
+      <li><span style="color:var(--text-4)">○</span> <strong>Future</strong>: everything else</li>
+    </ul>
+    <p>Completed semesters render with reduced opacity for their course cards (dimmed, "already done" visual).</p>
+
+    <h2>Co-op and internship blocks</h2>
+    <p>If a co-op/internship is placed in this semester, a large block appears above the courses. The start row shows: type label + number (e.g. "CO-OP 1"), a <code>CompanySearch</code> field, a role/subline input, the company logo (via <code>CompanyLogo</code>), and a remove button.</p>
+    <p>Spanning blocks show a <strong>continuation row</strong> in the second semester. The continuation row shows the type label (e.g. "CO-OP CONTINUES"), the drag hint, and — if <code>showContLogo</code> is enabled — the same company logo at the same size as the start row. The logo is loaded from the same <code>companyDomain</code> field and stays hidden if the domain fails to load.</p>
+    <p><code>showContLogo</code> is a global preference toggled in the Settings popup and persisted as <code>ncp-show-cont-logo</code> (default <code>true</code>).</p>
+
+    <h2>Drop zone behavior</h2>
+    <p>The entire main courses section is a drop zone. While dragging, the row highlights (<code>hoveredSem === semId</code>). On drop, calls <code>onDrop(dragInfo.courseId, semId)</code>. The order of dropped courses within the row is managed by <code>onDropOnCard()</code> for reordering.</p>
+
+    <h2>Bonus SH input</h2>
+    <p>A small numeric input at the bottom of the row. Adding a number here increases the semester's SH total (for AP credit, transfer credit, or special arrangements). Stored in <code>bonusSH[semId]</code>. Shown in the SH total badge.</p>
+
+    <h2>"Other credits" section</h2>
+    <p>Courses with ≤2 SH (seminars, application fees, etc.) are segregated into a collapsible "+" section at the bottom. The <code>collapseOtherCredits</code> setting controls whether it starts collapsed. This prevents small-SH courses from cluttering the main course list.</p>
+
+    <h2>SummerRow differences</h2>
+    <p><code>SummerRow</code> receives <code>semIdA</code> (sumA) and <code>semIdB</code> (sumB) and renders them side-by-side in two columns. Each column is functionally identical to a half-height SemRow. 4-month co-ops span one column; 6-month co-ops span both.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

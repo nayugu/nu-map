@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfoPanel + RelationLines — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ui/InfoPanel">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ui/</a><span class="sep"> / </span><strong>InfoPanel.jsx + RelationLines.jsx</strong>
+    </div>
+
+    <h1>InfoPanel.jsx + RelationLines.jsx <span class="badge blue">UI components</span></h1>
+    <p class="lead">InfoPanel is a bottom drawer that slides up when a course is selected, showing all its metadata, prerequisites, and relationships. RelationLines is a full-viewport SVG overlay that draws colored lines between the selected course and its prerequisites/corequisites.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">ui/</a> (both rendered in PlannerApp)</div></div>
+      <div class="nb-group"><div class="nb-label">Trigger</div><div class="nb-value"><code>selectedId !== null</code> in PlannerContext</div></div>
+      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">InfoPanel ~400; RelationLines ~100</div></div>
+    </div>
+
+    <h2>InfoPanel sections</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TD
+    IP["InfoPanel (slides up when selectedId is set)"]
+    IP --> HDR["Header: course code + ✕ close + resize handle"]
+    IP --> INFO["Course info: title, SH, NUPath chips, offered semesters"]
+    IP --> DESC["Description: parsed text with clickable course links"]
+    IP --> PREREQ["Prerequisites: draggable chips (drag directly into timeline)"]
+    IP --> COREQ["Corequisites: draggable chips"]
+    IP --> REL["Relationship list: all edges with type icons"]
+    IP --> OFF["Offered toggles: fall/spring/sumA/sumB checkboxes (user-overridable)"]
+      </div>
+    </div>
+
+    <h2>Description parsing</h2>
+    <p>The catalog description often mentions other course codes inline (e.g., "Students must have completed CS 2500."). InfoPanel parses these with a regex and renders them as clickable chips. Clicking a chip sets <code>selectedId</code> to that course, effectively navigating to it.</p>
+    <p>A local navigation history stack (<code>navHistory</code>, <code>navIdx</code>) tracks the sequence of viewed courses. <kbd>Cmd+Z</kbd> goes back, <kbd>Cmd+Shift+Z</kbd> goes forward — note this is separate from the undo/redo system.</p>
+
+    <h2>Draggable prerequisite chips</h2>
+    <p>Each prerequisite shown in InfoPanel is also a draggable element. You can drag a prereq chip directly from the panel into a semester row, placing it without searching for it in the bank. This is especially useful when building a plan from the InfoPanel view.</p>
+
+    <h2>Offered toggles (user overrides)</h2>
+    <p>The four checkboxes (fall/spring/sumA/sumB) show the scraped offering schedule. The user can toggle them to override the data — useful when a course is offered in an unusual semester not captured by the scraper. Overrides are stored per-course in context (not persisted across plans — this is a known gap).</p>
+
+    <h2>Resize handle</h2>
+    <p>A drag handle at the top of the panel lets users adjust its height. Height is stored in <code>panelHeight</code> (context state). On phone, the panel covers more screen real estate; on desktop it floats at the bottom.</p>
+
+    <h2>RelationLines.jsx</h2>
+    <p>A <code>position: fixed</code> SVG element covering the entire viewport. Rendered at all times but only draws lines when <code>selectedId !== null</code> and <code>showViolLines === true</code>.</p>
+
+    <p>When a course is selected, a <code>useEffect</code> in PlannerContext queries the DOM for all rendered course card elements using <code>document.querySelectorAll('[data-course-id="..."]')</code>, reads their bounding rectangles via <code>getBoundingClientRect()</code>, and stores the line endpoint coordinates. RelationLines reads these and draws SVG lines.</p>
+
+    <p>Lines are re-drawn:</p>
+    <ul>
+      <li>When <code>selectedId</code> changes</li>
+      <li>When <code>placements</code> changes (a course moved)</li>
+      <li>On scroll (via a <code>scrollTick</code> counter that increments on scroll events)</li>
+    </ul>
+
+    <p>Line styles (color, dash pattern, arrowhead) are defined per relationship type in <code>constants.js → REL_STYLE</code>.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gradRequirements.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/gradRequirements">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>gradRequirements.js</strong>
+    </div>
+
+    <h1>gradRequirements.js <span class="badge green">Core logic</span></h1>
+    <p class="lead">Graduation requirement checking and allocation. Validates a set of placed courses against a Major2 JSON requirement tree. The most algorithmically complex module in the codebase. Also handles the General Electives section and NUPath coverage.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext.jsx, GradPanel.jsx</div></div>
+      <div class="nb-group"><div class="nb-label">Imports</div><div class="nb-value">None — pure structural logic, no institution or adapter imports</div></div>
+    </div>
+
+    <h2>Requirement type hierarchy</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+classDiagram
+    class RequirementNode {
+        +type: string
+    }
+    class SECTION {
+        +title: string
+        +requirements: RequirementNode[]
+        +minRequirementCount: number
+        +creditHoursRequired?: number
+    }
+    class XOM {
+        +numCreditsMin: number
+        +courses: RequirementNode[]
+    }
+    class AND {
+        +courses: RequirementNode[]
+    }
+    class OR {
+        +courses: RequirementNode[]
+    }
+    class COURSE {
+        +subject: string
+        +classId: number
+    }
+    class RANGE {
+        +subject: string
+        +idRangeStart: number
+        +idRangeEnd: number
+    }
+    RequirementNode <|-- SECTION
+    RequirementNode <|-- XOM
+    RequirementNode <|-- AND
+    RequirementNode <|-- OR
+    RequirementNode <|-- COURSE
+    RequirementNode <|-- RANGE
+      </div>
+    </div>
+
+    <h2>checkReq — core validation algorithm</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["checkReq(req, placedSet, courseMap)"] --> B{req.type?}
+    B -->|COURSE| C{"placedSet.has\n(subject+classId)?"}
+    C -->|yes| T1["✓ true"]
+    C -->|no| F1["✗ false"]
+    B -->|AND| D["checkReq() for ALL children"]
+    D --> D2{"all return true?"}
+    D2 -->|yes| T2["✓ true"]
+    D2 -->|no| F2["✗ false"]
+    B -->|OR| E["checkReq() for each child"]
+    E --> E2{"any returns true?"}
+    E2 -->|yes| T3["✓ true"]
+    E2 -->|no| F3["✗ false"]
+    B -->|XOM| G["sum credits of satisfied children"]
+    G --> G2{"sum ≥ numCreditsMin?"}
+    G2 -->|yes| T4["✓ true"]
+    G2 -->|no| F4["✗ false"]
+    B -->|RANGE| H{"any placed course\nmatches subject + ID range?"}
+    H -->|yes| T5["✓ true"]
+    H -->|no| F5["✗ false"]
+    B -->|SECTION| I["count children where checkReq = true"]
+    I --> I2{"count ≥ minRequirementCount?"}
+    I2 -->|yes| T6["✓ true"]
+    I2 -->|no| F6["✗ false"]
+      </div>
+      <div class="caption">checkReq dispatches by type and recurses for compound nodes (AND, OR, XOM, SECTION).</div>
+    </div>
+
+    <h2>Exported functions</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">buildPlacedKeySet(placements, placedOut, courseMap) → Set&lt;string&gt;</div>
+      <div class="fn-desc">Builds the canonical key set of all placed courses (e.g. <code>Set{"CS3500", "CS1800"}</code>). Includes both semester-placed and placed-out courses. This set is the sole input to all requirement checking — the structure guarantees O(1) lookup.</div>
+      <div class="fn-returns">Returns: <span>Set&lt;string&gt; — keys are subject+classId with no space</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">checkReq(req, placedSet, courseMap) → boolean</div>
+      <div class="fn-desc">Pure recursive validator. See algorithm diagram above. For XOM nodes, credit hours come from <code>courseMap</code> lookups (respecting shOverrides). For RANGE nodes, iterates <code>placedSet</code> to find any matching course.</div>
+      <div class="fn-returns">Returns: <span>boolean — true if requirement is satisfied by the placed set</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">allocateMajor(major, placedSet, courseMap) → SectionResult[]</div>
+      <div class="fn-desc">
+        Maps placed courses to major sections. For each section in the major's <code>requirementSections</code>, determines which placed courses "count toward" it. Uses a greedy first-match strategy — a course is assigned to the earliest section it satisfies.
+        <br><br>
+        Internally calls <code>isOrWrappedSection()</code> and <code>normalizeOrWrapped()</code> to fix parser-generated OR-wrapped patterns on-the-fly (no JSON modification needed).
+      </div>
+      <div class="fn-returns">Returns: <span>SectionResult[] — [{title, requirements, allocated: string[], satisfied: boolean}]</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">allocateMajorWithElectives(major, placedSet, courseMap, placements) → object</div>
+      <div class="fn-desc">Wrapper around <code>allocateMajor()</code>. After allocating to major sections, finds the remaining unallocated placed courses and builds a synthetic General Electives section for them.</div>
+      <div class="fn-returns">Returns: <span>{ sections: SectionResult[], generalElectives: Section, allocatedSet: Set&lt;string&gt; }</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">buildGeneralElectivesSection(placedSet, allocatedSet, courseMap, creditHoursRequired?) → Section</div>
+      <div class="fn-desc">Creates a synthetic SECTION for courses not allocated to any major requirement. Computes total credit hours of unallocated courses. The <code>creditHoursRequired</code> comes from the major JSON's <code>creditHoursRequired</code> field (if present). Returns a section object compatible with the GradPanel SectionBlock renderer.</div>
+    </div>
+
+    <h2>Dynamic normalization helpers (private)</h2>
+
+    <div class="fn-block private">
+      <div class="fn-sig">isOrWrappedSection(section) → boolean</div>
+      <div class="fn-desc">Detects the parser-generated OR-wrapped pattern: a SECTION with exactly one OR child containing 2+ courses. This appears in "Supporting Courses" and "Technical Electives" sections across many major files.</div>
+    </div>
+
+    <div class="fn-block private">
+      <div class="fn-sig">normalizeOrWrapped(section) → section</div>
+      <div class="fn-desc">Expands an OR-wrapped section on-the-fly: extracts courses from the OR, makes them direct COURSE children of the section, sets <code>minRequirementCount = 1</code>. This makes the section render as "One of (X/N)" instead of "All of: (One of (0/N))".</div>
+    </div>
+
+    <h2>Known parser bugs and fixes</h2>
+    <div class="callout warn">
+      <span class="ci">⚠️</span>
+      <div class="callout-body">
+        <strong>Bug 1 — Broken pool structure (297 files, fixed in data):</strong><br>
+        Some catalog years encode elective pools as <code>SECTION { minReq: N, requirements: [N RANGEs] }</code> instead of <code>XOM { numCreditsMin, courses: [RANGEs] }</code>. Fixed by running <code>fix-pooled-requirements.js</code> against the JSON files.
+        <br><br>
+        <strong>Bug 2 — OR-wrapped sections (all years, fixed in code):</strong><br>
+        Sections like "Supporting Courses" are encoded as <code>SECTION { requirements: [OR { courses: [8 courses] }] }</code>. Fixed dynamically by <code>normalizeOrWrapped()</code> — no JSON changes needed. Applied in <code>allocateMajor()</code> before any processing.
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

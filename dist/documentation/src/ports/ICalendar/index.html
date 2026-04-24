@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICalendar — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ports/ICalendar">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>ICalendar.js</strong>
+    </div>
+
+    <h1>ICalendar <span class="badge blue">semester structure</span></h1>
+    <p class="lead">Semester types and their weights — the foundation of all span arithmetic. The <code>weight</code> field on each semester type is what makes a 6-month co-op span two slots without any hardcoded table.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"calendar"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">PlannerContext (semGrid, year labels), SemRow/SummerRow (slot rendering), specialTermUtils (span arithmetic)</div></div>
+      <div class="nb-group"><div class="nb-label">Override when</div><div class="nb-value">Your institution has summer sessions, quarters, trimesters, or a split year format (e.g. "2025–2026")</div></div>
+    </div>
+
+    <h2>The weight contract</h2>
+    <p>All span logic in the planner uses one rule: a special term spans into the next semester when <code>termWeight &gt; semSlotWeight</code>. Semester types and special term durations must use the same weight scale.</p>
+    <div class="callout info"><div class="ci">ℹ</div><div class="callout-body"><strong>Weight scale:</strong> <code>1.0</code> = one full academic semester. Half-sessions get <code>0.5</code>. All semester types in one academic year should sum to a whole number so that year boundaries are exact. NU's four types sum to 3.0.</div></div>
+
+    <h2>Contract — top-level fields</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>defaultStartYear</code></td><td>number</td><td>First academic year shown when no saved plan exists.</td></tr>
+        <tr><td><code>semesterTypes</code></td><td>SemesterType[]</td><td>Ordered list of all regular term types. Display order within each year follows this array order.</td></tr>
+        <tr><td><code>yearAnchor</code></td><td>string</td><td>Lowercase month name that begins the academic year, e.g. <code>"august"</code> or <code>"september"</code>. Used to align year labels.</td></tr>
+        <tr><td><code>academicYearFormat</code></td><td><code>"single"</code> | <code>"split"</code></td><td><code>"single"</code> → "2026"; <code>"split"</code> → "2025–2026". Use <code>"split"</code> if your institution labels years that span two calendar years.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Contract — SemesterType fields</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Machine-readable ID stored in plan state, e.g. <code>"fall"</code>, <code>"spring"</code>, <code>"sumA"</code>.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Display name, e.g. <code>"Fall"</code>, <code>"Summer 1"</code>.</td></tr>
+        <tr><td><code>shortLabel</code></td><td>string</td><td>Abbreviated label for tight spaces, e.g. <code>"FA"</code>, <code>"S1"</code>.</td></tr>
+        <tr><td><code>weight</code></td><td>number</td><td><strong>The span arithmetic key.</strong> <code>1.0</code> = one full semester; <code>0.5</code> = half-session. Must match the scale used in <code>ISpecialTerms</code> durations.</td></tr>
+        <tr><td><code>optional</code></td><td>boolean</td><td>If <code>true</code>, this slot can be collapsed in a condensed view (e.g. summer sessions the student didn't attend).</td></tr>
+        <tr><td><code>theme</code></td><td>string</td><td>CSS theme key for row background. Must be one of: <code>"fall"</code>, <code>"spring"</code>, <code>"summer"</code>, <code>"special"</code>.</td></tr>
+        <tr><td><code>months</code></td><td>string[]</td><td>ISO month strings (<code>"01"</code>–<code>"12"</code>) covered by this term. Informational — not used in logic.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern reference implementation</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>id</th><th>label</th><th>weight</th><th>optional</th><th>theme</th><th>months</th></tr></thead>
+      <tbody>
+        <tr><td><code>fall</code></td><td>Fall</td><td>1.0</td><td>false</td><td>fall</td><td>09–12</td></tr>
+        <tr><td><code>spring</code></td><td>Spring</td><td>1.0</td><td>false</td><td>spring</td><td>01–05</td></tr>
+        <tr><td><code>sumA</code></td><td>Summer 1</td><td>0.5</td><td>true</td><td>summer</td><td>05–06</td></tr>
+        <tr><td><code>sumB</code></td><td>Summer 2</td><td>0.5</td><td>true</td><td>summer</td><td>07–08</td></tr>
+      </tbody>
+    </table></div>
+    <p>Year total: <code>1.0 + 1.0 + 0.5 + 0.5 = 3.0</code>. <code>defaultStartYear: 2026</code>, <code>yearAnchor: "august"</code>, <code>academicYearFormat: "single"</code>.</p>
+
+    <h2>Generic default</h2>
+    <p>Fall + Spring only, weight 1.0 each. <code>defaultStartYear</code> is <code>new Date().getFullYear()</code> at startup. Covers the majority of semester-system universities globally.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>id</th><th>label</th><th>weight</th><th>optional</th></tr></thead>
+      <tbody>
+        <tr><td><code>fall</code></td><td>Fall</td><td>1.0</td><td>false</td></tr>
+        <tr><td><code>spring</code></td><td>Spring</td><td>1.0</td><td>false</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Common calendar patterns</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>System</th><th>Semester types</th><th>Weights</th><th>Year total</th></tr></thead>
+      <tbody>
+        <tr><td>Semester (no summer)</td><td>fall, spring</td><td>1.0, 1.0</td><td>2.0</td></tr>
+        <tr><td>Semester + summer (NU-style)</td><td>fall, spring, sumA, sumB</td><td>1.0, 1.0, 0.5, 0.5</td><td>3.0</td></tr>
+        <tr><td>Semester + one summer session</td><td>fall, spring, summer</td><td>1.0, 1.0, 1.0</td><td>3.0</td></tr>
+        <tr><td>Quarter system (4 quarters)</td><td>fall, winter, spring, summer</td><td>0.75, 0.75, 0.75, 0.75</td><td>3.0</td></tr>
+        <tr><td>Trimester (3 equal terms)</td><td>term1, term2, term3</td><td>1.0, 1.0, 1.0</td><td>3.0</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">Keep the year total consistent across your institution (e.g. always 3.0 or always 2.0). The span arithmetic doesn't require a specific total, but a consistent sum makes it easier to reason about multi-year plans.</div></div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

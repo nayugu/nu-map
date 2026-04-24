@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThemeContext — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context/ThemeContext">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">context/</a><span class="sep"> / </span><strong>ThemeContext.jsx</strong>
+    </div>
+
+    <h1>ThemeContext.jsx <span class="badge gray">~65 lines</span></h1>
+    <p class="lead">Manages the active theme. On mount, reads the saved theme from localStorage. When the theme changes, injects all CSS variable tokens from <code>core/themes.js</code> directly onto <code>document.documentElement</code>.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">context/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Hook</div><div class="nb-value"><code>const { themeName, setThemeName, themeNames } = useTheme()</code></div></div>
+      <div class="nb-group"><div class="nb-label">Imports</div><div class="nb-value"><code>core/themes.js</code> (THEMES, THEME_LABELS)</div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">App.jsx (provider), Header.jsx (cycler button)</div></div>
+    </div>
+
+    <h2>How theme injection works</h2>
+    <p>CSS custom properties on <code>:root</code> / <code>html</code> can be overridden by JavaScript at runtime. ThemeContext calls <code>Object.entries(theme)</code> and sets each variable:</p>
+
+    <pre><code><span class="cmt">// ThemeContext.jsx — simplified</span>
+<span class="kw">function</span> <span class="fn-name">applyTheme</span>(themeName) {
+  <span class="kw">const</span> tokens = THEMES[themeName];
+  <span class="kw">const</span> root = document.documentElement;
+  Object.entries(tokens).forEach(([key, val]) => {
+    root.style.setProperty(key, val);  <span class="cmt">// e.g. "--bg-surface", "#1a1d23"</span>
+  });
+}</code></pre>
+
+    <p>This means all components using <code>var(--bg-surface)</code>, <code>var(--text-1)</code>, etc. in their inline styles immediately reflect the new theme — no re-render required for the CSS variable change itself.</p>
+
+    <h2>Exported values from useTheme()</h2>
+    <div class="state-block"><div class="sb-name">themeName</div><div class="sb-type">string</div><div class="sb-desc">Current theme name (e.g. <code>"dark"</code> or <code>"light"</code>).</div></div>
+    <div class="state-block"><div class="sb-name">setThemeName</div><div class="sb-type">function</div><div class="sb-desc">Set a new theme by name. Calls <code>applyTheme()</code> and saves to <code>ncp-theme</code> in localStorage.</div></div>
+    <div class="state-block"><div class="sb-name">themeNames</div><div class="sb-type">string[]</div><div class="sb-desc">Array of all available theme names (keys of <code>THEMES</code> from <code>themes.js</code>). Used by Header to cycle through them.</div></div>
+
+    <h2>Scrollbar special handling</h2>
+    <p>The <code>scrollbar-color</code> CSS property doesn't respond to custom property changes in all browsers. ThemeContext handles this by creating a dynamic <code>&lt;style&gt;</code> tag with a literal value:</p>
+    <pre><code><span class="cmt">// injects: * { scrollbar-color: #363b47 #1a1d23; }</span>
+<span class="kw">const</span> styleTag = document.createElement(<span class="str">'style'</span>);
+styleTag.textContent = <span class="str">`* { scrollbar-color: ${tokens['--scrollbar-thumb']} ${tokens['--scrollbar-track']}; }`</span>;
+document.head.appendChild(styleTag);</code></pre>
+
+    <h2>Adding a new theme</h2>
+    <ol>
+      <li>Open <code>src/core/themes.js</code></li>
+      <li>Add a new export: <code>export const myTheme = { "--bg-app": "#...", ... }</code></li>
+      <li>Add it to the <code>THEMES</code> object: <code>export const THEMES = { dark, light, myTheme }</code></li>
+      <li>Add a label: <code>export const THEME_LABELS = { dark: "Dark", light: "Light", myTheme: "My Theme" }</code></li>
+      <li>ThemeContext and Header will automatically pick it up — the cycle button iterates <code>themeNames</code>.</li>
+    </ol>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

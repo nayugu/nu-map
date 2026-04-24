@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InstitutionContext — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context/InstitutionContext">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../../">src/</a><span class="sep"> / </span><a href="../../">context/</a><span class="sep"> / </span><strong>InstitutionContext.jsx</strong>
+    </div>
+
+    <h1>InstitutionContext.jsx <span class="badge purple">Context</span></h1>
+    <p class="lead">The bridge between the adapter bundle and the React component tree. Wrap the app root once with <code>&lt;InstitutionProvider&gt;</code>, then call <code>usePort(IPortName)</code> anywhere to read that port's implementation. 75 lines — thin by design.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">context/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Adapter source</div><div class="nb-value"><a href="../../adapters/">src/adapters/</a> via <code>src/config.js</code></div></div>
+      <div class="nb-group"><div class="nb-label">Exports</div><div class="nb-value"><code>InstitutionProvider</code>, <code>useInstitution()</code>, <code>usePort(portKey)</code></div></div>
+    </div>
+
+    <h2>Setup — already done in App.jsx</h2>
+    <p><code>InstitutionProvider</code> wraps the entire app tree above <code>PlannerProvider</code>, so adapter data is available to every component including PlannerContext itself.</p>
+    <pre><code><span class="cmt">// src/App.jsx</span>
+import { institutionAdapter } from "./config.js";
+import { InstitutionProvider } from "./context/InstitutionContext.jsx";
+
+function App() {
+  return (
+    &lt;InstitutionProvider adapter={institutionAdapter}&gt;
+      &lt;ThemeProvider&gt;
+        &lt;PlannerProvider&gt;
+          ...
+        &lt;/PlannerProvider&gt;
+      &lt;/ThemeProvider&gt;
+    &lt;/InstitutionProvider&gt;
+  );
+}</code></pre>
+
+    <h2>Reading a port in a component</h2>
+    <p>Import the port constant and pass it to <code>usePort()</code>. Port constants are camelCase strings — the same keys used in <code>wire()</code>. Importing from <code>src/ports/</code> is what catches typos at the import site rather than silently at runtime.</p>
+    <pre><code><span class="cmt">// Most common pattern — read a single port</span>
+import { usePort }           from "../context/InstitutionContext.jsx";
+import { IAttributeSystem }  from "../ports/IAttributeSystem.js";
+
+function MyComponent() {
+  const attributeSystem = usePort(IAttributeSystem);
+  const covered = attributeSystem.getCoverage(placements, courseMap, grantedAttrs);
+  <span class="cmt">// ...</span>
+}</code></pre>
+
+    <h2>getAllSources() — data attribution</h2>
+    <p><code>wire()</code> adds an extra method to the adapter bundle: <code>getAllSources()</code>. It aggregates <code>getSources()</code> across all active ports, deduplicates by <code>SourceInfo.id</code>, and merges <code>usedFor</code> arrays when two ports reference the same upstream source. The About / Disclaimer modal calls this to build its attribution list without knowing which ports exist.</p>
+    <pre><code><span class="cmt">// DisclaimerModal.jsx</span>
+const adapter = useInstitution();
+const sources = adapter.getAllSources();  <span class="cmt">// aggregated across all 8 ports</span></code></pre>
+    <p>See <a href="../../ports/IAttributable/">IAttributable</a> for the <code>SourceInfo</code> shape and how to implement <code>getSources()</code>.</p>
+
+    <h2>usePort() vs useInstitution()</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Hook</th><th>Returns</th><th>When to use</th></tr></thead>
+      <tbody>
+        <tr><td><code>usePort(IPortName)</code></td><td>One port implementation</td><td>Almost always — reads one port, minimizes what the component depends on</td></tr>
+        <tr><td><code>useInstitution()</code></td><td>Whole adapter bundle</td><td>Only when you need multiple ports at once or must pass the bundle as a parameter to a non-React function (e.g. <code>exportReport(…, adapter)</code>)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>API reference</h2>
+    <div class="fn-block exported">
+      <div class="fn-sig">InstitutionProvider({ adapter, children })</div>
+      <div class="fn-desc">Context provider component. Wraps the component tree once at the app root. <code>adapter</code> must be a fully-wired adapter bundle from <code>wire()</code> — i.e. the value of <code>institutionAdapter</code> from <code>src/config.js</code>.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">usePort(portKey) → port implementation</div>
+      <div class="fn-desc">Returns the implementation bound to <code>portKey</code>. Must be called inside a component tree wrapped by <code>&lt;InstitutionProvider&gt;</code> — throws otherwise. <code>portKey</code> should be a constant imported from <code>src/ports/*.js</code>.</div>
+    </div>
+    <div class="fn-block exported">
+      <div class="fn-sig">useInstitution() → adapter bundle</div>
+      <div class="fn-desc">Returns the entire wired adapter object (all 8 ports). Useful when passing to non-React utilities like <code>exportReport()</code> that need multiple ports. Prefer <code>usePort()</code> for component-level access.</div>
+    </div>
+
+    <h2>How PlannerContext uses the adapter</h2>
+    <p>PlannerContext calls <code>useInstitution()</code> once and destructures the ports it needs. This is the primary consumer of the adapter in the React layer — most UI components get institution data via PlannerContext (re-exposed as context values) rather than calling <code>usePort()</code> directly.</p>
+    <pre><code><span class="cmt">// Inside PlannerContext.jsx</span>
+const adapter = useInstitution();
+const { attributeSystem, specialTerms, calendar, creditSystem } = adapter;
+<span class="cmt">// These are then used in useMemo hooks and exposed in the context value</span></code></pre>
+    <p>Components that need a port not exposed by PlannerContext — like GradPanel needing <code>ISpecialTerms</code> for <code>computeGrantedAttrs</code> — call <code>usePort()</code> directly.</p>
+
+  </main>
+</div>
+<script src="../../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

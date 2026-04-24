@@ -1,0 +1,1 @@
+const t="History, Minor",e={verified:!1,lastEdited:"11/5/2025",branch:"main"},n=0,i=2023,o=[],a={minOptions:0,concentrationOptions:[]},s={name:t,metadata:e,totalCreditsRequired:n,yearVersion:i,requirementSections:o,concentrations:a};export{a as concentrations,s as default,e as metadata,t as name,o as requirementSections,n as totalCreditsRequired,i as yearVersion};

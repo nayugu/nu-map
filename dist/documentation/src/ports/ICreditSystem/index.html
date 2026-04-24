@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICreditSystem — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/ports/ICreditSystem">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>ICreditSystem.js</strong>
+    </div>
+
+    <h1>ICreditSystem <span class="badge blue">credit units</span></h1>
+    <p class="lead">Credit unit naming and enrollment load thresholds. Affects every credit label in the UI and every enrollment-status badge — override if your institution uses anything other than 3-credit courses.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"creditSystem"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">CourseCard (credit label), GradPanel (SH totals), Header (plan stats), PDF export</div></div>
+      <div class="nb-group"><div class="nb-label">Override when</div><div class="nb-value">Unit name ≠ "credits", standard value ≠ 3, or your full-time threshold differs</div></div>
+    </div>
+
+    <h2>Contract</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>unitName</code></td><td>string</td><td>Short label in all UI contexts: course chips, totals, badges. e.g. <code>"SH"</code>, <code>"credits"</code>, <code>"ECTS"</code>, <code>"units"</code>.</td></tr>
+        <tr><td><code>unitLabel</code></td><td>string</td><td>Long label for tooltips and accessibility. e.g. <code>"Semester Hours"</code>, <code>"Credits"</code>.</td></tr>
+        <tr><td><code>standardValue</code></td><td>number</td><td>Typical credits for one course. Used as the default when a course has no credit value in catalog data.</td></tr>
+        <tr><td><code>fullTimeMin</code></td><td>number</td><td>Minimum credits per semester for full-time enrollment status badge.</td></tr>
+        <tr><td><code>partTimeMax</code></td><td>number</td><td>Maximum credits still considered part-time. Typically <code>fullTimeMin − 1</code>.</td></tr>
+        <tr><td><code>semesterMax</code></td><td>number</td><td>Hard maximum credits allowed per semester. Semesters exceeding this show a warning.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern vs generic defaults</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>NU (northeastern/)</th><th>Generic default</th></tr></thead>
+      <tbody>
+        <tr><td><code>unitName</code></td><td><code>"SH"</code></td><td><code>"credits"</code></td></tr>
+        <tr><td><code>unitLabel</code></td><td><code>"Semester Hours"</code></td><td><code>"Credits"</code></td></tr>
+        <tr><td><code>standardValue</code></td><td><code>4</code></td><td><code>3</code></td></tr>
+        <tr><td><code>fullTimeMin</code></td><td><code>12</code></td><td><code>12</code></td></tr>
+        <tr><td><code>partTimeMax</code></td><td><code>11</code></td><td><code>11</code></td></tr>
+        <tr><td><code>semesterMax</code></td><td><code>22</code></td><td><code>21</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Common credit systems</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>System</th><th>unitName</th><th>standardValue</th><th>fullTimeMin</th><th>semesterMax</th></tr></thead>
+      <tbody>
+        <tr><td>US semester (3-credit)</td><td><code>"credits"</code></td><td>3</td><td>12</td><td>18–21</td></tr>
+        <tr><td>US semester (4-credit, like NU)</td><td><code>"SH"</code></td><td>4</td><td>12</td><td>20–22</td></tr>
+        <tr><td>US quarter system</td><td><code>"units"</code></td><td>4</td><td>12</td><td>20</td></tr>
+        <tr><td>ECTS (European)</td><td><code>"ECTS"</code></td><td>6</td><td>30</td><td>36</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">If your institution uses a credit system not listed here, set <code>unitName</code> to whatever abbreviation appears on transcripts. The planner treats credit values as opaque numbers — no conversion logic is needed.</div></div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

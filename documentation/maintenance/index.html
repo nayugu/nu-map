@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maintenance — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="maintenance">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../">nu-map/documentation</a><span class="sep"> / </span><strong>maintenance</strong>
+    </div>
+
+    <h1>Maintenance <span class="badge green">operational playbook</span></h1>
+
+    <!--
+      SCR setup
+      Situation:    nu-map has a live 10k-course database that must stay accurate as Northeastern updates its catalog each semester
+      Complication: the catalog has no structured API — data requires automated scraping plus manual correction, and not every scraped change is correct
+      Resolution:   this page answers "as maintainer, what do I do and when?"
+    -->
+    <p class="lead">nu-map has a live course database that Northeastern updates each semester. There is no structured API — data accuracy depends on manual scraping plus manual correction. All data updates are initiated by you; nothing runs automatically. In practice, every maintenance task is triggered by exactly one of two events: <strong>it is the start of a semester</strong> (periodic data refresh), or <strong>you find bad data</strong>. Know which trigger you're responding to, follow its path, and one push to <code>main</code> deploys everything.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 1 — Trigger A: periodic data refresh
+         (most common trigger — this is the answer most of the time)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Trigger A — periodic data refresh (start of semester)</h2>
+    <p>There is no automated scraper. At the start of each semester (January, May, September) you manually run Catalog Check and NUPath Update to discover what has changed, then apply and push. This is the most common maintenance action — most of the time it takes under 30 minutes.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    START["Start of semester\n(Jan / May / Sep)"]
+    START --> CK["Work tab → Catalog Check → Launch Check\nstreams per-subject as it scrapes"]
+    CK --> REVIEW["Review discrepancy categories:\n⚠ changed  🆕 new  ❌ missing  ≈ range"]
+
+    REVIEW --> OK{"Do the changes\nlook correct?"}
+
+    OK -->|"Yes — catalog updated, our data is behind"| APPLY["Apply Fixes (by category)\nCI builds + deploys after push"]
+
+    OK -->|"One field is wrong\n(typo, stale catalog entry)"| PATCH["Do not apply that field\nCreate patch file to override\ncommit patch → CI re-applies on every deploy"]
+
+    OK -->|"Large suspicious diff\n(100+ removals)"| SKIP["Skip that category for now\nVerify manually on catalog.northeastern.edu\nthen decide"]
+
+    APPLY & PATCH & SKIP --> NP["Work tab → NUPath Update → Manual scan\napply NUPath attribute changes from Tableau"]
+    NP --> PUSH["npm run build → Preview tab\nWork tab → Review & Push"]
+      </div>
+    </div>
+
+    <h3>Reading the Catalog Check results</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>What you see</th><th>What it means</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>⚠ Changed: title, credits, description, NUPath</td><td>Catalog updated that field this semester</td><td>Verify one or two — if plausible, apply</td></tr>
+        <tr><td>🆕 New courses</td><td>Courses in catalog but not in our DB</td><td>Check they actually appear on catalog.northeastern.edu — then apply</td></tr>
+        <tr><td>❌ Missing from catalog</td><td>Course in our DB but scraper didn't find it</td><td>Investigate before applying — deletes record, irreversible without git</td></tr>
+        <tr><td>100+ courses changed or removed</td><td>Possible catalog site structure change or scraper bug</td><td>Do not apply — verify manually, then re-run</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Creating a patch to override a catalog value</h3>
+    <p>Use a patch when our data is correct and the catalog is wrong (typo, stale entry). Patches are re-applied on every deploy — they survive future scraper runs.</p>
+    <ol>
+      <li>Open <a href="../dev-portal/">Dev Portal</a> → Patches tab.</li>
+      <li>Select <strong>Update</strong>, enter the course code, fill in only the wrong field(s).</li>
+      <li>Click <strong>Generate YAML</strong>. Copy output to <code>data/patches/YYYY-MM-DD_description.yaml</code>.</li>
+      <li>Locally: <code>npm run data:patch:write &amp;&amp; npm run build</code> — verify in Preview tab.</li>
+      <li>Commit and push. The patch takes precedence over whatever the scraper writes.</li>
+    </ol>
+    <pre class="code-block">
+# data/patches/2025-09-01_fix-cs3700-credits.yaml
+meta:
+  date: "2025-09-01"
+  author: "developer"
+  reason: "Credits corrected per Fall 2025 catalog"
+courses:
+  update:
+    - subject: CS
+      number: "3700"
+      fields:
+        credits: 4
+        nuPath: ["AD", "ND"]
+</pre>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 2 — Trigger B: you find bad data
+         (reactive trigger — match the scale to the right tool)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Trigger B — you find bad data</h2>
+    <p>A user reports a wrong title. A course shows the wrong NUPath. A whole subject's credits look off. The right response depends on scale: a single known field → patch it directly; unknown scope or bulk problem → use the dev portal's Work tab to investigate and apply.</p>
+
+    <h3>Choose the right tool</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Situation</th><th>Tool</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>One course, you know exactly which field</td><td><a href="../dev-portal/">Patches tab</a></td><td>Fastest. No scrape. Patch survives all future deploys.</td></tr>
+        <tr><td>Unknown scope — want to see what differs across all courses</td><td><a href="../dev-portal/catalog-check/">Catalog Check</a></td><td>Full field comparison: title, credits, description, prereqs, scheduleType. Shows exactly what changed.</td></tr>
+        <tr><td>NUPath attributes specifically seem wrong</td><td><a href="../dev-portal/nupath-update/">NUPath Update</a></td><td>Fetches from Tableau — more authoritative than the catalog HTML for attribute data. Per-course selective apply.</td></tr>
+        <tr><td>New course not in database (you know the code)</td><td>Patches tab → Add</td><td>Instant. For a batch of new courses, use Catalog Check instead.</td></tr>
+        <tr><td>Course discontinued, should be removed</td><td>Catalog Check → ❌ filter → Apply Fixes</td><td>Deletes record. Use <code>git checkout -- public/all-courses.json</code> to undo if wrong.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Catalog Check path — full decision tree</h3>
+    <p>Use this when you need to verify scope before touching anything. Runs locally only — requires <code>npm run dev</code>. See <a href="../dev-portal/catalog-check/">Catalog Check reference</a> for how the tool works internally.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    CK["Work tab → Catalog Check → Launch Check\nstreams per-subject as it scrapes"]
+
+    CK --> WATCH["Watch live counts:\n⚠ changed  ≈ range  🆕 new  ❌ missing"]
+    WATCH --> STOP{"Stop early\nor let it finish?"}
+    STOP -->|"Saw the issue you came for"| INSP
+    STOP -->|"Let finish for full picture"| INSP
+
+    INSP["Discrepancy Inspector\nFilter + search by course code"]
+    INSP --> CAT{"Category?"}
+
+    CAT -->|"⚠ changed — catalog is right"| A1["Apply Fixes (changed filter)\ncatalog value overwrites our DB"]
+    CAT -->|"⚠ changed — our data is right"| A2["Create patch file instead\nour value wins on every deploy"]
+    CAT -->|"🆕 new — verified on catalog.neu.edu"| A3["Apply Fixes (new filter)\ncourse inserted from catalog data"]
+    CAT -->|"🆕 new — can't verify"| A4["Skip for now\nre-run after verifying manually"]
+    CAT -->|"❌ missing — confirmed discontinued"| A5["Apply Fixes (missing filter)\ndeletes record — irreversible without git"]
+    CAT -->|"❌ missing — possible scraper glitch"| A6["Do not apply\nre-run check in a few days"]
+    CAT -->|"≈ range only"| A7["Usually safe to ignore\nnumeric range fields, low signal"]
+
+    A1 & A2 & A3 & A5 --> BUILD["npm run build\nverify in Preview tab\nWork tab → Review & Push → push to main"]
+      </div>
+    </div>
+
+    <h3>NUPath Update path</h3>
+    <p>Use instead of Catalog Check when NUPath attributes are the specific issue. Manual mode gives you per-course review; Automatic mode commits directly to <code>main</code> on a schedule. See <a href="../dev-portal/nupath-update/">NUPath Update reference</a> for mechanics.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    NP["Work tab → NUPath Update\nManual mode → Scan for Changes"]
+    NP --> RES["Inspector: + Gained / − Lost / ± Mixed\nAll courses pre-selected by default"]
+    RES --> UNCHECK["Uncheck courses you don't trust\n(suspicious change, verify on Tableau first)"]
+    UNCHECK --> APPLY["☢ Apply Selected Fixes\nwrites nuPath field only\ndoes not touch other fields"]
+    APPLY --> PUSH_NP["npm run build → Preview → push"]
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 3 — One push deploys everything
+         (this is why both trigger paths converge to the same endpoint)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>One push deploys everything</h2>
+    <p>Both trigger paths end here. Pushing to <code>main</code> — whether by merging a PR or pushing directly — triggers the same automated pipeline. You never deploy manually. Patches are re-applied automatically, so a patch committed weeks ago still protects against a bad scraper value today.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant You
+    participant GitHub
+    participant CI as GitHub Actions (deploy.yml)
+    participant Pages as gh-pages branch
+    participant Live as nayugu.github.io/nu-map
+
+    You->>GitHub: push to main (or merge PR)
+    GitHub->>CI: trigger deploy.yml
+    CI->>CI: npm install
+    CI->>CI: npm run data:patch:write
+    note over CI: re-applies all data/patches/*.yaml\non top of current all-courses.json
+    CI->>CI: npm run build → dist/
+    CI->>Pages: force-push dist/
+    Pages->>Live: serve new build (~2 min total)
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SUPPORTING DATA — reference sections
+         (exist to support the three key arguments above)
+    ════════════════════════════════════════════════════════════════ -->
+
+    <h2>Data pipeline — where data comes from</h2>
+    <p>Understanding the pipeline helps you interpret what you see in the scraper PR or Catalog Check results.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    subgraph External ["External sources"]
+      SN["SearchNEU / nu-courses\nterm availability, section data"]
+      CAT["catalog.northeastern.edu\ntitles, descriptions, credits, prereqs"]
+      TAB["tableau.northeastern.edu\nNUPath attributes (authoritative)"]
+      GN["sandboxnu/graduatenu\nmajor requirement JSON trees"]
+    end
+    subgraph Build ["Build pipeline"]
+      FETCH["npm run data:fetch:write\nbase course records from SearchNEU"]
+      SCRAPE["npm run data:scrape:write\noverlays richer descriptions from catalog"]
+      PATCH["npm run data:patch:write\napplies all data/patches/*.yaml"]
+      JSON["public/all-courses.json\n(~6.5 MB, ~10k entries)"]
+      MAJORS["public/majors/\n(~1,471 JSON files)"]
+    end
+
+    SN -->|manual: npm run data:fetch:write| FETCH
+    CAT -->|optional manual step| SCRAPE
+    TAB -->|NUPath Update tool| PATCH
+    GN -->|manual sync| MAJORS
+    FETCH --> SCRAPE --> PATCH --> JSON
+      </div>
+    </div>
+    <p><strong>Key insight:</strong> <code>all-courses.json</code> is a <em>built artifact</em> — do not hand-edit it. Edit source data (patches, scripts) and let the pipeline regenerate it. All data refresh steps are manual; <code>data:patch:write</code> is the only step that runs automatically (as part of every CI build). Run <code>data:scrape:write</code> manually when catalog descriptions need refreshing.</p>
+
+    <h2>Forked repos — when they need attention</h2>
+
+    <h3>graduatenu (major requirement trees)</h3>
+    <p><code>public/majors/</code> comes from <a href="https://github.com/sandboxnu/graduatenu">sandboxnu/graduatenu</a>. It needs manual syncing when Northeastern adds a new catalog year or the upstream fixes requirement bugs.</p>
+    <ol>
+      <li>Copy the new year's files from <code>packages/api/src/major/majors/YEAR/</code> into <code>public/majors/YEAR/</code>.</li>
+      <li>Run <code>node scripts/fix-pooled-requirements.js</code> — fixes a parser bug in ~297 files where elective pools are structured as checkbox lists instead of credit-hour pools.</li>
+      <li>Update <code>src/data/majorLoader.js</code> to include the new year in the dropdown.</li>
+      <li><code>npm run build</code> → verify in Preview → PR.</li>
+    </ol>
+    <p>Known upstream parser issues (all handled in nu-map, no action needed unless you sync):</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Issue</th><th>Affected</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td>Elective pools shown as checkboxes instead of credit pool</td><td>~297 files (2024/2025)</td><td><code>fix-pooled-requirements.js</code> post-processor</td></tr>
+        <tr><td>OR-wrapped sections ("Supporting Courses") show "One of (0/8)"</td><td>Various majors</td><td>Runtime normalization in <code>allocateSection()</code> — no JSON changes needed</td></tr>
+        <tr><td>Missing <code>creditHoursRequired</code> on General Electives sections</td><td>~386 files</td><td>Defaults to 0 if absent — known gap</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>nu-courses (term availability)</h3>
+    <p>The <a href="https://github.com/ninest/nu-courses">ninest/nu-courses</a> fork provides which semesters each course actually runs in. Updated by the upstream maintainer each semester. nu-map pulls from it via the SearchNEU API wrapper in <code>scripts/fetch.js</code> — no manual sync needed unless the API endpoint changes.</p>
+
+    <h2>Scripts reference</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Command</th><th>What it does</th><th>Safe?</th></tr></thead>
+      <tbody>
+        <tr><td><code>npm run dev</code></td><td>Vite dev server (port 5173) + catalog-check-server (port 3333) via Vite plugin</td><td>Yes</td></tr>
+        <tr><td><code>npm run build</code></td><td>Vite production build into <code>dist/</code></td><td>Yes</td></tr>
+        <tr><td><code>npm run catalog:check</code></td><td>Start only the port 3333 server (without Vite) — useful for standalone backend use</td><td>Yes</td></tr>
+        <tr><td><code>npm run data:fetch</code></td><td>Dry-run: fetch SearchNEU data, print diff summary</td><td>Yes — read-only</td></tr>
+        <tr><td><code>npm run data:fetch:write</code></td><td>Write updated base data to <code>all-courses.json</code></td><td>Caution — overwrites</td></tr>
+        <tr><td><code>npm run data:update</code></td><td>Shortcut: <code>data:fetch:write</code> + <code>data:patch:write</code> in one command</td><td>Caution — overwrites</td></tr>
+        <tr><td><code>npm run data:scrape</code></td><td>Dry-run: scrape catalog.northeastern.edu, print what would change</td><td>Yes — read-only</td></tr>
+        <tr><td><code>npm run data:scrape:write</code></td><td>Overlay scraped data (all subjects) onto <code>all-courses.json</code></td><td>Caution — overwrites</td></tr>
+        <tr><td><code>npm run data:scrape:rotate</code></td><td>Dry-run: scrape one subject (advances <code>scrape-state.json</code> index)</td><td>Yes — read-only</td></tr>
+        <tr><td><code>npm run data:patch:write</code></td><td>Re-apply all <code>data/patches/*.yaml</code> — idempotent</td><td>Yes</td></tr>
+        <tr><td><code>npm run data:validate</code></td><td>Validate all patch files for schema correctness</td><td>Yes — read-only</td></tr>
+        <tr><td><code>npm run data:nupath</code></td><td>Dry-run: fetch NUPath from Tableau + catalog fallback</td><td>Yes — read-only</td></tr>
+        <tr><td><code>npm run data:nupath:write</code></td><td>Fetch NUPath and write <code>data/nupath-map.json</code></td><td>Caution — overwrites map file</td></tr>
+        <tr><td><code>npm run data:nupath:apply:write</code></td><td>Apply <code>data/nupath-map.json</code> to <code>all-courses.json</code></td><td>Caution — overwrites nuPath fields</td></tr>
+        <tr><td><code>npm run dev:pw</code></td><td>Generate a new PBKDF2 password hash for the dev portal auth</td><td>Yes — prints to stdout only</td></tr>
+        <tr><td><code>npm run test</code></td><td>Run all unit tests (rotate logic + CS2100 live check)</td><td>Yes</td></tr>
+        <tr><td><code>node scripts/fix-pooled-requirements.js</code></td><td>Post-process graduatenu JSON files after a sync</td><td>Caution — modifies <code>public/majors/</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>End-of-semester checklist</h2>
+    <p>Run through this at the start of each semester (January, May, September):</p>
+    <ul>
+      <li>Open Dev Portal locally → Changes tab — scan for any unexpected bulk changes since last semester.</li>
+      <li>Work tab → Catalog Check → Launch Check — review all discrepancy categories, apply the ones that look correct.</li>
+      <li>Work tab → NUPath Update → Manual scan — apply attribute updates from Tableau.</li>
+      <li>Create patch files for any known catalog errors (catalog wrong, our data correct).</li>
+      <li>If a new catalog year is available upstream in graduatenu, sync <code>public/majors/</code> and run <code>fix-pooled-requirements.js</code>.</li>
+      <li><code>npm run build</code> locally → verify in Preview tab across iPhone, iPad, Desktop.</li>
+      <li>Work tab → Review &amp; Push → push to <code>main</code> — CI deploys in ~2 minutes.</li>
+    </ul>
+
+    <h2>Environment setup (first time)</h2>
+    <pre class="code-block">
+git clone https://github.com/nayugu/nu-map.git
+cd nu-map
+npm install
+npm run dev    # Vite on :5173, dev portal backend on :3333
+</pre>
+    <p>Node 18+ required. No environment variables needed — the dev portal password is a PBKDF2 hash embedded in the client HTML. The portal performs no privileged server operations.</p>
+
+  </main>
+</div>
+<script src="../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

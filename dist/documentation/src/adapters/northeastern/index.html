@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>northeastern/ adapter — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/adapters/northeastern">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">adapters/</a><span class="sep"> / </span><strong>northeastern/</strong>
+    </div>
+
+    <h1>northeastern/ <span class="badge purple">Reference implementation</span></h1>
+    <p class="lead">Northeastern University's full adapter — every institution-specific value and rule in one folder. Eight files, one per port. This is the reference implementation to copy when forking for a new school.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">adapters/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Wired in</div><div class="nb-value"><code>src/config.js</code> via <code>wire(northeasternOverrides)</code></div></div>
+      <div class="nb-group"><div class="nb-label">Overrides all 8 ports</div><div class="nb-value">institution, calendar, creditSystem, attributeSystem, specialTerms, majorRequirements, courseCatalog, localization</div></div>
+    </div>
+
+    <h2>File map</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>File</th><th>Port</th><th>Key values</th></tr></thead>
+      <tbody>
+        <tr><td><code>institution.js</code></td><td>IInstitution</td><td>id <code>"northeastern"</code>, name "Northeastern University", prefix <code>"ncp"</code></td></tr>
+        <tr><td><code>calendar.js</code></td><td>ICalendar</td><td>Fall/Spring (weight 1.0), sumA/sumB (weight 0.5), start year 2026</td></tr>
+        <tr><td><code>creditSystem.js</code></td><td>ICreditSystem</td><td>unitName <code>"SH"</code>, standard 4, full-time min 12, semester max 22</td></tr>
+        <tr><td><code>attributeSystem.js</code></td><td>IAttributeSystem</td><td>NUPath — 12 active codes, 1 legacy (WF), 3×4 grid</td></tr>
+        <tr><td><code>specialTerms.js</code></td><td>ISpecialTerms</td><td>Co-op (4mo/6mo, grants EX), Full-Time Internship (2mo/4mo, no grants)</td></tr>
+        <tr><td><code>majorRequirements.js</code></td><td>IMajorRequirements</td><td>Strips <code>_(location)</code> suffixes, extracts location tags</td></tr>
+        <tr><td><code>courseCatalog.js</code></td><td>ICourseCatalog</td><td>Local: <code>public/northeastern/all-courses.json</code>, fallback: SearchNEU API</td></tr>
+        <tr><td><code>localization.js</code></td><td>ILocalization</td><td>3 disclaimer bullets: unofficial status, DegreeWorks authority, data freshness</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>calendar.js — semester weights</h2>
+    <p>NU's academic year uses four semester types. Their weights are the foundation of all span arithmetic — any duration with <code>weight &gt; semesterSlotWeight</code> spills into the next slot.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>id</th><th>label</th><th>weight</th><th>optional</th><th>months</th></tr></thead>
+      <tbody>
+        <tr><td><code>fall</code></td><td>Fall</td><td>1.0</td><td>false</td><td>Sep–Dec</td></tr>
+        <tr><td><code>spring</code></td><td>Spring</td><td>1.0</td><td>false</td><td>Jan–May</td></tr>
+        <tr><td><code>sumA</code></td><td>Summer 1</td><td>0.5</td><td>true</td><td>May–Jun</td></tr>
+        <tr><td><code>sumB</code></td><td>Summer 2</td><td>0.5</td><td>true</td><td>Jul–Aug</td></tr>
+      </tbody>
+    </table></div>
+    <p>Year total: 1.0 + 1.0 + 0.5 + 0.5 = 3.0. The <code>weight</code> field on each semester type is the sole input to span arithmetic — <code>termSpans(termWeight, semWeight)</code> in <code>specialTermUtils.js</code> uses these values directly.</p>
+
+    <h2>specialTerms.js — co-op and internship</h2>
+    <p>The two term types reflect NU's co-op program and optional internship policy. The key insight is the <code>weight</code> vs. <code>duration</code> distinction: <code>duration</code> is the calendar length stored in the plan; <code>weight</code> drives the span logic in the grid.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Type</th><th>Duration</th><th>Weight</th><th>Spans</th><th>Grants</th></tr></thead>
+      <tbody>
+        <tr><td>Co-op (<code>"coop"</code>)</td><td>4 months</td><td>1.0</td><td>One fall/spring; sumA→sumB if placed in summer</td><td>EX (Integration Experience)</td></tr>
+        <tr><td>Co-op (<code>"coop"</code>)</td><td>6 months</td><td>2.0</td><td>Always spans two consecutive full-semester slots</td><td>EX</td></tr>
+        <tr><td>Internship (<code>"intern"</code>)</td><td>2 months</td><td>0.5</td><td>One summer half-session only</td><td>none</td></tr>
+        <tr><td>Internship (<code>"intern"</code>)</td><td>4 months</td><td>1.0</td><td>One fall/spring; sumA→sumB if placed in summer</td><td>none</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>attributeSystem.js — NUPath</h2>
+    <p>13 attributes total. 12 are displayed in the 3×4 grad panel grid. The 13th (<code>WF</code>) is a legacy code that appears in old course data and is needed for PDF export label resolution but no longer awarded as an active requirement.</p>
+    <div class="two-col">
+      <div>
+        <h3>Grid layout (3×4)</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td>ND</td><td>EI</td><td>IC</td><td>FQ</td></tr>
+            <tr><td>SI</td><td>AD</td><td>DD</td><td>ER</td></tr>
+            <tr><td>WD</td><td>WI</td><td>EX</td><td>CE</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div>
+        <h3>Full label map</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td><code>ND</code></td><td>Natural/Designed World</td></tr>
+            <tr><td><code>EI</code></td><td>Creative Express/Innov</td></tr>
+            <tr><td><code>IC</code></td><td>Interpreting Culture</td></tr>
+            <tr><td><code>FQ</code></td><td>Formal/Quant Reasoning</td></tr>
+            <tr><td><code>SI</code></td><td>Societies/Institutions</td></tr>
+            <tr><td><code>AD</code></td><td>Analyzing/Using Data</td></tr>
+            <tr><td><code>DD</code></td><td>Difference/Diversity</td></tr>
+            <tr><td><code>ER</code></td><td>Ethical Reasoning</td></tr>
+            <tr><td><code>WF</code></td><td>1st Yr Writing (legacy)</td></tr>
+            <tr><td><code>WD</code></td><td>Adv Writing Disc</td></tr>
+            <tr><td><code>WI</code></td><td>Writing Intensive</td></tr>
+            <tr><td><code>EX</code></td><td>Integration Experience</td></tr>
+            <tr><td><code>CE</code></td><td>Capstone Experience</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <p><code>getCoverage(placements, courseMap, grantedAttrs)</code> — iterates all placed courses, unions their <code>attributes</code> arrays, then adds everything from <code>grantedAttrs</code> (which carries EX from placed co-ops, computed by <code>computeGrantedAttrs()</code>).</p>
+
+    <h2>index.js — wiring</h2>
+    <p>Imports all 8 adapter files and re-exports them as a typed <code>overrides</code> object. This is what <code>wire()</code> in <code>src/config.js</code> receives.</p>
+    <pre><code><span class="cmt">// src/adapters/northeastern/index.js</span>
+import nuInstitution       from "./institution.js";
+import nuCalendar          from "./calendar.js";
+<span class="cmt">// ... 6 more imports</span>
+
+/** @type {import('../../ports/index.js').AdapterOverrides} */
+const overrides = {
+  institution:       nuInstitution,
+  calendar:          nuCalendar,
+  <span class="cmt">// ... 6 more ports</span>
+};
+export default overrides;</code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

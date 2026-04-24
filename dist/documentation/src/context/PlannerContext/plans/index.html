@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plans &amp; Persistence — PlannerContext — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context/PlannerContext/plans">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../../">src/</a><span class="sep"> / </span><a href="../../">context/</a><span class="sep"> / </span><a href="../">PlannerContext</a><span class="sep"> / </span><strong>plans</strong>
+    </div>
+
+    <h1>Plans &amp; Persistence <span class="badge purple">PlannerContext subsystem</span></h1>
+    <p class="lead">A user can maintain multiple independent plans. Each plan is a named slot in localStorage. PlannerContext manages the plan index, active plan pointer, switching, and auto-save. The persistence layer itself (<a href="../../../data/persistence/">persistence.js</a>) only handles serialization — all logic for <em>when</em> to save lives here.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">PlannerContext.jsx</a></div></div>
+      <div class="nb-group"><div class="nb-label">Persistence module</div><div class="nb-value"><a href="../../../data/persistence/">persistence.js</a> — loadSaved, saveState, clearState</div></div>
+      <div class="nb-group"><div class="nb-label">Undo/redo scope</div><div class="nb-value">Per-plan — undo/redo stacks are cleared on switchPlan</div></div>
+    </div>
+
+    <h2>Multi-plan storage layout</h2>
+    <p>Three localStorage layers hold the multi-plan state. The index and active pointer are small; full plan data (potentially large) lives in per-plan keys.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    subgraph LS["localStorage"]
+        IDX["ncp-plan-index\n[{id, name}, ...]"]
+        ACT["ncp-active-plan\nplanId string"]
+        D1["ncp-plan-data-plan_1\nfull plan JSON"]
+        D2["ncp-plan-data-plan_2\nfull plan JSON"]
+    end
+    PC["PlannerContext"]
+
+    PC -->|"write — plans[] changed"| IDX
+    PC -->|"write — activePlanId changed"| ACT
+    PC -->|"write — any state change\n+ immediately on switchPlan"| D1
+    PC -->|"write — any state change\n+ immediately on switchPlan"| D2
+    IDX -->|"read on mount"| PC
+    ACT -->|"read on mount → which plan to load"| PC
+    D1 -->|"read when activePlanId changes"| PC
+    D2 -->|"read when activePlanId changes"| PC
+      </div>
+      <div class="caption">Each plan gets its own <code>ncp-plan-data-{id}</code> key. Switching plans triggers an immediate non-debounced save of the current plan before loading the new one.</div>
+    </div>
+
+    <h2>switchPlan sequence</h2>
+    <p>The critical invariant is that the current plan is always saved <em>before</em> the switch, so no edits are lost if the browser crashes or the tab is closed mid-switch.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant H as Header
+    participant PC as PlannerContext
+    participant LS as localStorage
+
+    U->>H: click plan name
+    H->>PC: switchPlan(newId)
+    PC->>LS: write ncp-plan-data-{currentId} immediately
+    note over PC,LS: save-before-switch — prevents data loss on crash
+    PC->>PC: setActivePlanId(newId)
+    note over PC: useEffect([activePlanId]) fires async
+    PC->>LS: read ncp-plan-data-{newId}
+    alt plan data found
+        LS-->>PC: plan JSON
+        PC->>PC: restorePlan(d) — hydrates all React state
+        PC->>LS: write ncp-ent/grad sem/year (cohort follows active plan)
+    else no data (brand-new plan)
+        PC->>PC: resetPlanToDefaults()
+    end
+    PC->>PC: reset bankSearch / bankTab / bankSort
+      </div>
+      <div class="caption">The save-before-switch is synchronous and immediate — not the debounced auto-save. The undo/redo stacks are also cleared at this point so Cmd+Z does not reach across plans.</div>
+    </div>
+
+    <h2>What captureCurrentPlan() serializes</h2>
+    <p>Every call to <code>captureCurrentPlan()</code> snapshots the current React state into a plain object. This is identical to the export JSON — File → Export and the auto-save write the same structure.</p>
+    <pre><code>{
+  placements,      <span class="cmt">// { courseId → semId }</span>
+  specialTermPl,   <span class="cmt">// { termId → { typeId, semId, duration, company, companyDomain, subline } }</span>
+  semOrders,       <span class="cmt">// { semId → courseId[] }</span>
+  shOverrides,     <span class="cmt">// { courseId → number }</span>
+  bonusSH,         <span class="cmt">// { semId → number }</span>
+  currentSemId,    <span class="cmt">// string — real-world current semester</span>
+  offeredOverrides,<span class="cmt">// manual offered-status overrides</span>
+  collapsedSubs,   <span class="cmt">// collapsed substitution groups</span>
+  major, conc,     <span class="cmt">// graduation panel selections</span>
+  minor1, minor2,
+  placedOut        <span class="cmt">// string[] — serialized from Set</span>
+}</code></pre>
+
+    <h2>Cohort settings and plan switching</h2>
+    <p><code>ncp-ent-sem/year</code> and <code>ncp-grad-sem/year</code> are stored as global localStorage keys, but <code>restorePlan()</code> also writes them when loading a plan. This means the "global" cohort settings always reflect the most recently active plan — switching plans updates the cohort to that plan's entry/graduation dates.</p>
+
+    <h2>Persistence auto-save</h2>
+    <p>A <code>useEffect</code> watching all persisted state calls <code>saveCurrentPlanToSlot()</code> on every change, skipping the first render via an <code>isFirstRender</code> ref. The call is debounced to avoid hammering localStorage on rapid state changes (e.g., drag reordering). The plan object written to localStorage matches the export format exactly.</p>
+
+    <h2>localStorage key reference</h2>
+    <pre><code><span class="cmt">// Written by PlannerContext on plan changes</span>
+ncp-plan-index        <span class="cmt">// [{id, name}] — plan list</span>
+ncp-active-plan       <span class="cmt">// currently loaded plan ID</span>
+ncp-plan-data-{id}    <span class="cmt">// full plan JSON per plan</span>
+
+<span class="cmt">// Cohort — reflect most-recently-active plan</span>
+ncp-ent-sem/year      <span class="cmt">// entry semester and year</span>
+ncp-grad-sem/year     <span class="cmt">// graduation semester and year</span>
+
+<span class="cmt">// Global — not cleared on plan reset</span>
+ncp-starred           <span class="cmt">// starred course IDs (global, not per-plan)</span>
+ncp-sticky-courses    <span class="cmt">// boolean — courses stay in semester on cohort shift</span>
+ncp-zoom              <span class="cmt">// manual zoom level</span>
+ncp-theme             <span class="cmt">// theme name string</span>
+ncp-collapse-other-credits <span class="cmt">// boolean (default true) — collapse ≤2 SH section</span>
+ncp-show-cont-logo    <span class="cmt">// boolean (default true) — logo on co-op/intern continuation rows</span></code></pre>
+
+    <p>See <a href="../../../data/persistence/">persistence.js</a> for the full key reference including non-plan keys.</p>
+
+  </main>
+</div>
+<script src="../../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

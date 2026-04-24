@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>context/ — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb"><a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>context/</strong></div>
+
+    <h1>context/ <span class="badge purple">State layer</span></h1>
+    <p class="lead">Three React contexts that bridge adapter data, application state, and UI. <strong>InstitutionContext</strong> injects the adapter bundle; <strong>PlannerContext</strong> owns all application state; <strong>ThemeContext</strong> manages CSS variable injection.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Imports from</div><div class="nb-value">adapters/ (InstitutionContext), core/, data/ (PlannerContext)</div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">All UI components via usePlanner() / usePort() / useTheme()</div></div>
+    </div>
+
+    <h2>Children</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./InstitutionContext/">
+        <div class="cc-type">context (~75 lines)</div>
+        <div class="cc-name">InstitutionContext.jsx</div>
+        <div class="cc-desc">Injects the adapter bundle into the React tree. Wrap root once with InstitutionProvider, then call usePort(IPortName) anywhere to read an implementation.</div>
+      </a>
+      <a class="child-card" href="./PlannerContext/">
+        <div class="cc-type">context (~1,600 lines)</div>
+        <div class="cc-name">PlannerContext.jsx</div>
+        <div class="cc-desc">All application state: placements, cohort, drag-drop, undo/redo, multi-plan, violations, persistence. The hub of everything.</div>
+      </a>
+      <a class="child-card" href="./ThemeContext/">
+        <div class="cc-type">context (~65 lines)</div>
+        <div class="cc-name">ThemeContext.jsx</div>
+        <div class="cc-desc">Reads theme from localStorage, injects 100+ CSS variables onto &lt;html&gt;. Cycle between dark/light themes.</div>
+      </a>
+    </div>
+
+    <h2>How UI components consume context</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    IC["InstitutionContext"]
+    PC["PlannerContext"]
+    TC["ThemeContext"]
+
+    IC -->|"usePort(IAttributeSystem)"| GP["GradPanel"]
+    IC -->|"usePort(ISpecialTerms)"| BP["BankPanel"]
+    IC -->|"usePort(ISpecialTerms)"| SR["SemRow / SummerRow"]
+    IC -->|"useInstitution()"| PC
+
+    PC -->|"usePlanner()"| H["Header"]
+    PC -->|"usePlanner()"| BP
+    PC -->|"usePlanner()"| GP
+    PC -->|"usePlanner()"| SR
+    PC -->|"usePlanner()"| CC["CourseCard"]
+    PC -->|"usePlanner()"| IP["InfoPanel"]
+
+    TC -->|"useTheme()"| H
+    TC -->|"useTheme()"| App["App.jsx"]
+
+    style IC fill:#fbefff,stroke:#8250df
+    style PC fill:#fbefff,stroke:#8250df
+    style TC fill:#fbefff,stroke:#8250df
+      </div>
+      <div class="caption">InstitutionContext feeds adapter data directly to components that need it. PlannerContext is the state hub for everything else.</div>
+    </div>
+
+    <h2>Provider nesting order</h2>
+    <p>The three providers must nest in this exact order in <code>App.jsx</code>. InstitutionProvider is outermost because PlannerContext calls <code>useInstitution()</code> internally during initialization.</p>
+    <pre><code><span class="cmt">// src/App.jsx — required nesting order</span>
+&lt;InstitutionProvider adapter={institutionAdapter}&gt;
+  &lt;ThemeProvider&gt;
+    &lt;PlannerProvider&gt;
+      &lt;PlannerApp /&gt;
+    &lt;/PlannerProvider&gt;
+  &lt;/ThemeProvider&gt;
+&lt;/InstitutionProvider&gt;</code></pre>
+
+    <h2>The no-prop-drilling contract</h2>
+    <p>No component passes state down via props (except trivial configuration like <code>semId</code> to a row). All shared state comes from <code>usePlanner()</code>. Institution config comes from <code>usePort(IPortName)</code>. This makes it easy to add features — any component can read or mutate any state without threading props through the tree.</p>
+    <p>The trade-off: adding new state means editing PlannerContext.jsx, which is already large. When adding state, check first whether it belongs in the context (shared across components) or as local component state (only needed in one place).</p>
+
+    <h2>Context initialization sequence</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant App
+    participant IC as InstitutionContext
+    participant TC as ThemeContext
+    participant PC as PlannerContext
+    participant CL as courseLoader
+    participant PS as persistence
+
+    App->>IC: mount InstitutionProvider(adapter)
+    IC->>IC: store adapter bundle in context
+
+    App->>TC: mount ThemeProvider
+    TC->>TC: read ncp-theme from localStorage
+    TC->>TC: inject CSS variables onto &lt;html&gt;
+
+    App->>PC: mount PlannerProvider
+    PC->>IC: useInstitution() → adapter
+    PC->>PS: loadSaved(storagePrefix)
+    PS-->>PC: saved plan state (or defaults)
+    PC->>PC: hydrate placements, cohort, major, etc.
+    PC->>CL: fetchCourses(courseCatalog)
+    CL-->>PC: Course[] (from all-courses.json)
+    PC->>PC: normalize → courseMap
+    PC->>PC: compute derived state (SEMESTERS, violations)
+      </div>
+      <div class="caption">Startup sequence. InstitutionProvider is synchronous and must complete before PlannerProvider mounts. Theme is injected synchronously; courses load asynchronously.</div>
+    </div>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

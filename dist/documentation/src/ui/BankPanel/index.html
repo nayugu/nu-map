@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BankPanel.jsx — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ui/BankPanel">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ui/</a><span class="sep"> / </span><strong>BankPanel.jsx</strong>
+    </div>
+
+    <h1>BankPanel.jsx <span class="badge blue">UI component</span></h1>
+    <p class="lead">The right sidebar. Toggles between two views: a searchable course bank (unplaced courses) and the graduation requirements panel. Also contains the placed-out section, substitution UI, and a user-resizable width handle.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">ui/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">~850</div></div>
+      <div class="nb-group"><div class="nb-label">Children rendered</div><div class="nb-value">CourseCard (bank), GradPanel (grad tab)</div></div>
+    </div>
+
+    <h2>View structure</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TD
+    BP["BankPanel"]
+    BP --> TAB["Tab bar: 📚 Bank | 🎓 Grad"]
+    TAB -->|"Bank tab"| BV["Course Bank View"]
+    TAB -->|"Grad tab"| GP["GradPanel"]
+
+    BV --> SEARCH["🔍 Search + Sort controls"]
+    BV --> TABS2["All | Starred | Search results"]
+    BV --> GROUPS["Course groups by subject"]
+    GROUPS --> CC["CourseCard ×N (bank mode)"]
+    BV --> COOP["Co-op/Internship templates"]
+    BV --> PO["Placed-out section (collapsible)"]
+    BV --> SUB["Substitution UI"]
+      </div>
+    </div>
+
+    <h2>Course bank — filtering and sorting</h2>
+
+    <div class="state-block"><div class="sb-name">bankSearch</div><div class="sb-type">string</div><div class="sb-desc">Current search query. Fuzzy-matched against <code>course.id</code> (e.g. "CS3500") and <code>course.title</code>. Stored in PlannerContext so the search state persists when switching tabs.</div></div>
+    <div class="state-block"><div class="sb-name">bankTab</div><div class="sb-type">string</div><div class="sb-desc">"all" | "starred" | "search". Controls which course subset is shown.</div></div>
+    <div class="state-block"><div class="sb-name">bankSort</div><div class="sb-type">string</div><div class="sb-desc">"az" | "za" | "shAsc" | "shDesc". Applied after filtering.</div></div>
+
+    <p>Courses are grouped by subject code (e.g., all "CS" courses under one header) when in "all" mode. In "search" and "starred" modes, they're shown as a flat list in the selected sort order.</p>
+
+    <h2>Co-op and internship templates</h2>
+    <p>Fixed blocks at the bottom of the bank, always visible regardless of search. Defined in <code>constants.js → COOP_TERMS / INTERNSHIP_TERMS</code>. Dragging one of these into a semester creates a work/internship block rather than a course placement. They're identified by a special prefix in their ID (<code>"coop-"</code> or <code>"int-"</code>).</p>
+
+    <h2>Placed-out section</h2>
+    <p>Courses in <code>placedOut</code> are shown in a collapsible list at the bottom. They can be dragged back into semesters or back into the bank. Clicking the ✕ on a placed-out card calls <code>onDropBank(courseId)</code> to return it.</p>
+
+    <h2>Substitution UI</h2>
+    <p>Two search fields: "From course" and "To course." Setting both calls <code>addSubstitution({ from, to })</code> in context. The substitution means "I took FROM, let it count as TO in graduation requirements." Stored as <code>substitutions</code> array in plan state.</p>
+
+    <h2>Resizable width</h2>
+    <p>A drag handle on the left edge of BankPanel lets users adjust the sidebar width. The width is stored in <code>bankWidth</code> (context state, persisted to localStorage). Min: 200px, max: 500px. Implemented with a <code>mousedown</code> / <code>mousemove</code> listener on the handle div.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

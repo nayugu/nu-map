@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drag &amp; Drop — PlannerContext — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context/PlannerContext/drag-drop">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../../">src/</a><span class="sep"> / </span><a href="../../">context/</a><span class="sep"> / </span><a href="../">PlannerContext</a><span class="sep"> / </span><strong>drag-drop</strong>
+    </div>
+
+    <h1>Drag &amp; Drop <span class="badge purple">PlannerContext subsystem</span></h1>
+    <p class="lead">Two parallel input systems — the browser's HTML5 Drag and Drop API (mouse) and a custom touch implementation — converge on the same four handlers. The central design constraint is that the touch system must work on iOS Safari, which has poor native DnD support.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">PlannerContext.jsx</a></div></div>
+      <div class="nb-group"><div class="nb-label">Shared state</div><div class="nb-value"><code>dragInfo</code> — set by both systems, read by handlers and UI</div></div>
+      <div class="nb-group"><div class="nb-label">Validation</div><div class="nb-value"><code>canDropSem(semId)</code> — called on every dragover to decide if a drop is legal</div></div>
+    </div>
+
+    <h2>Overall pipeline</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    subgraph Mouse["Mouse — HTML5 DnD API"]
+        MS["mousedown on draggable element\nonDragStart sets dragInfo"]
+        MS --> MOV["ondragover fires on potential targets\ncanDropSem() → e.preventDefault() if valid"]
+        MOV --> MDROP["ondrop fires\nreads dragInfo"]
+    end
+    subgraph Touch["Touch — custom document listener"]
+        TS["touchstart on [data-drag-id]\nclone ghost, dim original, set dragInfo via refs"]
+        TS --> TMOV["touchmove\nmove ghost, update hoveredSem via elementFromPoint"]
+        TMOV --> TDROP["touchend\nelementFromPoint → find target\nbounding-rect fallback for placed-out zone"]
+    end
+
+    MDROP --> HANDLER
+    TDROP --> HANDLER
+
+    HANDLER{"Which target?"}
+    HANDLER -->|"data-sem-id"| DROP["onDrop(semId)\nplace / move item\ncoreq partners move silently"]
+    HANDLER -->|"data-drop-bank"| BANK["onDropBank()\ncourse → bank\nco-op/intern → deleted"]
+    HANDLER -->|"data-drop-placedout"| PLOUT["onDropPlacedOut()\ncourse → placedOut set\nremoved from placements"]
+    HANDLER -->|"card data-drag-id"| REORDER["onDropOnCard()\nreorder within semester\nswap in semOrders"]
+    HANDLER -->|"no valid target"| CANCEL["setDragInfo(null)\ncancel"]
+      </div>
+      <div class="caption">Both input systems set the same <code>dragInfo</code> and call the same handlers. The touch system uses refs (not React state) during the gesture to avoid re-renders.</div>
+    </div>
+
+    <h2>dragInfo shape</h2>
+    <pre><code>{ id: string,        <span class="cmt">// item ID — null for new term templates dragged from the bank</span>
+  type: string,      <span class="cmt">// "course" | "specialTerm"</span>
+  typeId?: string,   <span class="cmt">// adapter term type — e.g. "coop" | "intern" — only for "specialTerm"</span>
+  fromSem: string,   <span class="cmt">// source semId (null if dragging from bank/template)</span>
+  duration?: number  <span class="cmt">// months — only present for "specialTerm"</span>
+}</code></pre>
+
+    <h2>Drop targets</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Target</th><th>Data attribute</th><th>Types accepted</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Semester zone</td><td><code>data-sem-id</code></td><td>course, specialTerm</td><td><code>onDrop(semId)</code> — places or moves item. For courses: coreq partners move silently to the same semester.</td></tr>
+        <tr><td>Bank panel</td><td><code>data-drop-bank</code></td><td>course, specialTerm</td><td><code>onDropBank()</code> — removes placement. Special terms deleted entirely; course returns to bank.</td></tr>
+        <tr><td>Placed-out zone</td><td><code>data-drop-placedout</code></td><td>course only</td><td><code>onDropPlacedOut()</code> — adds to <code>placedOut</code> set, removes from <code>placements</code>.</td></tr>
+        <tr><td>Another course card</td><td><code>data-drag-id</code> on target</td><td>course only</td><td><code>onDropOnCard(targetId, semId)</code> — reorders within the semester by swapping positions in <code>semOrders</code>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Drop validation</h2>
+    <p><code>canDropSem(semId)</code> is called on every <code>dragover</code> event. If it returns false, <code>e.preventDefault()</code> is not called and the browser shows the "no drop" cursor. The same function runs again inside <code>onDrop</code> as a safety check before committing the mutation.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Item</th><th>Duration</th><th>Valid semester types</th><th>Blocked if</th></tr></thead>
+      <tbody>
+        <tr><td>Course</td><td>—</td><td>Any</td><td>Semester is occupied by a special term (start or continuation row)</td></tr>
+        <tr><td>Co-op (<code>typeId: "coop"</code>)</td><td>4-month</td><td>Fall or spring (single row); summer (normalizes to sumA, spans sumA→sumB)</td><td>Any other term in start or continuation slot</td></tr>
+        <tr><td>Co-op (<code>typeId: "coop"</code>)</td><td>6-month</td><td>Spring→sumA or sumB→Fall only</td><td>Any other term in either of the two spanned semesters</td></tr>
+        <tr><td>Internship (<code>typeId: "intern"</code>)</td><td>2-month</td><td>Summer only (single row)</td><td>Any other term already there</td></tr>
+        <tr><td>Internship (<code>typeId: "intern"</code>)</td><td>4-month</td><td>Fall or spring (single); summer (normalizes to sumA, spans sumA→sumB)</td><td>Any other term in start or continuation slot</td></tr>
+        <tr><td>Custom type</td><td>any</td><td>Determined by weight-based span logic</td><td>Any slot already occupied (<code>isSlotOccupied</code>)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Corequisite partner movement</h2>
+    <p>When a course is dropped onto a semester or the bank, PlannerContext scans <code>allEdges</code> for all corequisite partners of the dragged course and moves them to the same destination. This is silent — no confirmation, no visual indicator. The partners are also removed from <code>semOrders</code> in their old semesters. This means dragging one course in a coreq pair always relocates both.</p>
+
+    <h2>Touch drag pipeline</h2>
+    <p>A single <code>touchstart</code> / <code>touchmove</code> / <code>touchend</code> listener is attached to <code>document</code> at mount. All drag state lives in refs (not React state) to avoid triggering re-renders during the gesture. <code>INPUT</code>, <code>BUTTON</code>, <code>SELECT</code>, and <code>TEXTAREA</code> elements receive native touch handling and do not trigger drag.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant Finger
+    participant Doc as document listener
+    participant Ghost as Ghost element
+    participant Context as PlannerContext
+
+    Finger->>Doc: touchstart on [data-drag-id]
+    Doc->>Ghost: cloneNode(true) — position:fixed, z-index:9999, opacity:0.92, scale(1.06)
+    Doc->>Doc: dim original card (opacity 0.3, pointerEvents none)
+    Doc->>Context: setDragInfo({id, type, fromSem, duration})
+
+    loop touchmove
+      Finger->>Doc: touchmove
+      Doc->>Ghost: reposition ghost to finger coordinates
+      Doc->>Context: setHoveredSem via elementFromPoint
+    end
+
+    Finger->>Doc: touchend
+    Doc->>Ghost: remove ghost element
+    Doc->>Doc: restore original card opacity + pointerEvents
+    Doc->>Doc: elementFromPoint(touchX, touchY) → find drop target
+    note over Doc: priority order: data-drop-placedout (with bounding-rect fallback),<br/>then data-drop-bank, then data-sem-id
+    Doc->>Context: call onDropPlacedOut / onDropBank / onDrop
+      </div>
+      <div class="caption">Ghost position is offset by the initial finger-to-card-corner distance so the card doesn't jump when the drag starts.</div>
+    </div>
+
+    <h3>Placed-out bounding-rect fallback</h3>
+    <p><code>target.closest('[data-drop-placedout]')</code> can miss its target when the ghost element is positioned over it — <code>elementFromPoint</code> returns the ghost instead of the container below. The code handles this by iterating all <code>[data-drop-placedout]</code> elements and doing a manual <code>getBoundingClientRect()</code> hit test as a fallback when <code>closest()</code> returns null.</p>
+
+  </main>
+</div>
+<script src="../../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

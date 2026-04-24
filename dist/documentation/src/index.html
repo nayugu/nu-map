@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src/ — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div>
+    </div>
+    <div id="nav-tree"></div>
+    <hr class="nav-divider">
+    <a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../">nu-map/documentation</a><span class="sep"> / </span><strong>src/</strong>
+    </div>
+
+    <h1>src/ <span class="badge gray">~9,000 lines</span></h1>
+    <p class="lead">All application source code. Six layers that depend only inward: UI consumes Context, Context drives Core and Data, and all institution-specific behavior is isolated behind the ports/adapters boundary so the planner can be forked for any university.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">Nu-Map root</a></div></div>
+      <div class="nb-group"><div class="nb-label">Entry</div><div class="nb-value"><code>main.jsx</code> → <code>App.jsx</code></div></div>
+      <div class="nb-group"><div class="nb-label">Children</div><div class="nb-value">ports/, adapters/, context/, core/, data/, ui/</div></div>
+    </div>
+
+    <h2>Children</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./ports/">
+        <div class="cc-type">interface contracts</div>
+        <div class="cc-name">ports/</div>
+        <div class="cc-desc">Eight JSDoc-only files. Define the data shapes every institution adapter must provide — the contract boundary between app core and any university.</div>
+      </a>
+      <a class="child-card" href="./adapters/">
+        <div class="cc-type">institution implementations</div>
+        <div class="cc-name">adapters/</div>
+        <div class="cc-desc">Every institution-specific value and rule. Swap the import in config.js and the planner reconfigures for a different school.</div>
+      </a>
+      <a class="child-card" href="./context/">
+        <div class="cc-type">layer</div>
+        <div class="cc-name">context/</div>
+        <div class="cc-desc">InstitutionContext (adapter injection) + PlannerContext (all state) + ThemeContext (CSS vars). The bridge between UI and logic.</div>
+      </a>
+      <a class="child-card" href="./core/">
+        <div class="cc-type">layer</div>
+        <div class="cc-name">core/</div>
+        <div class="cc-desc">Pure domain logic: graduation checking, prereq evaluation, course normalization, semester grid, special term utilities.</div>
+      </a>
+      <a class="child-card" href="./data/">
+        <div class="cc-type">layer</div>
+        <div class="cc-name">data/</div>
+        <div class="cc-desc">I/O adapters: fetch courses, load majors, read/write localStorage. Each function takes port implementations as explicit parameters.</div>
+      </a>
+      <a class="child-card" href="./ui/">
+        <div class="cc-type">layer</div>
+        <div class="cc-name">ui/</div>
+        <div class="cc-desc">12 React components. All consume PlannerContext via usePlanner() and institution config via usePort(). No prop drilling.</div>
+      </a>
+    </div>
+
+    <h2>Layer dependency rules</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    UI["ui/\n12 components"]
+    CTX["context/\nInstitutionContext\nPlannerContext\nThemeContext"]
+    CORE["core/\npure functions"]
+    DATA["data/\nI/O only"]
+    PORTS["ports/\nJSDoc contracts"]
+    ADAPT["adapters/\nnortheastern/\ngeneric/"]
+
+    UI -->|"usePlanner()\nusePort()"| CTX
+    CTX -->|"pure fn calls"| CORE
+    CTX -->|"async I/O\n(ports as params)"| DATA
+    ADAPT -->|"implements"| PORTS
+    CTX -->|"wire()\nuseInstitution()"| ADAPT
+
+    style UI fill:#ddf4ff,stroke:#0969da
+    style CTX fill:#fbefff,stroke:#8250df
+    style CORE fill:#dafbe1,stroke:#1a7f37
+    style DATA fill:#fff8c5,stroke:#9a6700
+    style PORTS fill:#fef3c7,stroke:#d97706
+    style ADAPT fill:#ffe4e6,stroke:#e11d48
+      </div>
+      <div class="caption">Import direction. Core never imports React or adapters. UI never imports adapters directly — always via usePort().</div>
+    </div>
+
+    <h2>Entry points: main.jsx + App.jsx</h2>
+    <p><code>main.jsx</code> is 4 lines — it mounts React in StrictMode and renders <code>App</code>.</p>
+    <p><code>App.jsx</code> wraps the app in three nested providers in this order:</p>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">App() → JSX</div>
+      <div class="fn-desc">
+        Wraps everything in <code>&lt;InstitutionProvider adapter={institutionAdapter}&gt;</code>,
+        then <code>&lt;ThemeProvider&gt;</code>, then <code>&lt;PlannerProvider&gt;</code>.
+        InstitutionProvider must be outermost because PlannerContext calls <code>useInstitution()</code> internally.
+        Inside those, <code>PlannerApp</code> renders the fixed-size shell and uses a
+        <code>ResizeObserver</code> to compute <code>uiScale = containerWidth / BASE_WIDTH</code>
+        so all pixel values in components can be written at one canonical desktop size.
+      </div>
+    </div>
+
+    <h2>File inventory</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>File</th><th>Layer</th><th>Lines</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>main.jsx</code></td><td>—</td><td>4</td><td>React root mount</td></tr>
+        <tr><td><code>App.jsx</code></td><td>—</td><td>~60</td><td>Provider wrapper + uiScale</td></tr>
+        <tr><td><code>config.js</code></td><td>—</td><td>~5</td><td>Single import that selects the active institution adapter</td></tr>
+        <tr><td><code>ports/IInstitution.js</code></td><td>Ports</td><td>~15</td><td>Identity metadata contract (id, name, storagePrefix…)</td></tr>
+        <tr><td><code>ports/ICalendar.js</code></td><td>Ports</td><td>~20</td><td>Semester types + weights contract</td></tr>
+        <tr><td><code>ports/ICreditSystem.js</code></td><td>Ports</td><td>~15</td><td>Credit unit naming + enrollment thresholds contract</td></tr>
+        <tr><td><code>ports/IAttributeSystem.js</code></td><td>Ports</td><td>~20</td><td>Gen-ed / NUPath grid + getCoverage() contract</td></tr>
+        <tr><td><code>ports/ISpecialTerms.js</code></td><td>Ports</td><td>~20</td><td>Co-op / internship types + attributeGrants contract</td></tr>
+        <tr><td><code>ports/IMajorRequirements.js</code></td><td>Ports</td><td>~10</td><td>fmtLabel / fmtLocation path helpers contract</td></tr>
+        <tr><td><code>ports/ICourseCatalog.js</code></td><td>Ports</td><td>~10</td><td>LOCAL_URL / API_URL data source contract</td></tr>
+        <tr><td><code>ports/ILocalization.js</code></td><td>Ports</td><td>~10</td><td>Disclaimers + UI copy contract</td></tr>
+        <tr><td><code>adapters/northeastern/</code></td><td>Adapters</td><td>~200</td><td>NU reference implementation — 8 files, 1 per port</td></tr>
+        <tr><td><code>adapters/generic/</code></td><td>Adapters</td><td>~60</td><td>Minimal no-op defaults for every port</td></tr>
+        <tr><td><code>adapters/wire.js</code></td><td>Adapters</td><td>~15</td><td>wire(overrides) — merges overrides on top of generic defaults</td></tr>
+        <tr><td><code>context/InstitutionContext.jsx</code></td><td>Context</td><td>~75</td><td>Adapter injection — InstitutionProvider + usePort()</td></tr>
+        <tr><td><code>context/PlannerContext.jsx</code></td><td>Context</td><td>~1,600</td><td>All application state</td></tr>
+        <tr><td><code>context/ThemeContext.jsx</code></td><td>Context</td><td>~65</td><td>CSS variable injection</td></tr>
+        <tr><td><code>core/gradRequirements.js</code></td><td>Core</td><td>~500</td><td>Graduation requirement checking</td></tr>
+        <tr><td><code>core/prereqEval.js</code></td><td>Core</td><td>~80</td><td>Prerequisite satisfaction</td></tr>
+        <tr><td><code>core/courseModel.js</code></td><td>Core</td><td>~120</td><td>Course normalization + edges</td></tr>
+        <tr><td><code>core/semGrid.js</code></td><td>Core</td><td>~80</td><td>Semester grid generation</td></tr>
+        <tr><td><code>core/planModel.js</code></td><td>Core</td><td>~200</td><td>Plan helpers + PDF export</td></tr>
+        <tr><td><code>core/specialTermUtils.js</code></td><td>Core</td><td>~40</td><td>resolveTermByDuration, termSpans, computeGrantedAttrs</td></tr>
+        <tr><td><code>core/themes.js</code></td><td>Core</td><td>~160</td><td>CSS variable token sets</td></tr>
+        <tr><td><code>core/constants.js</code></td><td>Core</td><td>~60</td><td>Generic compile-time constants (colors, palette)</td></tr>
+        <tr><td><em>course loading</em></td><td>Adapter</td><td>—</td><td>Handled by <code>courseCatalog.fetchAll()</code> — no standalone module</td></tr>
+        <tr><td><code>data/majorLoader.js</code></td><td>Data</td><td>~50</td><td>Fetch major requirements (takes majorRequirements port)</td></tr>
+        <tr><td><code>data/minorLoader.js</code></td><td>Data</td><td>~40</td><td>Fetch minor requirements (takes majorRequirements port)</td></tr>
+        <tr><td><code>data/persistence.js</code></td><td>Data</td><td>~30</td><td>localStorage read/write (takes storagePrefix)</td></tr>
+        <tr><td><code>ui/Header.jsx</code></td><td>UI</td><td>~780</td><td>Top bar: controls, plan management, settings</td></tr>
+        <tr><td><code>ui/BankPanel.jsx</code></td><td>UI</td><td>~850</td><td>Course bank + grad panel sidebar</td></tr>
+        <tr><td><code>ui/GradPanel.jsx</code></td><td>UI</td><td>~1,000</td><td>Graduation requirement tree UI</td></tr>
+        <tr><td><code>ui/SemRow.jsx</code></td><td>UI</td><td>~850</td><td>Semester row (fall/spring/special)</td></tr>
+        <tr><td><code>ui/SummerRow.jsx</code></td><td>UI</td><td>~850</td><td>Paired summer semester columns</td></tr>
+        <tr><td><code>ui/CourseCard.jsx</code></td><td>UI</td><td>~500</td><td>Draggable course tile</td></tr>
+        <tr><td><code>ui/InfoPanel.jsx</code></td><td>UI</td><td>~400</td><td>Bottom drawer for selected course</td></tr>
+        <tr><td><code>ui/RelationLines.jsx</code></td><td>UI</td><td>~100</td><td>SVG overlay for prereq/coreq lines</td></tr>
+      </tbody>
+    </table></div>
+
+  </main>
+</div>
+<script src="../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

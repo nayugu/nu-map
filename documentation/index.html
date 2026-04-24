@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nu-Map — Developer Documentation</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div>
+    </div>
+    <div id="nav-tree"></div>
+    <hr class="nav-divider">
+    <a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <h1>nu-map</h1>
+    <p class="lead">A zero-backend, single-page React degree planner for Northeastern University. Every piece of logic runs in the browser — no server, no database, no auth. Plans live in localStorage and export as JSON.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Type</div><div class="nb-value">Root — entire application</div></div>
+      <div class="nb-group"><div class="nb-label">Entry</div><div class="nb-value"><code>src/main.jsx</code> → <code>src/App.jsx</code></div></div>
+      <div class="nb-group"><div class="nb-label">Deploy</div><div class="nb-value">GitHub Pages + Netlify (static SPA)</div></div>
+      <div class="nb-group"><div class="nb-label">Stack</div><div class="nb-value">React 18, Vite 5, vanilla CSS vars</div></div>
+    </div>
+
+    <h2>Architecture overview</h2>
+    <p>The app uses a hexagonal architecture with a hard boundary between institution-specific config and the app core. All NU-specific values (semester types, NUPath codes, co-op rules, course catalog URL, disclaimers) live in <code>src/adapters/northeastern/</code>. The core is institution-agnostic. <strong>Swap one import in <code>config.js</code></strong> and the planner reconfigures for a different school.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph TB
+    subgraph ADAPT["Institution Layer  (src/adapters/ + src/ports/)"]
+        NU["northeastern/\n8 adapter files"]
+        GEN["generic/\nfallback defaults"]
+        W["wire(overrides)\n→ adapter bundle"]
+        NU --> W
+        GEN --> W
+    end
+    subgraph CTX["Context Layer  (src/context/)"]
+        IC["InstitutionContext\nusePort(IPortName)"]
+        PC["PlannerContext\nuseInstitution() + all state"]
+        TC["ThemeContext"]
+        W -->|"adapter bundle"| IC
+        IC -->|"useInstitution()"| PC
+    end
+    subgraph UI["UI Layer  (src/ui/)"]
+        H["Header"] --- BP["BankPanel"]
+        BP --- GP["GradPanel"]
+        GP --- SR["SemRow / SummerRow"]
+        SR --- CC["CourseCard"]
+        CC --- IP["InfoPanel"]
+    end
+    subgraph CORE["Core Logic  (src/core/)"]
+        CM["courseModel"] --- GR["gradRequirements"]
+        SG["semGrid"] --- PM["planModel"]
+        STU["specialTermUtils"]
+    end
+    subgraph DATA["Data Layer  (src/data/)"]
+        CL["courseLoader"] --- ML["majorLoader"]
+        ML --- PS["persistence"]
+    end
+
+    UI -->|"usePlanner()\nusePort()"| CTX
+    PC -->|"pure fn calls"| CORE
+    PC -->|"I/O (ports as params)"| DATA
+    DATA -->|"fetch"| FS[("public/northeastern/\nall-courses.json")]
+    DATA -->|"fetch"| GN[("external/graduatenu")]
+    DATA -->|"read/write"| LS[("localStorage")]
+
+    style ADAPT fill:#ffe4e6,stroke:#e11d48
+    style CTX fill:#fbefff,stroke:#8250df
+    style UI fill:#ddf4ff,stroke:#0969da
+    style CORE fill:#dafbe1,stroke:#1a7f37
+    style DATA fill:#fff8c5,stroke:#9a6700
+      </div>
+      <div class="caption">Full dependency graph. The red adapter layer is the only place with institution-specific values. Core has zero adapter imports.</div>
+    </div>
+
+    <h2>Source tree</h2>
+    <p>Navigate any node below to read its full documentation — methods, state, connections to siblings and parents.</p>
+
+    <div class="children-grid">
+      <a class="child-card" href="./architecture/">
+        <div class="cc-type">reference</div>
+        <div class="cc-name">architecture</div>
+        <div class="cc-desc">Full hexagonal architecture reference — how ports, adapters, core, data, and UI relate. The invariants. The forking guide. Start here.</div>
+      </a>
+      <a class="child-card" href="./src/">
+        <div class="cc-type">folder</div>
+        <div class="cc-name">src/</div>
+        <div class="cc-desc">All application source code: 6 layers, ~35 files, ~9,000 lines</div>
+      </a>
+    </div>
+
+    <h2>Key design decisions</h2>
+    <div class="two-col">
+      <div>
+        <h3>Hexagonal architecture</h3>
+        <p>Institution-specific values (semester weights, NUPath grid, co-op rules) are isolated in <code>src/adapters/northeastern/</code> behind JSDoc port contracts. The core is institution-agnostic. Fork the planner for any school by replacing one folder and one import.</p>
+
+        <h3>No backend, ever</h3>
+        <p>Zero hosting cost, no migrations, no auth. Plans persist in localStorage and export as JSON files. Course data is scraped and bundled at build time.</p>
+
+        <h3>React Context over Redux</h3>
+        <p>All state in <code>PlannerContext</code> (~1,600 lines). No action/reducer boilerplate. Any component reads or mutates any state with one <code>usePlanner()</code> call.</p>
+      </div>
+      <div>
+        <h3>Weight-based span arithmetic</h3>
+        <p>Semester types carry a <code>weight</code> (fall/spring = 1.0, sumA/sumB = 0.5). Special term durations carry a matching weight. A term spans into the next semester when <code>termWeight &gt; semWeight</code> — no hardcoded duration checks anywhere.</p>
+
+        <h3>CSS variables for theming</h3>
+        <p>ThemeContext injects ~100 CSS custom properties onto <code>&lt;html&gt;</code>. All components use <code>var(--token)</code> inline. No CSS-in-JS library.</p>
+
+        <h3>Fixed layout + CSS scale</h3>
+        <p>Components are written at desktop scale. On small screens, <code>App.jsx</code> applies <code>transform: scale(uiScale)</code> — one layout for all viewports.</p>
+      </div>
+    </div>
+
+    <h2>Data sources</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Source</th><th>Format</th><th>When loaded</th><th>Size</th></tr></thead>
+      <tbody>
+        <tr><td><code>public/northeastern/all-courses.json</code></td><td>JSON array</td><td>App startup (primary)</td><td>6.5 MB, 4,800+ courses</td></tr>
+        <tr><td><code>husker.vercel.app/courses/all</code></td><td>JSON array</td><td>App startup fallback (if local JSON fails)</td><td>Same data via SearchNEU API</td></tr>
+        <tr><td><code>tableau.northeastern.edu</code></td><td>Playwright DOM scrape</td><td>NUPath Update tool (manual)</td><td>~4,800 course NUPath records</td></tr>
+        <tr><td><code>external/graduatenu/</code></td><td>Major2 JSON</td><td>On major selection</td><td>1,471 files</td></tr>
+        <tr><td><code>localStorage</code></td><td>JSON strings</td><td>App startup + every mutation</td><td>~50 KB per plan</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Quick start</h2>
+    <pre><code>git clone https://github.com/nayugu/nu-map
+cd nu-map
+npm install
+npm run dev              # Vite on :5173 + catalog-check-server on :3333
+
+npm run data:scrape:write  # update course catalog from catalog.northeastern.edu
+npm run data:patch:write   # apply YAML corrections from data/patches/
+npm run build              # production bundle → dist/</code></pre>
+
+  </main>
+</div>
+<script src="./nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral', flowchart: { curve: 'basis' } });</script>
+</body>
+</html>

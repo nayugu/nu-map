@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CourseCard.jsx — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ui/CourseCard">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ui/</a><span class="sep"> / </span><strong>CourseCard.jsx</strong>
+    </div>
+
+    <h1>CourseCard.jsx <span class="badge blue">UI component</span></h1>
+    <p class="lead">The atomic unit of the UI. A draggable course tile rendered in three contexts: inside a semester row, inside the course bank, and inside the GradPanel requirement tree. Appearance adapts to context and viewport size.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value">SemRow, SummerRow, BankPanel, GradPanel</div></div>
+      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">~500</div></div>
+      <div class="nb-group"><div class="nb-label">Key props</div><div class="nb-value"><code>id</code> (courseId), <code>inSem</code> (bool), <code>semId</code> (when placed)</div></div>
+    </div>
+
+    <h2>Three rendering modes</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Context</th><th>Layout</th><th>Shows</th></tr></thead>
+      <tbody>
+        <tr><td>Semester (desktop)</td><td>Tall card, full width</td><td>Color stripe, code, title, SH badge, NUPath tags, schedule badge, warning icons</td></tr>
+        <tr><td>Semester (phone)</td><td>Compact row</td><td>Code + SH only. No title (saves space).</td></tr>
+        <tr><td>Bank</td><td>Narrow row</td><td>Code + star button. No SH/NUPath (shown in InfoPanel when selected).</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Warning icons</h2>
+    <p>Three types of inline warnings shown on cards in semester rows:</p>
+    <ul>
+      <li><strong>⚠ Not offered</strong>: Course is placed in a semester type it's not offered in (e.g. a fall-only course placed in Spring). Derived from <code>course.offeredFall</code> etc. vs the semester type.</li>
+      <li><strong>⚡ Coreq violation</strong>: A corequisite is missing from the same semester. Read from <code>coreqViolations</code> in context.</li>
+      <li><strong>! Prereq unsatisfied</strong>: A prerequisite is missing or in a later semester. Read from <code>prereqViolations</code> in context.</li>
+    </ul>
+    <p>Additionally, a yellow border appears when <code>prereqViolations.has(id)</code> (the "misplaced" highlight in the legend).</p>
+
+    <h2>Variable-credit editing</h2>
+    <p>If <code>course.shMin !== course.shMax</code>, the SH badge becomes clickable. Clicking it enters edit mode: a small inline <code>&lt;input type="number"&gt;</code> replaces the badge. On blur/enter, the value is stored in <code>shOverrides[id]</code> in context (clamped to [shMin, shMax]).</p>
+
+    <h2>Selection and dimming</h2>
+    <p>Clicking a card sets <code>selectedId = id</code> in context. This opens InfoPanel and triggers RelationLines to draw SVG lines. All <em>other</em> cards receive reduced opacity (<code>0.4</code>) to dim them. The selected card gets a highlighted border.</p>
+
+    <h2>Drag handling</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant Card as CourseCard
+    participant Ctx as PlannerContext
+    participant Target as SemRow (drop target)
+
+    Card->>Ctx: onDragStart → set dragInfo = {courseId, sourceType}
+    Card->>Card: set dragging CSS class
+    Target->>Ctx: onDragEnter → set hoveredSem
+    Target->>Ctx: onDragLeave → clear hoveredSem
+    Target->>Ctx: onDrop(courseId, semId)
+    Ctx->>Ctx: pushUndo() → update placements
+    Card->>Ctx: onDragEnd → clear dragInfo
+      </div>
+    </div>
+
+    <p>On touch devices, the same flow is driven by <code>touchstart</code>/<code>touchmove</code>/<code>touchend</code> events with a ghost element that follows the finger. The ghost is a clone of the card appended to <code>document.body</code>.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

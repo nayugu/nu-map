@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Loading — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/data/courseLoader">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">data/</a><span class="sep"> / </span><strong>course loading</strong>
+    </div>
+
+    <h1>Course Loading <span class="badge yellow">ICourseCatalog adapter</span></h1>
+    <p class="lead">Course loading is the responsibility of the <code>ICourseCatalog</code> adapter. There is no standalone <code>courseLoader.js</code> — the adapter owns the full fetch-and-normalize pipeline and PlannerContext calls <code>courseCatalog.fetchAll()</code> directly on mount.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Contract</div><div class="nb-value"><a href="../../ports/ICourseCatalog/">ICourseCatalog port</a> — <code>fetchAll()</code>, <code>normalize()</code>, <code>courseUrl()</code></div></div>
+      <div class="nb-group"><div class="nb-label">NU implementation</div><div class="nb-value"><code>src/adapters/northeastern/courseCatalog.js</code></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx — <code>const courseCatalog = usePort(ICourseCatalog); courseCatalog.fetchAll()</code></div></div>
+    </div>
+
+    <h2>How course loading works</h2>
+    <p>On mount, PlannerContext reads the <code>ICourseCatalog</code> port from the active institution adapter and calls <code>fetchAll()</code>. The adapter decides how to source the data — static file, live API, or any other strategy. The result is already normalized to the <a href="../../ports/ICourseCatalog/">Course shape</a> before PlannerContext ever sees it.</p>
+
+    <pre><code><span class="cmt">// PlannerContext.jsx (simplified)</span>
+const courseCatalog = usePort(ICourseCatalog);
+
+useEffect(() => {
+  courseCatalog.fetchAll()
+    .then(courses => {
+      setCourses(courses);      <span class="cmt">// already normalized</span>
+    })
+    .catch(err => setLoadError(err.message));
+}, []);</code></pre>
+
+    <div class="callout info"><div class="ci">ℹ</div><div class="callout-body">The adapter handles the entire strategy: local file first, API fallback, retry logic, error messages — all without touching PlannerContext. This is why there is no <code>courseLoader.js</code> wrapper. The adapter <em>is</em> the loader.</div></div>
+
+    <h2>Northeastern implementation</h2>
+    <p>The NU adapter (<code>northeastern/courseCatalog.js</code>) fetches a bundled static JSON first, then falls back to the live SearchNEU API if the local file is unavailable. All Banner term code decoding (<code>"202430" → "spring"</code>) happens inside <code>normalizeCourse()</code> — PlannerContext never sees raw registrar codes.</p>
+
+    <pre><code><span class="cmt">// src/adapters/northeastern/courseCatalog.js (simplified)</span>
+export default {
+  async fetchAll() {
+    const json = await tryLocal() ?? await tryAPI();
+    return json.map(normalizeCourse).filter(Boolean);
+  },
+  normalize: normalizeCourse,
+  courseUrl: course => `https://catalog.northeastern.edu/course-descriptions/${course.subject.toLowerCase()}/`,
+  getSources: () => [{ id: "nu-courses", label: "ninest/nu-courses", ... }],
+};</code></pre>
+
+    <h2>Implementing for your institution</h2>
+    <p>Override <a href="../../adapters/northeastern/"><code>courseCatalog</code></a> in your adapter folder. The minimum is a <code>fetchAll()</code> that returns <code>Course[]</code>. See <a href="../../ports/ICourseCatalog/">ICourseCatalog</a> for the full Course shape and the complete port contract.</p>
+
+    <h2>Updating the NU course catalog</h2>
+    <pre><code><span class="cmt"># Full update workflow</span>
+npm run data:scrape:write  <span class="cmt"># fetch from catalog.northeastern.edu (~20 min)</span>
+npm run data:patch:write   <span class="cmt"># apply YAML corrections from data/patches/</span>
+npm run build
+git add public/northeastern/all-courses.json
+git commit -m "data: update course catalog"</code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

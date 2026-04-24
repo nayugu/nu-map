@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GradPanel.jsx — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/ui/GradPanel">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ui/</a><span class="sep"> / </span><strong>GradPanel.jsx</strong>
+    </div>
+
+    <h1>GradPanel.jsx <span class="badge blue">UI component</span></h1>
+    <p class="lead">The most complex UI component. Fetches and renders a major's graduation requirement tree, showing which requirements are satisfied by the user's placed courses. Contains a recursive ReqNode renderer, NUPath grid, and General Electives section.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">ui/</a> (rendered inside BankPanel)</div></div>
+      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">~1,000+</div></div>
+      <div class="nb-group"><div class="nb-label">Core logic used</div><div class="nb-value">allocateMajorWithElectives(), getNuPathCoverage(), checkReq()</div></div>
+      <div class="nb-group"><div class="nb-label">Data loaded</div><div class="nb-value">majorLoader.loadMajor(), minorLoader.loadMinor()</div></div>
+    </div>
+
+    <h2>Data flow through GradPanel</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["User selects major in SearchCombo"] --> B["loadMajor(path)"]
+    B --> C["Major2 JSON fetched"]
+    C --> D["buildPlacedKeySet(placements, placedOut, courseMap)"]
+    D --> E["allocateMajorWithElectives(major, placedSet, courseMap)"]
+    E --> F["SectionResult[] + generalElectives"]
+    F --> G["SectionBlock renders each section"]
+    G --> H["ReqNode renders each requirement recursively"]
+
+    I["placements change"] --> D
+    J["major changed"] --> B
+      </div>
+    </div>
+
+    <h2>Major / concentration / minor selectors</h2>
+    <p>Three <code>SearchCombo</code> components — fuzzy-search comboboxes backed by <code>getMajorOptionGroups()</code> / <code>getMinorOptionGroups()</code>. Selecting a major triggers <code>loadMajor(path)</code> and updates <code>major</code> in context. The concentration and minor selectors are enabled after a major is chosen.</p>
+
+    <h2>GradCtx — avoiding deep prop drilling within GradPanel</h2>
+    <p>GradPanel creates its own internal <code>GradCtx</code> React context and provides it to <code>SectionBlock</code> and <code>ReqNode</code> children. This passes down <code>placedSet</code>, <code>courseMap</code>, <code>allocatedSets</code>, and drag handlers without threading them through every prop chain. It's a local context (not exported), used only within GradPanel's subtree.</p>
+
+    <h2>ReqNode — recursive requirement renderer</h2>
+    <p>The <code>ReqNode</code> component renders a single requirement node. It reads <code>req.type</code> and renders differently for each:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Type</th><th>UI label</th><th>Satisfaction display</th></tr></thead>
+      <tbody>
+        <tr><td>COURSE</td><td>Course code + title chip</td><td>✓ (placed) / ○ (not placed) / → (planned)</td></tr>
+        <tr><td>AND</td><td>"All of (X/N)"</td><td>Count of satisfied children / total</td></tr>
+        <tr><td>OR</td><td>"One of (X/N)"</td><td>Any satisfied = done</td></tr>
+        <tr><td>XOM</td><td>"N SH / M SH"</td><td>Accumulated credit hours</td></tr>
+        <tr><td>RANGE</td><td>Subject range label (e.g. "CS 2500–9999")</td><td>Matching placed courses listed</td></tr>
+        <tr><td>SECTION</td><td>Section title with progress bar</td><td>N of M requirements satisfied</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>COURSE nodes are draggable — you can drag them directly from the GradPanel requirement tree into a semester row.</p>
+
+    <h2>NUPath coverage grid</h2>
+    <p>Below the major requirement sections, a 12-cell grid shows NUPath attribute coverage. Each cell shows the attribute code and name. Green = satisfied (at least one placed course carries this attribute). Dim = not yet satisfied. Computed by <code>attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms.types))</code>.</p>
+
+    <h2>General Electives section</h2>
+    <p>Automatically appended at the end. Shows all placed courses that weren't allocated to any major requirement. Displays credit hours total. Built by <code>buildGeneralElectivesSection()</code> from <code>gradRequirements.js</code>. The <code>creditHoursRequired</code> comes from the major JSON's <code>creditHoursRequired</code> field (if present).</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

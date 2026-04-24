@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>constants + themes — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/constants">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>constants.js + themes.js</strong>
+    </div>
+
+    <h1>constants.js + themes.js <span class="badge gray">Compile-time</span></h1>
+    <p class="lead">Compile-time constants shared across all layers. No functions, no logic — just exported values. <code>constants.js</code> defines labels, colors, and templates. <code>themes.js</code> defines CSS variable token sets for each UI theme.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Imported by</div><div class="nb-value">courseModel.js, semGrid.js, gradRequirements.js, PlannerContext.jsx, Header.jsx, ThemeContext.jsx</div></div>
+    </div>
+
+    <h2>constants.js exports</h2>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Export</th><th>Type</th><th>Used by</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>DEFAULT_START_YEAR</code></td><td>number (2026)</td><td>PlannerContext</td><td>Default entry year for new plans</td></tr>
+        <tr><td><code>NUM_YEARS</code></td><td>number (5)</td><td>semGrid</td><td>How many years to generate in the full grid</td></tr>
+        <tr><td><code>SUBJECT_PALETTE</code></td><td>string[25]</td><td>courseModel</td><td>CSS hex colors for the subject color hash</td></tr>
+        <tr><td><code>TYPE_BG</code></td><td>object</td><td>SemRow, SummerRow</td><td>CSS variable names for semester background colors per type</td></tr>
+        <tr><td><code>REL_STYLE</code></td><td>object</td><td>RelationLines, Header legend</td><td>SVG line styles (color, dasharray, label, arrowhead) per relationship type</td></tr>
+        <tr><td><code>NUPATH_LABELS</code></td><td>object</td><td>GradPanel, InfoPanel</td><td>Maps NUPath code → full attribute name (e.g. "AD" → "Analyzing and Using Data")</td></tr>
+        <tr><td><code>COOP_TERMS</code></td><td>object[]</td><td>BankPanel, SemRow</td><td>Pre-defined 4-month and 6-month co-op block templates</td></tr>
+        <tr><td><code>INTERNSHIP_TERMS</code></td><td>object[]</td><td>BankPanel, SemRow</td><td>Pre-defined 2-month and 4-month internship block templates</td></tr>
+        <tr><td><code>WORK_TERMS</code></td><td>object</td><td>PlannerContext</td><td>Combined co-op + internship definitions keyed by template ID</td></tr>
+        <tr><td><code>SEMESTER_TYPES</code></td><td>string[4]</td><td>semGrid</td><td>["fall", "spring", "sumA", "sumB"]</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>REL_STYLE — relationship line styles</h3>
+    <pre><code><span class="kw">export const</span> REL_STYLE = {
+  prerequisite:        { color: <span class="str">'#e74c3c'</span>, dash: <span class="str">''</span>,     label: <span class="str">'Prereq'</span>,       arrow: <span class="kw">true</span>  },
+  corequisite:         { color: <span class="str">'#f39c12'</span>, dash: <span class="str">'4,3'</span>,  label: <span class="str">'Coreq'</span>,        arrow: <span class="kw">true</span>  },
+  <span class="str">'prerequisite-viol'</span>: { color: <span class="str">'#e74c3c'</span>, dash: <span class="str">'6,2'</span>,  label: <span class="str">'Prereq (unmet)'</span>, arrow: <span class="kw">true</span>  },
+  <span class="str">'corequisite-viol'</span>:  { color: <span class="str">'#f39c12'</span>, dash: <span class="str">'6,2'</span>,  label: <span class="str">'Coreq (unmet)'</span>,  arrow: <span class="kw">false</span> },
+  substitution:        { color: <span class="str">'#3498db'</span>, dash: <span class="str">'2,4'</span>,  label: <span class="str">'Substitution'</span>,  arrow: <span class="kw">false</span> },
+};</code></pre>
+
+    <h2>themes.js exports</h2>
+
+    <p>Each theme is a plain object mapping CSS variable names to values. <code>ThemeContext</code> injects these onto <code>document.documentElement</code> at runtime.</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Export</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>dark</code></td><td>object (~100 CSS vars)</td><td>Default dark theme token set</td></tr>
+        <tr><td><code>light</code></td><td>object (~100 CSS vars)</td><td>Light theme token set</td></tr>
+        <tr><td><code>THEMES</code></td><td><code>{ dark, light, ... }</code></td><td>All available themes — ThemeContext iterates keys</td></tr>
+        <tr><td><code>THEME_LABELS</code></td><td><code>{ dark: "Dark", ... }</code></td><td>Human-readable theme names for the UI</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Key CSS variable groups</h3>
+    <pre><code><span class="cmt">// Backgrounds</span>
+--bg-app, --bg-surface, --bg-surface-2, --bg-card
+
+<span class="cmt">// Text hierarchy (1 = most prominent)</span>
+--text-1, --text-2, --text-3, --text-4, --text-5, --text-6
+
+<span class="cmt">// Borders</span>
+--border-1, --border-2, --border-3
+
+<span class="cmt">// Semester type colors</span>
+--sel-fall-bg, --sel-fall-border, --sel-fall-text
+--sel-spr-bg,  --sel-spr-border,  --sel-spr-text
+
+<span class="cmt">// Status colors</span>
+--active, --success, --error, --warn, --warn-bright
+
+<span class="cmt">// Scrollbar</span>
+--scrollbar-thumb, --scrollbar-track</code></pre>
+
+    <div class="callout tip">
+      <span class="ci">💡</span>
+      <div class="callout-body"><strong>Adding a theme:</strong> Copy the <code>dark</code> object, adjust values, export it, add to <code>THEMES</code> and <code>THEME_LABELS</code>. ThemeContext and Header will pick it up automatically with no other changes needed.</div>
+    </div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

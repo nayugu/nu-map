@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ILocalization — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/ports/ILocalization">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>ILocalization.js</strong>
+    </div>
+
+    <h1>ILocalization <span class="badge blue">UI copy</span></h1>
+    <p class="lead">Institution-specific text that doesn't fit a more focused port — primarily the legal disclaimers in the About modal. Override to insert your institution's name, portal, and any legally required language.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"localization"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">DisclaimerModal — shown on first load and accessible from the About menu</div></div>
+      <div class="nb-group"><div class="nb-label">Scope rule</div><div class="nb-value">Credit labels → ICreditSystem. Institution names → IInstitution. Attribute labels → IAttributeSystem. This port is for everything else.</div></div>
+    </div>
+
+    <h2>Contract</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Method</th><th>Signature</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>getDisclaimers()</code></td><td><code>() → string[]</code></td><td>Ordered list of disclaimer bullet points shown in the About / Disclaimer modal. Include unofficial-status language, degree audit authority, data freshness, and storage limitations.</td></tr>
+        <tr><td><code>getSources()</code></td><td><code>() → SourceInfo[]</code></td><td>External data sources. See <a href="../IAttributable/">IAttributable</a>. Typically returns <code>[]</code> for localization.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern reference implementation</h2>
+    <pre><code><span class="cmt">// src/adapters/northeastern/localization.js</span>
+export default {
+  getDisclaimers() {
+    return [
+      "This is NOT an official Northeastern University tool and is not affiliated with or endorsed by Northeastern.",
+      "This does NOT replace your official degree audit. Always verify your plan with your academic advisor and through MyNEU / DegreeWorks.",
+      "Course availability, prerequisites, credit hours, and NUpath designations may be outdated or incorrect.",
+      "Your saved plan lives in your browser's localStorage only. Clearing browser data will erase it.",
+      "Use at your own risk.",
+    ];
+  },
+  getSources() { return []; },
+};</code></pre>
+
+    <h2>Generic default</h2>
+    <pre><code><span class="cmt">// src/adapters/generic/localization.js</span>
+export default {
+  getDisclaimers() {
+    return [
+      "This is an unofficial academic planning tool and is not affiliated with or endorsed by your institution.",
+      "This does NOT replace your official degree audit. Always verify your plan with your academic advisor.",
+      "Course availability, prerequisites, and credit values may change. Confirm with your official course catalog.",
+      "Your saved plan is stored in your browser only. Clearing browser data will erase it.",
+      "Use at your own risk.",
+    ];
+  },
+  getSources() { return []; },
+};</code></pre>
+    <p>The generic default is institution-neutral. It's usable as-is if you don't need custom legal language — but you should override to at least insert your institution's name and portal/audit tool names.</p>
+
+    <h2>Implementing for your institution</h2>
+    <p>Replace the generic bullets with your institution's language. Recommended bullets:</p>
+    <ol>
+      <li><strong>Unofficial status:</strong> "This is NOT an official [Institution Name] tool…"</li>
+      <li><strong>Degree audit authority:</strong> "Always verify with your advisor and through [Portal] / [DegreeAudit]."</li>
+      <li><strong>Data freshness:</strong> Mention that catalog data may be stale.</li>
+      <li><strong>Storage warning:</strong> localStorage is browser-local — clearing data erases the plan.</li>
+      <li><strong>Liability:</strong> "Use at your own risk."</li>
+    </ol>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">Use <code>institution.portalName</code> and <code>institution.degreeAuditName</code> from <code>IInstitution</code> as the authoritative source of those names. The localization strings currently inline them as literals for simplicity, but they should match.</div></div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>

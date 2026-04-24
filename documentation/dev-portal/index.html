@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev Portal — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="dev-portal">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../">nu-map/documentation</a><span class="sep"> / </span><strong>dev-portal</strong>
+    </div>
+
+    <h1>Dev Portal <span class="badge blue">public/dev.html</span></h1>
+
+    <!--
+      SCR setup
+      Situation:    nu-map needs a way to inspect and fix the course database — but writing to disk and running git requires a local server
+      Complication: the portal must work at the public GitHub Pages URL too, for read-only access without a backend
+      Resolution:   this page answers "what is the dev portal, what can it do, and how is it structured?"
+    -->
+    <p class="lead">The dev portal is a single self-contained HTML file (~2,400 lines) that gives you visibility into the course database everywhere, and write access to it locally. That distinction — <strong>read-only on GitHub Pages, full write access on localhost</strong> — is the one thing that determines everything about how the portal behaves. Start there.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Remote URL</div><div class="nb-value"><code>https://nayugu.github.io/nu-map/dev.html</code></div></div>
+      <div class="nb-group"><div class="nb-label">Local URL</div><div class="nb-value"><code>http://localhost:5173/dev.html</code> (after <code>npm run dev</code>)</div></div>
+      <div class="nb-group"><div class="nb-label">Write operations talk to</div><div class="nb-value"><code>http://localhost:3333</code> — started by <code>npm run dev</code></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 1 — The local/remote split
+         (THE governing distinction — must come first)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Local vs. remote — the capability split</h2>
+    <p>The first thing the page does on load is <code>["localhost","127.0.0.1",""].includes(location.hostname)</code>. This single boolean controls almost every UI decision:</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart LR
+    subgraph Local["localhost — full access"]
+      direction TB
+      L1["Auth skipped entirely"]
+      L2["Work tab: Catalog Check + NUPath Update + Push to GitHub"]
+      L3["Changes tab shows ⏳ Pending push badge\nfor entries not yet on GitHub Pages"]
+      L4["Header: 'LOCAL' badge + dev_logo.png"]
+      L5["Preview iframe points at local build"]
+      L6["Link: 'Open on GitHub Pages →'"]
+    end
+    subgraph Remote["GitHub Pages — read-only"]
+      direction TB
+      R1["Auth required (PBKDF2 hash check)"]
+      R2["Work tab hidden\n(HTTPS → HTTP mixed-content blocked)"]
+      R3["Overview shows 'Open Local →' hint + port input"]
+      R4["Header: logo.png"]
+      R5["Preview iframe points at deployed build"]
+    end
+      </div>
+    </div>
+
+    <p>Why is the Work tab blocked on GitHub Pages? The write tools communicate with <code>http://localhost:3333</code>. A page served over HTTPS cannot make requests to an HTTP endpoint — browsers block this as mixed content. The portal detects this at load time and hides the Work tab rather than letting you click buttons that silently fail.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 2 — The three read-only tabs (work anywhere)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Read-only tabs — available everywhere</h2>
+
+    <h3>Overview</h3>
+    <p>The landing tab after login. Contains: a PR review reminder (links to GitHub PRs), a data status card (course count + last-updated timestamp from <code>data-meta.json</code>), repository quick-links, and on GitHub Pages only — the "work tools are local-only" hint card with a copyable <code>npm run dev</code> command.</p>
+
+    <h3>Changes tab</h3>
+    <p>A paginated audit log of everything that has happened to the database. Reads <code>change-log.json</code> (and <code>scrape-state.json</code> for rotation status). On localhost it also fetches the deployed changelog from GitHub Pages to compute which local entries haven't been pushed yet — those get a <strong>⏳ Pending push</strong> badge.</p>
+    <p>Five entry types, each rendered differently:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>type</th><th>Created by</th><th>Key data shown</th></tr></thead>
+      <tbody>
+        <tr><td><code>catalog-check</code></td><td>Catalog Check run</td><td>correct / needPR / rangeDiff / newCourses / notInCatalog / totalScanned</td></tr>
+        <tr><td><code>nuclear-fix</code></td><td>Apply Fixes in Catalog Check</td><td>fixed count, nChanged, nRange, nAdded, nRemoved; new data label</td></tr>
+        <tr><td><code>nupath-scan</code></td><td>Manual NUPath scan</td><td>scanned / gainedOnly / lostOnly / mixed; source (Tableau or catalog); sample discrepancies</td></tr>
+        <tr><td><code>nupath-auto-update</code></td><td>GitHub Actions <code>workflow_dispatch</code> (cron schedule currently disabled)</td><td>same stats + runId (links to GH Actions run) + triggeredBy</td></tr>
+        <tr><td><code>nupath-manual-fix</code></td><td>Apply Selected Fixes in NUPath Update</td><td>fixed count + list of affected course codes</td></tr>
+        <tr><td><em>subject string</em></td><td>Legacy rotating scraper run (catalog-rotate workflow is disabled)</td><td>added[] / modified[] (per-field before→after) / removedFromCatalog[]</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Patches tab</h3>
+    <p>A form-driven YAML generator. No server call — pure client-side string building. Fill in the course code and the fields to change, click <strong>Generate YAML</strong>, copy the output to <code>data/patches/YYYY-MM-DD_description.yaml</code>. Three action modes:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Action</th><th>Required fields</th><th>What it generates</th></tr></thead>
+      <tbody>
+        <tr><td>Add</td><td>subject, number, title, credits</td><td><code>courses.add[]</code> entry</td></tr>
+        <tr><td>Update</td><td>subject, number + at least one changed field</td><td><code>courses.update[].fields</code></td></tr>
+        <tr><td>Remove</td><td>subject, number</td><td><code>courses.remove[]</code> entry</td></tr>
+      </tbody>
+    </table></div>
+    <p>The download button auto-names the file <code>YYYY-MM-DD_action-course.yaml</code>. Patches are re-applied on every deploy — committing a patch means it persists through all future scraper updates.</p>
+
+    <h3>Data Sources tab</h3>
+    <p>A reference card showing where all course data comes from and how each source is updated. Contains two cards:</p>
+    <ul>
+      <li><strong>Course Data Sources table</strong> — four rows: <code>catalog.northeastern.edu</code> (titles, descriptions, credits, prereqs), <code>tableau.northeastern.edu</code> (NUPath attributes, authoritative), <code>ninest/nu-courses via SearchNEU</code> (term availability, live sections), <code>sandboxnu/graduatenu</code> (major requirement trees). Each row shows how that source is updated.</li>
+      <li><strong>Update Workflow</strong> — five numbered steps for a full data refresh: Catalog Check → NUPath Update → apply patches → build → Review &amp; Push.</li>
+    </ul>
+    <p>This tab is informational only — no server calls, available on both localhost and GitHub Pages.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEY ARGUMENT 3 — The two write tools (local only)
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Write tools — local only (Work tab)</h2>
+    <p>These are the tools that actually modify <code>all-courses.json</code> on disk. Both require <code>npm run dev</code> to be running. Their internal mechanics — SSE streams, discrepancy categories, apply pipelines — are documented in the sub-pages below. This section covers what they are and when to reach for each.</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Tool</th><th>What it does</th><th>When to use it</th><th>Reference</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Catalog Check</strong></td><td>Scrapes catalog.northeastern.edu, compares every field against the database, streams live results, lets you selectively apply fixes</td><td>Bulk verification — want to see what's actually different across all 10k courses</td><td><a href="catalog-check/">catalog-check/</a></td></tr>
+        <tr><td><strong>NUPath Update</strong></td><td>Fetches NUPath attributes from Tableau (authoritative source), diffs against database, per-course selective apply</td><td>NUPath attributes specifically seem wrong — Tableau is more reliable than catalog HTML for this</td><td><a href="nupath-update/">nupath-update/</a></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Push to GitHub</h3>
+    <p>A "Review &amp; Push" button that shows a git diff before committing. A two-step confirmation prevents accidental pushes. Under the hood:</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant You
+    participant Portal as Browser
+    participant Server as localhost:3333
+
+    You->>Portal: click "Review & Push"
+    Portal->>Server: GET /git-status
+    Server-->>Portal: {dirty, status (file list), diff (text)}
+    alt nothing to commit
+      Portal-->>You: "✓ Nothing to commit" — button disabled
+    else files changed
+      Portal-->>You: modal shows changed files + diff
+      You->>Portal: "Confirm & Push"
+      Portal->>Server: POST /git-push
+      Server->>Server: git commit && git push origin main
+      Server-->>Portal: {ok, msg}
+      Portal-->>You: result banner — GitHub Actions picks up in ~1 min
+    end
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SUPPORTING DATA — Preview tab, Auth, day-to-day workflow
+    ════════════════════════════════════════════════════════════════ -->
+    <h2>Preview tab — device simulation</h2>
+    <p>An iframe of the app scaled to exact device dimensions. Lazy-loaded on first tab switch. The toolbar lets you switch device, rotate, and toggle the bezel. Five presets:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Preset</th><th>Viewport (w×h)</th><th>DPR</th><th>Notch / Home bar</th></tr></thead>
+      <tbody>
+        <tr><td>iphoneX</td><td>375 × 812</td><td>3</td><td>44 pt notch / 34 pt home bar</td></tr>
+        <tr><td>ipadAir</td><td>820 × 1180</td><td>2</td><td>—</td></tr>
+        <tr><td>ipadPro</td><td>834 × 1194</td><td>2</td><td>—</td></tr>
+        <tr><td>macbook</td><td>1440 × 900</td><td>2</td><td>—</td></tr>
+        <tr><td>desktop1080</td><td>1920 × 1080</td><td>1</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <p>The iframe is clipped to the device's safe area — the notch and home bar regions are covered by a white <code>#pv-screen-bg</code> div and the actual bezel border, accurately simulating what iOS renders. <strong>Reset state</strong> clears <code>localStorage</code> key <code>ncp-state-v2</code> inside the iframe — useful for testing first-run onboarding.</p>
+
+    <h2>Auth system (remote only)</h2>
+    <p>The password is never stored in plain text. A developer runs <code>node scripts/generate-dev-password.js</code> which outputs a PBKDF2-SHA256 hash embedded in the page. At login, the browser hashes the entered password with 300,000 iterations and compares hex strings — all in Web Crypto, no server involved. On success, <code>sessionStorage</code> (not <code>localStorage</code>) stores the session token — it clears when the tab closes, so a shared machine can't be left permanently unlocked.</p>
+
+    <h2>Day-to-day development workflow</h2>
+    <p>The typical loop for making and verifying code changes:</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["Edit code in VSCode"] --> B["npm run dev\nVite hot-reload on :5173 + dev server on :3333"]
+    B --> C["localhost:5173\nlive app — edits reflect instantly"]
+    B --> D["localhost:5173/dev.html\nno auth, full Work tab"]
+    D --> E["Preview tab — test across devices"]
+    E --> E1["iphoneX — mobile layout, touch targets"]
+    E --> E2["ipadAir / Pro — tablet layout"]
+    E --> E3["macbook / desktop1080 — full layout"]
+    E1 & E2 & E3 --> F{"Stable?"}
+    F -->|No| A
+    F -->|Yes| G["git commit + push\nCI builds + deploys in ~2 min"]
+    G --> H["Verify on deployed build\nPreview tab (now points at GitHub Pages)"]
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
