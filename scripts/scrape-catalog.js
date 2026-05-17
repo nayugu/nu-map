@@ -407,17 +407,17 @@ async function runRotate() {
     process.exit(1);
   }
 
-  // ── Verified-merge into all-courses.json ─────────────────────────────────
+  // ── Verified-merge into catalog-courses.json ─────────────────────────────
   // Strategy:
-  //   - Existing course in catalog   → overlay catalog fields, preserve sections/terms, diff
-  //   - New course only in catalog   → add with no sections (catalog stub)
+  //   - Existing course in catalog   → overlay catalog fields, diff
+  //   - New course only in catalog   → add
   //   - Course in our data but gone from catalog → flag in log, KEEP in data (don't silently delete)
-  if (!existsSync(ALL_COURSES)) {
-    console.error("  ❌  all-courses.json not found — run data:fetch first.");
+  if (!existsSync(CATALOG_OUT)) {
+    console.error("  ❌  catalog-courses.json not found — run scrape-catalog.js --write first.");
     process.exit(1);
   }
 
-  const existing = JSON.parse(readFileSync(ALL_COURSES, "utf8"));
+  const existing = JSON.parse(readFileSync(CATALOG_OUT, "utf8"));
   const existingForSubject = new Map(
     existing.filter(c => c.subject === subjectCode).map(c => [`${c.subject} ${c.number}`, c])
   );
@@ -504,8 +504,8 @@ async function runRotate() {
   }
 
   // ── Write course data ───────────────────────────────────────────────────────────
-  writeFileSync(ALL_COURSES, JSON.stringify(updated, null, 0), "utf8");
-  console.log(`  ✅  Saved ${updated.length} courses → public/all-courses.json`);
+  writeFileSync(CATALOG_OUT, JSON.stringify(updated, null, 0), "utf8");
+  console.log(`  ✅  Saved ${updated.length} courses → public/northeastern/catalog-courses.json`);
 
   // ── Write change log (public/change-log.json) ───────────────────────────
   let changeLog = { runs: [] };
