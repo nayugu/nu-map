@@ -1,6 +1,13 @@
 {
   "runs": [
     {
+      "type": "manual-trigger",
+      "subject": "Course Catalog (manual)",
+      "adapter": "catalog",
+      "timestamp": "2026-05-17T14:29:56.664Z",
+      "exitCode": 0
+    },
+    {
       "type": "nupath-scan",
       "subject": "🎓 NUpath Scan",
       "timestamp": "2026-04-03T18:39:45.189Z",
