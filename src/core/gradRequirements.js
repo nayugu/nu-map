@@ -591,13 +591,19 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
       const satSh = children.reduce((sum, child) => sum + sumSatisfiedCredits(child), 0);
       const sat = satSh >= node.numCreditsMin;
 
-      // Collect all allocated course keys from satisfied children
+      // Collect all allocated course keys from satisfied children.
+      // Prefer node.allocatedCourses when present (covers RANGE and OR nodes
+      // that already track their own set) before falling back to recursion.
       function collectAllocated(node, outSet) {
         if (!node) return;
+        if (node.allocatedCourses?.size) {
+          node.allocatedCourses.forEach(k => outSet.add(k));
+          return;
+        }
         if (node.type === 'COURSE' && node.sat) {
           outSet.add(node.key);
         }
-        if (node.children && node.children.length > 0) {
+        if (node.children?.length) {
           node.children.forEach(child => collectAllocated(child, outSet));
         }
       }
@@ -642,21 +648,16 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
           allocatedCourses,
         };
       } else {
-        const failedChildren = (node.courses ?? []).map(child => {
-          const base = checkReq(child, placedSet, courseMap);
-          return {
-            ...base,
-            sat: false,
-            allocatedCourses: new Set(),
-          };
-        });
+        // Don't commit any allocations — AND failed, so nothing is consumed.
+        // Keep per-child sat values from allocateNode so partial progress is visible
+        // (e.g. 1/2 for a course+lab pair where only one is placed).
         return {
           type: 'AND',
           sat: false,
           satCount,
           total: children.length,
-          children: failedChildren,
-          label: `All of (${(node.courses ?? []).map(c => c.label).join(', ')})`,
+          children,
+          label: `All of (${children.map(c => c.label).join(', ')})`,
           allocatedCourses: new Set(),
         };
       }

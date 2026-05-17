@@ -641,16 +641,17 @@ export default function GradPanel() {
     if (!major) return [];
 
     // Allocate major requirements + General Electives
-    const { sections: majorResults, generalElectives } = allocateMajorWithElectives(major, placedSet, courseMap);
+    const { sections: majorResults, generalElectives, allocatedSet } = allocateMajorWithElectives(major, placedSet, courseMap);
 
     // Add General Electives as the last major section
     const majorWithElectives = [...majorResults, generalElectives];
 
-    // Allocate concentration if present
+    // Allocate concentration sharing the major's used set so courses already
+    // counted toward major requirements can't also satisfy the concentration.
     if (selConc && major.concentrations) {
       const concSection = major.concentrations.concentrationOptions.find(c => c.title === selConc);
       if (concSection) {
-        const concResults = allocateSections([concSection], placedSet, new Set(), courseMap);
+        const concResults = allocateSections([concSection], placedSet, allocatedSet, courseMap);
         return [...majorWithElectives, ...concResults];
       }
     }
