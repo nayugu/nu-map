@@ -78,8 +78,17 @@ export const ICalendar = "calendar";
  *   Returns the matching id (e.g. "spring", "sumA") or null if unrecognized.
  *   This mapping is institution-specific: NU uses a two-digit suffix (10 = fall,
  *   30 = spring, 40 = sumA, 60 = sumB); other registrars use different conventions.
- *   Consumed by courseModel.getOfferedFromTerms and InfoPanel's offering grid.
+ *   Consumed by the northeastern courseCatalog adapter and InfoPanel's offering grid.
  *   Example: decodeTermCode("202430") → "spring"
+ *
+ * @property {(code: string) => number|null} [getTermCodeYear]
+ *   Extract the calendar year from a raw term code.
+ *   Returns null if this calendar does not use term codes.
+ *   Institution-specific: NU Banner encodes the academic-year end year, so the
+ *   Fall term (suffix 10) runs in the previous calendar year.
+ *   Example: getTermCodeYear("202510") → 2024  (Fall 2024, AY 2024-25)
+ *            getTermCodeYear("202530") → 2025  (Spring 2025, AY 2024-25)
+ *   Used by the offering history UI to label historical terms (e.g. "FA24").
  *
  * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
  *   External data sources this adapter draws from.  See IAttributable.

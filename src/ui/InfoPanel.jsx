@@ -102,7 +102,7 @@ export default function InfoPanel() {
               <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
             )}
             {!isMobile && (
-              <OfferedToggles
+              <CourseOfferingHistory
                 selCourse={selCourse}
                 offeredOverrides={offeredOverrides}
                 setOfferedOverrides={setOfferedOverrides}
@@ -115,7 +115,7 @@ export default function InfoPanel() {
                 {selEdges.length > 0 && (
                   <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} compact />
                 )}
-                <OfferedToggles
+                <CourseOfferingHistory
                   selCourse={selCourse}
                   offeredOverrides={offeredOverrides}
                   setOfferedOverrides={setOfferedOverrides}
@@ -137,7 +137,7 @@ export default function InfoPanel() {
               {selEdges.length > 0 && (
                 <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
               )}
-              <OfferedToggles
+              <CourseOfferingHistory
                 selCourse={selCourse}
                 offeredOverrides={offeredOverrides}
                 setOfferedOverrides={setOfferedOverrides}
@@ -357,38 +357,104 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
   );
 }
 
-function OfferedToggles({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
-  const calendar = usePort(ICalendar);
-  const { t } = useLanguage();
-  const primarySems = calendar.getSemesterTypes().filter(t => !t.optional).map(t => t.id);
-  const defaults = (selCourse.terms?.length ? selCourse.terms : null) ?? primarySems;
+// Map SemesterType theme → accent CSS variable for history dots
+const THEME_DOT = {
+  fall:   "var(--row-fall-border)",
+  spring: "var(--row-spr-border)",
+  summer: "var(--row-sum-border)",
+};
+
+function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
+  const cal        = usePort(ICalendar);
+  const { t }      = useLanguage();
+  const semTypes   = cal.getSemesterTypes();
+  const termHistory = selCourse.termHistory ?? {};
+  const hasHistory  = Object.keys(termHistory).length > 0;
+
+  // Sort term codes chronologically (Banner codes are lexicographically chronological)
+  const sortedCodes = Object.keys(termHistory).sort();
+
+  const primarySems = semTypes.filter(s => !s.optional).map(s => s.id);
+  const defaults    = selCourse.terms?.length ? selCourse.terms : primarySems;
+  const activeTypes = offeredOverrides[selCourse.id] ?? defaults;
+  const hasOverride = !!offeredOverrides[selCourse.id];
+
+  function toggle(semTypeId) {
+    setOfferedOverrides(prev => {
+      const cur    = prev[selCourse.id] ?? defaults;
+      const active = cur.includes(semTypeId);
+      const next   = active ? cur.filter(id => id !== semTypeId) : [...cur, semTypeId];
+      return { ...prev, [selCourse.id]: next };
+    });
+  }
+
+  function resetOverride(e) {
+    e.stopPropagation();
+    setOfferedOverrides(prev => { const n = { ...prev }; delete n[selCourse.id]; return n; });
+  }
 
   return (
-    <div style={{ width: compact ? "100%" : 155, flexShrink: 0 }}>
-      <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
-        {t("info.offered.title")}
+    <div style={{ width: compact ? "100%" : 162, flexShrink: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+        <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em" }}>
+          {t("info.offered.title")}
+        </span>
+        {hasOverride && (
+          <button onClick={resetOverride}
+            style={{ fontSize: 8, color: "var(--text-5)", background: "none", border: "1px solid var(--border-card)", borderRadius: 3, cursor: "pointer", padding: "0 4px", lineHeight: "14px" }}>
+            reset
+          </button>
+        )}
       </div>
-      {calendar.getSemesterTypes().map(({ id: type, label }) => {
-        const active = (offeredOverrides[selCourse.id] ?? defaults).includes(type);
+
+      {semTypes.map(({ id, label, theme }) => {
+        const color   = THEME_DOT[theme] ?? "var(--text-4)";
+        const active  = activeTypes.includes(id);
+        const dotCodes = sortedCodes.filter(c => cal.decodeTermCode(c) === id).slice(-4);
+        const offered  = dotCodes.filter(c => termHistory[c]).length;
+        const total    = dotCodes.length;
+
         return (
-          <label key={type} style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", marginBottom: 4, userSelect: "none" }}
+          <label key={id}
+            style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 5, cursor: "pointer", userSelect: "none" }}
             onClick={e => e.stopPropagation()}>
             <input type="checkbox" checked={active}
-              onChange={() => {
-                setOfferedOverrides(prev => {
-                  const cur  = prev[selCourse.id] ?? defaults;
-                  const next = active ? cur.filter(t => t !== type) : [...cur, type];
-                  return { ...prev, [selCourse.id]: next };
-                });
-              }}
-              style={{ accentColor: "var(--active)", cursor: "pointer" }}
+              onChange={() => toggle(id)}
+              style={{ accentColor: "var(--active)", cursor: "pointer", flexShrink: 0 }}
             />
-            <span style={{ fontSize: 10, color: active ? "var(--text-2)" : "var(--text-5)" }}>{label}</span>
+            <span style={{ fontSize: 10, color: active ? "var(--text-2)" : "var(--text-5)", minWidth: 44, flexShrink: 0 }}>
+              {label}
+            </span>
+            {dotCodes.length > 0 && (
+              <div style={{ display: "flex", gap: 2, alignItems: "center", flexShrink: 0 }}>
+                {dotCodes.map(code => {
+                  const yr    = cal.getTermCodeYear?.(code);
+                  const was   = termHistory[code];
+                  const tip   = yr ? `${label} ${yr}: ${was ? "offered" : "not offered"}` : code;
+                  return (
+                    <div key={code} title={tip}
+                      style={{
+                        width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
+                        background: was ? color : "transparent",
+                        border: `1.5px solid ${was ? color : "var(--text-5)"}`,
+                        opacity: was ? 1 : 0.45,
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            )}
+            {total > 0 && (
+              <span style={{ fontSize: 8, color: "var(--text-5)", marginLeft: "auto", flexShrink: 0 }}>
+                {offered}/{total}
+              </span>
+            )}
           </label>
         );
       })}
-      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 4, lineHeight: 1.4 }}>
-        {t("info.offered.hint")}
+
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 3, lineHeight: 1.4 }}>
+        {hasHistory ? t("info.offered.hint") : t("info.offered.nodata")}
       </div>
     </div>
   );

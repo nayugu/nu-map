@@ -47,11 +47,21 @@ export const ICourseCatalog = "courseCatalog";
  *                                         null for fixed-credit courses.
  *
  * Scheduling
- * @property {string[]}     terms        - Semester type IDs when this course is offered,
- *                                         e.g. ["fall", "spring"].  Already decoded from raw
+ * @property {Record<string,boolean>} termHistory
+ *                                       - Historical offering data keyed by raw term code
+ *                                         (e.g. "202430" for Spring 2025 at NU).
+ *                                         true  = course was offered that term.
+ *                                         false = explicitly confirmed not offered that term.
+ *                                         Absent key = term not yet queried.
+ *                                         Populated by scrape-availability.js and merged by
+ *                                         the adapter at load time.  Empty object {} when no
+ *                                         history data is available.
+ *
+ * @property {string[]}     terms        - Derived: semester type IDs with P(offered) ≥ 0.5
+ *                                         based on termHistory.  Falls back to primary semesters
+ *                                         when termHistory is empty.  Already decoded from raw
  *                                         registrar codes by the adapter during normalization.
- *                                         Empty array means offering data is unavailable; the UI
- *                                         will fall back to a default offering assumption.
+ *                                         Used by CourseCard for the "⚠ avail?" badge.
  *
  * Curriculum attributes
  * @property {string[]}     attributes   - Attribute/pathway codes assigned to this course,

@@ -53,15 +53,26 @@ const calendar = {
   getYearAnchor()          { return "august"; },
   getAcademicYearFormat()  { return "single"; },
 
-  // NEU Banner term code convention: YYYY10 = Fall, YYYY30 = Spring,
-  // YYYY40 = Summer 1 (May–Jun), YYYY60 = Summer 2 (Jul–Aug)
+  // NEU Banner term code convention (YYYY = AY end year):
+  //   10 = Fall,  30 = Spring,  40 = Summer 1,  60 = Summer 2
+  //   32 = Law Spring,  52 = Law Summer
   decodeTermCode(term) {
     const suffix = String(term).slice(-2);
     if (suffix === "10") return "fall";
     if (suffix === "30") return "spring";
     if (suffix === "40") return "sumA";
     if (suffix === "60") return "sumB";
+    if (suffix === "32") return "spring"; // Law spring — same academic slot
+    if (suffix === "52") return "sumA";   // Law summer — same academic slot
     return null;
+  },
+
+  // Banner YYYY = AY end year; Fall (10) runs in year YYYY-1, all others in YYYY.
+  getTermCodeYear(term) {
+    const year = parseInt(String(term).slice(0, 4), 10);
+    if (isNaN(year)) return null;
+    const suffix = String(term).slice(-2);
+    return suffix === "10" ? year - 1 : year;
   },
 
   getSources() { return []; },

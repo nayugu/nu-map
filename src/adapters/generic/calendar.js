@@ -42,6 +42,7 @@ const calendar = {
 
   // Generic adapter has no term-code convention — override in your institution adapter.
   decodeTermCode(_term) { return null; },
+  getTermCodeYear(_term) { return null; },
 
   getSources() { return []; },
 };

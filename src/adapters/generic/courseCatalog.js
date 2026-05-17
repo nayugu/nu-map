@@ -40,6 +40,7 @@ function normalizeCourse(raw) {
     scheduleType: raw.scheduleType || "",
     prereqs:      raw.prereqs ?? [],
     coreqs:       raw.coreqs  ?? [],
+    termHistory:  raw.termHistory ?? {},
     terms:        raw.terms   ?? [],
     attributes:   raw.attributes ?? [],
     color:        subjectColor(subject),
