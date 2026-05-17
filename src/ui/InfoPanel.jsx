@@ -336,18 +336,16 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
           const other = courseMap[isOut ? rel.to : rel.from];
           const rs    = REL_STYLE[rel.type];
           return (
-            <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 5, marginBottom: 3 }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
               <span style={{ fontSize: 11, color: rs?.color, fontWeight: 700, width: 14 }}>
                 {isOut ? "→" : "←"}
               </span>
               <span style={{ fontSize: 8, background: `${rs?.color}20`, color: rs?.color, borderRadius: 3, padding: "1px 4px", whiteSpace: "nowrap" }}>
                 {rs?.label}
               </span>
-              <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-2)" }}>
+              <span title={other?.title || undefined}
+                style={{ fontSize: 10, fontWeight: 700, color: "var(--text-2)" }}>
                 {other?.code || (isOut ? rel.to : rel.from)}
-              </span>
-              <span style={{ fontSize: 9, color: "var(--text-4)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {other?.title || ""}
               </span>
             </div>
           );
