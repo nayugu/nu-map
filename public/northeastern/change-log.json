@@ -1,6 +1,15 @@
 {
   "runs": [
     {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-05-17T19:16:11.268Z",
+      "done": 505,
+      "written": 505,
+      "skipped": 24,
+      "failed": 17
+    },
+    {
       "timestamp": "2026-05-17T16:19:48.443Z",
       "subject": "ACCT",
       "added": [],
