@@ -326,7 +326,7 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
 function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
   const { t } = useLanguage();
   return (
-    <div style={{ width: compact ? "100%" : 240, flexShrink: 0, display: "flex", flexDirection: "column" }}>
+    <div style={{ width: compact ? "100%" : "fit-content", flexShrink: 0, display: "flex", flexDirection: "column", paddingRight: compact ? 0 : 12 }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 5 }}>
         {t("info.relationships.title")}
       </div>
@@ -382,38 +382,61 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     }
   }
 
-  const primarySems = semTypes.filter(s => !s.optional).map(s => s.id);
-  const defaults    = selCourse.terms?.length ? selCourse.terms : primarySems;
-  const activeTypes = offeredOverrides[selCourse.id] ?? defaults;
-  const hasOverride = !!offeredOverrides[selCourse.id];
+  // Global year range — defines shared fixed columns across all semType rows.
+  const allYearNums   = Object.values(byType).flatMap(m => Object.keys(m).map(Number));
+  const globalMinYear = allYearNums.length ? Math.min(...allYearNums) : 0;
+  const globalMaxYear = allYearNums.length ? Math.max(...allYearNums) : 0;
+  const totalCols     = allYearNums.length ? globalMaxYear - globalMinYear + 1 : 0;
+  const histWidth     = totalCols * YR_CELL;
 
-  // Widest year set across all semTypes — used to size the history area consistently
-  const maxYrCount = Math.max(0, ...semTypes.map(({ id }) =>
-    Object.keys(byType[id] ?? {}).length
-  ));
+  // Explicit overrides: { semTypeId: true | false }.
+  // Old array format (pre-refactor saves) is ignored gracefully → treated as no override.
+  const rawOvr     = offeredOverrides[selCourse.id];
+  const ovrMap     = (rawOvr && !Array.isArray(rawOvr)) ? rawOvr : {};
+  const hasOverride = Object.keys(ovrMap).length > 0;
 
-  function toggle(semTypeId) {
+  // Historical offering probability for a given semTypeId (null if no data).
+  function semTypeProb(semTypeId) {
+    const entries = Object.entries(termHistory).filter(([code]) => cal.decodeTermCode(code) === semTypeId);
+    if (!entries.length) return null;
+    return entries.filter(([, v]) => v).length / entries.length;
+  }
+
+  // Write an explicit override (true/false) or clear it (undefined → delete key).
+  function setOverride(semTypeId, value) {
     setOfferedOverrides(prev => {
-      const cur    = prev[selCourse.id] ?? defaults;
-      const active = cur.includes(semTypeId);
-      const next   = active ? cur.filter(id => id !== semTypeId) : [...cur, semTypeId];
-      return { ...prev, [selCourse.id]: next };
+      const cur    = prev[selCourse.id];
+      const curMap = (!cur || Array.isArray(cur)) ? {} : { ...cur };
+      if (value === undefined) { delete curMap[semTypeId]; }
+      else { curMap[semTypeId] = value; }
+      const next = { ...prev };
+      if (Object.keys(curMap).length === 0) delete next[selCourse.id];
+      else next[selCourse.id] = curMap;
+      return next;
     });
   }
 
-  function resetOverride(e) {
+  // Click cycle: auto → forced-on → forced-off → auto
+  function cycleOverride(semTypeId) {
+    const cur = ovrMap[semTypeId];
+    if (cur === undefined)    setOverride(semTypeId, true);
+    else if (cur === true)    setOverride(semTypeId, false);
+    else                      setOverride(semTypeId, undefined);
+  }
+
+  function resetAllOverrides(e) {
     e.stopPropagation();
     setOfferedOverrides(prev => { const n = { ...prev }; delete n[selCourse.id]; return n; });
   }
 
   return (
-    <div style={{ width: compact ? "100%" : 148, flexShrink: 0 }}>
+    <div style={{ flexShrink: 0, width: compact ? "100%" : "auto", display: "flex", flexDirection: "column", paddingRight: compact ? 0 : 12 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
         <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em" }}>
           {t("info.offered.title")}
         </span>
         {hasOverride && (
-          <button onClick={resetOverride}
+          <button onClick={resetAllOverrides}
             style={{ fontSize: 8, color: "var(--text-5)", background: "none", border: "1px solid var(--border-card)", borderRadius: 3, cursor: "pointer", padding: "0 4px", lineHeight: "14px" }}>
             reset
           </button>
@@ -421,59 +444,90 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
       </div>
 
       {semTypes.map(({ id, label, shortLabel, theme }) => {
-        const color   = THEME_COLOR[theme] ?? "var(--text-4)";
-        const active  = activeTypes.includes(id);
-        const yrMap   = byType[id] ?? {};
-        // Years sorted ascending — oldest left, newest right
-        const years   = Object.keys(yrMap).map(Number).sort((a, b) => a - b);
+        const color  = THEME_COLOR[theme] ?? "var(--text-4)";
+        const yrMap  = byType[id] ?? {};
+        const prob   = semTypeProb(id);              // null | 0..1
+        const ovr    = ovrMap[id];                   // true | false | undefined
+
+        const probPct   = prob === null ? 0 : prob;
+        const labelDim  = ovr === false || (ovr === undefined && prob !== null && prob <= 0.5);
+        const probHint  = prob === null ? "No history" : `${Math.round(probPct * 100)}% historically`;
+        const ovrHint   = ovr === true ? " — forced on" : ovr === false ? " — forced off" : "";
+        const ctrlTip   = `${label}: ${probHint}${ovrHint} — click to cycle override`;
 
         return (
-          <label key={id}
-            style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, cursor: "pointer", userSelect: "none" }}
-            onClick={e => e.stopPropagation()}>
+          <div key={id}
+            style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, userSelect: "none" }}>
 
-            {/* Semtype label — abbreviated, full on hover */}
+            {/* Semtype label */}
             <span title={label}
-              style={{ fontSize: 10, color: active ? "var(--text-2)" : "var(--text-5)", width: 24, flexShrink: 0 }}>
+              style={{ fontSize: 10, color: labelDim ? "var(--text-5)" : "var(--text-2)", width: 24, flexShrink: 0 }}>
               {shortLabel}
             </span>
 
-            {/* Year history — fixed YR_CELL width per year, left = oldest, right = newest.
-                Each year label is absolutely positioned by calendar year so a course offered
-                in year N always appears in the same column regardless of total history length. */}
-            <div style={{ width: maxYrCount * YR_CELL, position: "relative", flexShrink: 0, height: 14 }}>
-              {years.map((yr, i) => {
-                const offered = yrMap[yr];
-                // Column index from the right: most recent year sits at the rightmost slot
-                const colFromRight = years.length - 1 - i;
-                const right = colFromRight * YR_CELL;
-                const tip = `${label} ${yr}: ${offered ? "offered" : "not offered"}`;
-                return (
-                  <span key={yr} title={tip}
-                    style={{
-                      position: "absolute", right,
-                      width: YR_CELL, textAlign: "center",
-                      fontSize: 9, fontWeight: 700, lineHeight: "14px",
-                      fontVariantNumeric: "tabular-nums",
-                      color: offered ? color : "var(--text-5)",
-                      opacity: offered ? 1 : 0.4,
-                    }}>
-                    {String(yr).slice(-2)}
-                  </span>
-                );
-              })}
-            </div>
+            {/* Year history — one fixed column per calendar year */}
+            {histWidth > 0 && (
+              <div style={{ width: histWidth, position: "relative", flexShrink: 0, height: 14 }}>
+                {Object.entries(yrMap).map(([yrStr, offered]) => {
+                  const yr    = Number(yrStr);
+                  const right = (globalMaxYear - yr) * YR_CELL;
+                  return (
+                    <span key={yr} title={`${label} ${yr}: ${offered ? "offered" : "not offered"}`}
+                      style={{
+                        position: "absolute", right,
+                        width: YR_CELL, textAlign: "center",
+                        fontSize: 9, fontWeight: 700, lineHeight: "14px",
+                        fontVariantNumeric: "tabular-nums",
+                        color: offered ? color : "var(--text-5)",
+                        opacity: offered ? 1 : 0.4,
+                      }}>
+                      {String(yr).slice(-2)}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
 
-            {/* Checkbox on the right */}
-            <input type="checkbox" checked={active}
-              onChange={() => toggle(id)}
-              style={{ accentColor: "var(--active)", cursor: "pointer", flexShrink: 0 }}
-            />
-          </label>
+            {/* 3-state control: auto (gradient fill) → forced-on (✓) → forced-off (✕) */}
+            <button
+              title={ctrlTip}
+              onClick={e => { e.stopPropagation(); cycleOverride(id); }}
+              style={{
+                flexShrink: 0,
+                position: "relative",
+                width: 14, height: 14,
+                border: `1.5px solid ${ovr === true ? "#22c55e" : ovr === false ? "var(--error)" : color + "55"}`,
+                borderRadius: 3,
+                background: "transparent",
+                cursor: "pointer",
+                padding: 0,
+                overflow: "hidden",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+              {ovr === undefined && (
+                <div style={{
+                  position: "absolute", bottom: 0, left: 0, right: 0,
+                  height: `${probPct * 100}%`,
+                  background: color, opacity: 0.65,
+                  pointerEvents: "none",
+                }} />
+              )}
+              {ovr === true && (
+                <div style={{ position: "absolute", inset: 0, background: "#22c55e", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 9, color: "#fff", lineHeight: 1, fontWeight: 700 }}>✓</span>
+                </div>
+              )}
+              {ovr === false && (
+                <div style={{ position: "absolute", inset: 0, background: "rgba(232,101,90,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 8, color: "var(--error)", lineHeight: 1, fontWeight: 700 }}>✕</span>
+                </div>
+              )}
+            </button>
+          </div>
         );
       })}
 
-      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 3, lineHeight: 1.4 }}>
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 3, lineHeight: 1.4, width: 0, minWidth: "100%" }}>
         {hasHistory ? t("info.offered.hint") : t("info.offered.nodata")}
       </div>
     </div>
