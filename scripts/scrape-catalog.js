@@ -107,13 +107,24 @@ function parseNUPath(text) {
   return found.sort();
 }
 
+// ── Extract courses marked "may be taken concurrently" from prereq text ───────
+// Returns { cleaned: string, concurrent: [{subject, number}] }
+function extractConcurrentCourses(text) {
+  const concurrent = [];
+  const pattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)\s*\(may be taken concurrently\)/gi;
+  const cleaned = text.replace(pattern, (_, subj, num) => {
+    concurrent.push({ subject: subj, number: num });
+    return '';
+  }).replace(/\s+/g, ' ').trim();
+  return { cleaned, concurrent };
+}
+
 // ── Prerequisite text → structured array (best-effort) ───────────────────────
 function parsePrereqText(text) {
     if (!text) return [];
 
-    // Remove "may be taken concurrently" and grade requirements
+    // Remove grade requirements (concurrent courses are handled before this call)
     let cleaned = text
-      .replace(/\(may be taken concurrently\)/gi, '')
       .replace(/with a minimum grade of [A-Z][+-]?/gi, '')
       .replace(/\s+/g, ' ')
       .trim();
@@ -248,9 +259,7 @@ function parseSubjectPage(html, subjectCode) {
     const nuPathEl = block.querySelector(
       "[class*='nupath'], [class*='NUpath'], [class*='attribute']"
     );
-    const nuPath = nuPathEl
-      ? parseNUPath(nuPathEl.textContent)
-      : parseNUPath(description);
+    const nuPath = nuPathEl ? parseNUPath(nuPathEl.textContent) : [];
 
     // ── Prereqs / coreqs (text extraction) ──
     const extraEls = block.querySelectorAll('.courseblockextra, p');
@@ -267,9 +276,15 @@ function parseSubjectPage(html, subjectCode) {
       }
     }
 
-    // ── Schedule type heuristic ──
+    // ── Extract concurrent courses from prereq text before parsing ──
+    const { cleaned: cleanedPrereq, concurrent } = extractConcurrentCourses(prereqText);
+
+    // ── Schedule type: explicit element → number suffix → title heuristic ──
     const scheduleType = (() => {
-      const t = description.toLowerCase() + rawTitle.toLowerCase();
+      const schedEl = block.querySelector('[class*="schedule"]');
+      if (schedEl?.textContent.trim()) return schedEl.textContent.trim();
+      if (/L$/i.test(number)) return "Lab";
+      const t = rawTitle.toLowerCase();
       if (t.includes("lab")) return "Lab";
       if (t.includes("seminar")) return "Seminar";
       if (t.includes("studio")) return "Studio";
@@ -287,8 +302,8 @@ function parseSubjectPage(html, subjectCode) {
       nuPath,
       sections: [],      // catalog has no section/term data
       description,
-      coreqs:  coreqText  ? parseCoreqText(coreqText)  : [],
-      prereqs: prereqText ? parsePrereqText(prereqText) : [],
+      coreqs:  [...(coreqText ? parseCoreqText(coreqText) : []), ...concurrent],
+      prereqs: cleanedPrereq ? parsePrereqText(cleanedPrereq) : [],
     });
   }
 
@@ -425,7 +440,7 @@ async function runRotate() {
       const merged = {
         ...prev,
         title:        cat.title        || prev.title,
-        credits:      cat.credits      || prev.credits,
+        credits:      cat.credits != null ? cat.credits : prev.credits,
         // creditsMax: set when catalog shows a range, clear when fixed-credit, preserve existing if cat has no data
         ...(cat.creditsMax !== undefined
           ? { creditsMax: cat.creditsMax }
@@ -602,7 +617,7 @@ if (MERGE) {
     return {
       ...c,
       title:        cat.title        || c.title,
-      credits:      cat.credits      || c.credits,
+      credits:      cat.credits != null ? cat.credits : c.credits,
       ...(cat.creditsMax !== undefined
         ? { creditsMax: cat.creditsMax }
         : cat.credits != null ? {} : c.creditsMax !== undefined ? { creditsMax: c.creditsMax } : {}),

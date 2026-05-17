@@ -12,7 +12,7 @@
     "data:patch": "node scripts/apply-patches.js",
     "data:patch:write": "node scripts/apply-patches.js --write",
     "data:validate": "node scripts/validate-patches.js",
-    "data:update": "node scripts/fetch-courses.js --write && node scripts/apply-patches.js --write",
+    "data:update": "node scripts/fetch-courses.js --write && node scripts/scrape-catalog.js --merge --write && node scripts/apply-patches.js --write",
     "data:scrape": "node scripts/scrape-catalog.js",
     "data:scrape:merge": "node scripts/scrape-catalog.js --merge",
     "data:scrape:write": "node scripts/scrape-catalog.js --merge --write",

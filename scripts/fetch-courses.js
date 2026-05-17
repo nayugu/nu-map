@@ -43,6 +43,17 @@ if (!Array.isArray(fresh)) {
   process.exit(1);
 }
 
+if (fresh.length === 0) {
+  console.error(`\n❌  API returned an empty array — aborting to avoid wiping all-courses.json.`);
+  process.exit(1);
+}
+
+const MIN_EXPECTED = 5000;
+if (fresh.length < MIN_EXPECTED) {
+  console.error(`\n❌  Only ${fresh.length} courses received (expected ≥${MIN_EXPECTED}) — looks truncated, aborting.`);
+  process.exit(1);
+}
+
 console.log(`   Received ${fresh.length.toLocaleString()} courses.`);
 
 // ── Load existing ────────────────────────────────────────────────────────────
@@ -143,7 +154,7 @@ if (!WRITE) {
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function diffFields(oldC, newC) {
-  const WATCH = ["title", "credits", "scheduleType", "nuPath", "description"];
+  const WATCH = ["title", "credits", "scheduleType", "nuPath", "description", "prereqs", "coreqs"];
   const out = [];
   for (const f of WATCH) {
     const ov = JSON.stringify(oldC[f]);

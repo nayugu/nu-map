@@ -468,6 +468,21 @@ function parseRequirements(root) {
   return { requirementSections, concentrations };
 }
 
+// ── Validate no internal markers escape into output ───────────────────────────
+function findLeakedMarkers(obj, path = '') {
+  if (!obj || typeof obj !== 'object') return [];
+  const leaks = [];
+  if (obj.type === '_CHOOSE') leaks.push(path);
+  for (const [k, v] of Object.entries(obj)) {
+    if (Array.isArray(v)) {
+      v.forEach((item, i) => leaks.push(...findLeakedMarkers(item, `${path}.${k}[${i}]`)));
+    } else if (v && typeof v === 'object') {
+      leaks.push(...findLeakedMarkers(v, `${path}.${k}`));
+    }
+  }
+  return leaks;
+}
+
 // ── Output path ───────────────────────────────────────────────────────────────
 
 function outPath(college, slug) {
@@ -531,6 +546,11 @@ async function main() {
         const path = outPath(prog.college, slug);
         const concCount = data.concentrations?.concentrationOptions?.length ?? 0;
         console.log(`OK  "${data.name}" — ${data.requirementSections.length} sections${concCount ? ` + ${concCount} concentrations` : ''}, ${data.totalCreditsRequired} SH`);
+
+        const leaks = findLeakedMarkers(data);
+        if (leaks.length) {
+          console.warn(`  ⚠  _CHOOSE markers not converted at: ${leaks.join(', ')}`);
+        }
 
         if (WRITE) {
           mkdirSync(dirname(path), { recursive: true });
