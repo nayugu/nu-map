@@ -376,11 +376,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const activeTypes = offeredOverrides[selCourse.id] ?? defaults;
   const hasOverride = !!offeredOverrides[selCourse.id];
 
-  // Fixed dot-column width keeps all semType rows aligned even when column counts differ
-  const DOT_CELL = 11; // px per column slot
-  const maxCols  = Math.max(0, ...semTypes.map(({ id }) =>
-    sortedCodes.filter(c => cal.decodeTermCode(c) === id).length
-  ));
+  const DOT_CELL = 11; // px per column slot — fixed so each slot is equally wide
 
   function toggle(semTypeId) {
     setOfferedOverrides(prev => {
@@ -427,9 +423,9 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
               {shortLabel}
             </span>
 
-            {/* Fixed-width dot timeline: each slot is DOT_CELL px wide so columns don't shift.
-                flex-end anchors newest slot to the right — gaps on left = older missing data. */}
-            <div style={{ width: maxCols * DOT_CELL, display: "flex", justifyContent: "flex-end", flexShrink: 0 }}>
+            {/* Dot timeline: each slot is DOT_CELL px wide, rendered in chronological order.
+                No container-width constraint — dots sit at their natural time position. */}
+            <div style={{ display: "flex", flexShrink: 0 }}>
               {dotCodes.map(code => {
                 const yr  = cal.getTermCodeYear?.(code);
                 const was = termHistory[code];
@@ -449,10 +445,12 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
               })}
             </div>
 
+            {/* Spacer pushes checkbox to the far right regardless of dot count */}
+            <div style={{ flex: 1 }} />
             {/* Checkbox on the right — user sees the evidence first, then decides to override */}
             <input type="checkbox" checked={active}
               onChange={() => toggle(id)}
-              style={{ accentColor: "var(--active)", cursor: "pointer", marginLeft: "auto", flexShrink: 0 }}
+              style={{ accentColor: "var(--active)", cursor: "pointer", flexShrink: 0 }}
             />
           </label>
         );
