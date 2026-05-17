@@ -856,6 +856,20 @@ function renderRun(run, deployedTs = null) {
     </div>`;
   }
 
+  // Availability scrape entries
+  if (run.type === "availability") {
+    const detail = `<div style="margin-top:8px;font-size:11px;color:var(--text2)">
+      <span style="color:var(--text)">${run.covered??0} / ${run.total??0} courses with history</span>
+      ${run.terms?.length ? `<div style="margin-top:4px;color:var(--text3)">${run.terms.join(" · ")}</div>` : ""}
+    </div>`;
+    return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div style="font-size:14px;font-weight:700;color:var(--accent)">${run.subject??run.type}</div>
+        <div style="display:flex;align-items:center;gap:8px">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+      </div>${detail}
+    </div>`;
+  }
+
   // Rotate entries
   const totalChanges = (run.added?.length??0)+(run.modified?.length??0)+(run.removedFromCatalog?.length??0);
   const badge = totalChanges

@@ -37,6 +37,8 @@ const __dirname      = dirname(fileURLToPath(import.meta.url));
 const ROOT           = resolve(__dirname, "..");
 const ALL_COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
 const HISTORY_OUT    = resolve(ROOT, "public/northeastern/term-history.json");
+const CHANGE_LOG     = resolve(ROOT, "public/northeastern/change-log.json");
+const CHANGE_LOG_MAX = 600;
 
 const BASE      = "https://nubanner.neu.edu/StudentRegistrationSsb/ssb";
 const PAGE_SIZE = 500;
@@ -273,6 +275,24 @@ async function main() {
   if (doWrite) {
     writeFileSync(HISTORY_OUT, JSON.stringify(termHistory, null, 2));
     console.log(`\nWrote ${HISTORY_OUT}`);
+
+    // Append to dev portal change log
+    let changeLog = { runs: [] };
+    if (existsSync(CHANGE_LOG)) {
+      try { changeLog = JSON.parse(readFileSync(CHANGE_LOG, "utf8")); } catch {}
+    }
+    changeLog.runs = changeLog.runs ?? [];
+    changeLog.runs.unshift({
+      type:      "availability",
+      subject:   "📅 Term Availability",
+      timestamp: new Date().toISOString(),
+      terms:     toQuery,
+      covered,
+      total,
+    });
+    if (changeLog.runs.length > CHANGE_LOG_MAX) changeLog.runs = changeLog.runs.slice(0, CHANGE_LOG_MAX);
+    writeFileSync(CHANGE_LOG, JSON.stringify(changeLog, null, 2) + "\n", "utf8");
+    console.log(`Wrote ${CHANGE_LOG}`);
   } else {
     console.log("\nDry run — pass --write to save term-history.json");
   }
