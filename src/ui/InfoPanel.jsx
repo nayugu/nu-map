@@ -355,13 +355,6 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
   );
 }
 
-// Map SemesterType theme → accent CSS variable for history year labels
-const THEME_COLOR = {
-  fall:   "var(--row-fall-border)",
-  spring: "var(--row-spr-border)",
-  summer: "var(--row-sum-border)",
-};
-
 const YR_CELL = 20; // px per year column
 
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
@@ -382,6 +375,17 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     }
   }
 
+  // Latest calendar year we have past data for, per semType — used to box the freshest point.
+  const latestPastYearByType = {};
+  for (const code of Object.keys(termHistory)) {
+    const semType = cal.decodeTermCode(code);
+    const yr      = cal.getTermCodeYear?.(code);
+    if (semType && yr != null && cal.isTermPast(code)) {
+      if (!latestPastYearByType[semType] || yr > latestPastYearByType[semType])
+        latestPastYearByType[semType] = yr;
+    }
+  }
+
   // Global year range — defines shared fixed columns across all semType rows.
   const allYearNums   = Object.values(byType).flatMap(m => Object.keys(m).map(Number));
   const globalMinYear = allYearNums.length ? Math.min(...allYearNums) : 0;
@@ -396,8 +400,10 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const hasOverride = Object.keys(ovrMap).length > 0;
 
   // Historical offering probability for a given semTypeId (null if no data).
+  // Only counts terms that have already started — future terms have unsettled Banner data.
   function semTypeProb(semTypeId) {
-    const entries = Object.entries(termHistory).filter(([code]) => cal.decodeTermCode(code) === semTypeId);
+    const entries = Object.entries(termHistory)
+      .filter(([code]) => cal.decodeTermCode(code) === semTypeId && cal.isTermPast(code));
     if (!entries.length) return null;
     return entries.filter(([, v]) => v).length / entries.length;
   }
@@ -443,17 +449,17 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
         )}
       </div>
 
-      {semTypes.map(({ id, label, shortLabel, theme }) => {
-        const color  = THEME_COLOR[theme] ?? "var(--text-4)";
+      {semTypes.map(({ id, label, shortLabel }) => {
         const yrMap  = byType[id] ?? {};
         const prob   = semTypeProb(id);              // null | 0..1
         const ovr    = ovrMap[id];                   // true | false | undefined
 
-        const probPct   = prob === null ? 0 : prob;
-        const labelDim  = ovr === false || (ovr === undefined && prob !== null && prob <= 0.5);
-        const probHint  = prob === null ? "No history" : `${Math.round(probPct * 100)}% historically`;
-        const ovrHint   = ovr === true ? " — forced on" : ovr === false ? " — forced off" : "";
-        const ctrlTip   = `${label}: ${probHint}${ovrHint} — click to cycle override`;
+        const probPct       = prob === null ? 0 : prob;
+        const labelDim      = ovr === false || (ovr === undefined && prob !== null && prob <= 0.5);
+        const latestPastYr  = latestPastYearByType[id] ?? null;
+        const probHint      = prob === null ? "No history" : `${Math.round(probPct * 100)}% historically`;
+        const ovrHint       = ovr === true ? " — forced on" : ovr === false ? " — forced off" : "";
+        const ctrlTip       = `${label}: ${probHint}${ovrHint} — click to cycle override`;
 
         return (
           <div key={id}
@@ -469,17 +475,26 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
             {histWidth > 0 && (
               <div style={{ width: histWidth, position: "relative", flexShrink: 0, height: 14 }}>
                 {Object.entries(yrMap).map(([yrStr, offered]) => {
-                  const yr    = Number(yrStr);
-                  const right = (globalMaxYear - yr) * YR_CELL;
+                  const yr       = Number(yrStr);
+                  const right    = (globalMaxYear - yr) * YR_CELL;
+                  const isLatest = yr === latestPastYr;
                   return (
-                    <span key={yr} title={`${label} ${yr}: ${offered ? "offered" : "not offered"}`}
+                    <span key={yr}
+                      title={`${label} ${yr}: ${offered ? "offered" : "not offered"}${isLatest ? " — latest data" : ""}`}
                       style={{
                         position: "absolute", right,
-                        width: YR_CELL, textAlign: "center",
-                        fontSize: 9, fontWeight: 700, lineHeight: "14px",
+                        width: YR_CELL - (isLatest ? 2 : 0),
+                        textAlign: "center",
+                        fontSize: 9, fontWeight: isLatest ? 800 : 700,
+                        lineHeight: "12px",
                         fontVariantNumeric: "tabular-nums",
-                        color: offered ? color : "var(--text-5)",
-                        opacity: offered ? 1 : 0.4,
+                        color: offered ? "var(--text-2)" : "var(--text-5)",
+                        opacity: offered ? 1 : 0.35,
+                        ...(isLatest ? {
+                          border: "1px solid var(--text-4)",
+                          borderRadius: 2,
+                          marginTop: 1,
+                        } : {}),
                       }}>
                       {String(yr).slice(-2)}
                     </span>
@@ -496,7 +511,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                 flexShrink: 0,
                 position: "relative",
                 width: 14, height: 14,
-                border: `1.5px solid ${ovr === true ? "#22c55e" : ovr === false ? "var(--error)" : color + "55"}`,
+                border: `1.5px solid ${ovr === true ? "#22c55e" : ovr === false ? "var(--error)" : "var(--border-1)"}`,
                 borderRadius: 3,
                 background: "transparent",
                 cursor: "pointer",
@@ -508,7 +523,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                 <div style={{
                   position: "absolute", bottom: 0, left: 0, right: 0,
                   height: `${probPct * 100}%`,
-                  background: color, opacity: 0.65,
+                  background: "var(--text-3)", opacity: 0.4,
                   pointerEvents: "none",
                 }} />
               )}
@@ -527,7 +542,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
         );
       })}
 
-      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 3, lineHeight: 1.4, width: 0, minWidth: "100%" }}>
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 10, lineHeight: 1.4, width: 0, minWidth: "100%" }}>
         {hasHistory ? t("info.offered.hint") : t("info.offered.nodata")}
       </div>
     </div>

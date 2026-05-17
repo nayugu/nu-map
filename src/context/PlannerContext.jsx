@@ -1399,11 +1399,20 @@ export function PlannerProvider({ children }) {
   }, [SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Offered overrides setter ─────────────────────────────────
-  const toggleOffered = (courseId, type, currentList) => {
+  // offeredOverrides shape: { courseId: { semTypeId: true | false } }
+  // Absent key = auto (probability-based). Cycle: auto → true → false → auto.
+  const toggleOffered = (courseId, semTypeId) => {
     setOfferedOverrides(prev => {
-      const cur  = prev[courseId] ?? currentList;
-      const next = cur.includes(type) ? cur.filter(t => t !== type) : [...cur, type];
-      return { ...prev, [courseId]: next };
+      const cur    = prev[courseId];
+      const curMap = (!cur || Array.isArray(cur)) ? {} : { ...cur };
+      const existing = curMap[semTypeId];
+      if (existing === undefined)   curMap[semTypeId] = true;
+      else if (existing === true)   curMap[semTypeId] = false;
+      else                          delete curMap[semTypeId];
+      const next = { ...prev };
+      if (Object.keys(curMap).length === 0) delete next[courseId];
+      else next[courseId] = curMap;
+      return next;
     });
   };
 

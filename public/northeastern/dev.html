@@ -305,7 +305,7 @@ const PW_SALT = "numap-dev-portal-2026";
 const PW_ITER = 300_000;
 
 const ADAPTER_DEFS = [
-  { id:"offerings", icon:"📡", label:"Course Offerings",    desc:"Fetch live section data from husker.vercel.app",                                     schedule:"Jan/Mar/May/Jul/Sep/Nov · 1st · 06:00 UTC", workflow:"update-courses.yml" },
+  { id:"availability",icon:"📡", label:"Term Availability",  desc:"Query nubanner.neu.edu Banner for per-course offering history (last 2 AYs)",       schedule:"Every month · 1st · 06:00 UTC",             workflow:"update-courses.yml" },
   { id:"catalog",   icon:"📚", label:"Course Catalog",      desc:"Scrape titles, descriptions, credits, prereqs from catalog.northeastern.edu",         schedule:"Every month · 1st · 06:00 UTC",             workflow:"update-courses.yml" },
   { id:"majors",    icon:"🎓", label:"Major Requirements",  desc:"Scrape degree requirement trees from catalog.northeastern.edu",                        schedule:"Jan/Mar/May/Jul/Sep/Nov · 1st · 08:00 UTC", workflow:"update-majors.yml"  },
   { id:"nupath",    icon:"🏷",  label:"NUPath Attributes",   desc:"Fetch from Tableau (official source), falls back to catalog.northeastern.edu",        schedule:"Manual",                                    workflow:"update-nupath.yml"  },

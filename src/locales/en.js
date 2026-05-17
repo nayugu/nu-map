@@ -91,8 +91,8 @@ export const strings = {
   "info.prereqs":                 "Prereqs:",
   "info.relationships.title":     "RELATIONSHIPS",
   "info.offered.title":           "OFFERED IN",
-  "info.offered.hint":            "Years show Banner history (oldest\u2192newest). Override checkboxes for your plan.",
-  "info.offered.nodata":          "No scheduling data for this course \u2014 override checkboxes if needed.",
+  "info.offered.hint":            "Boxed = most recent term. Click to override: \u2713 always offered \xb7 \u2715 never.",
+  "info.offered.nodata":          "No Banner data for this course. Click to override: \u2713 offered \xb7 \u2715 not.",
   "info.drag.title":              "drag to place",
 
   // ── Header ─────────────────────────────────────────────────────

@@ -75,6 +75,17 @@ const calendar = {
     return suffix === "10" ? year - 1 : year;
   },
 
+  // Returns true only when the term's first class day has already passed.
+  // Future/upcoming terms have unreliable Banner data (registration not yet settled).
+  isTermPast(code) {
+    const semTypeId = this.decodeTermCode(code);
+    const yr = this.getTermCodeYear(code);
+    if (!semTypeId || yr == null) return false;
+    const firstMonth = { fall: 9, spring: 1, sumA: 5, sumB: 7 }[semTypeId];
+    if (!firstMonth) return false;
+    return new Date(yr, firstMonth - 1, 1) <= new Date();
+  },
+
   getSources() { return []; },
 };
 

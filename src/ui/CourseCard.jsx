@@ -27,7 +27,6 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const creditSystem = usePort(ICreditSystem);
   const calendar     = usePort(ICalendar);
   const { t }        = useLanguage();
-  const defaultOffered = calendar.getSemesterTypes().filter(t => !t.optional).map(t => t.id);
 
   const [editingSh, setEditingSh] = useState(false);
 
@@ -41,13 +40,27 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const hasSel        = selectedId !== null;
   const isCardHov     = hoveredCardId === course.id && dragInfo?.id !== course.id;
 
-  // Offered-semester warning
-  const semMeta       = semId ? SEMESTERS.find(s => s.id === semId) : null;
-  const semOffType    = inSem ? semMeta?.semTypeId ?? null : null;
-  const offeredList   = offeredOverrides[course.id]
-    ?? (course.terms?.length ? course.terms : null)
-    ?? defaultOffered;
-  const notOffered = inSem && semOffType && semMeta?.type !== "special" && !offeredList.includes(semOffType);
+  // Offered-semester warning — probability-based (≤ 50% triggers ⚠).
+  // Explicit override in offeredOverrides[course.id][semTypeId] takes precedence:
+  //   true  = force-offered (suppress warning)
+  //   false = force-not-offered (always warn)
+  //   absent = auto: warn only when historical probability ≤ 0.5
+  const semMeta    = semId ? SEMESTERS.find(s => s.id === semId) : null;
+  const semOffType = inSem ? semMeta?.semTypeId ?? null : null;
+  let notOffered = false;
+  if (inSem && semOffType && semMeta?.type !== "special") {
+    const rawOvr = offeredOverrides[course.id];
+    const semOvr = (rawOvr && !Array.isArray(rawOvr)) ? rawOvr[semOffType] : undefined;
+    if (semOvr === false) {
+      notOffered = true;
+    } else if (semOvr !== true) {
+      const entries = Object.entries(course.termHistory ?? {})
+        .filter(([code]) => calendar.decodeTermCode(code) === semOffType && calendar.isTermPast(code));
+      if (entries.length > 0) {
+        notOffered = entries.filter(([, v]) => v).length / entries.length <= 0.5;
+      }
+    }
+  }
 
   let borderColor = isCardHov ? "var(--active)" : "var(--border-card)";
   if (coreqViol)                                                borderColor = "var(--warn-bright)";  // always wins
@@ -310,7 +323,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         {notOffered && (() => {
           // Build a probability hint from termHistory if available
           const hist    = course.termHistory ?? {};
-          const entries = Object.entries(hist).filter(([c]) => calendar.decodeTermCode(c) === semOffType);
+          const entries = Object.entries(hist).filter(([c]) => calendar.decodeTermCode(c) === semOffType && calendar.isTermPast(c));
           const tip = entries.length > 0
             ? `${course.code}: offered in ${entries.filter(([,v]) => v).length}/${entries.length} past ${semOffType} terms — override in panel`
             : `${course.code} may not be offered in ${semOffType} — override in panel`;

@@ -175,8 +175,7 @@ async function fetchTermOfferings(termCode) {
     }
 
     if (totalCount === null) totalCount = data.totalCount ?? 0;
-    const fetched = data.sectionsFetchedCount ?? sections.length;
-    if (fetched === 0 || offset + fetched >= totalCount) break;
+    if (sections.length === 0 || offset + sections.length >= totalCount) break;
     offset += PAGE_SIZE;
     await sleep(DELAY_MS);
   }
