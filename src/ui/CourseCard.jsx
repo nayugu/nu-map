@@ -67,7 +67,6 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   if (isPhone && !inSem) {
     return (
       <div
-        ref={el => { cardRefs.current[course.id] = el; }}
         draggable
         data-drag-id={course.id}
         data-drag-type="course"
@@ -163,7 +162,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
 
   return (
     <div
-      ref={el => { cardRefs.current[course.id] = el; }}
+      ref={el => { if (inSem) cardRefs.current[course.id] = el; }}
       draggable
       data-drag-id={course.id}
       data-drag-type="course"
