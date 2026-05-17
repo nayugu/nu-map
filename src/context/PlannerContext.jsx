@@ -655,20 +655,21 @@ export function PlannerProvider({ children }) {
   const coreqViolations = useMemo(() => {
     const v = new Map();
     allEdges.filter(e => e.type === "corequisite").forEach(({ from, to }) => {
-      [{ placed: from, partner: to }, { placed: to, partner: from }].forEach(({ placed, partner }) => {
-        const placedTaken = placements[placed] !== undefined || placedOut.has(placed);
-        const partnerTaken = placements[partner] !== undefined || placedOut.has(partner);
-        if (!placedTaken) return;
-        if (placements[placed] === "incoming") return;
-        if (placedOut.has(placed)) return; // skip placed-out courses – they have no coreq warnings
-        if (!partnerTaken) {
-          v.set(placed, "alone");
-        } else if (placements[placed] && placements[partner] && placements[placed] !== placements[partner]) {
-          // both placed in different semesters → violation
-          if (v.get(placed) !== "alone") v.set(placed, "sep");
-        }
-        // If one is placed out, no violation (treated as satisfied)
-      });
+      // Only warn `to` (the course that declared the coreq). Symmetric pairs each
+      // have their own edge in both directions, so each side is still covered.
+      // Checking `from` as well would falsely warn e.g. CS 2100 for not being
+      // co-placed with every course that lists CS 2100 as its coreq.
+      const placed = to, partner = from;
+      const placedTaken = placements[placed] !== undefined || placedOut.has(placed);
+      const partnerTaken = placements[partner] !== undefined || placedOut.has(partner);
+      if (!placedTaken) return;
+      if (placements[placed] === "incoming") return;
+      if (placedOut.has(placed)) return;
+      if (!partnerTaken) {
+        v.set(placed, "alone");
+      } else if (placements[placed] && placements[partner] && placements[placed] !== placements[partner]) {
+        if (v.get(placed) !== "alone") v.set(placed, "sep");
+      }
     });
     return v;
   }, [allEdges, placements, placedOut]);
