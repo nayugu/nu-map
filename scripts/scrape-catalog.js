@@ -303,7 +303,8 @@ function parseSubjectPage(html, subjectCode) {
       sections: [],      // catalog has no section/term data
       description,
       coreqs:  [...(coreqText ? parseCoreqText(coreqText) : []), ...concurrent],
-      prereqs: cleanedPrereq ? parsePrereqText(cleanedPrereq) : [],
+      // Only parse cleanedPrereq if it still contains course references after concurrent extraction
+      prereqs: (cleanedPrereq && /[A-Z]{2,6}\s+\d{4}/.test(cleanedPrereq)) ? parsePrereqText(cleanedPrereq) : [],
     });
   }
 
@@ -450,8 +451,10 @@ async function runRotate() {
         scheduleType: cat.scheduleType || prev.scheduleType,
         description:  cat.description  || prev.description,
         nuPath:       cat.nuPath?.length  ? cat.nuPath  : prev.nuPath,
-        prereqs: (Array.isArray(cat.prereqs) && cat.prereqs.length > 0) ? cat.prereqs : (prev.prereqs ?? []),
-        coreqs: (Array.isArray(cat.coreqs) && cat.coreqs.length > 0) ? cat.coreqs : (prev.coreqs ?? []),
+        // Always trust catalog prereqs/coreqs when they exist (even empty = confirmed no prereqs).
+        // Only fall back to prev when catalog had no record for this course (cat field is undefined).
+        prereqs: Array.isArray(cat.prereqs) ? cat.prereqs : (prev.prereqs ?? []),
+        coreqs:  Array.isArray(cat.coreqs)  ? cat.coreqs  : (prev.coreqs  ?? []),
       };
       const changes = diffCourse(prev, merged);
       if (changes.length > 0) {
@@ -624,8 +627,8 @@ if (MERGE) {
       scheduleType: cat.scheduleType || c.scheduleType,
       description:  cat.description  || c.description,
       nuPath:       cat.nuPath?.length ? cat.nuPath : c.nuPath,
-      prereqs:      cat.prereqs?.length ? cat.prereqs : c.prereqs,
-      coreqs:       cat.coreqs?.length  ? cat.coreqs  : c.coreqs,
+      prereqs:      Array.isArray(cat.prereqs) ? cat.prereqs : c.prereqs,
+      coreqs:       Array.isArray(cat.coreqs)  ? cat.coreqs  : c.coreqs,
     };
   });
 
