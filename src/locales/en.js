@@ -91,7 +91,7 @@ export const strings = {
   "info.prereqs":                 "Prereqs:",
   "info.relationships.title":     "RELATIONSHIPS",
   "info.offered.title":           "OFFERED IN",
-  "info.offered.hint":            "Dots show Banner history (oldest\u2192newest). Override checkboxes for your plan.",
+  "info.offered.hint":            "Years show Banner history (oldest\u2192newest). Override checkboxes for your plan.",
   "info.offered.nodata":          "No scheduling data for this course \u2014 override checkboxes if needed.",
   "info.drag.title":              "drag to place",
 

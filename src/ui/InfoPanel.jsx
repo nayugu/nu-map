@@ -355,12 +355,14 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
   );
 }
 
-// Map SemesterType theme → accent CSS variable for history dots
-const THEME_DOT = {
+// Map SemesterType theme → accent CSS variable for history year labels
+const THEME_COLOR = {
   fall:   "var(--row-fall-border)",
   spring: "var(--row-spr-border)",
   summer: "var(--row-sum-border)",
 };
+
+const YR_CELL = 20; // px per year column
 
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const cal         = usePort(ICalendar);
@@ -369,14 +371,26 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const termHistory = selCourse.termHistory ?? {};
   const hasHistory  = Object.keys(termHistory).length > 0;
 
-  const sortedCodes = Object.keys(termHistory).sort();
+  // Build lookup: { semTypeId → { calYear → offered:boolean } }
+  // calYear is the calendar year the term actually runs in (via getTermCodeYear).
+  const byType = {};
+  for (const [code, offered] of Object.entries(termHistory)) {
+    const semType = cal.decodeTermCode(code);
+    const yr      = cal.getTermCodeYear?.(code);
+    if (semType && yr != null) {
+      (byType[semType] ??= {})[yr] = offered;
+    }
+  }
 
   const primarySems = semTypes.filter(s => !s.optional).map(s => s.id);
   const defaults    = selCourse.terms?.length ? selCourse.terms : primarySems;
   const activeTypes = offeredOverrides[selCourse.id] ?? defaults;
   const hasOverride = !!offeredOverrides[selCourse.id];
 
-  const DOT_CELL = 11; // px per column slot — fixed so each slot is equally wide
+  // Widest year set across all semTypes — used to size the history area consistently
+  const maxYrCount = Math.max(0, ...semTypes.map(({ id }) =>
+    Object.keys(byType[id] ?? {}).length
+  ));
 
   function toggle(semTypeId) {
     setOfferedOverrides(prev => {
@@ -407,47 +421,50 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
       </div>
 
       {semTypes.map(({ id, label, shortLabel, theme }) => {
-        const color    = THEME_DOT[theme] ?? "var(--text-4)";
-        const active   = activeTypes.includes(id);
-        const dotCodes = sortedCodes.filter(c => cal.decodeTermCode(c) === id);
+        const color   = THEME_COLOR[theme] ?? "var(--text-4)";
+        const active  = activeTypes.includes(id);
+        const yrMap   = byType[id] ?? {};
+        // Years sorted ascending — oldest left, newest right
+        const years   = Object.keys(yrMap).map(Number).sort((a, b) => a - b);
 
         return (
-          // Whole row is a label — clicking anywhere toggles the checkbox
           <label key={id}
             style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, cursor: "pointer", userSelect: "none" }}
             onClick={e => e.stopPropagation()}>
 
-            {/* Abbreviated semtype label; full name on hover */}
+            {/* Semtype label — abbreviated, full on hover */}
             <span title={label}
               style={{ fontSize: 10, color: active ? "var(--text-2)" : "var(--text-5)", width: 24, flexShrink: 0 }}>
               {shortLabel}
             </span>
 
-            {/* Dot timeline: each slot is DOT_CELL px wide, rendered in chronological order.
-                No container-width constraint — dots sit at their natural time position. */}
-            <div style={{ display: "flex", flexShrink: 0 }}>
-              {dotCodes.map(code => {
-                const yr  = cal.getTermCodeYear?.(code);
-                const was = termHistory[code];
-                const tip = yr ? `${label} ${yr}: ${was ? "offered" : "not offered"}` : code;
+            {/* Year history — fixed YR_CELL width per year, left = oldest, right = newest.
+                Each year label is absolutely positioned by calendar year so a course offered
+                in year N always appears in the same column regardless of total history length. */}
+            <div style={{ width: maxYrCount * YR_CELL, position: "relative", flexShrink: 0, height: 14 }}>
+              {years.map((yr, i) => {
+                const offered = yrMap[yr];
+                // Column index from the right: most recent year sits at the rightmost slot
+                const colFromRight = years.length - 1 - i;
+                const right = colFromRight * YR_CELL;
+                const tip = `${label} ${yr}: ${offered ? "offered" : "not offered"}`;
                 return (
-                  <div key={code} style={{ width: DOT_CELL, display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <div title={tip}
-                      style={{
-                        width: 7, height: 7, borderRadius: "50%",
-                        background: was ? color : "transparent",
-                        border: `1.5px solid ${was ? color : "var(--text-5)"}`,
-                        opacity: was ? 1 : 0.55,
-                      }}
-                    />
-                  </div>
+                  <span key={yr} title={tip}
+                    style={{
+                      position: "absolute", right,
+                      width: YR_CELL, textAlign: "center",
+                      fontSize: 9, fontWeight: 700, lineHeight: "14px",
+                      fontVariantNumeric: "tabular-nums",
+                      color: offered ? color : "var(--text-5)",
+                      opacity: offered ? 1 : 0.4,
+                    }}>
+                    {String(yr).slice(-2)}
+                  </span>
                 );
               })}
             </div>
 
-            {/* Spacer pushes checkbox to the far right regardless of dot count */}
-            <div style={{ flex: 1 }} />
-            {/* Checkbox on the right — user sees the evidence first, then decides to override */}
+            {/* Checkbox on the right */}
             <input type="checkbox" checked={active}
               onChange={() => toggle(id)}
               style={{ accentColor: "var(--active)", cursor: "pointer", flexShrink: 0 }}
