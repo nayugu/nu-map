@@ -600,6 +600,15 @@ if (errors.length > 0) {
 writeFileSync(CATALOG_OUT, JSON.stringify(allCourses, null, 0), "utf8");
 console.log(`\n✅  Wrote catalog snapshot → public/catalog-courses.json`);
 
+if (WRITE && !MERGE) {
+  const now   = new Date();
+  const label = now.toLocaleString("en-US", { month: "short", year: "numeric" });
+  const metaPayload = { lastUpdated: label, courseCount: allCourses.length };
+  writeFileSync(META_SRC_PATH, JSON.stringify(metaPayload, null, 2) + "\n", "utf8");
+  writeFileSync(META_PUB_PATH, JSON.stringify(metaPayload, null, 2) + "\n", "utf8");
+  console.log(`✅  dataMeta updated → lastUpdated: "${label}"`);
+}
+
 // ── Merge mode ────────────────────────────────────────────────────────────────
 
 if (MERGE) {

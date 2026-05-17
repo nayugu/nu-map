@@ -2,9 +2,10 @@ name: Update Course Data
 
 # Runs on the 1st of every month at 06:00 UTC.
 #
-# On ALL months:   scrape catalog.northeastern.edu → overlay → apply patches
-# On ODD months:  also fetch fresh offerings from husker.vercel.app first
-#                 (January, March, May, July, September, November)
+# Every month:
+#   1. Scrape catalog.northeastern.edu → catalog-courses.json
+#   2. Query nubanner.neu.edu for recent term availability → term-history.json
+#   3. Apply manual patches
 #
 # Pushes directly to main — no PR. Same pattern as update-nupath.yml.
 
@@ -12,12 +13,6 @@ on:
   schedule:
     - cron: "0 6 1 * *"   # 06:00 UTC on the 1st of every month
   workflow_dispatch:
-    inputs:
-      force_offerings:
-        description: "Force offerings fetch even on an even month"
-        required: false
-        default: "false"
-        type: boolean
 
 permissions:
   contents: write
@@ -42,34 +37,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # ── Decide whether to fetch offerings this run ────────────────────────
-      - name: Check if offerings run is due
-        id: schedule
-        run: |
-          MONTH=$(date -u +%-m)
-          FORCE="${{ github.event.inputs.force_offerings }}"
-          if (( MONTH % 2 == 1 )) || [ "$FORCE" = "true" ]; then
-            echo "fetch_offerings=true" >> "$GITHUB_OUTPUT"
-            echo "Offerings fetch: YES (month $MONTH)"
-          else
-            echo "fetch_offerings=false" >> "$GITHUB_OUTPUT"
-            echo "Offerings fetch: NO  (month $MONTH — even month)"
-          fi
+      # ── Step 1: Scrape catalog.northeastern.edu ───────────────────────────────
+      - name: Scrape catalog
+        run: node scripts/scrape-catalog.js --write 2>&1 | tee /tmp/catalog-log.txt
 
-      # ── Step 1 (odd months): Fetch offerings from husker.vercel.app ───────
-      - name: Fetch course offerings
-        if: steps.schedule.outputs.fetch_offerings == 'true'
-        run: node scripts/fetch-courses.js --write 2>&1 | tee /tmp/offerings-log.txt
+      # ── Step 2: Fetch term availability from nubanner.neu.edu ─────────────────
+      - name: Scrape term availability
+        run: node scripts/scrape-availability.js --write 2>&1 | tee /tmp/availability-log.txt
 
-      # ── Step 2 (every month): Overlay catalog metadata ────────────────────
-      - name: Scrape catalog overlay
-        run: node scripts/scrape-catalog.js --merge --write 2>&1 | tee /tmp/catalog-log.txt
-
-      # ── Step 3 (every month): Apply manual patches ────────────────────────
+      # ── Step 3: Apply manual patches ──────────────────────────────────────────
       - name: Apply patches
         run: node scripts/apply-patches.js --write 2>&1 | tee /tmp/patches-log.txt
 
-      # ── Commit and push directly to main ──────────────────────────────────
+      # ── Commit and push directly to main ──────────────────────────────────────
       - name: Check for changes
         id: changes
         run: git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -80,20 +60,16 @@ jobs:
           git config user.name  "nu-map-bot"
           git config user.email "nu-map-bot@users.noreply.github.com"
 
-          MONTH=$(date -u +%-m)
           DATE=$(date -u '+%Y-%m')
-          OFFERINGS="${{ steps.schedule.outputs.fetch_offerings }}"
-          TYPE="catalog"
-          [ "$OFFERINGS" = "true" ] && TYPE="offerings + catalog"
 
           git add \
-            public/northeastern/all-courses.json \
             public/northeastern/catalog-courses.json \
+            public/northeastern/term-history.json \
             src/core/dataMeta.json \
             public/data-meta.json
-          git diff --cached --quiet || git commit -m "data: update courses ($TYPE) [$DATE]
+          git diff --cached --quiet || git commit -m "data: update courses (catalog + availability) [$DATE]
 
-          Triggered by: scheduled run (month $MONTH)
+          Triggered by: scheduled run
           Workflow run: ${{ github.run_id }}"
 
           git push origin main
@@ -102,21 +78,19 @@ jobs:
         if: steps.changes.outputs.changed == 'false'
         run: echo "✅  Course data is already up-to-date — nothing to commit."
 
-      # ── Write run summary ─────────────────────────────────────────────────
+      # ── Write run summary ─────────────────────────────────────────────────────
       - name: Summary
         if: always()
         run: |
           echo "## Course Data Update Summary" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          if [ -f /tmp/offerings-log.txt ]; then
-            echo "### Offerings fetch" >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-            cat /tmp/offerings-log.txt >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-          fi
-          echo "### Catalog overlay" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Catalog scrape" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           cat /tmp/catalog-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "### Term availability scrape" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat /tmp/availability-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           echo "### Patches" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"

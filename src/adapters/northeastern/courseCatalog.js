@@ -12,9 +12,8 @@
 import { subjectColor } from "../../core/courseModel.js";
 import calendar from "./calendar.js";
 
-const LOCAL_URL   = `${import.meta.env.BASE_URL}northeastern/all-courses.json`;
+const LOCAL_URL   = `${import.meta.env.BASE_URL}northeastern/catalog-courses.json`;
 const HISTORY_URL = `${import.meta.env.BASE_URL}northeastern/term-history.json`;
-const API_URL     = "https://husker.vercel.app/courses/all";
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -45,10 +44,7 @@ function deriveTerms(termHistory) {
 
 // ── Normalization ────────────────────────────────────────────────
 
-/**
- * Enrollment-restriction patterns that ninest/nu-courses sometimes
- * stores in the `description` field instead of actual content.
- */
+/** Enrollment-restriction patterns sometimes stored in the description field instead of actual content. */
 const RESTRICTION_ONLY = /^(not open to|open only to|restricted to|required only for|graduate students only|undergraduate students only|for [a-z, ]+(students|majors|minors))/i;
 
 function sanitizeDesc(raw) {
@@ -59,11 +55,10 @@ function sanitizeDesc(raw) {
 }
 
 /**
- * Normalize a raw ninest/nu-courses record into the internal Course shape.
+ * Normalize a raw catalog record into the internal Course shape.
  * Returns null if the record is missing a subject or number.
- * Term codes are decoded to semester type IDs here so the core never sees Banner codes.
  *
- * @param {object} raw - Raw record from ninest/nu-courses
+ * @param {object} raw
  * @returns {import('../../ports/ICourseCatalog.js').Course|null}
  */
 function normalizeCourse(raw) {
@@ -78,7 +73,7 @@ function normalizeCourse(raw) {
                : typeof raw.creditHours=== "number" ? raw.creditHours
                : 4;
 
-  // ninest/nu-courses: sections[]{term} — de-duplicate term codes
+  // sections[]{term} — de-duplicate term codes
   const rawTermCodes = raw.terms?.length
     ? raw.terms
     : (raw.sections || []).map(s => (typeof s === "string" ? s : s?.term ?? "")).filter(Boolean);
@@ -112,7 +107,7 @@ function normalizeCourse(raw) {
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],
     termHistory,
     terms:        uniqueTerms,
-    attributes:   raw.nuPath ?? raw.attributes ?? [],  // nuPath: legacy ninest field name
+    attributes:   raw.nuPath ?? raw.attributes ?? [],
     color:        subjectColor(subject),
   };
 }
@@ -140,17 +135,8 @@ export default {
     let json;
     try {
       json = await tryFetch(LOCAL_URL);
-    } catch (localErr) {
-      console.warn("Local file unavailable, trying API:", localErr.message);
-      try {
-        json = await tryFetch(API_URL);
-      } catch (apiErr) {
-        throw new Error(
-          `Could not load course catalog.\n` +
-          `\u2022 Local (${LOCAL_URL}): ${localErr.message}\n` +
-          `\u2022 API (${API_URL}): ${apiErr.message}`
-        );
-      }
+    } catch (err) {
+      throw new Error(`Could not load course catalog from ${LOCAL_URL}: ${err.message}`);
     }
     const raw = Array.isArray(json) ? json : Object.values(json).flat();
     const courses = raw.map(normalizeCourse).filter(Boolean);
@@ -173,7 +159,7 @@ export default {
     return courses;
   },
 
-  /** Normalize a single raw ninest/nu-courses record into the Course shape. */
+  /** Normalize a single raw catalog record into the Course shape. */
   normalize: normalizeCourse,
 
   /**
@@ -187,17 +173,15 @@ export default {
   getSources() {
     return [
       {
-        id:      "nu-courses",
-        label:   "ninest/nu-courses",
-        url:     "https://github.com/ninest/nu-courses",
-        author:  "ninest",
+        id:      "catalog",
+        label:   "catalog.northeastern.edu",
+        url:     "https://catalog.northeastern.edu/course-descriptions/",
         usedFor: "course catalog data",
       },
       {
         id:      "nubanner",
         label:   "nubanner.neu.edu",
         url:     "https://nubanner.neu.edu/StudentRegistrationSsb",
-        author:  "Northeastern University",
         usedFor: "term availability history",
       },
     ];
