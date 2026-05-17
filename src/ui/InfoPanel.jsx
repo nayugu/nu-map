@@ -363,19 +363,24 @@ const THEME_DOT = {
 };
 
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
-  const cal        = usePort(ICalendar);
-  const { t }      = useLanguage();
-  const semTypes   = cal.getSemesterTypes();
+  const cal         = usePort(ICalendar);
+  const { t }       = useLanguage();
+  const semTypes    = cal.getSemesterTypes();
   const termHistory = selCourse.termHistory ?? {};
   const hasHistory  = Object.keys(termHistory).length > 0;
 
-  // Sort term codes chronologically (Banner codes are lexicographically chronological)
   const sortedCodes = Object.keys(termHistory).sort();
 
   const primarySems = semTypes.filter(s => !s.optional).map(s => s.id);
   const defaults    = selCourse.terms?.length ? selCourse.terms : primarySems;
   const activeTypes = offeredOverrides[selCourse.id] ?? defaults;
   const hasOverride = !!offeredOverrides[selCourse.id];
+
+  // Fixed dot-column width keeps all semType rows aligned even when column counts differ
+  const DOT_CELL = 11; // px per column slot
+  const maxCols  = Math.max(0, ...semTypes.map(({ id }) =>
+    sortedCodes.filter(c => cal.decodeTermCode(c) === id).length
+  ));
 
   function toggle(semTypeId) {
     setOfferedOverrides(prev => {
@@ -392,7 +397,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   }
 
   return (
-    <div style={{ width: compact ? "100%" : 162, flexShrink: 0 }}>
+    <div style={{ width: compact ? "100%" : 148, flexShrink: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
         <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em" }}>
           {t("info.offered.title")}
@@ -405,48 +410,49 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
         )}
       </div>
 
-      {semTypes.map(({ id, label, theme }) => {
-        const color   = THEME_DOT[theme] ?? "var(--text-4)";
-        const active  = activeTypes.includes(id);
-        const dotCodes = sortedCodes.filter(c => cal.decodeTermCode(c) === id).slice(-4);
-        const offered  = dotCodes.filter(c => termHistory[c]).length;
-        const total    = dotCodes.length;
+      {semTypes.map(({ id, label, shortLabel, theme }) => {
+        const color    = THEME_DOT[theme] ?? "var(--text-4)";
+        const active   = activeTypes.includes(id);
+        const dotCodes = sortedCodes.filter(c => cal.decodeTermCode(c) === id);
 
         return (
+          // Whole row is a label — clicking anywhere toggles the checkbox
           <label key={id}
-            style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 5, cursor: "pointer", userSelect: "none" }}
+            style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, cursor: "pointer", userSelect: "none" }}
             onClick={e => e.stopPropagation()}>
-            <input type="checkbox" checked={active}
-              onChange={() => toggle(id)}
-              style={{ accentColor: "var(--active)", cursor: "pointer", flexShrink: 0 }}
-            />
-            <span style={{ fontSize: 10, color: active ? "var(--text-2)" : "var(--text-5)", minWidth: 44, flexShrink: 0 }}>
-              {label}
+
+            {/* Abbreviated semtype label; full name on hover */}
+            <span title={label}
+              style={{ fontSize: 10, color: active ? "var(--text-2)" : "var(--text-5)", width: 24, flexShrink: 0 }}>
+              {shortLabel}
             </span>
-            {dotCodes.length > 0 && (
-              <div style={{ display: "flex", gap: 2, alignItems: "center", flexShrink: 0 }}>
-                {dotCodes.map(code => {
-                  const yr    = cal.getTermCodeYear?.(code);
-                  const was   = termHistory[code];
-                  const tip   = yr ? `${label} ${yr}: ${was ? "offered" : "not offered"}` : code;
-                  return (
-                    <div key={code} title={tip}
+
+            {/* Fixed-width dot timeline: each slot is DOT_CELL px wide so columns don't shift */}
+            <div style={{ width: maxCols * DOT_CELL, display: "flex", flexShrink: 0 }}>
+              {dotCodes.map(code => {
+                const yr  = cal.getTermCodeYear?.(code);
+                const was = termHistory[code];
+                const tip = yr ? `${label} ${yr}: ${was ? "offered" : "not offered"}` : code;
+                return (
+                  <div key={code} style={{ width: DOT_CELL, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <div title={tip}
                       style={{
-                        width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
+                        width: 7, height: 7, borderRadius: "50%",
                         background: was ? color : "transparent",
                         border: `1.5px solid ${was ? color : "var(--text-5)"}`,
-                        opacity: was ? 1 : 0.45,
+                        opacity: was ? 1 : 0.55,
                       }}
                     />
-                  );
-                })}
-              </div>
-            )}
-            {total > 0 && (
-              <span style={{ fontSize: 8, color: "var(--text-5)", marginLeft: "auto", flexShrink: 0 }}>
-                {offered}/{total}
-              </span>
-            )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Checkbox on the right — user sees the evidence first, then decides to override */}
+            <input type="checkbox" checked={active}
+              onChange={() => toggle(id)}
+              style={{ accentColor: "var(--active)", cursor: "pointer", marginLeft: "auto", flexShrink: 0 }}
+            />
           </label>
         );
       })}
