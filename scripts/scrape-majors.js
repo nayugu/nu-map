@@ -101,16 +101,21 @@ async function fetchProgramUrls() {
 // ── Credit helpers ────────────────────────────────────────────────────────────
 
 function extractTotalCredits(root) {
-  // Most pages have a "Total Credit Hours  134" row in the listsum
-  for (const tr of root.querySelectorAll('tr.listsum, tr.total')) {
+  // Catalog uses class "plangridtotal" for the "Total Hours: 134" row
+  for (const tr of root.querySelectorAll('tr.plangridtotal, tr.listsum, tr.total')) {
     const cells = tr.querySelectorAll('td');
-    if (cells.length >= 2) {
-      const n = parseInt(cells[cells.length - 1].text.trim(), 10);
-      if (!isNaN(n) && n > 60 && n < 250) return n;
+    const cell = cells[cells.length - 1];
+    if (!cell) continue;
+    const text = cell.text.trim();
+    // "Total Hours: 134" or just "134"
+    const m = text.match(/(\d+)\s*$/);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (n > 60 && n < 250) return n;
     }
   }
-  // Fallback: scan raw text
-  const m = root.text.match(/[Tt]otal\s+[Cc]redit\s+[Hh]ours?[\s:]+(\d+)/);
+  // Fallback: scan raw text for "Total Hours: 134"
+  const m = root.text.match(/[Tt]otal\s+[Hh]ours?[\s:]+(\d+)/);
   return m ? parseInt(m[1], 10) : 0;
 }
 
