@@ -4,14 +4,26 @@
 // Uses Vite's import.meta.glob for lazy, on-demand loading of the
 // parsed.initial.json files in the graduatenu fork.  Only the selected
 // major's JSON is ever fetched; the other 1400+ paths stay as stubs.
+//
+// Scraped majors (src/data/majors/) take precedence over the external
+// graduatenu submodule for the same year/college/program combination.
 // ═══════════════════════════════════════════════════════════════════
 
-// Lazy stubs for every parsed.initial.json in the graduatenu majors tree.
-// Paths are relative to this file (src/data/).
-const _moduleMap = import.meta.glob(
+// Lazy stubs from the legacy external/graduatenu submodule.
+const _externalMap = import.meta.glob(
   '../../external/graduatenu/packages/api/src/major/majors/**/parsed.initial.json',
   { eager: false }
 );
+
+// Lazy stubs from our own scraper output (src/data/majors/).
+// import.meta.glob requires static string literals — two separate calls, merged below.
+const _scrapedMap = import.meta.glob(
+  './majors/**/parsed.initial.json',
+  { eager: false }
+);
+
+// Merge: scraped entries win on collision (same path suffix).
+const _moduleMap = { ..._externalMap, ..._scrapedMap };
 
 // ── Public API ───────────────────────────────────────────────────
 // Path-parsing helpers (fmtLabel, fmtLocation) come from the
@@ -90,8 +102,10 @@ export function getMajorOptionGroups(majorRequirements) {
  */
 export function canonicalizeMajorPath(path) {
   if (_moduleMap[path]) return path;
+  // Legacy: paths before the external/ submodule reorganisation
   const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
-  return _moduleMap[migrated] ? migrated : path;
+  if (_moduleMap[migrated]) return migrated;
+  return path;
 }
 
 export async function loadMajor(path) {
