@@ -1,0 +1,77 @@
+{
+  "name": "Cinema Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 2895
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 3600
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2212
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2220
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2336
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3389
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3392
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 4208
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 1113
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

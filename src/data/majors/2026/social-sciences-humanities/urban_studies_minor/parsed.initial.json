@@ -1,0 +1,97 @@
+{
+  "name": "Urban Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2345
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2358
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 2305
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 4850
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 1240
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2345
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3309
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2358
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4522
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

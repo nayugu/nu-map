@@ -1,0 +1,77 @@
+{
+  "name": "Rhetoric, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1160
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1331
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3415
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3501
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3325
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3381
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3404
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

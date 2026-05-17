@@ -1,0 +1,98 @@
+{
+  "name": "Russian, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Language Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 24,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "RSSN",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "RSSN",
+              "classId": 1102
+            },
+            {
+              "type": "COURSE",
+              "subject": "RSSN",
+              "classId": 2101
+            },
+            {
+              "type": "COURSE",
+              "subject": "RSSN",
+              "classId": 2102
+            },
+            {
+              "type": "COURSE",
+              "subject": "RSSN",
+              "classId": 3101
+            },
+            {
+              "type": "COURSE",
+              "subject": "RSSN",
+              "classId": 3102
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CLTR",
+              "classId": 1120
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1286
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1390
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "INTL",
+                  "classId": 3455
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3455
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

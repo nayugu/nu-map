@@ -1,0 +1,111 @@
+{
+  "name": "Architectural Engineering, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 3210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 3211
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2221
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2222
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2240
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 2330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 2331
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 2341
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2230
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2240
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

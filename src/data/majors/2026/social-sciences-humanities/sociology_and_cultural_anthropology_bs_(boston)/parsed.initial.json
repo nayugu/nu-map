@@ -1,0 +1,184 @@
+{
+  "name": "Sociology and Cultural Anthropology, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Sociology Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 1101
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 3300
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 3421
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Methodological Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2321
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Additional Required Methodological Training",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2001
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2105
+            },
+            {
+              "type": "COURSE",
+              "subject": "DS",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 2102
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2323
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 3487
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Cultural Anthropology Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 3410
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 2305
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4100
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4600
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

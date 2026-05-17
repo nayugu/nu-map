@@ -1,0 +1,117 @@
+{
+  "name": "Art History and Visual Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1002
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2501
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2211
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2212
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2215
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2311
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2312
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2313
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 3211
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 4000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 5600
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

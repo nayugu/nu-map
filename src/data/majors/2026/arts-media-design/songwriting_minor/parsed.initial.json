@@ -1,0 +1,109 @@
+{
+  "name": "Songwriting, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Music Theory",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 1119
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 1201
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 1204
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Songwriting",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MUSC",
+          "classId": 2210
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Songwriting Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 2105
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 2150
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 2211
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 2101
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 2232
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 2235
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 2331
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 5220
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

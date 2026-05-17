@@ -1,0 +1,40 @@
+{
+  "name": "Political Science, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 1150
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 1155
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 1160
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

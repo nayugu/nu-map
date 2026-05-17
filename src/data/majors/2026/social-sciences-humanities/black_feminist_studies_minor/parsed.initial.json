@@ -1,0 +1,77 @@
+{
+  "name": "Black Feminist Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AFCS",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "WMNS",
+          "classId": 1103
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3900
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2455
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4520
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 1225
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 2505
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 3100
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

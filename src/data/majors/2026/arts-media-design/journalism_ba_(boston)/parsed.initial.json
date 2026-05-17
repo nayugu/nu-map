@@ -1,0 +1,40 @@
+{
+  "name": "Journalism, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Journalism Major Requirements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2201
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 4650
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

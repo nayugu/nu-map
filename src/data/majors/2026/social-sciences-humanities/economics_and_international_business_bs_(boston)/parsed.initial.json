@@ -1,0 +1,377 @@
+{
+  "name": "Economics and International Business, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "BUSN",
+              "classId": 1102
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Economics Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 1115
+        },
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 1116
+        },
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 2315
+        },
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 2316
+        },
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 2560
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Accounting",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 1201
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Finance",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 2201
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Marketing",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 2201
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Organizational Behavior",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3201
+            },
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3203
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Business Core Option",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "INNO",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 2301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Course Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 3291
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 3635
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Co-op Preparation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BUSN",
+              "classId": 1103
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESH",
+              "classId": 2000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistics Requirement",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MGSC",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Calculus",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1231
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1241
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1245
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1251
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1340
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1341
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Computer Science",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 1100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 1101
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 2510
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Business Experiential Learning",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 28,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BUSN",
+              "classId": 4945
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3945
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3946
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3947
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3949
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEBA",
+              "classId": 2945
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEBA",
+              "classId": 2948
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Economics GPA Requirement",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2315
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2316
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2560
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "name": "Computational Social Science, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 2280
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3700
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3102
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2320
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Applications of Computational Approaches in the Social Sciences",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 28,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2105
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 3000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4400
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 2102
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MISM",
+                  "classId": 2301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MISM",
+                  "classId": 2510
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2001
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3310
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5262
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective in Social Inquiry, Computation, and Logic",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 24,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 3418
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2800
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 4681
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3081
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1115
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 1215
+                }
+              ]
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 4515
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 4516
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

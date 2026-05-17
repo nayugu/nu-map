@@ -1,0 +1,79 @@
+{
+  "name": "Studio Art, BFA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Art History Required Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTH",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTH",
+          "classId": 4000
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Studio Art",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SMFA",
+              "classId": 3000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Senior Thesis Capstone",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SMFA",
+              "classId": 4000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Cultural Anthropology, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Cultural Anthropology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 2305
+        },
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 3410
+        },
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 3421
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4100
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 1101
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

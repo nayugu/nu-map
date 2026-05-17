@@ -1,0 +1,41 @@
+{
+  "name": "Journalism Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundation",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 1150
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2350
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Law",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 3550
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

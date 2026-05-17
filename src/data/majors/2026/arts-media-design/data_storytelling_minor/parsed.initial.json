@@ -1,0 +1,107 @@
+{
+  "name": "Data Storytelling, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundation",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 3700
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 28,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2242
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3610
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2201
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3650
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2262
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2263
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2001
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5500
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

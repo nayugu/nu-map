@@ -1,0 +1,157 @@
+{
+  "name": "Environmental Engineering, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 2334
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2301
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2331
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2335
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3430
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3435
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 4534
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 4535
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4540
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4777
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5250
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5261
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5271
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5275
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5280
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5281
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5363
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5366
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5536
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 3300
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

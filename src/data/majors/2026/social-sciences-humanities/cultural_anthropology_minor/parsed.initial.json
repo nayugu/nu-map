@@ -1,0 +1,24 @@
+{
+  "name": "Cultural Anthropology, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 1101
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

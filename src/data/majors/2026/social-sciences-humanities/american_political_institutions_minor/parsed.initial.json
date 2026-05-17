@@ -1,0 +1,72 @@
+{
+  "name": "American Political Institutions, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "POLS",
+          "classId": 1150
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2345
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3300
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3302
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3310
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 4500
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 4505
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

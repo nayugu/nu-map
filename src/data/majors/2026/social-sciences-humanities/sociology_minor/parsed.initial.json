@@ -1,0 +1,24 @@
+{
+  "name": "Sociology, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to Sociology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 1101
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

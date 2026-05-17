@@ -1,0 +1,442 @@
+{
+  "name": "Biology, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSC",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Introduction",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 2000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology Core Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1107
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1108
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 2299
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2302
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 2309
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3611
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3612
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Organismal and Evolutionary Biology",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2327
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3401
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3413
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 5585
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2302
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2303
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2610
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2701
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3460
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3466
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3600
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate and Advanced Biology",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4970
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4971
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4991
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4994
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4701
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4971
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4900
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistics",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2501
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2502
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemistry",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1161
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1162
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1163
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2311
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2312
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2313
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2314
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Physics 1",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1145
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1146
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Physics 2",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1147
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1148
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

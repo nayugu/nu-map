@@ -1,0 +1,93 @@
+{
+  "name": "Psychology, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 1101
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Personal/Social Bases of Behavior (Area A)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3400
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3402
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3404
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3406
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Biological/Cognitive Bases of Behavior (Area B)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3450
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3452
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3458
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3464
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3466
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

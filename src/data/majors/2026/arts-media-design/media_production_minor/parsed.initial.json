@@ -1,0 +1,87 @@
+{
+  "name": "Media Production, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 1450
+        },
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 2350
+        },
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 2550
+        },
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 2655
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2650
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2750
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3450
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3655
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3750
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4755
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

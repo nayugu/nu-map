@@ -1,0 +1,106 @@
+{
+  "name": "Early Intervention, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 5150
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 5151
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 5153
+        },
+        {
+          "type": "COURSE",
+          "subject": "SLPA",
+          "classId": 5152
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Practicum and Electives Options",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SLPA",
+              "classId": 5154
+            },
+            {
+              "type": "COURSE",
+              "subject": "SLPA",
+              "classId": 5155
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 3480
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 1717
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2300
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 3520
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3404
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1255
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "WMNS",
+                  "classId": 1255
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

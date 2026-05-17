@@ -1,0 +1,61 @@
+{
+  "name": "Public Relations, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "PREL",
+          "classId": 1425
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5400
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5480
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

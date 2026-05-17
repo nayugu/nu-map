@@ -1,0 +1,44 @@
+{
+  "name": "Speech-Language Pathology and Audiology, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Speech-Language Pathology and Audiology Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SLPA",
+          "classId": 1102
+        },
+        {
+          "type": "COURSE",
+          "subject": "SLPA",
+          "classId": 1103
+        },
+        {
+          "type": "COURSE",
+          "subject": "SLPA",
+          "classId": 1200
+        },
+        {
+          "type": "COURSE",
+          "subject": "SLPA",
+          "classId": 1203
+        },
+        {
+          "type": "COURSE",
+          "subject": "SLPA",
+          "classId": 1205
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

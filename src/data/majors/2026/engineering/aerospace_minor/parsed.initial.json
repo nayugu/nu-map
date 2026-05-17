@@ -1,0 +1,90 @@
+{
+  "name": "Aerospace, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ME",
+          "classId": 3465
+        },
+        {
+          "type": "COURSE",
+          "subject": "ME",
+          "classId": 3470
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Guidance and Navigation Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ME",
+          "classId": 5554
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Structures Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 4520
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5655
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Combustion and Aerodynamics Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 4565
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5690
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5695
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "name": "Foundation Year",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Application",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 2310
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENG",
+          "classId": 1107
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENG",
+          "classId": 1108
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MTH",
+              "classId": 1105
+            },
+            {
+              "type": "COURSE",
+              "subject": "MTH",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "MTH",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "MTH",
+              "classId": 2300
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

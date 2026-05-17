@@ -1,0 +1,333 @@
+{
+  "name": "Design, BFA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTF",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Required",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTF",
+          "classId": 1220
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1210
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1231
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1240
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1241
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1251
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art and Design History",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTH",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTH",
+          "classId": 4000
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Course",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1270
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1271
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1290
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1291
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2262
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2263
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Degree Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 4550
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Media Arts Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 5,
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2360
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2361
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2370
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2371
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2380
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2381
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 2810
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 3810
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5000
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2290
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3250
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5640
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

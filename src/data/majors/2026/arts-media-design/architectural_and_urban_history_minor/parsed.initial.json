@@ -1,0 +1,72 @@
+{
+  "name": "Architectural and Urban History, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Architectural History Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 1310
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2345
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 3370
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 4850
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

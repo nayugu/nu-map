@@ -1,0 +1,63 @@
+{
+  "name": "Linguistics, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 1150
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 1449
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "LING",
+          "classId": 2350
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate/Advanced Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DEAF",
+              "classId": 2700
+            },
+            {
+              "type": "RANGE",
+              "subject": "LING",
+              "idRangeStart": 3000,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

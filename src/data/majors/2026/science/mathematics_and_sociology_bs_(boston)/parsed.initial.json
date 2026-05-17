@@ -1,0 +1,240 @@
+{
+  "name": "Mathematics and Sociology, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSC",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Introduction",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 2000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Problem Solving",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1365
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Calculus",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1342
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2321
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate and Advanced Mathematics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2331
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 3081
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Sociology Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 1101
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2321
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3101
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 3300
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 4600
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirement",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 4025
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 5131
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 1280
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2485
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4528
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3308
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

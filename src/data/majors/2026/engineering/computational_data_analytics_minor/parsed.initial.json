@@ -1,0 +1,138 @@
+{
+  "name": "Computational Data Analytics, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EECE",
+          "classId": 5642
+        },
+        {
+          "type": "COURSE",
+          "subject": "EECE",
+          "classId": 5644
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2140
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Probability and Statistics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 2365
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3464
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 3468
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 3412
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 2280
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3081
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5200
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2520
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2560
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 4694
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5639
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 4515
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5640
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

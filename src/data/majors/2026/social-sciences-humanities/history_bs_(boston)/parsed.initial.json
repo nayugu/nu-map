@@ -1,0 +1,266 @@
+{
+  "name": "History, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introductory History",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Historical Research and Writing and First Year Seminar",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 1200
+        },
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 1201
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "History Seminar and Historical Writing",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 2301
+        },
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 2302
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Pre-1800 Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1185
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1218
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1252
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1272
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1389
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2370
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2375
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2390
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 3334
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "History Outside the United States and Europe",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1150
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1185
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1187
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1206
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1246
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1252
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1253
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1294
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1500
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2025
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2211
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2311
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2351
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2360
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone or Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 4701
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 2280
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2320
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

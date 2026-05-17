@@ -1,0 +1,60 @@
+{
+  "name": "Business Administration, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Accounting",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 1209
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Organizational Behavior",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ORGB",
+          "classId": 3209
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Finance",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 2209
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Marketing",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 2209
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

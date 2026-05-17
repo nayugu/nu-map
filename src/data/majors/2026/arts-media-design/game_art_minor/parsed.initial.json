@@ -1,0 +1,118 @@
+{
+  "name": "Game Art, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses (Requirements for Non–Art + Design Majors)",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2370
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2371
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3470
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTF",
+          "classId": 1220
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1241
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3471
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3472
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (Requirements for Art + Design Majors)",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2370
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2371
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3470
+        }
+      ],
+      "minRequirementCount": 3
+    }
+  ]
+}

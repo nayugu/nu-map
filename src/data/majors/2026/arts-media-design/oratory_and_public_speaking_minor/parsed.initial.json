@@ -1,0 +1,67 @@
+{
+  "name": "Oratory and Public Speaking, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 1112
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1331
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1511
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3450
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

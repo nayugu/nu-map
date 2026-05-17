@@ -1,0 +1,44 @@
+{
+  "name": "Economics, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 1115
+        },
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 1116
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2315
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2316
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    }
+  ]
+}

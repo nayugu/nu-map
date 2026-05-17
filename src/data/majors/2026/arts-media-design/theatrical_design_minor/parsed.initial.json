@@ -1,0 +1,124 @@
+{
+  "name": "Theatrical Design, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "THTR",
+          "classId": 1100
+        },
+        {
+          "type": "COURSE",
+          "subject": "THTR",
+          "classId": 1270
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Area",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 1131
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2370
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2380
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUST",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 5700
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Interdisciplinary Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1250
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 1450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3462
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 1131
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2370
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2380
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUST",
+              "classId": 2320
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

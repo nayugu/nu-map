@@ -1,0 +1,150 @@
+{
+  "name": "Physics, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Physics 1",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1151
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1152
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1153
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1161
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1162
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1191
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1192
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Physics 2",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1155
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1156
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1157
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1165
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1166
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Modern Physics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 2303
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 4606
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

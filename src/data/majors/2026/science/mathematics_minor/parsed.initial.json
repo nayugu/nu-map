@@ -1,0 +1,72 @@
+{
+  "name": "Mathematics, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1342
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1251
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1252
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate-Level Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 2321
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 2341
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 2331
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "name": "Digital Communication, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1255
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2105
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2551
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1450
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MSCR",
+                  "classId": 2505
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "WMNS",
+                  "classId": 2505
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4605
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4625
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

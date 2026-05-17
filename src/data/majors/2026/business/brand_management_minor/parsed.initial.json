@@ -1,0 +1,122 @@
+{
+  "name": "Brand Management, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 2209
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 2201
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 3720
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INNO",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "MGMT",
+              "classId": 3530
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 2720
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MKTG",
+                  "classId": 3401
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MKTG",
+                  "classId": 3402
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4502
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4504
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4506
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MKTG",
+                  "classId": 4510
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 3330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INNO",
+                  "classId": 3335
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4720
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

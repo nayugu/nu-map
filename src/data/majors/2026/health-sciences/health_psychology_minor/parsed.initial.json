@@ -1,0 +1,82 @@
+{
+  "name": "Health Psychology, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 2012
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 2101
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 32,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 3899
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 5151
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5002
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2800
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 3520
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 3404
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

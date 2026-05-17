@@ -1,0 +1,195 @@
+{
+  "name": "Bioengineering and Behavioral Neuroscience, BSBioE (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Engineering",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 2350
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 2355
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 2365
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 2366
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 3210
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 3310
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 3380
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Bioengineering Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 4790
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 4792
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Supplemental Credit",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Professional Development",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 2000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Additional Required Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 1111
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 3302
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 4790
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 4792
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

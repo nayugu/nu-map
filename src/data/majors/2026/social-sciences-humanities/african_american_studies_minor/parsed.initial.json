@@ -1,0 +1,83 @@
+{
+  "name": "African American Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AFCS",
+          "classId": 1101
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Humanities",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2296
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3210
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Social Sciences",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2355
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2600
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3305
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 4939
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

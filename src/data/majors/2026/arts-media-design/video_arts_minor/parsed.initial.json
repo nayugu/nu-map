@@ -1,0 +1,167 @@
+{
+  "name": "Video Arts, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses (Requirements for Non–Art + Design Majors)",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2380
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2381
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3480
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1241
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (Requirements for Non–Art + Design Majors)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3485
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 3901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 4901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2212
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (Requirements for Art + Design Majors)",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2380
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2381
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3480
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3485
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (Requirements for Art + Design Majors)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 3901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 4901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2212
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

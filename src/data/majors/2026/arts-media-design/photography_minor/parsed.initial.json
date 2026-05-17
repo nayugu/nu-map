@@ -1,0 +1,92 @@
+{
+  "name": "Photography, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2360
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2361
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3460
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 4565
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4660
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4661
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 3901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 4901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2212
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

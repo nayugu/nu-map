@@ -1,0 +1,61 @@
+{
+  "name": "Communication Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 1112
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Foundation Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1231
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1225
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1255
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

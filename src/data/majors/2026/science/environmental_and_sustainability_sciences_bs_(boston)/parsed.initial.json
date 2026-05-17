@@ -1,0 +1,437 @@
+{
+  "name": "Environmental and Sustainability Sciences, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSC",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Core Curriculum",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2302
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2303
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1201
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2200
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1401
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1501
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 2515
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3300
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3301
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 4000
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4050
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4971
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4997
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2501
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2321
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1241
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1341
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3303
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Co-op Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 2000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Conservation, Restoration, and Management Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 2400
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3455
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3430
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 3460
+        },
+        {
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 4001
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Conservation, Restoration, and Management Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 24,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2610
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3250
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3465
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3466
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3475
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 4000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2401
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3540
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3801
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3850
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 4500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 4501
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4505
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4970
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5190
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5563
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5700
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5750
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "name": "Interdisciplinary Artificial Intelligence, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Technology and Ethics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1145
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1300
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential, Project-Based, and Applied Coursework",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INMI",
+              "classId": 2710
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4604
+            },
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3203
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BUSN",
+              "classId": 3501
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 1801
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 4390
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "INMI",
+              "classId": 2710
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 3330
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTL",
+              "classId": 2600
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 2720
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4604
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4606
+            },
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3203
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1145
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1300
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5360
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 4211
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

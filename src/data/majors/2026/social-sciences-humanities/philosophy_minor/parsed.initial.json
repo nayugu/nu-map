@@ -1,0 +1,39 @@
+{
+  "name": "Philosophy, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2325
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2325
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHIL",
+          "classId": 2330
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "name": "Network Science, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Network Science Core",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2105
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3545
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1125
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 5116
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Data and Computational Methods",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2001
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2101
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Applied Topics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2105
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 2102
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5304
+            },
+            {
+              "type": "COURSE",
+              "subject": "MGMT",
+              "classId": 3435
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 5116
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

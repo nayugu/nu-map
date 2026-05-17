@@ -1,0 +1,103 @@
+{
+  "name": "American Sign Language, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Culture Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CLTR",
+              "classId": 1120
+            },
+            {
+              "type": "COURSE",
+              "subject": "DEAF",
+              "classId": 2500
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "DEAF",
+          "classId": 1500
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Language Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 2101
+        },
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 2102
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AMSL",
+              "classId": 1511
+            },
+            {
+              "type": "COURSE",
+              "subject": "AMSL",
+              "classId": 3101
+            },
+            {
+              "type": "COURSE",
+              "subject": "AMSL",
+              "classId": 3102
+            },
+            {
+              "type": "COURSE",
+              "subject": "AMSL",
+              "classId": 4992
+            },
+            {
+              "type": "COURSE",
+              "subject": "DEAF",
+              "classId": 1550
+            },
+            {
+              "type": "COURSE",
+              "subject": "DEAF",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "DEAF",
+              "classId": 2700
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

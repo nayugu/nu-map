@@ -1,0 +1,29 @@
+{
+  "name": "Media and Screen Studies, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 1220
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 2220
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

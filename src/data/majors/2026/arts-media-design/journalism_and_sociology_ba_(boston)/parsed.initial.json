@@ -1,0 +1,296 @@
+{
+  "name": "Journalism and Sociology, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundation Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 1150
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2201
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Visual Storytelling",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3370
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5309
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5314
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5316
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5320
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Law and Ethics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3550
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 4650
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 1101
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2321
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3101
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 3300
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone Requirement",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4100
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Introductory",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Co-op Preparatory Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EESH",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEAM",
+              "classId": 2000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirement",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3700
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5250
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 3441
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4520
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4522
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 1111
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3308
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

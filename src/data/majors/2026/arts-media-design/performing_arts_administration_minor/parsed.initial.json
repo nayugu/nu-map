@@ -1,0 +1,134 @@
+{
+  "name": "Performing Arts Administration, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1002
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1003
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 1230
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 1101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MUSI",
+          "classId": 2330
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AACE",
+              "classId": 6000
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1231
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2650
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3451
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 2234
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 2235
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 3338
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSI",
+              "classId": 3340
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2335
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

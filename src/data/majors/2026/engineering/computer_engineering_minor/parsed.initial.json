@@ -1,0 +1,98 @@
+{
+  "name": "Computer Engineering, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2160
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2310
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2311
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Fundamental Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2322
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2323
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2540
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2560
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Computer Engineering Technical Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5670
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

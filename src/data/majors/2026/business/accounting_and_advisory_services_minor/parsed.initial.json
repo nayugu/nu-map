@@ -1,0 +1,71 @@
+{
+  "name": "Accounting and Advisory Services, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 1209
+        },
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 2301
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 3401
+            },
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 3402
+            },
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 3403
+            },
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 3416
+            },
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 3220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 4414
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

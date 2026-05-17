@@ -1,0 +1,162 @@
+{
+  "name": "Geosciences, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1201
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 2200
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2310
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2311
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2341
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Geology Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2341
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3125
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3200
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3301
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3410
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5190
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5202
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5350
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

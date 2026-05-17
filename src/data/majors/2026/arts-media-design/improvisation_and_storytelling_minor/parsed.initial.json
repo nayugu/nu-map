@@ -1,0 +1,78 @@
+{
+  "name": "Improvisation and Storytelling, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Common Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 1511
+        },
+        {
+          "type": "COURSE",
+          "subject": "THTR",
+          "classId": 1125
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Communication Studies Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1112
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1210
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Theatre Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 1130
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 2345
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,409 @@
+{
+  "name": "Physics, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introductory Physics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1151
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1152
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1153
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1161
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1162
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1191
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1192
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1155
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1156
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1157
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1165
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1166
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate Physics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 2303
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 2371
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 2372
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced Physics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 3600
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 3601
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 3602
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 3603
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 4115
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 4305
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 4606
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Senior Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 5318
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSC",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Introduction",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 2000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1342
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2321
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2331
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 3081
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Computational Methods",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1211
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1130
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1111
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemistry",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1211
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1212
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Technical Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 2280
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Astrophysics Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 1111
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 3111
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 4111
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 5117
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 5118
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "name": "Data Visualization, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "5/17/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2262
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2263
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2242
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3444
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5110
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5320
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5330
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}
