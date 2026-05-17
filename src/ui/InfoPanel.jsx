@@ -427,8 +427,9 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
               {shortLabel}
             </span>
 
-            {/* Fixed-width dot timeline: each slot is DOT_CELL px wide so columns don't shift */}
-            <div style={{ width: maxCols * DOT_CELL, display: "flex", flexShrink: 0 }}>
+            {/* Fixed-width dot timeline: each slot is DOT_CELL px wide so columns don't shift.
+                flex-end anchors newest slot to the right — gaps on left = older missing data. */}
+            <div style={{ width: maxCols * DOT_CELL, display: "flex", justifyContent: "flex-end", flexShrink: 0 }}>
               {dotCodes.map(code => {
                 const yr  = cal.getTermCodeYear?.(code);
                 const was = termHistory[code];
