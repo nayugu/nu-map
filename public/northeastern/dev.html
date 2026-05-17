@@ -870,6 +870,20 @@ function renderRun(run, deployedTs = null) {
     </div>`;
   }
 
+  // Major requirements scrape entries
+  if (run.type === "majors") {
+    const detail = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-top:10px">
+      ${[{val:run.done,lbl:"Scraped",col:"var(--text)"},{val:run.written,lbl:"Written",col:"var(--accent)"},{val:run.skipped,lbl:"Skipped",col:"var(--text2)"},{val:run.failed,lbl:"Failed",col:"var(--error)"}]
+        .map(x=>`<div class="stat"><div class="val" style="font-size:22px;color:${x.col}">${x.val??0}</div><div class="lbl">${x.lbl}</div></div>`).join("")}
+    </div>`;
+    return `<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div style="font-size:14px;font-weight:700;color:var(--accent)">${run.subject??run.type}</div>
+        <div style="display:flex;align-items:center;gap:8px">${pendingBadge}<span style="font-size:11px;color:var(--text2)">${ts}</span></div>
+      </div>${detail}
+    </div>`;
+  }
+
   // Rotate entries
   const totalChanges = (run.added?.length??0)+(run.modified?.length??0)+(run.removedFromCatalog?.length??0);
   const badge = totalChanges

@@ -23,14 +23,16 @@
  * Override: MAJORS_DELAY_MS=300 node scripts/scrape-majors.js
  */
 
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname }            from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
-const OUT_ROOT  = join(ROOT, 'src/data/majors');
+const OUT_ROOT    = join(ROOT, 'src/data/majors');
+const CHANGE_LOG  = join(ROOT, 'public/northeastern/change-log.json');
+const CHANGE_LOG_MAX = 600;
 const BASE      = 'https://catalog.northeastern.edu';
 const AZ_URL    = `${BASE}/azindex/`;
 const DELAY_MS  = parseInt(process.env.MAJORS_DELAY_MS ?? '600', 10);
@@ -582,6 +584,23 @@ async function main() {
 
   console.log(`\nResults: ${done} scraped, ${written} written, ${skipped} skipped, ${failed} failed`);
   if (!WRITE && !DRY_RUN && done > 0) console.log('Run with --write to save output files.');
+
+  if (WRITE) {
+    let changeLog = { runs: [] };
+    if (existsSync(CHANGE_LOG)) {
+      try { changeLog = JSON.parse(readFileSync(CHANGE_LOG, 'utf8')); } catch {}
+    }
+    changeLog.runs = changeLog.runs ?? [];
+    changeLog.runs.unshift({
+      type:      'majors',
+      subject:   '🎓 Major Requirements',
+      timestamp: new Date().toISOString(),
+      done, written, skipped, failed,
+    });
+    if (changeLog.runs.length > CHANGE_LOG_MAX) changeLog.runs = changeLog.runs.slice(0, CHANGE_LOG_MAX);
+    writeFileSync(CHANGE_LOG, JSON.stringify(changeLog, null, 2) + '\n', 'utf8');
+    console.log(`Wrote ${CHANGE_LOG}`);
+  }
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
