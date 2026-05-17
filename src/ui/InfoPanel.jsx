@@ -330,7 +330,7 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 5 }}>
         {t("info.relationships.title")}
       </div>
-      <div style={{ overflowY: "auto", maxHeight: 220 }}>
+      <div style={{ overflowY: "auto", maxHeight: 220, paddingRight: 14 }}>
         {selEdges.map((rel, i) => {
           const isOut = rel.from === selCourse.id;
           const other = courseMap[isOut ? rel.to : rel.from];
