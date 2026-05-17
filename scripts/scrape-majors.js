@@ -457,9 +457,22 @@ function parseRequirements(root) {
     }
 
     const sections = parseTable(el, currentH2);
+    // Tag each section with its h2 context so we can qualify duplicates later
+    sections.forEach(s => { s._h2 = currentH2; });
     requirementSections.push(...sections);
     currentH2 = null;
   }
+
+  // Qualify sections whose titles collide (same areaheader in different h2 tables).
+  // e.g. two "Supplemental Credit" sections under different h2s get their h2 appended.
+  const titleCount = {};
+  requirementSections.forEach(s => { titleCount[s.title] = (titleCount[s.title] ?? 0) + 1; });
+  requirementSections.forEach(s => {
+    if (titleCount[s.title] > 1 && s._h2 && s._h2 !== s.title) {
+      s.title = `${s.title} (${s._h2})`;
+    }
+    delete s._h2;
+  });
 
   const concentrations = concentrationOptions.length
     ? { minOptions: 1, concentrationOptions }
