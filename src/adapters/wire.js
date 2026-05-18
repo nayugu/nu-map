@@ -18,6 +18,7 @@
 //
 // AVAILABLE PORT KEYS (camelCase strings):
 //
+// Driven ports (app calls out to these):
 //   institution       — name, short name, portal name, storage prefix
 //   calendar          — semester types, weights, start year
 //   creditSystem      — unit name ("SH"), credit thresholds
@@ -26,6 +27,11 @@
 //   majorRequirements — path-parsing helpers for major/minor data
 //   courseCatalog     — local JSON path and optional live API URL
 //   localization      — disclaimer text and other institution copy
+//   aiAssistant       — push plan context to an AI assistant (e.g. MCP server)
+//
+// Driving ports (external actors call these):
+//   plannerQuery      — course search, requirement audit, prereq check (MCP, CLI)
+//   plannerAction     — propose or apply plan changes, fire UI commands (MCP, CLI)
 //
 // WHAT ARE "PORTS"?
 //
@@ -48,6 +54,9 @@ const KNOWN_PORTS = new Set([
   "majorRequirements",
   "courseCatalog",
   "localization",
+  "plannerQuery",   // driving port — external actors (MCP, CLI) query plan data
+  "plannerAction",  // driving port — external actors propose and apply plan changes
+  "aiAssistant",    // driven port  — app pushes plan context to an AI assistant
 ]);
 
 /**

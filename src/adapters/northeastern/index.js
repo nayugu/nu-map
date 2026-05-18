@@ -17,6 +17,7 @@ import nuSpecialTerms      from "./specialTerms.js";
 import nuMajorRequirements from "./majorRequirements.js";
 import nuCourseCatalog     from "./courseCatalog.js";
 import nuLocalization      from "./localization.js";
+import nuAIAssistant       from "./aiAssistant.js";
 
 /** @type {import('../../ports/index.js').AdapterOverrides} */
 const overrides = {
@@ -28,6 +29,7 @@ const overrides = {
   majorRequirements: nuMajorRequirements,
   courseCatalog:     nuCourseCatalog,
   localization:      nuLocalization,
+  aiAssistant:       nuAIAssistant,
 };
 
 export default overrides;

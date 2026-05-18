@@ -22,6 +22,7 @@ import { IInstitution }   from "../ports/IInstitution.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
+import { IAIAssistant }   from "../ports/IAIAssistant.js";
 
 const PlannerContext = createContext(null);
 
@@ -30,6 +31,7 @@ export function PlannerProvider({ children }) {
   const calendar       = usePort(ICalendar);
   const courseCatalog  = usePort(ICourseCatalog);
   const specialTerms   = usePort(ISpecialTerms);
+  const aiAssistant    = usePort(IAIAssistant);
   const storagePrefix    = institution.storagePrefix;
   const key              = n => `${storagePrefix}-${n}`;
   const defaultStartYear = calendar.getDefaultStartYear();
@@ -89,6 +91,9 @@ export function PlannerProvider({ children }) {
     const saved = _saved?.persist && _saved.substitutions;
     return Array.isArray(saved) ? saved : [];
   });
+
+  // Pending proposal from Claude (null = no pending proposal)
+  const [pendingMCPProposal, setPendingMCPProposal] = useState(null);
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
@@ -469,6 +474,186 @@ export function PlannerProvider({ children }) {
     });
     return () => cancelAnimationFrame(raf);
   }, [selectedId, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX]);
+
+  // ── MCP action applier ───────────────────────────────────────────
+  // Applies a batch of IPlannerAction actions dispatched by Claude via APPLY events.
+  // Mutates all affected state slices in a single React batch.
+  function applyMCPActions(actions) {
+    // Accumulate all mutations before committing to state.
+    // Read current values from stateRef (stale-closure-safe).
+    let newPl   = { ...stateRef.current.placements };
+    let newStp  = { ...stateRef.current.specialTermPl };
+    let newOrd  = { ...stateRef.current.semOrders };
+
+    // These can't be batched from a snapshot, so we build final state from
+    // the functional-update form and commit once per action group.
+    const poAdds = [], poDels = [], subAdds = [], subDels = [];
+    const programUpdates = {};
+    const shOvUpdates = {};
+    const ooUpdates = {};
+
+    for (const action of actions) {
+      switch (action.type) {
+        case "ADD_COURSE":
+          newPl[action.courseId] = action.semId;
+          poDels.push(action.courseId);
+          break;
+        case "REMOVE_COURSE":
+          delete newPl[action.courseId];
+          break;
+        case "MOVE_COURSE":
+          newPl[action.courseId] = action.toSemId;
+          break;
+        case "ADD_PLACED_OUT":
+          poAdds.push(action.courseId);
+          delete newPl[action.courseId];
+          break;
+        case "REMOVE_PLACED_OUT":
+          poDels.push(action.courseId);
+          break;
+        case "ADD_SUBSTITUTION":
+          subAdds.push({ from: action.fromId, to: action.toId });
+          break;
+        case "REMOVE_SUBSTITUTION":
+          subDels.push({ from: action.fromId, to: action.toId });
+          break;
+        case "ADD_WORK_TERM": {
+          const id = `wt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+          newStp[id] = { typeId: action.typeId, semId: action.semId, duration: action.duration,
+            ...(action.company       != null && { company:       action.company }),
+            ...(action.companyDomain != null && { companyDomain: action.companyDomain }),
+            ...(action.subline       != null && { subline:       action.subline }),
+          };
+          break;
+        }
+        case "REMOVE_WORK_TERM":
+          delete newStp[action.instanceId];
+          break;
+        case "MOVE_WORK_TERM":
+          if (newStp[action.instanceId]) newStp[action.instanceId] = { ...newStp[action.instanceId], semId: action.toSemId };
+          break;
+        case "UPDATE_WORK_TERM":
+          if (newStp[action.instanceId]) {
+            const cur = { ...newStp[action.instanceId] };
+            if (action.company       != null) cur.company       = action.company;
+            if (action.companyDomain != null) cur.companyDomain = action.companyDomain;
+            if (action.subline       != null) cur.subline       = action.subline;
+            newStp[action.instanceId] = cur;
+          }
+          break;
+        case "SET_MAJOR":         programUpdates.major  = action.programId; break;
+        case "SET_CONCENTRATION": programUpdates.conc   = action.label;     break;
+        case "SET_MINOR1":        programUpdates.minor1 = action.programId; break;
+        case "SET_MINOR2":        programUpdates.minor2 = action.programId; break;
+        case "SET_BONUS_SH":      programUpdates.bonusSH = action.amount;   break;
+        case "SET_SH_OVERRIDE":
+          shOvUpdates[action.courseId] = action.value; // null = clear
+          break;
+        case "SET_OFFERED_OVERRIDE":
+          ooUpdates[action.courseId] ??= {};
+          ooUpdates[action.courseId][action.semTypeId] = action.status; // null = clear
+          break;
+        case "SET_ENTRY":
+          programUpdates.entSem  = action.sem;
+          programUpdates.entYear = action.year;
+          break;
+        case "SET_GRADUATION":
+          programUpdates.gradSem  = action.sem;
+          programUpdates.gradYear = action.year;
+          break;
+        case "SET_CURRENT_SEM":
+          programUpdates.currentSemId = action.semId;
+          break;
+        case "CREATE_PLAN":    createPlan(action.name);                            break;
+        case "RENAME_PLAN":    renamePlan(action.planId, action.name);             break;
+        case "SWITCH_PLAN":    switchPlan(action.planId);                          break;
+        case "DELETE_PLAN":    deletePlan(action.planId);                          break;
+      }
+    }
+
+    // Commit placements + work experience + sem orders
+    setPlacements(newPl);
+    setSpecialTermPl(newStp);
+
+    // Commit placed-out changes
+    if (poAdds.length || poDels.length) {
+      setPlacedOut(prev => {
+        const next = new Set(prev);
+        poAdds.forEach(id => next.add(id));
+        poDels.forEach(id => next.delete(id));
+        return next;
+      });
+    }
+
+    // Commit substitution changes
+    if (subAdds.length || subDels.length) {
+      setSubstitutions(prev => {
+        let next = [...prev];
+        for (const { from, to } of subAdds) {
+          if (!next.some(s => s.from === from && s.to === to)) next.push({ from, to });
+        }
+        for (const { from, to } of subDels) {
+          next = next.filter(s => !(s.from === from && s.to === to));
+        }
+        return next;
+      });
+    }
+
+    // Commit program / timeline updates
+    if ("major"         in programUpdates) setMajor(programUpdates.major);
+    if ("conc"          in programUpdates) setConc(programUpdates.conc);
+    if ("minor1"        in programUpdates) setMinor1(programUpdates.minor1);
+    if ("minor2"        in programUpdates) setMinor2(programUpdates.minor2);
+    if ("bonusSH"       in programUpdates) setBonusSH(programUpdates.bonusSH);
+    if ("currentSemId"  in programUpdates) setCurrentSemId(programUpdates.currentSemId);
+    if ("entSem"        in programUpdates) setEntSem(programUpdates.entSem);
+    if ("entYear"       in programUpdates) setEntYear(programUpdates.entYear);
+    if ("gradSem"       in programUpdates) setGradSem(programUpdates.gradSem);
+    if ("gradYear"      in programUpdates) setGradYear(programUpdates.gradYear);
+
+    // Commit SH overrides
+    if (Object.keys(shOvUpdates).length) {
+      setShOverrides(prev => {
+        const next = { ...prev };
+        for (const [id, val] of Object.entries(shOvUpdates)) {
+          if (val == null) delete next[id]; else next[id] = val;
+        }
+        return next;
+      });
+    }
+
+    // Commit offering overrides
+    if (Object.keys(ooUpdates).length) {
+      setOfferedOverrides(prev => {
+        const next = { ...prev };
+        for (const [cid, semMap] of Object.entries(ooUpdates)) {
+          const cur = { ...(next[cid] ?? {}) };
+          for (const [semTypeId, status] of Object.entries(semMap)) {
+            if (status == null) delete cur[semTypeId]; else cur[semTypeId] = status;
+          }
+          if (Object.keys(cur).length === 0) delete next[cid]; else next[cid] = cur;
+        }
+        return next;
+      });
+    }
+  }
+
+  function executeMCPCommand(cmd) {
+    if (!cmd?.type) return;
+    switch (cmd.type) {
+      case "FOCUS_COURSE":
+        setSelectedId(cmd.courseId ?? null);
+        if (cmd.courseId) setShowPanel(true);
+        break;
+      case "OPEN_SEARCH":
+        setBankSearch(cmd.query ?? "");
+        setBankTab("all");
+        break;
+      case "SET_BANK_TAB":
+        if (["all", "placed", "starred"].includes(cmd.tab)) setBankTab(cmd.tab);
+        break;
+    }
+  }
 
   // ── Undo / redo ───────────────────────────────────────────────
   const pushUndo = () => {
@@ -1418,6 +1603,72 @@ export function PlannerProvider({ children }) {
     });
   };
 
+  // ── Effect: AI assistant — sync plan state to MCP server ─────────
+  // Debounced: fires 400 ms after the last change so rapid edits don't flood.
+  // Placed here (after all variable declarations) so deps like plans/activePlanId
+  // are fully initialized before the dependency array is evaluated.
+  useEffect(() => {
+    if (!aiAssistant?.notifyChange) return;
+    const timer = setTimeout(() => {
+      const planName = plans.find(p => p.id === activePlanId)?.name ?? "Untitled";
+      aiAssistant.notifyChange({
+        planId:    activePlanId,
+        planName,
+        major, concentration: conc, minor1, minor2,
+        majorLabel: null, minor1Label: null, minor2Label: null,
+        currentSemId,
+        entSem: planEntSem, entYear: planEntYear,
+        gradSem: planGradSem, gradYear: planGradYear,
+        placements,
+        semOrders,
+        workExperience: specialTermPl,
+        placedOut: [...placedOut],
+        substitutions,
+        bonusSH,
+        shOverrides,
+        offeredOverrides,
+        totalSHPlaced,
+        totalSHDone,
+        prereqViolationCount: prereqViolations.size,
+        coreqViolationCount:  coreqViolations.size,
+        selectedCourseId: selectedId,
+        allPlans: plans.map(p => ({ id: p.id, name: p.name, active: p.id === activePlanId })),
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [ // eslint-disable-line react-hooks/exhaustive-deps
+    aiAssistant, placements, specialTermPl, placedOut, substitutions,
+    major, conc, minor1, minor2, currentSemId, bonusSH, shOverrides,
+    offeredOverrides, semOrders, planEntSem, planEntYear, planGradSem, planGradYear,
+    selectedId, activePlanId, plans,
+  ]);
+
+  // ── Effect: AI assistant — handle incoming MCP events ────────────
+  useEffect(() => {
+    if (!aiAssistant?.onEvent) return;
+    const unsubscribe = aiAssistant.onEvent((event) => {
+      if (event.type === "PROPOSAL") {
+        setPendingMCPProposal({ proposalId: event.proposalId, changeset: event.changeset });
+        return;
+      }
+      if (event.type === "PROPOSAL_RESOLVED") {
+        setPendingMCPProposal(prev => prev?.proposalId === event.proposalId ? null : prev);
+        return;
+      }
+      if (event.type === "APPLY") {
+        const { actions } = event.changeset ?? {};
+        if (!Array.isArray(actions) || !actions.length) return;
+        pushUndo();
+        applyMCPActions(actions);
+        return;
+      }
+      if (event.type === "COMMAND") {
+        executeMCPCommand(event.command);
+      }
+    });
+    return unsubscribe;
+  }, [aiAssistant]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Context value ─────────────────────────────────────────────
   const value = {
     // Data
@@ -1449,7 +1700,19 @@ export function PlannerProvider({ children }) {
     prereqViolations, coreqViolations, connectedIds,
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
     major, setMajor, conc, setConc, minor1, setMinor1, minor2, setMinor2,
-    placedOut, setPlacedOut, 
+    placedOut, setPlacedOut,
+    // MCP / AI assistant
+    pendingMCPProposal, setPendingMCPProposal,
+    confirmMCPProposal: (accepted) => {
+      if (!pendingMCPProposal) return;
+      const { proposalId, changeset } = pendingMCPProposal;
+      if (accepted) {
+        pushUndo();
+        applyMCPActions(changeset.actions ?? []);
+      }
+      aiAssistant?.confirmProposal?.(proposalId, accepted);
+      setPendingMCPProposal(null);
+    },
     // Refs (passed through for DOM measurements)
     timelineRef, cardRefs, bankRef, bankResizing, panelResizing, uiScaleRef,
     // Actions

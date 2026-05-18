@@ -13,6 +13,7 @@ import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
+// import ClaudePanel from "./ClaudePanel.jsx"; // MCP integration — disabled until hosted
 import dataMeta from "../core/dataMeta.json";
 
 export default function Header() {
@@ -421,6 +422,9 @@ export default function Header() {
           {isMobile ? "↺" : "↺ Erase"}
         </button>}
         */}
+
+        {/* ◆ Claude integration panel — disabled until MCP server is hosted */}
+        {/* <ClaudePanel isMobile={isMobile} /> */}
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative" }}>
