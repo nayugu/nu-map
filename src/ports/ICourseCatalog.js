@@ -71,19 +71,23 @@ export const ICourseCatalog = "courseCatalog";
  *
  * Prerequisites and corequisites
  * @property {PrereqNode[]} prereqs      - Prerequisite tree.  Each node is one of:
- *                                           - A course reference: { subject: string, number: string }
+ *                                           - A course reference: { subject: string, number: string, concurrent?: boolean }
+ *                                             concurrent=true means the course may be taken in the same semester
+ *                                             (catalog language: "may be taken concurrently").  The evaluator
+ *                                             in prereqEval.js treats it as satisfied when co-placed.
  *                                           - An operator token: "And" | "Or" | "(" | ")"
  *                                           - A sub-array (nested group)
  *                                         The evaluator in prereqEval.js traverses this tree.
  *                                         Empty array means no prerequisites.
  * @property {CourseRef[]}  coreqs       - Corequisite list: flat array of course references
  *                                         { subject: string, number: string }.
+ *                                         Must be placed in the same semester as this course.
  *                                         Empty array means no corequisites.
  */
 
 /**
  * @typedef {Object|string|Array} PrereqNode  — one node in a prerequisite tree (see Course.prereqs)
- * @typedef {{ subject: string, number: string }} CourseRef
+ * @typedef {{ subject: string, number: string, concurrent?: boolean }} CourseRef
  */
 
 /**

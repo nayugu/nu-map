@@ -306,7 +306,7 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
         onClick={e => { e.stopPropagation(); navTo(id); }}
         onMouseEnter={() => setHov(true)}
         onMouseLeave={() => setHov(false)}
-        title={c ? `${c.title} — click to view, drag to place` : id}
+        title={c ? `${c.title}${item.concurrent ? " (may be taken concurrently)" : ""} — click to view, drag to place` : id}
         style={{
           display: "inline-block", fontSize: 9, fontWeight: 600,
           color: "var(--text-2)", background: "var(--bg-surface-2)",

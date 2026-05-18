@@ -383,7 +383,8 @@ export function PlannerProvider({ children }) {
           if (rel.type === "prerequisite") {
             const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
             const toIdx   = SEM_INDEX[placements[rel.to]]   ?? -1;
-            if (fromIdx >= toIdx) type = "prerequisite-order";
+            // concurrent prereq: same-semester is valid, only flag if strictly after
+            if (fromIdx > toIdx || (fromIdx === toIdx && !rel.concurrent)) type = "prerequisite-order";
           }
           if (rel.type === "corequisite" && placements[rel.from] !== placements[rel.to]) {
             type = "corequisite-viol";
@@ -429,6 +430,7 @@ export function PlannerProvider({ children }) {
             // Now, check if THIS edge is the one out of order
             const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
             if (fromIdx < ti) return; // This edge is not the one out of order
+            if (fromIdx === ti && rel.concurrent) return; // same-sem OK for concurrent prereqs
             const fp = getCenter(rel.from);
             const tp = getCenter(rel.to);
             if (!fp || !tp) return;

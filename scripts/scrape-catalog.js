@@ -51,6 +51,11 @@ const SUBJECT  = (() => {
   const i = process.argv.indexOf("--subject");
   return i !== -1 ? process.argv[i + 1]?.toUpperCase() : null;
 })();
+// --subjects PHYS,EECE,MATH  — scrape multiple subjects in merge mode (like --rotate per subject)
+const SUBJECTS = (() => {
+  const i = process.argv.indexOf("--subjects");
+  return i !== -1 ? process.argv[i + 1]?.toUpperCase().split(",").map(s => s.trim()).filter(Boolean) : null;
+})();
 
 // ── NUPATH code map ───────────────────────────────────────────────────────────
 // Maps catalog Attribute(s) text fragments → internal NUPath codes.
@@ -107,16 +112,17 @@ function parseNUPath(text) {
   return found.sort();
 }
 
-// ── Extract courses marked "may be taken concurrently" from prereq text ───────
-// Returns { cleaned: string, concurrent: [{subject, number}] }
+// ── Mark "(may be taken concurrently)" prereqs inline ────────────────────────
+// Concurrent prereqs stay in the prereq tree (not coreqs) but get flagged with
+// concurrent:true so the evaluator allows same-semester co-placement.
+// Returns { cleaned: string, concurrent: [] }  (concurrent[] kept for call-site compat)
 function extractConcurrentCourses(text) {
-  const concurrent = [];
-  const pattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)\s*\(may be taken concurrently\)/gi;
-  const cleaned = text.replace(pattern, (_, subj, num) => {
-    concurrent.push({ subject: subj, number: num });
-    return '';
-  }).replace(/\s+/g, ' ').trim();
-  return { cleaned, concurrent };
+  // Replace "SUBJ 1234 (may be taken concurrently)" → "SUBJ 1234[CONC]"
+  // The [CONC] marker is picked up by parsePrereqText's course regex.
+  const cleaned = text
+    .replace(/([A-Z]{2,6}\s+\d{4}[A-Z]?)\s*\(may be taken concurrently\)/gi, '$1[CONC]')
+    .replace(/\s+/g, ' ').trim();
+  return { cleaned, concurrent: [] };
 }
 
 // ── Prerequisite text → structured array (best-effort) ───────────────────────
@@ -132,8 +138,9 @@ function parsePrereqText(text) {
     // Strip trailing period if present
     cleaned = cleaned.replace(/\.\s*$/, '');
 
-    // Tokenize: split on "and"/"or" while preserving them, and handle parens
-    const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)/g;
+    // Tokenize: split on "and"/"or" while preserving them, and handle parens.
+    // [CONC] marker (from extractConcurrentCourses) sets concurrent:true on the ref.
+    const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)(\[CONC\])?/g;
     const parts = [];
     let lastIndex = 0;
     let match;
@@ -143,7 +150,9 @@ function parsePrereqText(text) {
       const between = cleaned.slice(lastIndex, match.index);
       extractOperators(between, parts);
 
-      parts.push({ subject: match[1], number: match[2] });
+      const ref = { subject: match[1], number: match[2] };
+      if (match[3]) ref.concurrent = true;
+      parts.push(ref);
       lastIndex = coursePattern.lastIndex;
     }
 
@@ -543,6 +552,96 @@ async function runRotate() {
   console.log(`\n  Next run will scrape: ${state.subjects[state.nextIndex]?.[0] ?? "(wrap to start)"}\n`);
 }
 
+// ── Multi-subject merge: scrape a provided list of subjects, merging each ──────
+// Like running --rotate --write once per subject but without advancing state.
+async function runSubjects(subjectCodes) {
+  console.log(`\nNU Catalog Scraper — SUBJECTS MODE (${subjectCodes.length} subjects)`);
+  console.log("=".repeat(50));
+  if (!existsSync(CATALOG_OUT)) {
+    console.error("  ❌  catalog-courses.json not found — run scrape-catalog.js --write first.");
+    process.exit(1);
+  }
+
+  for (let si = 0; si < subjectCodes.length; si++) {
+    const subjectCode = subjectCodes[si];
+    const url = `${INDEX_URL}${subjectCode.toLowerCase()}/`;
+    console.log(`\n  [${si + 1}/${subjectCodes.length}]  ${subjectCode}`);
+    console.log(`  URL: ${url}`);
+
+    let freshCourses = [];
+    try {
+      const html = await fetchPage(url);
+      freshCourses = parseSubjectPage(html, subjectCode);
+      console.log(`  Scraped: ${freshCourses.length} courses`);
+    } catch (err) {
+      console.error(`  ❌  Scrape failed: ${err.message} — skipping`);
+      if (si < subjectCodes.length - 1) await sleep(DELAY_MS);
+      continue;
+    }
+
+    const existing = JSON.parse(readFileSync(CATALOG_OUT, "utf8"));
+    const existingForSubject = new Map(
+      existing.filter(c => c.subject === subjectCode).map(c => [`${c.subject} ${c.number}`, c])
+    );
+    const existingOther = existing.filter(c => c.subject !== subjectCode);
+    const catMap = new Map(freshCourses.map(c => [`${c.subject} ${c.number}`, c]));
+
+    const addedCodes = [], modifiedCourses = [], removedCodes = [];
+    let unchangedCount = 0;
+    const mergedSubject = [];
+
+    for (const [key, cat] of catMap) {
+      const prev = existingForSubject.get(key);
+      if (!prev) {
+        mergedSubject.push(cat);
+        addedCodes.push(key);
+      } else {
+        const merged = {
+          ...prev,
+          title:        cat.title        || prev.title,
+          credits:      cat.credits != null ? cat.credits : prev.credits,
+          ...(cat.creditsMax !== undefined
+            ? { creditsMax: cat.creditsMax }
+            : cat.credits != null ? {} : prev.creditsMax !== undefined ? { creditsMax: prev.creditsMax } : {}),
+          scheduleType: cat.scheduleType || prev.scheduleType,
+          description:  cat.description  || prev.description,
+          nuPath:       cat.nuPath?.length ? cat.nuPath : prev.nuPath,
+          prereqs: Array.isArray(cat.prereqs) ? cat.prereqs : (prev.prereqs ?? []),
+          coreqs:  Array.isArray(cat.coreqs)  ? cat.coreqs  : (prev.coreqs  ?? []),
+        };
+        const changes = diffCourse(prev, merged);
+        if (changes.length > 0) modifiedCourses.push({ code: key, changes });
+        else unchangedCount++;
+        mergedSubject.push(merged);
+        existingForSubject.delete(key);
+      }
+    }
+    for (const [key, c] of existingForSubject) { removedCodes.push(key); mergedSubject.push(c); }
+
+    console.log(`  Added: ${addedCodes.length}  Modified: ${modifiedCourses.length}  Unchanged: ${unchangedCount}`);
+    if (modifiedCourses.length) {
+      for (const { code, changes } of modifiedCourses) {
+        for (const { field, before, after } of changes) {
+          const b = JSON.stringify(before)?.slice(0, 60);
+          const a = JSON.stringify(after)?.slice(0, 60);
+          console.log(`    ${code}  ${field}: ${b} → ${a}`);
+        }
+      }
+    }
+
+    if (!WRITE) {
+      console.log("  📋  DRY RUN — pass --write to save");
+    } else {
+      const updated = [...existingOther, ...mergedSubject];
+      writeFileSync(CATALOG_OUT, JSON.stringify(updated, null, 0), "utf8");
+      console.log(`  ✅  Saved ${updated.length} courses → catalog-courses.json`);
+    }
+
+    if (si < subjectCodes.length - 1) await sleep(DELAY_MS);
+  }
+  console.log("\n✅  Done.");
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 console.log("\nNU Catalog Scraper");
@@ -553,6 +652,12 @@ if (MERGE)   console.log("  MODE: merge into all-courses.json");
 // Rotate mode: short-circuit into dedicated single-subject handler
 if (ROTATE) {
   await runRotate();
+  process.exit(0);
+}
+
+// Multi-subject merge mode
+if (SUBJECTS) {
+  await runSubjects(SUBJECTS);
   process.exit(0);
 }
 

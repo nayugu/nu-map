@@ -32,6 +32,7 @@ export function extractEdges(courseId, prereqs, coreqs) {
         from: `${node.subject.toUpperCase()}${node.number}`,
         to:   courseId,
         type: "prerequisite",
+        ...(node.concurrent ? { concurrent: true } : {}),
       });
   }
 

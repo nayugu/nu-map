@@ -76,7 +76,8 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
       }
       const fi = semIndex[placements[id]];
       if (fi === undefined) return "missing";
-      return fi < ti ? "satisfied" : "order";
+      // concurrent prereq: same-semester co-placement is allowed (catalog: "may be taken concurrently")
+      return (tok.concurrent ? fi <= ti : fi < ti) ? "satisfied" : "order";
     }
 
     // Skip ")", stray operators, etc.
