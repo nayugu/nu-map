@@ -365,7 +365,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const hasHistory  = Object.keys(termHistory).length > 0;
 
   // Build lookup: { semTypeId → { calYear → offered:boolean } }
-  // calYear is the calendar year the term actually runs in (via getTermCodeYear).
+  // termHistory is already past-filtered by courseCatalog adapter, so byType is past-only.
   const byType = {};
   for (const [code, offered] of Object.entries(termHistory)) {
     const semType = cal.decodeTermCode(code);
@@ -375,15 +375,11 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     }
   }
 
-  // Latest calendar year we have past data for, per semType — used to box the freshest point.
+  // Latest year with data per semType — simply the max key in each byType row.
   const latestPastYearByType = {};
-  for (const code of Object.keys(termHistory)) {
-    const semType = cal.decodeTermCode(code);
-    const yr      = cal.getTermCodeYear?.(code);
-    if (semType && yr != null && cal.isTermPast(code)) {
-      if (!latestPastYearByType[semType] || yr > latestPastYearByType[semType])
-        latestPastYearByType[semType] = yr;
-    }
+  for (const [semType, yrMap] of Object.entries(byType)) {
+    const yrs = Object.keys(yrMap).map(Number);
+    if (yrs.length) latestPastYearByType[semType] = Math.max(...yrs);
   }
 
   // Global year range — defines shared fixed columns across all semType rows.
@@ -400,10 +396,10 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const hasOverride = Object.keys(ovrMap).length > 0;
 
   // Historical offering probability for a given semTypeId (null if no data).
-  // Only counts terms that have already started — future terms have unsettled Banner data.
+  // termHistory is past-filtered at the adapter, so all entries here are valid.
   function semTypeProb(semTypeId) {
     const entries = Object.entries(termHistory)
-      .filter(([code]) => cal.decodeTermCode(code) === semTypeId && cal.isTermPast(code));
+      .filter(([code]) => cal.decodeTermCode(code) === semTypeId);
     if (!entries.length) return null;
     return entries.filter(([, v]) => v).length / entries.length;
   }
@@ -471,7 +467,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
               {shortLabel}
             </span>
 
-            {/* Year history — one fixed column per calendar year */}
+            {/* Year history — one fixed column per calendar year, all years in global range */}
             {histWidth > 0 && (
               <div style={{ width: histWidth, position: "relative", flexShrink: 0, height: 14 }}>
                 {Object.entries(yrMap).map(([yrStr, offered]) => {
@@ -491,7 +487,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                         color: offered ? "var(--text-2)" : "var(--text-5)",
                         opacity: offered ? 1 : 0.35,
                         ...(isLatest ? {
-                          border: "1px solid var(--text-4)",
+                          border: "1px solid rgba(128,128,128,0.25)",
                           borderRadius: 2,
                           marginTop: 1,
                         } : {}),

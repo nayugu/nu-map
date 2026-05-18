@@ -149,7 +149,11 @@ export default {
         return courses.map(course => {
           const hist = history[course.id];
           if (!hist || typeof hist !== "object") return course;
-          const termHistory = { ...course.termHistory, ...hist };
+          // Only merge past terms — future terms with false values skew probability.
+          const pastHist = Object.fromEntries(
+            Object.entries(hist).filter(([code]) => calendar.isTermPast(code))
+          );
+          const termHistory = { ...course.termHistory, ...pastHist };
           return { ...course, termHistory, terms: deriveTerms(termHistory) };
         });
       }

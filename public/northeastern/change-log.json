@@ -1,6 +1,26 @@
 {
   "runs": [
     {
+      "type": "availability",
+      "subject": "📅 Term Availability",
+      "timestamp": "2026-05-18T14:21:49.570Z",
+      "terms": [
+        "202360",
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630"
+      ],
+      "covered": 4626,
+      "total": 7879
+    },
+    {
       "type": "majors",
       "subject": "🎓 Major Requirements",
       "timestamp": "2026-05-17T19:16:11.268Z",

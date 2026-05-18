@@ -55,9 +55,9 @@ const STANDARD_SUFFIXES = ["10", "30", "40", "60"];
  * Return Banner term codes for the last `yearsBack` academic years,
  * sorted chronologically (ascending).
  * Today = May 2026 → currentAYEndYear = 2026
- * Returns terms from AY ending 2024 through AY ending 2026.
+ * Returns terms from AY ending 2023 through AY ending 2026.
  */
-function recentTermCodes(yearsBack = 2) {
+function recentTermCodes(yearsBack = 3) {
   const now = new Date();
   const month = now.getMonth() + 1; // 1-12
   const calYear = now.getFullYear();
@@ -209,8 +209,8 @@ async function main() {
   const bannerTermCodes = new Set(termList.map(t => t.code));
   console.log(`Banner has ${bannerTermCodes.size} terms available`);
 
-  // Determine which standard terms to query (last 2 AYs, standard suffixes only)
-  const desired = recentTermCodes(2);
+  // Determine which standard terms to query (last 3 AYs, standard suffixes only)
+  const desired = recentTermCodes(3);
   const toQuery = desired.filter(code => bannerTermCodes.has(code));
 
   if (toQuery.length === 0) {

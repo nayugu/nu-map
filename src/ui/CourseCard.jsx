@@ -55,7 +55,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
       notOffered = true;
     } else if (semOvr !== true) {
       const entries = Object.entries(course.termHistory ?? {})
-        .filter(([code]) => calendar.decodeTermCode(code) === semOffType && calendar.isTermPast(code));
+        .filter(([code]) => calendar.decodeTermCode(code) === semOffType);
       if (entries.length > 0) {
         notOffered = entries.filter(([, v]) => v).length / entries.length <= 0.5;
       }
@@ -323,7 +323,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         {notOffered && (() => {
           // Build a probability hint from termHistory if available
           const hist    = course.termHistory ?? {};
-          const entries = Object.entries(hist).filter(([c]) => calendar.decodeTermCode(c) === semOffType && calendar.isTermPast(c));
+          const entries = Object.entries(hist).filter(([c]) => calendar.decodeTermCode(c) === semOffType);
           const tip = entries.length > 0
             ? `${course.code}: offered in ${entries.filter(([,v]) => v).length}/${entries.length} past ${semOffType} terms — override in panel`
             : `${course.code} may not be offered in ${semOffType} — override in panel`;
