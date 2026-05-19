@@ -40,14 +40,15 @@ export default function Header() {
   const { themeName, setThemeName, themeNames } = useTheme();
   const { t, locale, setLocale, locales } = useLanguage();
   const adapter = useInstitution();
-  const { attributeSystem, specialTerms, calendar, creditSystem, institution } = adapter;
+  const { attributeSystem, specialTerms, calendar, creditSystem, institution, majorRequirements } = adapter;
   const unitName        = creditSystem.getUnitName();
   const [showQuickSet, setShowQuickSet] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
+  const [planSearch, setPlanSearch] = useState("");
 
   useEffect(() => {
-    if (!showPlanMenu) return;
+    if (!showPlanMenu) { setPlanSearch(""); return; }
     const close = () => setShowPlanMenu(false);
     window.addEventListener("click", close);
     return () => window.removeEventListener("click", close);
@@ -210,6 +211,47 @@ export default function Header() {
     window.location.reload();
   };
 
+  // Renders a single row in the plan switcher list.
+  // majorLabel is non-empty only when the row surfaced via a major-name fallback search.
+  const renderPlanRow = (p, majorLabel = "") => (
+    <div key={p.id} style={{
+      display: "flex", alignItems: "center", gap: 4, padding: "4px 10px",
+      background: p.id === activePlanId ? "var(--active-bg)" : "transparent",
+      cursor: p.id === activePlanId ? "default" : "pointer",
+    }} onClick={() => { if (p.id !== activePlanId) { switchPlan(p.id); setShowPlanMenu(false); } }}>
+      <span style={{ flex: 1, minWidth: 0 }}>
+        <span style={{
+          display: "block", fontSize: isPhone ? 9 : 10, fontWeight: p.id === activePlanId ? 700 : 400,
+          color: p.id === activePlanId ? "var(--active)" : "var(--text-3)",
+          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+        }}>
+          {p.id === activePlanId ? "● " : ""}{p.name}
+        </span>
+        {majorLabel && (
+          <span style={{
+            display: "block", fontSize: isPhone ? 8 : 9, color: "var(--text-5)",
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+          }}>
+            {majorLabel}
+          </span>
+        )}
+      </span>
+      <button onClick={e => {
+        e.stopPropagation();
+        const name = prompt(t("header.plan.rename.prompt"), p.name);
+        if (name?.trim()) renamePlan(p.id, name.trim());
+      }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px", flexShrink: 0 }}
+        title={t("header.plan.rename.title")}>✎</button>
+      {plans.length > 1 && (
+        <button onClick={e => {
+          e.stopPropagation();
+          if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
+        }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px", flexShrink: 0 }}
+          title="Delete">✕</button>
+      )}
+    </div>
+  );
+
   return (
     <>
       {/* ── Sticky header bar ── */}
@@ -309,44 +351,67 @@ export default function Header() {
             <div onClick={e => e.stopPropagation()} style={{
               position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 6,
-              padding: "6px 0", minWidth: 160, boxShadow: "var(--shadow-modal)",
+              padding: "6px 0", minWidth: 180, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", transformOrigin: "top left",
               fontSize: isPhone ? 9 : 11,
             }}>
-              <div style={{fontSize: 8, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", padding: "3px 10px 6px", borderBottom: "1px solid var(--border-1)" }}>
-                {t("header.plans.title")}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 8, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", padding: "3px 10px 5px", borderBottom: "1px solid var(--border-1)" }}>
+                <span>{t("header.plans.title")}</span>
+                <span style={{ fontWeight: 400, color: "var(--text-5)", letterSpacing: 0 }}>{plans.length}</span>
               </div>
 
-              {plans.map(p => (
-                <div key={p.id} style={{
-                  display: "flex", alignItems: "center", gap: 4, padding: "4px 10px",
-                  background: p.id === activePlanId ? "var(--active-bg)" : "transparent",
-                  cursor: p.id === activePlanId ? "default" : "pointer",
-                }} onClick={() => { if (p.id !== activePlanId) { switchPlan(p.id); setShowPlanMenu(false); } }}>
-                  <span style={{
-                    flex: 1, fontSize: isPhone ? 9 : 10, fontWeight: p.id === activePlanId ? 700 : 400,
-                    color: p.id === activePlanId ? "var(--active)" : "var(--text-3)",
-                    overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                  }}>
-                    {p.id === activePlanId ? "● " : ""}{p.name}
-                  </span>
-                  {/* Rename */}
-                  <button onClick={e => {
-                    e.stopPropagation();
-                    const name = prompt(t("header.plan.rename.prompt"), p.name);
-                    if (name?.trim()) renamePlan(p.id, name.trim());
-                  }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px" }}
-                    title={t("header.plan.rename.title")}>✎</button>
-                  {/* Delete */}
-                  {plans.length > 1 && (
-                    <button onClick={e => {
-                      e.stopPropagation();
-                      if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
-                    }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px" }}
-                      title="Delete">✕</button>
-                  )}
+              {/* Search */}
+              {plans.length > 3 && (
+                <div style={{ padding: "5px 10px 4px", borderBottom: "1px solid var(--border-1)" }}>
+                  <input
+                    autoFocus
+                    value={planSearch}
+                    onChange={e => setPlanSearch(e.target.value)}
+                    placeholder="Search plans…"
+                    style={{
+                      width: "100%", boxSizing: "border-box",
+                      fontSize: isPhone ? 9 : 10, padding: "3px 7px",
+                      border: "1px solid var(--border-2)", borderRadius: 4,
+                      background: "var(--bg-surface-2)", color: "var(--text-2)",
+                      outline: "none",
+                    }}
+                  />
                 </div>
-              ))}
+              )}
+
+              {/* Scrollable plan list */}
+              <div style={{ maxHeight: "40vh", overflowY: "auto" }}>
+                {(() => {
+                  const q = planSearch.trim().toLowerCase();
+                  if (!q) return plans.map(p => renderPlanRow(p));
+
+                  // Helper: readable major label from a stored plan's major path
+                  const getMajorLabel = id => {
+                    try {
+                      const raw = localStorage.getItem(`${institution.storagePrefix}-plan-data-${id}`);
+                      const parts = (JSON.parse(raw || '{}').major || '').split('/');
+                      const folder = parts[parts.length - 2] || '';
+                      return folder ? majorRequirements.fmtLabel(folder) : '';
+                    } catch { return ''; }
+                  };
+
+                  // 1st pass: match by name
+                  const byName = plans.filter(p => p.name.toLowerCase().includes(q));
+                  if (byName.length > 0) return byName.map(p => renderPlanRow(p));
+
+                  // 2nd pass: fall back to major
+                  const byMajor = plans.map(p => ({ p, majorLabel: getMajorLabel(p.id) }))
+                    .filter(({ majorLabel }) => majorLabel.toLowerCase().includes(q));
+
+                  if (byMajor.length === 0) return (
+                    <div style={{ padding: "8px 10px", fontSize: isPhone ? 9 : 10, color: "var(--text-5)", fontStyle: "italic" }}>
+                      No plans match
+                    </div>
+                  );
+
+                  return byMajor.map(({ p, majorLabel }) => renderPlanRow(p, majorLabel));
+                })()}
+              </div>
 
               <div style={{ borderTop: "1px solid var(--border-1)", padding: "4px 10px 3px" }}>
                 <button onClick={e => {
