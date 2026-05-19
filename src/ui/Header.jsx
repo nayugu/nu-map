@@ -217,11 +217,13 @@ export default function Header() {
   // Toggle selection for one plan, with shift-range support.
   // visiblePlans is the currently displayed list (may be filtered by search).
   const handleSelectToggle = (p, idx, visiblePlans, shiftHeld) => {
+    const anchor = lastClickedIdx.current;
+    lastClickedIdx.current = idx; // set synchronously so the next shift-click sees it
     setSelectedIds(prev => {
       const next = new Set(prev);
-      if (shiftHeld && lastClickedIdx.current >= 0 && lastClickedIdx.current !== idx) {
-        const from = Math.min(lastClickedIdx.current, idx);
-        const to   = Math.max(lastClickedIdx.current, idx);
+      if (shiftHeld && anchor >= 0 && anchor !== idx) {
+        const from = Math.min(anchor, idx);
+        const to   = Math.max(anchor, idx);
         const shouldSelect = !prev.has(p.id);
         for (let i = from; i <= to; i++) {
           const id = visiblePlans[i]?.id;
@@ -230,7 +232,6 @@ export default function Header() {
       } else {
         next.has(p.id) ? next.delete(p.id) : next.add(p.id);
       }
-      lastClickedIdx.current = idx;
       return next;
     });
   };
