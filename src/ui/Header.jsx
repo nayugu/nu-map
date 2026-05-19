@@ -46,9 +46,12 @@ export default function Header() {
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
   const [planSearch, setPlanSearch] = useState("");
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const lastClickedIdx = useRef(-1);
 
   useEffect(() => {
-    if (!showPlanMenu) { setPlanSearch(""); return; }
+    if (!showPlanMenu) { setPlanSearch(""); setSelectMode(false); setSelectedIds(new Set()); lastClickedIdx.current = -1; return; }
     const close = () => setShowPlanMenu(false);
     window.addEventListener("click", close);
     return () => window.removeEventListener("click", close);
@@ -211,46 +214,87 @@ export default function Header() {
     window.location.reload();
   };
 
+  // Toggle selection for one plan, with shift-range support.
+  // visiblePlans is the currently displayed list (may be filtered by search).
+  const handleSelectToggle = (p, idx, visiblePlans, shiftHeld) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (shiftHeld && lastClickedIdx.current >= 0 && lastClickedIdx.current !== idx) {
+        const from = Math.min(lastClickedIdx.current, idx);
+        const to   = Math.max(lastClickedIdx.current, idx);
+        const shouldSelect = !prev.has(p.id);
+        for (let i = from; i <= to; i++) {
+          const id = visiblePlans[i]?.id;
+          if (id) shouldSelect ? next.add(id) : next.delete(id);
+        }
+      } else {
+        next.has(p.id) ? next.delete(p.id) : next.add(p.id);
+      }
+      lastClickedIdx.current = idx;
+      return next;
+    });
+  };
+
   // Renders a single row in the plan switcher list.
   // majorLabel is non-empty only when the row surfaced via a major-name fallback search.
-  const renderPlanRow = (p, majorLabel = "") => (
-    <div key={p.id} style={{
-      display: "flex", alignItems: "center", gap: 4, padding: "4px 10px",
-      background: p.id === activePlanId ? "var(--active-bg)" : "transparent",
-      cursor: p.id === activePlanId ? "default" : "pointer",
-    }} onClick={() => { if (p.id !== activePlanId) { switchPlan(p.id); setShowPlanMenu(false); } }}>
+  // idx + visiblePlans enable shift-range selection in select mode.
+  const renderPlanRow = (p, majorLabel = "", idx = 0, visiblePlans = plans) => {
+    const isChecked = selectedIds.has(p.id);
+    const nameSpan = (
       <span style={{ flex: 1, minWidth: 0 }}>
         <span style={{
-          display: "block", fontSize: isPhone ? 9 : 10, fontWeight: p.id === activePlanId ? 700 : 400,
-          color: p.id === activePlanId ? "var(--active)" : "var(--text-3)",
+          display: "block", fontSize: isPhone ? 9 : 10,
+          fontWeight: !selectMode && p.id === activePlanId ? 700 : 400,
+          color: !selectMode && p.id === activePlanId ? "var(--active)" : "var(--text-3)",
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
         }}>
-          {p.id === activePlanId ? "● " : ""}{p.name}
+          {!selectMode && p.id === activePlanId ? "● " : ""}{p.name}
         </span>
         {majorLabel && (
-          <span style={{
-            display: "block", fontSize: isPhone ? 8 : 9, color: "var(--text-5)",
-            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-          }}>
+          <span style={{ display: "block", fontSize: isPhone ? 8 : 9, color: "var(--text-5)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {majorLabel}
           </span>
         )}
       </span>
-      <button onClick={e => {
-        e.stopPropagation();
-        const name = prompt(t("header.plan.rename.prompt"), p.name);
-        if (name?.trim()) renamePlan(p.id, name.trim());
-      }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px", flexShrink: 0 }}
-        title={t("header.plan.rename.title")}>✎</button>
-      {plans.length > 1 && (
+    );
+
+    if (selectMode) {
+      return (
+        <div key={p.id} style={{
+          display: "flex", alignItems: "center", gap: 6, padding: "4px 10px",
+          background: isChecked ? "var(--active-bg)" : "transparent", cursor: "pointer",
+        }} onClick={e => handleSelectToggle(p, idx, visiblePlans, e.shiftKey)}>
+          <input type="checkbox" checked={isChecked} onChange={() => {}}
+            onClick={e => { e.stopPropagation(); handleSelectToggle(p, idx, visiblePlans, e.shiftKey); }}
+            style={{ cursor: "pointer", accentColor: "var(--active)", flexShrink: 0 }} />
+          {nameSpan}
+        </div>
+      );
+    }
+
+    return (
+      <div key={p.id} style={{
+        display: "flex", alignItems: "center", gap: 4, padding: "4px 10px",
+        background: p.id === activePlanId ? "var(--active-bg)" : "transparent",
+        cursor: p.id === activePlanId ? "default" : "pointer",
+      }} onClick={() => { if (p.id !== activePlanId) { switchPlan(p.id); setShowPlanMenu(false); } }}>
+        {nameSpan}
         <button onClick={e => {
           e.stopPropagation();
-          if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
+          const name = prompt(t("header.plan.rename.prompt"), p.name);
+          if (name?.trim()) renamePlan(p.id, name.trim());
         }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px", flexShrink: 0 }}
-          title="Delete">✕</button>
-      )}
-    </div>
-  );
+          title={t("header.plan.rename.title")}>✎</button>
+        {plans.length > 1 && (
+          <button onClick={e => {
+            e.stopPropagation();
+            if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
+          }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px", flexShrink: 0 }}
+            title="Delete">✕</button>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -357,7 +401,16 @@ export default function Header() {
             }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 8, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", padding: "3px 10px 5px", borderBottom: "1px solid var(--border-1)" }}>
                 <span>{t("header.plans.title")}</span>
-                <span style={{ fontWeight: 400, color: "var(--text-5)", letterSpacing: 0 }}>{plans.length}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  {plans.length > 1 && (
+                    <button onClick={e => { e.stopPropagation(); setSelectMode(v => !v); setSelectedIds(new Set()); lastClickedIdx.current = -1; }}
+                      style={{ background: "none", border: "none", cursor: "pointer", fontSize: 8, padding: 0, fontWeight: 600,
+                        color: selectMode ? "var(--active)" : "var(--text-5)" }}>
+                      {selectMode ? "Done" : "Select"}
+                    </button>
+                  )}
+                  <span style={{ fontWeight: 400, color: "var(--text-5)", letterSpacing: 0 }}>{plans.length}</span>
+                </div>
               </div>
 
               {/* Search */}
@@ -383,7 +436,7 @@ export default function Header() {
               <div style={{ maxHeight: "40vh", overflowY: "auto" }}>
                 {(() => {
                   const q = planSearch.trim().toLowerCase();
-                  if (!q) return plans.map(p => renderPlanRow(p));
+                  if (!q) return plans.map((p, i) => renderPlanRow(p, "", i, plans));
 
                   // Helper: readable major label from a stored plan's major path
                   const getMajorLabel = id => {
@@ -397,7 +450,7 @@ export default function Header() {
 
                   // 1st pass: match by name
                   const byName = plans.filter(p => p.name.toLowerCase().includes(q));
-                  if (byName.length > 0) return byName.map(p => renderPlanRow(p));
+                  if (byName.length > 0) return byName.map((p, i) => renderPlanRow(p, "", i, byName));
 
                   // 2nd pass: fall back to major
                   const byMajor = plans.map(p => ({ p, majorLabel: getMajorLabel(p.id) }))
@@ -409,22 +462,47 @@ export default function Header() {
                     </div>
                   );
 
-                  return byMajor.map(({ p, majorLabel }) => renderPlanRow(p, majorLabel));
+                  const byMajorPlans = byMajor.map(x => x.p);
+                  return byMajor.map(({ p, majorLabel }, i) => renderPlanRow(p, majorLabel, i, byMajorPlans));
                 })()}
               </div>
 
               <div style={{ borderTop: "1px solid var(--border-1)", padding: "4px 10px 3px" }}>
-                <button onClick={e => {
-                  e.stopPropagation();
-                  const name = prompt(t("header.plan.new.prompt"));
-                  if (name?.trim()) { createPlan(name.trim()); setShowPlanMenu(false); }
-                }} style={{
-                  width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)", color: "var(--accent)", textAlign: "left",
-                }}>
-                  {t("header.plan.new")}
-                </button>
+                {selectMode ? (
+                  <button onClick={e => {
+                    e.stopPropagation();
+                    const count = selectedIds.size;
+                    if (count === 0) return;
+                    if (count >= plans.length) { alert("You must keep at least one plan."); return; }
+                    if (confirm(`Delete ${count} plan${count > 1 ? "s" : ""}?`)) {
+                      for (const id of selectedIds) deletePlan(id);
+                      setSelectMode(false);
+                      setSelectedIds(new Set());
+                    }
+                  }} style={{
+                    width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700,
+                    cursor: selectedIds.size === 0 ? "default" : "pointer",
+                    padding: "5px 8px", borderRadius: 5, textAlign: "left",
+                    opacity: selectedIds.size === 0 ? 0.4 : 1,
+                    background: selectedIds.size > 0 ? "var(--red-soft, #fee2e2)" : "var(--bg-surface-2)",
+                    border: `1px solid ${selectedIds.size > 0 ? "var(--red, #ef4444)" : "var(--border-2)"}`,
+                    color: selectedIds.size > 0 ? "var(--red, #ef4444)" : "var(--text-5)",
+                  }}>
+                    {selectedIds.size === 0 ? "Select plans to delete" : `Delete ${selectedIds.size} plan${selectedIds.size > 1 ? "s" : ""}`}
+                  </button>
+                ) : (
+                  <button onClick={e => {
+                    e.stopPropagation();
+                    const name = prompt(t("header.plan.new.prompt"));
+                    if (name?.trim()) { createPlan(name.trim()); setShowPlanMenu(false); }
+                  }} style={{
+                    width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
+                    background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
+                    border: "1px solid var(--border-2)", color: "var(--accent)", textAlign: "left",
+                  }}>
+                    {t("header.plan.new")}
+                  </button>
+                )}
               </div>
             </div>
           )}
