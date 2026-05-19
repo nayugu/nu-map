@@ -1,15 +1,31 @@
 // ═══════════════════════════════════════════════════════════════════
 // MAJOR LOADER  (data adapter — bridges graduatenu/packages/api JSON files)
 //
-// Uses Vite's import.meta.glob for lazy, on-demand loading of the
-// parsed.initial.json files in the graduatenu fork.  Only the selected
-// major's JSON is ever fetched; the other 1400+ paths stay as stubs.
+// DATA SOURCE HISTORY
+// ───────────────────
+// Originally, all major/minor requirement JSON files came from the
+// external/graduatenu git submodule (a fork of sandboxnu/graduatenu).
+// This let us bootstrap quickly — the data was already there.
+// The downside: we had no control over schema, coverage, or update cadence,
+// and the submodule introduced a hard external dependency.
 //
-// Scraped majors (src/data/majors/) take precedence over the external
-// graduatenu submodule for the same year/college/program combination.
+// We later built our own scraper (scripts/scrape-majors.js) that pulls
+// directly from catalog.northeastern.edu and writes to src/data/majors/.
+// Our scraped files take precedence over the external submodule on collision
+// (same year/college/program path). The submodule remains as a fallback for
+// programs not yet covered by the scraper.
+//
+// Goal: fully migrate to scraped data so the external submodule can be removed.
+//
+// IMPLEMENTATION NOTE
+// ───────────────────
+// Uses Vite's import.meta.glob for lazy, on-demand loading of the
+// parsed.initial.json files.  Only the selected major's JSON is ever
+// fetched; the other 1400+ paths stay as stubs.
+// import.meta.glob requires static string literals at the call site.
 // ═══════════════════════════════════════════════════════════════════
 
-// Lazy stubs from the legacy external/graduatenu submodule.
+// Lazy stubs from the legacy external/graduatenu submodule (fallback).
 const _externalMap = import.meta.glob(
   '../../external/graduatenu/packages/api/src/major/majors/**/parsed.initial.json',
   { eager: false }
@@ -22,7 +38,7 @@ const _scrapedMap = import.meta.glob(
   { eager: false }
 );
 
-// Merge: scraped entries win on collision (same path suffix).
+// Scraped entries win on collision — own data preferred over external submodule.
 const _moduleMap = { ..._externalMap, ..._scrapedMap };
 
 // ── Public API ───────────────────────────────────────────────────

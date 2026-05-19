@@ -1,10 +1,20 @@
 // ═══════════════════════════════════════════════════════════════════
 // MINOR LOADER  (data adapter — bridges graduatenu minor JSON files)
 //
-// Same architecture as majorLoader.js, pointing instead to the
-// minor/minors/** tree in the graduatenu fork.
+// DATA SOURCE HISTORY
+// ───────────────────
+// Same history as majorLoader.js: minor data originally came from the
+// external/graduatenu submodule for speed of development. Unlike majors,
+// minors have not yet been migrated to our own scraper — all minor data
+// still comes from the external submodule.
+//
+// When scripts/scrape-majors.js is extended to cover minors, add a
+// _scrapedMap glob pointing to src/data/minors/ and merge it in the
+// same way majorLoader.js does (scraped wins on collision).
 // ═══════════════════════════════════════════════════════════════════
 
+// All minor data still comes from the external/graduatenu submodule.
+// Pending: migrate to own scraper (see majorLoader.js for the pattern).
 const _moduleMap = import.meta.glob(
   '../../external/graduatenu/packages/api/src/minor/minors/**/parsed.initial.json',
   { eager: false }

@@ -1,10 +1,26 @@
 // ═══════════════════════════════════════════════════════════════════
 // ADAPTER: northeastern/majorRequirements  (implements IMajorRequirements)
 //
-// Note: import.meta.glob() requires string literals at the call site
-// (Vite static analysis).  The glob patterns must therefore remain in
-// majorLoader.js / minorLoader.js.  getMajorOptions() and getMinorOptions()
-// are thin wrappers around those loaders.
+// DATA SOURCE HISTORY
+// ───────────────────
+// Major/minor requirement JSON files originally came entirely from the
+// external/graduatenu git submodule (sandboxnu/graduatenu fork). This was
+// chosen for speed — the data already existed and the schema was known.
+// The trade-off was no control over coverage, accuracy, or update cadence.
+//
+// We later built scripts/scrape-majors.js to pull major requirements
+// directly from catalog.northeastern.edu, writing to src/data/majors/.
+// Our scraped files now take precedence over the external submodule for
+// any program both sources cover (see majorLoader.js). The external
+// submodule remains as a fallback for programs not yet scraped.
+//
+// Minors: not yet migrated — all minor data still comes from the submodule.
+//
+// IMPLEMENTATION NOTES
+// ────────────────────
+// import.meta.glob() requires string literals at the call site (Vite static
+// analysis). The glob patterns therefore live in majorLoader.js / minorLoader.js.
+// getMajorOptions() and getMinorOptions() are thin wrappers around those loaders.
 //
 // auditMajor() / auditMinor() are not yet implemented here — GradPanel
 // calls loadMajor() + gradRequirements.js directly (Stage 2 migration).
@@ -80,11 +96,17 @@ export default {
   getSources() {
     return [
       {
+        id:      "catalog-majors",
+        label:   "catalog.northeastern.edu",
+        url:     "https://catalog.northeastern.edu/",
+        usedFor: "major requirement definitions (scraped, preferred)",
+      },
+      {
         id:      "graduatenu",
         label:   "sandboxnu/graduatenu",
         url:     "https://github.com/sandboxnu/graduatenu",
         author:  "sandboxnu",
-        usedFor: "graduation requirement definitions",
+        usedFor: "major/minor requirement definitions (external submodule fallback)",
       },
     ];
   },
