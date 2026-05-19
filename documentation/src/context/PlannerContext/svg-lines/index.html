@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVG Lines — PlannerContext — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context/PlannerContext/svg-lines">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../../">src/</a><span class="sep"> / </span><a href="../../">context/</a><span class="sep"> / </span><a href="../">PlannerContext</a><span class="sep"> / </span><strong>svg-lines</strong>
+    </div>
+
+    <h1>SVG Prerequisite Lines <span class="badge purple">PlannerContext subsystem</span></h1>
+    <p class="lead">Lines connecting course cards are recomputed inside a <code>requestAnimationFrame</code> callback whenever <code>selectedId</code>, <code>placements</code>, <code>showViolLines</code>, <code>substitutions</code>, <code>specialTermPl</code>, or <code>scrollTick</code> changes. Each line is a <code>{ from, to, type, fp, tp }</code> object where <code>fp</code> and <code>tp</code> are center-point coordinates in SVG space.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">PlannerContext.jsx</a></div></div>
+      <div class="nb-group"><div class="nb-label">Rendered by</div><div class="nb-value"><a href="../../../ui/InfoPanel/">InfoPanel + RelLines</a></div></div>
+      <div class="nb-group"><div class="nb-label">Edge data source</div><div class="nb-value"><code>allEdges</code> — computed from <code>courseMap</code>, includes both prereq and coreq edges for all known courses</div></div>
+    </div>
+
+    <h2>Coordinate correction</h2>
+    <p><code>getBoundingClientRect()</code> returns viewport pixels. On desktop the app container has <code>transform: scale(uiScale)</code>, so coordinates must be divided by <code>uiScale</code> to convert back to SVG local space. On phone, <code>uiScale</code> is effectively 1 (transform is <code>none</code>), so no correction is applied.</p>
+    <p>Courses in the <code>"incoming"</code> pseudo-semester are always skipped — no lines are drawn to or from them regardless of mode.</p>
+
+    <h2>Line types</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>type</th><th>Color</th><th>Condition</th><th>Mode</th></tr></thead>
+      <tbody>
+        <tr><td><code>prerequisite</code></td><td>Green</td><td>A is a prereq of B; A is placed before B — correct order</td><td>Selection only</td></tr>
+        <tr><td><code>prerequisite-order</code></td><td>Red</td><td>A is a prereq of B but placed in the same semester or after B</td><td>Both</td></tr>
+        <tr><td><code>corequisite</code></td><td>Blue</td><td>A and B are coreqs; both in the same semester</td><td>Selection only</td></tr>
+        <tr><td><code>corequisite-viol</code></td><td>Red</td><td>A and B are coreqs but placed in different semesters</td><td>Both</td></tr>
+        <tr><td><code>substitution-prereq</code></td><td>Teal</td><td>Substituting course fulfills an inherited prereq — correct order</td><td>Selection only</td></tr>
+        <tr><td><code>substitution-prereq-order</code></td><td>Red</td><td>Substituting course fulfills an inherited prereq but is in the wrong order</td><td>Both</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Two drawing modes</h2>
+    <p>The effect runs in one of two modes depending on whether a course is currently selected. Selection mode is a superset of always-on mode — it draws both satisfied and violated lines, while always-on mode draws only red violations.</p>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    TICK["Effect triggers\nselectedId / placements / showViolLines\nsubstitutions / specialTermPl / scrollTick"]
+    TICK --> SEL{"selectedId\nset?"}
+
+    SEL -->|"Yes — Selection mode"| SM["Draw ALL edge types\nfor every edge touching selected course"]
+    SM --> SMTYPES["prerequisite (green)\nprerequisite-order (red)\ncorequisite (blue)\ncorequisite-viol (red)\nsubstitution-prereq (teal)\nsubstitution-prereq-order (red)"]
+    SM --> SUBSEL["Also draw substitution-inherited lines\nwhere selected course is an endpoint"]
+
+    SEL -->|"No — Always-on mode"| VL{"showViolLines?"}
+    VL -->|false| EMPTY["setLines([])"]
+    VL -->|true| SCAN["Scan ALL placed-course edges"]
+    SCAN --> PQ{"prereq edge?"}
+    PQ -->|Yes| EVTREE{"evalPrereqTree\nreturns 'order'?"}
+    EVTREE -->|Yes| RPREQ["Draw prerequisite-order (red)"]
+    EVTREE -->|No| SKP["skip"]
+    PQ -->|"No — coreq edge"| CSEM{"both in same\nsemester?"}
+    CSEM -->|No| RCOREQ["Draw corequisite-viol (red)"]
+    CSEM -->|Yes| SKP2["skip"]
+    SCAN --> SUBVIOL["Also draw substitution-inherited\nviolation lines (wrong-order only)\nskip if already drawn by selection mode"]
+
+    SMTYPES & SUBSEL & RPREQ & RCOREQ & SUBVIOL --> SET["setLines(newLines)"]
+      </div>
+      <div class="caption">Always-on mode checks <code>evalPrereqTree</code> per edge to determine if a "wrong order" violation exists. Selection mode skips this check and draws all edge types unconditionally.</div>
+    </div>
+
+    <h2>scrollTick</h2>
+    <p>Because card positions change when the user scrolls the planner grid, SVG coordinates go stale. A scroll listener on the planner container increments <code>scrollTick</code> by 1. This value is a dependency of the lines effect, so the <code>requestAnimationFrame</code> fires again after scroll and recalculates fresh bounding rects for all visible cards.</p>
+
+  </main>
+</div>
+<script src="../../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
