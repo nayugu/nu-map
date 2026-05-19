@@ -31,14 +31,17 @@
     <p>All span logic in the planner uses one rule: a special term spans into the next semester when <code>termWeight &gt; semSlotWeight</code>. Semester types and special term durations must use the same weight scale.</p>
     <div class="callout info"><div class="ci">ℹ</div><div class="callout-body"><strong>Weight scale:</strong> <code>1.0</code> = one full academic semester. Half-sessions get <code>0.5</code>. All semester types in one academic year should sum to a whole number so that year boundaries are exact. NU's four types sum to 3.0.</div></div>
 
-    <h2>Contract — top-level fields</h2>
+    <h2>Contract — methods</h2>
     <div class="table-wrap"><table>
-      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <thead><tr><th>Method</th><th>Returns</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td><code>defaultStartYear</code></td><td>number</td><td>First academic year shown when no saved plan exists.</td></tr>
-        <tr><td><code>semesterTypes</code></td><td>SemesterType[]</td><td>Ordered list of all regular term types. Display order within each year follows this array order.</td></tr>
-        <tr><td><code>yearAnchor</code></td><td>string</td><td>Lowercase month name that begins the academic year, e.g. <code>"august"</code> or <code>"september"</code>. Used to align year labels.</td></tr>
-        <tr><td><code>academicYearFormat</code></td><td><code>"single"</code> | <code>"split"</code></td><td><code>"single"</code> → "2026"; <code>"split"</code> → "2025–2026". Use <code>"split"</code> if your institution labels years that span two calendar years.</td></tr>
+        <tr><td><code>getSemesterTypes()</code></td><td>SemesterType[]</td><td>Ordered list of all regular term types. Display order within each year follows this array order.</td></tr>
+        <tr><td><code>getDefaultStartYear()</code></td><td>number</td><td>First academic year shown when no saved plan exists.</td></tr>
+        <tr><td><code>getYearAnchor()</code></td><td>string</td><td>Lowercase month name that begins the academic year, e.g. <code>"august"</code> or <code>"september"</code>. Used to align year labels.</td></tr>
+        <tr><td><code>getAcademicYearFormat()</code></td><td><code>"single"</code> | <code>"split"</code></td><td><code>"single"</code> → year label shows a single year, e.g. "2026"; <code>"split"</code> → cross-calendar label, e.g. "2025–2026".</td></tr>
+        <tr><td><code>decodeTermCode(code)</code></td><td>string | null</td><td>Decode a raw registrar term code into a SemesterType id. Returns <code>null</code> if unrecognized. Institution-specific: NU uses a two-digit suffix (10 = fall, 30 = spring, 40 = sumA, 60 = sumB). Consumed by the courseCatalog adapter and InfoPanel offering grid.</td></tr>
+        <tr><td><code>getTermCodeYear(code)</code></td><td>number | null</td><td><em>Optional.</em> Extract the calendar year from a raw term code. Returns <code>null</code> if this calendar does not use term codes. NU: Fall (suffix 10) runs in year YYYY-1; all others in YYYY. Used to label historical terms (e.g. "FA24").</td></tr>
+        <tr><td><code>getSources()</code></td><td>SourceInfo[]</td><td>External data sources this adapter draws from. See <a href="../IAttributable/">IAttributable</a>.</td></tr>
       </tbody>
     </table></div>
 
@@ -46,27 +49,30 @@
     <div class="table-wrap"><table>
       <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td><code>id</code></td><td>string</td><td>Machine-readable ID stored in plan state, e.g. <code>"fall"</code>, <code>"spring"</code>, <code>"sumA"</code>.</td></tr>
+        <tr><td><code>id</code></td><td>string</td><td>Machine-readable type ID, e.g. <code>"fall"</code>, <code>"spring"</code>, <code>"sumA"</code>. Also the default prefix when building semester IDs (see <code>idPrefix</code>).</td></tr>
+        <tr><td><code>[idPrefix]</code></td><td>string</td><td><em>Optional.</em> Override prefix for generated semester IDs: <code>${idPrefix}${year}</code>. Defaults to <code>id</code> when omitted. Use this when legacy saved plans used a different prefix — e.g. NU spring has <code>id: "spring"</code> but <code>idPrefix: "spr"</code> so existing <code>"spr2027"</code> keys remain valid.</td></tr>
         <tr><td><code>label</code></td><td>string</td><td>Display name, e.g. <code>"Fall"</code>, <code>"Summer 1"</code>.</td></tr>
         <tr><td><code>shortLabel</code></td><td>string</td><td>Abbreviated label for tight spaces, e.g. <code>"FA"</code>, <code>"S1"</code>.</td></tr>
+        <tr><td><code>[sub]</code></td><td>string</td><td><em>Optional.</em> Date-range subtitle under the semester heading, e.g. <code>"Sep – Dec"</code>. If omitted, derived from <code>months[]</code>.</td></tr>
         <tr><td><code>weight</code></td><td>number</td><td><strong>The span arithmetic key.</strong> <code>1.0</code> = one full semester; <code>0.5</code> = half-session. Must match the scale used in <code>ISpecialTerms</code> durations.</td></tr>
         <tr><td><code>optional</code></td><td>boolean</td><td>If <code>true</code>, this slot can be collapsed in a condensed view (e.g. summer sessions the student didn't attend).</td></tr>
         <tr><td><code>theme</code></td><td>string</td><td>CSS theme key for row background. Must be one of: <code>"fall"</code>, <code>"spring"</code>, <code>"summer"</code>, <code>"special"</code>.</td></tr>
-        <tr><td><code>months</code></td><td>string[]</td><td>ISO month strings (<code>"01"</code>–<code>"12"</code>) covered by this term. Informational — not used in logic.</td></tr>
+        <tr><td><code>months</code></td><td>string[]</td><td>ISO month strings (<code>"01"</code>–<code>"12"</code>) covered by this term. Informational — used for subtitle fallback and display tooltips.</td></tr>
       </tbody>
     </table></div>
 
     <h2>Northeastern reference implementation</h2>
     <div class="table-wrap"><table>
-      <thead><tr><th>id</th><th>label</th><th>weight</th><th>optional</th><th>theme</th><th>months</th></tr></thead>
+      <thead><tr><th>id</th><th>idPrefix</th><th>label</th><th>sub</th><th>weight</th><th>optional</th><th>theme</th><th>months</th></tr></thead>
       <tbody>
-        <tr><td><code>fall</code></td><td>Fall</td><td>1.0</td><td>false</td><td>fall</td><td>09–12</td></tr>
-        <tr><td><code>spring</code></td><td>Spring</td><td>1.0</td><td>false</td><td>spring</td><td>01–05</td></tr>
-        <tr><td><code>sumA</code></td><td>Summer 1</td><td>0.5</td><td>true</td><td>summer</td><td>05–06</td></tr>
-        <tr><td><code>sumB</code></td><td>Summer 2</td><td>0.5</td><td>true</td><td>summer</td><td>07–08</td></tr>
+        <tr><td><code>fall</code></td><td>—</td><td>Fall</td><td>Sep – Dec</td><td>1.0</td><td>false</td><td>fall</td><td>09–12</td></tr>
+        <tr><td><code>spring</code></td><td><code>"spr"</code></td><td>Spring</td><td>Jan – Apr</td><td>1.0</td><td>false</td><td>spring</td><td>01–05</td></tr>
+        <tr><td><code>sumA</code></td><td>—</td><td>Summer 1</td><td>May – Jun</td><td>0.5</td><td>true</td><td>summer</td><td>05–06</td></tr>
+        <tr><td><code>sumB</code></td><td>—</td><td>Summer 2</td><td>Jul – Aug</td><td>0.5</td><td>true</td><td>summer</td><td>07–08</td></tr>
       </tbody>
     </table></div>
-    <p>Year total: <code>1.0 + 1.0 + 0.5 + 0.5 = 3.0</code>. <code>defaultStartYear: 2026</code>, <code>yearAnchor: "august"</code>, <code>academicYearFormat: "single"</code>.</p>
+    <p>Year total: <code>1.0 + 1.0 + 0.5 + 0.5 = 3.0</code>. <code>getDefaultStartYear() → 2026</code>, <code>getYearAnchor() → "august"</code>, <code>getAcademicYearFormat() → "single"</code>.</p>
+    <p>Spring uses <code>idPrefix: "spr"</code> so that legacy plan keys (<code>"spr2027"</code>) remain valid. Banner term code decoding: 10 → fall, 30 → spring (32 = Law Spring → spring), 40 → sumA (52 = Law Summer → sumA), 60 → sumB.</p>
 
     <h2>Generic default</h2>
     <p>Fall + Spring only, weight 1.0 each. <code>defaultStartYear</code> is <code>new Date().getFullYear()</code> at startup. Covers the majority of semester-system universities globally.</p>

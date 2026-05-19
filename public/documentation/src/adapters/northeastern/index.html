@@ -72,7 +72,7 @@
         <tr><td><code>specialTerms.js</code></td><td>ISpecialTerms</td><td>Co-op: color #f87171, 4mo (w=1.0, grants EX) / 6mo (w=2.0, grants EX). Internship: color #9ca3af, 2mo (w=0.5) / 4mo (w=1.0), grants nothing</td></tr>
         <tr><td><code>majorRequirements.js</code></td><td>IMajorRequirements</td><td>fmtLabel strips <code>_(boston)</code>/<code>_(burlington)</code> location suffixes, title-cases result; fmtLocation extracts and formats the location tag</td></tr>
         <tr><td><code>courseCatalog.js</code></td><td>ICourseCatalog</td><td>Fetches <code>public/northeastern/catalog-courses.json</code> + merges <code>public/northeastern/term-history.json</code>; <code>deriveTerms()</code> uses P≥0.5 threshold to predict offering; Banner term decode via calendar adapter</td></tr>
-        <tr><td><code>localization.js</code></td><td>ILocalization</td><td>3 disclaimer bullets: unofficial status, DegreeWorks authority, data freshness</td></tr>
+        <tr><td><code>localization.js</code></td><td>ILocalization</td><td>5 disclaimer bullets: unofficial status, DegreeWorks authority, data freshness (with "confirm with official catalog"), localStorage-only storage, use at own risk</td></tr>
         <tr><td><code>aiAssistant.js</code></td><td>IAIAssistant</td><td>Posts plan snapshots to MCP server at <code>VITE_MCP_SERVER_URL</code> (default localhost:27182); session UUID in localStorage <code>"nu-map-mcp-session"</code>. <strong>Imported in northeastern/index.js but commented out in src/config.js</strong> — pending public hosting.</td></tr>
       </tbody>
     </table></div>

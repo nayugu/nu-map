@@ -32,24 +32,31 @@
       <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Purpose</th></tr></thead>
       <tbody>
         <tr><td><code>id</code></td><td>string</td><td>Yes</td><td>Machine-readable key, e.g. <code>"northeastern"</code>. Used to disambiguate storage keys if multiple adapters are ever deployed.</td></tr>
-        <tr><td><code>name</code></td><td>string</td><td>Yes</td><td>Full institution name shown in the About modal and PDF export header.</td></tr>
+        <tr><td><code>name</code></td><td>string</td><td>Yes</td><td>Full institution name shown in disclaimers and PDF export header.</td></tr>
         <tr><td><code>shortName</code></td><td>string</td><td>Yes</td><td>Abbreviation for tight UI spaces, e.g. page titles.</td></tr>
+        <tr><td><code>url</code></td><td>string|null</td><td>Yes</td><td>Institution home page URL, or <code>null</code>. Shown in the header links section.</td></tr>
+        <tr><td><code>appName</code></td><td>string</td><td>Yes</td><td>Name of this planner deployment, e.g. <code>"NU Map"</code>. Distinct from institution name — forks can brand independently. Used in the header, loading screen, and <code>&lt;title&gt;</code>.</td></tr>
+        <tr><td><code>storagePrefix</code></td><td>string</td><td>Yes</td><td>Namespace for all <code>localStorage</code> keys. Must be unique. NU uses <code>"ncp"</code>; every key is stored as <code>"ncp-..."</code>. <strong>Never change after deploying.</strong></td></tr>
         <tr><td><code>portalName</code></td><td>string</td><td>Yes</td><td>Name of the student self-service portal, referenced in disclaimers.</td></tr>
         <tr><td><code>degreeAuditName</code></td><td>string</td><td>Yes</td><td>Name of the official degree audit tool, referenced in disclaimers.</td></tr>
-        <tr><td><code>storagePrefix</code></td><td>string</td><td>Yes</td><td>Namespace for all <code>localStorage</code> keys. Must be unique. NU uses <code>"ncp"</code>; every key is stored as <code>"ncp-..."</code>.</td></tr>
-        <tr><td><code>logoUrl</code></td><td>string?</td><td>No</td><td>Optional URL to an institution wordmark. Not currently rendered but reserved.</td></tr>
+        <tr><td><code>defaultLocale</code></td><td>string?</td><td>No</td><td>BCP-47 locale code used on first load, e.g. <code>"en"</code>. Defaults to <code>"en"</code> if omitted. Users can override at runtime via the language picker.</td></tr>
+        <tr><td><code>logoUrl</code></td><td>string?</td><td>No</td><td>URL to institution wordmark or app logo. Falls back to the default logo if omitted.</td></tr>
       </tbody>
     </table></div>
 
     <h2>Northeastern reference implementation</h2>
     <pre><code><span class="cmt">// src/adapters/northeastern/institution.js</span>
 export default {
-  id:              "northeastern",
-  name:            "Northeastern University",
-  shortName:       "NU",
-  portalName:      "MyNEU",
-  degreeAuditName: "DegreeWorks",
-  storagePrefix:   "ncp",
+  id:               <span class="str">"northeastern"</span>,
+  name:             <span class="str">"Northeastern University"</span>,
+  shortName:        <span class="str">"NU"</span>,
+  url:              <span class="str">"https://www.northeastern.edu"</span>,
+  appName:          <span class="str">"NU Map"</span>,
+  defaultLocale:    <span class="str">"en"</span>,
+  portalName:       <span class="str">"MyNEU"</span>,
+  degreeAuditName:  <span class="str">"DegreeWorks"</span>,
+  storagePrefix:    <span class="str">"ncp"</span>,
+  <span class="fn-name">getSources</span>()      { <span class="kw">return</span> []; },
 };</code></pre>
 
     <h2>Generic default</h2>
@@ -65,14 +72,16 @@ export default {
     <div class="callout warning"><div class="ci">!</div><div class="callout-body">The generic default is a development placeholder. If you deploy without overriding <code>IInstitution</code>, users see "My University" everywhere and plans are stored under <code>"map-..."</code> keys, which will conflict if you later change the prefix.</div></div>
 
     <h2>Implementing for your institution</h2>
-    <p>Copy <code>src/adapters/northeastern/institution.js</code> and change all six values:</p>
+    <p>Copy <code>src/adapters/northeastern/institution.js</code> and update all values:</p>
     <ol>
       <li><code>id</code> — lowercase hyphenated slug, e.g. <code>"boston-university"</code></li>
       <li><code>name</code> — official full name</li>
       <li><code>shortName</code> — official abbreviation</li>
+      <li><code>url</code> — institution home page, or <code>null</code></li>
+      <li><code>appName</code> — name for the planner deployment, e.g. <code>"BU Course Map"</code></li>
+      <li><code>storagePrefix</code> — short unique string, 3–6 chars. <strong>Never change this after deploying</strong> — it will orphan all existing saved plans.</li>
       <li><code>portalName</code> — your student portal (Banner, MyPortal, ONE, etc.)</li>
       <li><code>degreeAuditName</code> — your degree audit system (DegreeWorks, DARS, uAchieve, etc.)</li>
-      <li><code>storagePrefix</code> — short unique string, 3–6 chars. <strong>Never change this after deploying</strong> — it will orphan all existing saved plans.</li>
     </ol>
 
   </main>

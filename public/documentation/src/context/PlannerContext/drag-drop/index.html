@@ -56,11 +56,11 @@ flowchart TD
     </div>
 
     <h2>dragInfo shape</h2>
-    <pre><code>{ id: string,        <span class="cmt">// item ID — null for new term templates dragged from the bank</span>
-  type: string,      <span class="cmt">// "course" | "specialTerm"</span>
-  typeId?: string,   <span class="cmt">// adapter term type — e.g. "coop" | "intern" — only for "specialTerm"</span>
-  fromSem: string,   <span class="cmt">// source semId (null if dragging from bank/template)</span>
-  duration?: number  <span class="cmt">// months — only present for "specialTerm"</span>
+    <pre><code>{ id: string | null,        <span class="cmt">// item ID — null for new term templates dragged from the bank</span>
+  type: string,             <span class="cmt">// "course" | "specialTerm"</span>
+  typeId?: string,          <span class="cmt">// adapter term type — e.g. "coop" | "intern" — only for "specialTerm"</span>
+  fromSem: string | null,   <span class="cmt">// source semId — null if dragging from bank/template</span>
+  duration?: number         <span class="cmt">// months — only present for "specialTerm"</span>
 }</code></pre>
 
     <h2>Drop targets</h2>

@@ -45,27 +45,38 @@ graph TD
     <h2>Exported functions — majorLoader.js</h2>
 
     <div class="fn-block exported">
-      <div class="fn-sig">loadMajor(path) → Promise&lt;Major2&gt;</div>
-      <div class="fn-desc">Fetches a major's requirement tree JSON from <code>{BASE_URL}{path}</code>. The path argument is the relative path within the <code>public/</code> directory, e.g. <code>"graduatenu/packages/api/src/major/majors/2024/computer-information-science/computer_science_bscs/parsed.initial.json"</code>.</div>
-      <div class="fn-returns">Returns: <span>Promise&lt;Major2&gt; — the requirement tree JSON</span></div>
+      <div class="fn-sig">getMajorOptions(majorRequirements) → ProgramOption[]</div>
+      <div class="fn-desc">Returns the full flat list of available major options by scanning the Vite module registry (no JSON loaded). Uses <code>majorRequirements.fmtLabel()</code> and <code>fmtLocation()</code> from the port to format display names. Results are cached per adapter instance. Each option is <code>{ path, year, college, collegeLabel, folder, label, location }</code>.</div>
+      <div class="fn-returns">Returns: <span>ProgramOption[] — sorted by year descending, then college, then label</span></div>
     </div>
 
     <div class="fn-block exported">
-      <div class="fn-sig">getMajorOptionGroups() → OptionGroup[]</div>
-      <div class="fn-desc">Reads the generated major index and returns a grouped option structure for the SearchCombo dropdown in GradPanel. Grouped by: location → college → major name → catalog year → optional concentrations.</div>
-      <div class="fn-returns">Returns: <span>OptionGroup[] — hierarchical dropdown data</span></div>
+      <div class="fn-sig">getMajorOptionGroups(majorRequirements) → Map&lt;string, ProgramOption[]&gt;</div>
+      <div class="fn-desc">Groups the flat option list by <code>"${year} — ${collegeLabel}"</code> key for use in the GradPanel SearchCombo dropdown. Returns an ordered <code>Map</code> — not an array. Calling code uses <code>map.entries()</code> to build <code>&lt;optgroup&gt;</code> elements.</div>
+      <div class="fn-returns">Returns: <span>Map&lt;string, ProgramOption[]&gt; — keys are group labels, e.g. <code>"2025 — Khoury College"</code></span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">loadMajor(path) → Promise&lt;Major2&gt;</div>
+      <div class="fn-desc">Lazily loads the <code>parsed.initial.json</code> at the given module path using <code>import.meta.glob</code> stubs. Both the scraped output (<code>src/data/majors/</code>) and the legacy submodule (<code>external/graduatenu/</code>) are registered; scraped files take priority on collision.</div>
+      <div class="fn-returns">Returns: <span>Promise&lt;Major2&gt; — the requirement tree JSON</span></div>
     </div>
 
     <h2>Exported functions — minorLoader.js</h2>
 
     <div class="fn-block exported">
-      <div class="fn-sig">loadMinor(path) → Promise&lt;Minor2&gt;</div>
-      <div class="fn-desc">Identical to <code>loadMajor()</code> but for minor requirement files under <code>graduatenu/.../minors/</code>.</div>
+      <div class="fn-sig">getMinorOptions(majorRequirements) → ProgramOption[]</div>
+      <div class="fn-desc">Same as <code>getMajorOptions()</code> but scans the minors glob registry.</div>
     </div>
 
     <div class="fn-block exported">
-      <div class="fn-sig">getMinorOptionGroups() → OptionGroup[]</div>
-      <div class="fn-desc">Same structure as <code>getMajorOptionGroups()</code> but for minors.</div>
+      <div class="fn-sig">getMinorOptionGroups(majorRequirements) → Map&lt;string, ProgramOption[]&gt;</div>
+      <div class="fn-desc">Same as <code>getMajorOptionGroups()</code> but for minors. Returns a <code>Map</code>, not an array.</div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">loadMinor(path) → Promise&lt;Minor2&gt;</div>
+      <div class="fn-desc">Identical to <code>loadMajor()</code> but for minor requirement files.</div>
     </div>
 
     <h2>Major2 schema (what loadMajor returns)</h2>

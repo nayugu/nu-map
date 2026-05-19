@@ -24,7 +24,7 @@
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value">SemRow, SummerRow, BankPanel, GradPanel</div></div>
       <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">~500</div></div>
-      <div class="nb-group"><div class="nb-label">Key props</div><div class="nb-value"><code>id</code> (courseId), <code>inSem</code> (bool), <code>semId</code> (when placed)</div></div>
+      <div class="nb-group"><div class="nb-label">Key props</div><div class="nb-value"><code>course</code> (Course object), <code>inSem</code> (bool), <code>semId</code> (when placed), <code>noSubject</code> (bool, default false)</div></div>
     </div>
 
     <h2>Three rendering modes</h2>
@@ -42,7 +42,7 @@
     <ul>
       <li><strong>⚠ Not offered</strong>: Course is placed in a semester type it's not offered in (e.g. a fall-only course placed in Spring). Derived from <code>course.offeredFall</code> etc. vs the semester type.</li>
       <li><strong>⚡ Coreq violation</strong>: A corequisite is missing from the same semester. Read from <code>coreqViolations</code> in context.</li>
-      <li><strong>! Prereq unsatisfied</strong>: A prerequisite is missing or in a later semester. Read from <code>prereqViolations</code> in context.</li>
+      <li><strong>! Prereq violation</strong>: A prerequisite is missing from the plan (<code>"missing"</code>) or placed in a later semester (<code>"order"</code>). Read from <code>prereqViolations</code> in context.</li>
     </ul>
     <p>Additionally, a yellow border appears when <code>prereqViolations.has(id)</code> (the "misplaced" highlight in the legend).</p>
 

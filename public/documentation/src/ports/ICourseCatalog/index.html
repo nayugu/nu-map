@@ -48,9 +48,12 @@
         <tr><td><code>number</code></td><td>string</td><td>Course number, e.g. <code>"3500"</code>.</td></tr>
         <tr><td><code>code</code></td><td>string</td><td>Human-readable combined code, e.g. <code>"CS 3500"</code>.</td></tr>
         <tr><td><code>title</code></td><td>string</td><td>Full course title.</td></tr>
+        <tr><td><code>desc</code></td><td>string</td><td>Course description. Empty string if unavailable.</td></tr>
+        <tr><td><code>scheduleType</code></td><td>string</td><td>Delivery mode, e.g. <code>"Lecture"</code>, <code>"Lab"</code>, <code>"Seminar"</code>, <code>"Online"</code>.</td></tr>
         <tr><td><code>sh</code></td><td>number</td><td>Credit hours (minimum for variable-credit courses). Named <code>sh</code> for historical reasons; the actual unit name comes from ICreditSystem.</td></tr>
         <tr><td><code>shMin / shMax</code></td><td>number|null</td><td>Null for fixed-credit courses. Non-null when the course has a credit range.</td></tr>
-        <tr><td><code>terms</code></td><td>string[]</td><td>Semester type IDs when offered, e.g. <code>["fall", "spring"]</code>. <strong>Already decoded</strong> from raw registrar codes by the adapter. Empty array means offering data is unavailable.</td></tr>
+        <tr><td><code>termHistory</code></td><td>Record&lt;string, boolean&gt;</td><td>Historical offering data keyed by raw term code (e.g. <code>"202430"</code> for Spring 2025 at NU). <code>true</code> = offered that term; <code>false</code> = confirmed not offered; absent = not yet queried. Empty object <code>{}</code> when no history is available.</td></tr>
+        <tr><td><code>terms</code></td><td>string[]</td><td>Derived: semester type IDs with P(offered) ≥ 0.5 based on <code>termHistory</code>. Falls back to primary semesters when <code>termHistory</code> is empty. <strong>Already decoded</strong> from raw registrar codes by the adapter. Used by CourseCard for the "⚠ avail?" badge.</td></tr>
         <tr><td><code>attributes</code></td><td>string[]</td><td>Gen-ed / attribute codes, e.g. <code>["ND", "FQ"]</code>. Codes defined by IAttributeSystem. Empty array if none.</td></tr>
         <tr><td><code>prereqs</code></td><td>PrereqNode[]</td><td>Prerequisite expression tree (Major2 format). Empty array means no prerequisites.</td></tr>
         <tr><td><code>coreqs</code></td><td>CourseRef[]</td><td>Flat corequisite list. Empty array means none.</td></tr>
@@ -64,14 +67,18 @@
     <pre><code><span class="cmt">// src/adapters/northeastern/courseCatalog.js</span>
 export default {
   async fetchAll() {
-    <span class="cmt">// try local bundled JSON first, fall back to live API</span>
-    let json;
+    <span class="cmt">// Load catalog metadata; throw if unavailable (no live API fallback)</span>
+    const json = await tryFetch(LOCAL_URL);
+    const courses = json.map(normalizeCourse).filter(Boolean);
+    <span class="cmt">// Merge term history — adds course.termHistory from a separate JSON</span>
     try {
-      json = await tryFetch(LOCAL_URL);
-    } catch {
-      json = await tryFetch(API_URL);  <span class="cmt">// SearchNEU API</span>
-    }
-    return json.map(normalizeCourse).filter(Boolean);
+      const history = await tryFetch(HISTORY_URL);
+      <span class="cmt">// history is { courseId: { "202430": true, ... } }</span>
+      for (const course of courses) {
+        if (history[course.id]) Object.assign(course.termHistory, history[course.id]);
+      }
+    } catch { <span class="cmt">/* term history is optional — missing is fine */</span> }
+    return courses;
   },
 
   normalize: normalizeCourse,  <span class="cmt">// decodes Banner terms, maps raw fields</span>
@@ -81,14 +88,17 @@ export default {
   },
 
   getSources() {
-    return [{
-      id: "nu-courses", label: "ninest/nu-courses",
-      url: "https://github.com/ninest/nu-courses",
-      author: "ninest", usedFor: "course catalog data",
-    }];
+    return [
+      { id: "catalog", label: "catalog.northeastern.edu",
+        url: "https://catalog.northeastern.edu/course-descriptions/",
+        usedFor: "course catalog data" },
+      { id: "nubanner", label: "nubanner.neu.edu",
+        url: "https://nubanner.neu.edu/StudentRegistrationSsb",
+        usedFor: "term availability history" },
+    ];
   },
 };</code></pre>
-    <p><code>normalizeCourse()</code> handles Banner term code decoding (<code>"202430" → "spring"</code>), maps the legacy <code>nuPath</code> field to <code>attributes</code>, and sanitizes description strings. All of this is an adapter concern — the core never sees raw ninest records.</p>
+    <p><code>normalizeCourse()</code> handles Banner term code decoding (<code>"202430" → "spring"</code>), maps the legacy <code>nuPath</code> field to <code>attributes</code>, sanitizes description strings, and initializes <code>termHistory</code> to <code>{}</code>. The second fetch in <code>fetchAll()</code> merges historical offering data into each course's <code>termHistory</code>. The <code>deriveTerms()</code> helper then sets <code>terms</code> using a P≥0.5 threshold. All of this is an adapter concern — the core never sees raw catalog records.</p>
 
     <h2>Generic default</h2>
     <pre><code><span class="cmt">// src/adapters/generic/courseCatalog.js</span>

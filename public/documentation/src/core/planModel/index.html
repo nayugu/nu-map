@@ -30,8 +30,14 @@
     <h2>Exported functions</h2>
 
     <div class="fn-block exported">
-      <div class="fn-sig">getSemSH(semId, placements, courseMap, shOverrides?, bonusSH?) → number</div>
-      <div class="fn-desc">Sums credit hours for all courses in a semester. Respects <code>shOverrides</code> for variable-credit courses. Adds <code>bonusSH[semId]</code> for AP/transfer credit. Used in semester row headers.</div>
+      <div class="fn-sig">hexRgb(hex) → string</div>
+      <div class="fn-desc">Converts a CSS hex color to a <code>"r,g,b"</code> string for use in <code>rgba()</code> calls. Falls back to <code>"180,180,180"</code> if the input is not a valid 6-digit hex. Used in PDF export for color formatting.</div>
+      <div class="fn-returns">Returns: <span>string — e.g. <code>"74,144,217"</code></span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getSemSH(semId, placements, courseMap) → number</div>
+      <div class="fn-desc">Sums credit hours for all courses placed in a given semester. Reads <code>courseMap[id]?.sh</code> for each placed course — if variable-credit overrides need to be applied, they must be pre-computed into the <code>sh</code> field before calling this function. Used in semester row headers.</div>
       <div class="fn-returns">Returns: <span>number — total SH for the semester</span></div>
     </div>
 
@@ -45,6 +51,12 @@
       <div class="fn-sig">getConnections(courseId, edges) → Edge[]</div>
       <div class="fn-desc">Returns all edges where the given course is either the <code>from</code> or <code>to</code> end. Used by <code>RelationLines</code> when a course is selected — it needs all related courses to draw lines to/from them. Each edge has <code>{ from, to, type }</code>.</div>
       <div class="fn-returns">Returns: <span>Edge[] — all edges touching this course</span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">formatPrereqSummary(prereqs, courseMap) → string</div>
+      <div class="fn-desc">Turns a prerequisite token array into a human-readable string. Converts <code>{ subject, number }</code> leaf refs to their course codes (e.g. <code>"CS 3500"</code>); passes through string tokens (<code>"Or"</code>, <code>"And"</code>, parentheses) unchanged. Returns <code>"—"</code> for empty/null input or parse errors. Used by InfoPanel.</div>
+      <div class="fn-returns">Returns: <span>string — readable prerequisite expression, or <code>"—"</code></span></div>
     </div>
 
     <div class="fn-block exported">

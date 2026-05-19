@@ -16,108 +16,135 @@
 
     <div class="breadcrumb"><a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>context/</strong></div>
 
-    <h1>context/ <span class="badge purple">State layer</span></h1>
-    <p class="lead">Three React contexts that bridge adapter data, application state, and UI. <strong>InstitutionContext</strong> injects the adapter bundle; <strong>PlannerContext</strong> owns all application state; <strong>ThemeContext</strong> manages CSS variable injection.</p>
+    <h1>context/ <span class="badge purple">State bridge</span></h1>
+    <p class="lead">Four React contexts that bridge adapter data, application state, i18n, and theming. <strong>ThemeContext</strong> handles CSS variable injection. <strong>InstitutionContext</strong> injects the adapter bundle. <strong>LanguageContext</strong> provides translation and locale. <strong>PlannerContext</strong> owns all mutable planner state.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
-      <div class="nb-group"><div class="nb-label">Imports from</div><div class="nb-value">adapters/ (InstitutionContext), core/, data/ (PlannerContext)</div></div>
-      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">All UI components via usePlanner() / usePort() / useTheme()</div></div>
+      <div class="nb-group"><div class="nb-label">Provider nesting order</div><div class="nb-value">ThemeProvider → InstitutionProvider → LanguageProvider → PlannerProvider</div></div>
+      <div class="nb-group"><div class="nb-label">Hooks exported</div><div class="nb-value">useTheme(), usePort(), useInstitution(), useLanguage(), usePlanner()</div></div>
     </div>
 
     <h2>Children</h2>
     <div class="children-grid">
       <a class="child-card" href="./InstitutionContext/">
-        <div class="cc-type">context (~75 lines)</div>
+        <div class="cc-type">context</div>
         <div class="cc-name">InstitutionContext.jsx</div>
-        <div class="cc-desc">Injects the adapter bundle into the React tree. Wrap root once with InstitutionProvider, then call usePort(IPortName) anywhere to read an implementation.</div>
+        <div class="cc-desc">Injects the adapter bundle into the React tree. Wrap root once with InstitutionProvider, then call usePort(IPortName) anywhere to read a port implementation.</div>
+      </a>
+      <a class="child-card" href="./LanguageContext/">
+        <div class="cc-type">context</div>
+        <div class="cc-name">LanguageContext.jsx</div>
+        <div class="cc-desc">i18n layer. Provides t(key, vars) translation function and setLocale(). Loads 7 locale files at build time via Vite glob. Persists choice in localStorage.</div>
       </a>
       <a class="child-card" href="./PlannerContext/">
-        <div class="cc-type">context (~1,600 lines)</div>
+        <div class="cc-type">context (hub)</div>
         <div class="cc-name">PlannerContext.jsx</div>
-        <div class="cc-desc">All application state: placements, cohort, drag-drop, undo/redo, multi-plan, violations, persistence. The hub of everything.</div>
+        <div class="cc-desc">All mutable planner state: placements, cohort, drag-drop, undo/redo, multi-plan, violations, persistence, MCP sync. Every UI component reads from it via usePlanner().</div>
       </a>
       <a class="child-card" href="./ThemeContext/">
-        <div class="cc-type">context (~65 lines)</div>
+        <div class="cc-type">context</div>
         <div class="cc-name">ThemeContext.jsx</div>
-        <div class="cc-desc">Reads theme from localStorage, injects 100+ CSS variables onto &lt;html&gt;. Cycle between dark/light themes.</div>
+        <div class="cc-desc">Reads theme from localStorage, injects ~100 CSS variables onto &lt;html&gt; at runtime. Cycle between themes without any component re-renders.</div>
       </a>
-    </div>
-
-    <h2>How UI components consume context</h2>
-    <div class="diagram-wrap">
-      <div class="mermaid">
-graph LR
-    IC["InstitutionContext"]
-    PC["PlannerContext"]
-    TC["ThemeContext"]
-
-    IC -->|"usePort(IAttributeSystem)"| GP["GradPanel"]
-    IC -->|"usePort(ISpecialTerms)"| BP["BankPanel"]
-    IC -->|"usePort(ISpecialTerms)"| SR["SemRow / SummerRow"]
-    IC -->|"useInstitution()"| PC
-
-    PC -->|"usePlanner()"| H["Header"]
-    PC -->|"usePlanner()"| BP
-    PC -->|"usePlanner()"| GP
-    PC -->|"usePlanner()"| SR
-    PC -->|"usePlanner()"| CC["CourseCard"]
-    PC -->|"usePlanner()"| IP["InfoPanel"]
-
-    TC -->|"useTheme()"| H
-    TC -->|"useTheme()"| App["App.jsx"]
-
-    style IC fill:#fbefff,stroke:#8250df
-    style PC fill:#fbefff,stroke:#8250df
-    style TC fill:#fbefff,stroke:#8250df
-      </div>
-      <div class="caption">InstitutionContext feeds adapter data directly to components that need it. PlannerContext is the state hub for everything else.</div>
     </div>
 
     <h2>Provider nesting order</h2>
-    <p>The three providers must nest in this exact order in <code>App.jsx</code>. InstitutionProvider is outermost because PlannerContext calls <code>useInstitution()</code> internally during initialization.</p>
-    <pre><code><span class="cmt">// src/App.jsx — required nesting order</span>
-&lt;InstitutionProvider adapter={institutionAdapter}&gt;
-  &lt;ThemeProvider&gt;
-    &lt;PlannerProvider&gt;
-      &lt;PlannerApp /&gt;
-    &lt;/PlannerProvider&gt;
-  &lt;/ThemeProvider&gt;
-&lt;/InstitutionProvider&gt;</code></pre>
+    <p>The four providers nest in exactly this order in <code>App.jsx</code>. The order is determined by dependency:</p>
 
-    <h2>The no-prop-drilling contract</h2>
-    <p>No component passes state down via props (except trivial configuration like <code>semId</code> to a row). All shared state comes from <code>usePlanner()</code>. Institution config comes from <code>usePort(IPortName)</code>. This makes it easy to add features — any component can read or mutate any state without threading props through the tree.</p>
-    <p>The trade-off: adding new state means editing PlannerContext.jsx, which is already large. When adding state, check first whether it belongs in the context (shared across components) or as local component state (only needed in one place).</p>
+    <pre><code><span class="cmt">// src/App.jsx</span>
+&lt;ThemeProvider storagePrefix={institutionAdapter.institution.storagePrefix}&gt;
+  &lt;InstitutionProvider adapter={institutionAdapter}&gt;
+    &lt;LanguageProvider&gt;
+      &lt;PlannerProvider&gt;
+        &lt;PlannerApp /&gt;
+      &lt;/PlannerProvider&gt;
+    &lt;/LanguageProvider&gt;
+  &lt;/InstitutionProvider&gt;
+&lt;/ThemeProvider&gt;</code></pre>
 
-    <h2>Context initialization sequence</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Provider</th><th>Why it's where it is</th></tr></thead>
+      <tbody>
+        <tr><td>ThemeProvider (outermost)</td><td>Reads <code>storagePrefix</code> from the adapter <em>object</em> as a React prop — not via React context. Must be outermost so its CSS variables are on <code>&lt;html&gt;</code> before any child renders.</td></tr>
+        <tr><td>InstitutionProvider</td><td>Provides <code>usePort()</code>. Must be above LanguageProvider and PlannerProvider because both call <code>usePort(IInstitution)</code> internally.</td></tr>
+        <tr><td>LanguageProvider</td><td>Calls <code>usePort(IInstitution)</code> to read <code>defaultLocale</code> and <code>storagePrefix</code>. Must be above PlannerProvider in case planner UI ever needs <code>t()</code>.</td></tr>
+        <tr><td>PlannerProvider (innermost of the four)</td><td>Calls <code>usePort()</code> for calendar, courseCatalog, specialTerms, institution. Must be inside InstitutionProvider.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>How components consume context</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    IC["InstitutionContext\nusePort()"]
+    LC["LanguageContext\nuseLanguage()"]
+    PC["PlannerContext\nusePlanner()"]
+    TC["ThemeContext\nuseTheme()"]
+
+    IC -->|"usePort(ISpecialTerms)"| BP["BankPanel"]
+    IC -->|"usePort(IAttributeSystem)"| GP["GradPanel"]
+    IC -->|"usePort(ISpecialTerms)"| SR["SemRow / SummerRow"]
+    IC -->|"usePort(ICreditSystem, ICalendar, ICourseCatalog)"| IP["InfoPanel"]
+    IC -->|"usePort(ICalendar, ICreditSystem)"| CC["CourseCard"]
+    IC -->|"useInstitution()"| H["Header"]
+
+    LC -->|"useLanguage()"| H
+
+    PC -->|"usePlanner()"| H
+    PC -->|"usePlanner()"| BP
+    PC -->|"usePlanner()"| GP
+    PC -->|"usePlanner()"| SR
+    PC -->|"usePlanner()"| CC
+    PC -->|"usePlanner()"| IP
+
+    TC -->|"useTheme()"| H
+
+    style IC fill:#fbefff,stroke:#8250df
+    style LC fill:#fbefff,stroke:#8250df
+    style PC fill:#fbefff,stroke:#8250df
+    style TC fill:#fbefff,stroke:#8250df
+      </div>
+      <div class="caption">Most state comes from PlannerContext. Institution config comes from InstitutionContext. Translation from LanguageContext. Theme is pure CSS — components don't call useTheme() except Header (which has the theme switcher button).</div>
+    </div>
+
+    <h2>No prop drilling</h2>
+    <p>No component passes shared state down via props. Any component can read or mutate any state with one hook call. The trade-off: adding new shared state means editing PlannerContext.jsx, which is already large (~1,600 lines). Before adding state there, check whether it can live as local component state instead — if only one component needs it, keep it there.</p>
+
+    <h2>Context startup sequence</h2>
     <div class="diagram-wrap">
       <div class="mermaid">
 sequenceDiagram
     participant App
-    participant IC as InstitutionContext
     participant TC as ThemeContext
+    participant IC as InstitutionContext
+    participant LC as LanguageContext
     participant PC as PlannerContext
-    participant CL as courseLoader
-    participant PS as persistence
+    participant CC as courseCatalog adapter
+    participant PS as persistence.js
+
+    App->>TC: mount ThemeProvider(storagePrefix)
+    TC->>TC: read {prefix}-theme from localStorage
+    TC->>TC: inject CSS vars onto &lt;html&gt; (synchronous)
 
     App->>IC: mount InstitutionProvider(adapter)
-    IC->>IC: store adapter bundle in context
+    IC->>IC: store adapter bundle in React context
 
-    App->>TC: mount ThemeProvider
-    TC->>TC: read ncp-theme from localStorage
-    TC->>TC: inject CSS variables onto &lt;html&gt;
+    App->>LC: mount LanguageProvider
+    LC->>IC: usePort(IInstitution) → defaultLocale, storagePrefix
+    LC->>LC: read {prefix}-locale from localStorage
+    LC->>LC: load all locale files (Vite eager glob)
 
     App->>PC: mount PlannerProvider
-    PC->>IC: useInstitution() → adapter
+    PC->>IC: usePort(IInstitution, ICalendar, ICourseCatalog, ISpecialTerms)
     PC->>PS: loadSaved(storagePrefix)
     PS-->>PC: saved plan state (or defaults)
-    PC->>PC: hydrate placements, cohort, major, etc.
-    PC->>CL: fetchCourses(courseCatalog)
-    CL-->>PC: Course[] (from all-courses.json)
-    PC->>PC: normalize → courseMap
-    PC->>PC: compute derived state (SEMESTERS, violations)
+    PC->>PC: hydrate placements, cohort, programs
+    PC->>CC: courseCatalog.fetchAll()
+    CC-->>PC: Course[] (normalized, with term history merged)
+    PC->>PC: build courseMap, compute SEMESTERS, prereq violations
       </div>
-      <div class="caption">Startup sequence. InstitutionProvider is synchronous and must complete before PlannerProvider mounts. Theme is injected synchronously; courses load asynchronously.</div>
+      <div class="caption">ThemeProvider is synchronous and completes before any component renders. Courses load asynchronously — PlannerApp shows LoadingScreen while loading is true.</div>
     </div>
 
   </main>

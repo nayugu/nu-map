@@ -27,28 +27,27 @@
     </div>
 
     <h2>Contract</h2>
+    <p>All members are getter methods, not properties.</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <thead><tr><th>Method</th><th>Returns</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td><code>unitName</code></td><td>string</td><td>Short label in all UI contexts: course chips, totals, badges. e.g. <code>"SH"</code>, <code>"credits"</code>, <code>"ECTS"</code>, <code>"units"</code>.</td></tr>
-        <tr><td><code>unitLabel</code></td><td>string</td><td>Long label for tooltips and accessibility. e.g. <code>"Semester Hours"</code>, <code>"Credits"</code>.</td></tr>
-        <tr><td><code>standardValue</code></td><td>number</td><td>Typical credits for one course. Used as the default when a course has no credit value in catalog data.</td></tr>
-        <tr><td><code>fullTimeMin</code></td><td>number</td><td>Minimum credits per semester for full-time enrollment status badge.</td></tr>
-        <tr><td><code>partTimeMax</code></td><td>number</td><td>Maximum credits still considered part-time. Typically <code>fullTimeMin − 1</code>.</td></tr>
-        <tr><td><code>semesterMax</code></td><td>number</td><td>Hard maximum credits allowed per semester. Semesters exceeding this show a warning.</td></tr>
+        <tr><td><code>getUnitName()</code></td><td>string</td><td>Short label in all UI contexts: course chips, totals, badges. e.g. <code>"SH"</code>, <code>"credits"</code>, <code>"ECTS"</code>, <code>"units"</code>.</td></tr>
+        <tr><td><code>getUnitLabel()</code></td><td>string</td><td>Long label for headers and descriptions. e.g. <code>"Semester Hours"</code>, <code>"Credits"</code>.</td></tr>
+        <tr><td><code>getStandardValue()</code></td><td>number</td><td>Typical credits for one course. Used as the default when a course has no credit value in catalog data.</td></tr>
+        <tr><td><code>getFullTimeMin()</code></td><td>number</td><td>Minimum credits per semester for full-time enrollment status badge.</td></tr>
+        <tr><td><code>getSemesterMax()</code></td><td>number</td><td>Hard maximum credits allowed per semester. Semesters exceeding this show a warning.</td></tr>
       </tbody>
     </table></div>
 
     <h2>Northeastern vs generic defaults</h2>
     <div class="table-wrap"><table>
-      <thead><tr><th>Field</th><th>NU (northeastern/)</th><th>Generic default</th></tr></thead>
+      <thead><tr><th>Method</th><th>NU (northeastern/)</th><th>Generic default</th></tr></thead>
       <tbody>
-        <tr><td><code>unitName</code></td><td><code>"SH"</code></td><td><code>"credits"</code></td></tr>
-        <tr><td><code>unitLabel</code></td><td><code>"Semester Hours"</code></td><td><code>"Credits"</code></td></tr>
-        <tr><td><code>standardValue</code></td><td><code>4</code></td><td><code>3</code></td></tr>
-        <tr><td><code>fullTimeMin</code></td><td><code>12</code></td><td><code>12</code></td></tr>
-        <tr><td><code>partTimeMax</code></td><td><code>11</code></td><td><code>11</code></td></tr>
-        <tr><td><code>semesterMax</code></td><td><code>22</code></td><td><code>21</code></td></tr>
+        <tr><td><code>getUnitName()</code></td><td><code>"SH"</code></td><td><code>"credits"</code></td></tr>
+        <tr><td><code>getUnitLabel()</code></td><td><code>"Semester Hours"</code></td><td><code>"Credits"</code></td></tr>
+        <tr><td><code>getStandardValue()</code></td><td><code>4</code></td><td><code>3</code></td></tr>
+        <tr><td><code>getFullTimeMin()</code></td><td><code>12</code></td><td><code>12</code></td></tr>
+        <tr><td><code>getSemesterMax()</code></td><td><code>22</code></td><td><code>21</code></td></tr>
       </tbody>
     </table></div>
 

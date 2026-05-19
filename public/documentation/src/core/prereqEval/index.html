@@ -31,43 +31,48 @@
     <div class="diagram-wrap">
       <div class="mermaid">
 flowchart TD
-    A["evalPrereqTree(prereqs, placements, SEM_INDEX, semIdx)"] --> B{prereqs node type?}
-    B -->|"and"| C["eval each child"]
-    C --> D{worst result among children?}
-    D -->|all satisfied| R1["return 'satisfied'"]
-    D -->|any 'order'| R2["return 'order'"]
-    D -->|any 'unsatisfied'| R3["return 'unsatisfied'"]
-    B -->|"or"| E["eval each child"]
-    E --> F{best result among children?}
-    F -->|any satisfied| R4["return 'satisfied'"]
-    F -->|any 'order'| R5["return 'order'"]
-    F -->|all 'unsatisfied'| R6["return 'unsatisfied'"]
-    B -->|"leaf course ref"| G{"course in placements?"}
-    G -->|no| R7["return 'unsatisfied'"]
-    G -->|yes| H{"SEM_INDEX[course.semId]\n< semIdx?"}
-    H -->|yes, placed before| R8["return 'satisfied'"]
-    H -->|no, same or after| R9["return 'order'"]
+    A["evalPrereqTree(tree, placements, semIndex, ti, placedOut)"] --> B{node type?}
+    B -->|"And"| C["eval each child"]
+    C --> D{worst result?}
+    D -->|all satisfied| R1["'satisfied'"]
+    D -->|any 'order'| R2["'order'"]
+    D -->|any 'missing'| R3["'missing'"]
+    B -->|"Or"| E["eval each child"]
+    E --> F{best result?}
+    F -->|any satisfied| R4["'satisfied'"]
+    F -->|any 'order'| R5["'order'"]
+    F -->|all 'missing'| R6["'missing'"]
+    B -->|"leaf course ref"| G{"in placedOut?"}
+    G -->|yes| R8["'satisfied'"]
+    G -->|no| H{"in placements?"}
+    H -->|no| R7["'missing'"]
+    H -->|yes| I{"concurrent flag?"}
+    I -->|yes: fi &lt;= ti| R9a["'satisfied' (same sem ok)"]
+    I -->|no: fi &lt; ti| R9b["'satisfied' or 'order'"]
       </div>
-      <div class="caption">Worst-case propagates up AND; best-case propagates up OR. "order" means placed but too late.</div>
+      <div class="caption">Worst-case propagates up And; best-case propagates up Or. "order" = placed but too late. "missing" = not in the plan at all. Placed-out courses are always satisfied.</div>
     </div>
 
     <h2>Exported function</h2>
 
     <div class="fn-block exported">
-      <div class="fn-sig">evalPrereqTree(prereqs, placements, SEM_INDEX, semesterIdx) → "satisfied" | "order" | "unsatisfied"</div>
+      <div class="fn-sig">evalPrereqTree(tree, placements, semIndex, ti, placedOut?) → "satisfied" | "order" | "missing"</div>
       <div class="fn-desc">
-        Walks the prerequisite tree recursively. For each leaf course reference (<code>{ subject, classId }</code>), checks if it's placed and whether it's in a <em>prior</em> semester.
+        Walks the prerequisite tree recursively. For each leaf course reference (<code>{ subject, number }</code>), checks if it's placed and whether it's in a <em>prior</em> semester.
         <ul style="margin-top:8px;margin-bottom:0">
-          <li><strong>"satisfied"</strong>: prereq is placed in an earlier semester ✓</li>
+          <li><strong>"satisfied"</strong>: prereq is placed in an earlier semester (or same semester if <code>concurrent: true</code>, or placed out)</li>
           <li><strong>"order"</strong>: prereq is placed but in the same or a later semester (ordering violation)</li>
-          <li><strong>"unsatisfied"</strong>: prereq is not placed at all</li>
+          <li><strong>"missing"</strong>: prereq is not placed in the plan at all</li>
         </ul>
-        AND nodes return the <em>worst</em> child result (unsatisfied > order > satisfied).<br>
-        OR nodes return the <em>best</em> child result (satisfied > order > unsatisfied).
+        And nodes return the <em>worst</em> child result (missing &gt; order &gt; satisfied).<br>
+        Or nodes return the <em>best</em> child result (satisfied &gt; order &gt; missing).
       </div>
-      <div class="fn-returns">Returns: <span>"satisfied" | "order" | "unsatisfied"</span></div>
-      <div class="fn-meta">Parameters: prereqs = prereq tree node, placements = {courseId→semId}, SEM_INDEX = {semId→ordinal}, semesterIdx = ordinal of the course being checked</div>
+      <div class="fn-returns">Returns: <span>"satisfied" | "order" | "missing"</span></div>
+      <div class="fn-meta">Parameters: tree = prereq token array, placements = {courseId→semId}, semIndex = {semId→ordinal}, ti = ordinal of course being checked, placedOut = Set of placed-out courseIds (defaults to empty)</div>
     </div>
+
+    <h3>Concurrent prerequisites</h3>
+    <p>Some courses are marked <code>concurrent: true</code> on their leaf reference — the catalog phrase is "may be taken concurrently." For these, the check allows same-semester co-placement: <code>fi &lt;= ti</code> instead of <code>fi &lt; ti</code>. The <code>concurrent</code> flag is set by <code>scrape-catalog.js</code> when it sees "(may be taken concurrently)" in the prerequisite text.</p>
 
     <h2>How PlannerContext uses this</h2>
     <pre><code><span class="cmt">// PlannerContext.jsx — violation computation (simplified)</span>

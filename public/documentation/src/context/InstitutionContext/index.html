@@ -28,20 +28,26 @@
     </div>
 
     <h2>Setup — already done in App.jsx</h2>
-    <p><code>InstitutionProvider</code> wraps the entire app tree above <code>PlannerProvider</code>, so adapter data is available to every component including PlannerContext itself.</p>
+    <p><code>InstitutionProvider</code> must be inside <code>ThemeProvider</code> (so the theme can be keyed by storage prefix) and outside <code>PlannerProvider</code> (so PlannerContext can call <code>useInstitution()</code>). The full nesting order is:</p>
     <pre><code><span class="cmt">// src/App.jsx</span>
 import { institutionAdapter } from "./config.js";
+import { ThemeProvider }       from "./context/ThemeContext.jsx";
 import { InstitutionProvider } from "./context/InstitutionContext.jsx";
+import { LanguageProvider }    from "./context/LanguageContext.jsx";
+import { PlannerProvider }     from "./context/PlannerContext.jsx";
 
-function App() {
+<span class="cmt">// ThemeProvider → InstitutionProvider → LanguageProvider → PlannerProvider</span>
+function AppRoot() {
   return (
-    &lt;InstitutionProvider adapter={institutionAdapter}&gt;
-      &lt;ThemeProvider&gt;
-        &lt;PlannerProvider&gt;
-          ...
-        &lt;/PlannerProvider&gt;
-      &lt;/ThemeProvider&gt;
-    &lt;/InstitutionProvider&gt;
+    &lt;ThemeProvider storagePrefix={institutionAdapter.institution.storagePrefix}&gt;
+      &lt;InstitutionProvider adapter={institutionAdapter}&gt;
+        &lt;LanguageProvider&gt;
+          &lt;PlannerProvider&gt;
+            ...
+          &lt;/PlannerProvider&gt;
+        &lt;/LanguageProvider&gt;
+      &lt;/InstitutionProvider&gt;
+    &lt;/ThemeProvider&gt;
   );
 }</code></pre>
 

@@ -23,7 +23,7 @@
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">ui/</a></div></div>
-      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">~850</div></div>
+      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">~650</div></div>
       <div class="nb-group"><div class="nb-label">Children rendered</div><div class="nb-value">CourseCard (bank), GradPanel (grad tab)</div></div>
     </div>
 
@@ -48,9 +48,9 @@ graph TD
 
     <h2>Course bank — filtering and sorting</h2>
 
-    <div class="state-block"><div class="sb-name">bankSearch</div><div class="sb-type">string</div><div class="sb-desc">Current search query. Fuzzy-matched against <code>course.id</code> (e.g. "CS3500") and <code>course.title</code>. Stored in PlannerContext so the search state persists when switching tabs.</div></div>
+    <div class="state-block"><div class="sb-name">bankSearch</div><div class="sb-type">string</div><div class="sb-desc">Current search query. Tokenized and matched against <code>course.subject</code>, <code>course.number</code>, <code>course.code</code>, and <code>course.title</code>. Stored in PlannerContext so the search state persists when switching tabs.</div></div>
     <div class="state-block"><div class="sb-name">bankTab</div><div class="sb-type">string</div><div class="sb-desc">"all" | "starred" | "search". Controls which course subset is shown.</div></div>
-    <div class="state-block"><div class="sb-name">bankSort</div><div class="sb-type">string</div><div class="sb-desc">"az" | "za" | "shAsc" | "shDesc". Applied after filtering.</div></div>
+    <div class="state-block"><div class="sb-name">bankSort</div><div class="sb-type">string</div><div class="sb-desc"><code>"az"</code> | <code>"za"</code> | <code>"sh↓"</code> | <code>"sh↑"</code>. Applied after filtering.</div></div>
 
     <p>Courses are grouped by subject code (e.g., all "CS" courses under one header) when in "all" mode. In "search" and "starred" modes, they're shown as a flat list in the selected sort order.</p>
 
@@ -58,7 +58,7 @@ graph TD
     <p>Fixed blocks at the bottom of the bank, always visible regardless of search. Defined in <code>constants.js → COOP_TERMS / INTERNSHIP_TERMS</code>. Dragging one of these into a semester creates a work/internship block rather than a course placement. They're identified by a special prefix in their ID (<code>"coop-"</code> or <code>"int-"</code>).</p>
 
     <h2>Placed-out section</h2>
-    <p>Courses in <code>placedOut</code> are shown in a collapsible list at the bottom. They can be dragged back into semesters or back into the bank. Clicking the ✕ on a placed-out card calls <code>onDropBank(courseId)</code> to return it.</p>
+    <p>Courses in <code>placedOut</code> are shown in a collapsible list at the bottom. They can be dragged back into semesters or back into the bank. Clicking the ✕ on a placed-out card removes it from <code>placedOut</code> directly via <code>setPlacedOut(newSet)</code>.</p>
 
     <h2>Substitution UI</h2>
     <p>Two search fields: "From course" and "To course." Setting both calls <code>addSubstitution({ from, to })</code> in context. The substitution means "I took FROM, let it count as TO in graduation requirements." Stored as <code>substitutions</code> array in plan state.</p>

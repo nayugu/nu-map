@@ -44,7 +44,7 @@ graph TD
 
     <h2>Description parsing</h2>
     <p>The catalog description often mentions other course codes inline (e.g., "Students must have completed CS 2500."). InfoPanel parses these with a regex and renders them as clickable chips. Clicking a chip sets <code>selectedId</code> to that course, effectively navigating to it.</p>
-    <p>A local navigation history stack (<code>navHistory</code>, <code>navIdx</code>) tracks the sequence of viewed courses. <kbd>Cmd+Z</kbd> goes back, <kbd>Cmd+Shift+Z</kbd> goes forward — note this is separate from the undo/redo system.</p>
+    <p>A local navigation history stack tracks the sequence of viewed courses using two <code>useRef</code> arrays: <code>navHistory</code> (past) and <code>navFuture</code> (forward stack). <kbd>Cmd+Z</kbd> goes back, <kbd>Cmd+Shift+Z</kbd> goes forward — note this is separate from the undo/redo system.</p>
 
     <h2>Draggable prerequisite chips</h2>
     <p>Each prerequisite shown in InfoPanel is also a draggable element. You can drag a prereq chip directly from the panel into a semester row, placing it without searching for it in the bank. This is especially useful when building a plan from the InfoPanel view.</p>

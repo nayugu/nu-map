@@ -41,7 +41,7 @@
     <h2>How getAllSources() works</h2>
     <p><code>wire(overrides)</code> adds a <code>getAllSources()</code> method to the merged adapter bundle. It iterates all active port implementations, calls <code>getSources()</code> on each, and deduplicates by <code>id</code>. When two ports return the same <code>id</code>, their <code>usedFor</code> descriptions are merged into an array so the About modal shows a single source entry with multiple uses.</p>
 
-    <pre><code><span class="cmt">// Simplified wire.js logic</span>
+    <pre><code><span class="cmt">// Simplified wire.js logic — note: usedFor is always string[] in the output</span>
 merged.getAllSources = () => {
   const map = new Map();
   Object.values(merged)
@@ -50,21 +50,23 @@ merged.getAllSources = () => {
     .forEach(s => {
       if (map.has(s.id)) {
         const existing = map.get(s.id);
-        map.set(s.id, { ...existing, usedFor: [existing.usedFor, s.usedFor].flat() });
+        const next = [existing.usedFor, s.usedFor].flat().filter(Boolean);
+        map.set(s.id, { ...existing, usedFor: next });
       } else {
-        map.set(s.id, { ...s, usedFor: [s.usedFor] });
+        map.set(s.id, { ...s, usedFor: [s.usedFor].filter(Boolean) });
       }
     });
   return [...map.values()];
 };</code></pre>
+    <p><strong>Return type note:</strong> <code>usedFor</code> is always <code>string[]</code> in the output — even for sources that appear in only one port (they're wrapped in a single-element array). Consumers should treat it as an array.</p>
 
     <h2>Current source map (Northeastern)</h2>
     <div class="table-wrap"><table>
-      <thead><tr><th>Port</th><th>Source id</th><th>usedFor</th></tr></thead>
+      <thead><tr><th>Port</th><th>Source id(s)</th><th>usedFor</th></tr></thead>
       <tbody>
-        <tr><td>courseCatalog</td><td><code>"nu-courses"</code></td><td>course catalog data</td></tr>
-        <tr><td>majorRequirements</td><td><code>"graduatenu"</code></td><td>graduation requirement definitions</td></tr>
-        <tr><td>institution, calendar, creditSystem, attributeSystem, specialTerms, localization</td><td>(none)</td><td><code>getSources()</code> returns <code>[]</code></td></tr>
+        <tr><td>courseCatalog</td><td><code>"catalog"</code>, <code>"nubanner"</code></td><td>course catalog data; term availability history</td></tr>
+        <tr><td>majorRequirements</td><td><code>"catalog-majors"</code>, <code>"graduatenu"</code></td><td>major requirement definitions (scraped); major requirement definitions (submodule fallback)</td></tr>
+        <tr><td>institution, calendar, creditSystem, attributeSystem, specialTerms, localization, aiAssistant</td><td>(none)</td><td><code>getSources()</code> returns <code>[]</code></td></tr>
       </tbody>
     </table></div>
 

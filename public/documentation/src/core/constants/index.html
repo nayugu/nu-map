@@ -19,7 +19,7 @@
     </div>
 
     <h1>constants.js + themes.js <span class="badge gray">Compile-time</span></h1>
-    <p class="lead">Compile-time constants shared across all layers. No functions, no logic — just exported values. <code>constants.js</code> defines labels, colors, and templates. <code>themes.js</code> defines CSS variable token sets for each UI theme.</p>
+    <p class="lead">Compile-time constants shared across all layers. No functions, no logic — just exported values. <code>constants.js</code> exports four constants. <code>themes.js</code> defines CSS variable token sets for each UI theme.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
@@ -31,27 +31,25 @@
     <div class="table-wrap"><table>
       <thead><tr><th>Export</th><th>Type</th><th>Used by</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td><code>DEFAULT_START_YEAR</code></td><td>number (2026)</td><td>PlannerContext</td><td>Default entry year for new plans</td></tr>
-        <tr><td><code>NUM_YEARS</code></td><td>number (5)</td><td>semGrid</td><td>How many years to generate in the full grid</td></tr>
-        <tr><td><code>SUBJECT_PALETTE</code></td><td>string[25]</td><td>courseModel</td><td>CSS hex colors for the subject color hash</td></tr>
-        <tr><td><code>TYPE_BG</code></td><td>object</td><td>SemRow, SummerRow</td><td>CSS variable names for semester background colors per type</td></tr>
-        <tr><td><code>REL_STYLE</code></td><td>object</td><td>RelationLines, Header legend</td><td>SVG line styles (color, dasharray, label, arrowhead) per relationship type</td></tr>
-        <tr><td><code>NUPATH_LABELS</code></td><td>object</td><td>GradPanel, InfoPanel</td><td>Maps NUPath code → full attribute name (e.g. "AD" → "Analyzing and Using Data")</td></tr>
-        <tr><td><code>COOP_TERMS</code></td><td>object[]</td><td>BankPanel, SemRow</td><td>Pre-defined 4-month and 6-month co-op block templates</td></tr>
-        <tr><td><code>INTERNSHIP_TERMS</code></td><td>object[]</td><td>BankPanel, SemRow</td><td>Pre-defined 2-month and 4-month internship block templates</td></tr>
-        <tr><td><code>WORK_TERMS</code></td><td>object</td><td>PlannerContext</td><td>Combined co-op + internship definitions keyed by template ID</td></tr>
-        <tr><td><code>SEMESTER_TYPES</code></td><td>string[4]</td><td>semGrid</td><td>["fall", "spring", "sumA", "sumB"]</td></tr>
+        <tr><td><code>NUM_YEARS</code></td><td>number (5)</td><td>semGrid</td><td>Default number of academic years to generate in the full semester grid</td></tr>
+        <tr><td><code>SUBJECT_PALETTE</code></td><td>string[25]</td><td>courseModel</td><td>25 dark-theme CSS hex colors for the deterministic subject color hash</td></tr>
+        <tr><td><code>TYPE_BG</code></td><td>object</td><td>SemRow, SummerRow</td><td>Maps semester type (<code>"fall"</code>, <code>"spring"</code>, <code>"summer"</code>, <code>"special"</code>) to CSS variable name pairs <code>{ bg, border }</code> used for row backgrounds</td></tr>
+        <tr><td><code>REL_STYLE</code></td><td>object</td><td>RelationLines, InfoPanel legend</td><td>SVG line styles <code>{ color, dash, label, arrow }</code> keyed by relationship type</td></tr>
       </tbody>
     </table></div>
 
+    <p>NUPath labels, co-op/internship templates, and semester type lists are not in this file — they live in the <a href="../../adapters/northeastern/">northeastern adapter</a> (<code>attributeSystem.js</code>, <code>specialTerms.js</code>) so they stay institution-specific.</p>
+
     <h3>REL_STYLE — relationship line styles</h3>
     <pre><code><span class="kw">export const</span> REL_STYLE = {
-  prerequisite:        { color: <span class="str">'#e74c3c'</span>, dash: <span class="str">''</span>,     label: <span class="str">'Prereq'</span>,       arrow: <span class="kw">true</span>  },
-  corequisite:         { color: <span class="str">'#f39c12'</span>, dash: <span class="str">'4,3'</span>,  label: <span class="str">'Coreq'</span>,        arrow: <span class="kw">true</span>  },
-  <span class="str">'prerequisite-viol'</span>: { color: <span class="str">'#e74c3c'</span>, dash: <span class="str">'6,2'</span>,  label: <span class="str">'Prereq (unmet)'</span>, arrow: <span class="kw">true</span>  },
-  <span class="str">'corequisite-viol'</span>:  { color: <span class="str">'#f39c12'</span>, dash: <span class="str">'6,2'</span>,  label: <span class="str">'Coreq (unmet)'</span>,  arrow: <span class="kw">false</span> },
-  substitution:        { color: <span class="str">'#3498db'</span>, dash: <span class="str">'2,4'</span>,  label: <span class="str">'Substitution'</span>,  arrow: <span class="kw">false</span> },
+  prerequisite:                  { color: <span class="str">'#3dd8a0'</span>, dash: <span class="str">''</span>,     label: <span class="str">'Prereq'</span>,                           arrow: <span class="kw">true</span>  },
+  <span class="str">'prerequisite-order'</span>:          { color: <span class="str">'#f85149'</span>, dash: <span class="str">''</span>,     label: <span class="str">'Prereq (wrong order)'</span>,               arrow: <span class="kw">true</span>  },
+  corequisite:                   { color: <span class="str">'#58a6ff'</span>, dash: <span class="str">'5 4'</span>,  label: <span class="str">'Coreq'</span>,                             arrow: <span class="kw">false</span> },
+  <span class="str">'corequisite-viol'</span>:            { color: <span class="str">'#ffd600'</span>, dash: <span class="str">'5 4'</span>,  label: <span class="str">'Misplaced'</span>,                         arrow: <span class="kw">false</span> },
+  <span class="str">'substitution-prereq'</span>:         { color: <span class="str">'#3dd8a0'</span>, dash: <span class="str">'4 3'</span>,  label: <span class="str">'Substituted prereq'</span>,                 arrow: <span class="kw">true</span>  },
+  <span class="str">'substitution-prereq-order'</span>:   { color: <span class="str">'#f85149'</span>, dash: <span class="str">'4 3'</span>,  label: <span class="str">'Substituted prereq (wrong order)'</span>,  arrow: <span class="kw">true</span>  },
 };</code></pre>
+    <p>Prerequisites use mint green (<code>#3dd8a0</code>) when satisfied and red (<code>#f85149</code>) when ordered wrong. Corequisites use blue (<code>#58a6ff</code>) dashed. Substituted-course variants mirror the same colors with a shorter dash. There is no <code>"substitution"</code> key — substitution relationships are represented as either <code>"substitution-prereq"</code> or <code>"substitution-prereq-order"</code>.</p>
 
     <h2>themes.js exports</h2>
 

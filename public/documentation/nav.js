@@ -17,14 +17,16 @@
             id: 'src/ports', label: 'ports/', type: 'dir',
             children: [
               { id: 'src/ports/IAttributable',      label: 'IAttributable.js',       type: 'js' },
-              { id: 'src/ports/IInstitution',       label: 'IInstitution.js',       type: 'js' },
+              { id: 'src/ports/IInstitution',       label: 'IInstitution.js',        type: 'js' },
               { id: 'src/ports/ICalendar',          label: 'ICalendar.js',           type: 'js' },
               { id: 'src/ports/ICreditSystem',      label: 'ICreditSystem.js',       type: 'js' },
               { id: 'src/ports/IAttributeSystem',   label: 'IAttributeSystem.js',    type: 'js' },
               { id: 'src/ports/ISpecialTerms',      label: 'ISpecialTerms.js',       type: 'js' },
               { id: 'src/ports/IMajorRequirements', label: 'IMajorRequirements.js',  type: 'js' },
               { id: 'src/ports/ICourseCatalog',     label: 'ICourseCatalog.js',      type: 'js' },
-              { id: 'src/ports/ILocalization',      label: 'ILocalization.js',       type: 'js' }
+              { id: 'src/ports/ILocalization',      label: 'ILocalization.js',       type: 'js' },
+              { id: 'src/ports/IAIAssistant',       label: 'IAIAssistant.js',        type: 'js' },
+              { id: 'src/ports/IPlannerQuery',      label: 'IPlannerQuery + Action', type: 'js' }
             ]
           },
           {
@@ -38,6 +40,7 @@
             id: 'src/context', label: 'context/', type: 'dir',
             children: [
               { id: 'src/context/InstitutionContext', label: 'InstitutionContext.jsx', type: 'jsx' },
+              { id: 'src/context/LanguageContext',    label: 'LanguageContext.jsx',    type: 'jsx' },
               {
                 id: 'src/context/PlannerContext', label: 'PlannerContext.jsx', type: 'jsx',
                 children: [
@@ -46,7 +49,7 @@
                   { id: 'src/context/PlannerContext/plans',     label: 'plans',     type: 'js' }
                 ]
               },
-              { id: 'src/context/ThemeContext',   label: 'ThemeContext.jsx',   type: 'jsx' }
+              { id: 'src/context/ThemeContext', label: 'ThemeContext.jsx', type: 'jsx' }
             ]
           },
           {
@@ -76,8 +79,8 @@
               { id: 'src/ui/BankPanel',  label: 'BankPanel.jsx',        type: 'jsx' },
               { id: 'src/ui/GradPanel',  label: 'GradPanel.jsx',        type: 'jsx' },
               { id: 'src/ui/SemRow',     label: 'SemRow + SummerRow',   type: 'jsx' },
-              { id: 'src/ui/CourseCard', label: 'CourseCard.jsx',       type: 'jsx' },
-              { id: 'src/ui/InfoPanel',  label: 'InfoPanel + RelLines', type: 'jsx' }
+              { id: 'src/ui/CourseCard', label: 'CourseCard.jsx',        type: 'jsx' },
+              { id: 'src/ui/InfoPanel',  label: 'InfoPanel + RelLines',  type: 'jsx' }
             ]
           }
         ]
@@ -85,8 +88,16 @@
       {
         id: 'dev-portal', label: 'dev-portal/', type: 'dir',
         children: [
-          { id: 'dev-portal/catalog-check', label: 'catalog-check', type: 'js' },
-          { id: 'dev-portal/nupath-update', label: 'nupath-update', type: 'js' }
+          { id: 'dev-portal/log',     label: 'Log tab',     type: 'js' },
+          {
+            id: 'dev-portal/trigger', label: 'Trigger tab', type: 'dir',
+            children: [
+              { id: 'dev-portal/trigger/availability', label: 'Term Availability', type: 'js' },
+              { id: 'dev-portal/trigger/catalog',      label: 'Course Catalog',    type: 'js' },
+              { id: 'dev-portal/trigger/majors',       label: 'Major Requirements',type: 'js' },
+              { id: 'dev-portal/trigger/nupath',       label: 'NUPath Attributes', type: 'js' }
+            ]
+          }
         ]
       },
       { id: 'maintenance', label: 'maintenance/', type: 'dir', children: [] }

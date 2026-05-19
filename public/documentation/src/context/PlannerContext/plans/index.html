@@ -86,14 +86,18 @@ sequenceDiagram
     <h2>What captureCurrentPlan() serializes</h2>
     <p>Every call to <code>captureCurrentPlan()</code> snapshots the current React state into a plain object. This is identical to the export JSON — File → Export and the auto-save write the same structure.</p>
     <pre><code>{
+  version: 1,      <span class="cmt">// schema version</span>
+  exported,        <span class="cmt">// ISO 8601 timestamp of when this was captured</span>
+  entSem, entYear, <span class="cmt">// entry semester/year (cohort)</span>
+  gradSem, gradYear,<span class="cmt">// graduation semester/year</span>
   placements,      <span class="cmt">// { courseId → semId }</span>
   specialTermPl,   <span class="cmt">// { termId → { typeId, semId, duration, company, companyDomain, subline } }</span>
   semOrders,       <span class="cmt">// { semId → courseId[] }</span>
   shOverrides,     <span class="cmt">// { courseId → number }</span>
-  bonusSH,         <span class="cmt">// { semId → number }</span>
+  bonusSH,         <span class="cmt">// number — global bonus SH (AP/transfer credit)</span>
   currentSemId,    <span class="cmt">// string — real-world current semester</span>
-  offeredOverrides,<span class="cmt">// manual offered-status overrides</span>
-  collapsedSubs,   <span class="cmt">// collapsed substitution groups</span>
+  offeredOverrides,<span class="cmt">// { courseId → bool } — user overrides for offering schedule</span>
+  collapsedSubs,   <span class="cmt">// { semId → bool } — collapsed state of semester sections</span>
   major, conc,     <span class="cmt">// graduation panel selections</span>
   minor1, minor2,
   placedOut        <span class="cmt">// string[] — serialized from Set</span>

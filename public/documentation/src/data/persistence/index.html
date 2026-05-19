@@ -72,19 +72,18 @@
     <div class="callout info"><div class="ci">ℹ</div><div class="callout-body">PlannerContext accesses most keys directly using a <code>key(name)</code> helper: <code>const key = n =&gt; `${storagePrefix}-${n}`</code>. Only the main state blob (plan-data, index, active) goes through the module-level pattern above. This separation keeps the module minimal while giving PlannerContext full control over key lifecycle.</div></div>
 
     <h2>State shape (what saveState writes)</h2>
+    <p>Only placement-layer state is serialized here. Entry/graduation dates are stored in separate keys (<code>{prefix}-ent-sem</code>, etc.). Major/minor selections are stored in per-plan slots (<code>{prefix}-plan-data-{id}</code>). This blob is shared across plan switches.</p>
     <pre><code>{
-  <span class="str">"persist"</span>:      <span class="kw">true</span>,
-  <span class="str">"entSem"</span>:       <span class="str">"fall"</span>,  <span class="str">"entYear"</span>:  2026,
-  <span class="str">"gradSem"</span>:      <span class="str">"spring"</span>, <span class="str">"gradYear"</span>: 2031,
-  <span class="str">"placements"</span>:   { <span class="str">"CS3500"</span>: <span class="str">"fall2027"</span>, ... },
+  <span class="str">"persist"</span>:       <span class="kw">true</span>,
+  <span class="str">"placements"</span>:    { <span class="str">"CS3500"</span>: <span class="str">"fall2027"</span>, ... },
   <span class="str">"specialTermPl"</span>: { <span class="str">"coop-1234"</span>: { <span class="str">"typeId"</span>: <span class="str">"coop"</span>, <span class="str">"semId"</span>: <span class="str">"sumA2028"</span>, ... } },
-  <span class="str">"semOrders"</span>:    { <span class="str">"fall2027"</span>: [<span class="str">"CS3500"</span>, <span class="str">"CS1800"</span>] },
-  <span class="str">"shOverrides"</span>:  { <span class="str">"CS1234"</span>: 3 },
-  <span class="str">"bonusSH"</span>:      { <span class="str">"fall2026"</span>: 8 },
-  <span class="str">"major"</span>:        <span class="str">"2024/computer-information-science/computer_science_bscs"</span>,
-  <span class="str">"conc"</span>:         <span class="kw">null</span>,
-  <span class="str">"minor1"</span>:       <span class="kw">null</span>,
-  <span class="str">"placedOut"</span>:    [<span class="str">"CS1200"</span>],
+  <span class="str">"currentSemId"</span>:  <span class="str">"fall2027"</span>,            <span class="cmt">// user-set current semester</span>
+  <span class="str">"collapsedSubs"</span>: { <span class="str">"sumA2027"</span>: <span class="kw">true</span> },    <span class="cmt">// { semId → bool } — collapsed state of semester sections</span>
+  <span class="str">"semOrders"</span>:     { <span class="str">"fall2027"</span>: [<span class="str">"CS3500"</span>, <span class="str">"CS1800"</span>] },
+  <span class="str">"offeredOverrides"</span>: { <span class="str">"CS3500"</span>: <span class="kw">true</span> },  <span class="cmt">// user-set offering overrides</span>
+  <span class="str">"shOverrides"</span>:   { <span class="str">"CS1234"</span>: 3 },
+  <span class="str">"bonusSH"</span>:       8,                    <span class="cmt">// number — global bonus SH</span>
+  <span class="str">"placedOut"</span>:     [<span class="str">"CS1200"</span>],
   <span class="str">"substitutions"</span>: [{ <span class="str">"from"</span>: <span class="str">"ENGW3302"</span>, <span class="str">"to"</span>: <span class="str">"ENGW3315"</span> }]
 }</code></pre>
 

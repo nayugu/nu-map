@@ -28,15 +28,18 @@
     </div>
 
     <h2>Contract</h2>
+    <p>All members are getter methods, not properties.</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <thead><tr><th>Method</th><th>Returns</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td><code>systemName</code></td><td>string</td><td>Display name shown as the grad panel section title. e.g. <code>"NUPath"</code>, <code>"Gen Ed"</code>, <code>"GIRs"</code>. Empty string → section is hidden.</td></tr>
-        <tr><td><code>attributes</code></td><td>Attribute[]</td><td>Full list of attribute definitions including legacy codes that exist in course data but are no longer active requirements.</td></tr>
-        <tr><td><code>gridLayout</code></td><td>string[][]</td><td>2-D array of attribute codes for the grad panel grid, e.g. <code>[["ND","EI","IC","FQ"], ...]</code>. Excludes legacy-only codes. Row × column order is display order.</td></tr>
-        <tr><td><code>gridCodes</code></td><td>string[]</td><td>Flat ordered list from <code>gridLayout.flat()</code>. This is the source of truth for rendering and the coverage progress badge.</td></tr>
-        <tr><td><code>labels</code></td><td>Object&lt;string,string&gt;</td><td>Code → label map for <em>all</em> attributes including legacy codes. Used for PDF export and tooltip lookups — must include every code that appears in course data.</td></tr>
-        <tr><td><code>getCoverage(placements, courseMap, grantedAttrs?)</code></td><td>function</td><td>Returns <code>Set&lt;string&gt;</code> of covered attribute codes. See below.</td></tr>
+        <tr><td><code>getSystemName()</code></td><td>string</td><td>Display name shown as the grad panel section title. e.g. <code>"NUPath"</code>, <code>"Gen Ed"</code>, <code>"GIRs"</code>. Empty string → attribute grid is hidden.</td></tr>
+        <tr><td><code>getAttributes()</code></td><td>Attribute[]</td><td>Full list of attribute definitions including legacy codes that exist in course data but are no longer active requirements.</td></tr>
+        <tr><td><code>getGridLayout()</code></td><td>string[][]</td><td>2-D array of attribute codes for the grad panel grid, e.g. <code>[["ND","EI","IC","FQ"], ...]</code>. Excludes legacy-only codes. Row × column order is display order.</td></tr>
+        <tr><td><code>getGridCodes()</code></td><td>string[]</td><td>Flat ordered list from <code>getGridLayout().flat()</code>. Source of truth for grid rendering and the coverage progress badge.</td></tr>
+        <tr><td><code>getLabel(code)</code></td><td>string</td><td>Returns the display label for an attribute code. Covers all codes including legacy ones. Falls back to the code itself if no label found.</td></tr>
+        <tr><td><code>canDoubleDip()</code></td><td>boolean</td><td>Whether a course can simultaneously satisfy an attribute and a major/minor requirement. Returns <code>true</code> at most institutions (including NU).</td></tr>
+        <tr><td><code>getMaxPerAttribute()</code></td><td>number|null</td><td>Maximum courses that can satisfy any single attribute. <code>null</code> = unlimited (most schools).</td></tr>
+        <tr><td><code>getCoverage(placements, courseMap, grantedCodes?)</code></td><td>Set&lt;string&gt;</td><td>Returns set of covered attribute codes. See below.</td></tr>
       </tbody>
     </table></div>
 
@@ -102,13 +105,17 @@ const npCovered    = attributeSystem.getCoverage(placements, courseMap, grantedA
 
     <h2>Generic default</h2>
     <pre><code><span class="cmt">// src/adapters/generic/attributeSystem.js</span>
-export const systemName = "";   <span class="cmt">// no section title → grid hidden</span>
-export const attributes = [];
-export const gridLayout = [];
-export const gridCodes  = [];
-export const labels     = {};
-export function getCoverage() { return new Set(); }</code></pre>
-    <p>With an empty <code>gridCodes</code>, the GradPanel hides the attribute grid entirely. No errors, no empty boxes.</p>
+export default {
+  <span class="fn-name">getSystemName</span>()       { <span class="kw">return</span> <span class="str">""</span>; },      <span class="cmt">// no section title → grid hidden</span>
+  <span class="fn-name">getAttributes</span>()       { <span class="kw">return</span> []; },
+  <span class="fn-name">getGridLayout</span>()       { <span class="kw">return</span> []; },
+  <span class="fn-name">getGridCodes</span>()        { <span class="kw">return</span> []; },
+  <span class="fn-name">getLabel</span>(code)        { <span class="kw">return</span> code; },   <span class="cmt">// fall back to raw code</span>
+  <span class="fn-name">canDoubleDip</span>()        { <span class="kw">return</span> <span class="kw">true</span>; },
+  <span class="fn-name">getMaxPerAttribute</span>()  { <span class="kw">return</span> <span class="kw">null</span>; },
+  <span class="fn-name">getCoverage</span>()         { <span class="kw">return new</span> Set(); },
+};</code></pre>
+    <p>With an empty <code>getGridCodes()</code>, the GradPanel hides the attribute grid entirely. No errors, no empty boxes.</p>
 
     <h2>Implementing for your institution</h2>
     <ol>
@@ -119,7 +126,7 @@ export function getCoverage() { return new Set(); }</code></pre>
       <li>Implement <code>getCoverage</code>: iterate placed courses, union their <code>attributes</code> arrays, add <code>grantedAttrs</code>.</li>
       <li>Set <code>systemName</code> to your framework's display name.</li>
     </ol>
-    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">Course objects use the generic field name <code>attributes</code> (not <code>nuPath</code>). Your course JSON should include an <code>attributes</code> array with the short codes, e.g. <code>"attributes": ["ND", "FQ"]</code>. The <code>normalizeCourse()</code> function in <code>courseModel.js</code> reads <code>raw.attributes ?? raw.nuPath</code> for backwards compatibility.</div></div>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">Course objects use the generic field name <code>attributes</code>. Your course JSON should include an <code>attributes</code> array with the short codes, e.g. <code>"attributes": ["ND", "FQ"]</code>. The NU scraper writes this field as <code>nuPath</code> in catalog data, which the adapter normalizes to <code>attributes</code> when loading.</div></div>
 
   </main>
 </div>

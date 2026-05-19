@@ -36,7 +36,7 @@
         <br><br>
         <strong>Why this is needed:</strong> The plan state only stores the integer month count (e.g. <code>4</code> or <code>6</code>). The descriptor object is needed to get the <code>weight</code> for span arithmetic and the <code>label</code> for display. This function is the bridge between stored state and runtime descriptor.
       </div>
-      <div class="fn-returns">Returns: <span>The matching descriptor, or the first descriptor if no match, or <code>null</code> if <code>durations</code> is empty</span></div>
+      <div class="fn-returns">Returns: <span>The matching descriptor, or the first descriptor if no exact match. Never returns null — but returns <code>undefined</code> if <code>durations</code> is empty (callers should guarantee at least one entry)</span></div>
     </div>
     <pre><code><span class="cmt">// Usage — wherever a stored duration needs to become a descriptor</span>
 const type  = specialTerms.types.find(t => t.id === termData.typeId);

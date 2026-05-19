@@ -23,7 +23,7 @@
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">ui/</a></div></div>
-      <div class="nb-group"><div class="nb-label">Lines each</div><div class="nb-value">~850</div></div>
+      <div class="nb-group"><div class="nb-label">Lines</div><div class="nb-value">SemRow ~450, SummerRow ~300</div></div>
       <div class="nb-group"><div class="nb-label">Key prop</div><div class="nb-value"><code>semId</code> (or <code>semIdA</code> + <code>semIdB</code> for SummerRow)</div></div>
       <div class="nb-group"><div class="nb-label">Children</div><div class="nb-value">CourseCard ×N per semester</div></div>
     </div>
@@ -40,7 +40,7 @@ graph TD
     MC --> CC["CourseCard ×N (credits ≥ 3)"]
     SR --> OC["Other credits toggle (credits ≤ 2)"]
     OC --> CC2["CourseCard ×N (small-SH courses)"]
-    SR --> BSH["Bonus SH input"]
+    SR --> BSH["Bonus SH input (incoming semester only)"]
       </div>
     </div>
 
@@ -62,10 +62,10 @@ graph TD
     <p>The entire main courses section is a drop zone. While dragging, the row highlights (<code>hoveredSem === semId</code>). On drop, calls <code>onDrop(dragInfo.courseId, semId)</code>. The order of dropped courses within the row is managed by <code>onDropOnCard()</code> for reordering.</p>
 
     <h2>Bonus SH input</h2>
-    <p>A small numeric input at the bottom of the row. Adding a number here increases the semester's SH total (for AP credit, transfer credit, or special arrangements). Stored in <code>bonusSH[semId]</code>. Shown in the SH total badge.</p>
+    <p>A small numeric input that only appears inside the <strong>incoming</strong> pseudo-semester (<code>sem.id === "incoming"</code>) when it is expanded. Adding a number here increases the global SH total (for AP credit, transfer credit, or special arrangements). Stored as a single global <code>bonusSH</code> number in PlannerContext (not per-semester). Shown in the SH total badge.</p>
 
     <h2>"Other credits" section</h2>
-    <p>Courses with ≤2 SH (seminars, application fees, etc.) are segregated into a collapsible "+" section at the bottom. The <code>collapseOtherCredits</code> setting controls whether it starts collapsed. This prevents small-SH courses from cluttering the main course list.</p>
+    <p>Courses with ≤2 SH (seminars, application fees, etc.) are segregated into a collapsible section at the bottom. When collapsed, it shows a <code>►</code> toggle with a summary of the credits and course codes. The <code>collapseOtherCredits</code> setting controls whether it starts collapsed. This prevents small-SH courses from cluttering the main course list.</p>
 
     <h2>SummerRow differences</h2>
     <p><code>SummerRow</code> receives <code>semIdA</code> (sumA) and <code>semIdB</code> (sumB) and renders them side-by-side in two columns. Each column is functionally identical to a half-height SemRow. 4-month co-ops span one column; 6-month co-ops span both.</p>
