@@ -9,9 +9,9 @@
 //
 // Engine priority
 // ───────────────
-//   1. ChromeAIEngine  — browser-native, instant, no download
-//   2. HFInferenceEngine — Qwen2.5 via HuggingFace serverless API,
-//                          streams tokens, no API key needed
+//   1. ChromeAIEngine      — browser-native, instant, no download
+//   2. GoogleTranslateEngine — unofficial translate.googleapis.com endpoint,
+//                              no API key, CORS-enabled, near-instant
 //
 // Caching
 // ───────
@@ -43,8 +43,9 @@ import {
   useEffect, useCallback,
 } from "react";
 import { useLanguage }          from "./LanguageContext.jsx";
-import { ChromeAIEngine }       from "../adapters/translation/ChromeAIEngine.js";
-import { HFInferenceEngine }    from "../adapters/translation/HFInferenceEngine.js";
+import { ChromeAIEngine }         from "../adapters/translation/ChromeAIEngine.js";
+import { GoogleTranslateEngine }  from "../adapters/translation/GoogleTranslateEngine.js";
+// import { HFInferenceEngine }    from "../adapters/translation/HFInferenceEngine.js";
 // import { TransformersJsEngine } from "../adapters/translation/TransformersJsEngine.js";
 
 const TranslationContext = createContext(null);
@@ -100,9 +101,11 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
       if (await chrome.isAvailable(locale, catalogLocale)) {
         engine = chrome;
       } else {
-        engine = new HFInferenceEngine();
+        engine = new GoogleTranslateEngine();
         // Uncomment to fall back to offline WASM instead of API:
         // engine = new TransformersJsEngine();
+        // Uncomment to use HuggingFace Inference API (requires VITE_HF_TOKEN):
+        // engine = new HFInferenceEngine();
       }
       engineRef.current = engine;
       setEngineTier(engine.tier);
