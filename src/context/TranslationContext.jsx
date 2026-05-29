@@ -47,6 +47,7 @@ import { ChromeAIEngine }         from "../adapters/translation/ChromeAIEngine.j
 import { GoogleTranslateEngine }  from "../adapters/translation/GoogleTranslateEngine.js";
 // import { HFInferenceEngine }    from "../adapters/translation/HFInferenceEngine.js";
 // import { TransformersJsEngine } from "../adapters/translation/TransformersJsEngine.js";
+import { glossaryLookup }         from "../locales/glossary.js";
 
 const TranslationContext = createContext(null);
 
@@ -125,6 +126,13 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
 
     texts.forEach((text, i) => {
       const key = `${text}::${catalogLocale}→${targetLocale}`;
+      // Curated override for academic terms Google mistranslates.
+      const override = glossaryLookup(text, targetLocale);
+      if (override != null) {
+        cacheRef.current.set(key, override);
+        results[i] = override;
+        return;
+      }
       const mem = cacheRef.current.get(key);
       if (mem != null) { results[i] = mem; return; }
       const stored = lsGet(key);
@@ -268,4 +276,70 @@ export function useCourseTranslation(course) {
     // the text updates live and the dim would obscure the typewriter effect.
     isTranslating: active && isTranslating && !translated,
   };
+}
+
+/**
+ * Drop-in wrapper that renders a translated version of its single
+ * string child (or `text` prop).  Sugar over useTranslatedText so callers
+ * can wrap any inline string without managing hooks:
+ *
+ *   <TText>{sem.label}</TText>
+ *   <TText>Session A</TText>
+ *
+ * Useful for adapter-supplied strings (semester labels, special term
+ * type labels, etc.) — universities don't need to provide per-language
+ * translations; Google does it once per user and caches forever.
+ *
+ * `as` is an optional disambiguating rephrasing that gets sent to the
+ * engine in place of the display text.  Google Translate has no
+ * "context" parameter, so when a term is ambiguous in isolation —
+ * "Session" reads as "meeting" — pass a clearer phrasing through `as`:
+ *
+ *   <TText as="summer half-term A">Session A</TText>
+ *
+ * In the source locale (English) the displayed text is unchanged; in
+ * other locales the user sees the translation of the `as` phrase.
+ */
+export function TText({ children, text, as }) {
+  const display = text ?? (typeof children === "string" ? children : "");
+  const translated = useTranslatedText(display, { as });
+  return translated;
+}
+
+/**
+ * Translates a single string to the active locale, returning the source
+ * text immediately and re-rendering with the translated text once it
+ * arrives.  Designed for rendering many translatable names at once
+ * (course bank, planner cards, grad requirement tree) — relies on the
+ * engine's concurrency limiter to avoid bursting requests.
+ *
+ * If translation is disabled, locale matches catalogLocale, or the
+ * engine isn't ready, returns `text` unchanged.
+ *
+ * @param {string | null | undefined} text          display text; returned when no translation happens
+ * @param {{ as?: string | null }}    [options]     `options.as` overrides what's sent to the engine
+ * @returns {string}
+ */
+export function useTranslatedText(text, options = {}) {
+  const { as } = options;
+  const source = as ?? text;
+
+  const { locale } = useLanguage();
+  const { translate, catalogLocale, engineTier, courseTranslationEnabled } = useTranslation();
+
+  const [translated, setTranslated] = useState(null);
+
+  useEffect(() => {
+    if (!courseTranslationEnabled || locale === catalogLocale || !source || !engineTier) {
+      setTranslated(null);
+      return;
+    }
+    let cancelled = false;
+    translate([source], locale)
+      .then(results => { if (!cancelled) setTranslated(results[0]); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [source, locale, catalogLocale, engineTier, courseTranslationEnabled, translate]);
+
+  return translated ?? text ?? "";
 }

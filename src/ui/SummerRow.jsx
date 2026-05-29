@@ -10,6 +10,7 @@ import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
+import { TText }          from "../context/TranslationContext.jsx";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
@@ -61,6 +62,10 @@ export default function SummerRow({ semA, semB }) {
     const semIsDone  = semStatus === "completed";
     const isSessionA = sem.id.startsWith("sumA");
     const sessionLabel = isSessionA ? "Session A" : "Session B";
+    // Translation rephrasing — "Session" alone reads as "meeting" in many
+    // languages; rephrase as a summer half-term so the translation engine
+    // picks the academic sense.  Displayed source-locale text stays as-is.
+    const sessionAs = isSessionA ? "Summer half-term A" : "Summer half-term B";
 
     // ── Special term start card ───────────────────────────────────
     const termStartId   = specialTermStartMap[sem.id];
@@ -77,8 +82,8 @@ export default function SummerRow({ semA, semB }) {
           transition: "background 0.1s, border-color 0.1s",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}>{sessionLabel}</span>
-            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}><TText as={sessionAs}>{sessionLabel}</TText></span>
+            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}><TText>{sem.sub}</TText></span>
           </div>
           <div
             ref={el => { cardRefs.current[termStartId] = el; }}
@@ -99,7 +104,7 @@ export default function SummerRow({ semA, semB }) {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termStartData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termStartData.typeId === "coop" ? "uppercase" : "none", whiteSpace: "nowrap", flexShrink: 0 }}>
-                {displayLabel} {termNum(termStartData.typeId, termStartId)}
+                <TText>{displayLabel}</TText> {termNum(termStartData.typeId, termStartId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
                 <CompanySearch name={termStartData.company} color={companyColor} emptyColor={placeholderColor} fontSize={isPhone ? 7 : 13} placeholder={t("sem.work.company.placeholder")} onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))} />
@@ -126,8 +131,8 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)" }}>{sessionLabel}</span>
-            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}>{sem.sub}</span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)" }}><TText as={sessionAs}>{sessionLabel}</TText></span>
+            <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}><TText>{sem.sub}</TText></span>
           </div>
           <div style={{
             width: "100%", minHeight: 58,
@@ -136,7 +141,7 @@ export default function SummerRow({ semA, semB }) {
             display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
           }}>
             <div>
-              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}>{termContType?.label} {t("sem.cont.abbr")}</div>
+              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}><TText>{termContType?.label}</TText> {t("sem.cont.abbr")}</div>
               <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>{termContData.duration}-month block</div>
             </div>
             {showContLogo && <CompanyLogo key={termContData.companyDomain || ""} domain={termContData.companyDomain} size={isPhone ? 17 : 34} />}
@@ -168,9 +173,9 @@ export default function SummerRow({ semA, semB }) {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
           <span style={{ fontSize: 9, fontWeight: 700, color: semIsDone ? "var(--success)" : "var(--text-4)" }}>
-            {sessionLabel}
+            <TText as={sessionAs}>{sessionLabel}</TText>
           </span>
-          <span style={{ fontSize: 9, color: "var(--text-5)" }}>{sem.sub}</span>
+          <span style={{ fontSize: 9, color: "var(--text-5)" }}><TText>{sem.sub}</TText></span>
           {semIsDone && <span style={{ fontSize: 8, color: "var(--success)" }}>✓</span>}
         </div>
 
@@ -278,12 +283,12 @@ export default function SummerRow({ semA, semB }) {
               {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
               {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
             </span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}>Summer {year}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}><TText>{`Summer ${year}`}</TText></span>
             {combinedActive && (
               <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700, marginLeft: 3 }}>NOW</span>
             )}
           </div>
-          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>May – Aug</div>
+          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}><TText>May – Aug</TText></div>
           {combinedSH > 0 && <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: "var(--success)" }}>{combinedSH} SH</span>}
         </div>
       )}

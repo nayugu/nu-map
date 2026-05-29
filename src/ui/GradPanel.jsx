@@ -15,6 +15,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
+import { useTranslatedText }    from "../context/TranslationContext.jsx";
 import {
   buildPlacedKeySet,
   allocateMajor,
@@ -225,6 +226,10 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
   const rowGap           = isPhone ? 3 : 5;
   const baseIndent       = isPhone ? 2 : 4;
 
+  // Translation hooks — must be called unconditionally; pass null when not applicable.
+  const courseTitle      = useTranslatedText(r.type === "COURSE" ? courseMap?.[r.key]?.title : null);
+  const sectionHeading   = useTranslatedText(r.type !== "COURSE" && r.type !== "RANGE" && r.type !== "XOM" ? (r.title ?? null) : null);
+
   if (r.type === "COURSE") {
     const course       = courseMap?.[r.key];
     const isSelected   = selectedId === r.key;
@@ -264,7 +269,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
               fontWeight: 400, userSelect: "none",
               overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
             }}>
-              {course.title}
+              {courseTitle}
             </span>
           )}
         </div>
@@ -306,7 +311,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
   const heading =
     r.type === "AND" ? t("grad.allOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
     r.type === "OR"  ? t("grad.oneOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
-    r.title ?? r.label; // Ensure t is available for heading
+    sectionHeading || (r.label ?? "");
 
   return (
     <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
@@ -330,6 +335,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
   const ctx = useContext(GradCtx);
   const ph  = ctx?.isPhone;
   const { t } = useLanguage(); // Added this line to use t in this function
+  const secTitle = useTranslatedText(sec.title);
 
   // For pool structures (minRequired < total): display requirement satisfaction, not option count
   const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < sec.total;
@@ -349,7 +355,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
         <CheckBox sat={sec.sat} />
         <span style={{ flex: 1, fontSize: ph ? 9 : 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {sec.title}
+          {secTitle}
         </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>{displaySatCount}/{displayTotal}</span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>
@@ -437,6 +443,7 @@ function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
   const [minor, setMinor] = useState(null);
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const minorName = useTranslatedText(minor?.name ?? null);
 
   useEffect(() => {
     if (!path) { setMinor(null); setErr(null); return; }
@@ -494,7 +501,7 @@ function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
     <>
       <div style={{ textAlign: "center", fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 12 }}>
         {label}
-        <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{minor.name}</span>
+        <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{minorName}</span>
         {minor.metadata?.verified && (
           <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>verified</span>
         )}
@@ -586,11 +593,15 @@ export default function GradPanel({ wideCatalog = false }) {
   const { t } = useLanguage();
 
   const majorGroups  = useMemo(() => majorRequirements.getMajorOptionGroups(), [majorRequirements]);
+
+  // Translated major name + concentration (no-ops when translation disabled or in source locale).
   const minorGroups  = useMemo(() => majorRequirements.getMinorOptionGroups(), [majorRequirements]);
 
   const [major,    setMajor]    = useState(null);
   const [loadErr,  setLoadErr]  = useState(null);
   const [fetching, setFetching] = useState(false);
+  const majorName = useTranslatedText(major?.name ?? null);
+  const concName  = useTranslatedText(selConc || null);
   const [showNP,   setShowNP]   = useState(() => {
     try { const v = localStorage.getItem(`${pfx}-grad-show-np`); return v === null ? true : v !== "false"; } catch { return true; }
   });
@@ -837,8 +848,8 @@ export default function GradPanel({ wideCatalog = false }) {
               </div>
               {showMajorDetails && (
                 <div style={{ margin: isPhone ? "2px 0 6px 0" : "3px 0 8px 0", color: "var(--text-2)", fontWeight: 600, fontSize: isPhone ? 9 : 10, textAlign: "center" }}>
-                  {major.name}
-                  {selConc && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 2 }}>Concentration: {selConc}</div>}
+                  {majorName}
+                  {selConc && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 2 }}>Concentration: {concName}</div>}
                 </div>
               )}
               

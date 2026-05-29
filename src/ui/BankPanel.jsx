@@ -9,8 +9,31 @@ import { subjectColor } from "../core/courseModel.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
+import { useTranslatedText } from "../context/TranslationContext.jsx";
 import CourseCard  from "./CourseCard.jsx";
 import GradPanel   from "./GradPanel.jsx";
+
+// One row in the substitution-search dropdown.  Extracted so each row
+// can call useTranslatedText on its own title.
+function CourseSearchRow({ c, isSelected, onPick }) {
+  const title = useTranslatedText(c.title);
+  return (
+    <div
+      onMouseDown={onPick}
+      onTouchStart={e => { e.preventDefault(); onPick(); }}
+      style={{
+        padding: "5px 10px", fontSize: 11, cursor: "pointer",
+        background: isSelected ? "var(--bg-surface-2)" : undefined,
+        color: isSelected ? "var(--text-1)" : "var(--text-2)",
+      }}
+      onMouseEnter={e => e.currentTarget.style.background = "var(--bg-surface-2)"}
+      onMouseLeave={e => e.currentTarget.style.background = isSelected ? "var(--bg-surface-2)" : ""}
+    >
+      <div style={{ fontWeight: 600 }}>{c.subject} {c.number}</div>
+      <div style={{ fontSize: 10, color: "var(--text-5)" }}>{title}</div>
+    </div>
+  );
+}
 
 // ── Course search for substitution input ────────────────────────
 
@@ -93,20 +116,12 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
           ) : filtered.length === 0 ? (
             <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)" }}>No results</div>
           ) : filtered.map(c => (
-            <div key={c.id}
-              onMouseDown={() => select(c.id)}
-              onTouchStart={e => { e.preventDefault(); select(c.id); }}
-              style={{
-                padding: "5px 10px", fontSize: 11, cursor: "pointer",
-                background: c.id === value ? "var(--bg-surface-2)" : undefined,
-                color: c.id === value ? "var(--text-1)" : "var(--text-2)",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "var(--bg-surface-2)"}
-              onMouseLeave={e => e.currentTarget.style.background = c.id === value ? "var(--bg-surface-2)" : ""}
-            >
-              <div style={{ fontWeight: 600 }}>{c.subject} {c.number}</div>
-              <div style={{ fontSize: 10, color: "var(--text-5)" }}>{c.title}</div>
-            </div>
+            <CourseSearchRow
+              key={c.id}
+              c={c}
+              isSelected={c.id === value}
+              onPick={() => select(c.id)}
+            />
           ))}
         </div>,
         document.body

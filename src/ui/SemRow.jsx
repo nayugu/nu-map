@@ -11,6 +11,7 @@ import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
+import { TText }          from "../context/TranslationContext.jsx";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
@@ -131,18 +132,18 @@ export default function SemRow({ sem }) {
         <div style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 2 }}>
             {statusDot}
-            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)" }}>{sem.label}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)" }}><TText>{sem.label}</TText></span>
             {isActive && (
               <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>NOW</span>
             )}
           </div>
-          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19 }}>{sem.sub}</div>
+          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19 }}><TText>{sem.sub}</TText></div>
         </div>
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
           <div style={{ width: 3, alignSelf: "stretch", background: "var(--border-2)", borderRadius: 2 }} />
           <div>
             <div style={{ fontSize: isPhone ? 6 : 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-              {termContType?.label ?? "Work"} Continues
+              <TText>{termContType?.label ?? "Work"}</TText> <TText>Continues</TText>
             </div>
             <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)" }}>{termContData?.duration}-month block · drag to move</div>
           </div>
@@ -176,7 +177,7 @@ export default function SemRow({ sem }) {
         >
           {statusDot}
           {sem.label.split(" ").map((part, i) => (
-            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: 1.2, textAlign: "center" }}>{part}</span>
+            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: 1.2, textAlign: "center" }}><TText>{part}</TText></span>
           ))}
           {shEl}
         </div>
@@ -188,7 +189,7 @@ export default function SemRow({ sem }) {
           <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
             {statusDot}
             <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}>
-              {sem.label}
+              <TText>{sem.label}</TText>
             </span>
             {isActive && (
               <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>
@@ -196,11 +197,11 @@ export default function SemRow({ sem }) {
               </span>
             )}
           </div>
-          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}>{sem.sub}</div>
+          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}><TText>{sem.sub}</TText></div>
           {shEl}
           {sem.id === "incoming" && !isIncomingCollapsed && (
             <div style={{ paddingLeft: 19, marginTop: 5 }} onClick={e => e.stopPropagation()}>
-              <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 2 }}>general SH</div>
+              <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 2 }}><TText>general {unitName}</TText></div>
               <input
                 type="number" min={0} max={999} value={bonusSH || ""}
                 placeholder="0"
@@ -245,7 +246,7 @@ export default function SemRow({ sem }) {
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
-                {termStartType?.label ?? termStartData.typeId} {termNum(termStartData.typeId, termStartId)}
+                <TText>{termStartType?.label ?? termStartData.typeId}</TText> {termNum(termStartData.typeId, termStartId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 10 : 20 }}>
                 <CompanySearch
@@ -300,8 +301,8 @@ export default function SemRow({ sem }) {
               title={isIncomingCollapsed ? t("sem.incoming.title.show") : t("sem.incoming.title.hide")}
             >
               {isIncomingCollapsed
-                ? `► general SH: ${bonusSH || 0}${crs.length > 0 ? ' | ' : ''}${crs.map(c => c.code || (c.subject + ' ' + c.number)).join(", ")}`
-                : "▼ Incoming Credit"
+                ? <>► <TText>general {unitName}</TText>: {bonusSH || 0}{crs.length > 0 ? ' | ' : ''}{crs.map(c => c.code || (c.subject + ' ' + c.number)).join(", ")}</>
+                : <>▼ <TText>{sem.label}</TText></>
               }
             </button>
             {!isIncomingCollapsed && (

@@ -13,7 +13,7 @@ import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
-import { useTranslation } from "../context/TranslationContext.jsx";
+import { useTranslation, useTranslatedText } from "../context/TranslationContext.jsx";
 // import ClaudePanel from "./ClaudePanel.jsx"; // MCP integration — disabled until hosted
 import dataMeta from "../core/dataMeta.json";
 
@@ -259,9 +259,7 @@ export default function Header() {
           {!selectMode && p.id === activePlanId ? "● " : ""}{p.name}
         </span>
         {majorLabel && (
-          <span style={{ display: "block", fontSize: isPhone ? 8 : 9, color: "var(--text-5)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            {majorLabel}
-          </span>
+          <MajorLabelText label={majorLabel} isPhone={isPhone} />
         )}
       </span>
     );
@@ -1086,6 +1084,16 @@ function LanguagePicker({ locale, locales, setLocale }) {
       />
       {dropdown}
     </div>
+  );
+}
+
+/** Subline under a plan name when the plan-switcher search matched by major. */
+function MajorLabelText({ label, isPhone }) {
+  const translated = useTranslatedText(label);
+  return (
+    <span style={{ display: "block", fontSize: isPhone ? 8 : 9, color: "var(--text-5)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      {translated}
+    </span>
   );
 }
 

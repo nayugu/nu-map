@@ -8,6 +8,11 @@
 // Responses are near-instant so no streaming is needed.  onToken is
 // called once with the final result to maintain interface parity.
 //
+// A module-level concurrency limiter caps simultaneous in-flight
+// requests so opening a page with many translatable elements (course
+// bank, grad requirement tree) doesn't burst dozens of requests at
+// Google and trip per-IP throttling.
+//
 // Implements the ITranslationEngine port.
 // ═══════════════════════════════════════════════════════════════════
 
@@ -18,6 +23,26 @@ const GOOGLE_LOCALE = {
 
 function googleLocale(bcp47) {
   return GOOGLE_LOCALE[bcp47] ?? bcp47;
+}
+
+// Shared across all engine instances so a re-mount doesn't reset the cap.
+const MAX_CONCURRENT = 6;
+let inFlight = 0;
+const queue = [];
+
+function drain() {
+  while (inFlight < MAX_CONCURRENT && queue.length > 0) {
+    const job = queue.shift();
+    inFlight++;
+    job().finally(() => { inFlight--; drain(); });
+  }
+}
+
+function schedule(taskFactory) {
+  return new Promise((resolve, reject) => {
+    queue.push(() => taskFactory().then(resolve, reject));
+    drain();
+  });
 }
 
 export class GoogleTranslateEngine {
@@ -60,7 +85,7 @@ export class GoogleTranslateEngine {
     return results;
   }
 
-  async #fetch(text, sl, tl) {
+  #fetch(text, sl, tl) {
     const ac = new AbortController();
     this.#aborts.push(ac);
 
@@ -69,19 +94,21 @@ export class GoogleTranslateEngine {
       `?client=gtx&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}` +
       `&dt=t&q=${encodeURIComponent(text)}`;
 
-    try {
-      const response = await fetch(url, { signal: ac.signal });
-      if (!response.ok) throw new Error(`Google Translate ${response.status}`);
-      const data = await response.json();
-      // Response: [[[translatedSegment, original, ...], ...], ...]
-      // Concatenate all translated segments.
-      const translated = (data[0] ?? [])
-        .map(seg => seg[0] ?? "")
-        .join("");
-      return translated.trim();
-    } finally {
-      this.#aborts = this.#aborts.filter(a => a !== ac);
-    }
+    return schedule(async () => {
+      try {
+        const response = await fetch(url, { signal: ac.signal });
+        if (!response.ok) throw new Error(`Google Translate ${response.status}`);
+        const data = await response.json();
+        // Response: [[[translatedSegment, original, ...], ...], ...]
+        // Concatenate all translated segments.
+        const translated = (data[0] ?? [])
+          .map(seg => seg[0] ?? "")
+          .join("");
+        return translated.trim();
+      } finally {
+        this.#aborts = this.#aborts.filter(a => a !== ac);
+      }
+    });
   }
 
   destroy() {

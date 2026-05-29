@@ -8,6 +8,7 @@ import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
+import { useTranslatedText } from "../context/TranslationContext.jsx";
 
 /**
  * @param {object} course   - normalised course object
@@ -27,6 +28,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const creditSystem = usePort(ICreditSystem);
   const calendar     = usePort(ICalendar);
   const { t }        = useLanguage();
+  const title        = useTranslatedText(course.title);
 
   const [editingSh, setEditingSh] = useState(false);
 
@@ -251,7 +253,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         fontSize: 10, color: "var(--text-3)", lineHeight: 1.25,
         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginBottom: 2,
       }}>
-        {course.title || <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
+        {title || <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
       </div>
 
       {/* Badges */}
