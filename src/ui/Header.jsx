@@ -13,6 +13,7 @@ import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
+import { useTranslation } from "../context/TranslationContext.jsx";
 // import ClaudePanel from "./ClaudePanel.jsx"; // MCP integration — disabled until hosted
 import dataMeta from "../core/dataMeta.json";
 
@@ -39,6 +40,11 @@ export default function Header() {
 
   const { themeName, setThemeName, themeNames } = useTheme();
   const { t, locale, setLocale, locales } = useLanguage();
+  const {
+    courseTranslationEnabled, setCourseTranslationEnabled,
+    engineTier, modelProgress, modelCached,
+    cancelDownload, clearModelCache,
+  } = useTranslation();
   const adapter = useInstitution();
   const { attributeSystem, specialTerms, calendar, creditSystem, institution, majorRequirements } = adapter;
   const unitName        = creditSystem.getUnitName();
@@ -713,11 +719,69 @@ export default function Header() {
                 </div>
               )}
 
-              {/* Language picker */}
+              {/* Language picker + course translation toggle */}
               {locales.length > 1 && (
                 <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
                   <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.language")}</div>
                   <LanguagePicker locale={locale} locales={locales} setLocale={setLocale} />
+
+                  {locale !== "en" && (
+                    <div style={{ marginTop: 7 }}>
+                      <label style={{ display: "flex", alignItems: "flex-start", gap: 6, cursor: "pointer", userSelect: "none" }}>
+                        <input
+                          type="checkbox"
+                          checked={courseTranslationEnabled}
+                          onChange={e => setCourseTranslationEnabled(e.target.checked)}
+                          style={{ marginTop: 1, flexShrink: 0, accentColor: "var(--active)" }}
+                        />
+                        <span style={{ flex: 1, minWidth: 0 }}>
+                          <span style={{ fontSize: 10, color: "var(--text-2)" }}>
+                            {t("translation.toggle")}
+                          </span>
+                          {/* Hint line: changes based on engine + download + cache state */}
+                          <span style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2, flexWrap: "wrap" }}>
+                            <span style={{ fontSize: 9, color: "var(--text-5)" }}>
+                              {engineTier === "native"
+                                ? t("translation.toggle.hint.native")
+                                : modelProgress
+                                  ? `${Math.round((modelProgress.loaded / (modelProgress.total || 1)) * 100)}% ${t("translation.progress.of")} ~890 MB`
+                                  : modelCached
+                                    ? t("translation.toggle.hint.cached")
+                                    : t("translation.toggle.hint.wasm")}
+                            </span>
+                            {/* Cancel button — visible while downloading */}
+                            {engineTier === "wasm" && modelProgress && (
+                              <button
+                                onMouseDown={e => e.preventDefault()}
+                                onClick={cancelDownload}
+                                style={{
+                                  fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
+                                  background: "transparent", border: "1px solid var(--border-2)",
+                                  color: "var(--text-4)", lineHeight: 1.4,
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
+                              >{t("translation.cancel")}</button>
+                            )}
+                            {/* Clear cache button — visible when model is fully cached and not downloading */}
+                            {engineTier === "wasm" && modelCached && !modelProgress && (
+                              <button
+                                onMouseDown={e => e.preventDefault()}
+                                onClick={clearModelCache}
+                                style={{
+                                  fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
+                                  background: "transparent", border: "1px solid var(--border-2)",
+                                  color: "var(--text-5)", lineHeight: 1.4,
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-5)"; }}
+                              >{t("translation.clear.cache")}</button>
+                            )}
+                          </span>
+                        </span>
+                      </label>
+                    </div>
+                  )}
                 </div>
               )}
 

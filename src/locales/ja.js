@@ -164,6 +164,19 @@ export const strings = {
   "legend.substitution-prereq-order": "代替履修条件（順序違い）",
   "legend.corequisite-viol":          "配置ミス",
 
+  // ── Translation ────────────────────────────────────────────────
+  "translation.toggle":             "コース内容を翻訳する",
+  "translation.toggle.hint.native": "Chrome AI 使用 — 即時翻訳",
+  "translation.toggle.hint.wasm":   "初回約 890 MB ダウンロード、以降オフライン対応",
+  "translation.toggle.hint.cached": "モデルをキャッシュ済み — オフラインで利用可能",
+  "translation.english.note":       "コース内容は英語表示",
+  "translation.enable":             "翻訳 →",
+  "translation.downloading":        "翻訳モデルをダウンロード中…",
+  "translation.progress.of":        "/",
+  "translation.cancel":             "キャンセル",
+  "translation.cancel.title":       "ダウンロードをキャンセル",
+  "translation.clear.cache":        "キャッシュを削除",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "非公式の学生プランニングツール",
   "modal.dismiss":    "理解しました—プランを始める！",

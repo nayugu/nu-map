@@ -34,6 +34,7 @@
     "test:live": "node scripts/test-cs2100.js"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

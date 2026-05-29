@@ -163,6 +163,19 @@ export const strings = {
   "legend.substitution-prereq-order": "Prérequis substitué (ordre incorrect)",
   "legend.corequisite-viol":          "Mal placé",
 
+  // ── Translation ────────────────────────────────────────────────
+  "translation.toggle":             "Traduire le contenu des cours",
+  "translation.toggle.hint.native": "Via Chrome AI — instantané",
+  "translation.toggle.hint.wasm":   "~890 Mo en une seule fois, puis hors ligne",
+  "translation.toggle.hint.cached": "Modèle en cache — fonctionne hors ligne",
+  "translation.english.note":       "Contenu des cours en anglais",
+  "translation.enable":             "Traduire →",
+  "translation.downloading":        "Téléchargement du modèle de traduction…",
+  "translation.progress.of":        "sur",
+  "translation.cancel":             "Annuler",
+  "translation.cancel.title":       "Annuler le téléchargement",
+  "translation.clear.cache":        "Vider le cache",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "Outil de planification étudiante non officiel",
   "modal.dismiss":    "Je comprends — laissez-moi planifier !",

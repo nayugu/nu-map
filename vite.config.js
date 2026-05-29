@@ -55,4 +55,6 @@ export default defineConfig({
   plugins: [react(), catalogCheckPlugin(), dataMetaPlugin()],
   base: process.env.VITE_BASE_PATH ?? "/",
   define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
+  optimizeDeps: { exclude: ["@huggingface/transformers"] },
+  worker: { format: "es" },
 });

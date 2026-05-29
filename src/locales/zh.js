@@ -161,6 +161,20 @@ export const strings = {
   "info.drag.title":              "\u62d6\u62fd\u653e\u7f6e",
   "info.catalog.link":            "\u8bfe\u7a0b\u76ee\u5f55 \u2197",
 
+
+  // ── Translation ──────────────────────────────────────────────────────────────────
+  "translation.toggle":             "\u7ffb\u8bd5\u8bfe\u7a0b\u5185\u5bb9",
+  "translation.toggle.hint.native": "\u7531 Chrome AI \u63d0\u4f9b \u2014 \u5373\u65f6\u7ffb\u8bd5",
+  "translation.toggle.hint.wasm":   "\u4e00\u6b21\u6027\u4e0b\u8f7d\u7ea6 890 MB\uff0c\u4e4b\u540e\u53ef\u79bb\u7ebf\u4f7f\u7528",
+  "translation.toggle.hint.cached": "\u6a21\u578b\u5df2\u7f13\u5b58 \u2014 \u652f\u6301\u79bb\u7ebf\u4f7f\u7528",
+  "translation.english.note":       "\u8bfe\u7a0b\u5185\u5bb9\u4e3a\u82f1\u6587",
+  "translation.enable":             "\u7ffb\u8bd5 \u2192",
+  "translation.downloading":        "\u6b63\u5728\u4e0b\u8f7d\u7ffb\u8bd5\u6a21\u578b\u2026",
+  "translation.progress.of":        "/",
+  "translation.cancel":             "\u53d6\u6d88",
+  "translation.cancel.title":       "\u53d6\u6d88\u4e0b\u8f7d",
+  "translation.clear.cache":        "\u6e05\u9664\u7f13\u5b58",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle": "\u975e\u5b98\u65b9\u5b66\u4e1a\u89c4\u5212\u5de5\u5177",
   "modal.dismiss":  "\u6211\u5df2\u4e86\u89e3 \u2014 \u5f00\u59cb\u89c4\u5212\uff01",

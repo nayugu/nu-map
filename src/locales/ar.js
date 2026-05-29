@@ -162,6 +162,19 @@ export const strings = {
   "legend.substitution-prereq-order": "متطلب سابق بديل (ترتيب خاطئ)",
   "legend.corequisite-viol":          "في غير موضعه",
 
+  // ── Translation ────────────────────────────────────────────────
+  "translation.toggle":             "ترجمة محتوى المقررات",
+  "translation.toggle.hint.native": "مدعوم بـ Chrome AI — فوري",
+  "translation.toggle.hint.wasm":   "تنزيل لمرة واحدة ~890 ميغابايت، ثم يعمل بدون إنترنت",
+  "translation.toggle.hint.cached": "النموذج محفوظ — يعمل بدون إنترنت",
+  "translation.english.note":       "محتوى المقررات بالإنجليزية",
+  "translation.enable":             "← ترجمة",
+  "translation.downloading":        "جارٍ تنزيل نموذج الترجمة…",
+  "translation.progress.of":        "من",
+  "translation.cancel":             "إلغاء",
+  "translation.cancel.title":       "إلغاء التنزيل",
+  "translation.clear.cache":        "مسح التخزين المؤقت",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "أداة تخطيط طلابية غير رسمية",
   "modal.dismiss":    "فهمت — دعني أخطط!",

@@ -163,6 +163,19 @@ export const strings = {
   "legend.substitution-prereq-order": "प्रतिस्थापित पूर्व-आवश्यकता (गलत क्रम)",
   "legend.corequisite-viol":          "गलत स्थान",
 
+  // ── Translation ────────────────────────────────────────────────
+  "translation.toggle":             "पाठ्यक्रम सामग्री अनुवाद करें",
+  "translation.toggle.hint.native": "Chrome AI द्वारा — तत्काल",
+  "translation.toggle.hint.wasm":   "एकबारगी ~890 MB डाउनलोड, फिर ऑफ़लाइन",
+  "translation.toggle.hint.cached": "मॉडल कैश्ड — ऑफ़लाइन उपलब्ध",
+  "translation.english.note":       "पाठ्यक्रम सामग्री अंग्रेज़ी में",
+  "translation.enable":             "अनुवाद करें →",
+  "translation.downloading":        "अनुवाद मॉडल डाउनलोड हो रहा है…",
+  "translation.progress.of":        "में से",
+  "translation.cancel":             "रद्द करें",
+  "translation.cancel.title":       "डाउनलोड रद्द करें",
+  "translation.clear.cache":        "कैश साफ़ करें",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "ग़ैर-आधिकारिक छात्र योजना उपकरण",
   "modal.dismiss":    "मैं समझ गया — योजना शुरू करें!",

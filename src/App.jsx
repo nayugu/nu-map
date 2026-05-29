@@ -3,6 +3,7 @@ import { PlannerProvider, usePlanner } from './context/PlannerContext.jsx';
 import { ThemeProvider }               from './context/ThemeContext.jsx';
 import { InstitutionProvider }         from './context/InstitutionContext.jsx';
 import { LanguageProvider }            from './context/LanguageContext.jsx';
+import { TranslationProvider }         from './context/TranslationContext.jsx';
 import { institutionAdapter }          from './config.js';
 import LoadingScreen   from './ui/LoadingScreen.jsx';
 import RelationLines   from './ui/RelationLines.jsx';
@@ -103,9 +104,11 @@ export default function App() {
     <ThemeProvider storagePrefix={institutionAdapter.institution.storagePrefix}>
       <InstitutionProvider adapter={institutionAdapter}>
         <LanguageProvider>
-          <PlannerProvider>
-            <PlannerApp />
-          </PlannerProvider>
+          <TranslationProvider>
+            <PlannerProvider>
+              <PlannerApp />
+            </PlannerProvider>
+          </TranslationProvider>
         </LanguageProvider>
       </InstitutionProvider>
     </ThemeProvider>

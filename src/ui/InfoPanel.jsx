@@ -11,6 +11,7 @@ import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
+import { useTranslation, useCourseTranslation } from "../context/TranslationContext.jsx";
 
 export default function InfoPanel() {
   const {
@@ -156,9 +157,16 @@ function CourseInfo({ selCourse, navTo }) {
   const creditSystem    = usePort(ICreditSystem);
   const calendar        = usePort(ICalendar);
   const courseCatalog   = usePort(ICourseCatalog);
-  const { t } = useLanguage();
+  const { t, locale, locales } = useLanguage();
+  const { modelProgress, engineTier, courseTranslationEnabled, setCourseTranslationEnabled, cancelDownload } = useTranslation();
+  const { title, desc, isTranslating } = useCourseTranslation(selCourse);
+
   const catalogUrl = courseCatalog?.courseUrl?.(selCourse) ?? null;
   const [codeHover, setCodeHover] = useState(false);
+
+  const dir     = locales.find(l => l.code === locale)?.dir ?? "ltr";
+  const isNonEn = locale !== "en";
+
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, flexWrap: "wrap" }}>
@@ -181,7 +189,14 @@ function CourseInfo({ selCourse, navTo }) {
             textUnderlineOffset: 3,
           }}
         >{selCourse.code}</span>
-        <span style={{ fontSize: 12, color: "var(--text-3)" }}>{selCourse.title}</span>
+        <span
+          dir={isNonEn ? dir : undefined}
+          style={{
+            fontSize: 12, color: "var(--text-3)",
+            opacity: isTranslating ? 0.45 : 1,
+            transition: "opacity 0.2s",
+          }}
+        >{title}</span>
         <span style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 3, padding: "1px 6px" }}>
           {selCourse.sh} {creditSystem.getUnitName()}
         </span>
@@ -205,10 +220,70 @@ function CourseInfo({ selCourse, navTo }) {
           </a>
         )}
       </div>
+
+      {/* Non-English: nudge to enable translation, or show download progress */}
+      {isNonEn && !courseTranslationEnabled && (
+        <div style={{ marginBottom: 5, display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontSize: 9, color: "var(--text-5)" }}>{t("translation.english.note")}</span>
+          <button
+            onClick={() => setCourseTranslationEnabled(true)}
+            style={{
+              fontSize: 9, padding: "1px 7px", borderRadius: 3, cursor: "pointer",
+              background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+              color: "var(--text-3)",
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = "var(--active)"}
+            onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
+          >{t("translation.enable")}</button>
+        </div>
+      )}
+      {isNonEn && courseTranslationEnabled && engineTier === "wasm" && modelProgress && (
+        <div style={{ marginBottom: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
+            <span style={{ fontSize: 9, color: "var(--text-4)", flex: 1 }}>
+              {t("translation.downloading")}
+              {modelProgress.total > 0 && (
+                <span style={{ marginLeft: 4, color: "var(--text-5)" }}>
+                  {Math.round((modelProgress.loaded / modelProgress.total) * 100)}%{" "}
+                  {t("translation.progress.of")} ~890 MB
+                </span>
+              )}
+            </span>
+            <button
+              onClick={cancelDownload}
+              title={t("translation.cancel.title")}
+              style={{
+                fontSize: 9, padding: "1px 6px", borderRadius: 3, cursor: "pointer",
+                background: "transparent", border: "1px solid var(--border-2)",
+                color: "var(--text-4)", lineHeight: 1.4, flexShrink: 0,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
+            >{t("translation.cancel")}</button>
+          </div>
+          <div style={{ height: 2, borderRadius: 99, background: "var(--border-1)", overflow: "hidden" }}>
+            <div style={{
+              height: "100%", borderRadius: 99, background: "var(--active)",
+              width: modelProgress.total > 0
+                ? `${Math.round((modelProgress.loaded / modelProgress.total) * 100)}%`
+                : "30%",
+              transition: "width 0.3s ease",
+            }} />
+          </div>
+        </div>
+      )}
+
       {selCourse.desc && (
-        <div style={{ fontSize: 11, color: "var(--text-3)", lineHeight: 1.55, marginBottom: 4 }}>
+        <div
+          dir={isNonEn ? dir : undefined}
+          style={{
+            fontSize: 11, color: "var(--text-3)", lineHeight: 1.55, marginBottom: 4,
+            opacity: isTranslating ? 0.45 : 1,
+            transition: "opacity 0.2s",
+          }}
+        >
           <DescriptionWithLinks
-            text={selCourse.desc}
+            text={desc}
             courseMap={courseMap}
             placements={placements}
             navTo={navTo}

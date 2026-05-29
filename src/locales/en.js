@@ -169,10 +169,14 @@ export const strings = {
   "translation.toggle":             "Translate course content",
   "translation.toggle.hint.native": "Powered by Chrome AI — instant",
   "translation.toggle.hint.wasm":   "~890 MB one-time download, then offline",
+  "translation.toggle.hint.cached": "Model cached — works offline",
   "translation.english.note":       "Course content in English",
   "translation.enable":             "Translate →",
   "translation.downloading":        "Downloading translation model…",
   "translation.progress.of":        "of",
+  "translation.cancel":             "Cancel",
+  "translation.cancel.title":       "Cancel model download",
+  "translation.clear.cache":        "Clear cache",
 
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "Unofficial student planning tool",
