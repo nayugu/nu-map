@@ -82,6 +82,12 @@ function loadModel() {
     "translation",
     "Xenova/nllb-200-distilled-600M",
     {
+      // Disable the graph optimizer to work around a bug in ORT dev build
+      // onnxruntime-web@1.26.0-dev bundled with @huggingface/transformers@4.2:
+      // TransposeDQWeightsForMatMulNBits crashes with "Missing required scale"
+      // on the shared embedding in this model.  Disabling optimizations has
+      // a modest inference-speed cost but is functionally equivalent.
+      session_options: { graphOptimizationLevel: "disabled" },
       progress_callback(p) {
         if (p.status === "progress" && p.file) {
           fileBytes.set(p.file, { loaded: p.loaded ?? 0, total: p.total ?? 0 });
