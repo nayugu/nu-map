@@ -21,6 +21,13 @@ import { pipeline, env } from "@huggingface/transformers";
 
 env.allowLocalModels = false;
 
+// Force single-threaded ONNX inference.  Multithreaded WASM requires
+// SharedArrayBuffer, which is only available under cross-origin isolation
+// (COOP + COEP headers).  Static hosts like GitHub Pages don't set those
+// headers, so the threaded session would throw and the error gets silently
+// swallowed.  Single-threaded is slower but works everywhere.
+env.backends.onnx.wasm.numThreads = 1;
+
 // FLORES-200 language codes required by NLLB-200.
 // Extend this map if new locales are added to src/locales/.
 const NLLB_LANG = {
@@ -55,15 +62,22 @@ function loadModel() {
           const loaded = [...fileBytes.values()].reduce((s, f) => s + f.loaded, 0);
           const total  = [...fileBytes.values()].reduce((s, f) => s + f.total,  0);
           self.postMessage({ type: "progress", loaded, total });
-        } else if (p.status === "ready") {
-          self.postMessage({ type: "model-ready" });
         }
       },
     }
   ).then(pipe => {
     translator = pipe;
     loadingPromise = null;
+    // Send model-ready here — pipeline is fully initialised and translate()
+    // calls will succeed immediately.  The callback's status==="ready" fires
+    // before the promise resolves, so sending it there was premature.
+    self.postMessage({ type: "model-ready" });
     return translator;
+  }).catch(err => {
+    // Reset so a retry attempt can start a fresh load instead of re-throwing
+    // the same cached rejected promise forever.
+    loadingPromise = null;
+    throw err;
   });
 
   return loadingPromise;
