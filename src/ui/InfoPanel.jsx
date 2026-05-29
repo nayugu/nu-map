@@ -158,14 +158,14 @@ function CourseInfo({ selCourse, navTo }) {
   const calendar        = usePort(ICalendar);
   const courseCatalog   = usePort(ICourseCatalog);
   const { t, locale, locales } = useLanguage();
-  const { modelProgress, engineTier, courseTranslationEnabled, setCourseTranslationEnabled, cancelDownload } = useTranslation();
+  const { modelProgress, engineTier, catalogLocale, courseTranslationEnabled, setCourseTranslationEnabled, cancelDownload } = useTranslation();
   const { title, desc, isTranslating } = useCourseTranslation(selCourse);
 
   const catalogUrl = courseCatalog?.courseUrl?.(selCourse) ?? null;
   const [codeHover, setCodeHover] = useState(false);
 
   const dir     = locales.find(l => l.code === locale)?.dir ?? "ltr";
-  const isNonEn = locale !== "en";
+  const isNonEn = locale !== catalogLocale;
 
   return (
     <div style={{ flex: 1, minWidth: 0 }}>

@@ -46,12 +46,12 @@ export class TransformersJsEngine {
     });
   }
 
-  async translate(texts, targetLocale) {
+  async translate(texts, targetLocale, sourceLocale = "en") {
     this.#ensureWorker();
     const id = this.#nextId++;
     return new Promise((resolve, reject) => {
       this.#pending.set(id, { resolve, reject });
-      this.#worker.postMessage({ type: "translate", id, texts, targetLocale });
+      this.#worker.postMessage({ type: "translate", id, texts, targetLocale, sourceLocale });
     });
   }
 

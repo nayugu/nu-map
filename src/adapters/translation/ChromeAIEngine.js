@@ -19,15 +19,15 @@ export class ChromeAIEngine {
   /** @type {(() => void) | null} */
   onReady = null;
 
-  // Reuse translator instances per locale to avoid repeated API creation.
-  #instances = new Map(); // targetLocale → Translator instance
+  // Reuse translator instances per language pair to avoid repeated API creation.
+  #instances = new Map(); // "srcLocale→tgtLocale" → Translator instance
 
-  async isAvailable(targetLocale) {
+  async isAvailable(targetLocale, sourceLocale = "en") {
     const api = getAPI();
     if (!api) return false;
     try {
       const status = await api.availability({
-        sourceLanguage: "en",
+        sourceLanguage: sourceLocale,
         targetLanguage: targetLocale,
       });
       return status !== "no";
@@ -36,13 +36,14 @@ export class ChromeAIEngine {
     }
   }
 
-  async translate(texts, targetLocale) {
+  async translate(texts, targetLocale, sourceLocale = "en") {
     const api = getAPI();
 
-    if (!this.#instances.has(targetLocale)) {
+    const key = `${sourceLocale}→${targetLocale}`;
+    if (!this.#instances.has(key)) {
       const self = this;
       const t = await api.create({
-        sourceLanguage: "en",
+        sourceLanguage: sourceLocale,
         targetLanguage: targetLocale,
         monitor(m) {
           m.addEventListener("downloadprogress", e => {
@@ -50,11 +51,11 @@ export class ChromeAIEngine {
           });
         },
       });
-      this.#instances.set(targetLocale, t);
+      this.#instances.set(key, t);
       this.onReady?.();
     }
 
-    const t = this.#instances.get(targetLocale);
+    const t = this.#instances.get(key);
     return Promise.all(
       texts.map(text => (text ? t.translate(text) : Promise.resolve("")))
     );

@@ -42,7 +42,7 @@ export default function Header() {
   const { t, locale, setLocale, locales } = useLanguage();
   const {
     courseTranslationEnabled, setCourseTranslationEnabled,
-    engineTier, modelProgress, modelCached,
+    catalogLocale, engineTier, modelProgress, modelCached,
     cancelDownload, clearModelCache,
   } = useTranslation();
   const adapter = useInstitution();
@@ -725,7 +725,7 @@ export default function Header() {
                   <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.language")}</div>
                   <LanguagePicker locale={locale} locales={locales} setLocale={setLocale} />
 
-                  {locale !== "en" && (
+                  {locale !== catalogLocale && (
                     <div style={{ marginTop: 7 }}>
                       <label style={{ display: "flex", alignItems: "flex-start", gap: 6, cursor: "pointer", userSelect: "none" }}>
                         <input

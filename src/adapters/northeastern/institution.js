@@ -10,6 +10,7 @@ export default {
   url:              "https://www.northeastern.edu",
   appName:          "NU Map",
   defaultLocale:    "en",
+  contentLocale:    "en",
   portalName:       "MyNEU",
   degreeAuditName:  "DegreeWorks",
   storagePrefix:    "ncp",

@@ -45,6 +45,10 @@ export const IInstitution = "institution";
  * @property {string}       [defaultLocale]  - BCP-47 locale code used on first load, e.g. "en".
  *                                             Users can override at runtime via the language picker.
  *                                             Defaults to "en" if omitted.
+ * @property {string}       [contentLocale]  - BCP-47 locale of the course catalog content, e.g. "en".
+ *                                             Translation is suppressed when the active UI locale
+ *                                             matches this value.  Defaults to defaultLocale ?? "en"
+ *                                             if omitted.
  * @property {string}       [logoUrl]        - URL to the institution wordmark or app logo.
  *                                             Relative paths are resolved from BASE_URL.
  *                                             Falls back to the default logo if omitted.

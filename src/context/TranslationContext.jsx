@@ -70,7 +70,7 @@ async function deleteModelCache() {
 
 // ── Provider ───────────────────────────────────────────────────────
 
-export function TranslationProvider({ children }) {
+export function TranslationProvider({ catalogLocale = "en", children }) {
   const { locale } = useLanguage();
 
   const engineRef = useRef(null);
@@ -94,9 +94,9 @@ export function TranslationProvider({ children }) {
     checkModelCached().then(setModelCached);
   }, []);
 
-  // Select best available engine the first time locale becomes non-English.
+  // Select best available engine the first time locale differs from catalog locale.
   useEffect(() => {
-    if (locale === "en") {
+    if (locale === catalogLocale) {
       engineRef.current?.destroy?.();
       engineRef.current = null;
       setEngineTier(null);
@@ -108,7 +108,7 @@ export function TranslationProvider({ children }) {
     (async () => {
       let engine;
       const chrome = new ChromeAIEngine();
-      if (await chrome.isAvailable(locale)) {
+      if (await chrome.isAvailable(locale, catalogLocale)) {
         engine = chrome;
       } else {
         engine = new TransformersJsEngine();
@@ -121,18 +121,18 @@ export function TranslationProvider({ children }) {
       engineRef.current = engine;
       setEngineTier(engine.tier);
     })();
-  }, [locale]);
+  }, [locale, catalogLocale]);
 
-  // Core translate — stable, no state deps.
+  // Core translate — depends on catalogLocale so engines use correct source lang.
   const translate = useCallback(async (texts, targetLocale) => {
-    if (targetLocale === "en") return texts;
+    if (targetLocale === catalogLocale) return texts;
     const engine = engineRef.current;
     if (!engine) return texts;
 
     const results = new Array(texts.length);
     const uncached = [];
     texts.forEach((text, i) => {
-      const key = `${text}::${targetLocale}`;
+      const key = `${text}::${catalogLocale}→${targetLocale}`;
       if (cacheRef.current.has(key)) {
         results[i] = cacheRef.current.get(key);
       } else {
@@ -144,6 +144,7 @@ export function TranslationProvider({ children }) {
       const translated = await engine.translate(
         uncached.map(u => u.text),
         targetLocale,
+        catalogLocale,
       );
       uncached.forEach(({ i, key }, j) => {
         const val = translated[j] ?? texts[i];
@@ -152,7 +153,7 @@ export function TranslationProvider({ children }) {
       });
     }
     return results;
-  }, []);
+  }, [catalogLocale]);
 
   // Cancel an in-progress download: terminate the worker and wipe any
   // partial files so the next attempt starts clean.
@@ -183,6 +184,7 @@ export function TranslationProvider({ children }) {
   return (
     <TranslationContext.Provider value={{
       translate,
+      catalogLocale,
       engineTier,
       modelProgress,
       modelCached,
@@ -211,13 +213,13 @@ export function useTranslation() {
  */
 export function useCourseTranslation(course) {
   const { locale } = useLanguage();
-  const { translate, engineTier, courseTranslationEnabled } = useTranslation();
+  const { translate, catalogLocale, engineTier, courseTranslationEnabled } = useTranslation();
 
   const [translated,    setTranslated]    = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
 
   useEffect(() => {
-    if (!courseTranslationEnabled || locale === "en" || !course) {
+    if (!courseTranslationEnabled || locale === catalogLocale || !course) {
       setTranslated(null);
       setIsTranslating(false);
       return;
@@ -244,9 +246,9 @@ export function useCourseTranslation(course) {
       });
 
     return () => { cancelled = true; };
-  }, [course?.id, locale, engineTier, courseTranslationEnabled, translate]);
+  }, [course?.id, locale, catalogLocale, engineTier, courseTranslationEnabled, translate]);
 
-  const active = courseTranslationEnabled && locale !== "en";
+  const active = courseTranslationEnabled && locale !== catalogLocale;
   return {
     title:         translated?.title ?? course?.title ?? "",
     desc:          translated?.desc  ?? course?.desc  ?? "",

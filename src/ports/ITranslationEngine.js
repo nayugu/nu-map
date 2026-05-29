@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 // PORT: ITranslationEngine
 //
-// Translates arrays of English strings to a target locale.
+// Translates arrays of strings from a source locale to a target locale.
 // Three adapters exist, selected at runtime in priority order:
 //
 //   1. ChromeAIEngine   — Chrome 138+ built-in Translator API.
@@ -34,16 +34,17 @@
  *
  * @property {EngineTier} tier
  *
- * @property {(targetLocale: string) => Promise<boolean>} isAvailable
- *   Returns true if this engine can translate to the given locale.
+ * @property {(targetLocale: string, sourceLocale: string) => Promise<boolean>} isAvailable
+ *   Returns true if this engine can translate from sourceLocale to targetLocale.
  *   May be async (e.g. Chrome AI checks model availability over IPC).
  *
  * @property {(
  *     texts: string[],
  *     targetLocale: string,
+ *     sourceLocale: string,
  *     onProgress?: (p: TranslationProgress) => void
  *   ) => Promise<string[]>} translate
- *   Translate an array of English strings to targetLocale.
+ *   Translate an array of strings from sourceLocale to targetLocale.
  *   Returns a parallel array of translated strings.
  *   onProgress fires during model loading only (not per-string).
  *   Empty strings pass through as-is.

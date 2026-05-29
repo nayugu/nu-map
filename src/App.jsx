@@ -104,7 +104,7 @@ export default function App() {
     <ThemeProvider storagePrefix={institutionAdapter.institution.storagePrefix}>
       <InstitutionProvider adapter={institutionAdapter}>
         <LanguageProvider>
-          <TranslationProvider>
+          <TranslationProvider catalogLocale={institutionAdapter.institution?.contentLocale ?? institutionAdapter.institution?.defaultLocale ?? "en"}>
             <PlannerProvider>
               <PlannerApp />
             </PlannerProvider>
