@@ -168,6 +168,7 @@ export const strings = {
   // ── Translation ────────────────────────────────────────────────
   "translation.toggle":             "Translate course content",
   "translation.toggle.hint.native": "Powered by Chrome AI — instant",
+  "translation.toggle.hint.api":    "Online · results cached locally",
   "translation.toggle.hint.wasm":   "~890 MB one-time download, then offline",
   "translation.toggle.hint.cached": "Model cached — works offline",
   "translation.english.note":       "Course content in English",

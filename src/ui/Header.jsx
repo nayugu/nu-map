@@ -743,11 +743,13 @@ export default function Header() {
                             <span style={{ fontSize: 9, color: "var(--text-5)" }}>
                               {engineTier === "native"
                                 ? t("translation.toggle.hint.native")
-                                : modelProgress
-                                  ? `${Math.round((modelProgress.loaded / (modelProgress.total || 1)) * 100)}% ${t("translation.progress.of")} ~890 MB`
-                                  : modelCached
-                                    ? t("translation.toggle.hint.cached")
-                                    : t("translation.toggle.hint.wasm")}
+                                : engineTier === "api"
+                                  ? t("translation.toggle.hint.api")
+                                  : modelProgress
+                                    ? `${Math.round((modelProgress.loaded / (modelProgress.total || 1)) * 100)}% ${t("translation.progress.of")} ~890 MB`
+                                    : modelCached
+                                      ? t("translation.toggle.hint.cached")
+                                      : t("translation.toggle.hint.wasm")}
                             </span>
                             {/* Cancel button — visible while downloading */}
                             {engineTier === "wasm" && modelProgress && (
