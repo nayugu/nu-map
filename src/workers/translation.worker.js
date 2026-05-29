@@ -27,6 +27,13 @@
 import * as ort from "onnxruntime-web";
 import { pipeline, env } from "@huggingface/transformers";
 
+// Force single-threaded ORT.  With numThreads > 1, ORT spawns WASM pthread
+// sub-workers from inside our Web Worker; those sub-workers can't resolve the
+// blob factory URL and hang indefinitely, causing the "stuck at 100%" symptom.
+// numThreads = 1 runs the threaded WASM binary in single-thread mode: no
+// sub-workers are created, SharedArrayBuffer is not required.
+ort.env.wasm.numThreads = 1;
+
 // Safari uses the standard threaded variant; other browsers use asyncify.
 const _isSafari = /apple/i.test(navigator.vendor ?? "");
 ort.env.wasm.wasmPaths = _isSafari
@@ -55,16 +62,6 @@ let loadingPromise = null;
 function loadModel() {
   if (translator) return Promise.resolve(translator);
   if (loadingPromise) return loadingPromise;
-
-  // The threaded WASM backend requires SharedArrayBuffer.  It is enabled by the
-  // coi-serviceworker (COOP/COEP headers).  On first page load the SW activates
-  // and the page reloads; SAB is available from that second load onward.
-  if (typeof SharedArrayBuffer === "undefined") {
-    return Promise.reject(new Error(
-      "SharedArrayBuffer unavailable — cross-origin isolation not active. " +
-      "Reload the page; the service worker will activate and enable it."
-    ));
-  }
 
   // Track bytes per file so overall progress never goes backwards.
   // @huggingface/transformers fires progress_callback once per file,
