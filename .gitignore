@@ -4,3 +4,5 @@ public/ort/
 .DS_Store
 .mypy_cache/
 *.py
+.env.local
+.env*.local

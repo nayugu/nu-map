@@ -11,7 +11,11 @@
 // ═══════════════════════════════════════════════════════════════════
 
 const MODEL = "Qwen/Qwen2.5-1.5B-Instruct";
-const API   = `https://router.huggingface.co/hf-inference/models/${MODEL}/v1/chat/completions`;
+// api-inference.huggingface.co adds Access-Control-Allow-Origin when a valid
+// Authorization header is present (even a free read-only HF token works).
+// Set VITE_HF_TOKEN in .env.local (dev) or Netlify env vars (prod).
+const API   = `https://api-inference.huggingface.co/models/${MODEL}/v1/chat/completions`;
+const TOKEN = import.meta.env.VITE_HF_TOKEN ?? "";
 
 const LANG_NAME = {
   en: "English",
@@ -86,9 +90,12 @@ export class HFInferenceEngine {
   async #stream(text, systemMsg, onToken) {
     this.#abort = new AbortController();
 
+    const headers = { "Content-Type": "application/json" };
+    if (TOKEN) headers["Authorization"] = `Bearer ${TOKEN}`;
+
     const response = await fetch(API, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       signal: this.#abort.signal,
       body: JSON.stringify({
         model: MODEL,
