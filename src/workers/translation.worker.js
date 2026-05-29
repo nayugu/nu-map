@@ -22,9 +22,11 @@
 // @huggingface/transformers@4.2 sets wasmPaths to jsDelivr CDN (a dev-build URL
 // that may not resolve).  We override it to use the locally-served WASM files
 // in /public/ort/ — same-origin, no CDN availability issues.
-// This override is read lazily by ORT at first InferenceSession creation, so
-// setting it here (after module init but before any loadModel() call) is safe.
-import * as ort from "onnxruntime-web";
+// IMPORTANT: must import from "onnxruntime-web/webgpu" (not "onnxruntime-web") because
+// that is the exact entry point @huggingface/transformers uses internally.  Vite deduplicates
+// identical specifiers into one module instance; mismatched specifiers produce separate
+// instances with separate env.wasm objects, so our overrides would be silently ignored.
+import * as ort from "onnxruntime-web/webgpu";
 import { pipeline, env } from "@huggingface/transformers";
 
 // Force single-threaded ORT.  With numThreads > 1, ORT spawns WASM pthread
