@@ -21,13 +21,6 @@ import { pipeline, env } from "@huggingface/transformers";
 
 env.allowLocalModels = false;
 
-// Force single-threaded ONNX inference.  Multithreaded WASM requires
-// SharedArrayBuffer, which is only available under cross-origin isolation
-// (COOP + COEP headers).  Static hosts like GitHub Pages don't set those
-// headers, so the threaded session would throw and the error gets silently
-// swallowed.  Single-threaded is slower but works everywhere.
-env.backends.onnx.wasm.numThreads = 1;
-
 // FLORES-200 language codes required by NLLB-200.
 // Extend this map if new locales are added to src/locales/.
 const NLLB_LANG = {
