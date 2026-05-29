@@ -3,7 +3,8 @@
   publish   = "dist"
 
 [build.environment]
-  GIT_SUBMODULE_STRATEGY = "recursive"
+  # Top-level only; recursive was tripping a "No url found" git error.
+  GIT_SUBMODULE_STRATEGY = "normal"
 
 [[redirects]]
   from   = "/*"
