@@ -31,7 +31,7 @@ export default function Header() {
     collapseOtherCredits, setCollapseOtherCredits,
     showContLogo, setShowContLogo,
     stickyCourses, setStickyCourses,
-    exportPlanJSON, importPlanJSON,
+    exportPlanJSON, importPlanJSON, copyPlanLink,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
     major, conc, minor1, minor2,
     placedOut, substitutions,
@@ -45,6 +45,7 @@ export default function Header() {
   const [showQuickSet, setShowQuickSet] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
+  const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [planSearch, setPlanSearch] = useState("");
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -531,6 +532,25 @@ export default function Header() {
               padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
             }}>
+              <button className="hdr-btn-dd"
+                title={t("header.io.share.title")}
+                onClick={async () => {
+                  try {
+                    await copyPlanLink();
+                    setShareLinkCopied(true);
+                    setTimeout(() => setShareLinkCopied(false), 2000);
+                  } catch {
+                    alert(t("header.io.share.error") ?? "Could not copy link.");
+                  }
+                }}
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: shareLinkCopied ? "var(--active)" : "var(--bg-surface)",
+                  padding: "4px 8px", borderRadius: 5,
+                  border: `1px solid ${shareLinkCopied ? "var(--active)" : "var(--border-2)"}`,
+                  color: shareLinkCopied ? "#fff" : "var(--text-4)",
+                  transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
+                {shareLinkCopied ? (t("header.io.share.done") ?? "Link copied!") : (t("header.io.share") ?? "Share link")}
+              </button>
               <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title={t("header.io.copy.title")}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,

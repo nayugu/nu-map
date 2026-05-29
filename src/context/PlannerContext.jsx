@@ -17,6 +17,7 @@ import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
+import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
 import { ICalendar }      from "../ports/ICalendar.js";
@@ -1488,37 +1489,80 @@ export function PlannerProvider({ children }) {
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
 
+  const applyPlanData = (d) => {
+    pushUndo();
+    setPlacements(d.placements ?? {});
+    setSpecialTermPl(migrateSpecialTermPl(d));
+    setSemOrders(d.semOrders ?? {});
+    setShOverrides(prev => d.shOverrides ?? prev);
+    setOfferedOverrides(prev => d.offeredOverrides ?? prev);
+    setCollapsedSubs(prev => d.collapsedSubs ?? prev);
+    setBonusSH(d.bonusSH ?? 0);
+    setPlacedOut(new Set(Array.isArray(d.placedOut) ? d.placedOut : []));
+    setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
+    if (d.currentSemId) setCurrentSemId(d.currentSemId);
+    if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem(key("ent-sem"),  d.entSem);  } catch {} }
+    if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem(key("ent-year"), d.entYear); } catch {} }
+    if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem(key("grad-sem"), d.gradSem); } catch {} }
+    if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
+    setMajor(d.major ?? "");
+    setConc(d.conc ?? "");
+    setMinor1(d.minor1 ?? "");
+    setMinor2(d.minor2 ?? "");
+  };
+
   const importPlanJSON = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
       try {
         const d = JSON.parse(reader.result);
         if (d.version !== 1) { alert("Unrecognized plan file format."); return; }
-        pushUndo();
-        setPlacements(d.placements ?? {});
-        setSpecialTermPl(migrateSpecialTermPl(d));
-        setSemOrders(d.semOrders ?? {});
-        setShOverrides(prev => d.shOverrides ?? prev);
-        setOfferedOverrides(prev => d.offeredOverrides ?? prev);
-        setCollapsedSubs(prev => d.collapsedSubs ?? prev);
-        setBonusSH(d.bonusSH ?? 0);
-        setPlacedOut(new Set(Array.isArray(d.placedOut) ? d.placedOut : []));
-        setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
-        if (d.currentSemId) setCurrentSemId(d.currentSemId);
-        if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem(key("ent-sem"),  d.entSem);  } catch {} }
-        if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem(key("ent-year"), d.entYear); } catch {} }
-        if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem(key("grad-sem"), d.gradSem); } catch {} }
-        if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
-        setMajor(d.major ?? "");
-        setConc(d.conc ?? "");
-        setMinor1(d.minor1 ?? "");
-        setMinor2(d.minor2 ?? "");
+        applyPlanData(d);
       } catch (err) {
         alert("Could not read plan file: " + err.message);
       }
     };
     reader.readAsText(file);
   };
+
+  const copyPlanLink = async () => {
+    const planName = plans.find(p => p.id === activePlanId)?.name || "Plan";
+    const data = {
+      ...captureCurrentPlan(),
+      substitutions,
+      planName,
+    };
+    const encoded = await encodePlan(data);
+    const url = buildShareUrl(encoded);
+    await navigator.clipboard.writeText(url);
+  };
+
+  // Create a new plan slot pre-populated with shared data, then switch to it.
+  const importSharedPlan = (d) => {
+    saveCurrentPlanToSlot();
+    const id = `plan_${Date.now()}`;
+    const name = `Snapshot — ${d.planName || "Plan"}`;
+    // Pre-write so the activePlanId useEffect finds data and calls restorePlan.
+    try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
+    setPlans(prev => [...prev, { id, name }]);
+    setActivePlanId(id);
+    // restorePlan doesn't handle substitutions, so set them directly.
+    setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
+  };
+
+  // On mount: detect a shared plan in the URL hash and offer to load it as a new plan.
+  useEffect(() => {
+    const encoded = getHashPlanParam();
+    if (!encoded) return;
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    decodePlan(encoded)
+      .then(d => {
+        if (d.version !== 1) { alert("Unrecognized shared plan format."); return; }
+        if (!window.confirm("Load the shared plan? It will open as a new plan alongside your existing ones.")) return;
+        importSharedPlan(d);
+      })
+      .catch(() => alert("Could not decode the shared plan link."));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Cohort setters that also persist to localStorage ─────────
   // When stickyCourses is on, snapshot placements + SEMESTERS before changing
@@ -1731,7 +1775,7 @@ export function PlannerProvider({ children }) {
     }),
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    resetAll, exportPlanJSON, importPlanJSON,
+    resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,
