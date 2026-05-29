@@ -23,9 +23,29 @@
       /* Prevent browser text-selection on draggable cards (fixes serif font flash on touch) */
       [data-drag-id] { -webkit-user-select: none; user-select: none; }
     </style>
-    <script type="module" crossorigin src="/nu-map/assets/index-D4PWzaV7.js"></script>
+    <script type="module" crossorigin src="/nu-map/assets/index-DmqQG_Fy.js"></script>
   </head>
   <body>
+    <!-- Register COI service worker so SharedArrayBuffer is available for
+         ONNX Runtime's multithreaded WASM.  Only needed on hosts (e.g. GitHub
+         Pages) that don't set COOP/COEP headers natively.  The SW intercepts
+         responses and injects those headers; a single page reload activates it. -->
+    <script>
+      if ("serviceWorker" in navigator && !crossOriginIsolated) {
+        navigator.serviceWorker.register("./coi-serviceworker.js").then(function (reg) {
+          if (!navigator.serviceWorker.controller) {
+            // First activation — reload so the SW can serve this page with headers.
+            reg.addEventListener("updatefound", function () {
+              reg.installing.addEventListener("statechange", function () {
+                if (this.state === "activated") location.reload();
+              });
+            });
+          }
+        }).catch(function (err) {
+          console.warn("[coi-serviceworker] registration failed:", err);
+        });
+      }
+    </script>
     <div id="root"></div>
   </body>
 </html>
