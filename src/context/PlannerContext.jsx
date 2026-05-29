@@ -1541,7 +1541,8 @@ export function PlannerProvider({ children }) {
   const importSharedPlan = (d) => {
     saveCurrentPlanToSlot();
     const id = `plan_${Date.now()}`;
-    const name = `Snapshot — ${d.planName || "Plan"}`;
+    const base = d.planName || "Plan";
+    const name = base.startsWith('/') ? '/' + base : '/ ' + base;
     // Pre-write so the activePlanId useEffect finds data and calls restorePlan.
     try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
     setPlans(prev => [...prev, { id, name }]);
