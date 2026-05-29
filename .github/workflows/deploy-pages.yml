@@ -48,9 +48,15 @@ jobs:
           # Stash the built files
           cp -r dist/ /tmp/gh-pages-deploy
 
+          # Discard any tracked-file changes so checkout doesn't abort
+          git restore . 2>/dev/null || git checkout -- . 2>/dev/null || true
+
           # Switch to (or create) gh-pages branch as an orphan
           git fetch origin gh-pages 2>/dev/null && git checkout gh-pages || git checkout --orphan gh-pages
           git rm -rf --quiet . 2>/dev/null || true
+
+          # Exclude node_modules and other dev artifacts from the deploy commit
+          echo "node_modules/" > .gitignore
 
           # Copy dist contents (not the dist/ folder itself)
           cp -r /tmp/gh-pages-deploy/. .
