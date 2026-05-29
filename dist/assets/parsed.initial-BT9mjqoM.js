@@ -1,0 +1,1 @@
+const e="Expressive Therapies, Minor",t={verified:!1,lastEdited:"11/5/2025",branch:"main"},n=0,i=2025,a=[],s={minOptions:0,concentrationOptions:[]},o={name:e,metadata:t,totalCreditsRequired:n,yearVersion:i,requirementSections:a,concentrations:s};export{s as concentrations,o as default,t as metadata,e as name,a as requirementSections,n as totalCreditsRequired,i as yearVersion};
