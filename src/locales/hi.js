@@ -28,6 +28,7 @@ export const strings = {
   "bank.tab.grad":                "स्नातक",
   "bank.mode.bank":               "कोर्स बैंक",
   "bank.mode.grad":               "स्नातक आवश्यकताएँ",
+  "bank.mode.wide":               "चौड़ा",
   "bank.search.placeholder":      "⌕ खोजें",
   "bank.section.placedout":       "↪ छूट कोर्स",
   "bank.section.substitutions":   "⇄ प्रतिस्थापन",

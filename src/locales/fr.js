@@ -28,6 +28,7 @@ export const strings = {
   "bank.tab.grad":                "Diplôme",
   "bank.mode.bank":               "Banque de cours",
   "bank.mode.grad":               "Exigences de diplôme",
+  "bank.mode.wide":               "large",
   "bank.search.placeholder":      "⌕ rechercher",
   "bank.section.placedout":       "↪ COURS VALIDÉS",
   "bank.section.substitutions":   "⇄ SUBSTITUTIONS",

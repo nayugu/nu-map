@@ -29,6 +29,7 @@ export const strings = {
   "bank.tab.grad":                "卒業",
   "bank.mode.bank":               "コースバンク",
   "bank.mode.grad":               "卒業要件",
+  "bank.mode.wide":               "広い",
   "bank.search.placeholder":      "⌕ 検索",
   "bank.section.placedout":       "↪ 免除コース",
   "bank.section.substitutions":   "⇄ 代替コース",

@@ -218,7 +218,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
 function ReqNode({ r, depth = 0, dimmed = false }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
-  const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone } = useContext(GradCtx);
+  const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone, wideCatalog } = useContext(GradCtx);
   const pl               = depth * (isPhone ? 4 : 10);
   const rowMB            = isPhone ? 1 : 3;
   const nodeFz           = isPhone ? 8 : 10;
@@ -226,8 +226,8 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
   const baseIndent       = isPhone ? 2 : 4;
 
   if (r.type === "COURSE") {
-    const course    = courseMap?.[r.key];
-    const isSelected = selectedId === r.key;
+    const course       = courseMap?.[r.key];
+    const isSelected   = selectedId === r.key;
     const displayLabel = r.label.split(' — ')[0];
     return (
       <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
@@ -249,12 +249,24 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
           <span
             onMouseEnter={course ? () => setHov(true) : undefined}
             onMouseLeave={course ? () => setHov(false) : undefined}
-            style={{ fontSize: nodeFz, color: r.sat ? "var(--text-2)" : "var(--text-4)", fontWeight: r.sat ? 600 : 400, userSelect: "none",
+            style={{
+              fontSize: nodeFz, color: r.sat ? "var(--text-2)" : "var(--text-4)", fontWeight: r.sat ? 600 : 400, userSelect: "none",
               textDecoration: isSelected ? "underline" : hov ? "underline" : "none",
               textDecorationColor: "var(--text-4)",
-              textUnderlineOffset: 2 }}>
+              textUnderlineOffset: 2,
+              ...(wideCatalog ? { minWidth: 90, flexShrink: 0 } : {}),
+            }}>
             {displayLabel}
           </span>
+          {wideCatalog && course?.title && (
+            <span style={{
+              flex: 1, minWidth: 0, fontSize: nodeFz, color: "var(--text-5)",
+              fontWeight: 400, userSelect: "none",
+              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+            }}>
+              {course.title}
+            </span>
+          )}
         </div>
       </div>
     );
@@ -537,7 +549,7 @@ function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
 
 // ── Main panel ───────────────────────────────────────────────────
 
-export default function GradPanel() {
+export default function GradPanel({ wideCatalog = false }) {
   // Persist showMajorDetails state in localStorage
   const institution = usePort(IInstitution);
   const pfx = institution.storagePrefix;
@@ -668,7 +680,7 @@ export default function GradPanel() {
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
   return (
-    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, attributeSystem, majorRequirements }}>
+    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, attributeSystem, majorRequirements, wideCatalog }}>
       <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
         {/* ── Program selection (collapsible) ─────────────────── */}

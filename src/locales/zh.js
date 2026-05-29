@@ -28,6 +28,7 @@ export const strings = {
   "bank.tab.grad":                "\u6bd5\u4e1a",
   "bank.mode.bank":               "\u8bfe\u7a0b\u5e93",
   "bank.mode.grad":               "\u6bd5\u4e1a\u8981\u6c42",
+  "bank.mode.wide":               "\u5bbd\u5c4f",
   "bank.search.placeholder":      "\u2315 \u641c\u7d22",
   "bank.section.placedout":       "\u21aa \u514d\u4fee\u8bfe\u7a0b",
   "bank.section.substitutions":   "\u21c4 \u8bfe\u7a0b\u66ff\u6362",

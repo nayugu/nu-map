@@ -1,12 +1,11 @@
 // ═══════════════════════════════════════════════════════════════════
 // BANK PANEL  — right-hand sidebar: Course Bank ↔ Graduation toggle
 // ═══════════════════════════════════════════════════════════════════
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
-import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
@@ -123,13 +122,13 @@ export default function BankPanel() {
     courses, bankCourseIds, subjects, courseMap,
     placements,
     bankSearch, setBankSearch,
-    bankSort, setBankSort,
+    bankSort,
     bankTab, setBankTab,
-    bankWidth, setBankWidth,
+    bankWidth,
     showSubjectKeys, setShowSubjectKeys,
     starredIds, collapsedSubs, setCollapsedSubs,
     onDropBank, onDragStart,
-    bankRef, bankResizing, uiScaleRef, isPhone,
+    bankRef, bankResizing, isPhone,
     placedIds,
     placedOut, setPlacedOut,
     dragInfo,
@@ -189,6 +188,10 @@ export default function BankPanel() {
   }, [bankCourses, q, bankTab]);
 
   const [sideMode, setSideMode] = useState("bank"); // "bank" | "grad"
+  const [wideCatalog, setWideCatalog] = useState(() => {
+    try { const v = localStorage.getItem("wide-catalog"); return v === "true"; } catch { return false; }
+  });
+  useEffect(() => { try { localStorage.setItem("wide-catalog", String(wideCatalog)); } catch {} }, [wideCatalog]);
 
   const [collapsePlacedOut, setCollapsePlacedOut] = useState(true);
   const [hoveredPlacedOutId, setHoveredPlacedOutId] = useState(null);
@@ -203,9 +206,9 @@ export default function BankPanel() {
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
 
   return (
-    <div style={{ display: "flex", width: bankWidth, flexShrink: 0 }}>
-      {/* Drag-resize handle — desktop only */}
-      {!isPhone && <div
+    <div style={{ display: "flex", width: (wideCatalog && !isPhone) ? "clamp(280px, 30vw, 400px)" : bankWidth, flexShrink: 0 }}>
+      {/* Drag-resize handle — desktop only, hidden in wide mode */}
+      {!isPhone && !wideCatalog && <div
         onMouseDown={e => {
           bankResizing.current = { startX: e.clientX, startW: bankWidth };
           e.preventDefault();
@@ -263,6 +266,17 @@ export default function BankPanel() {
                   fontWeight: sideMode === mode ? 700 : 400,
                 }}>{label}</button>
               ))}
+              <button
+                  onClick={() => setWideCatalog(v => !v)}
+                  title="Toggle wide panel"
+                  style={{
+                    fontSize: 9, padding: "4px 7px", borderRadius: 4, cursor: "pointer", flexShrink: 0,
+                    background: wideCatalog ? "var(--bg-surface)" : "transparent",
+                    border: `1px solid ${wideCatalog ? "var(--active)" : "var(--border-2)"}`,
+                    color: wideCatalog ? "var(--active)" : "var(--text-4)",
+                    fontWeight: wideCatalog ? 700 : 400,
+                  }}
+                >{t("bank.mode.wide")}</button>
             </div>
           )}
 
@@ -431,7 +445,7 @@ export default function BankPanel() {
         {/* Graduation panel */}
         {sideMode === "grad" && (
           <div style={{ flex: 1, overflowY: "auto", background: "var(--bg-bank)" }}>
-            <GradPanel />
+            <GradPanel wideCatalog={wideCatalog} />
           </div>
         )}
 

@@ -29,6 +29,7 @@ export const strings = {
   "bank.tab.grad":                "Grad",
   "bank.mode.bank":               "Course Bank",
   "bank.mode.grad":               "Graduation",
+  "bank.mode.wide":               "wide",
   "bank.search.placeholder":      "\u2315 search",
   "bank.section.placedout":       "\u21aa PLACED OUT",
   "bank.section.substitutions":   "\u21c4 SUBSTITUTIONS",
@@ -163,6 +164,15 @@ export const strings = {
   "legend.substitution-prereq":       "Substituted prereq",
   "legend.substitution-prereq-order": "Substituted prereq (wrong order)",
   "legend.corequisite-viol":          "Misplaced",
+
+  // ── Translation ────────────────────────────────────────────────
+  "translation.toggle":             "Translate course content",
+  "translation.toggle.hint.native": "Powered by Chrome AI — instant",
+  "translation.toggle.hint.wasm":   "~890 MB one-time download, then offline",
+  "translation.english.note":       "Course content in English",
+  "translation.enable":             "Translate →",
+  "translation.downloading":        "Downloading translation model…",
+  "translation.progress.of":        "of",
 
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "Unofficial student planning tool",

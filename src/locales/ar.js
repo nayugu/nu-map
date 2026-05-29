@@ -28,6 +28,7 @@ export const strings = {
   "bank.tab.grad":                "التخرج",
   "bank.mode.bank":               "بنك المقررات",
   "bank.mode.grad":               "متطلبات التخرج",
+  "bank.mode.wide":               "واسع",
   "bank.search.placeholder":      "⌕ بحث",
   "bank.section.placedout":       "↪ مقررات معادلة",
   "bank.section.substitutions":   "⇄ مقررات بديلة",
