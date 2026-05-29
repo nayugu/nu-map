@@ -1,6 +1,13 @@
 {
   "runs": [
     {
+      "type": "manual-trigger",
+      "subject": "Major Requirements (manual)",
+      "adapter": "majors",
+      "timestamp": "2026-05-19T03:34:29.978Z",
+      "exitCode": 1
+    },
+    {
       "type": "availability",
       "subject": "📅 Term Availability",
       "timestamp": "2026-05-18T14:21:49.570Z",

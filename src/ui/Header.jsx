@@ -394,9 +394,10 @@ export default function Header() {
 
           {showPlanMenu && (
             <div onClick={e => e.stopPropagation()} style={{
-              position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
+              position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: isPhone ? 9500 : 100,
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 6,
-              padding: "6px 0", minWidth: 180, boxShadow: "var(--shadow-modal)",
+              padding: "6px 0", minWidth: isPhone ? 130 : 180, maxWidth: isPhone ? "72vw" : undefined,
+              boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", transformOrigin: "top left",
               fontSize: isPhone ? 9 : 11,
             }}>
