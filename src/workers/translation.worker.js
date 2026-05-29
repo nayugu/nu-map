@@ -46,6 +46,14 @@ ort.env.wasm.wasmPaths = _isSafari
 
 env.allowLocalModels = false;
 
+// Disable WASM caching so transformers skips the blob-URL factory step.
+// When useWasmCache=true (default in Workers), cacheWasm.js fetches the
+// .mjs factory, wraps it in a Blob, and calls import(blobURL).  That
+// dynamic import of a blob URL silently hangs in some Worker contexts.
+// With useWasmCache=false the factory is imported directly from the
+// /ort/ URL, which is plain ES module loading and always works.
+env.useWasmCache = false;
+
 // FLORES-200 language codes required by NLLB-200.
 // Extend this map if new locales are added to src/locales/.
 const NLLB_LANG = {
@@ -123,6 +131,7 @@ self.addEventListener("message", async ({ data }) => {
 
     self.postMessage({ type: "result", id, results });
   } catch (err) {
+    console.error("[translation-worker] error:", err);
     self.postMessage({ type: "error", id, message: err.message ?? String(err) });
   }
 });
