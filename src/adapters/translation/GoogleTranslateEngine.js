@@ -27,6 +27,7 @@ function googleLocale(bcp47) {
 
 // Shared across all engine instances so a re-mount doesn't reset the cap.
 const MAX_CONCURRENT = 6;
+const FETCH_TIMEOUT_MS = 5_000;
 let inFlight = 0;
 const queue = [];
 
@@ -95,6 +96,8 @@ export class GoogleTranslateEngine {
       `&dt=t&q=${encodeURIComponent(text)}`;
 
     return schedule(async () => {
+      // Start the timeout once the job is actually running (not while queued).
+      const timer = setTimeout(() => ac.abort(), FETCH_TIMEOUT_MS);
       try {
         const response = await fetch(url, { signal: ac.signal });
         if (!response.ok) throw new Error(`Google Translate ${response.status}`);
@@ -106,6 +109,7 @@ export class GoogleTranslateEngine {
           .join("");
         return translated.trim();
       } finally {
+        clearTimeout(timer);
         this.#aborts = this.#aborts.filter(a => a !== ac);
       }
     });

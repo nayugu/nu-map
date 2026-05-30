@@ -5,9 +5,17 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>NU Map</title>
+    <!-- Inter is loaded non-blocking so a blocked/slow network (e.g. GFW) never
+         delays first render.  The page appears immediately with the system font
+         stack; once Inter is fetched the browser swaps in seamlessly. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          onload="this.rel='stylesheet'" />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    </noscript>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html, body, #root { height: 100%; overflow: hidden; }
@@ -25,26 +33,6 @@
     </style>
   </head>
   <body>
-    <!-- Register COI service worker so SharedArrayBuffer is available for
-         ONNX Runtime's multithreaded WASM.  Only needed on hosts (e.g. GitHub
-         Pages) that don't set COOP/COEP headers natively.  The SW intercepts
-         responses and injects those headers; a single page reload activates it. -->
-    <script>
-      if ("serviceWorker" in navigator && !crossOriginIsolated) {
-        navigator.serviceWorker.register("./coi-serviceworker.js").then(function (reg) {
-          if (!navigator.serviceWorker.controller) {
-            // First activation — reload so the SW can serve this page with headers.
-            reg.addEventListener("updatefound", function () {
-              reg.installing.addEventListener("statechange", function () {
-                if (this.state === "activated") location.reload();
-              });
-            });
-          }
-        }).catch(function (err) {
-          console.warn("[coi-serviceworker] registration failed:", err);
-        });
-      }
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
