@@ -1526,6 +1526,18 @@ export function PlannerProvider({ children }) {
     }
   };
 
+  // Delete multiple plans at once — avoids stale-closure issue of calling deletePlan in a loop
+  const bulkDeletePlans = (ids) => {
+    const idSet = new Set(ids);
+    const remaining = plans.filter(p => !idSet.has(p.id));
+    if (remaining.length === 0) return;
+    for (const id of ids) {
+      try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
+    }
+    setPlans(remaining);
+    if (idSet.has(activePlanId)) setActivePlanId(remaining[0].id);
+  };
+
   // Rename a plan
   const renamePlan = (id, name) => {
     setPlans(prev => prev.map(p => p.id === id ? { ...p, name } : p));
@@ -1857,7 +1869,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
+    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,
     substitutions,

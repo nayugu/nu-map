@@ -34,7 +34,7 @@ export default function Header() {
     showUnlocks, setShowUnlocks,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
+    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, conc, minor1, minor2,
     placedOut, substitutions,
   } = usePlanner();
@@ -506,7 +506,7 @@ export default function Header() {
                     if (count === 0) return;
                     if (count >= plans.length) { alert("You must keep at least one plan."); return; }
                     if (confirm(`Delete ${count} plan${count > 1 ? "s" : ""}?`)) {
-                      for (const id of selectedIds) deletePlan(id);
+                      bulkDeletePlans(Array.from(selectedIds));
                       setSelectMode(false);
                       setSelectedIds(new Set());
                     }
