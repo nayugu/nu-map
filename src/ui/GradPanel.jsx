@@ -439,7 +439,7 @@ function NuPathGrid({ covered }) {
 
 // ── Minor block (loads + validates a minor's requirement sections) ─
 
-function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
+function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
   const { courseMap, majorRequirements } = useContext(GradCtx);
   const [minor, setMinor] = useState(null);
   const [err, setErr] = useState(null);
@@ -451,7 +451,13 @@ function MinorBlock({ path, placedSet, doneSet, label = "MINOR" }) {
     setLoading(true); setErr(null);
     majorRequirements.loadMinor(path)
       .then(setMinor)
-      .catch(e => setErr(e.message))
+      .catch(e => {
+        if (e.message.includes('not found in registry')) {
+          onClear?.();
+        } else {
+          setErr(e.message);
+        }
+      })
       .finally(() => setLoading(false));
   }, [path]);
 
@@ -936,8 +942,8 @@ export default function GradPanel({ wideCatalog = false }) {
         )}
 
         {/* ── Minor requirement sections ───────────────────────── */}
-        <MinorBlock path={minor1} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />
-        <MinorBlock path={minor2} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />
+        <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />
+        <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />
 
                 {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !minor1 && !minor2 && !fetching && !loadErr && (

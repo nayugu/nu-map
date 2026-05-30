@@ -24,6 +24,22 @@ const _scrapedMap = import.meta.glob(
 // Scraped entries win on collision — own data preferred over external submodule.
 const _moduleMap = { ..._externalMap, ..._scrapedMap };
 
+// ── Internal helpers ─────────────────────────────────────────────
+
+function parseMinorPathParts(path) {
+  const parts = path.split('/');
+  let yearIdx = -1;
+  for (let i = 0; i < parts.length; i++) {
+    if (/^\d{4}$/.test(parts[i])) { yearIdx = i; break; }
+  }
+  if (yearIdx < 0) return null;
+  return {
+    year:    parseInt(parts[yearIdx], 10),
+    college: parts[yearIdx + 1] ?? '',
+    folder:  parts[yearIdx + 2] ?? '',
+  };
+}
+
 // ── Public API ───────────────────────────────────────────────────
 // Path-parsing helpers (fmtLabel, fmtLocation) come from the
 // majorRequirements port passed by the caller — same port as majors.
@@ -83,7 +99,23 @@ export function getMinorOptionGroups(majorRequirements) {
 export function canonicalizeMinorPath(path) {
   if (_moduleMap[path]) return path;
   const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
-  return _moduleMap[migrated] ? migrated : path;
+  if (_moduleMap[migrated]) return migrated;
+  // Fallback: match by (college, folder) across any year, prefer newest
+  const parsed = parseMinorPathParts(path);
+  if (parsed) {
+    let bestPath = null;
+    let bestYear = -1;
+    for (const p of Object.keys(_moduleMap)) {
+      const pp = parseMinorPathParts(p);
+      if (!pp) continue;
+      if (pp.college === parsed.college && pp.folder === parsed.folder && pp.year > bestYear) {
+        bestYear = pp.year;
+        bestPath = p;
+      }
+    }
+    if (bestPath) return bestPath;
+  }
+  return path;
 }
 
 export async function loadMinor(path) {
