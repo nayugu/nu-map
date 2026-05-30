@@ -26,7 +26,7 @@ export default function PalettePanel() {
         }}
         title="Show scratch pad"
       >
-        <span style={{ fontSize: 8, color: "var(--text-5)", writingMode: "vertical-rl", letterSpacing: "0.08em", fontWeight: 700, textTransform: "uppercase" }}>{t("palette.title")}</span>
+        <span style={{ fontSize: 8, color: "var(--text-6)", writingMode: "vertical-rl", letterSpacing: "0.08em", fontWeight: 400, textTransform: "uppercase", opacity: 0.45 }}>{t("palette.title")}</span>
       </div>
     );
   }
