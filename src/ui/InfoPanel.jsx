@@ -171,7 +171,7 @@ function CourseInfo({ selCourse, navTo }) {
     <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, flexWrap: "wrap" }}>
         <span style={{ fontSize: 10, background: selCourse.color, color: "var(--badge-bg)", borderRadius: 3, padding: "2px 8px", fontWeight: 800, letterSpacing: "0.04em" }}>
-          {selCourse.subject}
+          {selCourse.isCps ? `${selCourse.subject} · CPS` : selCourse.subject}
         </span>
         <span
           draggable
@@ -203,13 +203,6 @@ function CourseInfo({ selCourse, navTo }) {
         {selCourse.scheduleType && (
           <span style={{ fontSize: 9, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 6px" }}>
             {selCourse.scheduleType}
-          </span>
-        )}
-        {selCourse.isCps && (
-          <span title="College of Professional Studies"
-            style={{ fontSize: 9, color: "var(--text-3)", background: "var(--bg-surface)",
-              border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 6px" }}>
-            CPS
           </span>
         )}
         {selCourse.attributes?.map(np => (

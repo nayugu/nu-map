@@ -244,8 +244,10 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
       <div style={{
         fontSize: 11, fontWeight: 800, color: course.color,
         letterSpacing: "0.02em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+        display: "flex", alignItems: "baseline", gap: 3,
       }}>
-        {course.code}
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{course.code}</span>
+        {course.isCps && <span style={{ fontWeight: 500, fontSize: 8, color: "var(--text-4)", flexShrink: 0 }}>· CPS</span>}
       </div>
 
       {/* Title */}
@@ -298,13 +300,6 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         ) : (
           <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 4px" }}>
             {course.sh} {creditSystem.getUnitName()}
-          </span>
-        )}
-        {course.isCps && (
-          <span title="College of Professional Studies"
-            style={{ fontSize: 9, color: "var(--text-4)", background: "var(--badge-bg)",
-              border: "1px solid var(--border-1)", borderRadius: 3, padding: "1px 4px" }}>
-            CPS
           </span>
         )}
         {isViolated && violationType === "order" && (

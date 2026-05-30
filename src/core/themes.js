@@ -73,9 +73,9 @@ const dark = {
   // ── Badges / chips ───────────────────────────────────────────────
   '--badge-bg':          '#0d1117',
   '--badge-border':      '#21262d',
-  '--nupath-text':       '#fbbf24',
-  '--nupath-bg':         '#2a200a',
-  '--nupath-border':     '#5a3e0a',
+  '--nupath-text':       '#4ade80',
+  '--nupath-bg':         '#0d1f14',
+  '--nupath-border':     '#166534',
   '--nupath-sat-text':   '#7eba96',
   '--nupath-sat-border': '#22c55e',
 
@@ -179,9 +179,9 @@ const light = {
   // ── Badges / chips ────────────────────────────────────────────────
   '--badge-bg':          '#faf9f8',
   '--badge-border':      '#eeeeee',
-  '--nupath-text':       '#9a6200',
-  '--nupath-bg':         '#fef3c7',
-  '--nupath-border':     '#e8a500',
+  '--nupath-text':       '#15803d',
+  '--nupath-bg':         '#f0fdf4',
+  '--nupath-border':     '#86efac',
   '--nupath-sat-text':   '#4a8f63',
   '--nupath-sat-border': '#86efac',
 
