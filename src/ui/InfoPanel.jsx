@@ -99,9 +99,6 @@ export default function InfoPanel() {
             <CourseInfo selCourse={selCourse} navTo={navTo} />
 
             {/* Desktop only: two separate columns */}
-            {!isMobile && selEdges.length > 0 && (
-              <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
-            )}
             {!isMobile && (
               <CourseOfferingHistory
                 selCourse={selCourse}
@@ -109,19 +106,22 @@ export default function InfoPanel() {
                 setOfferedOverrides={setOfferedOverrides}
               />
             )}
+            {!isMobile && selEdges.length > 0 && (
+              <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
+            )}
 
-            {/* Tablet: single narrow right column — Offered under Relationships */}
+            {/* Tablet: single narrow right column — Relationships under Offered */}
             {isMobile && !isPhone && (
               <div style={{ width: 175, flexShrink: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-                {selEdges.length > 0 && (
-                  <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} compact />
-                )}
                 <CourseOfferingHistory
                   selCourse={selCourse}
                   offeredOverrides={offeredOverrides}
                   setOfferedOverrides={setOfferedOverrides}
                   compact
                 />
+                {selEdges.length > 0 && (
+                  <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} compact />
+                )}
               </div>
             )}
 
@@ -132,17 +132,17 @@ export default function InfoPanel() {
             >✕</button>
           </div>
 
-          {/* Phone: relationships + offered toggles beneath main info */}
+          {/* Phone: offered + unlocks beneath main info */}
           {isPhone && (
             <div style={{ display: "flex", gap: 14, flexWrap: "wrap", width: "100%" }}>
-              {selEdges.length > 0 && (
-                <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
-              )}
               <CourseOfferingHistory
                 selCourse={selCourse}
                 offeredOverrides={offeredOverrides}
                 setOfferedOverrides={setOfferedOverrides}
               />
+              {selEdges.length > 0 && (
+                <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
+              )}
             </div>
           )}
         </div>
