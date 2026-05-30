@@ -11,7 +11,7 @@ import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
-import { useTranslation, useCourseTranslation } from "../context/TranslationContext.jsx";
+import { useTranslation, useCourseTranslation, TText } from "../context/TranslationContext.jsx";
 
 export default function InfoPanel() {
   const {
@@ -202,7 +202,7 @@ function CourseInfo({ selCourse, navTo }) {
         </span>
         {selCourse.scheduleType && (
           <span style={{ fontSize: 9, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 6px" }}>
-            {selCourse.scheduleType}
+            <TText>{selCourse.scheduleType}</TText>
           </span>
         )}
         {selCourse.attributes?.map(np => (
@@ -416,7 +416,7 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
                 {isOut ? "→" : "←"}
               </span>
               <span style={{ fontSize: 8, background: `${rs?.color}20`, color: rs?.color, borderRadius: 3, padding: "1px 4px", whiteSpace: "nowrap" }}>
-                {rs?.label}
+                {t(`legend.${rel.type}`)}
               </span>
               <span title={other?.title || undefined}
                 style={{ fontSize: 10, fontWeight: 700, color: "var(--text-2)" }}>
