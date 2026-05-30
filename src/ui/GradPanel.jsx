@@ -697,46 +697,18 @@ export default function GradPanel({ wideCatalog = false }) {
         {/* ── Program selection (collapsible) ─────────────────── */}
         <div style={{ marginBottom: 10, position: "relative" }}>
           {/* Collapsed: show header with triangle and text */}
-          {!showProgram && (
-            <div
-              onClick={() => setShowProgram(v => !v)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-                userSelect: "none",
-                fontSize: isPhone ? 9 : 11,
-                fontWeight: 500,
-                color: "var(--text-4)",
-                margin: 0,
-                padding: 0,
-                letterSpacing: 0,
-                gap: 5,
-              }}
-            >
-              <span style={{ fontSize: isPhone ? 9 : 10, color: "var(--text-5)", lineHeight: 1 }}>{"▶"}</span>
-              <span style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11 }}>{t("grad.programSelection")}</span>
-            </div>
-          )}
-          {/* Expanded: show triangle in upper right corner */}
+          <div
+            onClick={() => setShowProgram(v => !v)}
+            style={{
+              display: "flex", alignItems: "center", gap: 5, cursor: "pointer",
+              marginBottom: showProgram ? 4 : 0, userSelect: "none",
+            }}
+          >
+            <span style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, flex: 1 }}>{t("grad.programSelection")}</span>
+            <span style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1 }}>{showProgram ? "▲" : "▼"}</span>
+          </div>
           {showProgram && (
             <>
-              <span
-                onClick={() => setShowProgram(false)}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  fontSize: isPhone ? 9 : 10,
-                  color: "var(--text-5)",
-                  cursor: "pointer",
-                  userSelect: "none",
-                  padding: isPhone ? "2px 4px" : "3px 6px"
-                }}
-                title={t("grad.programSelection")}
-              >
-                ▼
-              </span>
               {/* Major selector */}
               <div style={{ marginBottom: 3 }}>
                 <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
