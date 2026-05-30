@@ -44,6 +44,7 @@ export const strings = {
   "bank.placedout.hint":          "Arrastra cursos aquí para convalidarlos (sin crédito, pero cumplen requisitos)",
   "bank.search.empty.typing":     "Escribe para buscar…",
   "bank.search.empty.none":       "Sin resultados",
+  "bank.colors.button":           "colores",
 
   // ── Semester row ───────────────────────────────────────────────
   "sem.slot.add":           "+ agregar",

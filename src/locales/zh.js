@@ -43,6 +43,7 @@ export const strings = {
   "bank.placedout.hint":          "\u62d6\u62fd\u8bfe\u7a0b\u5230\u6b64\u5904\u8bbe\u4e3a\u514d\u4fee\uff08\u4e0d\u8ba1\u5b66\u5206\uff0c\u4f46\u6ee1\u8db3\u5148\u4fee\u8981\u6c42\uff09",
   "bank.search.empty.typing":     "\u8bf7\u8f93\u5165\u641c\u7d22\u5185\u5bb9\u2026",
   "bank.search.empty.none":       "\u65e0\u7ed3\u679c",
+  "bank.colors.button":           "\u989c\u8272",
 
   // ── Semester row ───────────────────────────────────────────────
   "sem.slot.add":              "+ \u6dfb\u52a0",

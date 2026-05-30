@@ -326,7 +326,7 @@ export default function BankPanel() {
             </span>
             <button onClick={() => setShowSubjectKeys(v => !v)} title="Subject color key"
               style={{ background: showSubjectKeys ? "var(--bg-surface)" : "transparent", border: "1px solid var(--border-2)", borderRadius: 4, color: "var(--text-3)", fontSize: 9, cursor: "pointer", padding: "2px 6px" }}>
-              colors
+              {t("bank.colors.button")}
             </button>
           </div>
 

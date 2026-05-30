@@ -45,6 +45,7 @@ export const strings = {
   "bank.placedout.hint":          "ここにコースをドラッグして免除にします（単位は付与されませんが、要件は満たします）",
   "bank.search.empty.typing":     "検索語を入力…",
   "bank.search.empty.none":       "結果がありません",
+  "bank.colors.button":           "色分け",
 
   // ── Semester row ───────────────────────────────────────────────
   "sem.slot.add":           "+ 追加",

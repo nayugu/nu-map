@@ -44,6 +44,7 @@ export const strings = {
   "bank.placedout.hint":          "Faites glisser les cours ici pour les valider (pas de crédit, mais exigences remplies)",
   "bank.search.empty.typing":     "Tapez pour rechercher…",
   "bank.search.empty.none":       "Aucun résultat",
+  "bank.colors.button":           "couleurs",
 
   // ── Semester row ───────────────────────────────────────────────
   "sem.slot.add":           "+ ajouter",

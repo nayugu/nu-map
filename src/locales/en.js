@@ -45,6 +45,7 @@ export const strings = {
   "bank.placedout.hint":          "Drag courses here to place them out (no credit, but satisfy prerequisites)",
   "bank.search.empty.typing":     "Type to search\u2026",
   "bank.search.empty.none":       "No results",
+  "bank.colors.button":           "colors",
 
   // ── Semester row ───────────────────────────────────────────────
   "sem.slot.add":           "+ add",

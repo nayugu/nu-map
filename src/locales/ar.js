@@ -44,6 +44,7 @@ export const strings = {
   "bank.placedout.hint":          "اسحب المقررات هنا لمعادلتها (بدون ساعات، لكن تحقق المتطلبات)",
   "bank.search.empty.typing":     "اكتب للبحث…",
   "bank.search.empty.none":       "لا توجد نتائج",
+  "bank.colors.button":           "الألوان",
 
   // ── Semester row ───────────────────────────────────────────────
   "sem.slot.add":           "+ إضافة",

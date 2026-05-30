@@ -44,6 +44,7 @@ export const strings = {
   "bank.placedout.hint":          "यहाँ कोर्स ड्रैग करें छूट के लिए (कोई क्रेडिट नहीं, लेकिन आवश्यकताएँ पूरी होती हैं)",
   "bank.search.empty.typing":     "खोजने के लिए टाइप करें…",
   "bank.search.empty.none":       "कोई परिणाम नहीं",
+  "bank.colors.button":           "रंग",
 
   // ── Semester row ───────────────────────────────────────────────
   "sem.slot.add":           "+ जोड़ें",
