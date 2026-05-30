@@ -701,8 +701,36 @@ if (errors.length > 0) {
 }
 
 // ── Write catalog snapshot ────────────────────────────────────────────────────
+// Preserve fields that the catalog scraper may return empty when the website
+// changes its HTML (nuPath is the canonical example: selector stops matching →
+// every course gets [] → silent data loss on the next full re-scrape).
+// Apply the same "keep-if-fresh-is-empty" logic used by --rotate and --subjects.
 
-writeFileSync(CATALOG_OUT, JSON.stringify(allCourses, null, 0), "utf8");
+let toWrite = allCourses;
+if (existsSync(CATALOG_OUT)) {
+  try {
+    const prevMap = new Map(
+      JSON.parse(readFileSync(CATALOG_OUT, "utf8"))
+        .map(c => [`${c.subject} ${c.number}`, c])
+    );
+    toWrite = allCourses.map(c => {
+      const prev = prevMap.get(`${c.subject} ${c.number}`);
+      if (!prev) return c;
+      return {
+        ...c,
+        nuPath: c.nuPath?.length ? c.nuPath : (prev.nuPath ?? []),
+      };
+    });
+    const rescued = toWrite.filter((c, i) =>
+      !allCourses[i].nuPath?.length && c.nuPath?.length
+    ).length;
+    if (rescued > 0) console.log(`  Preserved nuPath for ${rescued} courses from previous snapshot`);
+  } catch {
+    // Existing file unreadable — proceed with raw scrape result
+  }
+}
+
+writeFileSync(CATALOG_OUT, JSON.stringify(toWrite, null, 0), "utf8");
 console.log(`\n✅  Wrote catalog snapshot → public/catalog-courses.json`);
 
 if (WRITE && !MERGE) {

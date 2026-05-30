@@ -29,8 +29,12 @@
 import { subjectColor } from "../../core/courseModel.js";
 import calendar from "./calendar.js";
 
-const LOCAL_URL   = `${import.meta.env.BASE_URL}northeastern/catalog-courses.json`;
-const HISTORY_URL = `${import.meta.env.BASE_URL}northeastern/term-history.json`;
+const LOCAL_URL    = `${import.meta.env.BASE_URL}northeastern/catalog-courses.json`;
+const HISTORY_URL  = `${import.meta.env.BASE_URL}northeastern/term-history.json`;
+const COLLEGES_URL = `${import.meta.env.BASE_URL}northeastern/subject-colleges.json`;
+// Supplemental nuPath source — catalog scraper sometimes drops nuPath on full re-scrapes.
+// all-courses.json (SearchNEU) is used only to back-fill nuPath when catalog-courses has none.
+const ALL_COURSES_URL = `${import.meta.env.BASE_URL}northeastern/all-courses.json`;
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -78,7 +82,7 @@ function sanitizeDesc(raw) {
  * @param {object} raw
  * @returns {import('../../ports/ICourseCatalog.js').Course|null}
  */
-function normalizeCourse(raw) {
+function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
   const subject = (raw.subject || raw.subjectCode || "").toUpperCase().trim();
   const number  = (raw.number  || raw.courseNumber || raw.num || "").trim();
   if (!subject || !number) return null;
@@ -124,8 +128,9 @@ function normalizeCourse(raw) {
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],
     termHistory,
     terms:        uniqueTerms,
-    attributes:   raw.nuPath ?? raw.attributes ?? [],
+    attributes:   (raw.nuPath?.length ? raw.nuPath : nuPathSupp[id]) ?? raw.attributes ?? [],
     color:        subjectColor(subject),
+    isCps:        (subjectColleges[subject] ?? "") === "CPS",
   };
 }
 
@@ -156,7 +161,21 @@ export default {
       throw new Error(`Could not load course catalog from ${LOCAL_URL}: ${err.message}`);
     }
     const raw = Array.isArray(json) ? json : Object.values(json).flat();
-    const courses = raw.map(normalizeCourse).filter(Boolean);
+
+    // Back-fill nuPath from all-courses.json when catalog-courses.json has it empty.
+    // Keyed by courseId ("CS3500") for O(1) lookup.
+    const nuPathSupp = {};
+    try {
+      const allCourses = await tryFetch(ALL_COURSES_URL);
+      for (const c of (Array.isArray(allCourses) ? allCourses : [])) {
+        const id = `${(c.subject || "").toUpperCase().trim()}${(c.number || "").trim()}`;
+        if (id && c.nuPath?.length) nuPathSupp[id] = c.nuPath;
+      }
+    } catch { /* all-courses.json absent or malformed — proceed without supplement */ }
+
+    let subjectColleges = {};
+    try { subjectColleges = await tryFetch(COLLEGES_URL); } catch { /* file not yet generated */ }
+    const courses = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
 
     // Merge Banner availability history if the file exists.
     // Silently skip if absent \u2014 app works without it.

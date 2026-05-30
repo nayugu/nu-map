@@ -205,6 +205,13 @@ function CourseInfo({ selCourse, navTo }) {
             {selCourse.scheduleType}
           </span>
         )}
+        {selCourse.isCps && (
+          <span title="College of Professional Studies"
+            style={{ fontSize: 9, color: "var(--text-3)", background: "var(--bg-surface)",
+              border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 6px" }}>
+            CPS
+          </span>
+        )}
         {selCourse.attributes?.map(np => (
           <span key={np} title={attributeSystem.getLabel(np)}
             style={{ fontSize: 9, color: "var(--nupath-text)", background: "var(--nupath-bg)", border: "1px solid var(--nupath-border)", borderRadius: 3, padding: "1px 5px", cursor: "default" }}>

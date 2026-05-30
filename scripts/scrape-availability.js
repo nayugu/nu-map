@@ -37,6 +37,7 @@ const __dirname      = dirname(fileURLToPath(import.meta.url));
 const ROOT           = resolve(__dirname, "..");
 const ALL_COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
 const HISTORY_OUT    = resolve(ROOT, "public/northeastern/term-history.json");
+const COLLEGES_OUT   = resolve(ROOT, "public/northeastern/subject-colleges.json");
 const CHANGE_LOG     = resolve(ROOT, "public/northeastern/change-log.json");
 const CHANGE_LOG_MAX = 600;
 
@@ -185,6 +186,48 @@ async function fetchTermOfferings(termCode) {
   return offered;
 }
 
+/**
+ * Fetch the set of subject codes offered by a given college in a term.
+ * Uses Banner's college filter (txt_college) to get only that college's sections.
+ */
+async function fetchCollegeSubjects(termCode, collegeCode) {
+  await activateTerm(termCode);
+  await sleep(DELAY_MS);
+  await resetForm();
+  await sleep(DELAY_MS);
+
+  const subjects = new Set();
+  let offset = 0;
+  let totalCount = null;
+
+  while (true) {
+    const url = `${BASE}/searchResults/searchResults` +
+      `?txt_term=${termCode}&txt_college=${encodeURIComponent(collegeCode)}` +
+      `&pageOffset=${offset}&pageMaxSize=${PAGE_SIZE}&sortColumn=subjectDescription&sortDirection=asc`;
+    let data;
+    try {
+      const res = await fetch(url, { headers: { "Cookie": cookieHeader() } });
+      updateJar(res);
+      data = await res.json();
+    } catch (err) {
+      console.warn(`  College fetch failed at offset ${offset}: ${err.message} — stopping`);
+      break;
+    }
+    if (!data.success) break;
+    const sections = data.data ?? [];
+    for (const s of sections) {
+      const subject = (s.subject || "").toUpperCase().trim();
+      if (subject) subjects.add(subject);
+    }
+    if (totalCount === null) totalCount = data.totalCount ?? 0;
+    if (sections.length === 0 || offset + sections.length >= totalCount) break;
+    offset += PAGE_SIZE;
+    await sleep(DELAY_MS);
+  }
+
+  return subjects;
+}
+
 // ── Main ─────────────────────────────────────────────────────────
 
 async function main() {
@@ -240,6 +283,31 @@ async function main() {
     await sleep(DELAY_MS);
   }
 
+  // Build subject→college map using Banner's college filter.
+  // Uses the most recent successfully-queried term.
+  const subjectColleges = {};
+  const recentTerm = [...toQuery].reverse().find(c => (termResults[c]?.size ?? 0) > 0);
+  if (recentTerm) {
+    console.log(`\nFetching college→subject map from term ${recentTerm}...`);
+    try {
+      // Fetch all college codes from Banner, then map subjects per college
+      const collegeList = await (await fetch(
+        `${BASE}/classSearch/get_college?searchTerm=&term=${recentTerm}&offset=1&max=50`,
+        { headers: { "Cookie": cookieHeader() } }
+      )).json();
+      for (const { code } of collegeList) {
+        const subs = await fetchCollegeSubjects(recentTerm, code);
+        for (const sub of subs) {
+          if (!subjectColleges[sub]) subjectColleges[sub] = code;
+        }
+        await sleep(DELAY_MS);
+      }
+      console.log(`  Mapped ${Object.keys(subjectColleges).length} subjects across ${collegeList.length} colleges`);
+    } catch (err) {
+      console.warn(`  College map fetch failed: ${err.message}`);
+    }
+  }
+
   // Build term-history: only for courses in our catalog
   const termHistory = {};
   for (const courseId of catalogIds) {
@@ -275,6 +343,11 @@ async function main() {
   if (doWrite) {
     writeFileSync(HISTORY_OUT, JSON.stringify(termHistory, null, 2));
     console.log(`\nWrote ${HISTORY_OUT}`);
+
+    if (Object.keys(subjectColleges).length > 0) {
+      writeFileSync(COLLEGES_OUT, JSON.stringify(subjectColleges, null, 2));
+      console.log(`Wrote ${COLLEGES_OUT} (${Object.keys(subjectColleges).length} subjects)`);
+    }
 
     // Append to dev portal change log
     let changeLog = { runs: [] };

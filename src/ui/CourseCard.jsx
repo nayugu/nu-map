@@ -300,6 +300,13 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             {course.sh} {creditSystem.getUnitName()}
           </span>
         )}
+        {course.isCps && (
+          <span title="College of Professional Studies"
+            style={{ fontSize: 9, color: "var(--text-4)", background: "var(--badge-bg)",
+              border: "1px solid var(--border-1)", borderRadius: 3, padding: "1px 4px" }}>
+            CPS
+          </span>
+        )}
         {isViolated && violationType === "order" && (
           <span title="Prerequisite is in the same or a later semester"
             style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", lineHeight: 1 }}>⚡</span>
