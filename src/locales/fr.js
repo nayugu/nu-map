@@ -133,6 +133,8 @@ export const strings = {
   "header.settings.collapse.off": "Réduire autres crédits : désactivé",
   "header.settings.contlogo.on":  "Logo de continuation : activé",
   "header.settings.contlogo.off": "Logo de continuation : désactivé",
+  "header.settings.unlocks.on":   "Afficher les débloqués : activé",
+  "header.settings.unlocks.off":  "Afficher les débloqués : désactivé",
   "header.settings.zoom":         "ZOOM",
   "header.settings.zoom.auto":    "auto",
   "header.settings.language":     "LANGUE",

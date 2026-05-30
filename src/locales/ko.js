@@ -133,6 +133,8 @@ export const strings = {
   "header.settings.collapse.off": "기타 학점 접기: 꺼짐",
   "header.settings.contlogo.on":  "연속 로고: 표시",
   "header.settings.contlogo.off": "연속 로고: 숨김",
+  "header.settings.unlocks.on":   "이후 수강 가능: 표시",
+  "header.settings.unlocks.off":  "이후 수강 가능: 숨김",
   "header.settings.zoom":         "확대/축소",
   "header.settings.zoom.auto":    "자동",
   "header.settings.language":     "언어",

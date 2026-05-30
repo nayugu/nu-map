@@ -134,6 +134,8 @@ export const strings = {
   "header.settings.collapse.off": "その他の単位を折りたたむ：無効",
   "header.settings.contlogo.on":  "継続ロゴ：表示",
   "header.settings.contlogo.off": "継続ロゴ：非表示",
+  "header.settings.unlocks.on":  "アンロック表示：表示",
+  "header.settings.unlocks.off": "アンロック表示：非表示",
   "header.settings.zoom":         "ズーム",
   "header.settings.zoom.auto":    "自動",
   "header.settings.language":     "言語",

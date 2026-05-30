@@ -122,6 +122,8 @@ export const strings = {
   "header.settings.collapse.off":  "\u6298\u53e0\u5176\u4ed6\u5b66\u5206\uff1a\u5173",
   "header.settings.contlogo.on":   "\u5ef6\u7eed\u6807\u5fd7\uff1a\u5f00",
   "header.settings.contlogo.off":  "\u5ef6\u7eed\u6807\u5fd7\uff1a\u5173",
+  "header.settings.unlocks.on":    "\u663e\u793a\u89e3\u9501\uff1a\u5f00",
+  "header.settings.unlocks.off":   "\u663e\u793a\u89e3\u9501\uff1a\u5173",
   "header.settings.zoom":          "\u7f29\u653e",
   "header.settings.zoom.auto":     "\u81ea\u52a8",
   "header.settings.language":      "\u8bed\u8a00",

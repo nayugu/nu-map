@@ -132,6 +132,8 @@ export const strings = {
   "header.settings.collapse.off": "طي الساعات الأخرى: معطل",
   "header.settings.contlogo.on":  "شعار الاستمرارية: مفعل",
   "header.settings.contlogo.off": "شعار الاستمرارية: معطل",
+  "header.settings.unlocks.on":   "عرض المفتوحة: مفعل",
+  "header.settings.unlocks.off":  "عرض المفتوحة: معطل",
   "header.settings.zoom":         "تكبير",
   "header.settings.zoom.auto":    "تلقائي",
   "header.settings.language":     "اللغة",

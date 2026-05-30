@@ -133,6 +133,8 @@ export const strings = {
   "header.settings.collapse.off": "अन्य क्रेडिट्स छुपाएँ: बंद",
   "header.settings.contlogo.on":  "जारी लोगो: चालू",
   "header.settings.contlogo.off": "जारी लोगो: बंद",
+  "header.settings.unlocks.on":   "अनलॉक दिखाएं: चालू",
+  "header.settings.unlocks.off":  "अनलॉक दिखाएं: बंद",
   "header.settings.zoom":         "ज़ूम",
   "header.settings.zoom.auto":    "स्वचालित",
   "header.settings.language":     "भाषा",
