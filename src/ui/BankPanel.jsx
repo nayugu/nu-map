@@ -208,6 +208,23 @@ export default function BankPanel() {
   });
   useEffect(() => { try { localStorage.setItem("wide-catalog", String(wideCatalog)); } catch {} }, [wideCatalog]);
 
+  const [wideWidth, setWideWidth] = useState(() => {
+    try { const v = localStorage.getItem("wide-catalog-width"); return v ? Number(v) : null; } catch { return null; }
+  });
+  const wideResizing = useRef(null);
+  useEffect(() => { try { if (wideWidth !== null) localStorage.setItem("wide-catalog-width", String(Math.round(wideWidth))); } catch {} }, [wideWidth]);
+  useEffect(() => {
+    const onMove = e => {
+      if (!wideResizing.current) return;
+      const dx = wideResizing.current.startX - e.clientX;
+      setWideWidth(Math.min(700, Math.max(220, wideResizing.current.startW + dx)));
+    };
+    const onUp = () => { wideResizing.current = null; };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+  }, []);
+
   const [collapsePlacedOut, setCollapsePlacedOut] = useState(true);
   const [hoveredPlacedOutId, setHoveredPlacedOutId] = useState(null);
   const [collapseSubstitutions, setCollapseSubstitutions] = useState(true);
@@ -221,11 +238,16 @@ export default function BankPanel() {
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
 
   return (
-    <div style={{ display: "flex", width: (wideCatalog && !isPhone) ? "clamp(280px, 30vw, 400px)" : bankWidth, flexShrink: 0 }}>
-      {/* Drag-resize handle — desktop only, hidden in wide mode */}
-      {!isPhone && !wideCatalog && <div
+    <div style={{ display: "flex", width: (wideCatalog && !isPhone) ? (wideWidth ?? "clamp(240px, 24vw, 340px)") : bankWidth, flexShrink: 0 }}>
+      {/* Drag-resize handle — desktop only */}
+      {!isPhone && <div
         onMouseDown={e => {
-          bankResizing.current = { startX: e.clientX, startW: bankWidth };
+          if (wideCatalog) {
+            const startW = wideWidth ?? (bankRef.current?.offsetWidth ?? 300);
+            wideResizing.current = { startX: e.clientX, startW };
+          } else {
+            bankResizing.current = { startX: e.clientX, startW: bankWidth };
+          }
           e.preventDefault();
         }}
         style={{ width: 5, flexShrink: 0, cursor: "col-resize", borderLeft: "1px solid var(--border-1)", background: "transparent" }}
