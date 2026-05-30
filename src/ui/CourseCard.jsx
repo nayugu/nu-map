@@ -106,7 +106,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: course.color, borderRadius: "4px 0 0 4px" }} />
         <button
           onClick={e => { e.stopPropagation(); toggleStar(course.id); }}
-          title={starredIds.has(course.id) ? "Remove from saved" : "Save course"}
+          title={starredIds.has(course.id) ? t("course.star.remove") : t("course.star.save")}
           style={{
             position: "absolute", left: 4, top: 0, bottom: 0, width: 26,
             background: starredIds.has(course.id) ? "var(--warn-bg)" : "transparent",
@@ -225,7 +225,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
       {!inSem && (
         <button
           onClick={e => { e.stopPropagation(); toggleStar(course.id); }}
-          title={starredIds.has(course.id) ? "Remove from saved" : "Save course"}
+          title={starredIds.has(course.id) ? t("course.star.remove") : t("course.star.save")}
           style={{
             position: "absolute", left: 4, top: 0, bottom: 0, width: 24,
             background: starredIds.has(course.id) ? "var(--warn-bg)" : "transparent",
@@ -289,7 +289,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           ) : (
             <span
               onClick={e => { e.stopPropagation(); setEditingSh(true); }}
-              title={`Variable credit: ${course.shMin ?? course.sh}–${course.shMax} ${creditSystem.getUnitName()} — click to set`}
+              title={t("course.tooltip.variable-sh", { min: course.shMin ?? course.sh, max: course.shMax, unit: creditSystem.getUnitName() })}
               style={{ fontSize: 9, color: "var(--active)", background: "var(--badge-bg)",
                 borderRadius: 3, padding: "1px 4px", cursor: "text",
                 borderBottom: "1px dashed var(--active)", userSelect: "none" }}
@@ -303,25 +303,25 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           </span>
         )}
         {isViolated && violationType === "order" && (
-          <span title="Prerequisite is in the same or a later semester"
+          <span title={t("course.tooltip.prereq.order")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", lineHeight: 1 }}>⚡</span>
         )}
         {isViolated && violationType === "missing" && (
-          <span title="Prerequisite not yet placed in plan"
+          <span title={t("course.tooltip.prereq.missing")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
-            ! prereq
+            {t("course.badge.prereq")}
           </span>
         )}
         {coreqViol === "alone" && (
-          <span title="Corequisite partner is not placed — both must be in the plan"
+          <span title={t("course.tooltip.coreq.alone")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
-            ! coreq
+            {t("course.badge.coreq.alone")}
           </span>
         )}
         {coreqViol === "sep" && (
-          <span title="Corequisite must be in the same semester"
+          <span title={t("course.tooltip.coreq.sep")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
-            ⚡ coreq
+            {t("course.badge.coreq.sep")}
           </span>
         )}
         {notOffered && (() => {

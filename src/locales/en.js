@@ -89,7 +89,17 @@ export const strings = {
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "No title",
-  "course.avail.badge":           "⚠ avail?",
+  "course.avail.badge":           "⚠ offered?",
+  "course.badge.prereq":          "! prereq",
+  "course.badge.coreq.alone":     "! coreq",
+  "course.badge.coreq.sep":       "⚡ coreq",
+  "course.tooltip.prereq.order":  "Prerequisite is in the same or a later semester",
+  "course.tooltip.prereq.missing":"Prerequisite not yet placed in plan",
+  "course.tooltip.coreq.alone":   "Corequisite partner is not placed — both must be in the plan",
+  "course.tooltip.coreq.sep":     "Corequisite must be in the same semester",
+  "course.star.save":             "Save course",
+  "course.star.remove":           "Remove from saved",
+  "course.tooltip.variable-sh":   "Variable credit: {min}–{max} {unit} — click to set",
   "info.prereqs":                 "Prereqs:",
   "info.relationships.title":     "UNLOCKS",
   "info.offered.title":           "OFFERED IN",
