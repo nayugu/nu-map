@@ -48,6 +48,7 @@ export default function Header() {
   const adapter = useInstitution();
   const { attributeSystem, specialTerms, calendar, creditSystem, institution, majorRequirements } = adapter;
   const unitName        = creditSystem.getUnitName();
+  const [showUpdatedDate, setShowUpdatedDate] = useState(false);
   const [showQuickSet, setShowQuickSet] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
@@ -320,24 +321,45 @@ export default function Header() {
             <span style={{ fontSize: 10, color: "var(--text-3)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{t("header.courses.count", { n: courses.length.toLocaleString() })}</span>
           )}
           {!isPhone && (dataMeta.lastUpdated || __COMMIT_DATE__) && (
-            <span style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-              <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap" }} title="Date of last course data refresh">
+            <span style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+              <span
+                title="Date of last course data refresh"
+                style={{
+                  fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap",
+                  maxWidth: showUpdatedDate ? 120 : 0,
+                  opacity: showUpdatedDate ? 1 : 0,
+                  overflow: "hidden",
+                  textAlign: "right",
+                  marginRight: showUpdatedDate ? 6 : 0,
+                  transition: "max-width 0.35s ease, opacity 0.25s ease, margin-right 0.35s ease",
+                }}
+              >
                 updated {dataMeta.lastUpdated || __COMMIT_DATE__}
               </span>
+              <a
+                href="https://forms.gle/CzXE25WRtJnXWE1U9"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.04em",
+                  color: "var(--text-5)", textDecoration: "none",
+                  border: "1px solid var(--border-1)", borderRadius: 20,
+                  padding: "1px 7px", whiteSpace: "nowrap", lineHeight: 1.7,
+                  marginRight: 6 }}
+                onMouseEnter={e => { e.currentTarget.style.color = "var(--text-3)"; e.currentTarget.style.borderColor = "var(--border-2)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "var(--text-5)"; e.currentTarget.style.borderColor = "var(--border-1)"; }}
+              >
+                feedback ↗
+              </a>
               <span
+                onMouseEnter={() => setShowUpdatedDate(true)}
+                onMouseLeave={() => setShowUpdatedDate(false)}
                 style={{
-                  fontSize: 9,
-                  fontWeight: 700,
-                  letterSpacing: "0.04em",
-                  color: "var(--beta-text)",
-                  background: "var(--beta-bg)",
-                  padding: "1px 7px",
-                  borderRadius: 6,
-                  marginLeft: 0,
-                  userSelect: "none",
-                  boxShadow: "0 1px 2px 0 rgba(0,0,0,0.03)",
-                  lineHeight: 1.7,
-                  transition: "background 0.2s,color 0.2s"
+                  fontSize: 9, fontWeight: 700, letterSpacing: "0.04em",
+                  color: "var(--beta-text)", background: "var(--beta-bg)",
+                  padding: "1px 7px", borderRadius: 6,
+                  userSelect: "none", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.03)",
+                  lineHeight: 1.7, transition: "background 0.2s,color 0.2s",
+                  cursor: "default",
                 }}
               >
                 BETA
@@ -944,6 +966,7 @@ export default function Header() {
           title={t("header.about.title")}
           style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}
         >{isMobile ? "ⓘ" : `ⓘ ${t("header.about.button")}`}</button>
+
         </div>{/* end controls row */}
       </div>{/* end header */}
 
