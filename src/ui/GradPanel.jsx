@@ -296,7 +296,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
           <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>
             {r.satSh}/{r.reqSh} SH from elective pool
           </span>
-          {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
+          {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>}
         </div>
         {open && has && <div style={{ marginTop: 3 }}>
           {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)}
@@ -319,7 +319,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
         style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
         <CheckBox sat={r.sat} dimmedCheck={dimmed} />
         <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>{heading}</span>
-        {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>}
+        {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>}
       </div>
       {open && has && <div style={{ marginTop: 3 }}>
         {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.type === "OR" && r.sat && !c.sat} />)}
@@ -358,7 +358,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
           {secTitle}
         </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>{displaySatCount}/{displayTotal}</span>
-        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▲" : "▼"}</span>
+        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
       {/* Progress sliver */}
       <div style={{ padding: ph ? "0 6px" : "0 8px", background: "var(--bg-surface)" }}>
@@ -705,7 +705,7 @@ export default function GradPanel({ wideCatalog = false }) {
             }}
           >
             <span style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, flex: 1 }}>{t("grad.programSelection")}</span>
-            <span style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1 }}>{showProgram ? "▲" : "▼"}</span>
+            <span style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1 }}>{showProgram ? "▼" : "▶"}</span>
           </div>
           {showProgram && (
             <>
@@ -759,7 +759,7 @@ export default function GradPanel({ wideCatalog = false }) {
             <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>
               {attributeSystem.getSystemName()} <span style={{ fontWeight: 400, color: "var(--text-5)" }}>({npCovered.size}/{attributeSystem.getGridCodes().length})</span>
             </span>
-            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{showNP ? "▲" : "▼"}</span>
+            <span style={{ fontSize: 9, color: "var(--text-5)" }}>{showNP ? "▼" : "▶"}</span>
           </div>
           {showNP && <NuPathGrid covered={npCovered} />}
         </div>
