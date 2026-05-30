@@ -41,6 +41,26 @@ const _scrapedMap = import.meta.glob(
 // Scraped entries win on collision — own data preferred over external submodule.
 const _moduleMap = { ..._externalMap, ..._scrapedMap };
 
+// ── Internal helpers ─────────────────────────────────────────────
+
+/**
+ * Parse the year/college/folder segments out of a module map path.
+ * Returns null if no 4-digit year segment is found.
+ */
+function parseMajorPathParts(path) {
+  const parts = path.split('/');
+  let yearIdx = -1;
+  for (let i = 0; i < parts.length; i++) {
+    if (/^\d{4}$/.test(parts[i])) { yearIdx = i; break; }
+  }
+  if (yearIdx < 0) return null;
+  return {
+    year:    parseInt(parts[yearIdx], 10),
+    college: parts[yearIdx + 1] ?? '',
+    folder:  parts[yearIdx + 2] ?? '',
+  };
+}
+
 // ── Public API ───────────────────────────────────────────────────
 // Path-parsing helpers (fmtLabel, fmtLocation) come from the
 // majorRequirements port passed by the caller — not imported directly
@@ -110,19 +130,58 @@ export function getMajorOptionGroups(majorRequirements) {
 }
 
 /**
- * Lazily load the Major2 JSON for a given path (from getMajorOptions).
- * Returns the parsed object (matches graduatenu Major2 schema).
- */
-/**
- * Migrate a major path from before the external/ submodule reorganisation.
- * Returns the canonical path as it exists in the current registry.
+ * Migrate a major path to a known registry entry.
+ * Falls back to the newest available (college, folder) match if the exact
+ * path (including year) is not found — handles saved plans from older catalog years.
  */
 export function canonicalizeMajorPath(path) {
   if (_moduleMap[path]) return path;
   // Legacy: paths before the external/ submodule reorganisation
   const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
   if (_moduleMap[migrated]) return migrated;
+  // Fallback: match by (college, folder) across any year, prefer newest
+  const parsed = parseMajorPathParts(path);
+  if (parsed) {
+    let bestPath = null;
+    let bestYear = -1;
+    for (const p of Object.keys(_moduleMap)) {
+      const pp = parseMajorPathParts(p);
+      if (!pp) continue;
+      if (pp.college === parsed.college && pp.folder === parsed.folder && pp.year > bestYear) {
+        bestYear = pp.year;
+        bestPath = p;
+      }
+    }
+    if (bestPath) return bestPath;
+  }
   return path;
+}
+
+/**
+ * Check whether a newer catalog-year version of a major exists.
+ * Returns the newer path string, or null if the given path is already the latest.
+ *
+ * @param {string} currentPath  - path from getMajorOptions or saved plan state
+ * @returns {string|null}
+ */
+export function findNewerMajorVersion(currentPath) {
+  const canonical = canonicalizeMajorPath(currentPath);
+  const current = parseMajorPathParts(canonical);
+  if (!current) return null;
+
+  let newestPath = null;
+  let newestYear = current.year;
+
+  for (const path of Object.keys(_moduleMap)) {
+    const pp = parseMajorPathParts(path);
+    if (!pp) continue;
+    if (pp.college === current.college && pp.folder === current.folder && pp.year > newestYear) {
+      newestYear = pp.year;
+      newestPath = path;
+    }
+  }
+
+  return newestPath;
 }
 
 export async function loadMajor(path) {

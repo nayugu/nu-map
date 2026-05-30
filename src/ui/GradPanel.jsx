@@ -22,6 +22,7 @@ import {
   allocateMajorWithElectives,
   allocateSections,
 } from "../core/gradRequirements.js";
+import { findNewerMajorVersion } from "../data/majorLoader.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
@@ -597,9 +598,10 @@ export default function GradPanel({ wideCatalog = false }) {
   // Translated major name + concentration (no-ops when translation disabled or in source locale).
   const minorGroups  = useMemo(() => majorRequirements.getMinorOptionGroups(), [majorRequirements]);
 
-  const [major,    setMajor]    = useState(null);
-  const [loadErr,  setLoadErr]  = useState(null);
-  const [fetching, setFetching] = useState(false);
+  const [major,          setMajor]          = useState(null);
+  const [loadErr,        setLoadErr]        = useState(null);
+  const [fetching,       setFetching]       = useState(false);
+  const [newerMajorPath, setNewerMajorPath] = useState(null);
   const majorName = useTranslatedText(major?.name ?? null);
   const concName  = useTranslatedText(selConc || null);
   const [showNP,   setShowNP]   = useState(() => {
@@ -611,10 +613,10 @@ export default function GradPanel({ wideCatalog = false }) {
 
   // Fetch major JSON on path change
   useEffect(() => {
-    if (!selPath) { setMajor(null); setLoadErr(null); return; }
-    setFetching(true); setLoadErr(null); setMajor(null); setSelConc("");
+    if (!selPath) { setMajor(null); setLoadErr(null); setNewerMajorPath(null); return; }
+    setFetching(true); setLoadErr(null); setMajor(null); setSelConc(""); setNewerMajorPath(null);
     majorRequirements.loadMajor(selPath)
-      .then(setMajor)
+      .then(data => { setMajor(data); setNewerMajorPath(findNewerMajorVersion(selPath)); })
       .catch(e => setLoadErr(e.message))
       .finally(() => setFetching(false));
   }, [selPath]);
@@ -720,6 +722,39 @@ export default function GradPanel({ wideCatalog = false }) {
                   groups={majorGroups}
                   placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
                 />
+                {newerMajorPath && (
+                  <div style={{
+                    marginTop: 4, padding: "5px 7px", borderRadius: 4,
+                    background: "var(--info-bg, var(--border-2))",
+                    border: "1px solid var(--info-border, var(--border-3))",
+                    display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap",
+                    fontSize: isPhone ? 8 : 9,
+                  }}>
+                    <span style={{ color: "var(--text-2)", flex: 1 }}>
+                      A {newerMajorPath.match(/\/(\d{4})\//)?.[1]} version of this major is available.
+                    </span>
+                    <button
+                      onClick={() => setSelPath(newerMajorPath)}
+                      style={{
+                        fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
+                        borderRadius: 3, border: "1px solid var(--accent)",
+                        background: "var(--accent)", color: "white", fontWeight: 600,
+                      }}
+                    >
+                      Switch
+                    </button>
+                    <button
+                      onClick={() => setNewerMajorPath(null)}
+                      style={{
+                        fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
+                        borderRadius: 3, border: "1px solid var(--border-3)",
+                        background: "transparent", color: "var(--text-4)",
+                      }}
+                    >
+                      Keep
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Concentration selector */}
