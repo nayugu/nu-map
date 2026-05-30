@@ -105,11 +105,14 @@ export default function SemRow({ sem }) {
     <span style={{ width: 14, height: 14, borderRadius: 3, border: "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }} />
   );
 
+  const shColor = sh > 19 ? "var(--error)" : (sh < 12 && (sem.type === "fall" || sem.type === "spring")) ? "var(--warn-bright)" : "var(--success)";
   const shEl = sh > 0 ? (
-    <span style={{
-      fontSize: 10, fontWeight: 700, marginLeft: 4,
-      color: sh > 19 ? "var(--error)" : (sh < 12 && (sem.type === "fall" || sem.type === "spring")) ? "var(--warn-bright)" : "var(--success)",
-    }}>
+    <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: shColor }}>
+      {sh} SH{sh > 19 ? " ⚠" : ""}
+    </span>
+  ) : null;
+  const shElPhone = sh > 0 ? (
+    <span style={{ fontSize: 7, fontWeight: 700, color: shColor, lineHeight: 1.2, textAlign: "center" }}>
       {sh} SH{sh > 19 ? " ⚠" : ""}
     </span>
   ) : null;
@@ -179,7 +182,7 @@ export default function SemRow({ sem }) {
           {sem.label.split(" ").map((part, i) => (
             <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: 1.2, textAlign: "center" }}><TText>{part}</TText></span>
           ))}
-          {shEl}
+          {shElPhone}
         </div>
       ) : (
         <div
