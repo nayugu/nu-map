@@ -141,6 +141,8 @@ export function PlannerProvider({ children }) {
   // ── UI interaction state ──────────────────────────────────────
   const [selectedId,    setSelectedId]    = useState(null);
   const [dragInfo,      setDragInfo]      = useState(null);
+  const [palette,       setPalette]       = useState(() => { try { return JSON.parse(localStorage.getItem(key("palette")) || "[]"); } catch { return []; } });
+  const [showPalette,   setShowPalette]   = useState(() => { try { const v = localStorage.getItem(key("show-palette")); return v === null ? false : v !== "false"; } catch { return false; } });
   const [hoveredSem,    setHoveredSem]    = useState(null);
   const [hoveredZone,   setHoveredZone]   = useState(null);
   const [hoveredCardId, setHoveredCardId] = useState(null);
@@ -242,6 +244,7 @@ export function PlannerProvider({ children }) {
   const touchDragStartedRef = useRef(false); // true once finger moves past drag threshold
   const touchStartPos       = useRef({ x: 0, y: 0 }); // raw finger position at touchstart
   const onDropPlacedOutRef  = useRef(null);
+  const onDropPaletteRef    = useRef(null);
 
   // ── Effects: data loading ────────────────────────────────────
   useEffect(() => {
@@ -270,6 +273,13 @@ export function PlannerProvider({ children }) {
   }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
 
   useEffect(() => {
+    try { localStorage.setItem(key("palette"), JSON.stringify(palette)); } catch {}
+  }, [palette]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    try { localStorage.setItem(key("show-palette"), String(showPalette)); } catch {}
+  }, [showPalette]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     const h = () => saveState(persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
@@ -287,9 +297,10 @@ export function PlannerProvider({ children }) {
   useEffect(() => {
     stateRef.current    = { placements, specialTermPl, semOrders };
     allEdgesRef.current = allEdges;
-    onDropRef.current     = onDrop;
-    onDropBankRef.current  = onDropBank;
+    onDropRef.current          = onDrop;
+    onDropBankRef.current      = onDropBank;
     onDropPlacedOutRef.current = onDropPlacedOut;
+    onDropPaletteRef.current   = onDropPalette;
   });
   useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
 
@@ -995,6 +1006,8 @@ export function PlannerProvider({ children }) {
         next[semId] = [...withoutDropped, id, ...coreqPartners];
         return next;
       });
+      // Remove from palette if it was there
+      setPalette(prev => prev.filter(cid => !allMoving.includes(cid)));
     }
     setDragInfo(null);
   };
@@ -1034,6 +1047,7 @@ export function PlannerProvider({ children }) {
         });
         return next;
       });
+      setPalette(prev => prev.filter(cid => cid !== id && !coreqPartners.includes(cid)));
     }
     setDragInfo(null);
   };
@@ -1083,10 +1097,45 @@ export function PlannerProvider({ children }) {
         console.log('Course was not placed (from bank)');
       }
 
+      setPalette(prev => prev.filter(cid => cid !== id));
       setDragInfo(null);
     } catch (error) {
       console.error('Error in onDropPlacedOut:', error);
     }
+  };
+
+  const onDropPalette = (e) => {
+    e?.preventDefault?.();
+    if (!dragInfo || dragInfo.type !== "course") return;
+    const { id, fromSem } = dragInfo;
+    if (palette.includes(id)) { setDragInfo(null); return; }
+    pushUndo();
+    const coreqPartners = [...new Set(
+      allEdges
+        .filter(e2 => e2.type === "corequisite" && (e2.from === id || e2.to === id))
+        .map(e2 => e2.from === id ? e2.to : e2.from)
+        .filter(cid => cid !== id)
+    )];
+    const allMoving = [id, ...coreqPartners.filter(cid => !palette.includes(cid))];
+    // Remove from semester placements & orders
+    const toCleanSems = new Set([fromSem, ...allMoving.map(cid => placements[cid])].filter(Boolean));
+    if (toCleanSems.size > 0) {
+      setPlacements(p => { const n = { ...p }; allMoving.forEach(cid => delete n[cid]); return n; });
+      setSemOrders(p => {
+        const next = { ...p };
+        toCleanSems.forEach(sid => { next[sid] = (next[sid] || []).filter(cid => !allMoving.includes(cid)); });
+        return next;
+      });
+    }
+    // Remove from placedOut if needed
+    if (placedOut.has(id)) setPlacedOut(prev => { const n = new Set(prev); n.delete(id); return n; });
+    setPalette(prev => [...new Set([...prev, ...allMoving])]);
+    setDragInfo(null);
+  };
+
+  const removeFromPalette = (id) => {
+    pushUndo();
+    setPalette(prev => prev.filter(cid => cid !== id));
   };
 
   const onDropOnCard = (e, targetId, targetSemId) => {
@@ -1279,9 +1328,10 @@ export function PlannerProvider({ children }) {
       const touch  = e.changedTouches[0];
       const touchX = touch.clientX, touchY = touch.clientY;
       const target = document.elementFromPoint(touchX, touchY);
-      const semEl  = target?.closest('[data-sem-id]');
-      const bankEl = target?.closest('[data-drop-bank]');
-      let placedOutEl = target?.closest('[data-drop-placedout]');
+      const semEl      = target?.closest('[data-sem-id]');
+      const bankEl     = target?.closest('[data-drop-bank]');
+      const paletteEl  = target?.closest('[data-drop-palette]');
+      let placedOutEl  = target?.closest('[data-drop-placedout]');
 
       if (!placedOutEl) {
         for (const container of document.querySelectorAll('[data-drop-placedout]')) {
@@ -1293,7 +1343,9 @@ export function PlannerProvider({ children }) {
         }
       }
 
-      if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
+      if (paletteEl && onDropPaletteRef.current && type === 'course') {
+        onDropPaletteRef.current({ preventDefault: () => {} });
+      } else if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
         onDropPlacedOutRef.current({ id, type, fromSem });
       } else if (bankEl && onDropBankRef.current) {
         onDropBankRef.current({ preventDefault: () => {} });
@@ -1333,6 +1385,7 @@ export function PlannerProvider({ children }) {
     setMinor1("");
     setMinor2("");
     setPlacedOut(new Set());
+    setPalette([]);
     // Reset cohort to defaults
     setPlanEntSem(_defEntSem);
     setPlanEntYear(defaultStartYear);
@@ -1805,6 +1858,7 @@ export function PlannerProvider({ children }) {
     removeSubstitution: (fromId, toId) => setSubstitutions(prev =>
       prev.filter(s => !(s.from === fromId && s.to === toId))
     ),
+    palette, removeFromPalette, onDropPalette, showPalette, setShowPalette,
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard, onDropPlacedOut,
     canDropSem,
     doUndo, doRedo, pushUndo,

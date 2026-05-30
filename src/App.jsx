@@ -13,6 +13,7 @@ import SummerRow       from './ui/SummerRow.jsx';
 import BankPanel       from './ui/BankPanel.jsx';
 import InfoPanel       from './ui/InfoPanel.jsx';
 import DisclaimerModal from './ui/DisclaimerModal.jsx';
+import PalettePanel    from './ui/PalettePanel.jsx';
 
 // Main planner layout -- consumes PlannerContext
 function PlannerApp() {
@@ -74,6 +75,9 @@ function PlannerApp() {
       }}>
         {/* SVG relation lines (fixed overlay) */}
         <RelationLines />
+
+        {/* Left scratch pad — desktop only */}
+        {!isPhone && <PalettePanel />}
 
         {/* Scrollable timeline */}
         <div
