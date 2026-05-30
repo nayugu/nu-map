@@ -18,6 +18,7 @@ export default function InfoPanel() {
     showPanel, setShowPanel, selectedId, setSelectedId,
     courseMap, allEdges, offeredOverrides, setOfferedOverrides,
     panelHeight, panelResizing, isPhone, isMobile,
+    showUnlocks,
   } = usePlanner();
 
   // ── InfoPanel nav history (back = Cmd+Z, fwd = Cmd+Shift+Z) ──────
@@ -106,7 +107,7 @@ export default function InfoPanel() {
                 setOfferedOverrides={setOfferedOverrides}
               />
             )}
-            {!isMobile && selEdges.length > 0 && (
+            {!isMobile && showUnlocks && selEdges.length > 0 && (
               <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
             )}
 
@@ -119,7 +120,7 @@ export default function InfoPanel() {
                   setOfferedOverrides={setOfferedOverrides}
                   compact
                 />
-                {selEdges.length > 0 && (
+                {showUnlocks && selEdges.length > 0 && (
                   <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} compact />
                 )}
               </div>
@@ -140,7 +141,7 @@ export default function InfoPanel() {
                 offeredOverrides={offeredOverrides}
                 setOfferedOverrides={setOfferedOverrides}
               />
-              {selEdges.length > 0 && (
+              {showUnlocks && selEdges.length > 0 && (
                 <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
               )}
             </div>

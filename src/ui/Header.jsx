@@ -31,6 +31,7 @@ export default function Header() {
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
     showContLogo, setShowContLogo,
+    showUnlocks, setShowUnlocks,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
     plans, activePlanId, switchPlan, createPlan, deletePlan, renamePlan,
@@ -699,6 +700,15 @@ export default function Header() {
                   border: "1px solid var(--border-2)",
                   color: showContLogo ? "var(--text-3)" : "var(--text-5)" }}>
                 {showContLogo ? t("header.settings.contlogo.on") : t("header.settings.contlogo.off")}
+              </button>
+
+              {/* Show unlocks toggle */}
+              <button className="hdr-btn-dd" onClick={() => setShowUnlocks(v => !v)}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 400, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)",
+                  color: showUnlocks ? "var(--text-3)" : "var(--text-5)" }}>
+                {showUnlocks ? t("header.settings.unlocks.on") : t("header.settings.unlocks.off")}
               </button>
 
               {/** Refresh catalog data (commented out)

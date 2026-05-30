@@ -125,6 +125,15 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("show-cont-logo"), String(val)); } catch {}
   };
 
+  // ── UI: Show "Unlocks" section in info panel ──
+  const [showUnlocks, setShowUnlocks] = useState(() => {
+    try { const v = localStorage.getItem(key("show-unlocks")); return v === "true"; } catch { return false; }
+  });
+  const updateShowUnlocks = (val) => {
+    setShowUnlocks(val);
+    try { localStorage.setItem(key("show-unlocks"), String(val)); } catch {}
+  };
+
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
   const effectiveCourseMap = useMemo(() => {
     if (!Object.keys(shOverrides).length) return courseMap;
@@ -1806,6 +1815,7 @@ export function PlannerProvider({ children }) {
     showDisclaimer, showSettings,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     showContLogo, setShowContLogo: updateShowContLogo,
+    showUnlocks, setShowUnlocks: updateShowUnlocks,
     stickyCourses, setStickyCourses,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd, semOrd: _semOrd,
     panelHeight,

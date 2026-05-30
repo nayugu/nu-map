@@ -136,6 +136,8 @@ export const strings = {
   "header.settings.collapse.off": "Collapse other credits: off",
   "header.settings.contlogo.on":  "Continuation logo: on",
   "header.settings.contlogo.off": "Continuation logo: off",
+  "header.settings.unlocks.on":   "Show unlocks: on",
+  "header.settings.unlocks.off":  "Show unlocks: off",
   "header.settings.zoom":         "ZOOM",
   "header.settings.zoom.auto":    "auto",
   "header.settings.language":     "LANGUAGE",
