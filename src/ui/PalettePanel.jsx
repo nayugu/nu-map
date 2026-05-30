@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
 
@@ -9,20 +10,31 @@ export default function PalettePanel() {
     effectiveCourseMap,
   } = usePlanner();
   const { t } = useLanguage();
+  const [hovered, setHovered] = useState(false);
 
-  const isDragTarget = dragInfo?.type === "course" && !palette.includes(dragInfo.id);
+  const canDrop = dragInfo?.type === "course" && !palette.includes(dragInfo.id);
+
+  const dragHandlers = {
+    onDragEnter: () => { if (canDrop) setHovered(true); },
+    onDragLeave: () => setHovered(false),
+    onDragOver:  e => { if (canDrop) e.preventDefault(); },
+    onDrop:      e => { setHovered(false); onDropPalette(e); },
+  };
 
   if (!showPalette) {
     return (
       <div
+        data-drop-palette="true"
         onClick={() => setShowPalette(true)}
+        {...dragHandlers}
         style={{
           width: 18, flexShrink: 0,
           display: "flex", alignItems: "center", justifyContent: "center",
-          background: "var(--bg-surface)",
+          background: hovered ? "var(--active-hov-bg)" : "var(--bg-surface)",
           borderRight: "1px solid var(--border-1)",
           cursor: "pointer",
           userSelect: "none",
+          transition: "background 0.12s",
         }}
         title="Show scratch pad"
       >
@@ -34,12 +46,11 @@ export default function PalettePanel() {
   return (
     <div
       data-drop-palette="true"
-      onDragOver={e => { if (isDragTarget) e.preventDefault(); }}
-      onDrop={onDropPalette}
+      {...dragHandlers}
       style={{
         width: 100, flexShrink: 0,
         display: "flex", flexDirection: "column",
-        background: isDragTarget ? "var(--active-hov-bg)" : "var(--bg-surface)",
+        background: hovered ? "var(--active-hov-bg)" : "var(--bg-surface)",
         borderRight: "1px solid var(--border-1)",
         transition: "background 0.12s",
       }}
