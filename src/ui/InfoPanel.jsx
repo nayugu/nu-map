@@ -422,7 +422,7 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
           return (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
               <span title={other?.title || undefined}
-                style={{ fontSize: 10, fontWeight: 700, color: "var(--text-2)" }}>
+                style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)" }}>
                 {other?.code || (isOut ? rel.to : rel.from)}
               </span>
               {coreq && (
