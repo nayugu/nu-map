@@ -52,6 +52,7 @@ export default function Header() {
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
+  const [shareLinkLocale, setShareLinkLocale] = useState(locale);
   const [planSearch, setPlanSearch] = useState("");
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -536,25 +537,39 @@ export default function Header() {
               padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
             }}>
-              <button className="hdr-btn-dd"
-                title={t("header.io.share.title")}
-                onClick={async () => {
-                  try {
-                    await copyPlanLink();
-                    setShareLinkCopied(true);
-                    setTimeout(() => setShareLinkCopied(false), 2000);
-                  } catch {
-                    alert(t("header.io.share.error") ?? "Could not copy link.");
-                  }
-                }}
-                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: shareLinkCopied ? "var(--active)" : "var(--bg-surface)",
-                  padding: "4px 8px", borderRadius: 5,
-                  border: `1px solid ${shareLinkCopied ? "var(--active)" : "var(--border-2)"}`,
-                  color: shareLinkCopied ? "#fff" : "var(--text-4)",
-                  transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
-                {shareLinkCopied ? (t("header.io.share.done") ?? "Link copied!") : (t("header.io.share") ?? "Share link")}
-              </button>
+              <div style={{ display: "flex", gap: 4 }}>
+                <button className="hdr-btn-dd"
+                  title={t("header.io.share.title")}
+                  onClick={async () => {
+                    try {
+                      await copyPlanLink(shareLinkLocale);
+                      setShareLinkCopied(true);
+                      setTimeout(() => setShareLinkCopied(false), 2000);
+                    } catch {
+                      alert(t("header.io.share.error") ?? "Could not copy link.");
+                    }
+                  }}
+                  style={{ flex: 1, textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                    background: shareLinkCopied ? "var(--active)" : "var(--bg-surface)",
+                    padding: "4px 8px", borderRadius: 5,
+                    border: `1px solid ${shareLinkCopied ? "var(--active)" : "var(--border-2)"}`,
+                    color: shareLinkCopied ? "#fff" : "var(--text-4)",
+                    transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
+                  {shareLinkCopied ? (t("header.io.share.done") ?? "Link copied!") : (t("header.io.share") ?? "Snapshot link")}
+                </button>
+                <select
+                  value={shareLinkLocale}
+                  onChange={e => setShareLinkLocale(e.target.value)}
+                  title={t("header.io.share.locale.title") ?? "Language for recipient"}
+                  style={{ fontSize: 10, fontWeight: 700, cursor: "pointer",
+                    background: "var(--bg-surface)", color: "var(--text-4)",
+                    border: "1px solid var(--border-2)", borderRadius: 5,
+                    padding: "4px 6px", flexShrink: 0 }}>
+                  {locales.map(l => (
+                    <option key={l.code} value={l.code}>{l.code.toUpperCase()}</option>
+                  ))}
+                </select>
+              </div>
               <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title={t("header.io.copy.title")}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,

@@ -110,6 +110,7 @@ export const strings = {
   "header.plan.new.prompt":       "New plan name:",
   "header.plan.delete.confirm":   "Delete \u201c{name}\u201d?",
   "header.io.share.title":        "Copy a link to a snapshot of this plan",
+  "header.io.share.locale.title": "Language for recipient",
   "header.io.share":              "Snapshot link",
   "header.io.share.done":         "Link copied!",
   "header.io.share.error":        "Could not copy link.",

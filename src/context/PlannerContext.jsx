@@ -18,6 +18,7 @@ import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.j
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
+import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
 import { ICalendar }      from "../ports/ICalendar.js";
@@ -28,6 +29,7 @@ import { IAIAssistant }   from "../ports/IAIAssistant.js";
 const PlannerContext = createContext(null);
 
 export function PlannerProvider({ children }) {
+  const { setLocale, locales } = useLanguage();
   const institution    = usePort(IInstitution);
   const calendar       = usePort(ICalendar);
   const courseCatalog  = usePort(ICourseCatalog);
@@ -1525,12 +1527,13 @@ export function PlannerProvider({ children }) {
     reader.readAsText(file);
   };
 
-  const copyPlanLink = async () => {
+  const copyPlanLink = async (targetLocale) => {
     const planName = plans.find(p => p.id === activePlanId)?.name || "Plan";
     const data = {
       ...captureCurrentPlan(),
       substitutions,
       planName,
+      locale: targetLocale,
     };
     const encoded = await encodePlan(data);
     const url = buildShareUrl(encoded);
@@ -1549,6 +1552,8 @@ export function PlannerProvider({ children }) {
     setActivePlanId(id);
     // restorePlan doesn't handle substitutions, so set them directly.
     setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
+    // Apply the sender's chosen locale if it's one we support.
+    if (d.locale && locales.some(l => l.code === d.locale)) setLocale(d.locale);
   };
 
   // On mount: detect a shared plan in the URL hash and offer to load it as a new plan.
