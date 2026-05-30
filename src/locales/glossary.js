@@ -23,6 +23,7 @@ export const GLOSSARY = {
   "Incoming Credit": {
     zh: "入学学分",
     ja: "持込単位",
+    ko: "편입 학점",
     es: "Créditos transferidos",
     fr: "Crédits d'admission",
     hi: "स्थानांतरण क्रेडिट",
@@ -31,6 +32,7 @@ export const GLOSSARY = {
   "general SH": {
     zh: "通用学分",
     ja: "一般単位",
+    ko: "일반 학점",
     es: "Créditos generales",
     fr: "Crédits généraux",
     hi: "सामान्य क्रेडिट",
