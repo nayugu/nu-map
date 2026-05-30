@@ -617,7 +617,14 @@ export default function GradPanel({ wideCatalog = false }) {
     setFetching(true); setLoadErr(null); setMajor(null); setSelConc(""); setNewerMajorPath(null);
     majorRequirements.loadMajor(selPath)
       .then(data => { setMajor(data); setNewerMajorPath(findNewerMajorVersion(selPath)); })
-      .catch(e => setLoadErr(e.message))
+      .catch(e => {
+        if (e.message.includes('not found in registry')) {
+          // Stale path from an old plan — clear it silently so the user can pick a new major
+          setSelPath("");
+        } else {
+          setLoadErr(e.message);
+        }
+      })
       .finally(() => setFetching(false));
   }, [selPath]);
 
