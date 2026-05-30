@@ -88,6 +88,7 @@ export const strings = {
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sans titre",
+  "course.avail.badge":           "⚠ dispo?",
   "info.prereqs":                 "Prérequis :",
   "info.relationships.title":     "DÉBLOQUE",
   "info.offered.title":           "PROPOSÉ EN",
@@ -111,7 +112,7 @@ export const strings = {
   "header.io.share":              "Lien instantané",
   "header.io.share.done":         "Lien copié !",
   "header.io.share.error":        "Impossible de copier le lien.",
-  "header.io.share.confirm":      "Charger le plan partagé ? Il s'ouvrira comme un nouveau plan à côté des vôtres.",
+  //   "header.io.share.confirm":      "Charger le plan partagé ? Il s'ouvrira comme un nouveau plan à côté des vôtres.",
   "header.io.copy.title":         "Copier le plan lisible dans le presse-papiers",
   "header.io.copy":               "Copier le résumé",
   "header.io.export.pdf.title":   "Exporter en PDF",

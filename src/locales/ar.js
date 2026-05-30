@@ -87,6 +87,7 @@ export const strings = {
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "بدون عنوان",
+  "course.avail.badge":           "⚠ متاح؟",
   "info.prereqs":                 "المتطلبات السابقة:",
   "info.relationships.title":     "يفتح",
   "info.offered.title":           "يُقدم في",
@@ -110,7 +111,7 @@ export const strings = {
   "header.io.share":              "رابط لقطة",
   "header.io.share.done":         "تم نسخ الرابط!",
   "header.io.share.error":        "تعذّر نسخ الرابط.",
-  "header.io.share.confirm":      "هل تريد تحميل الخطة المشتركة؟ ستُفتح كخطة جديدة بجانب خططك الحالية.",
+  //   "header.io.share.confirm":      "هل تريد تحميل الخطة المشتركة؟ ستُفتح كخطة جديدة بجانب خططك الحالية.",
   "header.io.copy.title":         "نسخ الخطة إلى الحافظة",
   "header.io.copy":               "نسخ الملخص",
   "header.io.export.pdf.title":   "تصدير PDF",

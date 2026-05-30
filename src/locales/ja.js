@@ -89,6 +89,7 @@ export const strings = {
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "タイトルなし",
+  "course.avail.badge":           "⚠ 開講?",
   "info.prereqs":                 "履修条件：",
   "info.relationships.title":     "アンロック",
   "info.offered.title":           "開講学期",
@@ -112,7 +113,7 @@ export const strings = {
   "header.io.share":              "スナップショットリンク",
   "header.io.share.done":         "リンクをコピーしました！",
   "header.io.share.error":        "リンクをコピーできませんでした。",
-  "header.io.share.confirm":      "共有されたプランを読み込みますか？既存のプランの隣に新しいプランとして開きます。",
+  //   "header.io.share.confirm":      "共有されたプランを読み込みますか？既存のプランの隣に新しいプランとして開きます。",
   "header.io.copy.title":         "人間が読めるプランをクリップボードにコピー",
   "header.io.copy":               "概要をコピー",
   "header.io.export.pdf.title":   "PDFとしてエクスポート",

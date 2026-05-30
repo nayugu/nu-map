@@ -88,6 +88,7 @@ export const strings = {
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "कोई शीर्षक नहीं",
+  "course.avail.badge":           "⚠ उपलब्ध?",
   "info.prereqs":                 "पूर्व-आवश्यकताएँ:",
   "info.relationships.title":     "अनलॉक",
   "info.offered.title":           "प्रस्तुत सेमेस्टर",
@@ -111,7 +112,7 @@ export const strings = {
   "header.io.share":              "स्नैपशॉट लिंक",
   "header.io.share.done":         "लिंक कॉपी हो गया!",
   "header.io.share.error":        "लिंक कॉपी नहीं हो सका।",
-  "header.io.share.confirm":      "शेयर किया गया प्लान लोड करें? यह आपके मौजूदा प्लान के साथ एक नए प्लान के रूप में खुलेगा।",
+  //   "header.io.share.confirm":      "शेयर किया गया प्लान लोड करें? यह आपके मौजूदा प्लान के साथ एक नए प्लान के रूप में खुलेगा।",
   "header.io.copy.title":         "प्लान को क्लिपबोर्ड पर कॉपी करें",
   "header.io.copy":               "सारांश कॉपी करें",
   "header.io.export.pdf.title":   "PDF निर्यात करें",

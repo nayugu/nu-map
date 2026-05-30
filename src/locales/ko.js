@@ -88,6 +88,7 @@ export const strings = {
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "제목 없음",
+  "course.avail.badge":           "⚠ 개설?",
   "info.prereqs":                 "선수 과목:",
   "info.relationships.title":     "이후 수강 가능",
   "info.offered.title":           "개설 학기",
@@ -111,7 +112,7 @@ export const strings = {
   "header.io.share":              "스냅샷 링크",
   "header.io.share.done":         "링크가 복사되었습니다!",
   "header.io.share.error":        "링크를 복사할 수 없습니다.",
-  "header.io.share.confirm":      "공유된 계획을 불러올까요? 기존 계획 옆에 새 계획으로 열립니다.",
+  //   "header.io.share.confirm":      "공유된 계획을 불러올까요? 기존 계획 옆에 새 계획으로 열립니다.",
   "header.io.copy.title":         "읽기 쉬운 계획을 클립보드에 복사",
   "header.io.copy":               "요약 복사",
   "header.io.export.pdf.title":   "PDF로 내보내기",

@@ -334,7 +334,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           return (
             <span title={tip}
               style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", borderRadius: 3, padding: "1px 4px" }}>
-              ⚠ avail?
+              {t("course.avail.badge")}
             </span>
           );
         })()}

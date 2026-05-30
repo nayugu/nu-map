@@ -101,7 +101,7 @@ export const strings = {
   "header.io.share":               "\u5feb\u7167\u94fe\u63a5",
   "header.io.share.done":          "\u94fe\u63a5\u5df2\u590d\u5236\uff01",
   "header.io.share.error":         "\u65e0\u6cd5\u590d\u5236\u94fe\u63a5\u3002",
-  "header.io.share.confirm":       "\u52a0\u8f7d\u5206\u4eab\u7684\u8ba1\u5212\uff1f\u5c06\u4f5c\u4e3a\u65b0\u8ba1\u5212\u5728\u60a8\u73b0\u6709\u8ba1\u5212\u65c1\u6253\u5f00\u3002",
+  //   "header.io.share.confirm":       "\u52a0\u8f7d\u5206\u4eab\u7684\u8ba1\u5212\uff1f\u5c06\u4f5c\u4e3a\u65b0\u8ba1\u5212\u5728\u60a8\u73b0\u6709\u8ba1\u5212\u65c1\u6253\u5f00\u3002",
   "header.io.copy.title":          "\u590d\u5236\u53ef\u8bfb\u8ba1\u5212\u5230\u526a\u8d34\u677f",
   "header.io.export.pdf":          "\u5bfc\u51fa PDF",
   "header.io.export.pdf.title":    "\u5bfc\u51fa PDF",
@@ -156,6 +156,7 @@ export const strings = {
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "\u65e0\u6807\u9898",
+  "course.avail.badge":           "\u26a0 \u5f00\u8bfe?",
   "info.prereqs":                 "\u5148\u4fee\uff1a",
   "info.relationships.title":     "\u89e3\u9501",
   "info.offered.title":           "\u5f00\u8bfe\u5b66\u671f",
