@@ -310,7 +310,7 @@ export default function Header() {
       <div style={{
         display: "flex", flexDirection: "column", gap: 6, marginBottom: 10,
         position: "sticky", top: 0, zIndex: 30, background: "var(--bg-app)",
-        paddingBottom: 8, borderBottom: "1px solid var(--border-1)",
+        paddingTop: 10, paddingBottom: 8, borderBottom: "1px solid var(--border-1)",
       }}>
         {/* Row 1: title + info — last-updated anchored right, never wraps */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "nowrap", minWidth: 0, overflow: "hidden" }}>

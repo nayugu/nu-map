@@ -78,7 +78,7 @@ function PlannerApp() {
         {/* Scrollable timeline */}
         <div
           ref={timelineRef}
-          style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: isPhone ? `10px 10px ${showPanel ? panelHeight + 24 : 90}px 10px` : '10px 10px 240px 10px' }}
+          style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: isPhone ? `0 10px ${showPanel ? panelHeight + 24 : 90}px 10px` : '0 10px 240px 10px' }}
           onClick={() => { setSelectedId(null); setShowPanel(false); }}
         >
           <Header />
