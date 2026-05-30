@@ -237,9 +237,11 @@ export function PlannerProvider({ children }) {
   const ghostRef        = useRef(null);  // floating ghost element during touch drag
   const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
   const isFirstRender = useRef(true);
-  const touchDragFromRef = useRef(null);
-  const touchDragTypeRef = useRef(null);
-  const onDropPlacedOutRef = useRef(null);
+  const touchDragFromRef    = useRef(null);
+  const touchDragTypeRef    = useRef(null);
+  const touchDragStartedRef = useRef(false); // true once finger moves past drag threshold
+  const touchStartPos       = useRef({ x: 0, y: 0 }); // raw finger position at touchstart
+  const onDropPlacedOutRef  = useRef(null);
 
   // ── Effects: data loading ────────────────────────────────────
   useEffect(() => {
@@ -1171,24 +1173,12 @@ export function PlannerProvider({ children }) {
       if (ghostRef.current) { ghostRef.current.remove(); ghostRef.current = null; }
     };
 
-    const onTouchStart = (e) => {
-      // Let interactive elements handle their own touch (inputs, buttons, selects)
-      const tag = e.target.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON') return;
-      const cardEl = e.target.closest('[data-drag-id]');
-      if (!cardEl) return;
-      const id       = cardEl.dataset.dragId || null;
-      const type     = cardEl.dataset.dragType;
-      const fromSem  = cardEl.dataset.dragFrom || null;
-      const duration = cardEl.dataset.dragDuration ? parseInt(cardEl.dataset.dragDuration, 10) : undefined;
-      const touch   = e.touches[0];
-      const rect    = cardEl.getBoundingClientRect();
+    const DRAG_THRESHOLD = 8; // px — finger must move this far before drag activates
 
-      // Suppress text selection
+    const initiateDrag = (cardEl, rect, id, type, fromSem, duration) => {
       document.documentElement.style.userSelect = 'none';
       document.documentElement.style.webkitUserSelect = 'none';
 
-      // Build ghost clone that floats under the finger
       removeGhost();
       const ghost = cardEl.cloneNode(true);
       ghost.style.position      = 'fixed';
@@ -1204,23 +1194,51 @@ export function PlannerProvider({ children }) {
       ghost.style.transition    = 'none';
       document.body.appendChild(ghost);
       ghostRef.current = ghost;
-      touchStartOff.current = { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
 
-      // Dim original and hide from hit-testing
       cardEl.style.opacity       = '0.3';
       cardEl.style.pointerEvents = 'none';
 
-      touchDragElRef.current = cardEl;
-      touchDragIdRef.current = id;
-      touchDragTypeRef.current = type;
-      touchDragFromRef.current = fromSem;
+      touchDragStartedRef.current = true;
       setDragInfo({ id, type, fromSem, ...(duration != null ? { duration } : {}) });
     };
 
-    const onTouchMove = (e) => {
-      if (!touchDragElRef.current && !touchDragIdRef.current) return;
-      e.preventDefault();
+    const onTouchStart = (e) => {
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON') return;
+      const cardEl = e.target.closest('[data-drag-id]');
+      if (!cardEl) return;
       const touch = e.touches[0];
+
+      // Record pending card info — don't start drag yet; wait for movement threshold
+      touchDragStartedRef.current = false;
+      touchStartPos.current = { x: touch.clientX, y: touch.clientY };
+      touchStartOff.current = { x: touch.clientX - cardEl.getBoundingClientRect().left,
+                                y: touch.clientY - cardEl.getBoundingClientRect().top };
+      touchDragElRef.current   = cardEl;
+      touchDragIdRef.current   = cardEl.dataset.dragId || null;
+      touchDragTypeRef.current = cardEl.dataset.dragType;
+      touchDragFromRef.current = cardEl.dataset.dragFrom || null;
+    };
+
+    const onTouchMove = (e) => {
+      if (!touchDragIdRef.current && !touchDragElRef.current) return;
+      const touch = e.touches[0];
+
+      if (!touchDragStartedRef.current) {
+        const dx = touch.clientX - touchStartPos.current.x;
+        const dy = touch.clientY - touchStartPos.current.y;
+        if (Math.sqrt(dx * dx + dy * dy) < DRAG_THRESHOLD) return;
+        // Threshold crossed — start the drag now
+        const cardEl   = touchDragElRef.current;
+        const id       = touchDragIdRef.current;
+        const type     = touchDragTypeRef.current;
+        const fromSem  = touchDragFromRef.current;
+        const duration = cardEl?.dataset.dragDuration ? parseInt(cardEl.dataset.dragDuration, 10) : undefined;
+        const rect     = cardEl.getBoundingClientRect();
+        initiateDrag(cardEl, rect, id, type, fromSem, duration);
+      }
+
+      e.preventDefault();
       if (ghostRef.current) {
         ghostRef.current.style.left = (touch.clientX - touchStartOff.current.x) + 'px';
         ghostRef.current.style.top  = (touch.clientY - touchStartOff.current.y) + 'px';
@@ -1231,64 +1249,59 @@ export function PlannerProvider({ children }) {
     };
 
     const onTouchEnd = (e) => {
-      console.log('Touch end triggered');
-      if (!touchDragElRef.current && !touchDragIdRef.current) {
-        console.log('No drag in progress');
-        return;
-      }
-      const id = touchDragIdRef.current;
-      const type = touchDragTypeRef.current;
+      if (!touchDragIdRef.current && !touchDragElRef.current) return;
+
+      const dragStarted = touchDragStartedRef.current;
+      const id      = touchDragIdRef.current;
+      const type    = touchDragTypeRef.current;
       const fromSem = touchDragFromRef.current;
-      const cardEl = touchDragElRef.current || cardRefs.current[id];
+      const cardEl  = touchDragElRef.current || cardRefs.current[id];
+
+      // Always clean up visual state
       if (cardEl) { cardEl.style.opacity = ''; cardEl.style.pointerEvents = ''; }
-      touchDragElRef.current = null;
+      touchDragElRef.current      = null;
+      touchDragStartedRef.current = false;
       removeGhost();
       document.documentElement.style.userSelect = '';
       document.documentElement.style.webkitUserSelect = '';
+      touchDragIdRef.current   = null;
+      touchDragTypeRef.current = null;
+      touchDragFromRef.current = null;
+      setHoveredSem(null);
+      setHoveredZone(null);
+
+      if (!dragStarted) {
+        // Was a tap, not a drag — leave drop logic alone
+        setDragInfo(null);
+        return;
+      }
+
       const touch  = e.changedTouches[0];
       const touchX = touch.clientX, touchY = touch.clientY;
-      console.log('Touch coordinates:', { touchX, touchY });
       const target = document.elementFromPoint(touchX, touchY);
-      console.log('Element at touch point:', target);
       const semEl  = target?.closest('[data-sem-id]');
       const bankEl = target?.closest('[data-drop-bank]');
       let placedOutEl = target?.closest('[data-drop-placedout]');
-      console.log('Direct placedOutEl via closest:', placedOutEl);
 
-      // Fallback: manually check all placed-out containers
       if (!placedOutEl) {
-        const placedOutContainers = document.querySelectorAll('[data-drop-placedout]');
-        console.log('Number of placed-out containers found:', placedOutContainers.length);
-        for (const container of placedOutContainers) {
+        for (const container of document.querySelectorAll('[data-drop-placedout]')) {
           const rect = container.getBoundingClientRect();
-          console.log('Container rect:', rect);
           if (touchX >= rect.left && touchX <= rect.right && touchY >= rect.top && touchY <= rect.bottom) {
             placedOutEl = container;
-            console.log('Found via bounding rect');
             break;
           }
         }
       }
 
       if (placedOutEl && onDropPlacedOutRef.current && type === 'course') {
-        console.log('Dropping on placed out section');
-        const dragInfo = { id, type, fromSem };
-        onDropPlacedOutRef.current(dragInfo);
+        onDropPlacedOutRef.current({ id, type, fromSem });
       } else if (bankEl && onDropBankRef.current) {
-        console.log('Dropping on bank');
         onDropBankRef.current({ preventDefault: () => {} });
       } else if (semEl && onDropRef.current) {
-        console.log('Dropping on semester');
         onDropRef.current(null, semEl.dataset.semId);
       } else {
-        console.log('No valid drop target, cancelling drag');
         setDragInfo(null);
       }
-      touchDragIdRef.current = null;
-      touchDragTypeRef.current = null;
-      touchDragFromRef.current = null;
-      setHoveredSem(null);
-      setHoveredZone(null);
     };
 
     document.addEventListener('touchstart', onTouchStart, { passive: true });
