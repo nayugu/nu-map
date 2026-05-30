@@ -171,9 +171,7 @@ export function PlannerProvider({ children }) {
   });
 
   // ── Settings / modal state ───────────────────────────────────
-  const [showDisclaimer, setShowDisclaimer] = useState(() => {
-    try { return !localStorage.getItem(key("seen-disclaimer")); } catch { return true; }
-  });
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
   // Default entry/grad sem: first and last non-optional semester types
   const _primarySems = calendar.getSemesterTypes().filter(t => !t.optional);
   const _defEntSem   = _primarySems[0]?.id           ?? "fall";
@@ -1139,6 +1137,7 @@ export function PlannerProvider({ children }) {
     // Remove from placedOut if needed
     if (placedOut.has(id)) setPlacedOut(prev => { const n = new Set(prev); n.delete(id); return n; });
     setPalette(prev => [...new Set([...prev, ...allMoving])]);
+    setShowPalette(true);
     setDragInfo(null);
   };
 
