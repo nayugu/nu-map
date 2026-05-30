@@ -130,7 +130,7 @@ function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     terms:        uniqueTerms,
     attributes:   (raw.nuPath?.length ? raw.nuPath : nuPathSupp[id]) ?? raw.attributes ?? [],
     color:        subjectColor(subject),
-    isCps:        (subjectColleges[subject] ?? "") === "CPS",
+    isCps:        (subjectColleges[subject] ?? "") === "PS",
   };
 }
 
