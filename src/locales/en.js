@@ -180,6 +180,10 @@ export const strings = {
   "translation.cancel.title":       "Cancel model download",
   "translation.clear.cache":        "Clear cache",
 
+  // ── Scratch pad ────────────────────────────────────────────────
+  "palette.title":  "Scratch",
+  "palette.empty":  "drag courses here",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "Unofficial student planning tool",
   "modal.dismiss":    "I understand \u2014 let me plan!",

@@ -1,4 +1,5 @@
 import { usePlanner } from "../context/PlannerContext.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
 
 export default function PalettePanel() {
   const {
@@ -7,6 +8,7 @@ export default function PalettePanel() {
     dragInfo, onDragStart,
     effectiveCourseMap,
   } = usePlanner();
+  const { t } = useLanguage();
 
   const isDragTarget = dragInfo?.type === "course" && !palette.includes(dragInfo.id);
 
@@ -24,7 +26,7 @@ export default function PalettePanel() {
         }}
         title="Show scratch pad"
       >
-        <span style={{ fontSize: 8, color: "var(--text-5)", writingMode: "vertical-rl", letterSpacing: "0.08em", fontWeight: 700, textTransform: "uppercase" }}>Scratch</span>
+        <span style={{ fontSize: 8, color: "var(--text-5)", writingMode: "vertical-rl", letterSpacing: "0.08em", fontWeight: 700, textTransform: "uppercase" }}>{t("palette.title")}</span>
       </div>
     );
   }
@@ -51,7 +53,7 @@ export default function PalettePanel() {
         display: "flex", alignItems: "center",
         userSelect: "none",
       }}>
-        <span style={{ flex: 1, fontSize: 8, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Scratch</span>
+        <span style={{ flex: 1, fontSize: 8, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.08em", textTransform: "uppercase" }}>{t("palette.title")}</span>
         <span
           onClick={() => setShowPalette(false)}
           style={{ fontSize: 9, color: "var(--text-5)", cursor: "pointer", padding: "0 2px", lineHeight: 1 }}
@@ -63,7 +65,7 @@ export default function PalettePanel() {
       <div style={{ flex: 1, overflowY: "auto", padding: "5px 4px", display: "flex", flexDirection: "column", gap: 3 }}>
         {palette.length === 0 && (
           <div style={{ fontSize: 8, color: "var(--text-5)", textAlign: "center", padding: "14px 4px", lineHeight: 1.5 }}>
-            drag courses here
+            {t("palette.empty")}
           </div>
         )}
         {palette.map(courseId => {

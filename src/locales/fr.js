@@ -176,6 +176,10 @@ export const strings = {
   "translation.cancel.title":       "Annuler le téléchargement",
   "translation.clear.cache":        "Vider le cache",
 
+  // ── Scratch pad ────────────────────────────────────────────────
+  "palette.title":  "Brouillon",
+  "palette.empty":  "Glissez des cours ici",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "Outil de planification étudiante non officiel",
   "modal.dismiss":    "Je comprends — laissez-moi planifier !",

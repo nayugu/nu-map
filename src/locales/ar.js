@@ -175,6 +175,10 @@ export const strings = {
   "translation.cancel.title":       "إلغاء التنزيل",
   "translation.clear.cache":        "مسح التخزين المؤقت",
 
+  // ── Scratch pad ────────────────────────────────────────────────
+  "palette.title":  "مسودة",
+  "palette.empty":  "اسحب المواد هنا",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "أداة تخطيط طلابية غير رسمية",
   "modal.dismiss":    "فهمت — دعني أخطط!",

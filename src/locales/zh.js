@@ -175,6 +175,10 @@ export const strings = {
   "translation.cancel.title":       "\u53d6\u6d88\u4e0b\u8f7d",
   "translation.clear.cache":        "\u6e05\u9664\u7f13\u5b58",
 
+  // ── Scratch pad ────────────────────────────────────────────────
+  "palette.title":  "暂存",
+  "palette.empty":  "将课程拖至此处",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle": "\u975e\u5b98\u65b9\u5b66\u4e1a\u89c4\u5212\u5de5\u5177",
   "modal.dismiss":  "\u6211\u5df2\u4e86\u89e3 \u2014 \u5f00\u59cb\u89c4\u5212\uff01",

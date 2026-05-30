@@ -177,6 +177,10 @@ export const strings = {
   "translation.cancel.title":       "ダウンロードをキャンセル",
   "translation.clear.cache":        "キャッシュを削除",
 
+  // ── Scratch pad ────────────────────────────────────────────────
+  "palette.title":  "一時保存",
+  "palette.empty":  "コースをここにドラッグ",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "非公式の学生プランニングツール",
   "modal.dismiss":    "理解しました—プランを始める！",

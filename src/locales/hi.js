@@ -176,6 +176,10 @@ export const strings = {
   "translation.cancel.title":       "डाउनलोड रद्द करें",
   "translation.clear.cache":        "कैश साफ़ करें",
 
+  // ── Scratch pad ────────────────────────────────────────────────
+  "palette.title":  "ड्राफ़्ट",
+  "palette.empty":  "कोर्स यहाँ खिंचें",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "ग़ैर-आधिकारिक छात्र योजना उपकरण",
   "modal.dismiss":    "मैं समझ गया — योजना शुरू करें!",

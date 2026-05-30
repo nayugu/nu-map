@@ -176,6 +176,10 @@ export const strings = {
   "translation.cancel.title":       "다운로드 취소",
   "translation.clear.cache":        "캐시 삭제",
 
+  // ── Scratch pad ────────────────────────────────────────────────
+  "palette.title":  "임시 저장",
+  "palette.empty":  "강좌를 여기로 드래그",
+
   // ── Disclaimer modal ───────────────────────────────────────────
   "modal.subtitle":   "비공식 학생 계획 도구",
   "modal.dismiss":    "이해했습니다—계획 시작!",
