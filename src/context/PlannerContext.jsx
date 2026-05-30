@@ -1638,7 +1638,7 @@ export function PlannerProvider({ children }) {
     decodePlan(encoded)
       .then(d => {
         if (d.version !== 1) { alert("Unrecognized shared plan format."); return; }
-        if (!window.confirm("Load the shared plan? It will open as a new plan alongside your existing ones.")) return;
+        // if (!window.confirm("Load the shared plan? It will open as a new plan alongside your existing ones.")) return;
         importSharedPlan(d);
       })
       .catch(() => alert("Could not decode the shared plan link."));
