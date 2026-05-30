@@ -88,7 +88,7 @@ export const strings = {
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "بدون عنوان",
   "info.prereqs":                 "المتطلبات السابقة:",
-  "info.relationships.title":     "العلاقات",
+  "info.relationships.title":     "يفتح",
   "info.offered.title":           "يُقدم في",
   "info.offered.hint":            "قد تختلف الإتاحة حسب السنة — تجاوز باستخدام مربعات الاختيار إذا لزم الأمر.",
   "info.drag.title":              "اسحب لوضعه",

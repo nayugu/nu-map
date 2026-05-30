@@ -89,7 +89,7 @@ export const strings = {
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "कोई शीर्षक नहीं",
   "info.prereqs":                 "पूर्व-आवश्यकताएँ:",
-  "info.relationships.title":     "संबंध",
+  "info.relationships.title":     "अनलॉक",
   "info.offered.title":           "प्रस्तुत सेमेस्टर",
   "info.offered.hint":            "उपलब्धता वर्ष के अनुसार बदल सकती है — आवश्यकता अनुसार चेकबॉक्स से ओवरराइड करें।",
   "info.drag.title":              "स्थान के लिए ड्रैग करें",

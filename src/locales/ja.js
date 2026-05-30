@@ -90,7 +90,7 @@ export const strings = {
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "タイトルなし",
   "info.prereqs":                 "履修条件：",
-  "info.relationships.title":     "関係",
+  "info.relationships.title":     "アンロック",
   "info.offered.title":           "開講学期",
   "info.offered.hint":            "開講状況は年度によって異なる場合があります。必要に応じてチェックボックスで上書きしてください。",
   "info.drag.title":              "ドラッグして配置",

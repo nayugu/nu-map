@@ -89,7 +89,7 @@ export const strings = {
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sans titre",
   "info.prereqs":                 "Prérequis :",
-  "info.relationships.title":     "RELATIONS",
+  "info.relationships.title":     "DÉBLOQUE",
   "info.offered.title":           "PROPOSÉ EN",
   "info.offered.hint":            "La disponibilité peut varier selon l'année — outrepasser avec les cases à cocher si besoin.",
   "info.drag.title":              "glisser pour placer",

@@ -400,28 +400,36 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
 
 function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
   const { t } = useLanguage();
+
+  // Only show courses this course unlocks (outgoing prereqs) and coreqs.
+  // Incoming prereqs are already shown in the "Prereqs:" line above.
+  const isCoreq = type => type === "corequisite" || type === "corequisite-viol";
+  const unlocks = selEdges.filter(rel => isCoreq(rel.type) || rel.from === selCourse.id);
+
+  if (unlocks.length === 0) return null;
+
   return (
     <div style={{ width: compact ? "100%" : "fit-content", flexShrink: 0, display: "flex", flexDirection: "column", paddingRight: compact ? 0 : 12 }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 5 }}>
         {t("info.relationships.title")}
       </div>
       <div style={{ overflowY: "auto", maxHeight: 220, paddingRight: 14 }}>
-        {selEdges.map((rel, i) => {
-          const isOut = rel.from === selCourse.id;
-          const other = courseMap[isOut ? rel.to : rel.from];
-          const rs    = REL_STYLE[rel.type];
+        {unlocks.map((rel, i) => {
+          const isOut  = rel.from === selCourse.id;
+          const other  = courseMap[isOut ? rel.to : rel.from];
+          const rs     = REL_STYLE[rel.type];
+          const coreq  = isCoreq(rel.type);
           return (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
-              <span style={{ fontSize: 11, color: rs?.color, fontWeight: 700, width: 14 }}>
-                {isOut ? "→" : "←"}
-              </span>
-              <span style={{ fontSize: 8, background: `${rs?.color}20`, color: rs?.color, borderRadius: 3, padding: "1px 4px", whiteSpace: "nowrap" }}>
-                {t(`legend.${rel.type}`)}
-              </span>
               <span title={other?.title || undefined}
                 style={{ fontSize: 10, fontWeight: 700, color: "var(--text-2)" }}>
                 {other?.code || (isOut ? rel.to : rel.from)}
               </span>
+              {coreq && (
+                <span style={{ fontSize: 8, background: `${rs?.color}20`, color: rs?.color, borderRadius: 3, padding: "1px 4px", whiteSpace: "nowrap" }}>
+                  {t("legend.corequisite")}
+                </span>
+              )}
             </div>
           );
         })}

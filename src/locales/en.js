@@ -90,7 +90,7 @@ export const strings = {
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "No title",
   "info.prereqs":                 "Prereqs:",
-  "info.relationships.title":     "RELATIONSHIPS",
+  "info.relationships.title":     "UNLOCKS",
   "info.offered.title":           "OFFERED IN",
   "info.offered.hint":            "Boxed = most recent term. Click to override: \u2713 always offered \xb7 \u2715 never.",
   "info.offered.nodata":          "No Banner data for this course. Click to override: \u2713 offered \xb7 \u2715 not.",

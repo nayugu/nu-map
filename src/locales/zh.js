@@ -155,7 +155,7 @@ export const strings = {
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "\u65e0\u6807\u9898",
   "info.prereqs":                 "\u5148\u4fee\uff1a",
-  "info.relationships.title":     "\u5173\u8054\u8bfe\u7a0b",
+  "info.relationships.title":     "\u89e3\u9501",
   "info.offered.title":           "\u5f00\u8bfe\u5b66\u671f",
   "info.offered.hint":            "\u5f00\u8bfe\u60c5\u51b5\u56e0\u5e74\u4efd\u800c\u5f02\u2014\u53ef\u901a\u8fc7\u590d\u9009\u6846\u8986\u76d6\u3002",
   "info.drag.title":              "\u62d6\u62fd\u653e\u7f6e",
