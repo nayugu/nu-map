@@ -86,6 +86,15 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
     try { localStorage.setItem(TOGGLE_KEY, val ? "1" : "0"); } catch {}
   }, []);
 
+  // Auto-enable/disable course translation when the UI language changes.
+  useEffect(() => {
+    if (locale !== catalogLocale) {
+      setCourseTranslationEnabled(true);
+    } else {
+      setCourseTranslationEnabled(false);
+    }
+  }, [locale, catalogLocale, setCourseTranslationEnabled]);
+
   // Select best available engine when locale diverges from catalog locale.
   useEffect(() => {
     if (locale === catalogLocale) {
