@@ -76,6 +76,7 @@ export function getMajorOptions(majorRequirements) {
       const year        = parseInt(parts[yearIdx], 10);
       const college     = parts[yearIdx + 1] ?? '';
       const folder      = parts[yearIdx + 2] ?? '';
+      if (folder.endsWith('_minor')) return null; // minors live in the minor search
       const label       = fmtLabel(folder);
       const location    = fmtLocation(folder);
       const collegeLabel = fmtLabel(college);

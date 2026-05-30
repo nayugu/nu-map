@@ -4,21 +4,25 @@
 // DATA SOURCE HISTORY
 // ───────────────────
 // Same history as majorLoader.js: minor data originally came from the
-// external/graduatenu submodule for speed of development. Unlike majors,
-// minors have not yet been migrated to our own scraper — all minor data
-// still comes from the external submodule.
-//
-// When scripts/scrape-majors.js is extended to cover minors, add a
-// _scrapedMap glob pointing to src/data/minors/ and merge it in the
-// same way majorLoader.js does (scraped wins on collision).
+// external/graduatenu submodule for speed of development. The scraper
+// (scripts/scrape-majors.js) outputs minors alongside majors into
+// src/data/majors/ — any folder ending in _minor is a minor program.
+// Scraped entries win on collision with the submodule fallback.
 // ═══════════════════════════════════════════════════════════════════
 
-// All minor data still comes from the external/graduatenu submodule.
-// Pending: migrate to own scraper (see majorLoader.js for the pattern).
-const _moduleMap = import.meta.glob(
+const _externalMap = import.meta.glob(
   '../../external/graduatenu/packages/api/src/minor/minors/**/parsed.initial.json',
   { eager: false }
 );
+
+// Scraped minors live alongside scraped majors; folder names end with _minor.
+const _scrapedMap = import.meta.glob(
+  './majors/**/*_minor/parsed.initial.json',
+  { eager: false }
+);
+
+// Scraped entries win on collision — own data preferred over external submodule.
+const _moduleMap = { ..._externalMap, ..._scrapedMap };
 
 // ── Public API ───────────────────────────────────────────────────
 // Path-parsing helpers (fmtLabel, fmtLocation) come from the
