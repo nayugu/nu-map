@@ -721,6 +721,7 @@ export default function Header() {
               */}
 
               {/* Zoom */}
+              {!isPhone && (
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.zoom")}</div>
                 <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
@@ -740,6 +741,7 @@ export default function Header() {
                   })}
                 </div>
               </div>
+              )}
               {isPhone && (
                 <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
                   <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5, textTransform: "uppercase" }}>{t("header.cohort.title")}</div>
