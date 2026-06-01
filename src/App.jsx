@@ -12,8 +12,9 @@ import SemRow          from './ui/SemRow.jsx';
 import SummerRow       from './ui/SummerRow.jsx';
 import BankPanel       from './ui/BankPanel.jsx';
 import InfoPanel       from './ui/InfoPanel.jsx';
-import DisclaimerModal from './ui/DisclaimerModal.jsx';
-import PalettePanel    from './ui/PalettePanel.jsx';
+import DisclaimerModal  from './ui/DisclaimerModal.jsx';
+import PalettePanel     from './ui/PalettePanel.jsx';
+import MigrationBanner  from './ui/MigrationBanner.jsx';
 
 // Main planner layout -- consumes PlannerContext
 function PlannerApp() {
@@ -95,6 +96,7 @@ function PlannerApp() {
       </div>
       {/* Rendered outside the scaled container so it's unaffected by zoom */}
       <DisclaimerModal />
+      <MigrationBanner />
     </div>
   );
 }
