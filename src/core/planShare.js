@@ -46,12 +46,91 @@ async function _decompress(b64url) {
   return new TextDecoder().decode(buf);
 }
 
+// v2 compact format: short key names + skip empty/default fields + drop unused `exported`.
+
+const _KEYS = {
+  entSem: 'es', entYear: 'ey',
+  gradSem: 'gs', gradYear: 'gy',
+  placements: 'p', specialTermPl: 'sp',
+  semOrders: 'so', shOverrides: 'sh',
+  bonusSH: 'b', currentSemId: 'cs',
+  offeredOverrides: 'oo', collapsedSubs: 'cl',
+  major: 'mj', conc: 'cn',
+  minor1: 'm1', minor2: 'm2',
+  placedOut: 'po', planName: 'pn',
+  locale: 'lc', substitutions: 'su',
+};
+const _KEYS_R = Object.fromEntries(Object.entries(_KEYS).map(([k, v]) => [v, k]));
+
+// Inner keys for specialTermPl entry objects
+const _SP = { typeId: 't', semId: 's', duration: 'd', company: 'c', companyDomain: 'cd', subline: 'sl' };
+const _SP_R = Object.fromEntries(Object.entries(_SP).map(([k, v]) => [v, k]));
+
+// Inner keys for substitutions array entries
+const _SU = { from: 'f', to: 't' };
+const _SU_R = Object.fromEntries(Object.entries(_SU).map(([k, v]) => [v, k]));
+
+function _isEmpty(v) {
+  if (v == null || v === '' || v === 0) return true;
+  if (Array.isArray(v)) return v.length === 0;
+  if (typeof v === 'object') return Object.keys(v).length === 0;
+  return false;
+}
+
+function _packPlan(data) {
+  const out = { v: 2 };
+  for (const [full, short] of Object.entries(_KEYS)) {
+    let val = data[full];
+    if (val === undefined) continue;
+
+    if (full === 'specialTermPl' && val && typeof val === 'object') {
+      const packed = {};
+      for (const [id, entry] of Object.entries(val)) {
+        const pe = {};
+        for (const [k, v] of Object.entries(entry)) pe[_SP[k] ?? k] = v;
+        packed[id] = pe;
+      }
+      val = packed;
+    } else if (full === 'substitutions' && Array.isArray(val)) {
+      val = val.map(({ from, to, ...rest }) => ({ f: from, t: to, ...rest }));
+    }
+
+    if (!_isEmpty(val)) out[short] = val;
+  }
+  return out;
+}
+
+function _unpackPlan(compact) {
+  const out = { version: 2 };
+  for (const [short, val] of Object.entries(compact)) {
+    if (short === 'v') continue;
+    const full = _KEYS_R[short] ?? short;
+
+    if (full === 'specialTermPl' && val && typeof val === 'object') {
+      const unpacked = {};
+      for (const [id, entry] of Object.entries(val)) {
+        const ue = {};
+        for (const [k, v] of Object.entries(entry)) ue[_SP_R[k] ?? k] = v;
+        unpacked[id] = ue;
+      }
+      out[full] = unpacked;
+    } else if (full === 'substitutions' && Array.isArray(val)) {
+      out[full] = val.map(({ f, t, ...rest }) => ({ from: f, to: t, ...rest }));
+    } else {
+      out[full] = val;
+    }
+  }
+  return out;
+}
+
 export async function encodePlan(data) {
-  return _compress(JSON.stringify(data));
+  return _compress(JSON.stringify(_packPlan(data)));
 }
 
 export async function decodePlan(encoded) {
-  return JSON.parse(await _decompress(encoded));
+  const raw = JSON.parse(await _decompress(encoded));
+  if (raw.v === 2) return _unpackPlan(raw);
+  return raw; // version 1: return as-is
 }
 
 export function buildShareUrl(encoded) {
