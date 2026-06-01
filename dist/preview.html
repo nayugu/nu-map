@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>NU Map — Device Preview</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2e2e2e;
+    --text: #e2e2e2;
+    --text-dim: #888;
+    --active: #4f8ef7;
+    --active-bg: rgba(79,142,247,0.12);
+    --chip-h: 26px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ── Toolbar ─────────────────────────────────────────────── */
+  #toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: calc(6px + env(safe-area-inset-top)) 12px 6px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  #toolbar h1 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-right: 4px;
+  }
+
+  .sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+
+  /* Device chips */
+  .chip {
+    height: var(--chip-h);
+    padding: 0 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.12s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .chip:hover { border-color: #555; color: var(--text); }
+  .chip.active {
+    background: var(--active-bg);
+    border-color: var(--active);
+    color: var(--active);
+    font-weight: 700;
+  }
+  .chip .icon { font-size: 13px; }
+
+  /* Scale badge */
+  #scale-badge {
+    font-size: 10px;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 7px;
+    min-width: 46px;
+    text-align: center;
+  }
+
+  /* Dimension readout */
+  #dim-read {
+    font-size: 10px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    min-width: 90px;
+  }
+
+  /* Orientation toggle */
+  #orient-btn {
+    height: var(--chip-h);
+    padding: 0 8px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  #orient-btn:hover { border-color: #555; color: var(--text); }
+
+  /* Frame toggle */
+  #frame-btn {
+    height: var(--chip-h);
+    padding: 0 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  #frame-btn:hover { border-color: #555; color: var(--text); }
+  #frame-btn.on { background: var(--active-bg); border-color: var(--active); color: var(--active); }
+
+  /* Open app in full tab */
+  #open-btn {
+    margin-left: auto;
+    height: var(--chip-h);
+    padding: 0 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    display: flex; align-items: center;
+    transition: all 0.12s;
+  }
+  #open-btn:hover { border-color: #555; color: var(--text); }
+
+  /* ── Viewport stage ──────────────────────────────────────── */
+  #stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* The scaled outer wrapper */
+  #device-wrap {
+    transform-origin: center center;
+    position: relative;
+    transition: transform 0.15s ease, width 0.15s ease, height 0.15s ease;
+  }
+
+  /* Phone/tablet bezel */
+  #bezel {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--bezel-r, 40px);
+    border: var(--bezel-t, 12px) solid #1c1c1e;
+    box-shadow:
+      0 0 0 1px #3a3a3c,
+      0 0 0 2px #1c1c1e,
+      0 24px 60px rgba(0,0,0,0.9);
+    pointer-events: none;
+    z-index: 2;
+    display: none;   /* toggled by js */
+  }
+
+  /* Notch — width/height/top set by JS from device definition */
+  #notch {
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    background: #1c1c1e;
+    border-radius: 0 0 18px 18px;
+    z-index: 3;
+    display: none;
+  }
+
+  /* Home indicator — bottom set by JS */
+  #home-bar {
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    width: 120px; height: 4px;
+    background: #5a5a5e;
+    border-radius: 99px;
+    z-index: 3;
+    display: none;
+  }
+
+  /* White screen background — fills full device screen, shows through in notch+home zones */
+  #screen-bg {
+    position: absolute;
+    background: #fff;
+    pointer-events: none;
+    z-index: 0;
+    display: none;
+  }
+
+  iframe {
+    display: block;
+    border: none;
+    position: absolute;
+    background: #fff;
+  }
+
+  /* No-frame mode: subtle outline only */
+  #device-wrap.no-frame iframe {
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(0,0,0,0.5);
+  }
+  #device-wrap.no-frame #bezel,
+  #device-wrap.no-frame #notch,
+  #device-wrap.no-frame #home-bar,
+  #device-wrap.no-frame #screen-bg { display: none !important; }
+
+  /* Ruler ticks along edge */
+  #ruler-w, #ruler-h {
+    position: absolute;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+    pointer-events: none;
+  }
+  #ruler-w { bottom: -18px; left: 0; right: 0; text-align: center; }
+  #ruler-h { top: 0; bottom: 0; right: -36px; display: flex; align-items: center; writing-mode: vertical-rl; }
+</style>
+</head>
+<body>
+
+<!-- ── Toolbar ──────────────────────────────────────────────── -->
+<div id="toolbar">
+  <h1>Preview</h1>
+  <div class="sep"></div>
+
+  <!-- Phone group -->
+  <button class="chip active" data-device="iphoneX">
+    <span class="icon">📱</span> iPhone X
+  </button>
+
+  <div class="sep"></div>
+
+  <!-- Tablet group -->
+  <button class="chip" data-device="ipadAir">
+    <span class="icon">⬛</span> iPad Air
+  </button>
+  <button class="chip" data-device="ipadPro">
+    <span class="icon">⬛</span> iPad Pro 11"
+  </button>
+
+  <div class="sep"></div>
+
+  <!-- Desktop group -->
+  <button class="chip" data-device="macbook">
+    <span class="icon">💻</span> MacBook
+  </button>
+
+  <div class="sep"></div>
+
+  <button id="orient-btn" title="Rotate device">⟳</button>
+  <button id="frame-btn" class="on">Frame</button>
+
+  <div class="sep"></div>
+
+  <span id="dim-read">375 × 812</span>
+  <span id="scale-badge">100%</span>
+
+  <a href="/" target="_blank" id="open-btn">Open app ↗</a>
+</div>
+
+<!-- ── Stage ────────────────────────────────────────────────── -->
+<div id="stage">
+  <div id="device-wrap">
+    <div id="bezel"></div>
+    <div id="notch"></div>
+    <div id="home-bar"></div>
+    <div id="screen-bg"></div>
+    <iframe id="preview-frame" src="/" title="App Preview"></iframe>
+    <span id="ruler-w"></span>
+    <span id="ruler-h"></span>
+  </div>
+</div>
+
+<script>
+// ── Device definitions ──────────────────────────────────────────
+// CSS logical pixel dimensions (physical / DPR), DPR, physical PPI
+// notchW/notchH = Dynamic Island / notch pill width + full status-bar reservation (pt)
+// homeH          = home-indicator zone height from bottom of screen content area (pt)
+const DEVICES = {
+  iphoneX:   { label: 'iPhone X',           w: 375,  h: 812,  dpr: 3, ppi: 458, type: 'phone',   bezelR: 40, bezelT: 12, notchW: 209, notchH: 44, homeH: 34, notch: true,  home: true  },
+  ipadAir:   { label: 'iPad Air (4th/5th)',  w: 820,  h: 1180, dpr: 2, ppi: 264, type: 'tablet',  bezelR: 20, bezelT: 20, notchW: 0,   notchH: 0,  homeH: 0,  notch: false, home: false },
+  ipadPro:   { label: 'iPad Pro 11"',        w: 834,  h: 1194, dpr: 2, ppi: 264, type: 'tablet',  bezelR: 20, bezelT: 14, notchW: 0,   notchH: 0,  homeH: 0,  notch: false, home: false },
+  macbook:   { label: 'MacBook (2560×1664)', w: 1280, h: 832,  dpr: 2, ppi: 224, type: 'desktop', bezelR: 0,  bezelT: 0,  notchW: 0,   notchH: 0,  homeH: 0,  notch: false, home: false },
+};
+
+let currentKey  = 'iphoneX';
+let isLandscape = false;
+let showFrame   = true;
+
+const deviceWrap  = document.getElementById('device-wrap');
+const iframe      = document.getElementById('preview-frame');
+const bezel       = document.getElementById('bezel');
+const notchEl     = document.getElementById('notch');
+const homeEl      = document.getElementById('home-bar');
+const dimRead     = document.getElementById('dim-read');
+const scaleBadge  = document.getElementById('scale-badge');
+const rulerW      = document.getElementById('ruler-w');
+const rulerH      = document.getElementById('ruler-h');
+const frameBtn    = document.getElementById('frame-btn');
+
+function applyDevice() {
+  const d   = DEVICES[currentKey];
+  const w   = isLandscape ? d.h : d.w;
+  const h   = isLandscape ? d.w : d.h;
+  const isDesktop = d.type === 'desktop';
+  const bt  = (showFrame && !isDesktop) ? d.bezelT : 0;
+  const br  = isLandscape ? Math.round(d.bezelR * 0.55) : d.bezelR;
+
+  // Outer wrapper includes bezel thickness on all sides
+  const outerW = w + 2 * bt;
+  const outerH = h + 2 * bt;
+
+  // Fit to stage (subtract actual toolbar height, not a hardcoded guess)
+  const toolbarH = document.getElementById('toolbar').offsetHeight;
+  const stageW = window.innerWidth  - 40;
+  const stageH = window.innerHeight - toolbarH - 40;
+  const fitScale = Math.min(1, stageW / outerW, stageH / outerH);
+
+  const showNotch = !isDesktop && showFrame && d.notch && !isLandscape;
+  const showHome  = !isDesktop && showFrame && d.home  && !isLandscape;
+  const safeTop   = showNotch ? d.notchH : 0;
+  const safeBot   = showHome  ? d.homeH  : 0;
+
+  // iframe is clipped to the safe content area — app never renders in notch or home-bar zones
+  iframe.style.left   = bt + 'px';
+  iframe.style.top    = (bt + safeTop) + 'px';
+  iframe.style.width  = w + 'px';
+  iframe.style.height = (h - safeTop - safeBot) + 'px';
+
+  // Device-wrap is the outer shell
+  deviceWrap.style.width     = outerW + 'px';
+  deviceWrap.style.height    = outerH + 'px';
+  deviceWrap.style.transform = `scale(${fitScale.toFixed(4)})`;
+
+  const screenBg = document.getElementById('screen-bg');
+
+  if (showFrame && !isDesktop) {
+    deviceWrap.classList.remove('no-frame');
+
+    bezel.style.display      = 'block';
+    bezel.style.borderRadius = br + 'px';
+    bezel.style.border       = bt + 'px solid #1c1c1e';
+    const screenR = Math.max(0, br - bt);
+    iframe.style.borderRadius = `0 0 ${screenR}px ${screenR}px`;
+
+    // White background fills the full device screen (behind both notch zone and home zone)
+    screenBg.style.left         = bt + 'px';
+    screenBg.style.top          = bt + 'px';
+    screenBg.style.width        = w + 'px';
+    screenBg.style.height       = h + 'px';
+    screenBg.style.borderRadius = screenR + 'px';
+    screenBg.style.display      = 'block';
+
+    // Notch pill overlaid on the white status-bar band
+    notchEl.style.top    = bt + 'px';
+    notchEl.style.width  = d.notchW + 'px';
+    notchEl.style.height = d.notchH + 'px';
+    notchEl.style.display = showNotch ? 'block' : 'none';
+
+    // Home bar overlaid on the white home-indicator band
+    homeEl.style.bottom  = (bt + Math.round((d.homeH || 8) / 2) - 2) + 'px';
+    homeEl.style.display = showHome ? 'block' : 'none';
+  } else {
+    deviceWrap.classList.add('no-frame');
+    bezel.style.display       = 'none';
+    notchEl.style.display     = 'none';
+    homeEl.style.display      = 'none';
+    screenBg.style.display    = 'none';
+    iframe.style.borderRadius = isDesktop ? '4px' : '12px';
+  }
+
+  // Info readouts
+  dimRead.textContent    = `${w} × ${h} CSS px  (${d.ppi} PPI ×${d.dpr})`;
+  scaleBadge.textContent = Math.round(fitScale * 100) + '%';
+  rulerW.textContent     = w + 'px';
+  rulerH.textContent     = h + 'px';
+}
+
+// Chip clicks
+document.querySelectorAll('.chip[data-device]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.device === currentKey) return;
+    currentKey = btn.dataset.device;
+    isLandscape = false;
+    document.querySelectorAll('.chip[data-device]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyDevice();
+    // Reload the app so zoom/panels/bankWidth reinit from the new viewport size
+    iframe.src = iframe.src;
+  });
+});
+
+// Orientation
+document.getElementById('orient-btn').addEventListener('click', () => {
+  isLandscape = !isLandscape;
+  applyDevice();
+});
+
+// Frame toggle
+frameBtn.addEventListener('click', () => {
+  showFrame = !showFrame;
+  frameBtn.classList.toggle('on', showFrame);
+  applyDevice();
+});
+
+// Resize observer
+window.addEventListener('resize', applyDevice);
+
+// Init
+applyDevice();
+</script>
+</body>
+</html>
