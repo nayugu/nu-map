@@ -1,6 +1,7 @@
 name: Deploy to GitHub Pages
 
-# Serves dist/ at numap.app (custom domain via CNAME).
+# Serves dist/ at nayugu.github.io/nu-map (migration landing page).
+# numap.app is hosted separately on Cloudflare Pages (same repo, same build).
 # One-time setup: go to Settings → Pages → Source → "Deploy from a branch",
 # choose branch "gh-pages", folder "/" — then this workflow takes over.
 #
@@ -65,4 +66,4 @@ jobs:
             (git commit -m "deploy: ${GITHUB_SHA:0:7}" && git push --force origin HEAD:gh-pages)
 
       - name: Summary
-        run: echo "✅ Deployed to https://numap.app/"
+        run: echo "✅ Deployed to https://nayugu.github.io/nu-map/"

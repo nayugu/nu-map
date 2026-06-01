@@ -7,34 +7,37 @@ export default function MigrationBanner() {
   if (!visible) return null;
 
   return (
-    <div style={{
-      position: "fixed", inset: 0, zIndex: 9999,
-      background: "rgba(0,0,0,0.55)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: 20,
-    }}>
-      <div style={{
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-2)",
-        borderRadius: 10,
-        padding: "28px 32px",
-        maxWidth: 400,
-        width: "100%",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-        display: "flex", flexDirection: "column", gap: 14,
-      }}>
-        <div style={{ fontSize: 17, fontWeight: 700, color: "var(--text-1)" }}>
+    <div
+      onClick={() => setVisible(false)}
+      style={{
+        position: "fixed", inset: 0, zIndex: 9999,
+        background: "rgba(0,0,0,0.75)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 14,
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+          borderRadius: 12, maxWidth: 400, width: "100%",
+          padding: "16px 14px 14px", boxShadow: "var(--shadow-modal)",
+          display: "flex", flexDirection: "column", gap: 10,
+          fontFamily: "'Inter', system-ui, sans-serif",
+        }}
+      >
+        <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-1)" }}>
           nu-map has moved
         </div>
-        <div style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.6 }}>
-          We're now at <strong>numap.app</strong>. Click below to move your saved plans there — it only takes a second.
+        <div style={{ fontSize: 11, color: "var(--text-2)", lineHeight: 1.6 }}>
+          We're now at <strong>numap.app</strong>. Click below to move your saved plans — it only takes a second.
         </div>
         <button
           onClick={migrateToNewDomain}
           style={{
-            padding: "10px 0", borderRadius: 6,
-            background: "var(--accent)", color: "white",
-            border: "none", fontSize: 13, fontWeight: 600,
+            width: "100%", padding: "7px 0", borderRadius: 6,
+            background: "var(--link-bg)", border: "1px solid var(--link-1)",
+            color: "var(--link-1)", fontSize: 11, fontWeight: 700,
             cursor: "pointer",
           }}
         >
@@ -43,9 +46,9 @@ export default function MigrationBanner() {
         <button
           onClick={() => setVisible(false)}
           style={{
-            padding: "6px 0", borderRadius: 6,
-            background: "transparent", color: "var(--text-4)",
-            border: "1px solid var(--border-2)", fontSize: 12,
+            width: "100%", padding: "7px 0", borderRadius: 6,
+            background: "transparent", border: "1px solid var(--border-2)",
+            color: "var(--text-4)", fontSize: 11, fontWeight: 400,
             cursor: "pointer",
           }}
         >

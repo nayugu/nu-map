@@ -49,9 +49,12 @@ export function applyMigrationIfPresent() {
   }
 }
 
+const MIGRATED_KEY = `${STORAGE_PREFIX}migrated`;
+
 /** True when running on the old domain and there is data worth migrating. */
 export function hasMigratableData() {
   if (window.location.hostname !== OLD_HOST) return false;
+  if (localStorage.getItem(MIGRATED_KEY) === '1') return false;
   return Object.keys(localStorage).some(k => k.startsWith(STORAGE_PREFIX));
 }
 
@@ -61,5 +64,6 @@ export function migrateToNewDomain() {
   for (const [k, v] of Object.entries(localStorage)) {
     if (k.startsWith(STORAGE_PREFIX)) entries[k] = v;
   }
+  localStorage.setItem(MIGRATED_KEY, '1');
   window.location.href = `${NEW_ORIGIN}/?${PARAM}=${encode(entries)}`;
 }
