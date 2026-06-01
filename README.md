@@ -4,8 +4,9 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 
 > Not affiliated with or endorsed by Northeastern University. Always verify your plan with an advisor and DegreeWorks.
 
-**Live:** https://nayugu.github.io/nu-map/  
-**Documentation:** https://nayugu.github.io/nu-map/documentation/
+**Live:** https://numap.app/  
+**Mirror:** https://nayugu.github.io/nu-map/  
+**Documentation:** https://numap.app/documentation/
 
 ---
 
@@ -32,7 +33,7 @@ src/adapters/northeastern/   src/ports/I*.js       src/core/, src/ui/
 
 Eight ports cover everything: `IInstitution`, `ICalendar`, `ICreditSystem`, `IAttributeSystem`, `ISpecialTerms`, `IMajorRequirements`, `ICourseCatalog`, `ILocalization`. UI components read adapters via `usePort()`. Core functions receive adapter config as explicit parameters.
 
-For the full dependency graph, invariants, and forking guide, see the **[architecture docs](https://nayugu.github.io/nu-map/documentation/architecture/)**.
+For the full dependency graph, invariants, and forking guide, see the **[architecture docs](https://numap.app/documentation/architecture/)**.
 
 ---
 
@@ -44,13 +45,13 @@ npm run dev      # http://localhost:5173 + catalog check server on :3333
 npm run build    # output → dist/
 ```
 
-For a full code walkthrough — every module, state shape, and interaction — see the **[developer documentation](https://nayugu.github.io/nu-map/documentation/)**.
+For a full code walkthrough — every module, state shape, and interaction — see the **[developer documentation](https://numap.app/documentation/)**.
 
 ---
 
 ## Dev portal
 
-**Remote** (`https://nayugu.github.io/nu-map/dev.html`) — read-only view of what's currently deployed. Use it to check the change log, browse patches and data sources, or preview the live site. Nothing you do here affects the repo.
+**Remote** (`https://numap.app/dev.html`) — read-only view of what's currently deployed. Use it to check the change log, browse patches and data sources, or preview the live site. Nothing you do here affects the repo.
 
 **Local** (`http://localhost:5173/dev.html`, after `npm run dev`) — the full portal. Run the catalog check, apply fixes, and review diffs. Changes stay on your machine until you explicitly push from the Work tab.
 
@@ -91,7 +92,7 @@ npm run test        # both
 
 ## Deployment
 
-Push to `main` → GitHub Actions builds and deploys to GitHub Pages (`gh-pages` branch) and Netlify auto-deploys the mirror.
+Push to `main` → GitHub Actions builds and deploys to GitHub Pages (`gh-pages` branch, mirror at `nayugu.github.io/nu-map`) and Cloudflare Pages auto-deploys to `numap.app`.
 
 ---
 
