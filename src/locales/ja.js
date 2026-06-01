@@ -18,8 +18,8 @@ export const strings = {
   "loading.progress":       "コースカタログを読み込み中…",
   "loading.note":           "初回読み込み約2–4秒・その後24時間ローカルキャッシュ",
   "loading.error.title":    "コースカタログの読み込みに失敗しました",
-  "loading.error.hint":     "インターネット接続を確認してください。初回はGitHubから読み込み、その後はローカルにキャッシュされます。",
-  "loading.error.retry":    "↺ キャッシュをクリアして再試行",
+  "loading.error.hint":     "インターネット接続を確認してもう一度お試しください。問題が続く場合は、強制リロード（Ctrl+Shift+R / Cmd+Shift+R）をお試しください。",
+  "loading.error.retry":    "↺ 再試行",
 
   // ── Bank panel ─────────────────────────────────────────────────
   "bank.title":                   "コースバンク",

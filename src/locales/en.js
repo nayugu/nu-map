@@ -18,8 +18,8 @@ export const strings = {
   "loading.progress":       "Loading course catalog from GitHub\u2026",
   "loading.note":           "First load ~2\u20134 s \xb7 then cached 24 h locally",
   "loading.error.title":    "Failed to load course catalog",
-  "loading.error.hint":     "Check your internet connection. The catalog loads from GitHub the first time, then caches locally.",
-  "loading.error.retry":    "\u21ba Clear cache & retry",
+  "loading.error.hint":     "Check your internet connection and try again. If the problem persists, a hard refresh (Ctrl+Shift+R / Cmd+Shift+R) may help.",
+  "loading.error.retry":    "\u21ba Retry",
 
   // ── Bank panel ─────────────────────────────────────────────────
   "bank.title":                   "COURSE BANK",

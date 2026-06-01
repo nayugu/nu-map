@@ -17,8 +17,8 @@ export const strings = {
   "loading.progress":       "코스 카탈로그 불러오는 중…",
   "loading.note":           "첫 로드 약 2–4초 · 이후 24시간 로컬 캐시",
   "loading.error.title":    "코스 카탈로그 불러오기 실패",
-  "loading.error.hint":     "인터넷 연결을 확인하세요. 처음에는 GitHub에서 불러오고, 이후에는 로컬에 캐시됩니다.",
-  "loading.error.retry":    "↺ 캐시 지우고 재시도",
+  "loading.error.hint":     "인터넷 연결을 확인하고 다시 시도하세요. 문제가 지속되면 강력 새로고침(Ctrl+Shift+R / Cmd+Shift+R)을 시도해 보세요.",
+  "loading.error.retry":    "↺ 재시도",
 
   // ── Bank panel ─────────────────────────────────────────────────
   "bank.title":                   "코스 뱅크",

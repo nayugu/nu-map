@@ -17,8 +17,8 @@ export const strings = {
   "loading.progress":       "Cargando el catálogo de cursos…",
   "loading.note":           "Primera carga ~2–4 s · luego en caché local por 24 h",
   "loading.error.title":    "Error al cargar el catálogo de cursos",
-  "loading.error.hint":     "Verifica tu conexión a internet. El catálogo se carga desde GitHub la primera vez, luego se almacena en caché localmente.",
-  "loading.error.retry":    "↺ Borrar caché y reintentar",
+  "loading.error.hint":     "Verifica tu conexión a internet e inténtalo de nuevo. Si el problema persiste, prueba una recarga forzada (Ctrl+Shift+R / Cmd+Shift+R).",
+  "loading.error.retry":    "↺ Reintentar",
 
   // ── Bank panel ─────────────────────────────────────────────────
   "bank.title":                   "BANCO DE CURSOS",

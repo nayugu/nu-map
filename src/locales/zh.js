@@ -17,8 +17,8 @@ export const strings = {
   "loading.progress":       "\u6b63\u5728\u52a0\u8f7d\u8bfe\u7a0b\u76ee\u5f55\u2026",
   "loading.note":           "\u9996\u6b21\u52a0\u8f7d\u7ea6 2\u20134 \u79d2\uff0c\u4e4b\u540e\u672c\u5730\u7f13\u5b58 24 \u5c0f\u65f6",
   "loading.error.title":    "\u8bfe\u7a0b\u76ee\u5f55\u52a0\u8f7d\u5931\u8d25",
-  "loading.error.hint":     "\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u3002\u8bfe\u7a0b\u76ee\u5f55\u9996\u6b21\u4ece GitHub \u52a0\u8f7d\uff0c\u4e4b\u540e\u672c\u5730\u7f13\u5b58\u3002",
-  "loading.error.retry":    "\u21ba \u6e05\u9664\u7f13\u5b58\u5e76\u91cd\u8bd5",
+  "loading.error.hint":     "\u8bf7\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5\u540e\u91cd\u8bd5\u3002\u82e5\u95ee\u9898\u6301\u7eed\uff0c\u53ef\u5c1d\u8bd5\u5f3a\u5236\u5237\u65b0\uff08Ctrl+Shift+R / Cmd+Shift+R\uff09\u3002",
+  "loading.error.retry":    "\u21ba \u91cd\u8bd5",
 
   // ── Bank panel ─────────────────────────────────────────────────
   "bank.title":                   "\u8bfe\u7a0b\u5e93",
