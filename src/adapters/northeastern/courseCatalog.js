@@ -154,26 +154,37 @@ export default {
    * Then merges term-history.json (if present) to enrich termHistory and recompute terms.
    */
   async fetchAll() {
-    // All four sources fetched in parallel; catalog is required, others degrade gracefully.
-    const [catalogResult, allCoursesResult, collegesResult, historyResult] = await Promise.allSettled([
-      tryFetch(LOCAL_URL),
-      tryFetch(ALL_COURSES_URL),
-      tryFetch(COLLEGES_URL),
-      tryFetch(HISTORY_URL),
+    // Start the two small optional fetches immediately while catalog loads.
+    const collegesPromise = tryFetch(COLLEGES_URL);
+    const historyPromise  = tryFetch(HISTORY_URL);
+
+    // Catalog is required — fetch it first so we can gate the supplemental download.
+    let catalogJson;
+    try {
+      catalogJson = await tryFetch(LOCAL_URL);
+    } catch (err) {
+      throw new Error(`Could not load course catalog from ${LOCAL_URL}: ${err.message}`);
+    }
+    const raw = Array.isArray(catalogJson) ? catalogJson : Object.values(catalogJson).flat();
+
+    // Skip all-courses.json (5.8 MB) when the build-time nuPath merge has already run
+    // (coverage ≥ 10%). Fall back to fetching it automatically if coverage looks wrong,
+    // e.g. after a scrape that wiped nuPath or if merge-nupath.js was not run.
+    const nuPathCoverage = raw.filter(c => c.nuPath?.length > 0).length / raw.length;
+    const suppPromise = nuPathCoverage >= 0.10
+      ? Promise.resolve(null)
+      : tryFetch(ALL_COURSES_URL);
+
+    const [allCoursesResult, collegesResult, historyResult] = await Promise.allSettled([
+      suppPromise,
+      collegesPromise,
+      historyPromise,
     ]);
 
-    if (catalogResult.status === "rejected") {
-      throw new Error(`Could not load course catalog from ${LOCAL_URL}: ${catalogResult.reason.message}`);
-    }
-    const raw = Array.isArray(catalogResult.value)
-      ? catalogResult.value
-      : Object.values(catalogResult.value).flat();
-
-    // Back-fill nuPath from all-courses.json when catalog-courses.json has it empty.
-    // Keyed by courseId ("CS3500") for O(1) lookup.
+    // Back-fill nuPath from all-courses.json if the supplemental fetch ran.
     const nuPathSupp = {};
-    if (allCoursesResult.status === "fulfilled") {
-      for (const c of (Array.isArray(allCoursesResult.value) ? allCoursesResult.value : [])) {
+    if (allCoursesResult.status === "fulfilled" && Array.isArray(allCoursesResult.value)) {
+      for (const c of allCoursesResult.value) {
         const id = `${(c.subject || "").toUpperCase().trim()}${(c.number || "").trim()}`;
         if (id && c.nuPath?.length) nuPathSupp[id] = c.nuPath;
       }
