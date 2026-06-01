@@ -212,7 +212,18 @@
     display: block;
     border: none;
     position: absolute;
-    background: #fff;
+    background: transparent;
+  }
+
+  #loading-cover {
+    position: absolute;
+    background: #111;
+    z-index: 1;
+    transition: opacity 0.25s ease;
+  }
+  #loading-cover.ready {
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* No-frame mode: subtle outline only */
@@ -286,6 +297,7 @@
     <div id="notch"></div>
     <div id="home-bar"></div>
     <div id="screen-bg"></div>
+    <div id="loading-cover"></div>
     <iframe id="preview-frame" src="/" title="App Preview"></iframe>
     <span id="ruler-w"></span>
     <span id="ruler-h"></span>
@@ -308,16 +320,19 @@ let currentKey  = 'iphoneX';
 let isLandscape = false;
 let showFrame   = true;
 
-const deviceWrap  = document.getElementById('device-wrap');
-const iframe      = document.getElementById('preview-frame');
-const bezel       = document.getElementById('bezel');
-const notchEl     = document.getElementById('notch');
-const homeEl      = document.getElementById('home-bar');
-const dimRead     = document.getElementById('dim-read');
-const scaleBadge  = document.getElementById('scale-badge');
-const rulerW      = document.getElementById('ruler-w');
-const rulerH      = document.getElementById('ruler-h');
-const frameBtn    = document.getElementById('frame-btn');
+const deviceWrap    = document.getElementById('device-wrap');
+const iframe        = document.getElementById('preview-frame');
+const loadingCover  = document.getElementById('loading-cover');
+const bezel         = document.getElementById('bezel');
+const notchEl       = document.getElementById('notch');
+const homeEl        = document.getElementById('home-bar');
+const dimRead       = document.getElementById('dim-read');
+const scaleBadge    = document.getElementById('scale-badge');
+const rulerW        = document.getElementById('ruler-w');
+const rulerH        = document.getElementById('ruler-h');
+const frameBtn      = document.getElementById('frame-btn');
+
+iframe.addEventListener('load', () => loadingCover.classList.add('ready'));
 
 function applyDevice() {
   const d   = DEVICES[currentKey];
@@ -390,6 +405,11 @@ function applyDevice() {
     iframe.style.borderRadius = isDesktop ? '4px' : '12px';
   }
 
+  // Keep loading cover in sync with iframe position/size
+  ['left','top','width','height','borderRadius'].forEach(p => {
+    loadingCover.style[p] = iframe.style[p];
+  });
+
   // Info readouts
   dimRead.textContent    = `${w} × ${h} CSS px  (${d.ppi} PPI ×${d.dpr})`;
   scaleBadge.textContent = Math.round(fitScale * 100) + '%';
@@ -406,6 +426,8 @@ document.querySelectorAll('.chip[data-device]').forEach(btn => {
     document.querySelectorAll('.chip[data-device]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     applyDevice();
+    // Show cover before reload so the switch doesn't flash white
+    loadingCover.classList.remove('ready');
     // Reload the app so zoom/panels/bankWidth reinit from the new viewport size
     iframe.src = iframe.src;
   });
