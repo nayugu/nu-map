@@ -137,7 +137,7 @@ function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
 // ── Fetch ────────────────────────────────────────────────────────
 
 async function tryFetch(url) {
-  const res = await fetch(url, { cache: "no-cache" });
+  const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status} from ${url}`);
   const text = await res.text();
   if (text.trim().startsWith("<")) throw new Error(`Got HTML (not JSON) from ${url}`);
@@ -154,33 +154,38 @@ export default {
    * Then merges term-history.json (if present) to enrich termHistory and recompute terms.
    */
   async fetchAll() {
-    let json;
-    try {
-      json = await tryFetch(LOCAL_URL);
-    } catch (err) {
-      throw new Error(`Could not load course catalog from ${LOCAL_URL}: ${err.message}`);
+    // All four sources fetched in parallel; catalog is required, others degrade gracefully.
+    const [catalogResult, allCoursesResult, collegesResult, historyResult] = await Promise.allSettled([
+      tryFetch(LOCAL_URL),
+      tryFetch(ALL_COURSES_URL),
+      tryFetch(COLLEGES_URL),
+      tryFetch(HISTORY_URL),
+    ]);
+
+    if (catalogResult.status === "rejected") {
+      throw new Error(`Could not load course catalog from ${LOCAL_URL}: ${catalogResult.reason.message}`);
     }
-    const raw = Array.isArray(json) ? json : Object.values(json).flat();
+    const raw = Array.isArray(catalogResult.value)
+      ? catalogResult.value
+      : Object.values(catalogResult.value).flat();
 
     // Back-fill nuPath from all-courses.json when catalog-courses.json has it empty.
     // Keyed by courseId ("CS3500") for O(1) lookup.
     const nuPathSupp = {};
-    try {
-      const allCourses = await tryFetch(ALL_COURSES_URL);
-      for (const c of (Array.isArray(allCourses) ? allCourses : [])) {
+    if (allCoursesResult.status === "fulfilled") {
+      for (const c of (Array.isArray(allCoursesResult.value) ? allCoursesResult.value : [])) {
         const id = `${(c.subject || "").toUpperCase().trim()}${(c.number || "").trim()}`;
         if (id && c.nuPath?.length) nuPathSupp[id] = c.nuPath;
       }
-    } catch { /* all-courses.json absent or malformed — proceed without supplement */ }
+    }
 
-    let subjectColleges = {};
-    try { subjectColleges = await tryFetch(COLLEGES_URL); } catch { /* file not yet generated */ }
+    const subjectColleges = collegesResult.status === "fulfilled" ? collegesResult.value : {};
     const courses = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
 
     // Merge Banner availability history if the file exists.
-    // Silently skip if absent \u2014 app works without it.
-    try {
-      const history = await tryFetch(HISTORY_URL);
+    // Silently skip if absent — app works without it.
+    if (historyResult.status === "fulfilled") {
+      const history = historyResult.value;
       if (history && typeof history === "object") {
         return courses.map(course => {
           const hist = history[course.id];
@@ -193,8 +198,6 @@ export default {
           return { ...course, termHistory, terms: deriveTerms(termHistory) };
         });
       }
-    } catch {
-      // term-history.json not yet generated \u2014 proceed with sections-only data
     }
     return courses;
   },

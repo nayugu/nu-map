@@ -50,7 +50,7 @@ function normalizeCourse(raw) {
 /** @type {import('../../ports/ICourseCatalog.js').ICourseCatalog} */
 export default {
   async fetchAll() {
-    const res = await fetch(LOCAL_URL, { cache: "no-cache" });
+    const res = await fetch(LOCAL_URL);
     if (!res.ok) throw new Error(`HTTP ${res.status} from ${LOCAL_URL}`);
     const data = await res.json();
     const raw  = Array.isArray(data) ? data : Object.values(data).flat();
