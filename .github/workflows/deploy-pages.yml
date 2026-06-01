@@ -1,10 +1,9 @@
 name: Deploy to GitHub Pages
 
-# Serves dist/ at nayugu.github.io/nu-map as a backup to Netlify.
+# Serves dist/ at numap.app (custom domain via CNAME).
 # One-time setup: go to Settings → Pages → Source → "Deploy from a branch",
 # choose branch "gh-pages", folder "/" — then this workflow takes over.
 #
-# After first successful run the site is live at: https://nayugu.github.io/nu-map/
 # The SPA redirect is handled by a 404.html copy (created below).
 
 on:
@@ -27,10 +26,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build for GitHub Pages (base = /nu-map/)
+      - name: Build
         run: npm run build
-        env:
-          VITE_BASE_PATH: /nu-map/
 
       - name: Prepare deployment directory
         run: |
@@ -68,4 +65,4 @@ jobs:
             (git commit -m "deploy: ${GITHUB_SHA:0:7}" && git push --force origin HEAD:gh-pages)
 
       - name: Summary
-        run: echo "✅ Deployed to https://nayugu.github.io/nu-map/"
+        run: echo "✅ Deployed to https://numap.app/"
