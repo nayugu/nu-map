@@ -248,6 +248,7 @@ export function PlannerProvider({ children }) {
   const isFirstRender = useRef(true);
   const touchDragFromRef    = useRef(null);
   const touchDragTypeRef    = useRef(null);
+  const touchDragTypeIdRef  = useRef(null);
   const touchDragStartedRef = useRef(false); // true once finger moves past drag threshold
   const touchStartPos       = useRef({ x: 0, y: 0 }); // raw finger position at touchstart
   const onDropPlacedOutRef  = useRef(null);
@@ -1232,7 +1233,7 @@ export function PlannerProvider({ children }) {
 
     const DRAG_THRESHOLD = 8; // px — finger must move this far before drag activates
 
-    const initiateDrag = (cardEl, rect, id, type, fromSem, duration) => {
+    const initiateDrag = (cardEl, rect, id, type, fromSem, duration, typeId) => {
       document.documentElement.style.userSelect = 'none';
       document.documentElement.style.webkitUserSelect = 'none';
 
@@ -1256,7 +1257,7 @@ export function PlannerProvider({ children }) {
       cardEl.style.pointerEvents = 'none';
 
       touchDragStartedRef.current = true;
-      setDragInfo({ id, type, fromSem, ...(duration != null ? { duration } : {}) });
+      setDragInfo({ id, type, fromSem, ...(duration != null ? { duration } : {}), ...(typeId ? { typeId } : {}) });
     };
 
     const onTouchStart = (e) => {
@@ -1271,10 +1272,11 @@ export function PlannerProvider({ children }) {
       touchStartPos.current = { x: touch.clientX, y: touch.clientY };
       touchStartOff.current = { x: touch.clientX - cardEl.getBoundingClientRect().left,
                                 y: touch.clientY - cardEl.getBoundingClientRect().top };
-      touchDragElRef.current   = cardEl;
-      touchDragIdRef.current   = cardEl.dataset.dragId || null;
-      touchDragTypeRef.current = cardEl.dataset.dragType;
-      touchDragFromRef.current = cardEl.dataset.dragFrom || null;
+      touchDragElRef.current     = cardEl;
+      touchDragIdRef.current     = cardEl.dataset.dragId || null;
+      touchDragTypeRef.current   = cardEl.dataset.dragType;
+      touchDragTypeIdRef.current = cardEl.dataset.dragTypeid || null;
+      touchDragFromRef.current   = cardEl.dataset.dragFrom || null;
     };
 
     const onTouchMove = (e) => {
@@ -1291,8 +1293,9 @@ export function PlannerProvider({ children }) {
         const type     = touchDragTypeRef.current;
         const fromSem  = touchDragFromRef.current;
         const duration = cardEl?.dataset.dragDuration ? parseInt(cardEl.dataset.dragDuration, 10) : undefined;
+        const typeId   = touchDragTypeIdRef.current || undefined;
         const rect     = cardEl.getBoundingClientRect();
-        initiateDrag(cardEl, rect, id, type, fromSem, duration);
+        initiateDrag(cardEl, rect, id, type, fromSem, duration, typeId);
       }
 
       e.preventDefault();
@@ -1321,9 +1324,10 @@ export function PlannerProvider({ children }) {
       removeGhost();
       document.documentElement.style.userSelect = '';
       document.documentElement.style.webkitUserSelect = '';
-      touchDragIdRef.current   = null;
-      touchDragTypeRef.current = null;
-      touchDragFromRef.current = null;
+      touchDragIdRef.current     = null;
+      touchDragTypeRef.current   = null;
+      touchDragTypeIdRef.current = null;
+      touchDragFromRef.current   = null;
       setHoveredSem(null);
       setHoveredZone(null);
 
