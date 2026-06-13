@@ -44,7 +44,7 @@ const dark = {
 
   // ── Status: warning ──────────────────────────────────────────────
   '--warn':              '#c17f24',
-  '--warn-bright':       '#e09618',
+  '--warn-bright':       '#fbbf24',
   '--warn-bg':           '#2a1e08',
   '--warn-border':       '#c17f24',
 
@@ -152,7 +152,7 @@ const light = {
 
   // ── Status: warning ───────────────────────────────────────────────
   '--warn':              '#9a6200',
-  '--warn-bright':       '#d97706',   // amber — readable on light bg (was neon yellow)
+  '--warn-bright':       '#ffd600',   // pure saturated yellow — alarming coreq/offered border
   '--warn-bg':           '#fef3c7',
   '--warn-border':       '#e8a500',
 
