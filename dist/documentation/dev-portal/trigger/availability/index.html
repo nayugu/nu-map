@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Term Availability — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="dev-portal/trigger/availability">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">dev-portal</a><span class="sep"> / </span><a href="../">Trigger tab</a><span class="sep"> / </span><strong>Term Availability</strong>
+    </div>
+
+    <h1>Term Availability <span class="badge blue">scrape-availability.js</span></h1>
+    <p class="lead">Queries Northeastern's official Banner SSB system (<code>nubanner.neu.edu</code>) to build a per-course offering history for the last 3 academic years. The output drives the "Offered In" column and the semester availability display in the app.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Script</div><div class="nb-value"><code>scripts/scrape-availability.js</code></div></div>
+      <div class="nb-group"><div class="nb-label">Output</div><div class="nb-value"><code>public/northeastern/term-history.json</code></div></div>
+      <div class="nb-group"><div class="nb-label">Rate limit</div><div class="nb-value">500 ms between Banner requests (override: <code>BANNER_DELAY_MS=200</code>)</div></div>
+      <div class="nb-group"><div class="nb-label">Duration</div><div class="nb-value">~5–10 min depending on Banner response times</div></div>
+    </div>
+
+    <h2>What it does</h2>
+    <p>Banner SSB requires a four-step session flow to query course sections. For each term, the script must activate the term first, then fetch results in pages of 500:</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant S as Script
+    participant B as Banner SSB
+
+    S->>B: GET /classSearch/getTerms (seed session cookies)
+    Note over S: determines which of the desired term codes Banner has available
+    loop For each term (last 3 AYs × 4 suffixes)
+      S->>B: POST /term/search?mode=search (activate term)
+      S->>B: POST /classSearch/resetDataForm (clear state)
+      loop Pages of 500
+        S->>B: GET /searchResults/searchResults?pageOffset=N
+        B-->>S: {data: [{subject, courseNumber, ...}], totalCount}
+        Note over S: collect unique courseId = subject+number
+      end
+    end
+    Note over S: build term-history: only for courses in catalog
+      </div>
+    </div>
+
+    <h2>Term code format</h2>
+    <p>Banner uses <code>YYYYSS</code> codes where <code>YYYY</code> is the academic year end year and <code>SS</code> is the semester suffix:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Suffix</th><th>Semester</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><code>10</code></td><td>Fall</td><td><code>202510</code> = Fall of AY 2024–25</td></tr>
+        <tr><td><code>30</code></td><td>Spring</td><td><code>202530</code> = Spring of AY 2024–25</td></tr>
+        <tr><td><code>40</code></td><td>Summer I</td><td><code>202540</code> = Summer I of AY 2024–25</td></tr>
+        <tr><td><code>60</code></td><td>Summer II</td><td><code>202560</code> = Summer II of AY 2024–25</td></tr>
+      </tbody>
+    </table></div>
+    <p>The script queries the last 3 academic years: <code>currentAYEnd - 3</code> through <code>currentAYEnd</code> (4 AY end years × 4 suffixes = up to 16 terms), then cross-checks against what Banner actually has available before querying.</p>
+
+    <h2>Output format</h2>
+    <pre><code><span class="cmt">// public/northeastern/term-history.json</span>
+{
+  "CS3500": { "202510": true, "202530": false, "202540": false, "202560": false, ... },
+  "CS4500": { "202510": true, "202530": true,  "202540": false, "202560": false, ... }
+}</code></pre>
+    <p><code>true</code> = the course had at least one section offered that term. <code>false</code> = the script found no sections. Courses with no Banner history at all (catalog-only courses that have never been offered) are omitted from the file entirely.</p>
+
+    <h2>Why courses can be missing from term-history.json</h2>
+    <ul>
+      <li>The course was never offered in any of the queried terms (too new, or inactive).</li>
+      <li>The course exists in the catalog but not in Banner SSB (e.g., placeholder or archived listing).</li>
+      <li>A Banner page fetch failed mid-run for that term — the script logs a warning and continues.</li>
+    </ul>
+
+    <h2>Usage</h2>
+    <pre><code>node scripts/scrape-availability.js            <span class="cmt"># dry run — prints summary to stdout</span>
+node scripts/scrape-availability.js --write    <span class="cmt"># writes term-history.json + change-log entry</span>
+BANNER_DELAY_MS=200 node scripts/scrape-availability.js --write  <span class="cmt"># faster (riskier)</span></code></pre>
+
+    <p>Via the Trigger tab: <strong>▷ Preview</strong> runs without <code>--write</code> and streams the summary. <strong>⚡ Run locally</strong> runs with <code>--write</code> and logs a <code>manual-trigger</code> entry.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
