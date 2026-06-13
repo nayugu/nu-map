@@ -46,33 +46,27 @@ function ProgressBar({ frac, color = "var(--success)" }) {
 
 /** Two-segment bar: completed (green) + planned (amber), with an optional required-marker line. */
 function CreditBar({ completedSH, plannedSH, requiredSH }) {
-  const totalSH = completedSH + plannedSH;
-  const maxSH   = Math.max(totalSH, requiredSH, 1);
-  const reqFrac = requiredSH > 0 ? requiredSH / maxSH : 0;
+  const totalSH    = completedSH + plannedSH;
+  const maxSH      = Math.max(totalSH, requiredSH, 1);
+  const reqFrac    = requiredSH > 0 ? requiredSH / maxSH : 0;
+  const totalFrac  = totalSH / maxSH;
+  const labelStyle = (color) => ({
+    position: "absolute", bottom: "100%", left: "50%",
+    transform: "translateX(-50%)", fontSize: 8, color, whiteSpace: "nowrap", marginBottom: 2, lineHeight: 1,
+  });
   return (
-    <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)", overflow: "visible", margin: "4px 0" }}>
+    <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)", overflow: "visible", margin: "14px 0 4px" }}>
       {plannedSH > 0 && (
-        <div style={{
-          position: "absolute", left: 0,
-          width: `${Math.min(100, totalSH / maxSH * 100)}%`,
-          height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45,
-        }} />
+        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalFrac * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />
       )}
       {completedSH > 0 && (
-        <div style={{
-          position: "absolute", left: 0,
-          width: `${Math.min(100, completedSH / maxSH * 100)}%`,
-          height: "100%", background: "var(--success)", borderRadius: 3,
-        }} />
+        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, completedSH / maxSH * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3 }} />
       )}
+      {/* required tick + label */}
       {requiredSH > 0 && (
-        <div style={{
-          position: "absolute",
-          left: `${Math.min(99.5, reqFrac * 100)}%`,
-          top: -3, height: 12, width: 2,
-          background: "var(--text-3)", borderRadius: 1,
-          transform: "translateX(-50%)",
-        }} />
+        <div style={{ position: "absolute", left: `${Math.min(99.5, reqFrac * 100)}%`, top: -3, height: 12, width: 2, background: "var(--text-3)", borderRadius: 1, transform: "translateX(-50%)" }}>
+          <div style={labelStyle("var(--text-4)")}>{requiredSH}</div>
+        </div>
       )}
     </div>
   );
@@ -568,19 +562,19 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
           <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginTop: 2 }}>{name}</div>
           {subtitle && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 1 }}>{subtitle}</div>}
         </div>
-        <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>
+        {progress.requiredSH > 0 && (
+          <span style={{ fontSize: isPhone ? 8 : 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>
+        )}
+        <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0, marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>
       </div>
 
       {/* Progress bar — always visible */}
       {progress.totalReq > 0 && (
         <div style={{ padding: "6px 10px 8px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
-            <span>
-              <span style={{ color: "var(--success)" }}>{progress.doneSat}</span>
-              {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--link-1)" }}>+{progress.totalSat - progress.doneSat}</span>}
-              <span>/{progress.totalReq}</span>
-            </span>
-            <span>{Math.round(progress.totalSat / progress.totalReq * 100)}%</span>
+          <div style={{ fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
+            <span style={{ color: "var(--success)" }}>{progress.doneSat}</span>
+            {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--link-1)" }}>+{progress.totalSat - progress.doneSat}</span>}
+            <span> / {progress.totalReq}</span>
           </div>
           <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
             {(progress.totalSat - progress.doneSat) > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.totalSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />}
@@ -777,8 +771,8 @@ export default function GradPanel({ wideCatalog = false }) {
         if (ds) doneSat += isPool ? Math.min(ds.satCount ?? 0, sec.minRequired) : (ds.satCount ?? 0);
       }
     }
-    return { totalSat, totalReq, doneSat };
-  }, [majorSections, major1DoneSections]);
+    return { totalSat, totalReq, doneSat, completedSH: totalSHDone, plannedSH: totalSHPlaced - totalSHDone, requiredSH: major?.totalCreditsRequired ?? 0 };
+  }, [majorSections, major1DoneSections, totalSHDone, totalSHPlaced, major]);
 
   // ── Second major allocation (courses double-count freely per NU policy) ─
   const major2Sections = useMemo(() => {
@@ -806,8 +800,8 @@ export default function GradPanel({ wideCatalog = false }) {
         if (ds) doneSat += isPool ? Math.min(ds.satCount ?? 0, sec.minRequired) : (ds.satCount ?? 0);
       }
     }
-    return { totalSat, totalReq, doneSat };
-  }, [major2Sections, major2DoneSections]);
+    return { totalSat, totalReq, doneSat, completedSH: totalSHDone, plannedSH: totalSHPlaced - totalSHDone, requiredSH: major2Data?.totalCreditsRequired ?? 0 };
+  }, [major2Sections, major2DoneSections, totalSHDone, totalSHPlaced, major2Data]);
 
   const satSections = majorSections.filter(s => s.sat).length;
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
