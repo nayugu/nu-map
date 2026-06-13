@@ -166,6 +166,10 @@ export function PlannerProvider({ children }) {
   const [bankTab,         setBankTab]         = useState("all");
   const [bankWidth,       setBankWidth]       = useState(() => window.innerWidth < 600 ? 88 : Math.min(300, Math.max(200, window.innerWidth * 0.21)));
   const [showSubjectKeys, setShowSubjectKeys] = useState(false);
+  const [wideCatalog, setWideCatalog] = useState(() => { try { const v = localStorage.getItem("wide-catalog"); return v === "true"; } catch { return false; } });
+  useEffect(() => { try { localStorage.setItem("wide-catalog", String(wideCatalog)); } catch {} }, [wideCatalog]); // eslint-disable-line react-hooks/exhaustive-deps
+  const [wideWidth, setWideWidth] = useState(() => { try { const v = localStorage.getItem("wide-catalog-width"); return v ? Number(v) : null; } catch { return null; } });
+  useEffect(() => { try { if (wideWidth !== null) localStorage.setItem("wide-catalog-width", String(Math.round(wideWidth))); } catch {} }, [wideWidth]); // eslint-disable-line react-hooks/exhaustive-deps
   const [starredIds,      setStarredIds]      = useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem(key("starred")) || "[]")); } catch { return new Set(); }
   });
@@ -1825,6 +1829,7 @@ export function PlannerProvider({ children }) {
     showPanel, lines, scrollTick, showViolLines,
     // Bank state
     bankSearch, bankSort, bankTab, bankWidth, showSubjectKeys,
+    wideCatalog, setWideCatalog, wideWidth, setWideWidth,
     starredIds, bankCourseIds,
     // Settings
     showDisclaimer, showSettings,

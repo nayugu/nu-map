@@ -140,6 +140,7 @@ export default function BankPanel() {
     bankSort,
     bankTab, setBankTab,
     bankWidth,
+    wideCatalog, setWideCatalog, wideWidth, setWideWidth,
     showSubjectKeys, setShowSubjectKeys,
     starredIds, collapsedSubs, setCollapsedSubs,
     onDropBank, onDragStart,
@@ -203,16 +204,7 @@ export default function BankPanel() {
   }, [bankCourses, q, bankTab]);
 
   const [sideMode, setSideMode] = useState("bank"); // "bank" | "grad"
-  const [wideCatalog, setWideCatalog] = useState(() => {
-    try { const v = localStorage.getItem("wide-catalog"); return v === "true"; } catch { return false; }
-  });
-  useEffect(() => { try { localStorage.setItem("wide-catalog", String(wideCatalog)); } catch {} }, [wideCatalog]);
-
-  const [wideWidth, setWideWidth] = useState(() => {
-    try { const v = localStorage.getItem("wide-catalog-width"); return v ? Number(v) : null; } catch { return null; }
-  });
   const wideResizing = useRef(null);
-  useEffect(() => { try { if (wideWidth !== null) localStorage.setItem("wide-catalog-width", String(Math.round(wideWidth))); } catch {} }, [wideWidth]);
   useEffect(() => {
     const onMove = e => {
       if (!wideResizing.current) return;

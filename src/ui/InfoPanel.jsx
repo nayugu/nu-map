@@ -18,7 +18,7 @@ export default function InfoPanel() {
     showPanel, setShowPanel, selectedId, setSelectedId,
     courseMap, allEdges, offeredOverrides, setOfferedOverrides,
     panelHeight, panelResizing, isPhone, isMobile,
-    showUnlocks, bankWidth, showPalette,
+    showUnlocks, bankWidth, showPalette, wideCatalog, wideWidth,
   } = usePlanner();
 
   // ── InfoPanel nav history (back = Cmd+Z, fwd = Cmd+Shift+Z) ──────
@@ -69,7 +69,7 @@ export default function InfoPanel() {
       style={{
         position: "fixed", bottom: 0,
         left: isPhone ? 0 : (showPalette ? 100 : 18),
-        right: isPhone ? 0 : bankWidth,
+        right: isPhone ? 0 : (wideCatalog ? (wideWidth ?? Math.min(340, Math.max(240, window.innerWidth * 0.24))) : bankWidth),
         background: "var(--bg-surface)",
         borderTop: `2px solid ${selCourse.color}50`,
         zIndex: 50, height: panelHeight, display: "flex", flexDirection: "column",
