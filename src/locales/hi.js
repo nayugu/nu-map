@@ -66,6 +66,8 @@ export const strings = {
 
   // ── Grad panel ─────────────────────────────────────────────────
   "grad.major.label":       "मुख्य विषय",
+  "grad.major1.label":      "मुख्य विषय 1",
+  "grad.major2.label":      "मुख्य विषय 2",
   "grad.major.search":      "⌕ मुख्य विषय खोजें",
   "grad.major.search.short":"⌕ खोजें",
   "grad.conc.label":        "विशेषज्ञता",

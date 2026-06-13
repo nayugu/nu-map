@@ -3,6 +3,9 @@
 //
 // Rendered by BankPanel as an XOR alternative to the course bank.
 // Uses graduatenu Major2 JSON schema (local fork) + gradRequirements.js
+//
+// Double major: courses count freely toward both majors (NU policy).
+// Each major is allocated independently with allocateMajorWithElectives.
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useMemo, useEffect, useContext, createContext, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -564,17 +567,8 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel({ wideCatalog = false }) {
-  // Persist showMajorDetails state in localStorage
   const institution = usePort(IInstitution);
   const pfx = institution.storagePrefix;
-  const [showMajorDetails, setShowMajorDetails] = useState(() => {
-    try {
-      const v = localStorage.getItem(`${pfx}-grad-show-major-details`);
-      return v === null ? false : v !== "false";
-    } catch {
-      return false;
-    }
-  });
 
   const [showProgram, setShowProgram] = useState(() => {
     try { const v = localStorage.getItem(`${pfx}-grad-show-program`); return v === null ? true : v !== "false"; } catch { return true; }
@@ -621,7 +615,6 @@ export default function GradPanel({ wideCatalog = false }) {
   });
   useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-program`, String(showProgram)); } catch {} }, [showProgram]);
   useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-np`,      String(showNP));      } catch {} }, [showNP]);
-  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-major-details`, String(showMajorDetails)); } catch {} }, [showMajorDetails]);
 
   // Fetch major JSON on path change
   useEffect(() => {
@@ -725,6 +718,28 @@ export default function GradPanel({ wideCatalog = false }) {
     return [...sections, generalElectives];
   }, [major2Data, placedSet, courseMap]);
 
+  const major2DoneSections = useMemo(() => {
+    if (!major2Data) return [];
+    const { sections, generalElectives } = allocateMajorWithElectives(major2Data, doneSet, courseMap);
+    return [...sections, generalElectives];
+  }, [major2Data, doneSet, courseMap]);
+
+  const major2Progress = useMemo(() => {
+    let totalSat = 0, totalReq = 0, doneSat = 0;
+    for (let i = 0; i < major2Sections.length; i++) {
+      const sec = major2Sections[i];
+      const isPool = sec.minRequired !== undefined && sec.minRequired < (sec.total ?? 0);
+      const displayTotal = isPool ? sec.minRequired : (sec.total ?? 0);
+      if (displayTotal > 0) {
+        totalSat += isPool ? Math.min(sec.satCount ?? 0, sec.minRequired) : (sec.satCount ?? 0);
+        totalReq += displayTotal;
+        const ds = major2DoneSections[i];
+        if (ds) doneSat += isPool ? Math.min(ds.satCount ?? 0, sec.minRequired) : (ds.satCount ?? 0);
+      }
+    }
+    return { totalSat, totalReq, doneSat };
+  }, [major2Sections, major2DoneSections]);
+
   const satSections = majorSections.filter(s => s.sat).length;
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
@@ -750,7 +765,7 @@ export default function GradPanel({ wideCatalog = false }) {
               {/* Major selector */}
               <div style={{ marginBottom: 3 }}>
                 <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
-                  {showMajor2 ? "MAJOR 1" : t("grad.major.label")}
+                  {showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
                 </div>
                 <SearchCombo
                   value={selPath}
@@ -812,7 +827,7 @@ export default function GradPanel({ wideCatalog = false }) {
               {showMajor2 ? (
                 <div style={{ marginBottom: 8, marginTop: 8 }}>
                   <div style={{ display: "flex", alignItems: "center", marginBottom: 4 }}>
-                    <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>MAJOR 2</div>
+                    <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>{t("grad.major2.label")}</div>
                     <button
                       onClick={() => { setMajor2Path(""); setShowMajor2(false); }}
                       style={{ background: "transparent", border: "none", color: "var(--text-5)", fontSize: 12, cursor: "pointer", lineHeight: 1, padding: "0 2px" }}
@@ -900,25 +915,23 @@ export default function GradPanel({ wideCatalog = false }) {
             <ProgressBar frac={overallFrac} />
             */}
             <div>
-              <div
-                onClick={() => setShowMajorDetails(v => !v)}
-                style={{
-                  textAlign: "center",
-                  fontSize: isPhone ? 10 : 12,
-                  fontWeight: 700,
-                  color: "var(--text-3)",
-                  margin: isPhone ? "8px 0 4px 0" : "12px 0 7px 0",
-                  letterSpacing: "0.05em",
-                  cursor: "pointer",
-                  userSelect: "none"
-                }}
-              >
-                {t("grad.major.label")}
+              <div style={{
+                textAlign: "center",
+                fontSize: isPhone ? 10 : 12,
+                fontWeight: 700,
+                color: "var(--text-3)",
+                margin: isPhone ? "8px 0 4px 0" : "12px 0 7px 0",
+                letterSpacing: "0.05em",
+              }}>
+                {showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
+                <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{majorName}</span>
+                {major?.metadata?.verified && (
+                  <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{t("grad.verified")}</span>
+                )}
               </div>
-              {showMajorDetails && (
-                <div style={{ margin: isPhone ? "2px 0 6px 0" : "3px 0 8px 0", color: "var(--text-2)", fontWeight: 600, fontSize: isPhone ? 9 : 10, textAlign: "center" }}>
-                  {majorName}
-                  {selConc && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 2 }}>Concentration: {concName}</div>}
+              {selConc && (
+                <div style={{ textAlign: "center", fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginBottom: 4 }}>
+                  {concName}
                 </div>
               )}
               
@@ -993,21 +1006,48 @@ export default function GradPanel({ wideCatalog = false }) {
         {/* ── Second major requirement sections ───────────────── */}
         {(major2Data || fetching2) && (
           <>
+            <div style={{ borderTop: "2px solid var(--border-2)", margin: "14px 0 0" }} />
             <div style={{
-              borderTop: "2px solid var(--border-2)", margin: "14px 0 10px",
-              display: "flex", alignItems: "center", gap: 6,
+              textAlign: "center",
+              fontSize: isPhone ? 10 : 12,
+              fontWeight: 700,
+              color: "var(--text-3)",
+              margin: isPhone ? "8px 0 4px 0" : "12px 0 7px 0",
+              letterSpacing: "0.05em",
             }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", paddingTop: 8 }}>
-                MAJOR 2
-                <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{major2Name}</span>
-                {major2Data?.metadata?.verified && (
-                  <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{t("grad.verified")}</span>
-                )}
-              </div>
+              {t("grad.major2.label")}
+              <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{major2Name}</span>
+              {major2Data?.metadata?.verified && (
+                <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{t("grad.verified")}</span>
+              )}
             </div>
             {fetching2
-              ? <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0" }}>{t("grad.loading")}</div>
-              : major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)
+              ? <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0", textAlign: "center" }}>{t("grad.loading")}</div>
+              : <>
+                  {major2Progress.totalReq > 0 && (
+                    <div style={{ border: "1px solid var(--border-2)", borderRadius: 4, padding: "4px 6px", margin: "0 0 8px 0", background: "var(--bg-surface)" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: "var(--text-5)", marginBottom: 4 }}>
+                        <span>
+                          <span style={{ color: "var(--success)" }}>{major2Progress.doneSat}</span>
+                          {(major2Progress.totalSat - major2Progress.doneSat) > 0 && (
+                            <span style={{ color: "var(--link-1)" }}>+{major2Progress.totalSat - major2Progress.doneSat}</span>
+                          )}
+                          <span>/{major2Progress.totalReq}</span>
+                        </span>
+                        <span>{Math.round(major2Progress.totalSat / major2Progress.totalReq * 100)}%</span>
+                      </div>
+                      <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
+                        {(major2Progress.totalSat - major2Progress.doneSat) > 0 && (
+                          <div style={{ position: "absolute", left: 0, width: `${Math.min(100, major2Progress.totalSat / major2Progress.totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />
+                        )}
+                        {major2Progress.doneSat > 0 && (
+                          <div style={{ position: "absolute", left: 0, width: `${Math.min(100, major2Progress.doneSat / major2Progress.totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+                </>
             }
           </>
         )}

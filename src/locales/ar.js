@@ -66,6 +66,8 @@ export const strings = {
 
   // ── Grad panel ─────────────────────────────────────────────────
   "grad.major.label":       "التخصص الرئيسي",
+  "grad.major1.label":      "التخصص الرئيسي 1",
+  "grad.major2.label":      "التخصص الرئيسي 2",
   "grad.major.search":      "⌕ بحث عن التخصصات",
   "grad.major.search.short":"⌕ بحث",
   "grad.conc.label":        "التركيز",

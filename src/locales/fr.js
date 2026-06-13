@@ -66,6 +66,8 @@ export const strings = {
 
   // ── Grad panel ─────────────────────────────────────────────────
   "grad.major.label":       "MAJEURE",
+  "grad.major1.label":      "MAJEURE 1",
+  "grad.major2.label":      "MAJEURE 2",
   "grad.major.search":      "⌕ rechercher une majeure",
   "grad.major.search.short":"⌕ rechercher",
   "grad.conc.label":        "CONCENTRATION",

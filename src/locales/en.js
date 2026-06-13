@@ -67,6 +67,8 @@ export const strings = {
 
   // ── Grad panel ─────────────────────────────────────────────────
   "grad.major.label":       "MAJOR",
+  "grad.major1.label":      "MAJOR 1",
+  "grad.major2.label":      "MAJOR 2",
   "grad.major.search":      "\u2315 search majors",
   "grad.major.search.short":"\u2315 search",
   "grad.conc.label":        "CONCENTRATION",

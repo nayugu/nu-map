@@ -67,6 +67,8 @@ export const strings = {
 
   // ── Grad panel ─────────────────────────────────────────────────
   "grad.major.label":       "専攻",
+  "grad.major1.label":      "専攻1",
+  "grad.major2.label":      "専攻2",
   "grad.major.search":      "⌕ 専攻を検索",
   "grad.major.search.short":"⌕ 検索",
   "grad.conc.label":        "集中分野",
