@@ -869,7 +869,7 @@ export default function GradPanel({ wideCatalog = false }) {
                     color: "var(--text-5)", fontSize: isPhone ? 8 : 9,
                     cursor: "pointer", textAlign: "center",
                   }}
-                >+ Add second major</button>
+                >{t("grad.major2.add")}</button>
               )}
 
               {/* Minor selectors */}
@@ -956,7 +956,7 @@ export default function GradPanel({ wideCatalog = false }) {
               {/* ── Section progress bar ──────────────────────────────── */}
               {major1Progress.totalReq > 0 && (
                 <div style={{ border: "1px solid var(--border-2)", borderRadius: 4, padding: "4px 6px", margin: "0 0 8px 0", background: "var(--bg-surface)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: "var(--text-5)", marginBottom: 4 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
                     <span>
                       <span style={{ color: "var(--success)" }}>{major1Progress.doneSat}</span>
                       {(major1Progress.totalSat - major1Progress.doneSat) > 0 && (
@@ -1013,7 +1013,7 @@ export default function GradPanel({ wideCatalog = false }) {
               : <>
                   {major2Progress.totalReq > 0 && (
                     <div style={{ border: "1px solid var(--border-2)", borderRadius: 4, padding: "4px 6px", margin: "0 0 8px 0", background: "var(--bg-surface)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: "var(--text-5)", marginBottom: 4 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
                         <span>
                           <span style={{ color: "var(--success)" }}>{major2Progress.doneSat}</span>
                           {(major2Progress.totalSat - major2Progress.doneSat) > 0 && (

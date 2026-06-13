@@ -68,6 +68,7 @@ export const strings = {
   "grad.major.label":       "전공",
   "grad.major1.label":      "전공 1",
   "grad.major2.label":      "전공 2",
+  "grad.major2.add":        "+ 두 번째 전공 추가",
   "grad.major.search":      "⌕ 전공 검색",
   "grad.major.search.short":"⌕ 검색",
   "grad.conc.label":        "세부 전공",

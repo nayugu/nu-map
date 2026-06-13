@@ -68,6 +68,7 @@ export const strings = {
   "grad.major.label":       "मुख्य विषय",
   "grad.major1.label":      "मुख्य विषय 1",
   "grad.major2.label":      "मुख्य विषय 2",
+  "grad.major2.add":        "+ दूसरा मुख्य विषय जोड़ें",
   "grad.major.search":      "⌕ मुख्य विषय खोजें",
   "grad.major.search.short":"⌕ खोजें",
   "grad.conc.label":        "विशेषज्ञता",
