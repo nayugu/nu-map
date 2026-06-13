@@ -12,7 +12,7 @@ const dark = {
   '--bg-app':            '#0d1117',
   '--bg-surface':        '#161b22',
   '--bg-surface-2':      '#1a1f26',
-  '--bg-card':           '#1c1e21',   // desaturated card tint for major/minor frames
+  '--bg-card':           '#1e2329',   // desaturated card tint for major/minor frames (lighter than surface-2)
   '--bg-bank':           '#0a0d12',
 
   // ── Borders ──────────────────────────────────────────────────────
@@ -117,7 +117,7 @@ const light = {
   '--bg-app':            '#fefefe',   // indistinguishable from white, but not pure
   '--bg-surface':        '#ffffff',
   '--bg-surface-2':      '#faf9f8',   // barely-there tint for controls/bank
-  '--bg-card':           '#f2f2f2',   // desaturated card tint for major/minor frames
+  '--bg-card':           '#fdfdfd',   // desaturated card tint for major/minor frames (between surface-2 and white)
   '--bg-bank':           '#faf9f8',
 
   // ── Borders ────────────────────────────────────────────────
