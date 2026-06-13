@@ -443,10 +443,11 @@ function NuPathGrid({ covered }) {
 // ── Minor block (loads + validates a minor's requirement sections) ─
 
 function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
-  const { courseMap, majorRequirements } = useContext(GradCtx);
+  const { courseMap, majorRequirements, isPhone } = useContext(GradCtx);
   const [minor, setMinor] = useState(null);
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const minorName = useTranslatedText(minor?.name ?? null);
 
   useEffect(() => {
@@ -508,30 +509,25 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
   if (!minor) return null;
 
   return (
-    <>
-      <div style={{ textAlign: "center", fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 12 }}>
-        {label}
-        <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{minorName}</span>
-        {minor.metadata?.verified && (
-          <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>verified</span>
-        )}
+    <div style={{ background: "var(--bg-card)", borderRadius: 6, marginBottom: 10 }}>
+      {/* Header row: label + triangle toggle */}
+      <div onClick={() => setExpanded(v => !v)} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: isPhone ? 10 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+            {label}
+            {minor.metadata?.verified && (
+              <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>verified</span>
+            )}
+          </div>
+          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginTop: 2 }}>{minorName}</div>
+        </div>
+        <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>
       </div>
 
+      {/* Progress bar — always visible */}
       {showBar && (
-        <div style={{
-          border: "1px solid var(--border-2)",
-          borderRadius: 4,
-          padding: "4px 6px",
-          margin: "6px 0 8px 0",
-          background: "var(--bg-surface)"
-        }}>
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: 8,
-            color: "var(--text-5)",
-            marginBottom: 4
-          }}>
+        <div style={{ padding: "6px 10px 8px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
             <span>
               <span style={{ color: "var(--success)" }}>{doneSat}</span>
               {plannedSat > 0 && <span style={{ color: "var(--link-1)" }}>+{plannedSat}</span>}
@@ -540,27 +536,70 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
             <span>{Math.round(totalSat / totalReq * 100)}%</span>
           </div>
           <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
-            {plannedSat > 0 && (
-              <div style={{
-                position: "absolute", left: 0,
-                width: `${Math.min(100, totalSat / totalReq * 100)}%`,
-                height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45,
-              }} />
-            )}
-            {doneSat > 0 && (
-              <div style={{
-                position: "absolute", left: 0,
-                width: `${Math.min(100, doneSat / totalReq * 100)}%`,
-                height: "100%", background: "var(--success)", borderRadius: 3,
-                transition: "width 0.2s",
-              }} />
-            )}
+            {plannedSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalSat / totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />}
+            {doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, doneSat / totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />}
           </div>
         </div>
       )}
 
-      {sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
-    </>
+      {/* Sections — collapsible */}
+      {expanded && (
+        <div style={{ padding: "0 10px 10px" }}>
+          {sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── MajorCard: framed collapsible card for a major's requirements ─
+// Frame is a subtle background tint (no border line) matching MinorBlock.
+function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, expanded, onToggle, isPhone, loading, loadingLabel, children }) {
+  return (
+    <div style={{ background: "var(--bg-card)", borderRadius: 6, marginBottom: 10 }}>
+      {/* Header row: label + triangle toggle */}
+      <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: isPhone ? 10 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+            {label}
+            {verified && (
+              <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{verifiedLabel}</span>
+            )}
+          </div>
+          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginTop: 2 }}>{name}</div>
+          {subtitle && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 1 }}>{subtitle}</div>}
+        </div>
+        <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>
+      </div>
+
+      {/* Progress bar — always visible */}
+      {progress.totalReq > 0 && (
+        <div style={{ padding: "6px 10px 8px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
+            <span>
+              <span style={{ color: "var(--success)" }}>{progress.doneSat}</span>
+              {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--link-1)" }}>+{progress.totalSat - progress.doneSat}</span>}
+              <span>/{progress.totalReq}</span>
+            </span>
+            <span>{Math.round(progress.totalSat / progress.totalReq * 100)}%</span>
+          </div>
+          <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
+            {(progress.totalSat - progress.doneSat) > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.totalSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />}
+            {progress.doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.doneSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />}
+          </div>
+        </div>
+      )}
+
+      {/* Requirement sections — collapsible */}
+      {expanded && (
+        <div style={{ padding: "0 10px 10px" }}>
+          {loading
+            ? <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0", textAlign: "center" }}>{loadingLabel}</div>
+            : children
+          }
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -610,11 +649,19 @@ export default function GradPanel({ wideCatalog = false }) {
   const [fetching2,     setFetching2]     = useState(false);
   const major2Name = useTranslatedText(major2Data?.name ?? null);
   const [showMajor2,    setShowMajor2]    = useState(() => major2Path !== "");
-  const [showNP,   setShowNP]   = useState(() => {
+  const [showNP,        setShowNP]        = useState(() => {
     try { const v = localStorage.getItem(`${pfx}-grad-show-np`); return v === null ? true : v !== "false"; } catch { return true; }
   });
-  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-program`, String(showProgram)); } catch {} }, [showProgram]);
-  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-np`,      String(showNP));      } catch {} }, [showNP]);
+  const [expandMajor1,  setExpandMajor1]  = useState(() => {
+    try { const v = localStorage.getItem(`${pfx}-grad-expand-major1`); return v === null ? true : v !== "false"; } catch { return true; }
+  });
+  const [expandMajor2,  setExpandMajor2]  = useState(() => {
+    try { const v = localStorage.getItem(`${pfx}-grad-expand-major2`); return v === null ? true : v !== "false"; } catch { return true; }
+  });
+  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-program`,   String(showProgram));  } catch {} }, [showProgram]);
+  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-show-np`,        String(showNP));       } catch {} }, [showNP]);
+  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-expand-major1`,  String(expandMajor1)); } catch {} }, [expandMajor1]);
+  useEffect(() => { try { localStorage.setItem(`${pfx}-grad-expand-major2`,  String(expandMajor2)); } catch {} }, [expandMajor2]);
 
   // Fetch major JSON on path change
   useEffect(() => {
@@ -910,134 +957,44 @@ export default function GradPanel({ wideCatalog = false }) {
           </div>
         )}
 
-                {/* ── Major requirement sections ───────────────────────── */}
-        {major && !fetching && (
-          <>
-            {/*
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: isPhone ? 3 : 5, marginTop: isPhone ? 2 : 4 }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: isPhone ? 9 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
-                  {t("grad.requirements.title")}
-                  <span style={{ fontWeight: 400, color: "var(--text-5)", marginLeft: 5 }}>
-                    ({satSections}/{majorSections.length})
-                  </span>
-                </div>
-                <div style={{ fontSize: isPhone ? 8 : 9, fontWeight: 600, color: "var(--text-2)", marginTop: 1 }}>
-                  {major.name}
-                  {major.metadata?.verified && (
-                    <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px", verticalAlign: "middle" }}>
-                      {t("grad.verified")}
-                    </span>
-                  )}
-                </div>
+        {/* ── Major 1 framed card ──────────────────────────────── */}
+        {major && !fetching && <MajorCard
+          label={showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
+          name={majorName}
+          subtitle={selConc ? concName : null}
+          verified={!!major?.metadata?.verified}
+          verifiedLabel={t("grad.verified")}
+          progress={major1Progress}
+          expanded={expandMajor1}
+          onToggle={() => setExpandMajor1(v => !v)}
+          isPhone={isPhone}
+        >
+          {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+          {concSection && (
+            <>
+              <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 10 }}>
+                {t("grad.conc.label")}
               </div>
-              <div style={{ fontSize: isPhone ? 16 : 22, fontWeight: 900, lineHeight: 1, color: overallFrac === 1 ? "var(--success)" : "var(--text-1)" }}>
-                {Math.round(overallFrac * 100)}%
-              </div>
-            </div>
-            <ProgressBar frac={overallFrac} />
-            */}
-            <div>
-              <div style={{ textAlign: "center", fontSize: isPhone ? 10 : 12, fontWeight: 700, color: "var(--text-3)", margin: isPhone ? "8px 0 2px 0" : "12px 0 2px 0", letterSpacing: "0.05em" }}>
-                {showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
-                {major?.metadata?.verified && (
-                  <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{t("grad.verified")}</span>
-                )}
-              </div>
-              <div style={{ textAlign: "center", fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginBottom: selConc ? 1 : 6 }}>
-                {majorName}
-              </div>
-              {selConc && (
-                <div style={{ textAlign: "center", fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginBottom: 6 }}>
-                  {concName}
-                </div>
-              )}
+              <SectionBlock sec={concSection} defaultOpen={true} />
+            </>
+          )}
+        </MajorCard>}
 
-              {/* ── Section progress bar ──────────────────────────────── */}
-              {major1Progress.totalReq > 0 && (
-                <div style={{ border: "1px solid var(--border-2)", borderRadius: 4, padding: "4px 6px", margin: "0 0 8px 0", background: "var(--bg-surface)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
-                    <span>
-                      <span style={{ color: "var(--success)" }}>{major1Progress.doneSat}</span>
-                      {(major1Progress.totalSat - major1Progress.doneSat) > 0 && (
-                        <span style={{ color: "var(--link-1)" }}>+{major1Progress.totalSat - major1Progress.doneSat}</span>
-                      )}
-                      <span>/{major1Progress.totalReq}</span>
-                    </span>
-                    <span>{Math.round(major1Progress.totalSat / major1Progress.totalReq * 100)}%</span>
-                  </div>
-                  <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
-                    {(major1Progress.totalSat - major1Progress.doneSat) > 0 && (
-                      <div style={{ position: "absolute", left: 0, width: `${Math.min(100, major1Progress.totalSat / major1Progress.totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />
-                    )}
-                    {major1Progress.doneSat > 0 && (
-                      <div style={{ position: "absolute", left: 0, width: `${Math.min(100, major1Progress.doneSat / major1Progress.totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />
-                    )}
-                  </div>
-                </div>
-              )}
-              
-              <div style={{ marginTop: 8 }}>
-                {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
-              </div>
-            </div>
-
-
-            {/* Concentration */}
-            {concSection && (
-              <>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 10 }}>
-                  {t("grad.conc.label")}
-                </div>
-                <SectionBlock sec={concSection} defaultOpen={true} />
-              </>
-            )}
-          </>
-        )}
-
-        {/* ── Second major requirement sections ───────────────── */}
-        {(major2Data || fetching2) && (
-          <>
-            <div style={{ borderTop: "2px solid var(--border-2)", margin: "14px 0 0" }} />
-            <div style={{ textAlign: "center", fontSize: isPhone ? 10 : 12, fontWeight: 700, color: "var(--text-3)", margin: isPhone ? "8px 0 2px 0" : "12px 0 2px 0", letterSpacing: "0.05em" }}>
-              {t("grad.major2.label")}
-              {major2Data?.metadata?.verified && (
-                <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{t("grad.verified")}</span>
-              )}
-            </div>
-            <div style={{ textAlign: "center", fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginBottom: 6 }}>
-              {major2Name}
-            </div>
-            {fetching2
-              ? <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0", textAlign: "center" }}>{t("grad.loading")}</div>
-              : <>
-                  {major2Progress.totalReq > 0 && (
-                    <div style={{ border: "1px solid var(--border-2)", borderRadius: 4, padding: "4px 6px", margin: "0 0 8px 0", background: "var(--bg-surface)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
-                        <span>
-                          <span style={{ color: "var(--success)" }}>{major2Progress.doneSat}</span>
-                          {(major2Progress.totalSat - major2Progress.doneSat) > 0 && (
-                            <span style={{ color: "var(--link-1)" }}>+{major2Progress.totalSat - major2Progress.doneSat}</span>
-                          )}
-                          <span>/{major2Progress.totalReq}</span>
-                        </span>
-                        <span>{Math.round(major2Progress.totalSat / major2Progress.totalReq * 100)}%</span>
-                      </div>
-                      <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
-                        {(major2Progress.totalSat - major2Progress.doneSat) > 0 && (
-                          <div style={{ position: "absolute", left: 0, width: `${Math.min(100, major2Progress.totalSat / major2Progress.totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />
-                        )}
-                        {major2Progress.doneSat > 0 && (
-                          <div style={{ position: "absolute", left: 0, width: `${Math.min(100, major2Progress.doneSat / major2Progress.totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  {major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
-                </>
-            }
-          </>
-        )}
+        {/* ── Major 2 framed card ──────────────────────────────── */}
+        {(major2Data || fetching2) && <MajorCard
+          label={t("grad.major2.label")}
+          name={major2Name}
+          verified={!!major2Data?.metadata?.verified}
+          verifiedLabel={t("grad.verified")}
+          progress={major2Progress}
+          expanded={expandMajor2}
+          onToggle={() => setExpandMajor2(v => !v)}
+          isPhone={isPhone}
+          loading={fetching2}
+          loadingLabel={t("grad.loading")}
+        >
+          {major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+        </MajorCard>}
 
         {/* ── Minor requirement sections ───────────────────────── */}
         <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />

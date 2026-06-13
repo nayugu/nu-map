@@ -12,6 +12,7 @@ const dark = {
   '--bg-app':            '#0d1117',
   '--bg-surface':        '#161b22',
   '--bg-surface-2':      '#1a1f26',
+  '--bg-card':           '#1c1e21',   // desaturated card tint for major/minor frames
   '--bg-bank':           '#0a0d12',
 
   // ── Borders ──────────────────────────────────────────────────────
@@ -54,14 +55,14 @@ const dark = {
   '--error-border-2':    '#5a1a1a',
 
   // ── Semester row backgrounds ──────────────────────────────────────
-  '--row-fall-bg':       '#0d1a27',
-  '--row-fall-border':   '#1e3a5f',
-  '--row-spr-bg':        '#0d1a10',
-  '--row-spr-border':    '#1a3a1a',
-  '--row-sum-bg':        '#1e1508',
-  '--row-sum-border':    '#3a2800',
-  '--row-spc-bg':        '#110d2a',
-  '--row-spc-border':    '#2a1a4a',
+  '--row-fall-bg':       '#180e0e',   // barely-red tint
+  '--row-fall-border':   '#2c1919',
+  '--row-spr-bg':        '#0e1710',   // barely-green tint
+  '--row-spr-border':    '#192b1e',
+  '--row-sum-bg':        '#141414',   // neutral — no saturation
+  '--row-sum-border':    '#242424',
+  '--row-spc-bg':        '#141414',   // neutral — no saturation
+  '--row-spc-border':    '#242424',
 
   // ── Cards ─────────────────────────────────────────────────────────
   '--card-bg':           '#161b22',
@@ -116,6 +117,7 @@ const light = {
   '--bg-app':            '#fefefe',   // indistinguishable from white, but not pure
   '--bg-surface':        '#ffffff',
   '--bg-surface-2':      '#faf9f8',   // barely-there tint for controls/bank
+  '--bg-card':           '#f2f2f2',   // desaturated card tint for major/minor frames
   '--bg-bank':           '#faf9f8',
 
   // ── Borders ────────────────────────────────────────────────
