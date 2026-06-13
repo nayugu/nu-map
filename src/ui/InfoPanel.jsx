@@ -18,7 +18,7 @@ export default function InfoPanel() {
     showPanel, setShowPanel, selectedId, setSelectedId,
     courseMap, allEdges, offeredOverrides, setOfferedOverrides,
     panelHeight, panelResizing, isPhone, isMobile,
-    showUnlocks,
+    showUnlocks, bankWidth, showPalette,
   } = usePlanner();
 
   // ── InfoPanel nav history (back = Cmd+Z, fwd = Cmd+Shift+Z) ──────
@@ -67,8 +67,9 @@ export default function InfoPanel() {
     <div
       onClick={e => e.stopPropagation()}
       style={{
-        position: "fixed", bottom: 0, left: 0,
-        right: 0, // will be overridden by inline style if bank is visible
+        position: "fixed", bottom: 0,
+        left: isPhone ? 0 : (showPalette ? 100 : 18),
+        right: isPhone ? 0 : bankWidth,
         background: "var(--bg-surface)",
         borderTop: `2px solid ${selCourse.color}50`,
         zIndex: 50, height: panelHeight, display: "flex", flexDirection: "column",
