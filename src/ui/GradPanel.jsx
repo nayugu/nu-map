@@ -349,12 +349,11 @@ function SectionBlock({ sec, defaultOpen = true }) {
   const frac = displayTotal > 0 ? displaySatCount / displayTotal : 0;
 
   return (
-    <div style={{ marginBottom: ph ? 3 : 4, border: "1px solid var(--border-2)", borderRadius: 6, overflow: "hidden" }}>
-      {/* Clickable header */}
+    <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: ph ? 5 : 7, marginBottom: ph ? 5 : 7 }}>
+      {/* Clickable header — no background, just text */}
       <div onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }} style={{
         display: "flex", alignItems: "center", gap: ph ? 4 : 6,
-        padding: ph ? "3px 6px" : "5px 8px",
-        cursor: "pointer", background: "var(--bg-surface)", userSelect: "none",
+        cursor: "pointer", userSelect: "none",
       }}>
         <CheckBox sat={sec.sat} />
         <span style={{ flex: 1, fontSize: ph ? 9 : 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
@@ -365,12 +364,12 @@ function SectionBlock({ sec, defaultOpen = true }) {
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
       {/* Progress sliver */}
-      <div style={{ padding: ph ? "0 6px" : "0 8px", background: "var(--bg-surface)" }}>
+      <div style={{ marginTop: 3 }}>
         <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--warn-bright)"} />
       </div>
       {/* Requirements */}
       {open && (
-        <div style={{ padding: ph ? "4px 3px 3px" : "8px 6px 6px", background: "var(--bg-surface-2)" }}>
+        <div style={{ paddingTop: ph ? 4 : 5 }}>
           {sec.warnings?.map((w, i) => (
             <div key={i} style={{ fontSize: ph ? 8 : 9, color: "var(--warn-bright)", marginBottom: ph ? 3 : 4, paddingLeft: 4, borderLeft: "2px solid var(--warn-bright)" }}>
               ⚠ {w}
@@ -509,7 +508,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
   if (!minor) return null;
 
   return (
-    <div style={{ background: "var(--bg-card)", borderRadius: 6, marginBottom: 10 }}>
+    <div style={{ border: "1px solid var(--border-1)", borderRadius: 6, marginBottom: 10 }}>
       {/* Header row: label + triangle toggle */}
       <div onClick={() => setExpanded(v => !v)} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
@@ -556,7 +555,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
 // Frame is a subtle background tint (no border line) matching MinorBlock.
 function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, expanded, onToggle, isPhone, loading, loadingLabel, children }) {
   return (
-    <div style={{ background: "var(--bg-card)", borderRadius: 6, marginBottom: 10 }}>
+    <div style={{ border: "1px solid var(--border-1)", borderRadius: 6, marginBottom: 10 }}>
       {/* Header row: label + triangle toggle */}
       <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>

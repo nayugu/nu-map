@@ -117,7 +117,7 @@ const light = {
   '--bg-app':            '#fefefe',   // indistinguishable from white, but not pure
   '--bg-surface':        '#ffffff',
   '--bg-surface-2':      '#faf9f8',   // barely-there tint for controls/bank
-  '--bg-card':           '#fdfdfd',   // desaturated card tint for major/minor frames (between surface-2 and white)
+  '--bg-card':           '#ffffff',   // reserved (cards now use outline border)
   '--bg-bank':           '#faf9f8',
 
   // ── Borders ────────────────────────────────────────────────
@@ -150,7 +150,7 @@ const light = {
 
   // ── Status: warning ───────────────────────────────────────────────
   '--warn':              '#9a6200',
-  '--warn-bright':       '#ffd600',   // pure saturated yellow — alarming coreq border
+  '--warn-bright':       '#d97706',   // amber — readable on light bg (was neon yellow)
   '--warn-bg':           '#fef3c7',
   '--warn-border':       '#e8a500',
 
