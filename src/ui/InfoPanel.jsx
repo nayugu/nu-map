@@ -447,11 +447,13 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const semTypes    = cal.getSemesterTypes();
   const termHistory = selCourse.termHistory ?? {};
   const hasHistory  = Object.keys(termHistory).length > 0;
+  const birth       = selCourse.birthTermCode ?? null;
 
   // Build lookup: { semTypeId → { calYear → offered:boolean } }
-  // termHistory is already past-filtered by courseCatalog adapter, so byType is past-only.
+  // Pre-birth terms are excluded — they represent the course not yet existing, not a "not offered" signal.
   const byType = {};
   for (const [code, offered] of Object.entries(termHistory)) {
+    if (birth !== null && Number(code) < birth) continue;
     const semType = cal.decodeTermCode(code);
     const yr      = cal.getTermCodeYear?.(code);
     if (semType && yr != null) {
@@ -479,12 +481,15 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const ovrMap     = (rawOvr && !Array.isArray(rawOvr)) ? rawOvr : {};
   const hasOverride = Object.keys(ovrMap).length > 0;
 
-  // Historical offering probability for a given semTypeId (null if no data).
-  // termHistory is past-filtered at the adapter, so all entries here are valid.
+  // Historical offering probability for a given semTypeId (null if no data or < 2 post-birth entries).
+  // Pre-birth entries are excluded: a false entry before birthTermCode means the course didn't
+  // exist yet, not that it was offered and stopped. Requires ≥ 2 entries to flag as not offered
+  // so sparse data for new courses doesn't produce a misleading 0% probability.
   function semTypeProb(semTypeId) {
     const entries = Object.entries(termHistory)
-      .filter(([code]) => cal.decodeTermCode(code) === semTypeId);
-    if (!entries.length) return null;
+      .filter(([code]) => (birth === null || Number(code) >= birth)
+                       && cal.decodeTermCode(code) === semTypeId);
+    if (entries.length < 2) return null;
     return entries.filter(([, v]) => v).length / entries.length;
   }
 

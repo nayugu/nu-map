@@ -39,23 +39,41 @@ const ALL_COURSES_URL = `${import.meta.env.BASE_URL}northeastern/all-courses.jso
 // ── Helpers ──────────────────────────────────────────────────────
 
 /**
- * Compute which semester type IDs a course is offered in from termHistory.
- * When history has both true and false entries (from scrape-availability), a
- * semType is included only if it was offered in ≥ 50% of queried terms of that type.
- * When history has only positive evidence (from sections in all-courses.json), all
- * decoded semTypes are included — we don't penalise absence of evidence.
+ * Earliest term code (numeric) where the course was ever confirmed offered.
+ * Returns null when no true entries exist.
+ * @param {Record<string,boolean>} termHistory
+ * @returns {number|null}
  */
-function deriveTerms(termHistory) {
-  const entries = Object.entries(termHistory);
+function computeBirthTermCode(termHistory) {
+  let birth = null;
+  for (const [code, offered] of Object.entries(termHistory)) {
+    if (offered === true) {
+      const n = Number(code);
+      if (birth === null || n < birth) birth = n;
+    }
+  }
+  return birth;
+}
+
+/**
+ * Compute which semester type IDs a course is offered in from termHistory.
+ * Only entries on or after birthTermCode are considered — earlier entries are
+ * pre-existence noise (Banner returning false before the course was created).
+ * When post-birth history has only true entries, all decoded semTypes are included.
+ * When it has mixed entries, a semType is included only if offered in ≥ 50%.
+ * @param {Record<string,boolean>} termHistory
+ * @param {number|null} birthTermCode
+ */
+function deriveTerms(termHistory, birthTermCode = null) {
+  const entries = Object.entries(termHistory)
+    .filter(([code]) => birthTermCode === null || Number(code) >= birthTermCode);
   if (entries.length === 0) return [];
 
   const hasNegative = entries.some(([, v]) => v === false);
   if (!hasNegative) {
-    // Only positive evidence: return all semTypes seen
     return [...new Set(entries.map(([code]) => calendar.decodeTermCode(code)).filter(Boolean))];
   }
 
-  // Full history with negatives: P ≥ 0.5 threshold
   const semTypeIds = [...new Set(entries.map(([code]) => calendar.decodeTermCode(code)).filter(Boolean))];
   return semTypeIds.filter(id => {
     const ofType = entries.filter(([code]) => calendar.decodeTermCode(code) === id);
@@ -107,9 +125,8 @@ function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     if (calendar.decodeTermCode(code)) termHistory[code] = true;
   }
 
-  // Derive terms from termHistory (P ≥ 0.5 per semType), or fall back to the raw
-  // set of decoded codes if we only have positive evidence from sections.
-  const uniqueTerms = deriveTerms(termHistory);
+  const birthTermCode = computeBirthTermCode(termHistory);
+  const uniqueTerms   = deriveTerms(termHistory, birthTermCode);
 
   const shMax = typeof raw.creditsMax === "number" && raw.creditsMax !== sh
     ? raw.creditsMax : null;
@@ -127,6 +144,7 @@ function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     prereqs:      raw.prereqs ?? raw.prerequisites ?? [],
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],
     termHistory,
+    birthTermCode,
     terms:        uniqueTerms,
     attributes:   (raw.nuPath?.length ? raw.nuPath : nuPathSupp[id]) ?? raw.attributes ?? [],
     color:        subjectColor(subject),
@@ -205,8 +223,9 @@ export default {
           const pastHist = Object.fromEntries(
             Object.entries(hist).filter(([code]) => calendar.isTermPast(code))
           );
-          const termHistory = { ...course.termHistory, ...pastHist };
-          return { ...course, termHistory, terms: deriveTerms(termHistory) };
+          const termHistory   = { ...course.termHistory, ...pastHist };
+          const birthTermCode = computeBirthTermCode(termHistory);
+          return { ...course, termHistory, birthTermCode, terms: deriveTerms(termHistory, birthTermCode) };
         });
       }
     }

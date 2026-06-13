@@ -47,6 +47,11 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   //   true  = force-offered (suppress warning)
   //   false = force-not-offered (always warn)
   //   absent = auto: warn only when historical probability ≤ 0.5
+  //
+  // Only post-birth entries count: termHistory entries before course.birthTermCode are
+  // pre-existence Banner noise (the course didn't exist yet, it just wasn't offered).
+  // Also requires ≥ 2 post-birth entries for the semType before flagging — one false
+  // entry after a course is first offered isn't enough evidence it's never offered there.
   const semMeta    = semId ? SEMESTERS.find(s => s.id === semId) : null;
   const semOffType = inSem ? semMeta?.semTypeId ?? null : null;
   let notOffered = false;
@@ -56,9 +61,11 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     if (semOvr === false) {
       notOffered = true;
     } else if (semOvr !== true) {
+      const birth   = course.birthTermCode ?? null;
       const entries = Object.entries(course.termHistory ?? {})
-        .filter(([code]) => calendar.decodeTermCode(code) === semOffType);
-      if (entries.length > 0) {
+        .filter(([code]) => (birth === null || Number(code) >= birth)
+                         && calendar.decodeTermCode(code) === semOffType);
+      if (entries.length >= 2) {
         notOffered = entries.filter(([, v]) => v).length / entries.length <= 0.5;
       }
     }

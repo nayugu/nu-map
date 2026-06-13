@@ -57,11 +57,20 @@ export const ICourseCatalog = "courseCatalog";
  *                                         the adapter at load time.  Empty object {} when no
  *                                         history data is available.
  *
+ * @property {number|null}  birthTermCode - Earliest term code where the course was ever offered
+ *                                         (i.e. termHistory value === true), as a raw numeric
+ *                                         Banner term code (e.g. 202510 for Fall 2025 at NU).
+ *                                         null when the course has no confirmed offerings.
+ *                                         Used to exclude pre-existence terms from "not offered"
+ *                                         probability calculations — a false entry before this
+ *                                         date means the course didn't exist, not that it was
+ *                                         offered and then stopped.
+ *
  * @property {string[]}     terms        - Derived: semester type IDs with P(offered) ≥ 0.5
- *                                         based on termHistory.  Falls back to primary semesters
- *                                         when termHistory is empty.  Already decoded from raw
- *                                         registrar codes by the adapter during normalization.
- *                                         Used by CourseCard for the "⚠ avail?" badge.
+ *                                         based on termHistory entries on or after birthTermCode.
+ *                                         Falls back to primary semesters when termHistory is
+ *                                         empty.  Already decoded from raw registrar codes by
+ *                                         the adapter during normalization.
  *
  * Curriculum attributes
  * @property {boolean}      isCps        - True if the course is offered through the College of Professional Studies.
