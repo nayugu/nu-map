@@ -365,7 +365,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
       </div>
       {/* Progress sliver */}
       <div style={{ marginTop: 3 }}>
-        <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--warn-bright)"} />
+        <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--success-bar-partial)"} />
       </div>
       {/* Requirements */}
       {open && (

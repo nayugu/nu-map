@@ -31,10 +31,11 @@ const dark = {
   '--text-6':            '#555d66',   // separator
 
   // ── Status: success / done ───────────────────────────────────────
-  '--success':           '#4ade80',
-  '--success-bg':        '#0d2a17',
-  '--success-border':    '#1a4a25',
-  '--success-deep':      '#2a7a3a',
+  '--success':              '#4ade80',
+  '--success-bg':           '#0d2a17',
+  '--success-border':       '#1a4a25',
+  '--success-deep':         '#2a7a3a',
+  '--success-bar-partial':  '#4aab6a',   // in-progress section bar (lighter muted green, slightly more saturated)
 
   // ── Status: active / current ─────────────────────────────────────
   '--active':            '#58a6ff',
@@ -136,10 +137,11 @@ const light = {
   '--text-6':            '#a3a3a3',
 
   // ── Status: success / done ────────────────────────────────────────
-  '--success':           '#16a34a',   // medium green — lighter & readable on white
-  '--success-bg':        '#bbf7d0',   // bright lime tint
-  '--success-border':    '#4ade80',   // vivid lime accent
-  '--success-deep':      '#14532d',   // deepest for left-bar / done row
+  '--success':              '#16a34a',   // medium green — lighter & readable on white
+  '--success-bg':           '#bbf7d0',   // bright lime tint
+  '--success-border':       '#4ade80',   // vivid lime accent
+  '--success-deep':         '#14532d',   // deepest for left-bar / done row
+  '--success-bar-partial':  '#9dd4ac',   // in-progress section bar (light sage, slightly more saturated)
 
   // ── Status: active / current ──────────────────────────────────────
   '--active':            '#2563eb',   // vivid blue
