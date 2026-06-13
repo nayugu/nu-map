@@ -81,6 +81,7 @@ export function PlannerProvider({ children }) {
   const [conc,   setConc]   = useState("");
   const [minor1, setMinor1] = useState("");
   const [minor2, setMinor2] = useState("");
+  const [major2, setMajor2] = useState("");
   // Set of course IDs that are placed out (satisfy prereqs, no credit)
   const [placedOut, setPlacedOut] = useState(() => {
     const saved = _saved?.persist && _saved.placedOut;
@@ -570,6 +571,7 @@ export function PlannerProvider({ children }) {
           }
           break;
         case "SET_MAJOR":         programUpdates.major  = action.programId; break;
+        case "SET_MAJOR2":        programUpdates.major2 = action.programId; break;
         case "SET_CONCENTRATION": programUpdates.conc   = action.label;     break;
         case "SET_MINOR1":        programUpdates.minor1 = action.programId; break;
         case "SET_MINOR2":        programUpdates.minor2 = action.programId; break;
@@ -629,6 +631,7 @@ export function PlannerProvider({ children }) {
 
     // Commit program / timeline updates
     if ("major"         in programUpdates) setMajor(programUpdates.major);
+    if ("major2"        in programUpdates) setMajor2(programUpdates.major2);
     if ("conc"          in programUpdates) setConc(programUpdates.conc);
     if ("minor1"        in programUpdates) setMinor1(programUpdates.minor1);
     if ("minor2"        in programUpdates) setMinor2(programUpdates.minor2);
@@ -1397,6 +1400,7 @@ export function PlannerProvider({ children }) {
     setOfferedOverrides({});
     setBonusSH(0);
     setMajor("");
+    setMajor2("");
     setConc("");
     setMinor1("");
     setMinor2("");
@@ -1445,7 +1449,7 @@ export function PlannerProvider({ children }) {
     gradSem: planGradSem, gradYear: planGradYear,
     placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
-    major, conc, minor1, minor2,
+    major, major2, conc, minor1, minor2,
     placedOut: [...placedOut],
   });
 
@@ -1473,6 +1477,7 @@ export function PlannerProvider({ children }) {
     if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem(key("grad-sem"), d.gradSem); } catch {} }
     if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
     setMajor(d.major ?? "");
+    setMajor2(d.major2 ?? "");
     setConc(d.conc ?? "");
     setMinor1(d.minor1 ?? "");
     setMinor2(d.minor2 ?? "");
@@ -1558,7 +1563,7 @@ export function PlannerProvider({ children }) {
       return;
     }
     saveCurrentPlanToSlot();
-  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, conc, minor1, minor2, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, minor1, minor2, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -1570,7 +1575,7 @@ export function PlannerProvider({ children }) {
       placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
       offeredOverrides, collapsedSubs,
       placedOut: [...placedOut], substitutions,
-      major, conc, minor1, minor2,
+      major, major2, conc, minor1, minor2,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
@@ -1602,6 +1607,7 @@ export function PlannerProvider({ children }) {
     if (d.gradSem) { setPlanGradSem(d.gradSem);  try { localStorage.setItem(key("grad-sem"), d.gradSem); } catch {} }
     if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
     setMajor(d.major ?? "");
+    setMajor2(d.major2 ?? "");
     setConc(d.conc ?? "");
     setMinor1(d.minor1 ?? "");
     setMinor2(d.minor2 ?? "");
@@ -1758,7 +1764,7 @@ export function PlannerProvider({ children }) {
       aiAssistant.notifyChange({
         planId:    activePlanId,
         planName,
-        major, concentration: conc, minor1, minor2,
+        major, major2, concentration: conc, minor1, minor2,
         majorLabel: null, minor1Label: null, minor2Label: null,
         currentSemId,
         entSem: planEntSem, entYear: planEntYear,
@@ -1782,7 +1788,7 @@ export function PlannerProvider({ children }) {
     return () => clearTimeout(timer);
   }, [ // eslint-disable-line react-hooks/exhaustive-deps
     aiAssistant, placements, specialTermPl, placedOut, substitutions,
-    major, conc, minor1, minor2, currentSemId, bonusSH, shOverrides,
+    major, major2, conc, minor1, minor2, currentSemId, bonusSH, shOverrides,
     offeredOverrides, semOrders, planEntSem, planEntYear, planGradSem, planGradYear,
     selectedId, activePlanId, plans,
   ]);
@@ -1845,7 +1851,7 @@ export function PlannerProvider({ children }) {
     gradSemId, coopGradConflicts,
     prereqViolations, coreqViolations, connectedIds,
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
-    major, setMajor, conc, setConc, minor1, setMinor1, minor2, setMinor2,
+    major, setMajor, major2, setMajor2, conc, setConc, minor1, setMinor1, minor2, setMinor2,
     placedOut, setPlacedOut,
     // MCP / AI assistant
     pendingMCPProposal, setPendingMCPProposal,

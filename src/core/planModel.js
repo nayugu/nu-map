@@ -159,7 +159,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const date   = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
   const {
-    majorPath = "", concLabel = "", minor1Path = "", minor2Path = "",
+    majorPath = "", major2Path = "", concLabel = "", minor1Path = "", minor2Path = "",
     npCovered = new Set(), doneKeys = new Set(), totalSHRequired = 0,
     placedOut = new Set(), substitutions = [],
   } = gradInfo;
@@ -174,8 +174,9 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   })();
 
   // ── Load major + minors (async) ───────────────────────────────
-  const [major, minor1, minor2] = await Promise.all([
+  const [major, major2, minor1, minor2] = await Promise.all([
     majorPath  ? majorRequirements?.loadMajor(majorPath).catch(() => null)  : null,
+    major2Path ? majorRequirements?.loadMajor(major2Path).catch(() => null) : null,
     minor1Path ? majorRequirements?.loadMinor(minor1Path).catch(() => null) : null,
     minor2Path ? majorRequirements?.loadMinor(minor2Path).catch(() => null) : null,
   ]);
@@ -236,7 +237,8 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   }
 
   const reqHtml = [
-    renderProgram(major,  doneKeys, "Major Requirements — ",   major?.name ?? "",  true),
+    renderProgram(major,  doneKeys, major2 ? "Major 1 Requirements — " : "Major Requirements — ", major?.name ?? "",  true),
+    major2 ? renderProgram(major2, doneKeys, "Major 2 Requirements — ", major2?.name ?? "", true) : "",
     renderProgram(minor1, doneKeys, "Minor 1 Requirements — ", minor1?.name ?? "", false),
     renderProgram(minor2, doneKeys, "Minor 2 Requirements — ", minor2?.name ?? "", false),
   ].join("");
@@ -361,10 +363,12 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 
   // ── Meta lines ───────────────────────────────────────────────
   const majorLabel  = major?.name  ?? "";
+  const major2Label = major2?.name ?? "";
   const minor1Label = minor1?.name ?? "";
   const minor2Label = minor2?.name ?? "";
   const metaLines = [
-    majorLabel  && `<div class="meta-row"><span class="meta-lbl">Major</span><span class="meta-val">${majorLabel}</span></div>`,
+    majorLabel  && `<div class="meta-row"><span class="meta-lbl">${major2Label ? "Major 1" : "Major"}</span><span class="meta-val">${majorLabel}</span></div>`,
+    major2Label && `<div class="meta-row"><span class="meta-lbl">Major 2</span><span class="meta-val">${major2Label}</span></div>`,
     concLabel   && `<div class="meta-row"><span class="meta-lbl">Concentration</span><span class="meta-val">${concLabel}</span></div>`,
     minor1Label && `<div class="meta-row"><span class="meta-lbl">Minor 1</span><span class="meta-val">${minor1Label}</span></div>`,
     minor2Label && `<div class="meta-row"><span class="meta-lbl">Minor 2</span><span class="meta-val">${minor2Label}</span></div>`,

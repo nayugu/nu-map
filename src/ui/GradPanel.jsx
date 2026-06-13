@@ -583,6 +583,7 @@ export default function GradPanel({ wideCatalog = false }) {
     placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
     specialTermPl,
     major: majorPath, setMajor: setMajorPath,
+    major2: major2Path, setMajor2: setMajor2Path,
     conc: selConc, setConc: setSelConc,
     minor1, setMinor1,
     minor2, setMinor2,
@@ -610,6 +611,11 @@ export default function GradPanel({ wideCatalog = false }) {
   const [newerMajorPath, setNewerMajorPath] = useState(null);
   const majorName = useTranslatedText(major?.name ?? null);
   const concName  = useTranslatedText(selConc || null);
+
+  const [major2Data,    setMajor2Data]    = useState(null);
+  const [fetching2,     setFetching2]     = useState(false);
+  const major2Name = useTranslatedText(major2Data?.name ?? null);
+  const [showMajor2,    setShowMajor2]    = useState(() => major2Path !== "");
   const [showNP,   setShowNP]   = useState(() => {
     try { const v = localStorage.getItem(`${pfx}-grad-show-np`); return v === null ? true : v !== "false"; } catch { return true; }
   });
@@ -640,6 +646,16 @@ export default function GradPanel({ wideCatalog = false }) {
     const opts = major.concentrations?.concentrationOptions ?? [];
     if (!opts.find(c => c.title === selConc)) setSelConc("");
   }, [major]);
+
+  // Fetch second major JSON on path change
+  useEffect(() => {
+    if (!major2Path) { setMajor2Data(null); return; }
+    setFetching2(true); setMajor2Data(null);
+    majorRequirements.loadMajor(major2Path)
+      .then(data => setMajor2Data(data))
+      .catch(() => setMajor2Path(""))
+      .finally(() => setFetching2(false));
+  }, [major2Path]);
 
   const placedSet = useMemo(
     () => buildPlacedKeySet(effectivePlacements, placedOut, courseMap),
@@ -702,6 +718,13 @@ export default function GradPanel({ wideCatalog = false }) {
   const majorSections = allocatedSections.slice(0, majorSectionsCount + 1); // +1 for General Electives
   const concSection = allocatedSections.length > majorSectionsCount + 1 ? allocatedSections[majorSectionsCount + 1] : null;
 
+  // ── Second major allocation (courses double-count freely per NU policy) ─
+  const major2Sections = useMemo(() => {
+    if (!major2Data) return [];
+    const { sections, generalElectives } = allocateMajorWithElectives(major2Data, placedSet, courseMap);
+    return [...sections, generalElectives];
+  }, [major2Data, placedSet, courseMap]);
+
   const satSections = majorSections.filter(s => s.sat).length;
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
@@ -727,7 +750,7 @@ export default function GradPanel({ wideCatalog = false }) {
               {/* Major selector */}
               <div style={{ marginBottom: 3 }}>
                 <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
-                  {t("grad.major.label")}
+                  {showMajor2 ? "MAJOR 1" : t("grad.major.label")}
                 </div>
                 <SearchCombo
                   value={selPath}
@@ -783,6 +806,32 @@ export default function GradPanel({ wideCatalog = false }) {
                     </div>
                   )}
                 </div>
+              )}
+
+              {/* Second major selector */}
+              {showMajor2 ? (
+                <div style={{ marginBottom: 8, marginTop: 8 }}>
+                  <div style={{ display: "flex", alignItems: "center", marginBottom: 4 }}>
+                    <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>MAJOR 2</div>
+                    <button
+                      onClick={() => { setMajor2Path(""); setShowMajor2(false); }}
+                      style={{ background: "transparent", border: "none", color: "var(--text-5)", fontSize: 12, cursor: "pointer", lineHeight: 1, padding: "0 2px" }}
+                      title="Remove second major"
+                    >✕</button>
+                  </div>
+                  <SearchCombo value={major2Path} onChange={setMajor2Path} groups={majorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")} />
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowMajor2(true)}
+                  style={{
+                    display: "block", width: "100%", marginTop: 6, marginBottom: 8,
+                    padding: "4px 0", background: "transparent",
+                    border: "1px dashed var(--border-3)", borderRadius: 4,
+                    color: "var(--text-5)", fontSize: isPhone ? 8 : 9,
+                    cursor: "pointer", textAlign: "center",
+                  }}
+                >+ Add second major</button>
               )}
 
               {/* Minor selectors */}
@@ -941,12 +990,34 @@ export default function GradPanel({ wideCatalog = false }) {
           </>
         )}
 
+        {/* ── Second major requirement sections ───────────────── */}
+        {(major2Data || fetching2) && (
+          <>
+            <div style={{
+              borderTop: "2px solid var(--border-2)", margin: "14px 0 10px",
+              display: "flex", alignItems: "center", gap: 6,
+            }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", paddingTop: 8 }}>
+                MAJOR 2
+                <span style={{ fontWeight: 400, color: "var(--text-2)", marginLeft: 5 }}>{major2Name}</span>
+                {major2Data?.metadata?.verified && (
+                  <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{t("grad.verified")}</span>
+                )}
+              </div>
+            </div>
+            {fetching2
+              ? <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0" }}>{t("grad.loading")}</div>
+              : major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)
+            }
+          </>
+        )}
+
         {/* ── Minor requirement sections ───────────────────────── */}
         <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />
         <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />
 
                 {/* ── Empty state ──────────────────────────────────────── */}
-        {!major && !minor1 && !minor2 && !fetching && !loadErr && (
+        {!major && !major2Data && !minor1 && !minor2 && !fetching && !loadErr && (
           <div style={{ textAlign: "center", color: "var(--text-5)", fontSize: 10, paddingTop: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {t("grad.empty")}
           </div>

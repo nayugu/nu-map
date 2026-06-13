@@ -35,7 +35,7 @@ export default function Header() {
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
-    major, conc, minor1, minor2,
+    major, major2, conc, minor1, minor2,
     placedOut, substitutions,
   } = usePlanner();
 
@@ -77,6 +77,7 @@ export default function Header() {
     e.stopPropagation();
     const curIdx     = SEM_INDEX[currentSemId] ?? 0;
     const majorPath  = major  || "";
+    const major2Path = major2 || "";
     const concLabel  = conc   || "";
     const minor1Path = minor1 || "";
     const minor2Path = minor2 || "";
@@ -89,7 +90,7 @@ export default function Header() {
       if ((SEM_INDEX[semId] ?? 99) < curIdx) doneKeys.add(c.subject + c.number);
     }
     const gradInfo = {
-      majorPath, concLabel, minor1Path, minor2Path,
+      majorPath, major2Path, concLabel, minor1Path, minor2Path,
       npCovered, doneKeys, totalSHRequired: 0,
       placedOut, substitutions,
     };

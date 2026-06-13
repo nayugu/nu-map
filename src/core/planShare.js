@@ -55,7 +55,7 @@ const _KEYS = {
   semOrders: 'so', shOverrides: 'sh',
   bonusSH: 'b', currentSemId: 'cs',
   offeredOverrides: 'oo', collapsedSubs: 'cl',
-  major: 'mj', conc: 'cn',
+  major: 'mj', major2: 'mj2', conc: 'cn',
   minor1: 'm1', minor2: 'm2',
   placedOut: 'po', planName: 'pn',
   locale: 'lc', substitutions: 'su',
