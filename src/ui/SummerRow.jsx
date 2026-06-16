@@ -62,7 +62,7 @@ export default function SummerRow({ semA, semB }) {
     const semStatus  = getSemStatus(sem.id);
     const semIsDone  = semStatus === "completed";
     const isSessionA = sem.id.startsWith("sumA");
-    const sessionLabel = isSessionA ? "Session A" : "Session B";
+    const sessionLabel = isSessionA ? "Summer A" : "Summer B";
     // Translation rephrasing — "Session" alone reads as "meeting" in many
     // languages; rephrase as a summer half-term so the translation engine
     // picks the academic sense.  Displayed source-locale text stays as-is.

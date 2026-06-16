@@ -1091,7 +1091,7 @@ function SemToastLabel({ semId, SEMESTERS }) {
   const isA = semId.startsWith("sumA");
   const isB = semId.startsWith("sumB");
   if (isA || isB) {
-    const sessionLabel = isA ? "Session A" : "Session B";
+    const sessionLabel = isA ? "Summer A" : "Summer B";
     const sessionAs    = isA ? "Summer half-term A" : "Summer half-term B";
     const year = semId.replace(/\D/g, "");
     return <><TText as={sessionAs}>{sessionLabel}</TText> {year}</>;
