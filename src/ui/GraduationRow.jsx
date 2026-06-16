@@ -90,9 +90,16 @@ export default function GraduationRow() {
         }}
       >
         <span style={{ fontSize: isPhone ? 16 : 22, lineHeight: 1 }}>🎓</span>
-        <span style={{ fontSize: isPhone ? 11 : 14, fontWeight: 700, color: "var(--success)" }}>
-          {t("grad.row.done")} · <TText>{gradLabel}</TText>
-        </span>
+        {isPhone ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--success)" }}>{t("grad.row.done")}</span>
+            <span style={{ fontSize: 9, fontWeight: 500, color: "var(--success)" }}><TText>{gradLabel}</TText></span>
+          </div>
+        ) : (
+          <span style={{ fontSize: 14, fontWeight: 700, color: "var(--success)" }}>
+            {t("grad.row.done")} · <TText>{gradLabel}</TText>
+          </span>
+        )}
         <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", marginLeft: 4 }}>{t("grad.row.undo")}</span>
       </div>
     );
@@ -114,9 +121,16 @@ export default function GraduationRow() {
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <span style={{ fontSize: isPhone ? 14 : 18, lineHeight: 1 }}>🎓</span>
-        <span style={{ fontSize: isPhone ? 10 : 12, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>
-          {t("grad.row.title")} · <TText>{gradLabel}</TText>
-        </span>
+        {isPhone ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <span style={{ fontSize: 10, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>{t("grad.row.title")}</span>
+            <span style={{ fontSize: 8, fontWeight: 500, color: isReady ? "var(--success)" : "var(--text-4)" }}><TText>{gradLabel}</TText></span>
+          </div>
+        ) : (
+          <span style={{ fontSize: 12, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>
+            {t("grad.row.title")} · <TText>{gradLabel}</TText>
+          </span>
+        )}
       </div>
       {isReady && (
         <button
