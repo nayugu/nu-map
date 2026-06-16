@@ -720,7 +720,6 @@ export default function Header() {
                 <div style={{ display: "flex", gap: 3 }}>
                   {[
                     { id: "live",   label: "Live" },
-                    { id: "auto",   label: "Auto" },
                     { id: "manual", label: "Manual" },
                   ].map(({ id, label }) => {
                     const active = semTrackingMode === id;
@@ -736,9 +735,8 @@ export default function Header() {
                   })}
                 </div>
                 <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 4, lineHeight: 1.4 }}>
-                  {semTrackingMode === "manual" && "Click a semester row to set NOW."}
-                  {semTrackingMode === "auto"   && "Advances when next semester starts."}
                   {semTrackingMode === "live"   && "Always matches today’s date."}
+                  {semTrackingMode === "manual" && "Click a semester row to set NOW."}
                 </div>
               </div>
 
