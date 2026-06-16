@@ -100,7 +100,7 @@ function PlannerApp() {
       {/* Rendered outside the scaled container so it's unaffected by zoom */}
       <DisclaimerModal />
       <MigrationBanner />
-      {import.meta.env.DEV && <DevClockPanel />}
+      {/* {import.meta.env.DEV && <DevClockPanel />} */}
     </div>
   );
 }
