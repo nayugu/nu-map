@@ -506,13 +506,13 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
       {/* Header row: label + triangle toggle */}
       <div onClick={() => setExpanded(v => !v)} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: isPhone ? 10 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+          <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
             {label}
             {minor.metadata?.verified && (
               <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>verified</span>
             )}
           </div>
-          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginTop: 2 }}>{minorName}</div>
+          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{minorName}</div>
         </div>
         <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>
       </div>
@@ -553,19 +553,20 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
       {/* Header row: label + triangle toggle */}
       <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: isPhone ? 10 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+          <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
             {label}
             {verified && (
               <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{verifiedLabel}</span>
             )}
+            {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
-          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginTop: 2 }}>{name}</div>
-          {subtitle && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 1 }}>{subtitle}</div>}
+          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{name}</div>
+          {subtitle && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 7 : 9, marginTop: 1 }}>{subtitle}</div>}
         </div>
         {!isPhone && progress.requiredSH > 0 && (
           <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>
         )}
-        <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0, marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>
+        {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0, marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
       </div>
 
       {/* Progress bar — always visible */}
