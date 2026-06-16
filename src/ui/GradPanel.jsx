@@ -562,8 +562,8 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
           <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 9 : 10, marginTop: 2 }}>{name}</div>
           {subtitle && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 8 : 9, marginTop: 1 }}>{subtitle}</div>}
         </div>
-        {progress.requiredSH > 0 && (
-          <span style={{ fontSize: isPhone ? 8 : 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>
+        {!isPhone && progress.requiredSH > 0 && (
+          <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>
         )}
         <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0, marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>
       </div>

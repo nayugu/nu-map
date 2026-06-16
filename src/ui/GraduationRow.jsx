@@ -52,7 +52,7 @@ function fireConfetti(originEl) {
 }
 
 export default function GraduationRow() {
-  const { gradSemId, currentSemId, SEMESTERS, isGraduated, setIsGraduated } = usePlanner();
+  const { gradSemId, currentSemId, SEMESTERS, isGraduated, setIsGraduated, isPhone } = usePlanner();
   const { t } = useLanguage();
   const rowRef = useRef(null);
 
@@ -81,7 +81,7 @@ export default function GraduationRow() {
         style={{
           margin: "6px 0 16px",
           borderRadius: 8,
-          background: "linear-gradient(100deg, var(--success-bg) 0%, var(--active-bg) 100%)",
+          background: "var(--card-bg)",
           border: "1.5px solid var(--success-border)",
           padding: "11px 20px",
           display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
@@ -89,11 +89,11 @@ export default function GraduationRow() {
           userSelect: "none",
         }}
       >
-        <span style={{ fontSize: 22, lineHeight: 1 }}>🎓</span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: "var(--success)" }}>
+        <span style={{ fontSize: isPhone ? 16 : 22, lineHeight: 1 }}>🎓</span>
+        <span style={{ fontSize: isPhone ? 11 : 14, fontWeight: 700, color: "var(--success)" }}>
           {t("grad.row.done")} · <TText>{gradLabel}</TText>
         </span>
-        <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: 4 }}>{t("grad.row.undo")}</span>
+        <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", marginLeft: 4 }}>{t("grad.row.undo")}</span>
       </div>
     );
   }
@@ -105,7 +105,7 @@ export default function GraduationRow() {
         margin: "6px 0 16px",
         borderRadius: 8,
         border: isReady ? "1.5px solid var(--success-border)" : "1.5px dashed var(--border-2)",
-        background: isReady ? "var(--success-bg)" : "transparent",
+        background: "var(--card-bg)",
         padding: "10px 20px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
         opacity: isReady ? 1 : 0.42,
@@ -113,8 +113,8 @@ export default function GraduationRow() {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <span style={{ fontSize: 18, lineHeight: 1 }}>🎓</span>
-        <span style={{ fontSize: 12, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>
+        <span style={{ fontSize: isPhone ? 14 : 18, lineHeight: 1 }}>🎓</span>
+        <span style={{ fontSize: isPhone ? 10 : 12, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>
           {t("grad.row.title")} · <TText>{gradLabel}</TText>
         </span>
       </div>
@@ -127,7 +127,7 @@ export default function GraduationRow() {
             border: "none",
             borderRadius: 6,
             padding: "6px 18px",
-            fontSize: 12,
+            fontSize: isPhone ? 10 : 12,
             fontWeight: 700,
             cursor: "pointer",
             letterSpacing: "0.03em",

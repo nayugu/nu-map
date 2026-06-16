@@ -133,16 +133,25 @@ export default function SemRow({ sem }) {
           transition: "opacity 0.15s",
         }}
       >
-        <div style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 2 }}>
+        {isPhone ? (
+          <div style={{ width: 34, flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}>
             {statusDot}
-            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)" }}><TText>{sem.label}</TText></span>
-            {isActive && (
-              <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>NOW</span>
-            )}
+            {sem.label.split(" ").map((part, i) => (
+              <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: 1.2, textAlign: "center" }}><TText>{part}</TText></span>
+            ))}
           </div>
-          <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19 }}><TText>{sem.sub}</TText></div>
-        </div>
+        ) : (
+          <div style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 2 }}>
+              {statusDot}
+              <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)" }}><TText>{sem.label}</TText></span>
+              {isActive && (
+                <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>NOW</span>
+              )}
+            </div>
+            <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19 }}><TText>{sem.sub}</TText></div>
+          </div>
+        )}
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
           <div style={{ width: 3, alignSelf: "stretch", background: "var(--border-2)", borderRadius: 2 }} />
           <div>

@@ -376,7 +376,7 @@ export default function Header() {
               </span>
             </span>
           )}
-          {isPhone && (dataMeta.lastUpdated || __COMMIT_DATE__) && (
+          {/* {isPhone && (dataMeta.lastUpdated || __COMMIT_DATE__) && (
             <>
               <span style={{ flex: 1, display: "flex", alignItems: "center", minWidth: 0, overflow: "hidden" }}>
                 <span style={{ fontSize: 9, color: "var(--text-5)", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }} title="Date of last course data refresh">
@@ -403,7 +403,7 @@ export default function Header() {
                 BETA
               </span>
             </>
-          )}
+          )} */}
         </div>
 
         {/* Row 2: SH badges left · buttons right — never wraps */}
@@ -419,10 +419,10 @@ export default function Header() {
           {/* Buttons — right side, icon-only on mobile/tablet */}
         
         {/* Plan switcher dropdown */}
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", minWidth: 0, flexShrink: 1 }}>
           <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowPlanMenu(v => !v); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? 80 : 160,
-              overflow: "hidden", textOverflow: "ellipsis",
+              overflow: "hidden", textOverflow: "ellipsis", display: "block",
               color: showPlanMenu ? "var(--text-2)" : "var(--text-4)",
               background: showPlanMenu ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`,
@@ -553,7 +553,7 @@ export default function Header() {
 
 
         {/* Input/Output Dropdown */}
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", flexShrink: 0 }}>
           <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowIO(v => !v); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color: showIO ? "var(--text-2)" : "var(--text-4)",
@@ -643,7 +643,7 @@ export default function Header() {
         {/* <ClaudePanel isMobile={isMobile} /> */}
 
         {/* ⚙ Settings dropdown — infrequent controls */}
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", flexShrink: 0 }}>
           <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowQuickSet(v => !v); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
@@ -1010,7 +1010,7 @@ export default function Header() {
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
           title={t("header.about.title")}
-          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", cursor: "pointer", whiteSpace: "nowrap" }}
+          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, padding: isPhone ? "2px 5px" : "3px 8px", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}
         >{isMobile ? "ⓘ" : `ⓘ ${t("header.about.button")}`}</button>
 
         </div>{/* end controls row */}
@@ -1018,7 +1018,7 @@ export default function Header() {
 
       {/* ── Relationship legend ── */}
       <div style={{ display: "flex", gap: isPhone ? 6 : 10, marginBottom: 8, flexWrap: "nowrap", alignItems: "center", overflow: "hidden" }}>
-        {Object.entries(REL_STYLE).filter(([type]) => type !== "corequisite-viol").map(([type, s]) => (
+        {Object.entries(REL_STYLE).filter(([type]) => type !== "corequisite-viol" && !(isPhone && (type === "substitution-prereq" || type === "substitution-prereq-order"))).map(([type, s]) => (
             <div key={type} style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isPhone ? 8 : 9, color: "var(--text-4)", flexShrink: 0 }}>
             <svg width={isPhone ? 14 : 18} height="6">
               <line x1="0" y1="3" x2={isPhone ? 14 : 18} y2="3" stroke={s.color} strokeWidth="1.5" strokeDasharray={s.dash || ""} />
