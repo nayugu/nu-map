@@ -13,7 +13,7 @@ import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
-import { useTranslation, useTranslatedText } from "../context/TranslationContext.jsx";
+import { useTranslation, useTranslatedText, TText } from "../context/TranslationContext.jsx";
 // import ClaudePanel from "./ClaudePanel.jsx"; // MCP integration — disabled until hosted
 import dataMeta from "../core/dataMeta.json";
 
@@ -716,12 +716,12 @@ export default function Header() {
 
               {/* Now tracking mode */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>NOW TRACKING</div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.tracking")}</div>
                 <div style={{ display: "flex", gap: 3 }}>
                   {[
-                    { id: "live",   label: "Live" },
-                    { id: "manual", label: "Manual" },
-                  ].map(({ id, label }) => {
+                    { id: "live",   labelKey: "header.settings.tracking.live" },
+                    { id: "manual", labelKey: "header.settings.tracking.manual" },
+                  ].map(({ id, labelKey }) => {
                     const active = semTrackingMode === id;
                     return (
                       <button key={id} onClick={() => setSemTrackingMode(id)} style={{
@@ -730,13 +730,13 @@ export default function Header() {
                         border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
                         color: active ? "var(--active)" : "var(--text-4)",
                         fontWeight: active ? 700 : 400,
-                      }}>{label}</button>
+                      }}>{t(labelKey)}</button>
                     );
                   })}
                 </div>
                 <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 4, lineHeight: 1.4 }}>
-                  {semTrackingMode === "live"   && "Always matches today’s date."}
-                  {semTrackingMode === "manual" && "Click a semester row to set NOW."}
+                  {semTrackingMode === "live"   && t("header.settings.tracking.live.hint")}
+                  {semTrackingMode === "manual" && t("header.settings.tracking.manual.hint")}
                 </div>
               </div>
 
@@ -1060,12 +1060,12 @@ export default function Header() {
       {semAdvanceToast && (
         <div style={{
           position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)",
-          zIndex: 200, background: "var(--bg-surface)", border: "1px solid var(--active)",
+          zIndex: 200, background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 8, padding: "9px 14px", boxShadow: "var(--shadow-modal)",
           display: "flex", alignItems: "center", gap: 10, fontSize: 11,
           color: "var(--text-2)", whiteSpace: "nowrap",
         }}>
-          <span>▶ Advanced to <strong>{semAdvanceToast}</strong></span>
+          <span>{t("header.settings.tracking.toast")} <strong><SemToastLabel semId={semAdvanceToast} SEMESTERS={SEMESTERS} /></strong></span>
           <button onClick={() => setSemAdvanceToast(null)} style={{
             background: "none", border: "none", cursor: "pointer",
             color: "var(--text-4)", fontSize: 13, lineHeight: 1, padding: 0,
@@ -1074,6 +1074,22 @@ export default function Header() {
       )}
     </>
   );
+}
+
+// Renders a semester name exactly as the planner row does, so translations match.
+// Summer semesters use the same TText `as` pattern as SummerRow.
+function SemToastLabel({ semId, SEMESTERS }) {
+  if (!semId) return null;
+  const isA = semId.startsWith("sumA");
+  const isB = semId.startsWith("sumB");
+  if (isA || isB) {
+    const sessionLabel = isA ? "Session A" : "Session B";
+    const sessionAs    = isA ? "Summer half-term A" : "Summer half-term B";
+    const year = semId.replace(/\D/g, "");
+    return <><TText as={sessionAs}>{sessionLabel}</TText> {year}</>;
+  }
+  const label = SEMESTERS.find(s => s.id === semId)?.label ?? semId;
+  return <TText>{label}</TText>;
 }
 
 /**

@@ -327,8 +327,7 @@ export function PlannerProvider({ children }) {
     const computed = calendar.getCurrentSemId(clockNow());
     if (computed && computed !== currentSemId) {
       setCurrentSemId(computed);
-      const label = SEMESTERS.find(s => s.id === computed)?.label ?? computed;
-      setSemAdvanceToast(label);
+      setSemAdvanceToast(computed); // store semId — Header renders it the same way as the planner row
     }
   }, [semTrackingMode, SEMESTERS, clockOverride]); // eslint-disable-line react-hooks/exhaustive-deps
 
