@@ -511,10 +511,11 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
             {minor.metadata?.verified && (
               <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>verified</span>
             )}
+            {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
           <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{minorName}</div>
         </div>
-        <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>
+        {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>}
       </div>
 
       {/* Progress bar — always visible */}
