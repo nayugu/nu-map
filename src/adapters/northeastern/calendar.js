@@ -11,7 +11,8 @@ const _semesterTypes = [
     weight:     1.0,
     optional:   false,
     theme:      "fall",
-    months:     ["09", "10", "11", "12"],
+    months:       ["09", "10", "11", "12"],
+    safeStartDay: 15,  // NU fall typically starts Sep 3–8; +1 week buffer
   },
   {
     id:         "spring",
@@ -22,7 +23,8 @@ const _semesterTypes = [
     weight:     1.0,
     optional:   false,
     theme:      "spring",
-    months:     ["01", "02", "03", "04", "05"],
+    months:       ["01", "02", "03", "04", "05"],
+    safeStartDay: 22,  // NU spring typically starts Jan 12–15; +1 week buffer
   },
   {
     id:         "sumA",
@@ -32,7 +34,8 @@ const _semesterTypes = [
     weight:     0.5,
     optional:   true,
     theme:      "summer",
-    months:     ["05", "06"],
+    months:       ["05", "06"],
+    safeStartDay: 12,  // NU summer 1 typically starts May 1–4; +1 week buffer
   },
   {
     id:         "sumB",
@@ -42,7 +45,8 @@ const _semesterTypes = [
     weight:     0.5,
     optional:   true,
     theme:      "summer",
-    months:     ["07", "08"],
+    months:       ["07", "08"],
+    safeStartDay: 16,  // NU summer 2 typically starts Jul 7–9; +1 week buffer
   },
 ];
 
@@ -75,15 +79,44 @@ const calendar = {
     return suffix === "10" ? year - 1 : year;
   },
 
-  // Returns true only when the term's first class day has already passed.
+  // Returns true only when the term's safe start day has already passed.
+  // Uses safeStartDay (+1 week buffer past typical first day of classes) so we
+  // never treat a term as past while it might still be registration/pre-class week.
   // Future/upcoming terms have unreliable Banner data (registration not yet settled).
   isTermPast(code) {
     const semTypeId = this.decodeTermCode(code);
     const yr = this.getTermCodeYear(code);
     if (!semTypeId || yr == null) return false;
-    const firstMonth = { fall: 9, spring: 1, sumA: 5, sumB: 7 }[semTypeId];
+    const type = _semesterTypes.find(t => t.id === semTypeId);
+    if (!type) return false;
+    const firstMonths = { fall: 9, spring: 1, sumA: 5, sumB: 7 };
+    const firstMonth = firstMonths[semTypeId];
     if (!firstMonth) return false;
-    return new Date(yr, firstMonth - 1, 1) <= new Date();
+    const safeDay = type.safeStartDay ?? 1;
+    return new Date(yr, firstMonth - 1, safeDay) <= new Date();
+  },
+
+  // Returns the semId (e.g. "spr2026", "fall2026") that contains today's date,
+  // using safeStartDay thresholds so the value only flips once a semester has
+  // definitely started. Returns null if the date predates all known thresholds.
+  getCurrentSemId(now = new Date()) {
+    const year = now.getFullYear();
+    const firstMonths = { fall: 9, spring: 1, sumA: 5, sumB: 7 };
+    const candidates = [];
+    for (const t of _semesterTypes) {
+      const firstMonth = firstMonths[t.id];
+      if (!firstMonth) continue;
+      const safeDay = t.safeStartDay ?? 1;
+      const prefix = t.idPrefix ?? t.id;
+      for (const yr of [year - 1, year]) {
+        candidates.push({
+          threshold: new Date(yr, firstMonth - 1, safeDay),
+          semId: `${prefix}${yr}`,
+        });
+      }
+    }
+    candidates.sort((a, b) => b.threshold - a.threshold);
+    return candidates.find(c => c.threshold <= now)?.semId ?? null;
   },
 
   getSources() { return []; },

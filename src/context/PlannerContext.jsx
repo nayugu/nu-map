@@ -136,6 +136,17 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("show-unlocks"), String(val)); } catch {}
   };
 
+  // ── Semester tracking mode ──
+  const [semTrackingMode, setSemTrackingModeRaw] = useState(() => {
+    try { return localStorage.getItem(key("sem-tracking")) || "manual"; } catch { return "manual"; }
+  });
+  const updateSemTrackingMode = (mode) => {
+    setSemTrackingModeRaw(mode);
+    try { localStorage.setItem(key("sem-tracking"), mode); } catch {}
+  };
+  // Toast shown when auto mode advances the semester: null or label string
+  const [semAdvanceToast, setSemAdvanceToast] = useState(null);
+
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
   const effectiveCourseMap = useMemo(() => {
     if (!Object.keys(shOverrides).length) return courseMap;
@@ -301,6 +312,49 @@ export function PlannerProvider({ children }) {
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
   }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
+
+  // ── Effect: semester tracking (auto / live) ──────────────────
+  // Runs on mount and whenever the tracking mode or plan semesters change.
+  // 'live'  → compute semId from today's date via calendar.getCurrentSemId()
+  // 'auto'  → walk forward through plan SEMESTERS as long as each next
+  //            semester's safeStartDay has already passed; show a toast if advanced.
+  useEffect(() => {
+    if (semTrackingMode === "manual") return;
+    if (semTrackingMode === "live") {
+      const computed = calendar.getCurrentSemId();
+      if (computed && computed !== currentSemId) setCurrentSemId(computed);
+      return;
+    }
+    if (semTrackingMode === "auto") {
+      const semTypes = calendar.getSemesterTypes();
+      const firstMonths = { fall: 9, spring: 1, sumA: 5, sumB: 7 };
+      const now = new Date();
+      let cur = currentSemId;
+      let advanced = false;
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const next = SEM_NEXT[cur];
+        if (!next) break;
+        const nextSem = SEMESTERS.find(s => s.id === next);
+        if (!nextSem) break;
+        const semType = semTypes.find(t => t.id === nextSem.semTypeId);
+        if (!semType) break;
+        const firstMonth = firstMonths[semType.id];
+        if (!firstMonth) break;
+        const year = parseInt(next.replace(/\D/g, ""), 10);
+        if (isNaN(year)) break;
+        const threshold = new Date(year, firstMonth - 1, semType.safeStartDay ?? 1);
+        if (threshold > now) break;
+        cur = next;
+        advanced = true;
+      }
+      if (advanced) {
+        setCurrentSemId(cur);
+        const label = SEMESTERS.find(s => s.id === cur)?.label ?? cur;
+        setSemAdvanceToast(label);
+      }
+    }
+  }, [semTrackingMode, SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
@@ -1849,6 +1903,8 @@ export function PlannerProvider({ children }) {
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     showContLogo, setShowContLogo: updateShowContLogo,
     showUnlocks, setShowUnlocks: updateShowUnlocks,
+    semTrackingMode, setSemTrackingMode: updateSemTrackingMode,
+    semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd, semOrd: _semOrd,
     panelHeight,

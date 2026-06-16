@@ -32,6 +32,8 @@ export default function Header() {
     collapseOtherCredits, setCollapseOtherCredits,
     showContLogo, setShowContLogo,
     showUnlocks, setShowUnlocks,
+    semTrackingMode, setSemTrackingMode,
+    semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
@@ -712,14 +714,33 @@ export default function Header() {
                 {showUnlocks ? t("header.settings.unlocks.on") : t("header.settings.unlocks.off")}
               </button>
 
-              {/** Refresh catalog data (commented out)
-              <button className="hdr-btn-dd" onClick={handleRefresh}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                ↺ Refresh
-              </button>
-              */}
+              {/* Now tracking mode */}
+              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>NOW TRACKING</div>
+                <div style={{ display: "flex", gap: 3 }}>
+                  {[
+                    { id: "manual", label: "Manual" },
+                    { id: "auto",   label: "Auto" },
+                    { id: "live",   label: "Live" },
+                  ].map(({ id, label }) => {
+                    const active = semTrackingMode === id;
+                    return (
+                      <button key={id} onClick={() => setSemTrackingMode(id)} style={{
+                        flex: "1 1 auto", fontSize: 9, padding: "3px 4px", borderRadius: 4, cursor: "pointer",
+                        background: active ? "var(--active-bg)" : "transparent",
+                        border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
+                        color: active ? "var(--active)" : "var(--text-4)",
+                        fontWeight: active ? 700 : 400,
+                      }}>{label}</button>
+                    );
+                  })}
+                </div>
+                <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 4, lineHeight: 1.4 }}>
+                  {semTrackingMode === "manual" && "Click a semester row to set NOW."}
+                  {semTrackingMode === "auto"   && "Advances when next semester starts."}
+                  {semTrackingMode === "live"   && "Always matches today’s date."}
+                </div>
+              </div>
 
               {/* Zoom */}
               {!isPhone && (
@@ -1034,6 +1055,23 @@ export default function Header() {
               }
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── Auto-advance toast ── */}
+      {semAdvanceToast && (
+        <div style={{
+          position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)",
+          zIndex: 200, background: "var(--bg-surface)", border: "1px solid var(--active)",
+          borderRadius: 8, padding: "9px 14px", boxShadow: "var(--shadow-modal)",
+          display: "flex", alignItems: "center", gap: 10, fontSize: 11,
+          color: "var(--text-2)", whiteSpace: "nowrap",
+        }}>
+          <span>▶ Advanced to <strong>{semAdvanceToast}</strong></span>
+          <button onClick={() => setSemAdvanceToast(null)} style={{
+            background: "none", border: "none", cursor: "pointer",
+            color: "var(--text-4)", fontSize: 13, lineHeight: 1, padding: 0,
+          }}>✕</button>
         </div>
       )}
     </>
