@@ -84,6 +84,10 @@ export const strings = {
   "grad.loading":           "लोड हो रहा है…",
   "grad.empty":             "ऊपर अपने मुख्य विषय की खोज करें\nस्नातक आवश्यकताओं की जाँच के लिए\nअपने वर्तमान योजना के साथ।",
   "grad.programSelection": "प्रोग्राम चयन",
+  "grad.row.title":        "स्नातक",
+  "grad.row.button":       "स्नातक करें!",
+  "grad.row.done":         "स्नातक हो गए",
+  "grad.row.undo":         "पूर्ववत करें",
 
   // Grad requirement phrases
   "grad.allOf": "सभी ({count}/{total})",

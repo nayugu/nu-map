@@ -10,6 +10,7 @@ import RelationLines   from './ui/RelationLines.jsx';
 import Header          from './ui/Header.jsx';
 import SemRow          from './ui/SemRow.jsx';
 import SummerRow       from './ui/SummerRow.jsx';
+import GraduationRow   from './ui/GraduationRow.jsx';
 import BankPanel       from './ui/BankPanel.jsx';
 import InfoPanel       from './ui/InfoPanel.jsx';
 import DisclaimerModal  from './ui/DisclaimerModal.jsx';
@@ -88,6 +89,7 @@ function PlannerApp() {
         >
           <Header />
           {semRows}
+          <GraduationRow />
         </div>
 
         {/* Right-hand sidebar + panels */}

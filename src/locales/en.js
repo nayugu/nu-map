@@ -85,6 +85,10 @@ export const strings = {
   "grad.loading":           "Loading\u2026",
   "grad.empty":             "Search for your major above\nto check graduation requirements\nagainst your current plan.",
   "grad.programSelection": "Program Selection",
+  "grad.row.title":        "Graduation",
+  "grad.row.button":       "Graduate!",
+  "grad.row.done":         "Graduated",
+  "grad.row.undo":         "click to undo",
 
   // Grad requirement phrases
   "grad.allOf": "All of ({count}/{total})",

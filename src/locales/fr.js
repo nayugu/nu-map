@@ -84,6 +84,10 @@ export const strings = {
   "grad.loading":           "Chargement…",
   "grad.empty":             "Recherchez votre majeure ci-dessus\npour vérifier les exigences de diplôme\npar rapport à votre plan actuel.",
   "grad.programSelection": "Sélection du programme",
+  "grad.row.title":        "Remise des diplômes",
+  "grad.row.button":       "Diplômé·e !",
+  "grad.row.done":         "Diplômé·e",
+  "grad.row.undo":         "cliquer pour annuler",
 
   // Grad requirement phrases
   "grad.allOf": "Tous ({count}/{total})",

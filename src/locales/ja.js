@@ -85,6 +85,10 @@ export const strings = {
   "grad.loading":           "読み込み中…",
   "grad.empty":             "上で専攻を検索して\n卒業要件を現在の計画と照合します。",
   "grad.programSelection": "プログラム選択",
+  "grad.row.title":        "卒業",
+  "grad.row.button":       "卒業する！",
+  "grad.row.done":         "卒業しました",
+  "grad.row.undo":         "クリックで取り消し",
 
   // Grad requirement phrases
   "grad.allOf": "すべて ({count}/{total})",

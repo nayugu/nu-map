@@ -84,6 +84,10 @@ export const strings = {
   "grad.loading":           "Cargando…",
   "grad.empty":             "Busca tu carrera arriba\npara verificar los requisitos de graduación\ncon tu plan actual.",
   "grad.programSelection": "Selección de programa",
+  "grad.row.title":        "Graduación",
+  "grad.row.button":       "¡Graduarme!",
+  "grad.row.done":         "Graduado/a",
+  "grad.row.undo":         "clic para deshacer",
 
   // Grad requirement phrases
   "grad.allOf": "Todos ({count}/{total})",

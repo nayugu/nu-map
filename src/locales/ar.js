@@ -84,6 +84,10 @@ export const strings = {
   "grad.loading":           "جارٍ التحميل…",
   "grad.empty":             "ابحث عن تخصصك أعلاه\nللتحقق من متطلبات التخرج\nمقارنة بخطتك الحالية.",
   "grad.programSelection": "اختيار البرنامج",
+  "grad.row.title":        "التخرج",
+  "grad.row.button":       "تخرجت!",
+  "grad.row.done":         "تخرجت",
+  "grad.row.undo":         "انقر للتراجع",
   // Grad requirement phrases
   "grad.allOf": "جميعها ({count}/{total})",
   "grad.oneOf": "واحد من ({count}/{total})",

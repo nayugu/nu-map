@@ -76,6 +76,7 @@ export function PlannerProvider({ children }) {
   // Extra SH that counts toward graduation but isn't tied to a specific course
   // (e.g. AP/IB general credit, transfer credit, test-out hours).
   const [bonusSH, setBonusSH] = useState(() => (_saved?.persist && _saved.bonusSH != null) ? _saved.bonusSH : 0);
+  const [isGraduated, setIsGraduated] = useState(() => { try { return localStorage.getItem(key("graduated")) === "true"; } catch { return false; } });
   // Plan-specific program selections (major path, concentration label, minor paths)
   const [major,  setMajor]  = useState("");
   const [conc,   setConc]   = useState("");
@@ -285,6 +286,9 @@ export function PlannerProvider({ children }) {
     saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
   }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
 
+  useEffect(() => {
+    try { localStorage.setItem(key("graduated"), String(isGraduated)); } catch {}
+  }, [isGraduated]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     try { localStorage.setItem(key("palette"), JSON.stringify(palette)); } catch {}
   }, [palette]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -903,6 +907,7 @@ export function PlannerProvider({ children }) {
   }, [selectedId, allEdges]);
 
   const getSemStatus = semId => {
+    if (isGraduated && semId === gradSemId) return "completed";
     const idx = SEM_INDEX[semId];
     if (idx < currentSemIdx)    return "completed";
     if (semId === currentSemId) return "inprogress";
@@ -920,9 +925,11 @@ export function PlannerProvider({ children }) {
   const totalSHDone = useMemo(
     () => bonusSH + courses.filter(c => {
       const sid = placements[c.id];
-      return sid && !placedOut.has(c.id) && (SEM_INDEX[sid] ?? 99) < currentSemIdx;
+      if (!sid || placedOut.has(c.id)) return false;
+      const sidx = SEM_INDEX[sid] ?? 99;
+      return isGraduated ? sidx <= currentSemIdx : sidx < currentSemIdx;
     }).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [bonusSH, courses, placements, placedOut, SEM_INDEX, currentSemIdx, effectiveCourseMap]
+    [bonusSH, courses, placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
   );
 
   // ── Star toggle ───────────────────────────────────────────────
@@ -1849,6 +1856,7 @@ export function PlannerProvider({ children }) {
     // Derived
     currentSemIdx, placedIds, specialTermStartMap, specialTermContMap,
     gradSemId, coopGradConflicts,
+    isGraduated, setIsGraduated,
     prereqViolations, coreqViolations, connectedIds,
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
     major, setMajor, major2, setMajor2, conc, setConc, minor1, setMinor1, minor2, setMinor2,

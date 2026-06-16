@@ -84,6 +84,10 @@ export const strings = {
   "grad.loading":           "불러오는 중…",
   "grad.empty":             "위에서 전공을 검색하여\n졸업 요건을 현재 계획과 비교하세요.",
   "grad.programSelection":  "프로그램 선택",
+  "grad.row.title":         "졸업",
+  "grad.row.button":        "졸업하기!",
+  "grad.row.done":          "졸업함",
+  "grad.row.undo":          "클릭하여 실행 취소",
 
   // Grad requirement phrases
   "grad.allOf":             "모두 ({count}/{total})",
