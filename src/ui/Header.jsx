@@ -69,6 +69,12 @@ export default function Header() {
     return () => window.removeEventListener("click", close);
   }, [showPlanMenu]);
 
+  useEffect(() => {
+    if (!semAdvanceToast) return;
+    const id = setTimeout(() => setSemAdvanceToast(null), 4000);
+    return () => clearTimeout(id);
+  }, [semAdvanceToast]);
+
   const cycleTheme = e => {
     e.stopPropagation();
     const idx = themeNames.indexOf(themeName);
