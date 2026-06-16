@@ -409,10 +409,10 @@ export default function Header() {
         {/* Row 2: SH badges left · buttons right — never wraps */}
         <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", minWidth: 0 }}>
           {/* SH badges — left side */}
-          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, flexShrink: 0, ...(isPhone ? { display: "inline-flex", alignItems: "center", height: 20, padding: "0 4px", lineHeight: 1 } : { padding: "2px 7px" }) }}>
+          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--success-bg)", border: "1px solid var(--success-border)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
             {t("header.credits.done", { n: totalSHDone, unit: unitName })}
           </span>
-          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, flexShrink: 0, ...(isPhone ? { display: "inline-flex", alignItems: "center", height: 20, padding: "0 4px", lineHeight: 1 } : { padding: "2px 7px" }) }}>
+          <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
             {t("header.credits.placed", { n: totalSHPlaced, unit: unitName })}
           </span>
 
@@ -426,7 +426,7 @@ export default function Header() {
               color: showPlanMenu ? "var(--text-2)" : "var(--text-4)",
               background: showPlanMenu ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, ...(isPhone ? { display: "inline-flex", alignItems: "center", height: 20, padding: "0 5px", lineHeight: 1 } : { padding: "3px 8px", whiteSpace: "nowrap" }) }}>
+              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 5px" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
             {isPhone
               ? <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾</span>
               : isMobile ? "/" : `/ ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
@@ -561,7 +561,7 @@ export default function Header() {
               color: showIO ? "var(--text-2)" : "var(--text-4)",
               background: showIO ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px solid ${showIO ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, ...(isPhone ? { width: 22, height: 20, padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" } : { padding: "3px 8px", whiteSpace: "nowrap" }), lineHeight: 1 }}>
+              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { width: 22, height: 20, padding: 0, justifyContent: "center" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
             {isMobile ? "⇅" : `⇅ ${t("header.io.button")}`}
           </button>
           {showIO && (
@@ -651,7 +651,7 @@ export default function Header() {
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border:    `1px solid ${showQuickSet ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, ...(isPhone ? { width: 22, height: 20, padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" } : { padding: "3px 8px", whiteSpace: "nowrap" }), lineHeight: 1 }}>
+              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { width: 22, height: 20, padding: 0, justifyContent: "center" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
             {isMobile ? "⚙" : `⚙ ${t("header.settings.button")}`}
           </button>
 
@@ -903,7 +903,7 @@ export default function Header() {
             color: showSettings ? "var(--text-2)" : "var(--text-4)",
             background: showSettings ? "var(--bg-surface)" : "var(--bg-surface-2)",
             border: `1px solid ${showSettings ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, padding: "3px 8px", whiteSpace: "nowrap",
+              borderRadius: 5, padding: "0 8px", height: 22, display: "inline-flex", alignItems: "center", lineHeight: 1, whiteSpace: "nowrap",
             }}
           >{isMobile ? "🎓" : `🎓 ${t("header.cohort.button")}`}</button>
 
@@ -1012,7 +1012,7 @@ export default function Header() {
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
           title={t("header.about.title")}
-          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, lineHeight: 1, ...(isPhone ? { width: 22, height: 20, padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" } : { padding: "3px 8px", whiteSpace: "nowrap" }) }}
+          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { width: 22, height: 20, padding: 0, justifyContent: "center" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}
         >{isMobile ? "ⓘ" : `ⓘ ${t("header.about.button")}`}</button>
 
         </div>{/* end controls row */}
