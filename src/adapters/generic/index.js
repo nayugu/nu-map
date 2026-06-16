@@ -22,6 +22,7 @@
 
 import institution       from "./institution.js";
 import calendar          from "./calendar.js";
+import clock             from "./clock.js";
 import creditSystem      from "./creditSystem.js";
 import specialTerms      from "./specialTerms.js";
 import attributeSystem   from "./attributeSystem.js";
@@ -32,6 +33,7 @@ import courseCatalog     from "./courseCatalog.js";
 // Named re-exports — import individual sub-adapters without the bundle
 export { default as institution }       from "./institution.js";
 export { default as calendar }          from "./calendar.js";
+export { default as clock }             from "./clock.js";
 export { default as creditSystem }      from "./creditSystem.js";
 export { default as specialTerms }      from "./specialTerms.js";
 export { default as attributeSystem }   from "./attributeSystem.js";
@@ -42,6 +44,7 @@ export { default as courseCatalog }     from "./courseCatalog.js";
 export default {
   institution,
   calendar,
+  clock,
   creditSystem,
   specialTerms,
   attributeSystem,

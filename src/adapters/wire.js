@@ -48,6 +48,7 @@ import genericDefaults from "./generic/index.js";
 const KNOWN_PORTS = new Set([
   "institution",
   "calendar",
+  "clock",          // current time source — swap for dev/test time-travel
   "creditSystem",
   "attributeSystem",
   "specialTerms",

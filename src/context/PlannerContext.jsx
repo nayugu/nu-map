@@ -22,6 +22,7 @@ import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
 import { ICalendar }      from "../ports/ICalendar.js";
+import { IClock }         from "../ports/IClock.js";
 import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAIAssistant }   from "../ports/IAIAssistant.js";
@@ -32,6 +33,7 @@ export function PlannerProvider({ children }) {
   const { setLocale, locales } = useLanguage();
   const institution    = usePort(IInstitution);
   const calendar       = usePort(ICalendar);
+  const clock          = usePort(IClock);
   const courseCatalog  = usePort(ICourseCatalog);
   const specialTerms   = usePort(ISpecialTerms);
   const aiAssistant    = usePort(IAIAssistant);
@@ -138,7 +140,7 @@ export function PlannerProvider({ children }) {
 
   // ── Semester tracking mode ──
   const [semTrackingMode, setSemTrackingModeRaw] = useState(() => {
-    try { return localStorage.getItem(key("sem-tracking")) || "manual"; } catch { return "manual"; }
+    try { return localStorage.getItem(key("sem-tracking")) || "live"; } catch { return "live"; }
   });
   const updateSemTrackingMode = (mode) => {
     setSemTrackingModeRaw(mode);
@@ -146,6 +148,10 @@ export function PlannerProvider({ children }) {
   };
   // Toast shown when auto mode advances the semester: null or label string
   const [semAdvanceToast, setSemAdvanceToast] = useState(null);
+  // Dev/test override: when set, replaces clock.now() throughout tracking logic.
+  // Set via DevClockPanel in development; always null in production builds.
+  const [clockOverride, setClockOverride] = useState(null);
+  const clockNow = () => clockOverride ?? clock.now();
 
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
   const effectiveCourseMap = useMemo(() => {
@@ -320,15 +326,15 @@ export function PlannerProvider({ children }) {
   //            semester's safeStartDay has already passed; show a toast if advanced.
   useEffect(() => {
     if (semTrackingMode === "manual") return;
+    const now = clockNow();
     if (semTrackingMode === "live") {
-      const computed = calendar.getCurrentSemId();
+      const computed = calendar.getCurrentSemId(now);
       if (computed && computed !== currentSemId) setCurrentSemId(computed);
       return;
     }
     if (semTrackingMode === "auto") {
       const semTypes = calendar.getSemesterTypes();
       const firstMonths = { fall: 9, spring: 1, sumA: 5, sumB: 7 };
-      const now = new Date();
       let cur = currentSemId;
       let advanced = false;
       // eslint-disable-next-line no-constant-condition
@@ -354,7 +360,7 @@ export function PlannerProvider({ children }) {
         setSemAdvanceToast(label);
       }
     }
-  }, [semTrackingMode, SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [semTrackingMode, SEMESTERS, clockOverride]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Effects: UI resize ───────────────────────────────────────
   useEffect(() => {
@@ -1905,6 +1911,7 @@ export function PlannerProvider({ children }) {
     showUnlocks, setShowUnlocks: updateShowUnlocks,
     semTrackingMode, setSemTrackingMode: updateSemTrackingMode,
     semAdvanceToast, setSemAdvanceToast,
+    clockOverride, setClockOverride,
     stickyCourses, setStickyCourses,
     planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd, semOrd: _semOrd,
     panelHeight,

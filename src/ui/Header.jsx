@@ -719,9 +719,9 @@ export default function Header() {
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>NOW TRACKING</div>
                 <div style={{ display: "flex", gap: 3 }}>
                   {[
-                    { id: "manual", label: "Manual" },
-                    { id: "auto",   label: "Auto" },
                     { id: "live",   label: "Live" },
+                    { id: "auto",   label: "Auto" },
+                    { id: "manual", label: "Manual" },
                   ].map(({ id, label }) => {
                     const active = semTrackingMode === id;
                     return (
