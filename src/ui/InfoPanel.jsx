@@ -609,7 +609,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                 <div style={{
                   position: "absolute", bottom: 0, left: 0, right: 0,
                   height: `${probPct * 100}%`,
-                  background: "var(--text-3)", opacity: 0.4,
+                  background: probPct <= 1/3 ? "var(--error)" : probPct <= 2/3 ? "#f59e0b" : "var(--success)", opacity: 0.55,
                   pointerEvents: "none",
                 }} />
               )}
@@ -619,8 +619,8 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                 </div>
               )}
               {ovr === false && (
-                <div style={{ position: "absolute", inset: 0, background: "rgba(232,101,90,0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 8, color: "var(--error)", lineHeight: 1, fontWeight: 700 }}>✕</span>
+                <div style={{ position: "absolute", inset: 0, background: "var(--error)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 8, color: "rgba(255,255,255,0.9)", lineHeight: 1, fontWeight: 700 }}>✕</span>
                 </div>
               )}
             </button>
