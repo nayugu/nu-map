@@ -28,7 +28,11 @@ export default function SummerRow({ semA, semB }) {
     SEM_INDEX,
     pushUndo, isPhone,
     collapseOtherCredits, showContLogo,
+    semTrackingMode,
   } = usePlanner();
+
+  const isLive = semTrackingMode === "live";
+  const onNowClick = () => { if (!isLive) setCurrentSemId(semA.id); };
 
   const { themeName } = useTheme();
   const specialTerms = usePort(ISpecialTerms);
@@ -268,7 +272,7 @@ export default function SummerRow({ semA, semB }) {
     }}>
       {/* Shared label column */}
       {isPhone ? (
-        <div onClick={() => setCurrentSemId(semA.id)} style={{ width: 34, flexShrink: 0, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}>
+        <div onClick={onNowClick} style={{ width: 34, flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}>
           <span style={{ width: 14, height: 14, borderRadius: 3, background: combinedDone ? "var(--bg-surface)" : combinedActive ? "var(--active-bg)" : "transparent", border: combinedDone ? "1px solid var(--success-border)" : combinedActive ? "1px solid var(--active-now-border)" : "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
             {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
@@ -278,7 +282,7 @@ export default function SummerRow({ semA, semB }) {
           {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: 1.2, textAlign: "center" }}>{combinedSH} SH</span>}
         </div>
       ) : (
-        <div onClick={() => setCurrentSemId(semA.id)} style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: "pointer" }}>
+        <div onClick={onNowClick} style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
             <span style={{ width: 14, height: 14, borderRadius: 3, background: combinedDone ? "var(--bg-surface)" : combinedActive ? "var(--active-bg)" : "transparent", border: combinedDone ? "1px solid var(--success-border)" : combinedActive ? "1px solid var(--active-now-border)" : "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
