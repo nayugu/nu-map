@@ -98,6 +98,7 @@ export const strings = {
   "course.no.title":              "कोई शीर्षक नहीं",
   "course.avail.badge":           "⚠ उपलब्ध?",
   "course.badge.prereq":          "! पूर्व आ.",
+  "course.badge.prereq.order":    "! क्रम",
   "course.badge.coreq.alone":     "! सह-आ.",
   "course.badge.coreq.sep":       "⚡ सह-आ.",
   "course.tooltip.prereq.order":  "पूर्वापेक्षा उसी या बाद के सेमेस्टर में है",

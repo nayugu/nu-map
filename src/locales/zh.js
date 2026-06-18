@@ -173,6 +173,7 @@ export const strings = {
   "course.no.title":              "\u65e0\u6807\u9898",
   "course.avail.badge":           "\u26a0 \u5f00\u8bfe?",
   "course.badge.prereq":          "! \u5148\u4fee",
+  "course.badge.prereq.order":    "! \u987a\u5e8f",
   "course.badge.coreq.alone":     "! \u540c\u4fee",
   "course.badge.coreq.sep":       "\u26a1 \u540c\u4fee",
   "course.tooltip.prereq.order":  "\u5148\u4fee\u8bfe\u7a0b\u5728\u540c\u4e00\u6216\u66f4\u665a\u7684\u5b66\u671f",

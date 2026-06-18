@@ -99,6 +99,7 @@ export const strings = {
   "course.no.title":              "タイトルなし",
   "course.avail.badge":           "⚠ 開講?",
   "course.badge.prereq":          "! 先修",
+  "course.badge.prereq.order":    "! 順序",
   "course.badge.coreq.alone":     "! 同修",
   "course.badge.coreq.sep":       "⚡ 同修",
   "course.tooltip.prereq.order":  "先修科目が同じまたは後の学期にあります",

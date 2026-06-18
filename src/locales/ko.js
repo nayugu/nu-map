@@ -98,6 +98,7 @@ export const strings = {
   "course.no.title":              "제목 없음",
   "course.avail.badge":           "⚠ 개설?",
   "course.badge.prereq":          "! 선수",
+  "course.badge.prereq.order":    "! 순서",
   "course.badge.coreq.alone":     "! 동시",
   "course.badge.coreq.sep":       "⚡ 동시",
   "course.tooltip.prereq.order":  "선수 과목이 같은 학기 또는 이후 학기에 있습니다",

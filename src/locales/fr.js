@@ -98,6 +98,7 @@ export const strings = {
   "course.no.title":              "Sans titre",
   "course.avail.badge":           "⚠ dispo?",
   "course.badge.prereq":          "! préreq",
+  "course.badge.prereq.order":    "! ordre",
   "course.badge.coreq.alone":     "! coréreq",
   "course.badge.coreq.sep":       "⚡ coréreq",
   "course.tooltip.prereq.order":  "Le prérequis est dans le même semestre ou un semestre ultérieur",

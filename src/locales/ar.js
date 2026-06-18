@@ -97,6 +97,7 @@ export const strings = {
   "course.no.title":              "بدون عنوان",
   "course.avail.badge":           "⚠ متاح؟",
   "course.badge.prereq":          "! متطلب",
+  "course.badge.prereq.order":    "! ترتيب",
   "course.badge.coreq.alone":     "! متزامن",
   "course.badge.coreq.sep":       "⚡ متزامن",
   "course.tooltip.prereq.order":  "المتطلب السابق في نفس الفصل أو لاحقاً",

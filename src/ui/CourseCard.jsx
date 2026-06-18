@@ -174,9 +174,16 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           {shOverrides[course.id] ?? course.sh}
         </span>
         {(isViolated || notOffered || coreqViol) && (
-          <span style={{ fontSize: 11, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
-            {isViolated && violationType === "order" ? "⚡" : isViolated ? "!" : notOffered ? "⚠" : "⚡"}
-          </span>
+          isViolated && violationType === "order" ? (
+            <span title={t("course.tooltip.prereq.order")}
+              style={{ fontSize: 7, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1, flexShrink: 0 }}>
+              {t("course.badge.prereq.order")}
+            </span>
+          ) : (
+            <span style={{ fontSize: 11, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
+              {isViolated ? "!" : notOffered ? "⚠" : "⚡"}
+            </span>
+          )
         )}
       </div>
     );
@@ -311,7 +318,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         )}
         {isViolated && violationType === "order" && (
           <span title={t("course.tooltip.prereq.order")}
-            style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", lineHeight: 1 }}>⚡</span>
+            style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
+            {t("course.badge.prereq.order")}
+          </span>
         )}
         {isViolated && violationType === "missing" && (
           <span title={t("course.tooltip.prereq.missing")}
