@@ -28,7 +28,11 @@ export default function SemRow({ sem }) {
     SEM_INDEX,
     pushUndo, isPhone,
     bonusSH, setBonusSH,
+    semTrackingMode,
   } = usePlanner();
+
+  const isLive = semTrackingMode === "live";
+  const onNowClick = () => { if (!isLive) setCurrentSemId(sem.id); };
 
   const { themeName } = useTheme();
   const specialTerms = usePort(ISpecialTerms);
@@ -122,9 +126,9 @@ export default function SemRow({ sem }) {
   if (termContId && !termStartId) {
     return (
       <div key={sem.id}
-        onClick={() => setCurrentSemId(sem.id)}
+        onClick={onNowClick}
         style={{
-          display: "flex", alignItems: "stretch", marginBottom: 3, cursor: "pointer",
+          display: "flex", alignItems: "stretch", marginBottom: 3, cursor: isLive ? "not-allowed" : "pointer",
           background: "var(--card-bg)",
           border: isActive ? "2px solid var(--active)" : "1px solid var(--border-card)",
           borderRadius: 6, padding: "6px 10px",
@@ -185,8 +189,8 @@ export default function SemRow({ sem }) {
       {/* Semester label */}
       {isPhone ? (
         <div
-          onClick={() => setCurrentSemId(sem.id)}
-          style={{ width: 34, flexShrink: 0, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}
+          onClick={onNowClick}
+          style={{ width: 34, flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}
         >
           {statusDot}
           {sem.label.split(" ").map((part, i) => (
@@ -196,8 +200,8 @@ export default function SemRow({ sem }) {
         </div>
       ) : (
         <div
-          onClick={() => setCurrentSemId(sem.id)}
-          style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: "pointer" }}
+          onClick={onNowClick}
+          style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer" }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
             {statusDot}
