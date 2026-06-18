@@ -905,6 +905,7 @@ export function PlannerProvider({ children }) {
     courses.forEach(c => {
       if (!placements[c.id] && !placedOut.has(c.id)) return; // not taken at all
       if (placements[c.id] === "incoming") return;
+      if (typeof placements[c.id] === "string" && placements[c.id].startsWith("__overflow:")) return;
       if (placedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[placements[c.id]];
@@ -922,10 +923,12 @@ export function PlannerProvider({ children }) {
       // Checking `from` as well would falsely warn e.g. CS 2100 for not being
       // co-placed with every course that lists CS 2100 as its coreq.
       const placed = to, partner = from;
+      const isHidden = id => typeof placements[id] === "string" && placements[id].startsWith("__overflow:");
       const placedTaken = placements[placed] !== undefined || placedOut.has(placed);
       const partnerTaken = placements[partner] !== undefined || placedOut.has(partner);
       if (!placedTaken) return;
       if (placements[placed] === "incoming") return;
+      if (isHidden(placed) || isHidden(partner)) return; // skip while either course is parked off-plan
       if (placedOut.has(placed)) return;
       if (!partnerTaken) {
         v.set(placed, "alone");
@@ -978,7 +981,7 @@ export function PlannerProvider({ children }) {
   // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
   const totalSHPlaced = useMemo(
     () => bonusSH + courses
-      .filter(c => placements[c.id] && !placedOut.has(c.id))
+      .filter(c => placements[c.id] && !placements[c.id].startsWith?.("__overflow:") && !placedOut.has(c.id))
       .reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
     [bonusSH, courses, placements, placedOut, effectiveCourseMap]
   );
@@ -1145,14 +1148,10 @@ export function PlannerProvider({ children }) {
       console.log('onDropPlacedOut called with:', { id, fromSem });
 
       // Add to placedOut set
-      setPlacedOut(prev => {
-        console.log('Adding to placedOut:', id);
-        return new Set([...prev, id]);
-      });
+      setPlacedOut(prev => new Set([...prev, id]));
 
       // If the course was placed in a semester, remove it from placements
       if (placements[id]) {
-        console.log('Course was placed in semester:', placements[id]);
         const coreqPartners = [...new Set(
           allEdges
             .filter(edge => edge.type === "corequisite" && (edge.from === id || edge.to === id))
@@ -1780,7 +1779,7 @@ export function PlannerProvider({ children }) {
     if (oldIds.length === newIds.length && oldIds.every((id, i) => id === newIds[i])) return;
 
     // Follow-slots remap: courses stay in the same slot index across cohort changes.
-    // Overflow courses (slot out of range) are marked "__overflow:N__" — invisible in both
+    // Overflow courses (slot out of range) are marked "__overflow:N" — invisible in both
     // bank and semester rows, but the slot index N is remembered so they restore correctly
     // when the plan expands back. Graduation-trim overflow parks at original semId instead
     // (the semester vanishes from the plan, so it's already invisible and exact-date restore
