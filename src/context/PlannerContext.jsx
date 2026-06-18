@@ -374,7 +374,16 @@ export function PlannerProvider({ children }) {
   // ── Effect: keep currentSemId valid on cohort change ─────────
   useEffect(() => {
     const sems = buildCohortSemesters(planEntSem, planEntYear, planGradSem, planGradYear, calendar);
-    setCurrentSemId(cur => sems.find(s => s.id === cur) ? cur : (sems[1]?.id ?? sems[0].id));
+    setCurrentSemId(cur => {
+      if (sems.find(s => s.id === cur)) return cur; // within plan, keep as-is
+      // cur is outside the plan — determine whether it's past graduation (allowed, auto-grad
+      // handles it) or before plan start (snap forward).
+      const TYPE_ORD = { spring: 0, sumA: 1, sumB: 2, fall: 3 };
+      const semOrd = id => { const m = id?.match(/^([a-zA-Z]+)(\d{4})$/); return m ? parseInt(m[2], 10) * 10 + (TYPE_ORD[m[1]] ?? 0) : null; };
+      const lastSem = sems[sems.length - 1];
+      if (lastSem && semOrd(cur) !== null && semOrd(cur) >= semOrd(lastSem.id)) return cur;
+      return sems[1]?.id ?? sems[0]?.id;
+    });
   }, [planEntSem, planEntYear, planGradSem, planGradYear]);
 
   // ── Effect: bank resize ───────────────────────────────────────
@@ -814,7 +823,9 @@ export function PlannerProvider({ children }) {
   }, []);
 
   // ── Derived plan state ────────────────────────────────────────
-  const currentSemIdx = SEM_INDEX[currentSemId] ?? 1;
+  // When graduated and the live semester has drifted past the plan boundary, treat it as
+  // one past the last plan semester so all plan semesters render as completed.
+  const currentSemIdx = SEM_INDEX[currentSemId] ?? (isGraduated ? SEMESTERS.length : 1);
   const placedIds = useMemo(
     () => new Set([...Object.keys(placements), ...placedOut]),
     [placements, placedOut]
