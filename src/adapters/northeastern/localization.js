@@ -3,10 +3,10 @@
 // ═══════════════════════════════════════════════════════════════════
 
 const _disclaimers = [
-  "This is NOT an official Northeastern University tool and is not affiliated with or endorsed by Northeastern.",
-  "This does NOT replace your official degree audit. Always verify your plan with your academic advisor and through MyNEU / DegreeWorks.",
+  "No login required. Your plan is stored entirely in your browser and is never sent to any server. No data about you is collected. The code is open source on GitHub.",
+  "This is a student-built tool, not affiliated with or endorsed by Northeastern University.",
+  "This does NOT replace your official degree audit. Always verify your plan with your academic advisor and DegreeWorks.",
   "Course availability, prerequisites, credit hours, and NUpath designations may be outdated or incorrect. Always confirm with the official course catalog.",
-  "Your saved plan lives in your browser's localStorage only. Clearing browser data will erase it.",
   "Use at your own risk.",
 ];
 

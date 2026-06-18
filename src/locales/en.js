@@ -214,7 +214,7 @@ export const strings = {
   "palette.empty":  "drag courses here",
 
   // ── Disclaimer modal ───────────────────────────────────────────
-  "modal.subtitle":   "Unofficial student planning tool",
+  "modal.subtitle":   "Student-built planning tool",
   "modal.dismiss":    "I understand \u2014 let me plan!",
   "modal.hint":       "Click outside or dismiss to continue.",
 };

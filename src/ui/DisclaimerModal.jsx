@@ -6,6 +6,7 @@ import { usePort, useInstitution } from "../context/InstitutionContext.jsx";
 import { IInstitution }     from "../ports/IInstitution.js";
 import { ILocalization }    from "../ports/ILocalization.js";
 import { useLanguage }      from "../context/LanguageContext.jsx";
+import { TText }            from "../context/TranslationContext.jsx";
 
 export default function DisclaimerModal() {
   const { showDisclaimer, setShowDisclaimer } = usePlanner();
@@ -47,7 +48,7 @@ export default function DisclaimerModal() {
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
           <div>
             <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-1)" }}>{institution.appName}</div>
-            <div style={{ fontSize: 10, color: "var(--text-3)" }}>{t("modal.subtitle")}</div>
+            <div style={{ fontSize: 10, color: "var(--text-3)" }}><TText>{t("modal.subtitle")}</TText></div>
           </div>
         </div>
 
@@ -58,7 +59,7 @@ export default function DisclaimerModal() {
             borderRadius: 8, padding: "10px 12px", marginBottom: 10,
           }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 7, letterSpacing: "0.04em" }}>
-              DATA SOURCES
+              <TText>DATA SOURCES</TText>
             </div>
             {sources.map((src, i) => (
               <div key={src.id} style={{
@@ -71,10 +72,10 @@ export default function DisclaimerModal() {
                     {src.label}
                   </a>
                   {src.author && (
-                    <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: 5 }}>by @{src.author}</span>
+                    <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: 5 }}><TText>{`by @${src.author}`}</TText></span>
                   )}
                   <div style={{ fontSize: 10, color: "var(--text-3)", marginTop: 1, lineHeight: 1.4 }}>
-                    used for {src.usedFor.join(", ")}
+                    <TText>{`used for ${src.usedFor.join(", ")}`}</TText>
                   </div>
                 </div>
                 <a href={src.url} target="_blank" rel="noreferrer"
@@ -92,7 +93,7 @@ export default function DisclaimerModal() {
           borderRadius: 8, padding: "10px 12px", marginBottom: 10,
         }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: "var(--error)", marginBottom: 6, letterSpacing: "0.04em" }}>
-            ⚠ DISCLAIMERS
+            ⚠ <TText>DISCLAIMERS</TText>
           </div>
           {disclaimers.map((text, i) => (
             <div key={i} style={{
@@ -100,7 +101,7 @@ export default function DisclaimerModal() {
               fontSize: 10, color: "var(--error-text)", lineHeight: 1.5,
             }}>
               <span style={{ flexShrink: 0, marginTop: 1 }}>•</span>
-              <span>{text}</span>
+              <span><TText>{text}</TText></span>
             </div>
           ))}
         </div>
