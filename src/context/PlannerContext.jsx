@@ -196,7 +196,11 @@ export function PlannerProvider({ children }) {
   // ── Settings / modal state ───────────────────────────────────
   const [showDisclaimer,   setShowDisclaimer]   = useState(false);
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
-    try { return !localStorage.getItem(key("seen-cohort-setup")); } catch { return false; }
+    try {
+      if (localStorage.getItem(key("seen-cohort-setup"))) return false;
+      localStorage.setItem(key("seen-cohort-setup"), "1");
+      return true;
+    } catch { return false; }
   });
   // Default entry/grad sem: first and last non-optional semester types
   const _primarySems = calendar.getSemesterTypes().filter(t => !t.optional);
