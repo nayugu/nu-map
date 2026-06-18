@@ -48,8 +48,14 @@ export function LanguageProvider({ children }) {
   const storageKey    = `${institution.storagePrefix}-locale`;
 
   const [locale, setLocaleState] = useState(() => {
-    try { return localStorage.getItem(storageKey) ?? defaultLocale; }
-    catch { return defaultLocale; }
+    try {
+      const param = new URLSearchParams(window.location.search).get("locale");
+      if (param && LOCALE_STRINGS[param]) {
+        localStorage.setItem(storageKey, param);
+        return param;
+      }
+      return localStorage.getItem(storageKey) ?? defaultLocale;
+    } catch { return defaultLocale; }
   });
 
   const setLocale = (code) => {
