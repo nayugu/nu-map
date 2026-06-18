@@ -51,6 +51,9 @@ export default function Header() {
   const adapter = useInstitution();
   const { attributeSystem, specialTerms, calendar, creditSystem, institution, majorRequirements } = adapter;
   const unitName        = creditSystem.getUnitName();
+  // Allow entry year up to next calendar year so incoming students can plan ahead
+  // (e.g. a fall 2027 admit setting up their plan in spring 2027).
+  const maxEntYear = new Date().getFullYear() + 1;
   const [showUpdatedDate, setShowUpdatedDate] = useState(false);
   const [showQuickSet, setShowQuickSet] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
@@ -780,7 +783,7 @@ export default function Header() {
                       const blocked = wouldBe >= gradOrd;
                       return (<button key={s} onClick={() => { if (!blocked) setEntSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>);
                     })}
-                    <YearStepper year={planEntYear} min={2010} max={2040} canInc={entOrd + 2 < gradOrd} onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }} onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < 2040) setEntYear(planEntYear + 1); }} />
+                    <YearStepper year={planEntYear} min={2010} max={maxEntYear} canInc={entOrd + 2 < gradOrd && planEntYear < maxEntYear} onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }} onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < maxEntYear) setEntYear(planEntYear + 1); }} />
                   </div>
                   <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>{t("header.cohort.graduation")}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -938,10 +941,10 @@ export default function Header() {
                     );
                   })}
                   <YearStepper
-                    year={planEntYear} min={2010} max={2040}
-                    canInc={entOrd + 2 < gradOrd}
+                    year={planEntYear} min={2010} max={maxEntYear}
+                    canInc={entOrd + 2 < gradOrd && planEntYear < maxEntYear}
                     onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }}
-                    onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < 2040) setEntYear(planEntYear + 1); }}
+                    onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < maxEntYear) setEntYear(planEntYear + 1); }}
                   />
                 </div>
               </div>
