@@ -43,8 +43,8 @@ import {
   useEffect, useCallback,
 } from "react";
 import { useLanguage }          from "./LanguageContext.jsx";
-import { ChromeAIEngine }    from "../adapters/translation/ChromeAIEngine.js";
-import { MyMemoryEngine }   from "../adapters/translation/MyMemoryEngine.js";
+import { ChromeAIEngine }  from "../adapters/translation/ChromeAIEngine.js";
+import { CascadeEngine }   from "../adapters/translation/CascadeEngine.js";
 // import { HFInferenceEngine }    from "../adapters/translation/HFInferenceEngine.js";
 // import { TransformersJsEngine } from "../adapters/translation/TransformersJsEngine.js";
 import { glossaryLookup }         from "../locales/glossary.js";
@@ -111,7 +111,7 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
       if (await chrome.isAvailable(locale, catalogLocale)) {
         engine = chrome;
       } else {
-        engine = new MyMemoryEngine();
+        engine = new CascadeEngine();
       }
       engineRef.current = engine;
       setEngineTier(engine.tier);
