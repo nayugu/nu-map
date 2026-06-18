@@ -1819,6 +1819,38 @@ export function PlannerProvider({ children }) {
     }
   }, [SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ── Resolve overflow markers when entering follow-slots mode ─────
+  // __overflow:N courses are created by follow-slots entry trims. In follow-dates mode
+  // they stay invisible (they have no date to park at). When the user switches back to
+  // follow-slots, immediately place them at their slot position in the current plan so
+  // they become visible again without needing a cohort change.
+  useEffect(() => {
+    if (!stickyCourses) return;
+    const resolveOverflow = semId => {
+      if (typeof semId !== "string" || !semId.startsWith("__overflow:")) return null;
+      const n = parseInt(semId.slice(11));
+      return (!isNaN(n) && n < SEMESTERS.length) ? SEMESTERS[n].id : null;
+    };
+    setPlacements(prev => {
+      let changed = false;
+      const next = { ...prev };
+      for (const [cid, semId] of Object.entries(prev)) {
+        const resolved = resolveOverflow(semId);
+        if (resolved) { next[cid] = resolved; changed = true; }
+      }
+      return changed ? next : prev;
+    });
+    setSpecialTermPl(prev => {
+      let changed = false;
+      const next = { ...prev };
+      for (const [id, data] of Object.entries(prev)) {
+        const resolved = resolveOverflow(data?.semId);
+        if (resolved) { next[id] = { ...data, semId: resolved }; changed = true; }
+      }
+      return changed ? next : prev;
+    });
+  }, [stickyCourses]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Offered overrides setter ─────────────────────────────────
   // offeredOverrides shape: { courseId: { semTypeId: true | false } }
   // Absent key = auto (probability-based). Cycle: auto → true → false → auto.
