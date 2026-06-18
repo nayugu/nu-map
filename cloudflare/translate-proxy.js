@@ -1,26 +1,24 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Cloudflare Worker: translate-proxy
 //
-// Proxies requests to Google Translate's unofficial endpoint so that users
-// in regions where Google is blocked (e.g. mainland China) can still use
-// course translation.  Cloudflare's network reaches Google even where the
-// public internet cannot.
+// Proxies requests to the MyMemory translation API so that users in regions
+// where mymemory.translated.net is blocked can still use course translation.
 //
 // Deploy:
 //   1. Go to workers.cloudflare.com → Create Worker
 //   2. Paste this file, save and deploy
-//   3. Copy the worker URL (e.g. https://translate-proxy.yourname.workers.dev)
-//   4. Set VITE_TRANSLATE_PROXY=<that URL> in:
+//   3. Optionally add a custom domain (e.g. translate.numap.app) under the
+//      worker's Settings → Triggers → Custom Domains tab.
+//   4. Set VITE_TRANSLATE_PROXY=<worker URL> in:
 //        • Cloudflare Pages → nu-map → Settings → Environment Variables
 //        • GitHub repo → Settings → Secrets → Actions (as VITE_TRANSLATE_PROXY)
 //      Then redeploy the app.
 //
-// The worker only forwards requests to /translate_a/single — all other
-// paths return 404.
+// The worker only forwards requests to /get — all other paths return 404.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const GOOGLE_BASE = "https://translate.googleapis.com";
-const ALLOWED_PATH = "/translate_a/single";
+const UPSTREAM     = "https://api.mymemory.translated.net";
+const ALLOWED_PATH = "/get";
 
 const CORS = {
   "Access-Control-Allow-Origin":  "*",
@@ -30,7 +28,6 @@ const CORS = {
 
 export default {
   async fetch(request) {
-    // CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: CORS });
     }
@@ -41,13 +38,10 @@ export default {
       return new Response("Not found", { status: 404 });
     }
 
-    const target = `${GOOGLE_BASE}${url.pathname}${url.search}`;
+    const target = `${UPSTREAM}${url.pathname}${url.search}`;
 
     try {
-      const upstream = await fetch(target, {
-        headers: { "User-Agent": "Mozilla/5.0" },
-      });
-
+      const upstream = await fetch(target);
       const body = await upstream.arrayBuffer();
 
       return new Response(body, {

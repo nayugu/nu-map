@@ -1,35 +1,38 @@
 // ═══════════════════════════════════════════════════════════════════
-// ADAPTER: GoogleTranslateEngine
+// ADAPTER: MyMemoryEngine
 //
-// Translates text via the unofficial Google Translate endpoint
-// (translate.googleapis.com).  No API key, no setup, CORS-enabled
-// (Access-Control-Allow-Origin: *).  Compatible with GitHub Pages.
+// Translates text via the MyMemory public API (mymemory.translated.net).
+// No API key required.  CORS-enabled (Access-Control-Allow-Origin: *).
+// Works from both browsers and Cloudflare Workers, and is accessible
+// from mainland China (not a Google/US-owned service).
 //
-// Responses are near-instant so no streaming is needed.  onToken is
-// called once with the final result to maintain interface parity.
+// Rate limit: ~5000 chars/day per IP for anonymous use.  In practice
+// this is never hit because all translations are cached in-memory and
+// in localStorage (TranslationContext handles caching).
 //
 // A module-level concurrency limiter caps simultaneous in-flight
-// requests so opening a page with many translatable elements (course
-// bank, grad requirement tree) doesn't burst dozens of requests at
-// Google and trip per-IP throttling.
+// requests so a page with many translatable elements doesn't burst
+// requests and trip per-IP throttling.
 //
 // Implements the ITranslationEngine port.
 // ═══════════════════════════════════════════════════════════════════
 
-// Google uses different locale codes than BCP-47 in a few cases.
-const GOOGLE_LOCALE = {
+// MyMemory accepts BCP-47 codes but expects the full regional variant
+// for some languages (e.g. "zh-CN" not just "zh").
+const LOCALE_MAP = {
   zh: "zh-CN",
+  he: "iw",       // Hebrew
 };
 
-function googleLocale(bcp47) {
-  return GOOGLE_LOCALE[bcp47] ?? bcp47;
+function mmLocale(bcp47) {
+  return LOCALE_MAP[bcp47] ?? bcp47;
 }
 
 // Shared across all engine instances so a re-mount doesn't reset the cap.
-const MAX_CONCURRENT = 6;
-const FETCH_TIMEOUT_MS = 5_000;
+const MAX_CONCURRENT  = 4;
+const FETCH_TIMEOUT_MS = 8_000;
 let inFlight = 0;
-const queue = [];
+const queue  = [];
 
 function drain() {
   while (inFlight < MAX_CONCURRENT && queue.length > 0) {
@@ -46,7 +49,7 @@ function schedule(taskFactory) {
   });
 }
 
-export class GoogleTranslateEngine {
+export class MyMemoryEngine {
   tier = "api";
 
   /** @type {((loaded: number, total: number) => void) | null} */
@@ -67,8 +70,8 @@ export class GoogleTranslateEngine {
    * @returns {Promise<string[]>}
    */
   async translate(texts, targetLocale, sourceLocale = "en", onToken = null) {
-    const sl = googleLocale(sourceLocale);
-    const tl = googleLocale(targetLocale);
+    const sl = mmLocale(sourceLocale);
+    const tl = mmLocale(targetLocale);
 
     const results = await Promise.all(
       texts.map((text, i) => {
@@ -90,25 +93,21 @@ export class GoogleTranslateEngine {
     const ac = new AbortController();
     this.#aborts.push(ac);
 
-    const base = import.meta.env.VITE_TRANSLATE_PROXY ?? "https://translate.googleapis.com";
+    const base = import.meta.env.VITE_TRANSLATE_PROXY ?? "https://api.mymemory.translated.net";
     const url =
-      `${base}/translate_a/single` +
-      `?client=gtx&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}` +
-      `&dt=t&q=${encodeURIComponent(text)}`;
+      `${base}/get` +
+      `?q=${encodeURIComponent(text)}` +
+      `&langpair=${encodeURIComponent(sl)}|${encodeURIComponent(tl)}`;
 
     return schedule(async () => {
-      // Start the timeout once the job is actually running (not while queued).
       const timer = setTimeout(() => ac.abort(), FETCH_TIMEOUT_MS);
       try {
         const response = await fetch(url, { signal: ac.signal });
-        if (!response.ok) throw new Error(`Google Translate ${response.status}`);
+        if (!response.ok) throw new Error(`MyMemory ${response.status}`);
         const data = await response.json();
-        // Response: [[[translatedSegment, original, ...], ...], ...]
-        // Concatenate all translated segments.
-        const translated = (data[0] ?? [])
-          .map(seg => seg[0] ?? "")
-          .join("");
-        return translated.trim();
+        if (data.quotaFinished) throw new Error("MyMemory daily quota exceeded");
+        if (data.responseStatus !== 200) throw new Error(`MyMemory status ${data.responseStatus}`);
+        return (data.responseData?.translatedText ?? text).trim();
       } finally {
         clearTimeout(timer);
         this.#aborts = this.#aborts.filter(a => a !== ac);

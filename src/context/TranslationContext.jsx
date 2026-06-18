@@ -43,8 +43,8 @@ import {
   useEffect, useCallback,
 } from "react";
 import { useLanguage }          from "./LanguageContext.jsx";
-import { ChromeAIEngine }         from "../adapters/translation/ChromeAIEngine.js";
-import { GoogleTranslateEngine }  from "../adapters/translation/GoogleTranslateEngine.js";
+import { ChromeAIEngine }    from "../adapters/translation/ChromeAIEngine.js";
+import { MyMemoryEngine }   from "../adapters/translation/MyMemoryEngine.js";
 // import { HFInferenceEngine }    from "../adapters/translation/HFInferenceEngine.js";
 // import { TransformersJsEngine } from "../adapters/translation/TransformersJsEngine.js";
 import { glossaryLookup }         from "../locales/glossary.js";
@@ -111,11 +111,7 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
       if (await chrome.isAvailable(locale, catalogLocale)) {
         engine = chrome;
       } else {
-        engine = new GoogleTranslateEngine();
-        // Uncomment to fall back to offline WASM instead of API:
-        // engine = new TransformersJsEngine();
-        // Uncomment to use HuggingFace Inference API (requires VITE_HF_TOKEN):
-        // engine = new HFInferenceEngine();
+        engine = new MyMemoryEngine();
       }
       engineRef.current = engine;
       setEngineTier(engine.tier);
