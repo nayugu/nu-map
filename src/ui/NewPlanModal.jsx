@@ -78,13 +78,13 @@ export default function NewPlanModal({ open, onClose }) {
       >
         {/* Title */}
         <div style={{ fontSize: 13, fontWeight: 800, color: "var(--text-1)", marginBottom: 14 }}>
-          New plan
+          {t("header.plan.new.title")}
         </div>
 
         {/* Name */}
         <div style={{ marginBottom: 14 }}>
           <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>
-            NAME
+            {t("header.plan.new.name")}
           </div>
           <input
             ref={nameRef}
@@ -193,7 +193,7 @@ export default function NewPlanModal({ open, onClose }) {
             color: canCreate ? "var(--link-1)" : "var(--text-5)",
           }}
         >
-          Create plan
+          {t("header.plan.new.create")}
         </button>
       </div>
     </div>
