@@ -194,7 +194,10 @@ export function PlannerProvider({ children }) {
   });
 
   // ── Settings / modal state ───────────────────────────────────
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showDisclaimer,   setShowDisclaimer]   = useState(false);
+  const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
+    try { return !localStorage.getItem(key("seen-cohort-setup")); } catch { return false; }
+  });
   // Default entry/grad sem: first and last non-optional semester types
   const _primarySems = calendar.getSemesterTypes().filter(t => !t.optional);
   const _defEntSem   = _primarySems[0]?.id           ?? "fall";
@@ -2011,6 +2014,7 @@ export function PlannerProvider({ children }) {
     setBankSearch, setBankSort, setBankTab, setBankWidth, setShowSubjectKeys,
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
+    showCohortSetup, setShowCohortSetup,
     setPersistEnabled,
     setOfferedOverrides,
     setShOverride: (id, value) => setShOverrides(prev => {
