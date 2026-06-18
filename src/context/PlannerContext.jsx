@@ -1638,6 +1638,7 @@ export function PlannerProvider({ children }) {
     const data = {
       version: 1,
       exported: new Date().toISOString(),
+      planName: plans.find(p => p.id === activePlanId)?.name || "Plan",
       entSem: planEntSem, entYear: planEntYear,
       gradSem: planGradSem, gradYear: planGradYear,
       placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
@@ -1687,7 +1688,14 @@ export function PlannerProvider({ children }) {
       try {
         const d = JSON.parse(reader.result);
         if (d.version !== 1) { alert("Unrecognized plan file format."); return; }
-        applyPlanData(d);
+        saveCurrentPlanToSlot();
+        const id = `plan_${Date.now()}`;
+        const base = d.planName || "Plan";
+        const name = base.startsWith('+') ? base : `+ ${base}`;
+        try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
+        setPlans(prev => [...prev, { id, name }]);
+        setActivePlanId(id);
+        if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
       } catch (err) {
         alert("Could not read plan file: " + err.message);
       }
