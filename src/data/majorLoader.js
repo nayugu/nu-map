@@ -108,6 +108,9 @@ export function getMajorOptions(majorRequirements) {
       b.year - a.year ||
       a.college.localeCompare(b.college) ||
       a.label.localeCompare(b.label)
+    )
+    .filter((opt, _, arr) =>
+      arr.findIndex(o => o.college === opt.college && o.folder === opt.folder) === arr.indexOf(opt)
     );
 
   return _cachedOptions;

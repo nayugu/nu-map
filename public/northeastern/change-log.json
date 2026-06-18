@@ -1,6 +1,15 @@
 {
   "runs": [
     {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-06-18T06:01:40.542Z",
+      "done": 517,
+      "written": 517,
+      "skipped": 25,
+      "failed": 4
+    },
+    {
       "type": "availability",
       "subject": "📅 Term Availability",
       "timestamp": "2026-05-30T02:20:12.050Z",
