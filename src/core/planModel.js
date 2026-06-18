@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { buildPlacedKeySet, allocateMajor } from "./gradRequirements.js";
+import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
 import { resolveTermByDuration, termSpans } from "./specialTermUtils.js";
 
 
@@ -112,13 +112,39 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
 
 function sectionHtml(sec, doneKeys) {
   // Mirror SectionBlock's pool-structure logic exactly
-  const isPoolStructure = sec.minRequired !== undefined && sec.minRequired < sec.total;
-  const displaySatCount = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
-  const displayTotal    = isPoolStructure ? sec.minRequired : sec.total;
-  const pct             = displayTotal > 0 ? Math.round(displaySatCount / displayTotal * 100) : 0;
-  const warnHtml  = (sec.warnings ?? []).map(w =>
+  const isPoolStructure   = sec.minRequired !== undefined && sec.minRequired < sec.total;
+  const displaySatCount   = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
+  const displayTotal      = isPoolStructure ? sec.minRequired : sec.total;
+  const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
+  const hasSplit           = isGeneralElectives && sec.completedSH !== undefined;
+
+  // Progress text
+  const progHtml = hasSplit
+    ? `<span style="color:#16a34a">${sec.completedSH}</span>${sec.plannedSH > 0 ? `<span style="color:#2563eb">+${sec.plannedSH}</span>` : ""}/${sec.requiredSH} SH`
+    : isGeneralElectives
+      ? `${sec.placedSH}/${sec.requiredSH} SH`
+      : `${displaySatCount}/${displayTotal}`;
+
+  // Progress bar
+  const printColor = `-webkit-print-color-adjust:exact;print-color-adjust:exact`;
+  const barHtml = hasSplit ? (() => {
+    const maxSH      = Math.max((sec.completedSH ?? 0) + (sec.plannedSH ?? 0), sec.requiredSH, 1);
+    const totalPct   = Math.min(100, ((sec.completedSH ?? 0) + (sec.plannedSH ?? 0)) / maxSH * 100).toFixed(1);
+    const compPct    = Math.min(100, (sec.completedSH ?? 0) / maxSH * 100).toFixed(1);
+    return `<div class="sec-bar" style="position:relative;overflow:hidden">
+      ${(sec.plannedSH ?? 0) > 0 ? `<div style="position:absolute;top:0;left:0;width:${totalPct}%;height:100%;background:#3b82f6;opacity:0.45;${printColor}"></div>` : ""}
+      ${(sec.completedSH ?? 0) > 0 ? `<div style="position:absolute;top:0;left:0;width:${compPct}%;height:100%;background:#22c55e;${printColor}"></div>` : ""}
+    </div>`;
+  })() : (() => {
+    const pct = isGeneralElectives
+      ? (sec.requiredSH > 0 ? Math.min(100, Math.round((sec.placedSH ?? 0) / sec.requiredSH * 100)) : 100)
+      : (displayTotal > 0 ? Math.round(displaySatCount / displayTotal * 100) : 0);
+    return `<div class="sec-bar"><div class="sec-bar-fill${sec.sat ? " sec-bar-sat" : ""}" style="width:${pct}%"></div></div>`;
+  })();
+
+  const warnHtml = (sec.warnings ?? []).map(w =>
     `<div class="sec-warn">⚠ ${w}</div>`).join("");
-  const noteHtml  = isPoolStructure && sec.minRequired > 0
+  const noteHtml = isPoolStructure && sec.minRequired > 0
     ? `<div class="sec-note">Requires ${sec.minRequired} of ${sec.total}</div>` : "";
   const secStatus = sec.sat ? (() => {
     const satReqs = (sec.children ?? []).filter(r => r.sat);
@@ -131,9 +157,9 @@ function sectionHtml(sec, doneKeys) {
     <div class="sec-head">
       <span class="sec-icon">${secIcon}</span>
       <span class="sec-title">${sec.title}</span>
-      <span class="sec-prog">${displaySatCount}/${displayTotal}</span>
+      <span class="sec-prog">${progHtml}</span>
     </div>
-    <div class="sec-bar"><div class="sec-bar-fill${sec.sat ? " sec-bar-sat" : ""}" style="width:${pct}%"></div></div>
+    ${barHtml}
     ${warnHtml}
     <div class="sec-body">
       ${sec.children.map(r => reqNodeHtml(r, doneKeys, 0, isPoolStructure && !r.sat && sec.satCount >= sec.minRequired)).join("")}
@@ -223,11 +249,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   });
 
   // ── Requirements sections HTML ────────────────────────────────
-  const placedSet = buildPlacedKeySet(effectivePlacements, placedOut, courseMap);
+  // placedSet includes virtual substitution targets (needed for requirement satisfaction).
+  // realPlacedSet excludes them so GE only lists courses the student actually placed.
+  const placedSet     = buildPlacedKeySet(effectivePlacements, placedOut, courseMap);
+  const realPlacedSet = buildPlacedKeySet(placements, placedOut, courseMap);
 
   function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true) {
     if (!prog) return "";
-    let sections = allocateMajor(prog, placedSet, courseMap);
+    const { sections: majorSections, generalElectives } = allocateMajorWithElectives(prog, placedSet, courseMap, doneKeysSet, realPlacedSet);
+    let sections = [...majorSections, generalElectives];
     if (!showGeneralElectives) {
       sections = sections.filter(s => s.title !== "General Electives");
     }
