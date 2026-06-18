@@ -133,17 +133,13 @@ export default function DisclaimerModal() {
               color: "var(--link-1)", cursor: "pointer",
             }}
           >{t("modal.dismiss")}</button>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <span style={{ fontSize: 10, color: "var(--text-6)" }}>{t("modal.hint")}</span>
-            <span style={{ fontSize: 10, color: "var(--text-6)" }}>
-              Built with{" "}
-              <a href="https://www.anthropic.com/claude" target="_blank" rel="noreferrer"
-                style={{ color: "var(--text-5)", textDecoration: "none" }}>
-                Claude Sonnet
-              </a>
-              {" (Anthropic)"}
-            </span>
-          </div>
+          <span style={{ fontSize: 10, color: "var(--text-6)" }}>
+            Made by Nathan Gu with{" "}
+            <a href="https://www.anthropic.com/claude" target="_blank" rel="noreferrer"
+              style={{ color: "var(--text-5)", textDecoration: "none" }}>
+              Claude Sonnet
+            </a>
+          </span>
         </div>
       </div>
     </div>
