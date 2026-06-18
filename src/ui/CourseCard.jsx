@@ -176,7 +176,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         {(isViolated || notOffered || coreqViol) && (
           isViolated && violationType === "order" ? (
             <span title={t("course.tooltip.prereq.order")}
-              style={{ fontSize: 7, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1, flexShrink: 0 }}>
+              style={{ fontSize: 7, fontWeight: 700, color: "var(--error-bg)", background: "var(--error-text)", borderRadius: 3, padding: "1px 3px", lineHeight: 1, flexShrink: 0 }}>
               {t("course.badge.prereq.order")}
             </span>
           ) : (
@@ -318,7 +318,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         )}
         {isViolated && violationType === "order" && (
           <span title={t("course.tooltip.prereq.order")}
-            style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
+            style={{ fontSize: 9, fontWeight: 700, color: "var(--error-bg)", background: "var(--error-text)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
             {t("course.badge.prereq.order")}
           </span>
         )}
