@@ -29,6 +29,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Set this secret in GitHub → Settings → Secrets → Actions.
+          # Value: the Cloudflare Worker URL from cloudflare/translate-proxy.js
+          # e.g. https://translate-proxy.yourname.workers.dev
+          VITE_TRANSLATE_PROXY: ${{ secrets.VITE_TRANSLATE_PROXY }}
 
       - name: Prepare deployment directory
         run: |

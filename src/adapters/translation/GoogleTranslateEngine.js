@@ -90,8 +90,9 @@ export class GoogleTranslateEngine {
     const ac = new AbortController();
     this.#aborts.push(ac);
 
+    const base = import.meta.env.VITE_TRANSLATE_PROXY ?? "https://translate.googleapis.com";
     const url =
-      "https://translate.googleapis.com/translate_a/single" +
+      `${base}/translate_a/single` +
       `?client=gtx&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}` +
       `&dt=t&q=${encodeURIComponent(text)}`;
 
