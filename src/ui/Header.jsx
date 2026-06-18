@@ -16,6 +16,8 @@ import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText } from "../context/TranslationContext.jsx";
 // import ClaudePanel from "./ClaudePanel.jsx"; // MCP integration — disabled until hosted
 import dataMeta from "../core/dataMeta.json";
+import YearStepper    from "./YearStepper.jsx";
+import NewPlanModal   from "./NewPlanModal.jsx";
 
 export default function Header() {
   const {
@@ -65,6 +67,7 @@ export default function Header() {
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const lastClickedIdx = useRef(-1);
+  const [showNewPlanModal, setShowNewPlanModal] = useState(false);
 
   useEffect(() => {
     if (!showPlanMenu) { setPlanSearch(""); setSelectMode(false); setSelectedIds(new Set()); lastClickedIdx.current = -1; return; }
@@ -551,8 +554,8 @@ export default function Header() {
                 ) : (
                   <button onClick={e => {
                     e.stopPropagation();
-                    const name = prompt(t("header.plan.new.prompt"));
-                    if (name?.trim()) { createPlan(name.trim()); setShowPlanMenu(false); }
+                    setShowPlanMenu(false);
+                    setShowNewPlanModal(true);
                   }} style={{
                     width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
                     background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
@@ -998,7 +1001,7 @@ export default function Header() {
                 {(planGradYear < planEntYear || (planGradYear === planEntYear && planGradSem === "fall" && planEntSem === "spring"))
                   ? <span style={{ color: "var(--error)" }}>{t("header.cohort.error")}</span>
                   : <span style={{ color: "var(--success)" }}>
-                      {t("header.cohort.duration", { yrs: ((planGradYear * 2 + (planGradSem === "fall" ? 0 : 1)) - (planEntYear * 2 + (planEntSem === "fall" ? 0 : 1))) / 2 })}
+                      {t("header.cohort.duration", { yrs: ((planGradYear * 2 + (planGradSem === "fall" ? 1 : 0)) - (planEntYear * 2 + (planEntSem === "fall" ? 1 : 0)) + 1) / 2 })}
                     </span>
                 }
               </div>
@@ -1079,6 +1082,9 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      {/* ── New plan modal ── */}
+      <NewPlanModal open={showNewPlanModal} onClose={() => setShowNewPlanModal(false)} />
 
       {/* ── Auto-advance toast ── */}
       {semAdvanceToast && (
@@ -1232,15 +1238,3 @@ function MajorLabelText({ label, isPhone }) {
   );
 }
 
-/** Small ◀ year ▶ stepper widget used in cohort popover. */
-function YearStepper({ year, canDec = true, canInc = true, onDec, onInc }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", marginLeft: 4, background: "var(--bg-app)", border: "1px solid var(--border-2)", borderRadius: 5, overflow: "hidden" }}>
-      <button onClick={onDec}
-        style={{ background: "none", border: "none", color: canDec ? "var(--text-3)" : "var(--border-2)", cursor: canDec ? "pointer" : "not-allowed", padding: "2px 7px", fontSize: 11 }}>◀</button>
-      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-2)", minWidth: 34, textAlign: "center" }}>{year}</span>
-      <button onClick={onInc}
-        style={{ background: "none", border: "none", color: canInc ? "var(--text-3)" : "var(--border-2)", cursor: canInc ? "pointer" : "not-allowed", padding: "2px 7px", fontSize: 11 }}>▶</button>
-    </div>
-  );
-}

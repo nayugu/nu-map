@@ -176,7 +176,8 @@ export const IPlannerAction = "plannerAction";
 /**
  * Create a new empty plan.
  * After creation, the new plan becomes active.
- * @typedef {{ type: 'CREATE_PLAN', name: string }} CreatePlanAction
+ * @typedef {{ entSem: string, entYear: number, gradSem: string, gradYear: number }} PlanCohort
+ * @typedef {{ type: 'CREATE_PLAN', name: string, cohort?: PlanCohort }} CreatePlanAction
  */
 
 /**

@@ -636,7 +636,7 @@ export function PlannerProvider({ children }) {
         case "SET_CURRENT_SEM":
           programUpdates.currentSemId = action.semId;
           break;
-        case "CREATE_PLAN":    createPlan(action.name);                            break;
+        case "CREATE_PLAN":    createPlan(action.name, action.cohort ?? null);      break;
         case "RENAME_PLAN":    renamePlan(action.planId, action.name);             break;
         case "SWITCH_PLAN":    switchPlan(action.planId);                          break;
         case "DELETE_PLAN":    deletePlan(action.planId);                          break;
@@ -1584,13 +1584,30 @@ export function PlannerProvider({ children }) {
     setActivePlanId(id);
   };
 
-  // Create a new plan
-    const createPlan = (name) => {
-    // Auto-save current plan
+  // Create a new plan.
+  // Optional cohort = { entSem, entYear, gradSem, gradYear }.
+  // When provided, pre-writes a minimal plan snapshot so that the activePlanId
+  // useEffect calls restorePlan (with the given cohort) instead of resetPlanToDefaults.
+  const createPlan = (name, cohort = null) => {
     saveCurrentPlanToSlot();
     const id = `plan_${Date.now()}`;
+    if (cohort) {
+      try {
+        localStorage.setItem(key(`plan-data-${id}`), JSON.stringify({
+          version: 1,
+          exported: new Date().toISOString(),
+          entSem:  cohort.entSem,
+          entYear: cohort.entYear,
+          gradSem: cohort.gradSem,
+          gradYear: cohort.gradYear,
+          placements: {}, specialTermPl: {}, semOrders: {},
+          shOverrides: {}, offeredOverrides: {}, collapsedSubs: {},
+          bonusSH: 0, major: "", major2: "", conc: "",
+          minor1: "", minor2: "", placedOut: [],
+        }));
+      } catch {}
+    }
     setPlans(prev => [...prev, { id, name }]);
-    // Switch to new plan – the useEffect will reset to defaults (no saved data)
     setActivePlanId(id);
   };
 
