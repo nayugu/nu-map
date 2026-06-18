@@ -2,7 +2,7 @@
   "name": "Data Science and Journalism, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "5/18/2026",
+    "lastEdited": "6/18/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 135,
@@ -422,5 +422,6 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "generalElectiveSH": 20
 }

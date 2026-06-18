@@ -431,6 +431,7 @@ function parseTable(table, h2Title) {
 function parseRequirements(root) {
   const requirementSections = [];
   const concentrationOptions = [];
+  let generalElectiveSH = 0;
 
   // Walk through h2 + table.sc_courselist pairs in document order.
   // We collect all block-level elements and step through them tracking
@@ -456,9 +457,13 @@ function parseRequirements(root) {
       continue;
     }
 
-    // Skip the empty "Required General Electives" placeholder;
-    // gradRequirements.js generates this dynamically.
+    // Capture SH from "Required General Electives" table then skip it;
+    // gradRequirements.js builds the section dynamically.
     if (/^Required General Electives/i.test(currentH2)) {
+      for (const tr of el.querySelectorAll('tr')) {
+        const sh = parseHoursCell(tr);
+        if (sh > 0) { generalElectiveSH = sh; break; }
+      }
       currentH2 = null;
       continue;
     }
@@ -485,7 +490,7 @@ function parseRequirements(root) {
     ? { minOptions: 1, concentrationOptions }
     : null;
 
-  return { requirementSections, concentrations };
+  return { requirementSections, concentrations, generalElectiveSH };
 }
 
 // ── Validate no internal markers escape into output ───────────────────────────
@@ -521,7 +526,7 @@ async function scrapeProgram(url) {
     ?? '';
 
   const totalCreditsRequired     = extractTotalCredits(root);
-  const { requirementSections, concentrations } = parseRequirements(root);
+  const { requirementSections, concentrations, generalElectiveSH } = parseRequirements(root);
 
   if (!requirementSections.length) return null;
 
@@ -532,6 +537,7 @@ async function scrapeProgram(url) {
     yearVersion: YEAR,
     requirementSections,
     ...(concentrations ? { concentrations } : {}),
+    ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
   };
 }
 

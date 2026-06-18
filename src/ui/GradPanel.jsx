@@ -340,7 +340,11 @@ function SectionBlock({ sec, defaultOpen = true }) {
   const displaySatCount = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
   const displayTotal = isPoolStructure ? sec.minRequired : sec.total;
 
-  const frac = displayTotal > 0 ? displaySatCount / displayTotal : 0;
+  // General electives section uses SH display instead of course count
+  const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
+  const frac = isGeneralElectives
+    ? (sec.requiredSH > 0 ? Math.min(sec.placedSH / sec.requiredSH, 1) : 1)
+    : (displayTotal > 0 ? displaySatCount / displayTotal : 0);
 
   return (
     <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: ph ? 5 : 7, marginBottom: ph ? 5 : 7 }}>
@@ -354,7 +358,11 @@ function SectionBlock({ sec, defaultOpen = true }) {
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {secTitle}
         </span>
-        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>{displaySatCount}/{displayTotal}</span>
+        <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>
+          {isGeneralElectives
+            ? `${sec.placedSH}/${sec.requiredSH} SH`
+            : `${displaySatCount}/${displayTotal}`}
+        </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
       {/* Progress sliver */}

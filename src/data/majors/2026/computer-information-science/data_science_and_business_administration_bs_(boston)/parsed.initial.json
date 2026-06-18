@@ -2,7 +2,7 @@
   "name": "Data Science and Business Administration, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "5/18/2026",
+    "lastEdited": "6/18/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -492,5 +492,6 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "generalElectiveSH": 16
 }

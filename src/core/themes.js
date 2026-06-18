@@ -47,6 +47,7 @@ const dark = {
   '--warn-bright':       '#fbbf24',
   '--warn-bg':           '#2a1e08',
   '--warn-border':       '#c17f24',
+  '--warn-badge-text':   '#fbbf24',
 
   // ── Status: error ────────────────────────────────────────────────
   '--error':             '#f85149',
@@ -155,6 +156,7 @@ const light = {
   '--warn-bright':       '#ffd600',   // pure saturated yellow — alarming coreq/offered border
   '--warn-bg':           '#fef3c7',
   '--warn-border':       '#e8a500',
+  '--warn-badge-text':   '#e8a500',
 
   // ── Status: error ─────────────────────────────────────────────────
   '--error':             '#dc2626',   // vivid red

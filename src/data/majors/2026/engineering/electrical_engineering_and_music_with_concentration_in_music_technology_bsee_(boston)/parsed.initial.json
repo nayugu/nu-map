@@ -2,7 +2,7 @@
   "name": "Electrical Engineering and Music with Concentration in Music Technology, BSEE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "5/18/2026",
+    "lastEdited": "6/18/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 137,
@@ -696,5 +696,6 @@
       ],
       "minRequirementCount": 2
     }
-  ]
+  ],
+  "generalElectiveSH": 4
 }

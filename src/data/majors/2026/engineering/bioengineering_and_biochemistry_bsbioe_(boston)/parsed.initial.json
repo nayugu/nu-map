@@ -2,7 +2,7 @@
   "name": "Bioengineering and Biochemistry, BSBioE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "5/18/2026",
+    "lastEdited": "6/18/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 139,
@@ -438,5 +438,6 @@
         "minRequirementCount": 5
       }
     ]
-  }
+  },
+  "generalElectiveSH": 12
 }

@@ -2,10 +2,10 @@
   "name": "Computer Engineering and Physics, BSCmpE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "5/17/2026",
+    "lastEdited": "6/18/2026",
     "branch": "main"
   },
-  "totalCreditsRequired": 0,
+  "totalCreditsRequired": 133,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -577,5 +577,6 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "generalElectiveSH": 8
 }

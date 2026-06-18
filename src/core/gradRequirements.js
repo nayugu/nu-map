@@ -246,14 +246,14 @@ function buildGeneralElectivesSection(placedSet, sectionResults, courseMap) {
     type: 'SECTION',
     title: 'General Electives',
     warnings: [],
-    sat: true, // Always "satisfied" since it's flexible
+    sat: true,
     satCount: generalElectiveKeys.length,
-    minRequired: 0, // No minimum (can go over required limit)
+    minRequired: 0,
     total: generalElectiveKeys.length,
     children,
     allocatedCourses: new Set(generalElectiveKeys),
-    // Add SH info for display
-    totalSH: generalElectiveSH,
+    placedSH: generalElectiveSH,
+    requiredSH: 0,
   };
 }
 
@@ -711,7 +711,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
  * Calculate "General Electives" — all placed courses not allocated to major requirements.
  * Returns a synthetic SECTION result with unallocated courses listed as children.
  */
-export function calculateGeneralElectives(placedSet, allocatedSet, courseMap) {
+export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, requiredSH = 0) {
   const unallocated = [];
   let totalSH = 0;
 
@@ -741,7 +741,8 @@ export function calculateGeneralElectives(placedSet, allocatedSet, courseMap) {
     total: unallocated.length,
     children: unallocated,
     allocatedCourses: new Set(unallocated.map(c => c.key)),
-    generalElectivesSH: totalSH,
+    placedSH: totalSH,
+    requiredSH,
   };
 }
 
@@ -758,6 +759,6 @@ export function allocateMajorWithElectives(major, placedSet, courseMap) {
     )
   );
   const sections = allocateSections(sectionsToAllocate, placedSet, globalUsed, courseMap);
-  const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap);
+  const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, major.generalElectiveSH ?? 0);
   return { sections, generalElectives, allocatedSet: globalUsed };
 }

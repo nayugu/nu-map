@@ -54,6 +54,7 @@ export default function Header() {
   // Allow entry year up to next calendar year so incoming students can plan ahead
   // (e.g. a fall 2027 admit setting up their plan in spring 2027).
   const maxEntYear = new Date().getFullYear() + 1;
+  const isMaintenanceDay = new Date().getUTCDate() === 1;
   const [showUpdatedDate, setShowUpdatedDate] = useState(false);
   const [showQuickSet, setShowQuickSet] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
@@ -363,6 +364,18 @@ export default function Header() {
               >
                 feedback ↗
               </a>
+              {isMaintenanceDay && (
+                <span title="Catalog data is being refreshed today — some major requirements may update shortly" style={{
+                  fontSize: 9, fontWeight: 700, letterSpacing: "0.04em",
+                  color: "var(--warn-badge-text)", background: "var(--warn-bg)",
+                  border: "1px solid var(--warn-bg)",
+                  padding: "1px 7px", borderRadius: 6,
+                  userSelect: "none", lineHeight: 1.7, marginRight: 4,
+                  cursor: "default",
+                }}>
+                  updating
+                </span>
+              )}
               <span
                 onMouseEnter={() => setShowUpdatedDate(true)}
                 onMouseLeave={() => setShowUpdatedDate(false)}

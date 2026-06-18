@@ -2,7 +2,7 @@
   "name": "Computer Science, BSCS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "5/18/2026",
+    "lastEdited": "6/18/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 135,
@@ -811,5 +811,6 @@
       ],
       "minRequirementCount": 3
     }
-  ]
+  ],
+  "generalElectiveSH": 28
 }
