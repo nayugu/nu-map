@@ -61,6 +61,12 @@ export function LanguageProvider({ children }) {
   const setLocale = (code) => {
     setLocaleState(code);
     try { localStorage.setItem(storageKey, code); } catch {}
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (code === defaultLocale) { params.delete("locale"); } else { params.set("locale", code); }
+      const q = params.toString();
+      history.replaceState(null, "", window.location.pathname + (q ? "?" + q : ""));
+    } catch {}
   };
 
   /** Translate key with optional named interpolation vars. Falls back to en, then key. */
