@@ -155,12 +155,12 @@ export function createServer({ data, sessionId }) {
         }
       }
 
-      const placedSet = buildPlacedKeySet(
-        effectivePlacements,
-        new Set(placedOut),
-        data.courseMap
-      );
-      const result = allocateMajorWithElectives(majorJson, placedSet, data.courseMap);
+      // placedSet includes virtual substitution targets (for requirement satisfaction).
+      // realPlacedSet excludes them so GE only lists courses the student actually placed.
+      const placedOut_ = new Set(placedOut);
+      const placedSet     = buildPlacedKeySet(effectivePlacements, placedOut_, data.courseMap);
+      const realPlacedSet = buildPlacedKeySet(placements,          placedOut_, data.courseMap);
+      const result = allocateMajorWithElectives(majorJson, placedSet, data.courseMap, null, realPlacedSet);
       return { content: [{ type: "text", text: JSON.stringify(result) }] };
     }
   );
