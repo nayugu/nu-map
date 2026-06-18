@@ -943,6 +943,27 @@ export function PlannerProvider({ children }) {
     return "future";
   };
 
+  // ── Effect: auto-graduate / auto-ungraduate ───────────────────
+  // Must live after gradSemId is declared (line above) to avoid a TDZ ReferenceError in
+  // the dependency array. Compares semester IDs by calendar order so a live semester
+  // outside the plan boundary (e.g. fall2026 for a plan ending spring2026) still works.
+  useEffect(() => {
+    const TYPE_ORD = { spring: 0, sumA: 1, sumB: 2, fall: 3 };
+    const semOrd = id => {
+      const m = id?.match(/^([a-zA-Z]+)(\d{4})$/);
+      if (!m) return null;
+      return parseInt(m[2], 10) * 10 + (TYPE_ORD[m[1]] ?? 0);
+    };
+    const curOrd  = semOrd(currentSemId);
+    const gradOrd = semOrd(gradSemId);
+    if (curOrd === null || gradOrd === null) return;
+    if (curOrd > gradOrd) {
+      setIsGraduated(true);
+    } else if (curOrd < gradOrd) {
+      setIsGraduated(false);
+    }
+  }, [currentSemId, gradSemId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
   const totalSHPlaced = useMemo(
     () => bonusSH + courses

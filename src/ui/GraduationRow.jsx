@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { usePlanner }   from "../context/PlannerContext.jsx";
 import { useLanguage }  from "../context/LanguageContext.jsx";
 import { TText }        from "../context/TranslationContext.jsx";
@@ -55,16 +55,24 @@ export default function GraduationRow() {
   const { gradSemId, currentSemId, SEMESTERS, isGraduated, setIsGraduated, isPhone } = usePlanner();
   const { t } = useLanguage();
   const rowRef = useRef(null);
+  const prevGraduatedRef = useRef(isGraduated);
 
   const gradSem   = SEMESTERS.find(s => s.id === gradSemId);
   const gradLabel = gradSem?.label ?? gradSemId;
 
   const isReady = currentSemId === gradSemId && !isGraduated;
 
+  // Fire confetti whenever graduation transitions false → true (covers both manual and auto).
+  useEffect(() => {
+    if (isGraduated && !prevGraduatedRef.current && rowRef.current) {
+      fireConfetti(rowRef.current);
+    }
+    prevGraduatedRef.current = isGraduated;
+  }, [isGraduated]);
+
   const handleGraduate = e => {
     e.stopPropagation();
     setIsGraduated(true);
-    if (rowRef.current) fireConfetti(rowRef.current);
   };
 
   const handleUngraduate = e => {
