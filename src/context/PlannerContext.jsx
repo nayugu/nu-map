@@ -1779,33 +1779,42 @@ export function PlannerProvider({ children }) {
     // If semesters didn't actually change, skip
     if (oldIds.length === newIds.length && oldIds.every((id, i) => id === newIds[i])) return;
 
-    // Remap course placements
+    // Follow-slots remap: courses stay in the same slot index across cohort changes.
+    // Overflow courses (slot out of range) are marked "__overflow:N__" — invisible in both
+    // bank and semester rows, but the slot index N is remembered so they restore correctly
+    // when the plan expands back. Graduation-trim overflow parks at original semId instead
+    // (the semester vanishes from the plan, so it's already invisible and exact-date restore
+    // works naturally).
+    const remapSemId = (semId) => {
+      // Already overflowed from a previous change — try to restore if slot is now in range.
+      if (typeof semId === "string" && semId.startsWith("__overflow:")) {
+        const n = parseInt(semId.slice(11));
+        return (!isNaN(n) && n < newIds.length) ? newIds[n] : semId;
+      }
+      if (semId === "incoming") return semId;
+      const idx = oldIds.indexOf(semId);
+      if (idx === -1) return semId; // not in old plan (e.g. came from a prior overflow restore)
+      if (idx < newIds.length) return newIds[idx]; // normal follow-slots remap
+      // Overflow: slot idx is beyond the new plan.
+      // If the semId is gone from the new plan (graduation trim) → park at semId so it
+      // reappears automatically when graduation extends back past this date.
+      // If the semId is still in the new plan (entry trim pushed it off the end) → use the
+      // slot-index marker so it stays invisible and restores to the right slot on revert.
+      return newIds.includes(semId) ? `__overflow:${idx}` : semId;
+    };
+
     const newPl = {};
     for (const [cid, semId] of Object.entries(snap.placements)) {
-      const idx = oldIds.indexOf(semId);
-      if (idx !== -1 && idx < newIds.length) {
-        newPl[cid] = newIds[idx];
-      } else if (semId === "incoming" || newIds.includes(semId)) {
-        newPl[cid] = semId;
-      } else {
-        newPl[cid] = newIds[newIds.length - 1];
-      }
+      newPl[cid] = remapSemId(semId);
     }
     setPlacements(newPl);
 
-    // Remap special term placements
+    // Same rules for work experience / special term placements.
     if (snap.specialTermPl) {
       const newStp = {};
       for (const [id, data] of Object.entries(snap.specialTermPl)) {
-        const semId = data?.semId;
-        if (!semId) continue;
-        const idx = oldIds.indexOf(semId);
-        if (idx !== -1 && idx < newIds.length) {
-          newStp[id] = { ...data, semId: newIds[idx] };
-        } else if (newIds.includes(semId)) {
-          newStp[id] = data;
-        }
-        // If the semester no longer exists, drop the placement
+        if (!data?.semId) continue;
+        newStp[id] = { ...data, semId: remapSemId(data.semId) };
       }
       setSpecialTermPl(newStp);
     }
