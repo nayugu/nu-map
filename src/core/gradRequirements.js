@@ -318,6 +318,32 @@ export function allocateMajor(major, placedSet, courseMap) {
 }
 
 /**
+ * Collect all placed course keys that appear anywhere in a requirement result tree,
+ * including inside unsatisfied AND nodes. Used to prevent a placed course from showing
+ * in both a requirement section (as a candidate) and general electives simultaneously.
+ * OR nodes are handled by only taking their committed allocatedCourses — unsatisfied
+ * OR alternatives remain available for general electives.
+ */
+function collectCandidateKeys(sections, placedSet) {
+  const keys = new Set();
+  function visit(node) {
+    if (!node) return;
+    if (node.type === 'COURSE') {
+      if (node.key && placedSet.has(node.key)) keys.add(node.key);
+      return;
+    }
+    if (node.type === 'OR') {
+      node.allocatedCourses?.forEach(k => keys.add(k));
+      return;
+    }
+    node.allocatedCourses?.forEach(k => keys.add(k));
+    (node.children ?? []).forEach(visit);
+  }
+  sections.forEach(visit);
+  return keys;
+}
+
+/**
  * Allocate courses to an array of sections, sharing the same used set.
  */
 export function allocateSections(sections, placedSet, globalUsed, courseMap) {
@@ -710,13 +736,20 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
 /**
  * Calculate "General Electives" — all placed courses not allocated to major requirements.
  * Returns a synthetic SECTION result with unallocated courses listed as children.
+ * completedSet: keys of courses in completed semesters (for completedSH/plannedSH split).
+ * candidateSet: keys appearing in any requirement node; excluded even if not in allocatedSet
+ *               (prevents a course from showing in both a requirement section and GE when
+ *               it is a candidate for an unsatisfied AND requirement).
  */
-export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, requiredSH = 0) {
+export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, requiredSH = 0, completedSet = null, candidateSet = null, realPlacedSet = null) {
   const unallocated = [];
   let totalSH = 0;
+  let completedSH = 0;
 
-  for (const key of placedSet) {
-    if (!allocatedSet.has(key)) {
+  // Iterate realPlacedSet when provided: virtual substitution-target entries in placedSet
+  // must not appear as GE courses (they are only there for requirement satisfaction).
+  for (const key of (realPlacedSet ?? placedSet)) {
+    if (!allocatedSet.has(key) && !candidateSet?.has(key)) {
       const course = courseMap[key];
       if (course) {
         const sh = course.sh ?? 4;
@@ -728,6 +761,7 @@ export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, re
           sh,
         });
         totalSH += sh;
+        if (completedSet?.has(key)) completedSH += sh;
       }
     }
   }
@@ -742,6 +776,8 @@ export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, re
     children: unallocated,
     allocatedCourses: new Set(unallocated.map(c => c.key)),
     placedSH: totalSH,
+    completedSH,
+    plannedSH: totalSH - completedSH,
     requiredSH,
   };
 }
@@ -749,8 +785,9 @@ export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, re
 /**
  * Allocate all sections + calculate general electives.
  * Returns sections array with general electives appended at end.
+ * completedSet: optional set of course keys in completed semesters, for the SH split.
  */
-export function allocateMajorWithElectives(major, placedSet, courseMap) {
+export function allocateMajorWithElectives(major, placedSet, courseMap, completedSet = null, realPlacedSet = null) {
   const globalUsed = new Set();
   // Filter out "Required General Electives" placeholder - we generate our own
   const sectionsToAllocate = mergeDuplicateSections(
@@ -759,6 +796,7 @@ export function allocateMajorWithElectives(major, placedSet, courseMap) {
     )
   );
   const sections = allocateSections(sectionsToAllocate, placedSet, globalUsed, courseMap);
-  const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, major.generalElectiveSH ?? 0);
+  const candidateKeys = collectCandidateKeys(sections, realPlacedSet ?? placedSet);
+  const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, major.generalElectiveSH ?? 0, completedSet, candidateKeys, realPlacedSet);
   return { sections, generalElectives, allocatedSet: globalUsed };
 }

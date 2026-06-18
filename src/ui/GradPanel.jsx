@@ -21,7 +21,6 @@ import { useLanguage }          from "../context/LanguageContext.jsx";
 import { useTranslatedText }    from "../context/TranslationContext.jsx";
 import {
   buildPlacedKeySet,
-  allocateMajor,
   allocateMajorWithElectives,
   allocateSections,
 } from "../core/gradRequirements.js";
@@ -44,28 +43,27 @@ function ProgressBar({ frac, color = "var(--success)" }) {
   );
 }
 
-/** Two-segment bar: completed (green) + planned (amber), with an optional required-marker line. */
-function CreditBar({ completedSH, plannedSH, requiredSH }) {
-  const totalSH    = completedSH + plannedSH;
-  const maxSH      = Math.max(totalSH, requiredSH, 1);
-  const reqFrac    = requiredSH > 0 ? requiredSH / maxSH : 0;
-  const totalFrac  = totalSH / maxSH;
-  const labelStyle = (color) => ({
-    position: "absolute", bottom: "100%", left: "50%",
-    transform: "translateX(-50%)", fontSize: 8, color, whiteSpace: "nowrap", marginBottom: 2, lineHeight: 1,
-  });
+/** Two-segment bar: completed (green) + planned (blue), with an optional required-marker tick. */
+function CreditBar({ completedSH, plannedSH, requiredSH, showLabel = true, style }) {
+  const totalSH   = completedSH + plannedSH;
+  const maxSH     = Math.max(totalSH, requiredSH, 1);
+  const reqFrac   = requiredSH > 0 ? requiredSH / maxSH : 0;
+  const totalFrac = totalSH / maxSH;
   return (
-    <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)", overflow: "visible", margin: "14px 0 4px" }}>
+    <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)", overflow: "visible", margin: "14px 0 4px", ...style }}>
       {plannedSH > 0 && (
         <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalFrac * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />
       )}
       {completedSH > 0 && (
         <div style={{ position: "absolute", left: 0, width: `${Math.min(100, completedSH / maxSH * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3 }} />
       )}
-      {/* required tick + label */}
       {requiredSH > 0 && (
         <div style={{ position: "absolute", left: `${Math.min(99.5, reqFrac * 100)}%`, top: -3, height: 12, width: 2, background: "var(--text-3)", borderRadius: 1, transform: "translateX(-50%)" }}>
-          <div style={labelStyle("var(--text-4)")}>{requiredSH}</div>
+          {showLabel && (
+            <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", fontSize: 8, color: "var(--text-4)", whiteSpace: "nowrap", marginBottom: 2, lineHeight: 1 }}>
+              {requiredSH}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -342,6 +340,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
 
   // General electives section uses SH display instead of course count
   const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
+  const hasSplit = isGeneralElectives && sec.completedSH !== undefined;
   const frac = isGeneralElectives
     ? (sec.requiredSH > 0 ? Math.min(sec.placedSH / sec.requiredSH, 1) : 1)
     : (displayTotal > 0 ? displaySatCount / displayTotal : 0);
@@ -359,15 +358,23 @@ function SectionBlock({ sec, defaultOpen = true }) {
           {secTitle}
         </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>
-          {isGeneralElectives
-            ? `${sec.placedSH}/${sec.requiredSH} SH`
+          {hasSplit ? (
+            <>
+              <span style={{ color: "var(--success)" }}>{sec.completedSH}</span>
+              {sec.plannedSH > 0 && <span style={{ color: "var(--link-1)" }}>+{sec.plannedSH}</span>}
+              <span>/{sec.requiredSH} SH</span>
+            </>
+          ) : isGeneralElectives ? `${sec.placedSH}/${sec.requiredSH} SH`
             : `${displaySatCount}/${displayTotal}`}
         </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
       {/* Progress sliver */}
       <div style={{ marginTop: 3 }}>
-        <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--success-bar-partial)"} />
+        {hasSplit
+          ? <CreditBar completedSH={sec.completedSH} plannedSH={sec.plannedSH} requiredSH={sec.requiredSH} showLabel={false} style={{ margin: 0 }} />
+          : <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--success-bar-partial)"} />
+        }
       </div>
       {/* Requirements */}
       {open && (
@@ -705,6 +712,13 @@ export default function GradPanel({ wideCatalog = false }) {
     [effectivePlacements, placedOut, courseMap]
   );
 
+  // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
+  // Used for GE display so substituted courses don't appear twice with doubled SH.
+  const realPlacedSet = useMemo(
+    () => buildPlacedKeySet(placements, placedOut, courseMap),
+    [placements, placedOut, courseMap]
+  );
+
   const doneSet = useMemo(() => {
     const donePlacements = Object.fromEntries(
       Object.entries(effectivePlacements).filter(([, semId]) => getSemStatus(semId) === "completed")
@@ -738,7 +752,7 @@ export default function GradPanel({ wideCatalog = false }) {
     if (!major) return [];
 
     // Allocate major requirements + General Electives
-    const { sections: majorResults, generalElectives, allocatedSet } = allocateMajorWithElectives(major, placedSet, courseMap);
+    const { sections: majorResults, generalElectives, allocatedSet } = allocateMajorWithElectives(major, placedSet, courseMap, doneSet, realPlacedSet);
 
     // Add General Electives as the last major section
     const majorWithElectives = [...majorResults, generalElectives];
@@ -754,7 +768,7 @@ export default function GradPanel({ wideCatalog = false }) {
     }
 
     return majorWithElectives;
-  }, [allSections, placedSet, courseMap, major, selConc]);
+  }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc]);
 
   // Split back for display: major sections (including General Electives) and concentration (if any)
   const majorSectionsCount = major?.requirementSections?.length ?? 0;
@@ -787,9 +801,9 @@ export default function GradPanel({ wideCatalog = false }) {
   // ── Second major allocation (courses double-count freely per NU policy) ─
   const major2Sections = useMemo(() => {
     if (!major2Data) return [];
-    const { sections, generalElectives } = allocateMajorWithElectives(major2Data, placedSet, courseMap);
+    const { sections, generalElectives } = allocateMajorWithElectives(major2Data, placedSet, courseMap, doneSet, realPlacedSet);
     return [...sections, generalElectives];
-  }, [major2Data, placedSet, courseMap]);
+  }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet]);
 
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
