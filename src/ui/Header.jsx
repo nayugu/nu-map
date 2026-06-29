@@ -895,7 +895,7 @@ export default function Header() {
                 >
                   /dev
                 </a>
-                <a href={`${import.meta.env.BASE_URL}documentation/`} target="_blank" rel="noreferrer"
+                <a href="https://github.com/nayugu/nu-map" target="_blank" rel="noreferrer"
                   style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
                     background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                     border: "1px solid var(--border-2)", color: "var(--text-4)",
@@ -904,7 +904,7 @@ export default function Header() {
                   onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
                   onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
                 >
-                  /documentation
+                  /github
                 </a>
               </div>
             </div>

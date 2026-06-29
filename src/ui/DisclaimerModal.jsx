@@ -106,9 +106,9 @@ export default function DisclaimerModal() {
           ))}
         </div>
 
-        {/* Documentation link */}
+        {/* GitHub link */}
         <a
-          href={`${import.meta.env.BASE_URL}documentation/`}
+          href="https://github.com/nayugu/nu-map"
           target="_blank" rel="noreferrer"
           style={{
             display: "block", width: "100%", textAlign: "center", boxSizing: "border-box",
@@ -121,7 +121,7 @@ export default function DisclaimerModal() {
           onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--text-4)"; e.currentTarget.style.color = "var(--text-2)"; }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-3)"; }}
         >
-          /documentation
+          /github
         </a>
 
         {/* Footer */}
