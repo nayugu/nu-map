@@ -103,10 +103,29 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
   const [rect,  setRect]  = useState(null);
   const inputRef = useRef(null);
   const { t } = useLanguage();
+  const { isPhone } = useContext(GradCtx) ?? {};
 
   const updateRect = () => {
     if (inputRef.current) setRect(inputRef.current.getBoundingClientRect());
   };
+
+  // Keep the portal dropdown pinned to the input as the layout shifts — most
+  // importantly when the iOS keyboard pops up and scrolls the input, which
+  // otherwise strands the dropdown at its stale focus-time position.
+  useEffect(() => {
+    if (!open) return;
+    const onMove = () => updateRect();
+    window.addEventListener("scroll", onMove, true); // capture nested scrolls (the panel)
+    window.addEventListener("resize", onMove);
+    window.visualViewport?.addEventListener("resize", onMove);
+    window.visualViewport?.addEventListener("scroll", onMove);
+    return () => {
+      window.removeEventListener("scroll", onMove, true);
+      window.removeEventListener("resize", onMove);
+      window.visualViewport?.removeEventListener("resize", onMove);
+      window.visualViewport?.removeEventListener("scroll", onMove);
+    };
+  }, [open]);
 
   const allOptions = useMemo(() => {
     const list = [];
@@ -159,14 +178,30 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           >✕</button>
         )}
       </div>
-      {open && rect && createPortal(
+      {open && rect && (() => {
+        // On phone the grad panel is narrow, so widen the dropdown to nearly the
+        // full screen (clamped to stay on-screen) instead of the cramped input
+        // width. Cap the height to the space above the keyboard so every result
+        // stays scrollable rather than hidden behind it.
+        const M = 8;
+        const vw = window.innerWidth;
+        const vvH = window.visualViewport?.height ?? window.innerHeight;
+        const dropW = isPhone ? Math.min(vw - M * 2, 460) : rect.width;
+        const dropLeft = isPhone
+          ? Math.max(M, Math.min(rect.left, vw - dropW - M))
+          : rect.left;
+        const dropMaxH = isPhone
+          ? Math.max(150, Math.min(280, vvH - rect.bottom - 12))
+          : 280;
+        return createPortal(
         <div style={{
           position: "fixed",
           top: rect.bottom + 2,
-          left: rect.left,
-          width: rect.width,
+          left: dropLeft,
+          width: dropW,
           zIndex: 9000,
-          maxHeight: 280, overflowY: "auto",
+          maxHeight: dropMaxH, overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
           fontFamily: "'Inter', system-ui, sans-serif", fontSize: 12,
@@ -206,7 +241,8 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           )}
         </div>,
         document.body
-      )}
+      );
+      })()}
     </div>
   );
 }
