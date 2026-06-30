@@ -2,7 +2,7 @@
   "name": "History and English, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 128,
@@ -147,7 +147,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 24,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -190,7 +190,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 40,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

@@ -2,7 +2,7 @@
   "name": "Business Administration and Communication Studies, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -396,7 +396,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 44,
+          "numCreditsMin": 12,
           "courses": [
             {
               "type": "AND",
@@ -527,8 +527,7 @@
       "title": "Business Experiential Learning",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

@@ -2,7 +2,7 @@
   "name": "Communication Sciences and Disorders, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -32,11 +32,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Speech-Language Pathology and Audiology",
+      "title": "Core Course Requirements",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 12,
           "courses": [
             {
               "type": "COURSE",
@@ -77,20 +77,7 @@
               "type": "COURSE",
               "subject": "SLPA",
               "classId": 4651
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Other",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 48,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "AMSL",
@@ -150,6 +137,118 @@
               "type": "COURSE",
               "subject": "PSYC",
               "classId": 3451
+            }
+          ],
+          "groups": [
+            {
+              "title": "Speech-Language Pathology and Audiology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 1102
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 1103
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 1200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 1203
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 1205
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 2400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 4500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 4651
+                }
+              ]
+            },
+            {
+              "title": "Other",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "AMSL",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 3480
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 1112
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2534
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 2100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 5280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 1260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 2300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3450
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3451
+                }
+              ]
             }
           ]
         }

@@ -2,7 +2,7 @@
   "name": "English, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 128,
@@ -552,7 +552,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 24,
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
@@ -594,8 +594,7 @@
       "title": "Experiential Learning Coursework",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -632,8 +631,7 @@
       "title": "Dialogues of Civilization",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

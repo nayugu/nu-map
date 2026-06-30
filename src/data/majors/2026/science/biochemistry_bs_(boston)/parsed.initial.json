@@ -2,7 +2,7 @@
   "name": "Biochemistry, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 144,
@@ -344,7 +344,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 5,
           "courses": [
             {
               "type": "AND",
@@ -415,7 +415,13 @@
                   "classId": 1173
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 5,
+          "courses": [
             {
               "type": "AND",
               "courses": [
@@ -489,7 +495,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

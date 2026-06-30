@@ -2,7 +2,7 @@
   "name": "Communication and Media Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -364,18 +364,30 @@
       "title": "Elective courses",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "COMM",
-          "idRangeStart": 1000,
-          "idRangeEnd": 9999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "COMM",
+              "idRangeStart": 1000,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            }
+          ]
         },
         {
-          "type": "RANGE",
-          "subject": "MSCR",
-          "idRangeStart": 1000,
-          "idRangeEnd": 9999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "MSCR",
+              "idRangeStart": 1000,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 2

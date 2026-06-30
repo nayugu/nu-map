@@ -2,7 +2,7 @@
   "name": "Health Humanities and Public Health, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -334,7 +334,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 152,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -395,7 +395,13 @@
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 1101
-            },
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
             {
               "type": "COURSE",
               "subject": "ANTH",
@@ -569,7 +575,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

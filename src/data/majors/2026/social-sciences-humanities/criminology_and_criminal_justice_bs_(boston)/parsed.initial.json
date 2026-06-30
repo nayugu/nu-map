@@ -2,7 +2,7 @@
   "name": "Criminology and Criminal Justice, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 128,
@@ -306,8 +306,7 @@
       "title": "Student-Generated Knowledge",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

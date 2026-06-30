@@ -2,7 +2,7 @@
   "name": "International Affairs and International Business, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -233,8 +233,7 @@
       "title": "Business Experiential Requirements",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 32,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

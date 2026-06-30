@@ -2,7 +2,7 @@
   "name": "Media and Screen Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -162,7 +162,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 20,
           "courses": [
             {
               "type": "AND",

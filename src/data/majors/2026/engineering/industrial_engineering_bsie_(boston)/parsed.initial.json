@@ -2,7 +2,7 @@
   "name": "Industrial Engineering, BSIE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 137,
@@ -133,59 +133,29 @@
           ]
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 3,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 4512
-            }
-          ]
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 4512
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 2,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 4515
-            }
-          ]
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 4515
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 2,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 4520
-            }
-          ]
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 4520
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 2,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 3,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1502
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1502
         }
       ],
       "minRequirementCount": 6
@@ -355,48 +325,24 @@
           ]
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 4512
-            }
-          ]
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 4512
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 2,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 4515
-            }
-          ]
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 4515
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 2,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 4520
-            }
-          ]
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 4520
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         }
       ],
       "minRequirementCount": 5
@@ -428,26 +374,14 @@
       "title": "Additional Required Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1502
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1502
         }
       ],
       "minRequirementCount": 2

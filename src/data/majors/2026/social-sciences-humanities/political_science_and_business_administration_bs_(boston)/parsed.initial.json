@@ -2,7 +2,7 @@
   "name": "Political Science and Business Administration, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -319,8 +319,7 @@
       "title": "Business Experiential Learning",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

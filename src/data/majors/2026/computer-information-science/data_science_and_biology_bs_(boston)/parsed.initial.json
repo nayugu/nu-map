@@ -2,7 +2,7 @@
   "name": "Data Science and Biology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 141,
@@ -409,7 +409,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 36,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -618,7 +618,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 12,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

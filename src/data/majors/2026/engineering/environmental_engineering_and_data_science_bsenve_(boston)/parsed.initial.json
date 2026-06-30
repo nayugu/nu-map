@@ -2,7 +2,7 @@
   "name": "Environmental Engineering and Data Science, BSEnvE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 136,
@@ -86,7 +86,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 92,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -244,26 +244,14 @@
           ]
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 2,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 3,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1502
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1502
         }
       ],
       "minRequirementCount": 3
@@ -534,15 +522,9 @@
           ]
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         }
       ],
       "minRequirementCount": 2
@@ -574,26 +556,14 @@
       "title": "Additional Required Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1502
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1502
         }
       ],
       "minRequirementCount": 2

@@ -2,7 +2,7 @@
   "name": "Mathematics and Physics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -74,14 +74,9 @@
       "title": "Mathematics Elective",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 4115
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 4115
         }
       ],
       "minRequirementCount": 1

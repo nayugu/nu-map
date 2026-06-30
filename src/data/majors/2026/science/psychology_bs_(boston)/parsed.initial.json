@@ -2,7 +2,7 @@
   "name": "Psychology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -130,15 +130,9 @@
       "title": "Statistics",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 2320
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 2320
         }
       ],
       "minRequirementCount": 1
@@ -216,7 +210,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 48,
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
@@ -295,11 +289,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Educational Psychology",
+      "title": "Supporting Courses",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 16,
+          "numCreditsMin": 11,
           "courses": [
             {
               "type": "COURSE",
@@ -320,20 +314,7 @@
               "type": "COURSE",
               "subject": "EDUC",
               "classId": 5570
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Society and Psychology",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 36,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ANTH",
@@ -378,20 +359,7 @@
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 1295
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Forensic Psychology",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CRIM",
@@ -411,20 +379,7 @@
               "type": "COURSE",
               "subject": "CRIM",
               "classId": 3120
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Cross-Cultural Psychology",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ANTH",
@@ -439,20 +394,7 @@
               "type": "COURSE",
               "subject": "LING",
               "classId": 3442
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Expressive Therapy",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 52,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "MUSC",
@@ -504,63 +446,35 @@
               "classId": 1220
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1230
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1231
-                }
-              ]
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1230
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1240
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1241
-                }
-              ]
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1231
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1250
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1251
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Counseling and Applied Psychology",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 28,
-          "courses": [
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1241
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1250
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1251
+            },
             {
               "type": "COURSE",
               "subject": "CAEP",
@@ -595,20 +509,7 @@
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 1295
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Artificial Intelligence and Information Science",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CS",
@@ -628,20 +529,7 @@
               "type": "COURSE",
               "subject": "CS",
               "classId": 4120
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Language",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 36,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "DEAF",
@@ -686,20 +574,7 @@
               "type": "COURSE",
               "subject": "SLPA",
               "classId": 1205
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Human Resource Management and Business",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 24,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "INTB",
@@ -729,20 +604,7 @@
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 1280
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Philosophy of Science and Psychology",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 24,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "PHIL",
@@ -772,20 +634,7 @@
               "type": "COURSE",
               "subject": "PHIL",
               "classId": 4535
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Ethics",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 20,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "PHIL",
@@ -810,49 +659,26 @@
               "type": "COURSE",
               "subject": "PHIL",
               "classId": 3435
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Biological and Chemical Sciences",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 60,
-          "courses": [
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1111
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1112
-                }
-              ]
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1113
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1114
-                }
-              ]
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1112
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1114
             },
             {
               "type": "COURSE",
@@ -870,34 +696,24 @@
               "classId": 1149
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 2217
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 2218
-                }
-              ]
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2217
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 2219
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 2220
-                }
-              ]
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2218
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2219
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2220
             },
             {
               "type": "COURSE",
@@ -915,83 +731,50 @@
               "classId": 3600
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1101
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1102
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1101
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1161
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1162
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1102
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1211
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1212
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1161
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1214
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CHEM",
-                  "classId": 1215
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1162
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1211
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1212
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1214
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1215
             },
             {
               "type": "COURSE",
               "subject": "EEMB",
               "classId": 2302
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Physical Sciences and Mathematics",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 20,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ENVR",
@@ -1016,20 +799,7 @@
               "type": "COURSE",
               "subject": "MATH",
               "classId": 4581
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Health and Wellness",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 56,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "BIOL",
@@ -1051,19 +821,14 @@
               "classId": 1149
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 2217
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 2218
-                }
-              ]
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2217
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2218
             },
             {
               "type": "COURSE",
@@ -1109,20 +874,7 @@
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 1295
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Communication, Culture, and Society",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 60,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "COMM",
@@ -1197,20 +949,7 @@
               "type": "COURSE",
               "subject": "LING",
               "classId": 3456
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Social Work Track",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "HUSV",
@@ -1230,20 +969,7 @@
               "type": "COURSE",
               "subject": "HUSV",
               "classId": 3900
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Mindfulness",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 48,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CAEP",
@@ -1303,6 +1029,828 @@
               "type": "COURSE",
               "subject": "PHIL",
               "classId": 2395
+            }
+          ],
+          "groups": [
+            {
+              "title": "Educational Psychology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EDUC",
+                  "classId": 1111
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EDUC",
+                  "classId": 5503
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EDUC",
+                  "classId": 5504
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EDUC",
+                  "classId": 5570
+                }
+              ]
+            },
+            {
+              "title": "Society and Psychology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 2302
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 2315
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INMI",
+                  "classId": 2810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INMI",
+                  "classId": 2820
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3412
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1255
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1295
+                }
+              ]
+            },
+            {
+              "title": "Forensic Psychology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 1120
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 2320
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 3110
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 3120
+                }
+              ]
+            },
+            {
+              "title": "Cross-Cultural Psychology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3412
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3442
+                }
+              ]
+            },
+            {
+              "title": "Expressive Therapy",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1118
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1125
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1130
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1180
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1215
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 2346
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1210
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1231
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1240
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1241
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTF",
+                  "classId": 1251
+                }
+              ]
+            },
+            {
+              "title": "Counseling and Applied Psychology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 3480
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 3485
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 2320
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2440
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 3520
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1295
+                }
+              ]
+            },
+            {
+              "title": "Artificial Intelligence and Information Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2484
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 3800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4120
+                }
+              ]
+            },
+            {
+              "title": "Language",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "DEAF",
+                  "classId": 2700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 2350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3412
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3422
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3442
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3450
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3452
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3456
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SLPA",
+                  "classId": 1205
+                }
+              ]
+            },
+            {
+              "title": "Human Resource Management and Business",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "INTB",
+                  "classId": 3310
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MISM",
+                  "classId": 2301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MKTG",
+                  "classId": 2209
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ORGB",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1170
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1280
+                }
+              ]
+            },
+            {
+              "title": "Philosophy of Science and Psychology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1115
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 3343
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 4500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 4510
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 4535
+                }
+              ]
+            },
+            {
+              "title": "Ethics",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1130
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1165
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1170
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1180
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 3435
+                }
+              ]
+            },
+            {
+              "title": "Biological and Chemical Sciences",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1111
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1112
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1113
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1114
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1141
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1147
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1149
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 2217
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 2218
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 2219
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 2220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 3405
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 5585
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 3600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1102
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1161
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1162
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1211
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1212
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1214
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 1215
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2302
+                }
+              ]
+            },
+            {
+              "title": "Physical Sciences and Mathematics",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1110
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 4581
+                }
+              ]
+            },
+            {
+              "title": "Health and Wellness",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1141
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1143
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1147
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1149
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 2217
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 2218
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 1105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 1106
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 1205
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1165
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1180
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1185
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PT",
+                  "classId": 1880
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1295
+                }
+              ]
+            },
+            {
+              "title": "Communication, Culture, and Society",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 1131
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 1255
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2304
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2551
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3304
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 4535
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 4605
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 4625
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INMI",
+                  "classId": 2810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INMI",
+                  "classId": 2820
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3412
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3442
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LING",
+                  "classId": 3456
+                }
+              ]
+            },
+            {
+              "title": "Social Work Track",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2355
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2970
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 3900
+                }
+              ]
+            },
+            {
+              "title": "Mindfulness",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 1280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 1290
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 2280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 2290
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 3899
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 5002
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1130
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1133
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1275
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1290
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 2395
+                }
+              ]
             }
           ]
         }

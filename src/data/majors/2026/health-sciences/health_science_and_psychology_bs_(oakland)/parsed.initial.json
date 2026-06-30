@@ -2,7 +2,7 @@
   "name": "Health Science and Psychology, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -159,15 +159,9 @@
       "title": "Statistics",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 2320
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 2320
         }
       ],
       "minRequirementCount": 1

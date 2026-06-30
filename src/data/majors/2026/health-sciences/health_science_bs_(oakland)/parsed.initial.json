@@ -2,7 +2,7 @@
   "name": "Health Science, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -154,11 +154,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Society and Health",
+      "title": "Selectives",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 76,
+          "numCreditsMin": 9,
           "courses": [
             {
               "type": "COURSE",
@@ -186,19 +186,14 @@
               "classId": 1300
             },
             {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "PHTH",
-                  "classId": 1270
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "AFCS",
-                  "classId": 1270
-                }
-              ]
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 1270
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 1270
             },
             {
               "type": "COURSE",
@@ -264,20 +259,7 @@
               "type": "COURSE",
               "subject": "WMNS",
               "classId": 1225
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Policy and Administration",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 60,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ECON",
@@ -352,20 +334,7 @@
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 3241
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Nutrition and Wellness",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 60,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CAEP",
@@ -440,34 +409,16 @@
               "type": "COURSE",
               "subject": "PSYC",
               "classId": 1250
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Digital Health",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 24,
-          "courses": [
+            },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 2000
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 2001
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2001
             },
             {
               "type": "COURSE",
@@ -493,20 +444,7 @@
               "type": "COURSE",
               "subject": "HINF",
               "classId": 5300
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Health Data Science",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 20,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ANTH",
@@ -531,6 +469,343 @@
               "type": "COURSE",
               "subject": "POLS",
               "classId": 2399
+            }
+          ],
+          "groups": [
+            {
+              "title": "Society and Health",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 3441
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 3040
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 5280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INMI",
+                  "classId": 2820
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 1300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 1270
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "AFCS",
+                  "classId": 1270
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 2414
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 2616
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5222
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5234
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1245
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1246
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1295
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 2303
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 2485
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 3441
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 4522
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "WMNS",
+                  "classId": 1225
+                }
+              ]
+            },
+            {
+              "title": "Policy and Administration",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 1230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3404
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 3900
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INMI",
+                  "classId": 1877
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INNO",
+                  "classId": 2206
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LPSC",
+                  "classId": 2301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MGMT",
+                  "classId": 3340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ORGB",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4511
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5232
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5234
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 2395
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3309
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 3241
+                }
+              ]
+            },
+            {
+              "title": "Nutrition and Wellness",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 1280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 1290
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 2012
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 2101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2555
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EXSC",
+                  "classId": 1120
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EXSC",
+                  "classId": 4500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EXSC",
+                  "classId": 5200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EXSC",
+                  "classId": 5220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 1105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 1106
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 2350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 2500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 1250
+                }
+              ]
+            },
+            {
+              "title": "Digital Health",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2001
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HINF",
+                  "classId": 5101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HINF",
+                  "classId": 5200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HINF",
+                  "classId": 5300
+                }
+              ]
+            },
+            {
+              "title": "Health Data Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 3410
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 5312
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 3065
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5202
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 2399
+                }
+              ]
             }
           ]
         }

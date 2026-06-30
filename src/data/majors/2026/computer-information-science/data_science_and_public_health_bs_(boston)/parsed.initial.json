@@ -2,7 +2,7 @@
   "name": "Data Science and Public Health, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 136,
@@ -144,7 +144,8 @@
       "title": "Introduction to College",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 1,
           "courses": [
             {
               "type": "COURSE",
@@ -262,7 +263,8 @@
       "title": "Professional Development",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 1,
           "courses": [
             {
               "type": "COURSE",

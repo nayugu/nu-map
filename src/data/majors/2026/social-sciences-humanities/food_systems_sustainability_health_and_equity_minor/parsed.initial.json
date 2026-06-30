@@ -2,7 +2,7 @@
   "name": "Food Systems Sustainability, Health, and Equity, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -10,11 +10,11 @@
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "First-Level Courses",
+      "title": "Required Courses",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 16,
           "courses": [
             {
               "type": "COURSE",
@@ -55,20 +55,7 @@
               "type": "COURSE",
               "subject": "PHIL",
               "classId": 1185
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Upper-Level Courses",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 32,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ECON",
@@ -80,19 +67,14 @@
               "classId": 3150
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ENVR",
-                  "classId": 3300
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ENVR",
-                  "classId": 3301
-                }
-              ]
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3300
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3301
             },
             {
               "type": "COURSE",
@@ -118,6 +100,103 @@
               "type": "COURSE",
               "subject": "PPUA",
               "classId": 5270
+            }
+          ],
+          "groups": [
+            {
+              "title": "First-Level Courses",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 2305
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2401
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 1106
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2401
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INNO",
+                  "classId": 2206
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 1102
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1185
+                }
+              ]
+            },
+            {
+              "title": "Upper-Level Courses",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3404
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3850
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INNO",
+                  "classId": 4506
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5236
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5263
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5270
+                }
+              ]
             }
           ]
         }

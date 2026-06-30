@@ -2,7 +2,7 @@
   "name": "English and Political Science, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 129,
@@ -56,7 +56,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 24,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -99,7 +99,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 40,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -471,11 +471,17 @@
       "title": "Political Science Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "POLS",
-          "idRangeStart": 2000,
-          "idRangeEnd": 9999,
-          "exceptions": []
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 2000,
+              "idRangeEnd": 9999,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

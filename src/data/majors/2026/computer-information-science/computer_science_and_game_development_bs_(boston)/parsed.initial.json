@@ -2,7 +2,7 @@
   "name": "Computer Science and Game Development, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 135,
@@ -375,7 +375,8 @@
           "classId": 1260
         },
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

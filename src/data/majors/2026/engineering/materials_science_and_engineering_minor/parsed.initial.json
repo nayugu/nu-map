@@ -2,7 +2,7 @@
   "name": "Materials Science and Engineering, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -22,29 +22,17 @@
     },
     {
       "type": "SECTION",
-      "title": "Bioengineering",
+      "title": "Electives",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 11,
           "courses": [
             {
               "type": "COURSE",
               "subject": "BIOE",
               "classId": 5820
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Chemical Engineering",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 20,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CHME",
@@ -69,52 +57,22 @@
               "type": "COURSE",
               "subject": "CHME",
               "classId": 5683
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Civil and Environmental Engineering",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CIVE",
-                  "classId": 2260
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CIVE",
-                  "classId": 2261
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2260
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2261
             },
             {
               "type": "COURSE",
               "subject": "CIVE",
               "classId": 5275
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Electrical and Computer Engineering",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "EECE",
@@ -129,20 +87,7 @@
               "type": "COURSE",
               "subject": "EECE",
               "classId": 5670
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Materials Engineering",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "MATL",
@@ -157,20 +102,7 @@
               "type": "COURSE",
               "subject": "MATL",
               "classId": 6285
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Mechanical and Industrial Engineering",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ME",
@@ -185,19 +117,7 @@
               "type": "COURSE",
               "subject": "ME",
               "classId": 5640
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Chemistry and Chemical Biology",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CHEM",
@@ -207,6 +127,143 @@
               "type": "COURSE",
               "subject": "CHEM",
               "classId": 5651
+            }
+          ],
+          "groups": [
+            {
+              "title": "Bioengineering",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIOE",
+                  "classId": 5820
+                }
+              ]
+            },
+            {
+              "title": "Chemical Engineering",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CHME",
+                  "classId": 5105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHME",
+                  "classId": 5160
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHME",
+                  "classId": 5631
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHME",
+                  "classId": 5632
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHME",
+                  "classId": 5683
+                }
+              ]
+            },
+            {
+              "title": "Civil and Environmental Engineering",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2261
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 5275
+                }
+              ]
+            },
+            {
+              "title": "Electrical and Computer Engineering",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 3392
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5606
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5670
+                }
+              ]
+            },
+            {
+              "title": "Materials Engineering",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MATL",
+                  "classId": 6250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATL",
+                  "classId": 6270
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATL",
+                  "classId": 6285
+                }
+              ]
+            },
+            {
+              "title": "Mechanical and Industrial Engineering",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ME",
+                  "classId": 5600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ME",
+                  "classId": 5620
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ME",
+                  "classId": 5640
+                }
+              ]
+            },
+            {
+              "title": "Chemistry and Chemical Biology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 3501
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 5651
+                }
+              ]
             }
           ]
         }

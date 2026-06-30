@@ -2,7 +2,7 @@
   "name": "Economics and Psychology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -72,15 +72,9 @@
       "title": "Statistics",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 2320
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 2320
         }
       ],
       "minRequirementCount": 1
@@ -397,8 +391,7 @@
       "title": "Combined Major Credit/ GPA Requirement",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

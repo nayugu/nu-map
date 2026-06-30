@@ -2,7 +2,7 @@
   "name": "Environmental Engineering, BSEnvE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -253,15 +253,9 @@
       "title": "Supplemental Credit (Engineering Requirements)",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CIVE",
-              "classId": 3464
-            }
-          ]
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 3464
         },
         {
           "type": "XOM",
@@ -285,26 +279,14 @@
           ]
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 2,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 3,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1502
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1502
         }
       ],
       "minRequirementCount": 4
@@ -423,15 +405,9 @@
       "title": "Supplemental Credit (Supporting Courses: Mathematics/Science)",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 3,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CIVE",
-              "classId": 3464
-            }
-          ]
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 3464
         },
         {
           "type": "XOM",
@@ -455,15 +431,9 @@
           ]
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         }
       ],
       "minRequirementCount": 3
@@ -495,26 +465,14 @@
       "title": "Additional Required Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1501
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 1,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 1502
-            }
-          ]
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1502
         }
       ],
       "minRequirementCount": 2

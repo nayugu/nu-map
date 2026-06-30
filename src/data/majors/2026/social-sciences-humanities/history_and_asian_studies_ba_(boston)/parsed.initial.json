@@ -2,7 +2,7 @@
   "name": "History and Asian Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -53,7 +53,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 20,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -130,7 +130,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 16,
           "courses": [
             {
               "type": "COURSE",
@@ -203,7 +203,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 52,
+          "numCreditsMin": 12,
           "courses": [
             {
               "type": "COURSE",

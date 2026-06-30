@@ -2,7 +2,7 @@
   "name": "Additional Requirements for BA Students",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -13,8 +13,7 @@
       "title": "Course Lists",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 44,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

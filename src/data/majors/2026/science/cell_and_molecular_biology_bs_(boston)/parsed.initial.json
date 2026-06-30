@@ -2,7 +2,7 @@
   "name": "Cell and Molecular Biology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -233,7 +233,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 16,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

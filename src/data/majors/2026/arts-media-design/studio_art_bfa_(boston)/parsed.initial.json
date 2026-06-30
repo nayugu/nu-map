@@ -2,7 +2,7 @@
   "name": "Studio Art, BFA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 138,
@@ -45,14 +45,9 @@
       "title": "Studio Art",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "SMFA",
-              "classId": 3000
-            }
-          ]
+          "type": "COURSE",
+          "subject": "SMFA",
+          "classId": 3000
         }
       ],
       "minRequirementCount": 1
@@ -62,15 +57,9 @@
       "title": "Senior Thesis Capstone",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "SMFA",
-              "classId": 4000
-            }
-          ]
+          "type": "COURSE",
+          "subject": "SMFA",
+          "classId": 4000
         }
       ],
       "minRequirementCount": 1

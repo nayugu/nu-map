@@ -2,7 +2,7 @@
   "name": "Computer Science, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -65,15 +65,21 @@
       "title": "Computer Science Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "CY",
-          "idRangeStart": 3000,
-          "idRangeEnd": 9999,
-          "exceptions": [
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
             {
-              "type": "COURSE",
+              "type": "RANGE",
               "subject": "CY",
-              "classId": 4930
+              "idRangeStart": 3000,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 4930
+                }
+              ]
             }
           ]
         }
@@ -85,8 +91,7 @@
       "title": "Bouvé Health Sciences",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -118,8 +123,7 @@
       "title": "Arts, Media and Design",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 56,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -201,8 +205,7 @@
       "title": "Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -259,8 +262,7 @@
       "title": "Khoury Computer Sciences",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -295,8 +297,7 @@
       "title": "Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 84,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -413,8 +414,7 @@
       "title": "Social Science and Humanities",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 36,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -481,8 +481,7 @@
       "title": "D'Amore-McKim School of Business",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -529,8 +528,7 @@
       "title": "Statistics Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 52,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

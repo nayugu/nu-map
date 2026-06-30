@@ -2,7 +2,7 @@
   "name": "Sociology and Environmental Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -53,7 +53,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 28,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -89,7 +89,13 @@
                   "classId": 1401
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
             {
               "type": "COURSE",
               "subject": "ANTH",
@@ -113,7 +119,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -327,7 +333,8 @@
       "title": "Research Methods",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "OR",
@@ -406,7 +413,8 @@
       "title": "Integrative Requirements",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",

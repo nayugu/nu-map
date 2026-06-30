@@ -2,7 +2,7 @@
   "name": "Linguistics and Communication Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -73,14 +73,9 @@
       "title": "Linguistics Electives",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "DEAF",
-              "classId": 2700
-            }
-          ]
+          "type": "COURSE",
+          "subject": "DEAF",
+          "classId": 2700
         }
       ],
       "minRequirementCount": 1
@@ -113,7 +108,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 16,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -146,7 +141,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 20,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -184,7 +179,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 52,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

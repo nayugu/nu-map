@@ -2,7 +2,7 @@
   "name": "Environmental and Sustainability Sciences and Journalism, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 135,
@@ -116,7 +116,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 116,
+          "numCreditsMin": 16,
           "courses": [
             {
               "type": "COURSE",
@@ -532,8 +532,7 @@
       "title": "Journalism GPA Requirement",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "AND",

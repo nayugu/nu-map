@@ -2,7 +2,7 @@
   "name": "Political Science and Economics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 128,
@@ -163,32 +163,43 @@
     },
     {
       "type": "SECTION",
-      "title": "Combination A",
+      "title": "Supporting Courses",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
               "subject": "POLS",
               "classId": 2400
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Combination B",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ECON",
               "classId": 2350
+            }
+          ],
+          "groups": [
+            {
+              "title": "Combination A",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 2400
+                }
+              ]
+            },
+            {
+              "title": "Combination B",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 2350
+                }
+              ]
             }
           ]
         }
@@ -232,8 +243,7 @@
       "title": "Combined Major GPA/Credit Requirement:",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

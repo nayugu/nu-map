@@ -2,7 +2,7 @@
   "name": "Social Activism, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -10,67 +10,74 @@
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Communication Studies",
+      "title": "Introductory Courses",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
               "subject": "COMM",
               "classId": 1412
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Political Science (Introductory Courses)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "POLS",
               "classId": 1150
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Sociology (Introductory Courses)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 1246
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Theatre",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "THTR",
               "classId": 1215
             }
+          ],
+          "groups": [
+            {
+              "title": "Communication Studies",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 1412
+                }
+              ]
+            },
+            {
+              "title": "Political Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 1150
+                }
+              ]
+            },
+            {
+              "title": "Sociology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 1246
+                }
+              ]
+            },
+            {
+              "title": "Theatre",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1215
+                }
+              ]
+            }
           ]
         }
       ],
@@ -78,49 +85,58 @@
     },
     {
       "type": "SECTION",
-      "title": "Law and Public Policy",
+      "title": "Intermediate/Advanced Courses",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 12,
           "courses": [
             {
               "type": "COURSE",
               "subject": "LPSC",
               "classId": 2301
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Political Science (Intermediate/Advanced Courses)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "POLS",
               "classId": 2395
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Sociology (Intermediate/Advanced Courses)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 3468
+            }
+          ],
+          "groups": [
+            {
+              "title": "Law and Public Policy",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "LPSC",
+                  "classId": 2301
+                }
+              ]
+            },
+            {
+              "title": "Political Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 2395
+                }
+              ]
+            },
+            {
+              "title": "Sociology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 3468
+                }
+              ]
             }
           ]
         }

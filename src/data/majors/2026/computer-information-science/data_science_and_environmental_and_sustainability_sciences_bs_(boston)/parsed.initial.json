@@ -2,7 +2,7 @@
   "name": "Data Science and Environmental and Sustainability Sciences, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -343,7 +343,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 120,
+          "numCreditsMin": 16,
           "courses": [
             {
               "type": "COURSE",

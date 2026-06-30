@@ -2,7 +2,7 @@
   "name": "Data Science and Journalism, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 135,
@@ -191,47 +191,48 @@
       "title": "Khoury Approved Electives",
       "requirements": [
         {
-          "type": "RANGE",
-          "subject": "CS",
-          "idRangeStart": 2500,
-          "idRangeEnd": 9999,
-          "exceptions": [
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 5010
-            }
-          ]
-        },
-        {
-          "type": "RANGE",
-          "subject": "CY",
-          "idRangeStart": 2000,
-          "idRangeEnd": 9999,
-          "exceptions": [
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 4930
-            }
-          ]
-        },
-        {
-          "type": "RANGE",
-          "subject": "DS",
-          "idRangeStart": 2500,
-          "idRangeEnd": 9999,
-          "exceptions": [
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 4900
-            }
-          ]
-        },
-        {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 4,
           "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 2500,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5010
+                }
+              ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "CY",
+              "idRangeStart": 2000,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 4930
+                }
+              ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "DS",
+              "idRangeStart": 2500,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4900
+                }
+              ]
+            },
             {
               "type": "COURSE",
               "subject": "MKTG",
@@ -240,15 +241,14 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
       "title": "Journalism Major Requirements",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

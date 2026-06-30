@@ -2,7 +2,7 @@
   "name": "Psychology and Design, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -25,14 +25,9 @@
       "title": "Statistics",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 2320
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 2320
         }
       ],
       "minRequirementCount": 1
@@ -272,10 +267,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Creative Fabrication",
+      "title": "Design Option",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
@@ -286,19 +282,7 @@
               "type": "COURSE",
               "subject": "ARTG",
               "classId": 3810
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Experience Design Option",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ARTG",
@@ -308,19 +292,7 @@
               "type": "COURSE",
               "subject": "ARTG",
               "classId": 3464
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Graphic Design Option",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ARTG",
@@ -330,19 +302,7 @@
               "type": "COURSE",
               "subject": "ARTG",
               "classId": 3452
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Information Design Option",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "ARTG",
@@ -352,21 +312,86 @@
               "type": "COURSE",
               "subject": "ARTG",
               "classId": 3444
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Interaction Design Option",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
-              "type": "AND",
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2401
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3400
+            }
+          ],
+          "groups": [
+            {
+              "title": "Creative Fabrication",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3810
+                }
+              ]
+            },
+            {
+              "title": "Experience Design Option",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3462
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3464
+                }
+              ]
+            },
+            {
+              "title": "Graphic Design Option",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2252
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3452
+                }
+              ]
+            },
+            {
+              "title": "Information Design Option",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2242
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3444
+                }
+              ]
+            },
+            {
+              "title": "Interaction Design Option",
               "courses": [
                 {
                   "type": "COURSE",
@@ -377,13 +402,13 @@
                   "type": "COURSE",
                   "subject": "ARTG",
                   "classId": 2401
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3400
                 }
               ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 3400
             }
           ]
         }

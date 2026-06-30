@@ -2,7 +2,7 @@
   "name": "Linguistics and Cultural Anthropology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 128,
@@ -125,14 +125,9 @@
       "title": "Linguistics Elective",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "DEAF",
-              "classId": 2700
-            }
-          ]
+          "type": "COURSE",
+          "subject": "DEAF",
+          "classId": 2700
         }
       ],
       "minRequirementCount": 1

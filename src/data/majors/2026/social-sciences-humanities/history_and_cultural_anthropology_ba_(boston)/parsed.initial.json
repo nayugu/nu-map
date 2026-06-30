@@ -2,7 +2,7 @@
   "name": "History and Cultural Anthropology, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -53,7 +53,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 48,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

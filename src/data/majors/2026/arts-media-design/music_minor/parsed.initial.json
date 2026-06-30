@@ -2,7 +2,7 @@
   "name": "Music, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -273,8 +273,7 @@
       "title": "Lessons and Ensembles",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 64,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

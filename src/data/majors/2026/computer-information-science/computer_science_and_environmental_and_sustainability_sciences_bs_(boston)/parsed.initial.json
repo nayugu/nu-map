@@ -2,7 +2,7 @@
   "name": "Computer Science and Environmental and Sustainability Sciences, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -320,14 +320,9 @@
       "title": "Environmental and Sustainability Sciences Electives",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 4970
-            }
-          ]
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 4970
         }
       ],
       "minRequirementCount": 1
@@ -337,8 +332,7 @@
       "title": "Earth Oceans and Environmental Change",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 32,
+          "type": "OR",
           "courses": [
             {
               "type": "AND",
@@ -430,8 +424,7 @@
       "title": "Conservation, Restoration, and Management",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -478,8 +471,7 @@
       "title": "Sustainable Planning and Development",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -526,8 +518,7 @@
       "title": "Environment and Society",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

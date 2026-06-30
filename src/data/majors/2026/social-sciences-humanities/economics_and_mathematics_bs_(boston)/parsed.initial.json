@@ -2,7 +2,7 @@
   "name": "Economics and Mathematics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 129,
@@ -109,7 +109,8 @@
       "title": "Mathematics Electives",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
@@ -212,8 +213,7 @@
       "title": "Combined Major GPA/Credit Requirement",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

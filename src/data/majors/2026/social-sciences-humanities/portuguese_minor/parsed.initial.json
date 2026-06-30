@@ -2,7 +2,7 @@
   "name": "Portuguese, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -14,7 +14,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 20,
+          "numCreditsMin": 16,
           "courses": [
             {
               "type": "OR",
@@ -72,7 +72,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 20,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

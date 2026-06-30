@@ -2,7 +2,7 @@
   "name": "Political Communication, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -48,10 +48,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Communication Studies",
+      "title": "Intermediate/Advanced Courses",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 16,
           "courses": [
             {
               "type": "COURSE",
@@ -62,19 +63,7 @@
               "type": "COURSE",
               "subject": "COMM",
               "classId": 3409
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Journalism",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "JRNL",
@@ -84,23 +73,53 @@
               "type": "COURSE",
               "subject": "JRNL",
               "classId": 3550
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Political Science",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "POLS",
               "classId": 3310
+            }
+          ],
+          "groups": [
+            {
+              "title": "Communication Studies",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3320
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3409
+                }
+              ]
+            },
+            {
+              "title": "Journalism",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 2350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3550
+                }
+              ]
+            },
+            {
+              "title": "Political Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3310
+                }
+              ]
             }
           ]
         }

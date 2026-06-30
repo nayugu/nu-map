@@ -2,7 +2,7 @@
   "name": "Media and Screen Studies and History, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -143,7 +143,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 12,
           "courses": [
             {
               "type": "AND",
@@ -240,7 +240,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 48,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

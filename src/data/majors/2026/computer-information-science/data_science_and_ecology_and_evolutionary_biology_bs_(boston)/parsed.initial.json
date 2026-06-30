@@ -2,7 +2,7 @@
   "name": "Data Science and Ecology and Evolutionary Biology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 136,
@@ -355,8 +355,7 @@
       "title": "Evolution of Organisms",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "AND",
@@ -393,8 +392,7 @@
       "title": "Ecology and Conservation Biology",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 36,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -451,8 +449,7 @@
       "title": "Analytical Skills",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

@@ -2,7 +2,7 @@
   "name": "Politics, Philosophy, and Economics and Business Administration, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -327,8 +327,7 @@
       "title": "Business Experiential Learning",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

@@ -2,7 +2,7 @@
   "name": "Theatre, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -58,7 +58,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 160,
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "AND",

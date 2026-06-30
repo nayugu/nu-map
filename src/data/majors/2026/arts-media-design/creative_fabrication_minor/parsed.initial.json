@@ -2,7 +2,7 @@
   "name": "Creative Fabrication, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -52,11 +52,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Art + Design",
+      "title": "Electives",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 20,
+          "numCreditsMin": 16,
           "courses": [
             {
               "type": "COURSE",
@@ -82,20 +82,7 @@
               "type": "COURSE",
               "subject": "ARTG",
               "classId": 5000
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Theatre",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "THTR",
@@ -115,34 +102,16 @@
               "type": "COURSE",
               "subject": "THTR",
               "classId": 2400
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Architecture",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
+            },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARCH",
-                  "classId": 1110
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARCH",
-                  "classId": 1120
-                }
-              ]
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 1110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 1120
             },
             {
               "type": "COURSE",
@@ -153,20 +122,7 @@
               "type": "COURSE",
               "subject": "ARCH",
               "classId": 3450
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Engineering",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "GE",
@@ -181,6 +137,108 @@
               "type": "COURSE",
               "subject": "GE",
               "classId": 5030
+            }
+          ],
+          "groups": [
+            {
+              "title": "Art + Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 5000
+                }
+              ]
+            },
+            {
+              "title": "Theatre",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1131
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 1270
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 2385
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "THTR",
+                  "classId": 2400
+                }
+              ]
+            },
+            {
+              "title": "Architecture",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 1110
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 1120
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 2240
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARCH",
+                  "classId": 3450
+                }
+              ]
+            },
+            {
+              "title": "Engineering",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "GE",
+                  "classId": 1501
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GE",
+                  "classId": 1502
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GE",
+                  "classId": 5030
+                }
+              ]
             }
           ]
         }

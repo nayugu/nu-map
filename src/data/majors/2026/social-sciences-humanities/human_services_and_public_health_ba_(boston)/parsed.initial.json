@@ -2,7 +2,7 @@
   "name": "Human Services and Public Health, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -584,11 +584,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Bouvé",
+      "title": "Capstone",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 52,
+          "numCreditsMin": 3,
           "courses": [
             {
               "type": "COURSE",
@@ -611,19 +611,14 @@
               "classId": 4740
             },
             {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "HSCI",
-                  "classId": 4970
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "HSCI",
-                  "classId": 4971
-                }
-              ]
+              "type": "COURSE",
+              "subject": "HSCI",
+              "classId": 4970
+            },
+            {
+              "type": "COURSE",
+              "subject": "HSCI",
+              "classId": 4971
             },
             {
               "type": "COURSE",
@@ -664,23 +659,98 @@
               "type": "COURSE",
               "subject": "PHTH",
               "classId": 5603
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "College of Social Sciences and Humanities",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "HUSV",
               "classId": 4700
+            }
+          ],
+          "groups": [
+            {
+              "title": "Bouvé",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "HINF",
+                  "classId": 5301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4720
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4730
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4740
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4970
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4971
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4515
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4602
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4616
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4717
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5214
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5236
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5603
+                }
+              ]
+            },
+            {
+              "title": "College of Social Sciences and Humanities",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 4700
+                }
+              ]
             }
           ]
         }

@@ -2,7 +2,7 @@
   "name": "International Affairs and Criminal Justice, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -316,28 +316,22 @@
       "title": "Co-op Integration Requirements",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EESH",
-              "classId": 2000
-            },
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 3000
-            },
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 4000
-            }
-          ]
+          "type": "COURSE",
+          "subject": "EESH",
+          "classId": 2000
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 4000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 3
     },
     {
       "type": "SECTION",

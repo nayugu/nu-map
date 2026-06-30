@@ -2,7 +2,7 @@
   "name": "Global Health, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -59,11 +59,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Area 1: Community and Public Health",
+      "title": "Elective Courses",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 9,
           "courses": [
             {
               "type": "COURSE",
@@ -91,24 +91,19 @@
               "classId": 2301
             },
             {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "PHTH",
-                  "classId": 2350
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "PHTH",
-                  "classId": 2351
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "NRSG",
-                  "classId": 4604
-                }
-              ]
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 2351
+            },
+            {
+              "type": "COURSE",
+              "subject": "NRSG",
+              "classId": 4604
             },
             {
               "type": "COURSE",
@@ -119,20 +114,7 @@
               "type": "COURSE",
               "subject": "PHTH",
               "classId": 4540
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Area 2: Biology of Health and Disease",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "BIOL",
@@ -152,20 +134,7 @@
               "type": "COURSE",
               "subject": "EEMB",
               "classId": 3466
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Area 3: Society and Cultural Health / Area Studies",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 32,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "AFCS",
@@ -202,38 +171,20 @@
               "classId": 1165
             },
             {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "WMNS",
-                  "classId": 3100
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "POLS",
-                  "classId": 3100
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ANTH",
-                  "classId": 3100
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Area 4: Globalization and Development",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 36,
-          "courses": [
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 3100
+            },
             {
               "type": "COURSE",
               "subject": "CRIM",
@@ -278,6 +229,193 @@
               "type": "COURSE",
               "subject": "POLS",
               "classId": 1160
+            }
+          ],
+          "groups": [
+            {
+              "title": "Area 1: Community and Public Health",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "AFCS",
+                  "classId": 4939
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CAEP",
+                  "classId": 2050
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1110
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 1261
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 2301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 2350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 2351
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "NRSG",
+                  "classId": 4604
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4202
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4540
+                }
+              ]
+            },
+            {
+              "title": "Area 2: Biology of Health and Disease",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1141
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1143
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 2327
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 3466
+                }
+              ]
+            },
+            {
+              "title": "Area 3: Society and Cultural Health / Area Studies",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "AFCS",
+                  "classId": 2900
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 4350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 4510
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 1230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HIST",
+                  "classId": 2233
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LACS",
+                  "classId": 1220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1165
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "WMNS",
+                  "classId": 3100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 3100
+                }
+              ]
+            },
+            {
+              "title": "Area 4: Globalization and Development",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 1400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3291
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3404
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3413
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3416
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 5292
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 2100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INTL",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 1160
+                }
+              ]
             }
           ]
         }

@@ -2,7 +2,7 @@
   "name": "Speech-Language Pathology and Audiology and Behavioral Neuroscience, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -286,7 +286,13 @@
               "type": "COURSE",
               "subject": "PSYC",
               "classId": 4570
-            },
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
             {
               "type": "RANGE",
               "subject": "BIOL",
@@ -311,7 +317,7 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 3
     },
     {
       "type": "SECTION",

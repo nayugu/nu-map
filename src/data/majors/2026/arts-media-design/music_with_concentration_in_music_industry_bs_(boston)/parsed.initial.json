@@ -2,7 +2,7 @@
   "name": "Music with Concentration in Music Industry, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -464,7 +464,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 132,
+          "numCreditsMin": 28,
           "courses": [
             {
               "type": "COURSE",

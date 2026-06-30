@@ -2,7 +2,7 @@
   "name": "Economics, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -146,8 +146,7 @@
       "title": "Major GPA/Credit Requirement",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

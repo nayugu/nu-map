@@ -2,7 +2,7 @@
   "name": "Data Science, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -99,8 +99,7 @@
       "title": "Arts, Media and Design",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -162,8 +161,7 @@
       "title": "Bouvé Health Sciences",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -195,8 +193,7 @@
       "title": "D'Amore-McKim—Business",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -280,8 +277,7 @@
       "title": "Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -318,8 +314,7 @@
       "title": "Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 32,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -371,8 +366,7 @@
       "title": "Social Science and Humanities",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

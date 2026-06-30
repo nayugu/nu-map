@@ -2,7 +2,7 @@
   "name": "Economics and Criminal Justice, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "5/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -270,8 +270,7 @@
       "title": "Combined Major GPA/Credit Requirements",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

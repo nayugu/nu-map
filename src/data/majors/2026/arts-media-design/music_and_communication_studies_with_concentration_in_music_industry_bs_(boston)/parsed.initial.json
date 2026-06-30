@@ -2,7 +2,7 @@
   "name": "Music and Communication Studies with Concentration in Music Industry, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -103,7 +103,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 140,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -671,30 +671,41 @@
     },
     {
       "type": "SECTION",
-      "title": "Music Option",
+      "title": "Integrative Requirement",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
               "subject": "MUSI",
               "classId": 4601
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Communication Studies Option",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
-              "type": "OR",
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4608
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4625
+            }
+          ],
+          "groups": [
+            {
+              "title": "Music Option",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 4601
+                }
+              ]
+            },
+            {
+              "title": "Communication Studies Option",
               "courses": [
                 {
                   "type": "COURSE",

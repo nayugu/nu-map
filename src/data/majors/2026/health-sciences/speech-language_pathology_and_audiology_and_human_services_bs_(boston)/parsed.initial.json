@@ -2,7 +2,7 @@
   "name": "Speech-Language Pathology and Audiology and Human Services, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "6/18/2026",
+    "lastEdited": "6/30/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -141,13 +141,51 @@
     },
     {
       "type": "SECTION",
-      "title": "Option 1: Co-op",
+      "title": "Co-op or Internship Requirement",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 5,
           "courses": [
             {
-              "type": "OR",
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3945
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3946
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3947
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3948
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESH",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "SLPA",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 4994
+            }
+          ],
+          "groups": [
+            {
+              "title": "Option 1: Co-op",
               "courses": [
                 {
                   "type": "COURSE",
@@ -168,12 +206,7 @@
                   "type": "COURSE",
                   "subject": "COOP",
                   "classId": 3948
-                }
-              ]
-            },
-            {
-              "type": "OR",
-              "courses": [
+                },
                 {
                   "type": "COURSE",
                   "subject": "EESH",
@@ -185,23 +218,16 @@
                   "classId": 2000
                 }
               ]
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Option 2: Internship",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
-              "type": "COURSE",
-              "subject": "HUSV",
-              "classId": 4994
+              "title": "Option 2: Internship",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 4994
+                }
+              ]
             }
           ]
         }
