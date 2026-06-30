@@ -919,23 +919,24 @@ export default function GradPanel({ wideCatalog = false }) {
           <div
             style={{ display: "flex", alignItems: "center", gap: 8, userSelect: "none", marginBottom: showProgram ? 4 : 0 }}
           >
-            {/* Heading reads as "Undergrad Program Selection" — the type word is inline
-                but tappable to surface the switch-plan prompt. */}
+            {/* Heading reads as "Undergrad Program Selection". On desktop the type
+                word is tappable to surface the switch-plan prompt; on phone it stays
+                a plain bold label — too cramped, and the prompt overflows. */}
             <span
               onClick={() => setShowProgram(v => !v)}
               style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, cursor: "pointer", flex: 1 }}
             >
               <span
-                onClick={(e) => { e.stopPropagation(); setShowSwitchPrompt(v => !v); }}
-                style={{ fontWeight: 700 }}
+                onClick={isPhone ? undefined : (e) => { e.stopPropagation(); setShowSwitchPrompt(v => !v); }}
+                style={{ fontWeight: 700, cursor: isPhone ? "inherit" : "pointer" }}
               >{isGrad ? "Graduate" : "Undergrad"}</span>
               {" "}{t("grad.programSelection")}
             </span>
             <span onClick={() => setShowProgram(v => !v)} style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1, cursor: "pointer", padding: "2px 0" }}>{showProgram ? "▼" : "▶"}</span>
           </div>
 
-          {/* Switch type prompt */}
-          {showSwitchPrompt && (
+          {/* Switch type prompt — desktop only (trigger is disabled on phone) */}
+          {showSwitchPrompt && !isPhone && (
             <div style={{
               marginBottom: 8, padding: "8px 10px", borderRadius: 6,
               background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
