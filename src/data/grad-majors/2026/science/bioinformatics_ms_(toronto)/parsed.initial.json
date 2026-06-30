@@ -102,28 +102,77 @@
         }
       ],
       "minRequirementCount": 4
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5225
-        },
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5228
-        },
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5500
-        }
-      ],
-      "minRequirementCount": 3
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Bioinformatics Enterprise",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5225
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5228
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5500
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Biotechnology",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5120
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5621
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOL",
+            "classId": 6299
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Omics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6400
+          },
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6420
+          },
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6430
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

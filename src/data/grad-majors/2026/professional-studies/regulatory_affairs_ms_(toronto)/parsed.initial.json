@@ -57,48 +57,10 @@
     },
     {
       "type": "SECTION",
-      "title": "Concentrations",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "RGA",
-          "classId": 6000
-        },
-        {
-          "type": "COURSE",
-          "subject": "RGA",
-          "classId": 6101
-        },
-        {
-          "type": "COURSE",
-          "subject": "RGA",
-          "classId": 6207
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "RGA",
-              "classId": 6217
-            },
-            {
-              "type": "COURSE",
-              "subject": "RGA",
-              "classId": 6235
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 4
-    },
-    {
-      "type": "SECTION",
       "title": "Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -120,5 +82,235 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Biopharmaceutical Regulatory Affairs",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6000
+          },
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6101
+          },
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6207
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6217
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6235
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Clinical Research Regulatory Affairs",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BTC",
+            "classId": 6211
+          },
+          {
+            "type": "COURSE",
+            "subject": "BTC",
+            "classId": 6213
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6000
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6001
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6101
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6202
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6228
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Medical Device Regulatory Affairs",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6001
+          },
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6202
+          },
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6233
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6205
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6222
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6243
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6275
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6370
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Nonclinical Biomedical Product Regulation",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6207
+          },
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6405
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6000
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6001
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Quality Assurance and Compliance",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6233
+          },
+          {
+            "type": "COURSE",
+            "subject": "RGA",
+            "classId": 6234
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6000
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6001
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6461
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6221
+              },
+              {
+                "type": "COURSE",
+                "subject": "RGA",
+                "classId": 6410
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

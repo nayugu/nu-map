@@ -31,18 +31,40 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Required Coursework",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "BIOL",
-          "classId": 6300
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Cell and Molecular Biology Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOL",
+            "classId": 6300
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Molecular Microbiology Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOL",
+            "classId": 6300
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOL",
+            "classId": 6405
+          }
+        ],
+        "minRequirementCount": 2
+      }
+    ]
+  }
 }

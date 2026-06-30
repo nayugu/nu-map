@@ -73,7 +73,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required (Accounting Requirements)",
+      "title": "Required",
       "requirements": [
         {
           "type": "COURSE",
@@ -132,33 +132,6 @@
     },
     {
       "type": "SECTION",
-      "title": "Required (Analytics Concentration Requirements)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "BUSN",
-          "classId": 6365
-        },
-        {
-          "type": "COURSE",
-          "subject": "MGSC",
-          "classId": 6201
-        },
-        {
-          "type": "COURSE",
-          "subject": "MISM",
-          "classId": 6210
-        },
-        {
-          "type": "COURSE",
-          "subject": "MISM",
-          "classId": 6212
-        }
-      ],
-      "minRequirementCount": 4
-    },
-    {
-      "type": "SECTION",
       "title": "Corporate Residency Requirement",
       "requirements": [
         {
@@ -169,5 +142,37 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Analytics Concentration Requirements",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BUSN",
+            "classId": 6365
+          },
+          {
+            "type": "COURSE",
+            "subject": "MGSC",
+            "classId": 6201
+          },
+          {
+            "type": "COURSE",
+            "subject": "MISM",
+            "classId": 6210
+          },
+          {
+            "type": "COURSE",
+            "subject": "MISM",
+            "classId": 6212
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

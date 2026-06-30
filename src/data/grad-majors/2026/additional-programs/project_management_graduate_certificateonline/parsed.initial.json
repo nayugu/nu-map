@@ -1,0 +1,39 @@
+{
+  "name": "Project Management, Graduate Certificate—Online",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6300
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

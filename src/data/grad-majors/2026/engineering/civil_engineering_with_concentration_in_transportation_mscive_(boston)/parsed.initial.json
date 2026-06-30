@@ -72,8 +72,7 @@
       "title": "Program Credit/GPA Requirements",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

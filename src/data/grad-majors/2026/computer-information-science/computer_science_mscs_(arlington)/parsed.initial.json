@@ -40,8 +40,7 @@
       "title": "Artificial Intelligence and Data Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -103,8 +102,7 @@
       "title": "Systems and Software",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -166,8 +164,7 @@
       "title": "Theory and Security",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

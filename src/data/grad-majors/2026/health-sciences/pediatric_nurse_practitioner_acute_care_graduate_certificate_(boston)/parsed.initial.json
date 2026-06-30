@@ -13,8 +13,7 @@
       "title": "Prerequisite Requirements",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 24,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

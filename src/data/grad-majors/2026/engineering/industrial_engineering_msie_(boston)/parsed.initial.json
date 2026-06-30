@@ -137,8 +137,7 @@
       "title": "Engineering Management",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -192,8 +191,7 @@
       "title": "Industrial Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 60,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -280,8 +278,7 @@
       "title": "Operations Research",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -328,8 +325,7 @@
       "title": "Supply Chain Management",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

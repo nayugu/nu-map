@@ -13,8 +13,7 @@
       "title": "Prerequisite or Equivalent Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -213,8 +212,7 @@
       "title": "Option B",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

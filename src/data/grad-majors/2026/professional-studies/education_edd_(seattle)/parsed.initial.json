@@ -84,8 +84,7 @@
       "title": "Elective List",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 48,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -151,33 +150,119 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7204
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7250
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7253
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7258
-        }
-      ],
-      "minRequirementCount": 4
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Higher Education Administration Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7204
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7250
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7253
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7258
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Innovative Teaching and Learning Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7217
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7311
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7315
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7316
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Transformative School Leadership Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7217
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7311
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7312
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7313
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Workplace Learning Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7501
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7502
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7503
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7504
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

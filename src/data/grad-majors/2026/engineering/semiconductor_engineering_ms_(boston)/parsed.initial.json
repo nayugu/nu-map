@@ -169,100 +169,10 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5606
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5651
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7201
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "EECE",
-                  "classId": 7240
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "EECE",
-                  "classId": 7248
-                }
-              ]
-            },
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "EECE",
-                  "classId": 7244
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ME",
-                  "classId": 6260
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7250
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7353
-            }
-          ]
-        },
-        {
-          "type": "COURSE",
-          "subject": "EECE",
-          "classId": 7945
-        },
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7945
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7990
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 3
-    },
-    {
-      "type": "SECTION",
       "title": "Elective Courses in Engineering and Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 220,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -678,5 +588,219 @@
       ],
       "minRequirementCount": 2
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Devices and NanoSystems",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5606
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5651
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7201
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 7240
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 7248
+                  }
+                ]
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 7244
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 6260
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7250
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7353
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "EECE",
+            "classId": 7945
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7945
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7990
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Materials and Manufacturing",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5105
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 6200
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 7270
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATL",
+                "classId": 7365
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5245
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5620
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5630
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHME",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "IE",
+                    "classId": 7945
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHME",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "IE",
+                    "classId": 7945
+                  }
+                ]
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 7990
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHME",
+                    "classId": 7990
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "IE",
+                    "classId": 7990
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

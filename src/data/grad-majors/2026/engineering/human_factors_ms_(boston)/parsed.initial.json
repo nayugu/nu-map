@@ -77,8 +77,7 @@
       "title": "College of Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 72,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -202,8 +201,7 @@
       "title": "College of Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -279,8 +277,7 @@
       "title": "College of Arts, Media and Design",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 44,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

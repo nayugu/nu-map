@@ -121,8 +121,7 @@
       "title": "Industrial Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 56,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -204,8 +203,7 @@
       "title": "Operations Research",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -237,8 +235,7 @@
       "title": "Materials Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -265,8 +262,7 @@
       "title": "Mechanical Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -303,8 +299,7 @@
       "title": "Engineering Management",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

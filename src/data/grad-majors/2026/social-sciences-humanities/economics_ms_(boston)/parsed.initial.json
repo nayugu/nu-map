@@ -109,114 +109,119 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Required",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 5110
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 5200
-            },
-            {
-              "type": "COURSE",
-              "subject": "DAMG",
-              "classId": 6210
-            },
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 6700
-            }
-          ]
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 5800
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 6205
-            }
-          ]
-        },
-        {
-          "type": "XOM",
-          "numCreditsMin": 4,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 7140
-            },
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "DS",
-                  "classId": 5230
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 6220
-                }
-              ]
-            },
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ECON",
-                  "classId": 5210
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "DS",
-                  "classId": 5220
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 6140
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 5220
-            },
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 6600
-            },
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 7275
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 3
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Data Science for Economics",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 5110
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "DAMG",
+                "classId": 6210
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 6700
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5800
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 6205
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 7140
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "DS",
+                    "classId": 5230
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 6220
+                  }
+                ]
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ECON",
+                    "classId": 5210
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "DS",
+                    "classId": 5220
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 6140
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ECON",
+                "classId": 5220
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 6600
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 7275
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

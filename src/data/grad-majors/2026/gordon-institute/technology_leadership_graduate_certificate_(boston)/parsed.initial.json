@@ -1,0 +1,49 @@
+{
+  "name": "Technology Leadership, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Admissions",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "TELR",
+          "classId": 5121
+        },
+        {
+          "type": "COURSE",
+          "subject": "TELR",
+          "classId": 5122
+        },
+        {
+          "type": "COURSE",
+          "subject": "TELR",
+          "classId": 5131
+        },
+        {
+          "type": "COURSE",
+          "subject": "TELR",
+          "classId": 5132
+        },
+        {
+          "type": "COURSE",
+          "subject": "TELR",
+          "classId": 7440
+        },
+        {
+          "type": "COURSE",
+          "subject": "TELR",
+          "classId": 7442
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

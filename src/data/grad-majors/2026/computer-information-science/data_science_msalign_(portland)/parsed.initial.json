@@ -114,8 +114,7 @@
       "title": "Khoury College of Computer Sciences",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 84,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -232,8 +231,7 @@
       "title": "College of Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -295,8 +293,7 @@
       "title": "College of Social Sciences and Humanities",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 24,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -338,8 +335,7 @@
       "title": "College of Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 16,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -371,8 +367,7 @@
       "title": "Bouvé College of Health Sciences",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

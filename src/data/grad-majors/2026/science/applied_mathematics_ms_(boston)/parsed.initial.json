@@ -89,137 +89,10 @@
     },
     {
       "type": "SECTION",
-      "title": "Core (​Concentration in Data Science)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 5800
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 6140
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 6220
-            },
-            {
-              "type": "COURSE",
-              "subject": "DA",
-              "classId": 5020
-            },
-            {
-              "type": "COURSE",
-              "subject": "DA",
-              "classId": 5030
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 5220
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 5230
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5644
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7243
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Core (​Concentration in Operations Research)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 7200
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7207
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7234
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7341
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 6205
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 7230
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 7235
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 7240
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 7245
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 7270
-            },
-            {
-              "type": "COURSE",
-              "subject": "OR",
-              "classId": 7310
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
       "title": "Suggested Electives Course List",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 52,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -296,8 +169,7 @@
       "title": "Additional Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 44,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -359,5 +231,136 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "​Concentration in Data Science",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5800
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 6140
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 6220
+              },
+              {
+                "type": "COURSE",
+                "subject": "DA",
+                "classId": 5020
+              },
+              {
+                "type": "COURSE",
+                "subject": "DA",
+                "classId": 5030
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 5220
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 5230
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5644
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 7243
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "​Concentration in Operations Research",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 7200
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 7207
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 7234
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 7341
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 6205
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 7230
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 7235
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 7240
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 7245
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 7270
+              },
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 7310
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

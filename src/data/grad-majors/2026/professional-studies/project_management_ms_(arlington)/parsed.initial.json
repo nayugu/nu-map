@@ -50,8 +50,7 @@
       "title": "Concentrations or Electives Option",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 80,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -157,38 +156,95 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "PJM",
-          "classId": 6205
-        },
-        {
-          "type": "COURSE",
-          "subject": "PJM",
-          "classId": 6810
-        },
-        {
-          "type": "COURSE",
-          "subject": "PJM",
-          "classId": 6815
-        },
-        {
-          "type": "COURSE",
-          "subject": "PJM",
-          "classId": 6820
-        },
-        {
-          "type": "COURSE",
-          "subject": "PJM",
-          "classId": 6825
-        }
-      ],
-      "minRequirementCount": 5
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Agile Project Management Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6205
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6810
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6815
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6820
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6825
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Analytics Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6000
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6010
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6015
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6070
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6020
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6030
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6040
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6110
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      }
+    ]
+  }
 }

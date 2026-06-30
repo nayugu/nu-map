@@ -1,0 +1,297 @@
+{
+  "name": "Applied AI, MPS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 34,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AAI",
+          "classId": 6600
+        },
+        {
+          "type": "COURSE",
+          "subject": "AAI",
+          "classId": 6610
+        },
+        {
+          "type": "COURSE",
+          "subject": "AAI",
+          "classId": 6620
+        },
+        {
+          "type": "COURSE",
+          "subject": "AAI",
+          "classId": 6630
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6640
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6650
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6655
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6665
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6740
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6790
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6850
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6900
+            },
+            {
+              "type": "COURSE",
+              "subject": "AAI",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AAI",
+          "classId": 6980
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "AI for 3D Imaging Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6710
+          },
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6720
+          },
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6730
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6640
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6650
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6665
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6740
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6790
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6850
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6900
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Conversational AI and Chatbots Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6660
+          },
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6670
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6640
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6650
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6655
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6665
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6740
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6790
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6850
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6900
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Machine Learning for Cybersecurity Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6680
+          },
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6690
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6640
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6650
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6665
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6740
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6790
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6850
+              },
+              {
+                "type": "COURSE",
+                "subject": "AAI",
+                "classId": 6900
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
+}

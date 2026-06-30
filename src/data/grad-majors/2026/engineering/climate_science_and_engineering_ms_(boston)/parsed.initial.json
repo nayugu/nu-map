@@ -101,8 +101,7 @@
       "title": "Restricted Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 100,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

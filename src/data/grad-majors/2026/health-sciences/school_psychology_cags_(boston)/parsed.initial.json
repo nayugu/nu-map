@@ -95,60 +95,58 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Optional Concentration",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 6326
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 6327
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 6329
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 6336
-        }
-      ],
-      "minRequirementCount": 4
-    },
-    {
-      "type": "SECTION",
-      "title": "Optional Intensive Practicum",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 8417
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 8418
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 8419
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 8421
-        }
-      ],
-      "minRequirementCount": 4
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Optional Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 6326
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 6327
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 6329
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 6336
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 8417
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 8418
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 8419
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 8421
+          }
+        ],
+        "minRequirementCount": 8
+      }
+    ]
+  }
 }

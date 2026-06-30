@@ -77,8 +77,7 @@
       "title": "College of Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 96,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -210,8 +209,7 @@
       "title": "D'Amore McKim School of Business",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -248,8 +246,7 @@
       "title": "College of Arts, Media and Design",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

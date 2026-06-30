@@ -120,8 +120,7 @@
       "title": "Advanced Coursework List",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 72,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -223,8 +222,7 @@
       "title": "Topics",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -261,8 +259,7 @@
       "title": "Readings",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 24,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

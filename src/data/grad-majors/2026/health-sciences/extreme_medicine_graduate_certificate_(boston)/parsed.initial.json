@@ -73,8 +73,7 @@
       "title": "Optional Experiential Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "AND",

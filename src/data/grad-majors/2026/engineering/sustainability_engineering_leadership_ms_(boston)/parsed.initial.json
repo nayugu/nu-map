@@ -71,104 +71,157 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentrations",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 20,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 6410
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 6420
-            },
-            {
-              "type": "COURSE",
-              "subject": "CIVE",
-              "classId": 5363
-            },
-            {
-              "type": "COURSE",
-              "subject": "CIVE",
-              "classId": 5365
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5670
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5000
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5100
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5200
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5300
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5500
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5585
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5650
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENSY",
-              "classId": 5700
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5350
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5800
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATL",
-              "classId": 6270
-            },
-            {
-              "type": "COURSE",
-              "subject": "ME",
-              "classId": 5685
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Energy and Climate Technologies Concentration",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 20,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 6410
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 6420
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5363
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5365
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5670
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5100
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5300
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5500
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5585
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5650
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENSY",
+                "classId": 5700
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5350
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5800
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATL",
+                "classId": 6270
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5685
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Sustainability Assessment Concentration",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 20,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5255
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5261
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5275
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5699
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 7110
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 7150
+              },
+              {
+                "type": "COURSE",
+                "subject": "SBSY",
+                "classId": 5100
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

@@ -228,8 +228,7 @@
       "title": "Courses in College of Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 248,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -551,8 +550,7 @@
       "title": "Khoury College of Computer Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 44,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -619,8 +617,7 @@
       "title": "D'Amore-McKim School of Business",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -667,8 +664,7 @@
       "title": "Bouvé College of Health Sciences",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 24,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -727,8 +723,7 @@
       "title": "School of Law",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 32,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -780,8 +775,7 @@
       "title": "College of Social Sciences and Humanities",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

@@ -88,8 +88,7 @@
       "title": "Psychology Breadth Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 24,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -131,8 +130,7 @@
       "title": "Sustainability Breadth Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 100,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -301,8 +299,7 @@
       "title": "Sustainability Depth Courses",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 40,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

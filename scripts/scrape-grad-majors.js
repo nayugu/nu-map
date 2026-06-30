@@ -79,10 +79,13 @@ async function fetchProgramUrls() {
     const href = a.getAttribute('href') ?? '';
     if (!href.startsWith('/graduate/')) continue;
 
-    // Graduate program pages have ≥4 path segments:
-    // /graduate/{college}/{department}/{degree}/
+    // Most graduate program pages have ≥4 path segments
+    // (/graduate/{college}/{department}/{degree}/), but interdisciplinary and
+    // standalone programs use 3 (/graduate/university-interdisciplinary-programs/{degree}/).
+    // Accept ≥3 and let non-program pages (policies, overviews) fall out later via
+    // the "no requirements found" skip.
     const parts = href.replace(/^\/|\/$/g, '').split('/');
-    if (parts.length < 4) continue;
+    if (parts.length < 3) continue;
 
     const url = BASE + href;
     if (seen.has(url)) continue;
@@ -214,6 +217,7 @@ function parseRowGroup(rows) {
   let chooseItems = [];
   let chooseCreds = 0;
   let chooseCount = 0;
+  let chooseExplicit = false;   // true when a "Complete N"/credit comment opened the group
 
   function commitPending() {
     if (!pending) return;
@@ -224,7 +228,7 @@ function parseRowGroup(rows) {
   function commitChooseGroup() {
     if (!inChoose) return;
     inChoose = false;
-    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; return; }
+    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; return; }
 
     if (chooseCreds > 0) {
       if (chooseItems.length === 1 && chooseItems[0].type === 'COURSE') {
@@ -234,6 +238,12 @@ function parseRowGroup(rows) {
       }
     } else if (chooseCount === 1 || chooseItems.length <= 2) {
       requirements.push({ type: 'OR', courses: chooseItems });
+    } else if (!chooseExplicit) {
+      // Group formed only by blockindent, with no "Complete N"/credit instruction —
+      // e.g. a bare referenced electives pool ("Electives List") whose required count
+      // is stated in another section. Default to "pick one" rather than fabricating
+      // "take all N courses" (which over-counts the requirement by N×4 SH).
+      requirements.push({ type: 'OR', courses: chooseItems });
     } else {
       requirements.push({
         type: '_CHOOSE',
@@ -242,7 +252,7 @@ function parseRowGroup(rows) {
       });
     }
 
-    chooseItems = []; chooseCreds = 0; chooseCount = 0;
+    chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false;
   }
 
   for (const tr of rows) {
@@ -330,6 +340,7 @@ function parseRowGroup(rows) {
         inChoose    = true;
         chooseCreds = effectiveCredits ?? 0;
         chooseCount = count  ?? 0;
+        chooseExplicit = true;
       }
       continue;
     }
@@ -445,7 +456,7 @@ function parseRequirements(root) {
   const concentrationOptions = [];
   let generalElectiveSH = 0;
 
-  const blocks = root.querySelectorAll('h2, table.sc_courselist');
+  const blocks = root.querySelectorAll('h2, h3, table.sc_courselist');
   let currentH2 = null;
 
   for (const el of blocks) {
@@ -454,11 +465,38 @@ function parseRequirements(root) {
       continue;
     }
 
+    if (el.tagName === 'H3') {
+      // Concentration detail blocks use an H3 header (e.g. "Computer Vision
+      // Concentration—College of Engineering") with their own course table. Adopt
+      // such headers so the following table is captured as a concentration. Ignore
+      // other H3s (footer "Campus Locations"/"Quick Links", in-section subheads) so
+      // the enclosing H2 context is preserved.
+      const t = el.text.trim().replace(/\s+/g, ' ');
+      if (/\bconcentration\b/i.test(t)) currentH2 = t;
+      continue;
+    }
+
     if (!currentH2) continue;
 
-    if (/^Concentration in /i.test(currentH2)) {
-      const sections = parseTable(el, currentH2);
-      if (sections.length === 1) concentrationOptions.push(sections[0]);
+    // Concentration sections. Two catalog patterns produce a concentration option:
+    //   "Concentration in X"             — single table → one section
+    //   "X Concentration—College of Y"   — own table with multiple sub-parts
+    //                                       (e.g. Complete 8 SH / Complete 4 SH / Capstone)
+    // In both cases every parsed sub-part is required, so they merge into one option
+    // SECTION. The plural "Concentrations" overview (a bulleted list, \bconcentration\b
+    // does not match the trailing 's') is left to fall through and yields no courses.
+    if (/\bconcentration\b/i.test(currentH2)) {
+      const parsed = parseTable(el, currentH2);
+      const reqs = parsed.flatMap(s => s.requirements ?? []);
+      if (reqs.length) {
+        const title = currentH2.split(/\s*[—–]\s*/)[0].trim();  // drop "—College of …" tag (em/en-dash only; keep hyphens like "Agent-Based")
+        concentrationOptions.push({
+          type: 'SECTION',
+          title,
+          requirements: reqs,
+          minRequirementCount: reqs.length,
+        });
+      }
       currentH2 = null;
       continue;
     }

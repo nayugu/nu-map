@@ -54,103 +54,6 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminars (Concentration)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 7102
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7101
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7103
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7104
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings (Concentration)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 8102
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentration-Specific Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5130
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5504
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5506
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5508
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5518
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5520
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5210
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5260
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
       "title": "Dissertation",
       "requirements": [
         {
@@ -205,50 +108,6 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminars (Concentration)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 7102
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7101
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7103
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7104
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings (Concentration)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 8102
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
       "title": "Dissertation",
       "requirements": [
         {
@@ -269,5 +128,130 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EEMB",
+            "classId": 7102
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 7101
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 7103
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 7104
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "EEMB",
+            "classId": 8102
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5130
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5504
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5506
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5508
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5518
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5520
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5260
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EEMB",
+            "classId": 7102
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 7101
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 7103
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 7104
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "EEMB",
+            "classId": 8102
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

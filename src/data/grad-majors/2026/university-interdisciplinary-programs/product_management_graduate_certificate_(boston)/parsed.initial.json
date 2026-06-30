@@ -1,0 +1,76 @@
+{
+  "name": "Product Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Fundamental Concepts",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5600
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6750
+            },
+            {
+              "type": "COURSE",
+              "subject": "PDM",
+              "classId": 6000
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "INNO",
+          "classId": 6409
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5540
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6760
+            },
+            {
+              "type": "COURSE",
+              "subject": "INNO",
+              "classId": 6411
+            },
+            {
+              "type": "COURSE",
+              "subject": "PDM",
+              "classId": 6940
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

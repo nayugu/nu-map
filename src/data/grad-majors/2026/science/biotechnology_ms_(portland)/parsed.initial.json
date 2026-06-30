@@ -86,56 +86,10 @@
     },
     {
       "type": "SECTION",
-      "title": "Required",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5810
-        },
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 6100
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Elective",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 3,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOT",
-              "classId": 5850
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOT",
-              "classId": 5225
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOT",
-              "classId": 7247
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
       "title": "Electives List",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 240,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -442,5 +396,86 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Agricultural Biotechnology Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5810
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6100
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5850
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5225
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 7247
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Biodefense Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6600
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6610
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5810
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 5202
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 5212
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

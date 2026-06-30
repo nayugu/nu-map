@@ -44,38 +44,75 @@
         }
       ],
       "minRequirementCount": 6
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HLS",
-          "classId": 6040
-        },
-        {
-          "type": "COURSE",
-          "subject": "HLS",
-          "classId": 6060
-        },
-        {
-          "type": "COURSE",
-          "subject": "HLS",
-          "classId": 6080
-        },
-        {
-          "type": "COURSE",
-          "subject": "HLS",
-          "classId": 6150
-        },
-        {
-          "type": "COURSE",
-          "subject": "HLS",
-          "classId": 6160
-        }
-      ],
-      "minRequirementCount": 5
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Homeland Security and Emergency Management Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6040
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6060
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6080
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6160
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Strategic Intelligence and Analysis Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6010
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6020
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6030
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6050
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6170
+          }
+        ],
+        "minRequirementCount": 5
+      }
+    ]
+  }
 }

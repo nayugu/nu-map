@@ -71,254 +71,258 @@
         }
       ],
       "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Course Lists",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 188,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 5100
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 6200
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 6220
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 7800
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 5110
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 5983
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5360
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5512
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5550
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5554
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5612
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5614
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5626
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5639
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5640
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5642
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5644
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5645
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5698
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5698
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 6400
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7150
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7204
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7205
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7215
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7223
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7311
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7315
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7323
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7337
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7345
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7346
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7352
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7370
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7397
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7398
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7400
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7945
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7990
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7233
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration Courses",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5100
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 6200
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 6220
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 7800
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 5110
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 5983
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5360
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5512
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5550
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5554
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5612
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5614
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5626
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5639
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5640
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5642
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5644
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5645
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 6400
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7150
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7204
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7205
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7215
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7223
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7311
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7315
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7323
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7337
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7345
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7346
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7352
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7370
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7397
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7400
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7945
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7990
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 7233
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

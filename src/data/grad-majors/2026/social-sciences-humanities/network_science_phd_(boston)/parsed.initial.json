@@ -45,8 +45,7 @@
       "title": "Computational Social Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 52,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -123,8 +122,7 @@
       "title": "Computer Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 52,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -201,8 +199,7 @@
       "title": "Epidemiology and Public Health",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 60,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -289,8 +286,7 @@
       "title": "Mathematic and Physics",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 48,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

@@ -1,0 +1,64 @@
+{
+  "name": "Educational Leadership, MA (Oakland)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6301
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6302
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6303
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6304
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6305
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6306
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6307
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDUT",
+          "classId": 6308
+        }
+      ],
+      "minRequirementCount": 9
+    }
+  ]
+}

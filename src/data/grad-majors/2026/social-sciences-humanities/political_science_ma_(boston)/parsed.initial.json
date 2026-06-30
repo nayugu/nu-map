@@ -101,91 +101,286 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Seminar",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "POLS",
-          "classId": 7205
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "American Government Courses",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "POLS",
-              "classId": 7341
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5232
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5233
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5234
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5240
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5245
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5270
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 6502
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 6505
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 6522
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 6551
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 6552
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "American Government and Politics Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "POLS",
+            "classId": 7205
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7341
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5232
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5233
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5234
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5240
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5245
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5270
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6502
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6505
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6522
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6551
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6552
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      },
+      {
+        "type": "SECTION",
+        "title": "Comparative Politics Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "POLS",
+            "classId": 7206
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7325
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "POLS",
+                    "classId": 7346
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PPUA",
+                    "classId": 7346
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7366
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5240
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5266
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5268
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5270
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      },
+      {
+        "type": "SECTION",
+        "title": "International Relations Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "POLS",
+            "classId": 7207
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7341
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7343
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7387
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      },
+      {
+        "type": "SECTION",
+        "title": "Public Policy Concentration",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7204
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6506
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7341
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5240
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5245
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6500
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6506
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6507
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6509
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6552
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      },
+      {
+        "type": "SECTION",
+        "title": "Security Studies Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "POLS",
+            "classId": 7341
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7207
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7366
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7387
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      }
+    ]
+  }
 }

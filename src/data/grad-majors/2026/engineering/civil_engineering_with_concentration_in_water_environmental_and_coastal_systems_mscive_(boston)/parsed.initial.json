@@ -51,8 +51,7 @@
       "title": "Course Lists",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 64,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

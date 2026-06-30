@@ -1,0 +1,56 @@
+{
+  "name": "AI Applications, Graduate Certificate (Silicon Valley)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6460
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5047
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5644
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHIL",
+          "classId": 5110
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 5640
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

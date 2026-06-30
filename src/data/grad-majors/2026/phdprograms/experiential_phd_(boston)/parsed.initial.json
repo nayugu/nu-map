@@ -1,0 +1,39 @@
+{
+  "name": "Experiential PhD (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHDL",
+          "classId": 7600
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHDL",
+          "classId": 7660
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHDL",
+          "classId": 7662
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHDL",
+          "classId": 7666
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

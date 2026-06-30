@@ -67,8 +67,7 @@
       "title": "General Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -115,8 +114,7 @@
       "title": "Regulatory Affairs of Food",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -143,8 +141,7 @@
       "title": "International Regulatory Affairs",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 32,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

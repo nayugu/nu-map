@@ -119,59 +119,6 @@
     },
     {
       "type": "SECTION",
-      "title": "Concentration or Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 32,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ALY",
-              "classId": 6010
-            },
-            {
-              "type": "COURSE",
-              "subject": "ALY",
-              "classId": 6070
-            },
-            {
-              "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6025
-            },
-            {
-              "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6050
-            },
-            {
-              "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6060
-            },
-            {
-              "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6096
-            },
-            {
-              "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6110
-            },
-            {
-              "type": "COURSE",
-              "subject": "LDR",
-              "classId": 6101
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
       "title": "Required Courses (Program Credit/GPA Requirements)",
       "requirements": [
         {
@@ -225,5 +172,62 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration or Electives",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6010
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6070
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6025
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6050
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6060
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6096
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6110
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6101
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

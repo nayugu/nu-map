@@ -32,28 +32,6 @@
     },
     {
       "type": "SECTION",
-      "title": "Optional Concentration in Medical Software Engineering",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CSYE",
-          "classId": 7280
-        },
-        {
-          "type": "COURSE",
-          "subject": "INFO",
-          "classId": 7405
-        },
-        {
-          "type": "COURSE",
-          "subject": "INFO",
-          "classId": 7410
-        }
-      ],
-      "minRequirementCount": 3
-    },
-    {
-      "type": "SECTION",
       "title": "Optional Co-op Experience",
       "requirements": [
         {
@@ -89,5 +67,32 @@
       ],
       "minRequirementCount": 2
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Optional Concentration in Medical Software Engineering",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CSYE",
+            "classId": 7280
+          },
+          {
+            "type": "COURSE",
+            "subject": "INFO",
+            "classId": 7405
+          },
+          {
+            "type": "COURSE",
+            "subject": "INFO",
+            "classId": 7410
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

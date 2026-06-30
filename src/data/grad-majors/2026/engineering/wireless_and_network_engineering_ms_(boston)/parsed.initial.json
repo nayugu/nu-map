@@ -78,8 +78,7 @@
       "title": "Electrical and Computer Engineering",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 152,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -281,8 +280,7 @@
       "title": "Computer Science",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -319,8 +317,7 @@
       "title": "Cybersecurity",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

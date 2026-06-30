@@ -99,28 +99,55 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5120
-        },
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5621
-        },
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5750
-        }
-      ],
-      "minRequirementCount": 3
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Biotechnology Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5120
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5621
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5750
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Omics Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6400
+          },
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6420
+          },
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6430
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

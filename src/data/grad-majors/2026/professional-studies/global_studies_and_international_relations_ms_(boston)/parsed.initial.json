@@ -109,8 +109,7 @@
       "title": "Global Studies Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 96,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -242,8 +241,7 @@
       "title": "Other Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 36,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

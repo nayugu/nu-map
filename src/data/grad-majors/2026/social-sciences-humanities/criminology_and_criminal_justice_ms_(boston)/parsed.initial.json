@@ -97,54 +97,6 @@
     },
     {
       "type": "SECTION",
-      "title": "Required",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CY",
-          "classId": 5001
-        },
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 6262
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5010
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5200
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5210
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5240
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5250
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
       "title": "Optional Co-op Experience",
       "requirements": [
         {
@@ -171,5 +123,58 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Optional Concentration in Cybersecurity",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CY",
+            "classId": 5001
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CRIM",
+                "classId": 6262
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5010
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5240
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5250
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      }
+    ]
+  }
 }

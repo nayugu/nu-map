@@ -57,8 +57,7 @@
       "title": "Restricted Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 32,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -110,8 +109,7 @@
       "title": "Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 268,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

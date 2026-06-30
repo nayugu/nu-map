@@ -47,47 +47,50 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Public History",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 5237
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Digital History",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 7370
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Fieldwork",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 8410
-        },
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 8411
-        }
-      ],
-      "minRequirementCount": 2
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Public History Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HIST",
+            "classId": 5237
+          },
+          {
+            "type": "COURSE",
+            "subject": "HIST",
+            "classId": 7370
+          },
+          {
+            "type": "COURSE",
+            "subject": "HIST",
+            "classId": 8410
+          },
+          {
+            "type": "COURSE",
+            "subject": "HIST",
+            "classId": 8411
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "World History Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HIST",
+            "classId": 5102
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

@@ -1,0 +1,39 @@
+{
+  "name": "Patient Safety, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HLTH",
+          "classId": 5600
+        },
+        {
+          "type": "COURSE",
+          "subject": "HLTH",
+          "classId": 5610
+        },
+        {
+          "type": "COURSE",
+          "subject": "HLTH",
+          "classId": 5620
+        },
+        {
+          "type": "COURSE",
+          "subject": "HLTH",
+          "classId": 5630
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

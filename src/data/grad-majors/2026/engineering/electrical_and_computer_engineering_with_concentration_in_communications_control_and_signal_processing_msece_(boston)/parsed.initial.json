@@ -83,5 +83,232 @@
       ],
       "minRequirementCount": 2
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration Courses",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5550
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5552
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5576
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5580
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5582
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5610
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5612
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5626
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5665
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5666
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 6400
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7200
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7204
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7211
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7213
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7214
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7215
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7223
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7310
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7311
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7315
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7323
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7336
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7337
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7345
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7346
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7400
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 7247
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

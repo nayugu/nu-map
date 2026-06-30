@@ -60,8 +60,7 @@
       "title": "Nonprofit Management Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 24,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -103,8 +102,7 @@
       "title": "Other Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 112,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

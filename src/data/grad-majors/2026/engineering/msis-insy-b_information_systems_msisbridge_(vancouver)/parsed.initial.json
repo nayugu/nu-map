@@ -61,99 +61,10 @@
     },
     {
       "type": "SECTION",
-      "title": "General Information Systems Concentration",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CSYE",
-              "classId": 6225
-            },
-            {
-              "type": "COURSE",
-              "subject": "CSYE",
-              "classId": 7280
-            },
-            {
-              "type": "COURSE",
-              "subject": "DAMG",
-              "classId": 7245
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 6150
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 6245
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 6350
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7250
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7375
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7390
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7500
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7510
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7520
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7525
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7535
-            },
-            {
-              "type": "COURSE",
-              "subject": "INFO",
-              "classId": 7610
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
       "title": "Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 132,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -347,5 +258,98 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "General Information Systems Concentration",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CSYE",
+                "classId": 6225
+              },
+              {
+                "type": "COURSE",
+                "subject": "CSYE",
+                "classId": 7280
+              },
+              {
+                "type": "COURSE",
+                "subject": "DAMG",
+                "classId": 7245
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 6150
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 6245
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 6350
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7250
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7375
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7390
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7500
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7510
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7520
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7525
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7535
+              },
+              {
+                "type": "COURSE",
+                "subject": "INFO",
+                "classId": 7610
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

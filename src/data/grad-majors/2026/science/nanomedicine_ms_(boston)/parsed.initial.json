@@ -75,8 +75,7 @@
           "classId": 7500
         },
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -110,58 +109,10 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5820
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 5631
-            }
-          ]
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 5648
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 5610
-            }
-          ]
-        },
-        {
-          "type": "COURSE",
-          "subject": "NNMD",
-          "classId": 5370
-        },
-        {
-          "type": "COURSE",
-          "subject": "NNMD",
-          "classId": 6370
-        }
-      ],
-      "minRequirementCount": 4
-    },
-    {
-      "type": "SECTION",
       "title": "Commercialization and Regulatory Affairs",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 44,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -228,8 +179,7 @@
       "title": "Drug Delivery",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 20,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -266,8 +216,7 @@
       "title": "Laboratory Research",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 28,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -314,8 +263,7 @@
       "title": "Nanomaterials Design and Application",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 60,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -397,5 +345,141 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Nanoformulation Research",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5820
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5631
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5648
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5610
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "NNMD",
+            "classId": 5370
+          },
+          {
+            "type": "COURSE",
+            "subject": "NNMD",
+            "classId": 6370
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Translation and Commercialization",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5145
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5220
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5219
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5225
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6290
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6310
+          },
+          {
+            "type": "COURSE",
+            "subject": "NNMD",
+            "classId": 5470
+          }
+        ],
+        "minRequirementCount": 6
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Vaccine Development",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5220
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5630
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5910
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5920
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5930
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6310
+          }
+        ],
+        "minRequirementCount": 6
+      }
+    ]
+  }
 }

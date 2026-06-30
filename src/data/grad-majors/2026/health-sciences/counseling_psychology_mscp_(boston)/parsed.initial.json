@@ -127,43 +127,134 @@
         }
       ],
       "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 6247
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 6401
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CAEP",
-              "classId": 6218
-            },
-            {
-              "type": "COURSE",
-              "subject": "CAEP",
-              "classId": 6402
-            },
-            {
-              "type": "COURSE",
-              "subject": "CAEP",
-              "classId": 6286
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 3
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Child and Adolescent Counseling Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 6247
+          },
+          {
+            "type": "COURSE",
+            "subject": "CAEP",
+            "classId": 6401
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6218
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6402
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6286
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Early Intervention Concentration",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 9,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 5150
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 5151
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 5153
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6218
+              },
+              {
+                "type": "COURSE",
+                "subject": "SLPA",
+                "classId": 5152
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Research in Counseling Psychology Concentration",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 9,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6328
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 7711
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 7712
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 7716
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 7771
+              },
+              {
+                "type": "COURSE",
+                "subject": "HLTH",
+                "classId": 5410
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 6320
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

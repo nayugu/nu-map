@@ -1,0 +1,77 @@
+{
+  "name": "AI Applications, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6460
+        },
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 5047
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHIL",
+          "classId": 5110
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 6600
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDUT",
+              "classId": 6150
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 6250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

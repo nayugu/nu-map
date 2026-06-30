@@ -35,8 +35,7 @@
       "title": "Electives",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 172,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

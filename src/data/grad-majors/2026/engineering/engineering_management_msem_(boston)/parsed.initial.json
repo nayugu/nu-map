@@ -74,28 +74,10 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EMGT",
-          "classId": 6700
-        },
-        {
-          "type": "COURSE",
-          "subject": "EMGT",
-          "classId": 6750
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
       "title": "Online Course List",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 64,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -182,5 +164,27 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Digital Product Management Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EMGT",
+            "classId": 6700
+          },
+          {
+            "type": "COURSE",
+            "subject": "EMGT",
+            "classId": 6750
+          }
+        ],
+        "minRequirementCount": 2
+      }
+    ]
+  }
 }

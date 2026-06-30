@@ -71,39 +71,92 @@
         }
       ],
       "minRequirementCount": 5
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HLTH",
-          "classId": 5800
-        },
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 6460
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 5047
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHIL",
-              "classId": 5110
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in AI Applications",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HLTH",
+            "classId": 5800
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 6460
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5047
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHIL",
+                "classId": 5110
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Exercise Science",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5220
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5230
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5240
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 6202
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 6400
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

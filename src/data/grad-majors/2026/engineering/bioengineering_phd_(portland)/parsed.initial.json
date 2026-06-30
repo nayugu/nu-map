@@ -95,8 +95,7 @@
       "title": "Electives Course List",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 444,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -739,8 +738,7 @@
       "title": "Electives Course List",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 436,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",

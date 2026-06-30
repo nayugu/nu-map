@@ -1,0 +1,57 @@
+{
+  "name": "Global Doctoral Research, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INPR",
+          "classId": 5900
+        },
+        {
+          "type": "COURSE",
+          "subject": "INPR",
+          "classId": 7970
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INPR",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "INPR",
+              "classId": 7900
+            },
+            {
+              "type": "COURSE",
+              "subject": "INPR",
+              "classId": 7995
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

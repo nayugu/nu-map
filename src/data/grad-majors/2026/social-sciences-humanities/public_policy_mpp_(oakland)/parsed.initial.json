@@ -134,64 +134,69 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 6150
-            },
-            {
-              "type": "COURSE",
-              "subject": "LPSC",
-              "classId": 7312
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5100
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5260
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5261
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5264
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5268
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5270
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 6101
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Sustainability and Climate Change Policy Concentration",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 6150
+              },
+              {
+                "type": "COURSE",
+                "subject": "LPSC",
+                "classId": 7312
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5100
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5260
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5261
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5264
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5268
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5270
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6101
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

@@ -47,58 +47,208 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentration Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "DA",
-          "classId": 5030
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "INSH",
-              "classId": 5302
-            },
-            {
-              "type": "COURSE",
-              "subject": "POLS",
-              "classId": 7334
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5262
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5263
-            }
-          ]
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "INSH",
-              "classId": 6406
-            },
-            {
-              "type": "COURSE",
-              "subject": "INSH",
-              "classId": 5301
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 3
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Computational Social Science",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "DA",
+            "classId": 5030
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 5302
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7334
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5262
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5263
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 6406
+              },
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 5301
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Data Analytics in the Social Sciences",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "DA",
+                "classId": 5020
+              },
+              {
+                "type": "COURSE",
+                "subject": "DA",
+                "classId": 5030
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5301
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5302
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Information Ethics for Social Analysis",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CY",
+            "classId": 5240
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PHIL",
+                "classId": 5001
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHIL",
+                "classId": 5002
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHIL",
+                "classId": 5010
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHIL",
+            "classId": 5005
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Machine Learning and Econometrics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ECON",
+            "classId": 5140
+          },
+          {
+            "type": "COURSE",
+            "subject": "ECON",
+            "classId": 5210
+          },
+          {
+            "type": "COURSE",
+            "subject": "ECON",
+            "classId": 5220
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Network Analysis in the Social Sciences",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5301
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5302
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 6304
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7334
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Statistical Methods in the Social Sciences",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5301
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 7400
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 7500
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }

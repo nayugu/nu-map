@@ -235,6 +235,7 @@ function parseRowGroup(rows) {
   let chooseItems   = [];     // options accumulated in choose block
   let chooseCreds   = 0;      // credit threshold (XOM)
   let chooseCount   = 0;      // pick-N count (OR / minRequirementCount)
+  let chooseExplicit = false; // true when a "Complete N"/credit comment opened the group
 
   function commitPending() {
     if (!pending) return;
@@ -245,7 +246,7 @@ function parseRowGroup(rows) {
   function commitChooseGroup() {
     if (!inChoose) return;
     inChoose = false;
-    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; return; }
+    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; return; }
 
     if (chooseCreds > 0) {
       // A credit-hour annotation followed by exactly one course is just a required course,
@@ -256,6 +257,11 @@ function parseRowGroup(rows) {
         requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
       }
     } else if (chooseCount === 1 || chooseItems.length <= 2) {
+      requirements.push({ type: 'OR', courses: chooseItems });
+    } else if (!chooseExplicit) {
+      // Group formed only by blockindent, with no "Complete N"/credit instruction —
+      // e.g. a bare referenced electives pool whose required count is stated in another
+      // section. Default to "pick one" rather than fabricating "take all N courses".
       requirements.push({ type: 'OR', courses: chooseItems });
     } else {
       // Pick N of M: emit as a SECTION node inline so the outer section can wrap it
@@ -268,7 +274,7 @@ function parseRowGroup(rows) {
       });
     }
 
-    chooseItems = []; chooseCreds = 0; chooseCount = 0;
+    chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false;
   }
 
   for (const tr of rows) {
@@ -368,6 +374,7 @@ function parseRowGroup(rows) {
         inChoose     = true;
         chooseCreds  = effectiveCredits ?? 0;
         chooseCount  = count  ?? 0;
+        chooseExplicit = true;
       }
       continue;
     }

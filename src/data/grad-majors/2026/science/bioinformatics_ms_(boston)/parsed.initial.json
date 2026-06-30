@@ -99,28 +99,152 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5219
-        },
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5225
-        },
-        {
-          "type": "COURSE",
-          "subject": "BIOT",
-          "classId": 5228
-        }
-      ],
-      "minRequirementCount": 3
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Bioinformatics Enterprise",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5219
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5225
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5228
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Biotechnology",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5120
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5621
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5750
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Data Analytics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "DA",
+            "classId": 5020
+          },
+          {
+            "type": "COURSE",
+            "subject": "DA",
+            "classId": 5030
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 5301
+              },
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 5302
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Health Informatics",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 9,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "HINF",
+                "classId": 5101
+              },
+              {
+                "type": "COURSE",
+                "subject": "HINF",
+                "classId": 5102
+              },
+              {
+                "type": "COURSE",
+                "subject": "HINF",
+                "classId": 5105
+              },
+              {
+                "type": "COURSE",
+                "subject": "HINF",
+                "classId": 5110
+              },
+              {
+                "type": "COURSE",
+                "subject": "HINF",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "HINF",
+                "classId": 6220
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Omics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6400
+          },
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6420
+          },
+          {
+            "type": "COURSE",
+            "subject": "BINF",
+            "classId": 6430
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
 }
