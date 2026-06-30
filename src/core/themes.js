@@ -102,7 +102,7 @@ const dark = {
   '--shadow-modal':      '0 24px 64px rgba(0,0,0,0.65)',
   '--shadow-active-row': '0 0 12px rgba(88,166,255,0.09), inset 3px 0 0 #58a6ff',
   '--shadow-done-row':   'inset 3px 0 0 #1a5c2a',
-  '--shadow-card-sel':   '0 0 0 1px #58a6ff40',
+  '--shadow-card-sel':   '0 0 0 2px rgba(170,180,190,0.5), 0 0 6px 0 rgba(255,255,255,0.85), 0 0 13px 0 rgba(255,255,255,0.5)',
   '--shadow-card-conn':  '0 0 0 1px rgba(88,166,255,0.15)',
   '--shadow-card-hov':   '0 0 0 2px rgba(88,166,255,0.31)',
 
@@ -211,7 +211,7 @@ const light = {
   '--shadow-modal':      '0 8px 32px rgba(0,0,0,0.12)',
   '--shadow-active-row': 'inset 2px 0 0 rgba(37,99,235,0.18)',
   '--shadow-done-row':   'inset 2px 0 0 #86efac',
-  '--shadow-card-sel':   '0 0 0 1px #2563eb40',
+  '--shadow-card-sel':   '0 0 6px 1px rgba(150,195,255,0.6), 0 0 15px 2px rgba(150,195,255,0.4)',
   '--shadow-card-conn':  '0 0 0 1px rgba(37,99,235,0.18)',
   '--shadow-card-hov':   '0 1px 3px rgba(0,0,0,0.10)',
 

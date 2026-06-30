@@ -177,7 +177,7 @@ export default function SummerRow({ semA, semB }) {
         onDragLeave={onDragLeave}
         onDrop={e => onDrop(e, sem.id)}
         style={{
-          flex: 1, minWidth: 0, overflow: "hidden",
+          flex: 1, minWidth: 0, overflow: "visible",
           padding: "4px 5px",
           border: `1px solid ${hoveredSem === sem.id ? "var(--active)" : "var(--border-slot)"}`,
           borderRadius: 4,
@@ -197,7 +197,7 @@ export default function SummerRow({ semA, semB }) {
         <div style={{
           display: "grid", gridTemplateColumns: `repeat(${Math.max(1, slotCount || 1)}, 1fr)`, gap: 4,
           minHeight: isPhone ? 35 : 66,
-          overflow: "hidden",
+          overflow: "visible",
           borderRadius: 4, padding: 2,
           border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
             ? "1px solid var(--active)" : "1px solid transparent",

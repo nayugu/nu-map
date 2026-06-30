@@ -107,7 +107,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           display: "flex", alignItems: "center", minHeight: 18,
           opacity: dimmed ? 0.35 : 1,
           transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
-          boxShadow: isSel ? "inset 0 -3px 0 #999" : isCardHov ? "var(--shadow-card-hov)" : "none",
+          boxShadow: isSel ? "var(--shadow-card-sel)" : isCardHov ? "var(--shadow-card-hov)" : "none",
         }}
       >
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: course.color, borderRadius: "4px 0 0 4px" }} />
@@ -150,7 +150,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           minHeight: 17, minWidth: 0, overflow: "hidden",
           opacity: dimmed ? 0.35 : 1,
           transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
-          boxShadow: isSel ? "inset 0 -2px 0 #999" : isCardHov ? "var(--shadow-card-hov)" : "none",
+          boxShadow: isSel ? "var(--shadow-card-sel)" : isCardHov ? "var(--shadow-card-hov)" : "none",
         }}
       >
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: course.color, borderRadius: "3px 0 0 3px" }} />
@@ -210,7 +210,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         touchAction: "manipulation",
         opacity: dimmed ? 0.35 : 1,
         transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
-        boxShadow: isSel          ? "inset 0 -4px 0 #999"
+        boxShadow: isSel          ? "var(--shadow-card-sel)"
                  : isConn         ? "var(--shadow-card-conn)"
                  : isCardHov      ? "var(--shadow-card-hov)"
                  : isMouseHov     ? "inset 0 -3px 0 rgba(0,0,0,0.14)"

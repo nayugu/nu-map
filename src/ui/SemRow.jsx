@@ -397,7 +397,7 @@ export default function SemRow({ sem }) {
                 // others squat. The placeholder's minHeight floor is also dropped on
                 // phone so it can't force one row taller than the rest.
                 gridAutoRows: isPhone ? "1fr" : undefined,
-                gap: 4, overflow: "hidden",
+                gap: 4, overflow: "visible",
                 borderRadius: 6, padding: 3,
                 minHeight: 76,
                 border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
