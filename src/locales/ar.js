@@ -122,6 +122,8 @@ export const strings = {
   "header.plans.title":           "الخطط المحفوظة",
   "header.plan.new":              "+ خطة جديدة",
   "header.plan.default":          "خطة",
+  "header.plan.group.undergrad":  "البكالوريوس",
+  "header.plan.group.graduate":   "الدراسات العليا",
   "header.plan.rename.title":     "إعادة التسمية",
   "header.plan.rename.prompt":    "إعادة تسمية الخطة:",
   "header.plan.new.prompt":       "اسم الخطة الجديدة:",

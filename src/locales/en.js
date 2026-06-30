@@ -125,6 +125,8 @@ export const strings = {
   "header.plans.title":           "SAVED PLANS",
   "header.plan.new":              "+ New plan",
   "header.plan.default":          "Plan",
+  "header.plan.group.undergrad":  "Undergraduate",
+  "header.plan.group.graduate":   "Graduate",
   "header.plan.rename.title":     "Rename",
   "header.plan.rename.prompt":    "Rename plan:",
   "header.plan.new.prompt":       "New plan name:",

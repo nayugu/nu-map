@@ -1539,6 +1539,33 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("active-plan"), activePlanId); } catch {}
   }, [activePlanId]);
 
+  // Keep each plan index entry's studentType up to date so the plan switcher can
+  // group plans by undergraduate / graduate. The active plan is synced from live
+  // state; other entries are backfilled (once) from their saved plan-data slot.
+  useEffect(() => {
+    setPlans(prev => {
+      let changed = false;
+      const next = prev.map(p => {
+        let st;
+        if (p.id === activePlanId) {
+          st = studentType;
+        } else if (p.studentType !== undefined) {
+          return p;
+        } else {
+          st = "undergrad";
+          try {
+            const raw = localStorage.getItem(key(`plan-data-${p.id}`));
+            if (raw) st = JSON.parse(raw).studentType ?? "undergrad";
+          } catch {}
+        }
+        if (p.studentType === st) return p;
+        changed = true;
+        return { ...p, studentType: st };
+      });
+      return changed ? next : prev;
+    });
+  }, [studentType, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Capture full plan state as a serializable object
   const captureCurrentPlan = () => ({
     version: 1,
@@ -1642,7 +1669,7 @@ export function PlannerProvider({ children }) {
         }));
       } catch {}
     }
-    setPlans(prev => [...prev, { id, name }]);
+    setPlans(prev => [...prev, { id, name, studentType: cohort?.studentType ?? "undergrad" }]);
     setActivePlanId(id);
   };
 
@@ -1747,7 +1774,7 @@ export function PlannerProvider({ children }) {
         const base = d.planName || "Plan";
         const name = base.startsWith('+') ? base : `+ ${base}`;
         try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
-        setPlans(prev => [...prev, { id, name }]);
+        setPlans(prev => [...prev, { id, name, studentType: d.studentType ?? "undergrad" }]);
         setActivePlanId(id);
         if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
       } catch (err) {
@@ -1778,7 +1805,7 @@ export function PlannerProvider({ children }) {
     const name = base.startsWith('/') ? '/' + base : '/ ' + base;
     // Pre-write so the activePlanId useEffect finds data and calls restorePlan.
     try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
-    setPlans(prev => [...prev, { id, name }]);
+    setPlans(prev => [...prev, { id, name, studentType: d.studentType ?? "undergrad" }]);
     setActivePlanId(id);
     // restorePlan doesn't handle substitutions, so set them directly.
     setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);

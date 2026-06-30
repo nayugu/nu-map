@@ -321,6 +321,36 @@ export default function Header() {
     );
   };
 
+  // Renders the full plan list grouped by student type (undergraduate / graduate).
+  // Headers appear only when both groups are present; otherwise a plain flat list.
+  // visiblePlans is the combined display order so shift-range selection spans groups.
+  const renderGroupedPlans = () => {
+    const ug = plans.filter(p => (p.studentType ?? "undergrad") !== "graduate");
+    const gr = plans.filter(p => (p.studentType ?? "undergrad") === "graduate");
+    const ordered = [...ug, ...gr];
+
+    if (ug.length === 0 || gr.length === 0) {
+      return ordered.map((p, i) => renderPlanRow(p, "", i, ordered));
+    }
+
+    const groupHeader = label => (
+      <div key={`hdr-${label}`} style={{
+        padding: "5px 10px 2px", fontSize: isPhone ? 7.5 : 8.5, fontWeight: 700,
+        letterSpacing: "0.07em", color: "var(--text-5)", textTransform: "uppercase",
+        userSelect: "none",
+      }}>{label}</div>
+    );
+
+    return (
+      <>
+        {groupHeader(t("header.plan.group.undergrad"))}
+        {ug.map(p => renderPlanRow(p, "", ordered.indexOf(p), ordered))}
+        {groupHeader(t("header.plan.group.graduate"))}
+        {gr.map(p => renderPlanRow(p, "", ordered.indexOf(p), ordered))}
+      </>
+    );
+  };
+
   return (
     <>
       {/* ── Sticky header bar ── */}
@@ -497,7 +527,7 @@ export default function Header() {
               <div style={{ maxHeight: "40vh", overflowY: "auto" }}>
                 {(() => {
                   const q = planSearch.trim().toLowerCase();
-                  if (!q) return plans.map((p, i) => renderPlanRow(p, "", i, plans));
+                  if (!q) return renderGroupedPlans();
 
                   // Helper: readable major label from a stored plan's major path
                   const getMajorLabel = id => {

@@ -123,6 +123,8 @@ export const strings = {
   "header.plans.title":           "सेव्ड योजनाएँ",
   "header.plan.new":              "+ नई योजना",
   "header.plan.default":          "योजना",
+  "header.plan.group.undergrad":  "स्नातक",
+  "header.plan.group.graduate":   "स्नातकोत्तर",
   "header.plan.rename.title":     "नाम बदलें",
   "header.plan.rename.prompt":    "योजना का नाम बदलें:",
   "header.plan.new.prompt":       "नई योजना का नाम:",

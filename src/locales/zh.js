@@ -100,6 +100,8 @@ export const strings = {
   "header.plans.title":            "\u5df2\u4fdd\u5b58\u7684\u8ba1\u5212",
   "header.plan.new":               "+ \u65b0\u5efa\u8ba1\u5212",
   "header.plan.default":           "\u8ba1\u5212",
+  "header.plan.group.undergrad":   "\u672c\u79d1",
+  "header.plan.group.graduate":    "\u7814\u7a76\u751f",
   "header.plan.rename.title":      "\u91cd\u547d\u540d",
   "header.plan.rename.prompt":     "\u91cd\u547d\u540d\u8ba1\u5212\uff1a",
   "header.plan.new.prompt":        "\u65b0\u8ba1\u5212\u540d\u79f0\uff1a",

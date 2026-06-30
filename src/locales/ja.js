@@ -124,6 +124,8 @@ export const strings = {
   "header.plans.title":           "保存済みプラン",
   "header.plan.new":              "+ 新規プラン",
   "header.plan.default":          "プラン",
+  "header.plan.group.undergrad":  "学部",
+  "header.plan.group.graduate":   "大学院",
   "header.plan.rename.title":     "名前を変更",
   "header.plan.rename.prompt":    "プラン名を変更：",
   "header.plan.new.prompt":       "新しいプラン名：",

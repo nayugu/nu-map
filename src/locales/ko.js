@@ -123,6 +123,8 @@ export const strings = {
   "header.plans.title":           "저장된 계획",
   "header.plan.new":              "+ 새 계획",
   "header.plan.default":          "계획",
+  "header.plan.group.undergrad":  "학부",
+  "header.plan.group.graduate":   "대학원",
   "header.plan.rename.title":     "이름 바꾸기",
   "header.plan.rename.prompt":    "계획 이름 바꾸기:",
   "header.plan.new.prompt":       "새 계획 이름:",
