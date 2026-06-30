@@ -135,7 +135,7 @@ export default function DisclaimerModal() {
             }}
           >{t("modal.dismiss")}</button>
           <span style={{ fontSize: 10, color: "var(--text-6)" }}>
-            Made by Nathan Gu with{" "}
+            Built with{" "}
             <a href="https://www.anthropic.com/claude" target="_blank" rel="noreferrer"
               style={{ color: "var(--text-5)", textDecoration: "none" }}>
               Claude Sonnet
