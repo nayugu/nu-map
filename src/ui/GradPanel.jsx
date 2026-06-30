@@ -917,26 +917,21 @@ export default function GradPanel({ wideCatalog = false }) {
         <div style={{ marginBottom: 10, position: "relative" }}>
           {/* Collapsed: show header with triangle and text */}
           <div
-            style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", userSelect: "none", marginBottom: showProgram ? 4 : 0 }}
+            style={{ display: "flex", alignItems: "center", gap: 8, userSelect: "none", marginBottom: showProgram ? 4 : 0 }}
           >
+            {/* Heading reads as "Undergrad Program Selection" — the type word is inline
+                but tappable to surface the switch-plan prompt. */}
             <span
               onClick={() => setShowProgram(v => !v)}
-              style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, flex: 1 }}
-            >{t("grad.programSelection")}</span>
-            {/* Plan type badge — always visible, left of collapse arrow */}
-            <button
-              onClick={() => setShowSwitchPrompt(v => !v)}
-              style={{
-                fontSize: 8, fontWeight: 700, padding: "2px 6px", borderRadius: 99,
-                background: "var(--bg-surface-2)",
-                border: "1px solid var(--border-2)",
-                color: "var(--text-4)",
-                cursor: "pointer", flexShrink: 0, letterSpacing: "0.04em",
-              }}
+              style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, cursor: "pointer", flex: 1 }}
             >
-              {isGrad ? "GRADUATE" : "UNDERGRAD"}
-            </button>
-            <span onClick={() => setShowProgram(v => !v)} style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1 }}>{showProgram ? "▼" : "▶"}</span>
+              <span
+                onClick={(e) => { e.stopPropagation(); setShowSwitchPrompt(v => !v); }}
+                style={{ fontWeight: 700 }}
+              >{isGrad ? "Graduate" : "Undergrad"}</span>
+              {" "}{t("grad.programSelection")}
+            </span>
+            <span onClick={() => setShowProgram(v => !v)} style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1, cursor: "pointer", padding: "2px 0" }}>{showProgram ? "▼" : "▶"}</span>
           </div>
 
           {/* Switch type prompt */}
