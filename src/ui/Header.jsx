@@ -117,6 +117,31 @@ export default function Header() {
     // Gather plan metadata
     const entry = `${planEntSem === 'fall' ? 'Fall' : 'Spring'} ${planEntYear}`;
     const grad = `${planGradSem === 'fall' ? 'Fall' : 'Spring'} ${planGradYear}`;
+
+    // Readable major/minor names from their stored paths (conc is already a label)
+    const isGrad = studentType === "graduate";
+    const labelFromPath = p => {
+      if (!p) return "";
+      const parts = p.split('/');
+      const folder = parts[parts.length - 2] || '';
+      return folder ? majorRequirements.fmtLabel(folder) : '';
+    };
+    const programLines = [];
+    if (isGrad) {
+      const prog = labelFromPath(major);
+      if (prog) programLines.push(`Program: ${prog}`);
+    } else {
+      const m1 = labelFromPath(major);
+      const m2 = labelFromPath(major2);
+      const mn1 = labelFromPath(minor1);
+      const mn2 = labelFromPath(minor2);
+      if (m1) programLines.push(`Major: ${m1}`);
+      if (m2) programLines.push(`Second Major: ${m2}`);
+      if (conc) programLines.push(`Concentration: ${conc}`);
+      if (mn1) programLines.push(`Minor: ${mn1}`);
+      if (mn2) programLines.push(`Second Minor: ${mn2}`);
+    }
+
     const totalSH = totalSHPlaced;
     const completedSH = totalSHDone;
     const plannedSH = totalSHPlaced - totalSHDone;
@@ -210,6 +235,7 @@ export default function Header() {
     // Assemble final text
     const fullText = [
       `${institution.appName} Plan: ${plans.find(p => p.id === activePlanId)?.name || 'Untitled'}`,
+      ...programLines,
       `Entry: ${entry}`,
       `Graduation: ${grad}`,
       `Total SH: ${totalSH} (completed: ${completedSH}, planned: ${plannedSH})`,
