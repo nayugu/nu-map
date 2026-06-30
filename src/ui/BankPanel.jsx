@@ -160,7 +160,9 @@ export default function BankPanel() {
   const bankCourses = useMemo(() => {
     const tokens = q.split(/\s+/).filter(Boolean);
     let list = q ? [...courses] : courses.filter(c => bankCourseIds.has(c.id));
-    if (bankTab === "starred" && !(q && !isPhone)) list = list.filter(c => starredIds.has(c.id));
+    // Phone has no starring, so never apply the starred filter there even if
+    // bankTab was set to "starred" (carried over from desktop or via a command).
+    if (bankTab === "starred" && !isPhone && !q) list = list.filter(c => starredIds.has(c.id));
 
     const tieSort =
       bankSort === "za"  ? (a, b) => b.code.localeCompare(a.code) :
@@ -648,7 +650,7 @@ export default function BankPanel() {
           <div style={{ padding: "4px 6px 6px", display: "flex", flexDirection: "column", gap: 3 }}>
             {bankCourses.length === 0 ? (
               <div style={{ padding: "18px 8px", fontSize: 10, color: "var(--text-6)", textAlign: "center", lineHeight: 1.6 }}>
-                {bankTab === "starred" ? (
+                {bankTab === "starred" && !isPhone ? (
                   <><div style={{ fontSize: 20, marginBottom: 6 }}>☆</div>{t("bank.empty.saved")}<br /><span style={{ fontSize: 9 }}>{t("bank.empty.saved.hint")}</span></>
                 ) : t("bank.empty.search")}
               </div>
