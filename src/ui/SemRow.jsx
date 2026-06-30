@@ -71,19 +71,18 @@ export default function SemRow({ sem }) {
   const isGrad      = studentType === "graduate";
   const isDragging  = dragInfo?.type === "course";
   // Undergrad: fixed slots always visible (4 for fall/spring, 2 for summer).
-  // Grad: compact at rest, slots reveal across all grad semesters while a drag is active.
-  //   fall/spring: 2 min → 4 max while dragging. summer: 1 min → 2 max while dragging.
+  // Grad: 2 slots at rest for fall/spring (default load), expand up to 4 while dragging.
+  //        1 slot at rest for summer, expand up to 2 while dragging.
   const mainSlots = (sem.type === "fall" || sem.type === "spring")
     ? (isGrad
-        ? (isDragging ? Math.min(4, Math.max(2, main4.length < 4 ? main4.length + 1 : 4)) : main4.length)
+        ? (isDragging ? Math.min(4, Math.max(2, main4.length < 4 ? main4.length + 1 : 4)) : Math.max(2, main4.length))
         : 4)
     : sem.type === "summer"
       ? (isGrad
-          ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : main4.length)
+          ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : Math.max(1, main4.length))
           : 2)
       : null;
-  const hideEmpty  = isGrad && !isDragging;
-  const emptySlots = hideEmpty ? 0 : Math.max(0, (isPhone ? Math.min(2, mainSlots ?? 2) : mainSlots ?? 0) - main4.length);
+  const emptySlots = Math.max(0, (isPhone ? Math.min(2, mainSlots ?? 2) : mainSlots ?? 0) - main4.length);
 
   // Collapsible other credits
   const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo } = usePlanner();
@@ -391,7 +390,7 @@ export default function SemRow({ sem }) {
                 gridTemplateColumns: `repeat(${Math.max(1, mainSlots || main4.length || 1)}, 1fr)`,
                 gap: 4, overflow: "hidden",
                 borderRadius: 6, padding: 3,
-                minHeight: (isGrad && main4.length === 0 && !isDragging) ? 0 : 76,
+                minHeight: 76,
                 border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
                   ? "1px solid var(--active)" : "1px solid transparent",
                 background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"

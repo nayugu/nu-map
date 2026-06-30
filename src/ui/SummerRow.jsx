@@ -163,12 +163,12 @@ export default function SummerRow({ semA, semB }) {
     const others     = crs.filter(c => c.sh <= 2);
     const isGrad     = studentType === "graduate";
     const isDragging = dragInfo?.type === "course";
-    // Grad: compact at rest (1 course fills the slot), slots reveal while dragging.
+    // Grad: 1 slot at rest (default summer load), expand to 2 while dragging.
     // Undergrad: always 2 slots.
     const slotCount  = isGrad
-      ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : main4.length)
+      ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : Math.max(1, main4.length))
       : 2;
-    const emptySlots = (isGrad && !isDragging) ? 0 : Math.max(0, slotCount - main4.length);
+    const emptySlots = Math.max(0, slotCount - main4.length);
 
     return (
       <div key={sem.id}
