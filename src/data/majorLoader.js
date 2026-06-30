@@ -67,6 +67,62 @@ function parseMajorPathParts(path) {
   };
 }
 
+/**
+ * Normalize a program folder slug so cosmetic catalog renames still match:
+ * lowercases, maps "&"→"and", and strips everything but the alphanumeric core
+ * (underscores, parentheses, the "_(boston)" campus suffix, spacing, commas).
+ */
+export function normalizeFolder(folder) {
+  return folder
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '');
+}
+
+/**
+ * Resolve a (possibly stale) saved path to the best CURRENT registry path,
+ * or null if no plausible match exists. Tiers, newest year wins at each:
+ *   1. exact path                          — program unchanged
+ *   2. legacy submodule prefix             — paths from before the reorg
+ *   3. same college + folder               — catalog-year bump
+ *   4. same folder, any college            — program moved colleges
+ *   5. normalized folder (± college)       — program slug renamed
+ *
+ * @param {Record<string, unknown>} map  - a Vite import.meta.glob module map
+ * @param {string} path
+ * @param {(p: string) => {year:number,college:string,folder:string}|null} parse
+ * @returns {string|null}
+ */
+export function resolveInMap(map, path, parse) {
+  if (map[path]) return path;
+  const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
+  if (map[migrated]) return migrated;
+
+  const want = parse(path);
+  if (!want) return null;
+
+  const entries = Object.keys(map)
+    .map(p => ({ p, pp: parse(p) }))
+    .filter(e => e.pp);
+
+  const newestWhere = (pred) => {
+    let best = null, bestYear = -Infinity;
+    for (const { p, pp } of entries) {
+      if (pred(pp) && pp.year > bestYear) { bestYear = pp.year; best = p; }
+    }
+    return best;
+  };
+
+  const wantNorm = normalizeFolder(want.folder);
+  return (
+    newestWhere(pp => pp.college === want.college && pp.folder === want.folder) ||
+    newestWhere(pp => pp.folder === want.folder) ||
+    newestWhere(pp => pp.college === want.college && normalizeFolder(pp.folder) === wantNorm) ||
+    newestWhere(pp => normalizeFolder(pp.folder) === wantNorm) ||
+    null
+  );
+}
+
 // ── Public API ───────────────────────────────────────────────────
 // Path-parsing helpers (fmtLabel, fmtLocation) come from the
 // majorRequirements port passed by the caller — not imported directly
@@ -145,27 +201,13 @@ export function getMajorOptionGroups(majorRequirements) {
  * Falls back to the newest available (college, folder) match if the exact
  * path (including year) is not found — handles saved plans from older catalog years.
  */
+/** Resolve a saved undergrad major path to its current registry path, or null. */
+export function resolveMajorPath(path) {
+  return resolveInMap(_moduleMap, path, parseMajorPathParts);
+}
+
 export function canonicalizeMajorPath(path) {
-  if (_moduleMap[path]) return path;
-  // Legacy: paths before the external/ submodule reorganisation
-  const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
-  if (_moduleMap[migrated]) return migrated;
-  // Fallback: match by (college, folder) across any year, prefer newest
-  const parsed = parseMajorPathParts(path);
-  if (parsed) {
-    let bestPath = null;
-    let bestYear = -1;
-    for (const p of Object.keys(_moduleMap)) {
-      const pp = parseMajorPathParts(p);
-      if (!pp) continue;
-      if (pp.college === parsed.college && pp.folder === parsed.folder && pp.year > bestYear) {
-        bestYear = pp.year;
-        bestPath = p;
-      }
-    }
-    if (bestPath) return bestPath;
-  }
-  return path;
+  return resolveMajorPath(path) ?? path;
 }
 
 /**
@@ -261,23 +303,13 @@ export function getGradMajorOptionGroups(majorRequirements) {
   return map;
 }
 
+/** Resolve a saved graduate major path to its current registry path, or null. */
+export function resolveGradMajorPath(path) {
+  return resolveInMap(_gradMap, path, parseMajorPathParts);
+}
+
 export function canonicalizeGradMajorPath(path) {
-  if (_gradMap[path]) return path;
-  const parsed = parseMajorPathParts(path);
-  if (parsed) {
-    let bestPath = null;
-    let bestYear = -1;
-    for (const p of Object.keys(_gradMap)) {
-      const pp = parseMajorPathParts(p);
-      if (!pp) continue;
-      if (pp.college === parsed.college && pp.folder === parsed.folder && pp.year > bestYear) {
-        bestYear = pp.year;
-        bestPath = p;
-      }
-    }
-    if (bestPath) return bestPath;
-  }
-  return path;
+  return resolveGradMajorPath(path) ?? path;
 }
 
 /**

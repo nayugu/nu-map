@@ -478,20 +478,23 @@ function NuPathGrid({ covered }) {
 
 function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
   const { courseMap, majorRequirements, isPhone } = useContext(GradCtx);
+  const { t } = useLanguage();
   const [minor, setMinor] = useState(null);
   const [err, setErr] = useState(null);
+  const [gone, setGone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(true);
   const minorName = useTranslatedText(minor?.name ?? null);
 
   useEffect(() => {
-    if (!path) { setMinor(null); setErr(null); return; }
-    setLoading(true); setErr(null);
+    if (!path) { setMinor(null); setErr(null); setGone(false); return; }
+    setLoading(true); setErr(null); setGone(false);
     majorRequirements.loadMinor(path)
       .then(setMinor)
       .catch(e => {
         if (e.message.includes('not found in registry')) {
-          onClear?.();
+          // Keep the saved selection; let the user remove it deliberately.
+          setGone(true);
         } else {
           setErr(e.message);
         }
@@ -540,6 +543,14 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
   if (!path) return null;
   if (loading) return <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0" }}>Loading…</div>;
   if (err) return <div style={{ fontSize: 9, color: "var(--error-text)" }}>Error: {err}</div>;
+  if (gone) return (
+    <StaleNotice
+      isPhone={isPhone}
+      message={t("grad.stale.minor", { label })}
+      removeLabel={t("grad.stale.remove")}
+      onRemove={() => onClear?.()}
+    />
+  );
   if (!minor) return null;
 
   return (
@@ -639,6 +650,33 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
   );
 }
 
+// ── Stale-selection notice ───────────────────────────────────────
+// Shown when a saved program path can no longer be resolved to any current
+// catalog entry. The selection is preserved until the user removes it.
+function StaleNotice({ message, onRemove, isPhone, removeLabel = "Remove" }) {
+  return (
+    <div style={{
+      marginTop: 4, padding: "5px 7px", borderRadius: 4,
+      background: "var(--warn-bg, var(--border-2))",
+      border: "1px solid var(--warn-border, var(--border-3))",
+      display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap",
+      fontSize: isPhone ? 8 : 9,
+    }}>
+      <span style={{ color: "var(--text-2)", flex: 1 }}>{message}</span>
+      <button
+        onClick={onRemove}
+        style={{
+          fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
+          borderRadius: 3, border: "1px solid var(--border-3)",
+          background: "transparent", color: "var(--text-3)", fontWeight: 600,
+        }}
+      >
+        {removeLabel}
+      </button>
+    </div>
+  );
+}
+
 // ── Main panel ───────────────────────────────────────────────────
 
 export default function GradPanel({ wideCatalog = false }) {
@@ -685,11 +723,13 @@ export default function GradPanel({ wideCatalog = false }) {
   const [loadErr,        setLoadErr]        = useState(null);
   const [fetching,       setFetching]       = useState(false);
   const [newerMajorPath, setNewerMajorPath] = useState(null);
+  const [majorGone,      setMajorGone]      = useState(false);
   const majorName = useTranslatedText(major?.name ?? null);
   const concName  = useTranslatedText(selConc || null);
 
   const [major2Data,    setMajor2Data]    = useState(null);
   const [fetching2,     setFetching2]     = useState(false);
+  const [major2Gone,    setMajor2Gone]    = useState(false);
   const major2Name = useTranslatedText(major2Data?.name ?? null);
   const [showMajor2,    setShowMajor2]    = useState(() => major2Path !== "");
   const [showSwitchPrompt, setShowSwitchPrompt] = useState(false);
@@ -709,16 +749,18 @@ export default function GradPanel({ wideCatalog = false }) {
 
   // Fetch major JSON on path change
   useEffect(() => {
-    if (!selPath) { setMajor(null); setLoadErr(null); setNewerMajorPath(null); return; }
-    setFetching(true); setLoadErr(null); setMajor(null); setSelConc(""); setNewerMajorPath(null);
+    if (!selPath) { setMajor(null); setLoadErr(null); setNewerMajorPath(null); setMajorGone(false); setSelConc(""); return; }
+    setFetching(true); setLoadErr(null); setMajor(null); setNewerMajorPath(null); setMajorGone(false);
     const loader = isGrad ? majorRequirements.loadGradMajor(selPath) : majorRequirements.loadMajor(selPath);
     const findNewer = isGrad ? findNewerGradMajorVersion : findNewerMajorVersion;
     loader
       .then(data => { setMajor(data); setNewerMajorPath(findNewer(selPath)); })
       .catch(e => {
         if (e.message.includes('not found in registry')) {
-          // Stale path from an old plan — clear it silently so the user can pick a new major
-          setSelPath("");
+          // The program could not be resolved to any current catalog entry (renamed
+          // away or discontinued). Keep the saved selection and let the user decide —
+          // never wipe it silently, or the auto-save would persist the loss.
+          setMajorGone(true);
         } else {
           setLoadErr(e.message);
         }
@@ -735,12 +777,12 @@ export default function GradPanel({ wideCatalog = false }) {
 
   // Fetch second major JSON on path change
   useEffect(() => {
-    if (!major2Path) { setMajor2Data(null); return; }
-    setFetching2(true); setMajor2Data(null);
+    if (!major2Path) { setMajor2Data(null); setMajor2Gone(false); return; }
+    setFetching2(true); setMajor2Data(null); setMajor2Gone(false);
     const loader2 = isGrad ? majorRequirements.loadGradMajor(major2Path) : majorRequirements.loadMajor(major2Path);
     loader2
       .then(data => setMajor2Data(data))
-      .catch(() => setMajor2Path(""))
+      .catch(() => setMajor2Gone(true)) // keep the saved path; surface it instead of wiping
       .finally(() => setFetching2(false));
   }, [major2Path, isGrad]);
 
@@ -982,6 +1024,14 @@ export default function GradPanel({ wideCatalog = false }) {
                     </button>
                   </div>
                 )}
+                {majorGone && (
+                  <StaleNotice
+                    isPhone={isPhone}
+                    message={t("grad.stale.program")}
+                    removeLabel={t("grad.stale.remove")}
+                    onRemove={() => setSelPath("")}
+                  />
+                )}
               </div>
 
               {/* Concentration selector */}
@@ -1011,6 +1061,14 @@ export default function GradPanel({ wideCatalog = false }) {
                     >✕</button>
                   </div>
                   <SearchCombo value={major2Path} onChange={setMajor2Path} groups={majorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")} />
+                  {major2Gone && (
+                    <StaleNotice
+                      isPhone={isPhone}
+                      message={t("grad.stale.program")}
+                      removeLabel={t("grad.stale.remove")}
+                      onRemove={() => { setMajor2Path(""); setShowMajor2(false); }}
+                    />
+                  )}
                 </div>
               ) : (
                 <button
@@ -1109,7 +1167,7 @@ export default function GradPanel({ wideCatalog = false }) {
         {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />}
 
                 {/* ── Empty state ──────────────────────────────────────── */}
-        {!major && !major2Data && !minor1 && !minor2 && !fetching && !loadErr && (
+        {!major && !major2Data && !minor1 && !minor2 && !fetching && !loadErr && !majorGone && !major2Gone && (
           <div style={{ textAlign: "center", color: "var(--text-5)", fontSize: 10, paddingTop: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {t("grad.empty")}
           </div>

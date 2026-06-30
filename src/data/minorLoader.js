@@ -10,6 +10,8 @@
 // Scraped entries win on collision with the submodule fallback.
 // ═══════════════════════════════════════════════════════════════════
 
+import { resolveInMap } from './majorLoader.js';
+
 const _externalMap = import.meta.glob(
   '../../external/graduatenu/packages/api/src/minor/minors/**/parsed.initial.json',
   { eager: false }
@@ -96,26 +98,13 @@ export function getMinorOptionGroups(majorRequirements) {
   return map;
 }
 
+/** Resolve a saved minor path to its current registry path, or null. */
+export function resolveMinorPath(path) {
+  return resolveInMap(_moduleMap, path, parseMinorPathParts);
+}
+
 export function canonicalizeMinorPath(path) {
-  if (_moduleMap[path]) return path;
-  const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
-  if (_moduleMap[migrated]) return migrated;
-  // Fallback: match by (college, folder) across any year, prefer newest
-  const parsed = parseMinorPathParts(path);
-  if (parsed) {
-    let bestPath = null;
-    let bestYear = -1;
-    for (const p of Object.keys(_moduleMap)) {
-      const pp = parseMinorPathParts(p);
-      if (!pp) continue;
-      if (pp.college === parsed.college && pp.folder === parsed.folder && pp.year > bestYear) {
-        bestYear = pp.year;
-        bestPath = p;
-      }
-    }
-    if (bestPath) return bestPath;
-  }
-  return path;
+  return resolveMinorPath(path) ?? path;
 }
 
 export async function loadMinor(path) {
