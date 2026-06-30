@@ -25,7 +25,7 @@
 // auditMajor() / auditMinor() are not yet implemented here — GradPanel
 // calls loadMajor() + gradRequirements.js directly (Stage 2 migration).
 // ═══════════════════════════════════════════════════════════════════
-import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor } from "../../data/majorLoader.js";
+import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor, getGradMajorOptions as _getGradMajorOptions, getGradMajorOptionGroups as _getGradMajorOptionGroups, loadGradMajor as _loadGradMajor } from "../../data/majorLoader.js";
 import { getMinorOptions as _getMinorOptions, getMinorOptionGroups as _getMinorOptionGroups, loadMinor as _loadMinor } from "../../data/minorLoader.js";
 
 /**
@@ -85,12 +85,25 @@ export default {
   /** @returns {Promise<object>} Raw graduatenu minor JSON */
   loadMinor(path) { return _loadMinor(path); },
 
+  /** @returns {import('../../ports/IMajorRequirements.js').ProgramOption[]} */
+  getGradMajorOptions() { return _getGradMajorOptions(_self); },
+
+  /** @returns {Map<string, import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
+  getGradMajorOptionGroups() { return _getGradMajorOptionGroups(_self); },
+
+  /** @returns {Promise<object>} Raw graduate program JSON */
+  loadGradMajor(path) { return _loadGradMajor(path); },
+
   auditMajor(_id, _plan, _courseMap) {
     throw new Error("auditMajor() not yet implemented — GradPanel uses loadMajor() + gradRequirements.js directly.");
   },
 
   auditMinor(_id, _plan, _courseMap) {
     throw new Error("auditMinor() not yet implemented — GradPanel uses loadMinor() + gradRequirements.js directly.");
+  },
+
+  auditGradMajor(_id, _plan, _courseMap) {
+    throw new Error("auditGradMajor() not yet implemented — GradPanel uses loadGradMajor() + gradRequirements.js directly.");
   },
 
   getSources() {

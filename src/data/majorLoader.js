@@ -41,6 +41,12 @@ const _scrapedMap = import.meta.glob(
 // Scraped entries win on collision — own data preferred over external submodule.
 const _moduleMap = { ..._externalMap, ..._scrapedMap };
 
+// Graduate program data (src/data/grad-majors/).
+const _gradMap = import.meta.glob(
+  './grad-majors/**/parsed.initial.json',
+  { eager: false }
+);
+
 // ── Internal helpers ─────────────────────────────────────────────
 
 /**
@@ -66,8 +72,10 @@ function parseMajorPathParts(path) {
 // majorRequirements port passed by the caller — not imported directly
 // from a specific adapter, preserving institution-agnosticism here.
 
-let _cachedOptions     = null;
-let _cachedMajorReqs   = null;
+let _cachedOptions      = null;
+let _cachedMajorReqs    = null;
+let _cachedGradOptions  = null;
+let _cachedGradMajorReqs = null;
 
 /**
  * Returns the full list of available major options derived from file paths.
@@ -191,6 +199,114 @@ export async function loadMajor(path) {
   const canonical = canonicalizeMajorPath(path);
   const fn = _moduleMap[canonical];
   if (!fn) throw new Error(`Major not found in registry: ${path}`);
+  const mod = await fn();
+  return mod.default ?? mod;
+}
+
+// ── Graduate major functions (mirror of undergrad above) ─────────────────────
+
+/**
+ * Returns the full list of available graduate major options derived from file paths.
+ *
+ * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
+ */
+export function getGradMajorOptions(majorRequirements) {
+  if (_cachedGradOptions && _cachedGradMajorReqs === majorRequirements) return _cachedGradOptions;
+
+  const { fmtLabel, fmtLocation } = majorRequirements;
+  _cachedGradMajorReqs = majorRequirements;
+  _cachedGradOptions = Object.keys(_gradMap)
+    .map(path => {
+      const parts = path.split('/');
+      let yearIdx = -1;
+      for (let i = 0; i < parts.length; i++) {
+        if (/^\d{4}$/.test(parts[i])) { yearIdx = i; break; }
+      }
+      if (yearIdx < 0) return null;
+
+      const year        = parseInt(parts[yearIdx], 10);
+      const college     = parts[yearIdx + 1] ?? '';
+      const folder      = parts[yearIdx + 2] ?? '';
+      const label       = fmtLabel(folder);
+      const location    = fmtLocation(folder);
+      const collegeLabel = fmtLabel(college);
+
+      return { path, year, college, collegeLabel, folder, label, location };
+    })
+    .filter(Boolean)
+    .sort((a, b) =>
+      b.year - a.year ||
+      a.college.localeCompare(b.college) ||
+      a.label.localeCompare(b.label)
+    )
+    .filter((opt, _, arr) =>
+      arr.findIndex(o => o.college === opt.college && o.folder === opt.folder) === arr.indexOf(opt)
+    );
+
+  return _cachedGradOptions;
+}
+
+/**
+ * Group graduate options by "YYYY — College Label" for use in <optgroup> selectors.
+ *
+ * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
+ */
+export function getGradMajorOptionGroups(majorRequirements) {
+  const map = new Map();
+  for (const opt of getGradMajorOptions(majorRequirements)) {
+    const key = `${opt.year} — ${opt.collegeLabel}`;
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(opt);
+  }
+  return map;
+}
+
+export function canonicalizeGradMajorPath(path) {
+  if (_gradMap[path]) return path;
+  const parsed = parseMajorPathParts(path);
+  if (parsed) {
+    let bestPath = null;
+    let bestYear = -1;
+    for (const p of Object.keys(_gradMap)) {
+      const pp = parseMajorPathParts(p);
+      if (!pp) continue;
+      if (pp.college === parsed.college && pp.folder === parsed.folder && pp.year > bestYear) {
+        bestYear = pp.year;
+        bestPath = p;
+      }
+    }
+    if (bestPath) return bestPath;
+  }
+  return path;
+}
+
+/**
+ * Check whether a newer catalog-year version of a graduate major exists.
+ */
+export function findNewerGradMajorVersion(currentPath) {
+  const canonical = canonicalizeGradMajorPath(currentPath);
+  const current = parseMajorPathParts(canonical);
+  if (!current) return null;
+
+  let newestPath = null;
+  let newestYear = current.year;
+
+  for (const path of Object.keys(_gradMap)) {
+    const pp = parseMajorPathParts(path);
+    if (!pp) continue;
+    if (pp.college === current.college && pp.folder === current.folder && pp.year > newestYear) {
+      newestYear = pp.year;
+      newestPath = path;
+    }
+  }
+
+  return newestPath;
+}
+
+export async function loadGradMajor(path) {
+  const canonical = canonicalizeGradMajorPath(path);
+  const fn = _gradMap[canonical];
+  if (!fn) throw new Error(`Graduate major not found in registry: ${path}`);
   const mod = await fn();
   return mod.default ?? mod;
 }

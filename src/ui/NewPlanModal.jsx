@@ -2,21 +2,24 @@ import { useState, useEffect, useRef } from "react";
 import { usePlanner }    from "../context/PlannerContext.jsx";
 import { useLanguage }   from "../context/LanguageContext.jsx";
 import YearStepper       from "./YearStepper.jsx";
+import { NUM_YEARS }     from "../core/constants.js";
 
 const MAX_GRAD_YEAR = 2040;
+const GRAD_YEARS    = 2;
 
 export default function NewPlanModal({ open, onClose }) {
   const {
     planEntSem, planEntYear, planGradSem, planGradYear,
-    semOrd, createPlan,
+    semOrd, createPlan, studentType: activeStudentType,
   } = usePlanner();
   const { t } = useLanguage();
 
-  const [name,     setName]     = useState("");
-  const [entSem,   setLocalEntSem]   = useState("fall");
-  const [entYear,  setLocalEntYear]  = useState(new Date().getFullYear());
-  const [gradSem,  setLocalGradSem]  = useState("spring");
-  const [gradYear, setLocalGradYear] = useState(new Date().getFullYear() + 4);
+  const [name,        setName]        = useState("");
+  const [studentType, setStudentType] = useState("undergrad");
+  const [entSem,      setLocalEntSem]  = useState("fall");
+  const [entYear,     setLocalEntYear] = useState(new Date().getFullYear());
+  const [gradSem,     setLocalGradSem] = useState("spring");
+  const [gradYear,    setLocalGradYear]= useState(new Date().getFullYear() + NUM_YEARS);
 
   const nameRef    = useRef(null);
   const maxEntYear = new Date().getFullYear() + 1;
@@ -26,6 +29,7 @@ export default function NewPlanModal({ open, onClose }) {
   useEffect(() => {
     if (!open) return;
     setName("");
+    setStudentType(activeStudentType);
     setLocalEntSem(planEntSem);
     setLocalEntYear(planEntYear);
     setLocalGradSem(planGradSem);
@@ -51,11 +55,27 @@ export default function NewPlanModal({ open, onClose }) {
   const durationYrs = ((gradYear * 2 + (gradSem === "fall" ? 1 : 0)) -
                        (entYear  * 2 + (entSem  === "fall" ? 1 : 0)) + 1) / 2;
 
+  const switchStudentType = (type) => {
+    setStudentType(type);
+    const defaultYears = type === "graduate" ? GRAD_YEARS : NUM_YEARS;
+    setLocalGradYear(entYear + defaultYears);
+    setLocalGradSem("spring");
+  };
+
   const submit = () => {
     if (!canCreate) return;
-    createPlan(name.trim(), { entSem, entYear, gradSem, gradYear });
+    createPlan(name.trim(), { entSem, entYear, gradSem, gradYear, studentType });
     onClose();
   };
+
+  const semBtnStyle = (s, isSel, isBlocked) => ({
+    flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
+    cursor: isBlocked ? "not-allowed" : "pointer",
+    background: isSel ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
+    border: `1px solid ${isSel ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : isBlocked ? "var(--blocked-border)" : "var(--border-2)"}`,
+    color: isSel ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : isBlocked ? "var(--blocked-text)" : "var(--text-4)",
+    fontWeight: isSel ? 700 : 400, opacity: isBlocked ? 0.4 : 1,
+  });
 
   return (
     <div
@@ -102,6 +122,28 @@ export default function NewPlanModal({ open, onClose }) {
           />
         </div>
 
+        {/* Student type */}
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>
+            STUDENT TYPE
+          </div>
+          <div style={{ display: "flex", borderRadius: 4, overflow: "hidden", border: "1px solid var(--border-2)" }}>
+            {[["undergrad", "Undergraduate"], ["graduate", "Graduate"]].map(([val, label]) => (
+              <button key={val} onClick={() => switchStudentType(val)}
+                style={{
+                  flex: 1, fontSize: 9, padding: "4px 0", cursor: "pointer",
+                  background: studentType === val ? "var(--active-bg)" : "transparent",
+                  border: "none",
+                  borderRight: val === "undergrad" ? "1px solid var(--border-2)" : "none",
+                  color: studentType === val ? "var(--active)" : "var(--text-4)",
+                  fontWeight: studentType === val ? 700 : 400,
+                }}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Entry */}
         <div style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>
@@ -112,14 +154,8 @@ export default function NewPlanModal({ open, onClose }) {
               const wouldBe = semOrd(s, entYear);
               const blocked = wouldBe >= gradOrd;
               return (
-                <button key={s} onClick={() => { if (!blocked) setLocalEntSem(s); }} style={{
-                  flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
-                  cursor: blocked ? "not-allowed" : "pointer",
-                  background: entSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
-                  border: `1px solid ${entSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
-                  color: entSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
-                  fontWeight: entSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
-                }}>
+                <button key={s} onClick={() => { if (!blocked) setLocalEntSem(s); }}
+                  style={semBtnStyle(s, entSem === s, blocked)}>
                   {s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}
                 </button>
               );
@@ -143,14 +179,8 @@ export default function NewPlanModal({ open, onClose }) {
               const wouldBe = semOrd(s, gradYear);
               const blocked = wouldBe <= entOrd;
               return (
-                <button key={s} onClick={() => { if (!blocked) setLocalGradSem(s); }} style={{
-                  flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
-                  cursor: blocked ? "not-allowed" : "pointer",
-                  background: gradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
-                  border: `1px solid ${gradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
-                  color: gradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
-                  fontWeight: gradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
-                }}>
+                <button key={s} onClick={() => { if (!blocked) setLocalGradSem(s); }}
+                  style={semBtnStyle(s, gradSem === s, blocked)}>
                   {s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}
                 </button>
               );

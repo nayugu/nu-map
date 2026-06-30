@@ -4,18 +4,22 @@ import { usePort }         from "../context/InstitutionContext.jsx";
 import { IInstitution }    from "../ports/IInstitution.js";
 import { useLanguage }     from "../context/LanguageContext.jsx";
 import YearStepper         from "./YearStepper.jsx";
+import { NUM_YEARS }       from "../core/constants.js";
 
-const MAX_GRAD_YEAR = 2040;
+const MAX_GRAD_YEAR   = 2040;
+const GRAD_YEARS      = 2;
 
 export default function CohortSetupModal() {
   const {
     planEntSem, planEntYear, planGradSem, planGradYear,
     semOrd, setEntSem, setEntYear, setGradSem, setGradYear,
     showCohortSetup, setShowCohortSetup,
+    studentType: savedStudentType, setStudentType,
   } = usePlanner();
   const institution = usePort(IInstitution);
   const { t } = useLanguage();
 
+  const [localStudentType, setLocalStudentType] = useState(savedStudentType);
   const [entSem,   setLocalEntSem]   = useState(planEntSem);
   const [entYear,  setLocalEntYear]  = useState(planEntYear);
   const [gradSem,  setLocalGradSem]  = useState(planGradSem);
@@ -39,13 +43,25 @@ export default function CohortSetupModal() {
   const durationYrs = ((gradYear * 2 + (gradSem === "fall" ? 1 : 0)) -
                        (entYear  * 2 + (entSem  === "fall" ? 1 : 0)) + 1) / 2;
 
+  const switchStudentType = (type) => {
+    setLocalStudentType(type);
+    const defaultYears = type === "graduate" ? GRAD_YEARS : NUM_YEARS;
+    setLocalGradYear(entYear + defaultYears);
+    setLocalGradSem(type === "graduate" ? "spring" : "spring");
+  };
+
   const dismiss = () => {
+    if (localStudentType !== savedStudentType) setStudentType(localStudentType);
     setEntSem(entSem);
     setEntYear(entYear);
     setGradSem(gradSem);
     setGradYear(gradYear);
     try { localStorage.setItem(`${institution.storagePrefix}-seen-cohort-setup`, "1"); } catch {}
     setShowCohortSetup(false);
+  };
+
+  const btnBase = {
+    flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4, cursor: "pointer",
   };
 
   return (
@@ -77,6 +93,28 @@ export default function CohortSetupModal() {
           </div>
         </div>
 
+        {/* Student type */}
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>
+            STUDENT TYPE
+          </div>
+          <div style={{ display: "flex", borderRadius: 4, overflow: "hidden", border: "1px solid var(--border-2)" }}>
+            {[["undergrad", "Undergraduate"], ["graduate", "Graduate"]].map(([val, label]) => (
+              <button key={val} onClick={() => switchStudentType(val)}
+                style={{
+                  flex: 1, fontSize: 9, padding: "4px 0", cursor: "pointer",
+                  background: localStudentType === val ? "var(--active-bg)" : "transparent",
+                  border: "none",
+                  borderRight: val === "undergrad" ? "1px solid var(--border-2)" : "none",
+                  color: localStudentType === val ? "var(--active)" : "var(--text-4)",
+                  fontWeight: localStudentType === val ? 700 : 400,
+                }}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Entry */}
         <div style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>
@@ -88,7 +126,7 @@ export default function CohortSetupModal() {
               const blocked = wouldBe >= gradOrd;
               return (
                 <button key={s} onClick={() => { if (!blocked) setLocalEntSem(s); }} style={{
-                  flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
+                  ...btnBase,
                   cursor: blocked ? "not-allowed" : "pointer",
                   background: entSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
                   border: `1px solid ${entSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
@@ -119,7 +157,7 @@ export default function CohortSetupModal() {
               const blocked = wouldBe <= entOrd;
               return (
                 <button key={s} onClick={() => { if (!blocked) setLocalGradSem(s); }} style={{
-                  flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
+                  ...btnBase,
                   cursor: blocked ? "not-allowed" : "pointer",
                   background: gradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
                   border: `1px solid ${gradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,

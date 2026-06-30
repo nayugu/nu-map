@@ -24,7 +24,7 @@ import {
   allocateMajorWithElectives,
   allocateSections,
 } from "../core/gradRequirements.js";
-import { findNewerMajorVersion } from "../data/majorLoader.js";
+import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
@@ -631,7 +631,10 @@ export default function GradPanel({ wideCatalog = false }) {
     minor1, setMinor1,
     minor2, setMinor2,
     getSemStatus,
+    studentType,
   } = usePlanner();
+
+  const isGrad = studentType === "graduate";
 
   const selPath    = majorPath || "";
   const setSelPath = setMajorPath;
@@ -643,7 +646,10 @@ export default function GradPanel({ wideCatalog = false }) {
   const unitName          = creditSystem.getUnitName();
   const { t } = useLanguage();
 
-  const majorGroups  = useMemo(() => majorRequirements.getMajorOptionGroups(), [majorRequirements]);
+  const majorGroups  = useMemo(
+    () => isGrad ? majorRequirements.getGradMajorOptionGroups() : majorRequirements.getMajorOptionGroups(),
+    [majorRequirements, isGrad]
+  );
 
   // Translated major name + concentration (no-ops when translation disabled or in source locale).
   const minorGroups  = useMemo(() => majorRequirements.getMinorOptionGroups(), [majorRequirements]);
@@ -677,8 +683,10 @@ export default function GradPanel({ wideCatalog = false }) {
   useEffect(() => {
     if (!selPath) { setMajor(null); setLoadErr(null); setNewerMajorPath(null); return; }
     setFetching(true); setLoadErr(null); setMajor(null); setSelConc(""); setNewerMajorPath(null);
-    majorRequirements.loadMajor(selPath)
-      .then(data => { setMajor(data); setNewerMajorPath(findNewerMajorVersion(selPath)); })
+    const loader = isGrad ? majorRequirements.loadGradMajor(selPath) : majorRequirements.loadMajor(selPath);
+    const findNewer = isGrad ? findNewerGradMajorVersion : findNewerMajorVersion;
+    loader
+      .then(data => { setMajor(data); setNewerMajorPath(findNewer(selPath)); })
       .catch(e => {
         if (e.message.includes('not found in registry')) {
           // Stale path from an old plan — clear it silently so the user can pick a new major
@@ -688,7 +696,7 @@ export default function GradPanel({ wideCatalog = false }) {
         }
       })
       .finally(() => setFetching(false));
-  }, [selPath]);
+  }, [selPath, isGrad]);
 
   // Reset concentration if not available in newly loaded major
   useEffect(() => {
@@ -701,11 +709,12 @@ export default function GradPanel({ wideCatalog = false }) {
   useEffect(() => {
     if (!major2Path) { setMajor2Data(null); return; }
     setFetching2(true); setMajor2Data(null);
-    majorRequirements.loadMajor(major2Path)
+    const loader2 = isGrad ? majorRequirements.loadGradMajor(major2Path) : majorRequirements.loadMajor(major2Path);
+    loader2
       .then(data => setMajor2Data(data))
       .catch(() => setMajor2Path(""))
       .finally(() => setFetching2(false));
-  }, [major2Path]);
+  }, [major2Path, isGrad]);
 
   const placedSet = useMemo(
     () => buildPlacedKeySet(effectivePlacements, placedOut, courseMap),

@@ -40,19 +40,25 @@ export default {
   fmtLabel,
   fmtLocation,
 
-  getMajorOptions()      { return []; },
-  getMinorOptions()      { return []; },
-  getMajorOptionGroups() { return new Map(); },
-  getMinorOptionGroups() { return new Map(); },
+  getMajorOptions()         { return []; },
+  getMinorOptions()         { return []; },
+  getMajorOptionGroups()    { return new Map(); },
+  getMinorOptionGroups()    { return new Map(); },
+  getGradMajorOptions()     { return []; },
+  getGradMajorOptionGroups(){ return new Map(); },
 
-  loadMajor(_path) { return Promise.reject(new Error("loadMajor() not implemented in generic adapter.")); },
-  loadMinor(_path) { return Promise.reject(new Error("loadMinor() not implemented in generic adapter.")); },
+  loadMajor(_path)     { return Promise.reject(new Error("loadMajor() not implemented in generic adapter.")); },
+  loadMinor(_path)     { return Promise.reject(new Error("loadMinor() not implemented in generic adapter.")); },
+  loadGradMajor(_path) { return Promise.reject(new Error("loadGradMajor() not implemented in generic adapter.")); },
 
   auditMajor(_id, _plan, _courseMap) {
     throw new Error("auditMajor() not implemented in generic adapter.");
   },
   auditMinor(_id, _plan, _courseMap) {
     throw new Error("auditMinor() not implemented in generic adapter.");
+  },
+  auditGradMajor(_id, _plan, _courseMap) {
+    throw new Error("auditGradMajor() not implemented in generic adapter.");
   },
   getSources() { return []; },
 };
