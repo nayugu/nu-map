@@ -1391,6 +1391,12 @@ export function PlannerProvider({ children }) {
       if (!touchDragIdRef.current && !touchDragElRef.current) return;
       const touch = e.touches[0];
 
+      // The gesture began on a draggable card (onTouchStart bails otherwise), so
+      // this is a drag, not a scroll. Prevent the default from the very first move
+      // — on iOS, if the first touchmove isn't cancelled the browser commits to
+      // scrolling for the rest of the gesture and the background drags along.
+      e.preventDefault();
+
       if (!touchDragStartedRef.current) {
         const dx = touch.clientX - touchStartPos.current.x;
         const dy = touch.clientY - touchStartPos.current.y;
@@ -1406,7 +1412,6 @@ export function PlannerProvider({ children }) {
         initiateDrag(cardEl, rect, id, type, fromSem, duration, typeId);
       }
 
-      e.preventDefault();
       if (ghostRef.current) {
         ghostRef.current.style.left = (touch.clientX - touchStartOff.current.x) + 'px';
         ghostRef.current.style.top  = (touch.clientY - touchStartOff.current.y) + 'px';
