@@ -283,6 +283,16 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
   );
 
   if (r.type === "XOM") {
+    // Single required course mis-encoded as XOM (scraper artifact: a credit-hour comment
+    // row followed by exactly one course course). Render as a plain course row instead of
+    // "X/Y SH from elective pool" — the pool framing is misleading when there's one option.
+    const singleCourse = r.children?.length === 1 && r.children[0].type === 'COURSE'
+      ? r.children[0]
+      : null;
+    if (singleCourse) {
+      return <ReqNode r={{ ...singleCourse, sat: r.sat }} depth={depth} dimmed={dimmed} />;
+    }
+
     const has = r.children?.length > 0;
     return (
       <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>

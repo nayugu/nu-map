@@ -239,7 +239,13 @@ function parseRowGroup(rows) {
     if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; return; }
 
     if (chooseCreds > 0) {
-      requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
+      // A credit-hour annotation followed by exactly one course is just a required course,
+      // not an elective pool. Emit as COURSE so the renderer doesn't show "X/Y SH from pool".
+      if (chooseItems.length === 1 && chooseItems[0].type === 'COURSE') {
+        requirements.push(chooseItems[0]);
+      } else {
+        requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
+      }
     } else if (chooseCount === 1 || chooseItems.length <= 2) {
       requirements.push({ type: 'OR', courses: chooseItems });
     } else {

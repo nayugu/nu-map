@@ -35,7 +35,7 @@ const OUT_ROOT  = join(ROOT, 'src/data/grad-majors');
 const CHANGE_LOG     = join(ROOT, 'public/northeastern/change-log.json');
 const CHANGE_LOG_MAX = 600;
 const BASE      = 'https://catalog.northeastern.edu';
-const AZ_URL    = `${BASE}/graduate/azindex/`;
+const AZ_URL    = `${BASE}/azindex/`;
 const DELAY_MS  = parseInt(process.env.GRAD_DELAY_MS ?? '600', 10);
 const YEAR      = parseInt(process.env.GRAD_YEAR ?? String(new Date().getFullYear()), 10);
 
@@ -102,6 +102,7 @@ async function fetchProgramUrls() {
 // ── Credit helpers ────────────────────────────────────────────────────────────
 
 function extractTotalCredits(root) {
+  // Table-based total (some grad pages share the undergrad plangridtotal structure)
   for (const tr of root.querySelectorAll('tr.plangridtotal, tr.listsum, tr.total')) {
     const cells = tr.querySelectorAll('td');
     const cell = cells[cells.length - 1];
@@ -110,12 +111,19 @@ function extractTotalCredits(root) {
     const m = text.match(/(\d+)\s*$/);
     if (m) {
       const n = parseInt(m[1], 10);
-      // Graduate programs: 20–100 SH (MS is typically 30–36, some are higher)
-      if (n > 20 && n < 120) return n;
+      if (n > 20 && n < 150) return n;
     }
   }
-  const m = root.text.match(/[Tt]otal\s+[Hh]ours?[\s:]+(\d+)/);
-  return m ? parseInt(m[1], 10) : 0;
+  // Most grad pages use prose in a "Program Credit/GPA Requirements" section:
+  // "32 total semester hours required" or "36-44 total semester hours required"
+  const gradM = root.text.match(/(\d+)(?:-\d+)?\s+total\s+semester\s+hours/i);
+  if (gradM) {
+    const n = parseInt(gradM[1], 10);
+    if (n > 20 && n < 150) return n;
+  }
+  // Fallback: undergrad-style "Total Hours: X"
+  const legacyM = root.text.match(/[Tt]otal\s+[Hh]ours?[\s:]+(\d+)/);
+  return legacyM ? parseInt(legacyM[1], 10) : 0;
 }
 
 function parseHoursCell(tr) {
@@ -210,7 +218,11 @@ function parseRowGroup(rows) {
     if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; return; }
 
     if (chooseCreds > 0) {
-      requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
+      if (chooseItems.length === 1 && chooseItems[0].type === 'COURSE') {
+        requirements.push(chooseItems[0]);
+      } else {
+        requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
+      }
     } else if (chooseCount === 1 || chooseItems.length <= 2) {
       requirements.push({ type: 'OR', courses: chooseItems });
     } else {
