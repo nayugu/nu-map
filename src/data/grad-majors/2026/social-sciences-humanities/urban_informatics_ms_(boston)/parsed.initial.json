@@ -67,7 +67,8 @@
       "title": "Optional Co-op Experience",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 1,
           "courses": [
             {
               "type": "AND",
@@ -170,7 +171,8 @@
       "title": "Practicum or Capstone",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "OR",

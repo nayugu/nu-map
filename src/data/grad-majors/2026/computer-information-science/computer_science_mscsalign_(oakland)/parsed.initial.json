@@ -100,11 +100,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Artificial Intelligence and Data Science",
+      "title": "Breadth Areas",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 40,
+          "numCreditsMin": 12,
           "courses": [
             {
               "type": "COURSE",
@@ -155,20 +155,7 @@
               "type": "COURSE",
               "subject": "CS",
               "classId": 7140
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Systems and Software",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 60,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CS",
@@ -243,6 +230,143 @@
               "type": "COURSE",
               "subject": "CY",
               "classId": 6740
+            }
+          ],
+          "groups": [
+            {
+              "title": "Artificial Intelligence and Data Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6120
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6140
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6240
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7140
+                }
+              ]
+            },
+            {
+              "title": "Systems and Software",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5520
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5610
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5850
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6410
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6510
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6620
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6650
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6760
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7805
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 5770
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 6740
+                }
+              ]
             }
           ]
         }

@@ -13,14 +13,9 @@
       "title": "Seminar (Core Requirements)",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PHSC",
-              "classId": 6300
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6300
         }
       ],
       "minRequirementCount": 1
@@ -64,10 +59,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Pharmaceutics & Drug Delivery",
+      "title": "Electives",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
@@ -83,19 +79,7 @@
               "type": "COURSE",
               "subject": "PMST",
               "classId": 6254
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Pharmacology",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "PMCL",
@@ -105,19 +89,7 @@
               "type": "COURSE",
               "subject": "PMCL",
               "classId": 6252
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Medicinal Chemistry & Drug Discovery",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CHEM",
@@ -132,6 +104,63 @@
               "type": "COURSE",
               "subject": "PHSC",
               "classId": 5450
+            }
+          ],
+          "groups": [
+            {
+              "title": "Pharmaceutics & Drug Delivery",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PMST",
+                  "classId": 6250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PMST",
+                  "classId": 6252
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PMST",
+                  "classId": 6254
+                }
+              ]
+            },
+            {
+              "title": "Pharmacology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PMCL",
+                  "classId": 6250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PMCL",
+                  "classId": 6252
+                }
+              ]
+            },
+            {
+              "title": "Medicinal Chemistry & Drug Discovery",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 5626
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 5628
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHSC",
+                  "classId": 5450
+                }
+              ]
             }
           ]
         }
@@ -225,14 +254,9 @@
       "title": "Seminar (Core Requirements)",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PHSC",
-              "classId": 6300
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6300
         }
       ],
       "minRequirementCount": 1

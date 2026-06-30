@@ -48,7 +48,8 @@
           "classId": 6275
         },
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

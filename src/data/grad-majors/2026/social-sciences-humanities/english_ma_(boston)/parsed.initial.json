@@ -146,7 +146,8 @@
       "title": "Optional Co-op Experience",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 1,
           "courses": [
             {
               "type": "AND",

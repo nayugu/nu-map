@@ -39,7 +39,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Machine Learning (Core Requirements)",
+      "title": "Machine Learning",
       "requirements": [
         {
           "type": "COURSE",
@@ -63,11 +63,11 @@
     },
     {
       "type": "SECTION",
-      "title": "Vision",
+      "title": "Options",
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 16,
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "COURSE",
@@ -88,20 +88,7 @@
               "type": "COURSE",
               "subject": "EECE",
               "classId": 7370
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Intelligent Interaction",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CS",
@@ -116,20 +103,7 @@
               "type": "COURSE",
               "subject": "CS",
               "classId": 7340
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Robotics and Agent-Based Systems",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CS",
@@ -149,20 +123,7 @@
               "type": "COURSE",
               "subject": "EECE",
               "classId": 5554
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Machine Learning (Options)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 32,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CS",
@@ -174,19 +135,14 @@
               "classId": 6220
             },
             {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 7140
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "EECE",
-                  "classId": 7397
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 7140
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 7397
             },
             {
               "type": "COURSE",
@@ -212,20 +168,7 @@
               "type": "COURSE",
               "subject": "MATH",
               "classId": 7340
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Knowledge Management and Reasoning",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
+            },
             {
               "type": "COURSE",
               "subject": "CS",
@@ -245,6 +188,153 @@
               "type": "COURSE",
               "subject": "CS",
               "classId": 7290
+            }
+          ],
+          "groups": [
+            {
+              "title": "Vision",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7180
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5639
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7370
+                }
+              ]
+            },
+            {
+              "title": "Intelligent Interaction",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7340
+                }
+              ]
+            },
+            {
+              "title": "Robotics and Agent-Based Systems",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5180
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5335
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5550
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5554
+                }
+              ]
+            },
+            {
+              "title": "Machine Learning",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5180
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7140
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7397
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 5230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5612
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5644
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 7340
+                }
+              ]
+            },
+            {
+              "title": "Knowledge Management and Reasoning",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6120
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7290
+                }
+              ]
             }
           ]
         }

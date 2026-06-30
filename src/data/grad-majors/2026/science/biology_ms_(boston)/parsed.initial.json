@@ -25,14 +25,9 @@
       "title": "Colloquium",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 5100
-            }
-          ]
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 5100
         }
       ],
       "minRequirementCount": 1

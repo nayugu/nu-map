@@ -230,7 +230,13 @@
               "type": "COURSE",
               "subject": "PHTH",
               "classId": 6204
-            },
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
             {
               "type": "COURSE",
               "subject": "PPUA",
@@ -244,7 +250,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 2
     }
   ]
 }

@@ -87,14 +87,9 @@
           "classId": 7770
         },
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "NRSG",
-              "classId": 9984
-            }
-          ]
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 9984
         }
       ],
       "minRequirementCount": 5
@@ -200,14 +195,9 @@
           "classId": 7770
         },
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "NRSG",
-              "classId": 9984
-            }
-          ]
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 9984
         }
       ],
       "minRequirementCount": 6

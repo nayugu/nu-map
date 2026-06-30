@@ -35,14 +35,9 @@
       "title": "Research",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 8984
-            }
-          ]
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 8984
         }
       ],
       "minRequirementCount": 1

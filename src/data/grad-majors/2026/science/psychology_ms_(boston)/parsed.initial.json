@@ -84,7 +84,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 48,
+          "numCreditsMin": 6,
           "courses": [
             {
               "type": "COURSE",
@@ -156,14 +156,9 @@
       "title": "Thesis",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 7990
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 7990
         }
       ],
       "minRequirementCount": 1

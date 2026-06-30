@@ -1,5 +1,5 @@
 {
-  "name": "Organizational Communication, Graduate Certificate (Boston)",
+  "name": "Higher Education Administration, Graduate Certificate (Boston)",
   "metadata": {
     "verified": false,
     "lastEdited": "6/30/2026",
@@ -10,58 +10,52 @@
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Required Courses",
+      "title": "Required Core Courses",
       "requirements": [
         {
           "type": "COURSE",
-          "subject": "CMN",
-          "classId": 6010
+          "subject": "EDU",
+          "classId": 6202
         },
         {
           "type": "COURSE",
-          "subject": "CMN",
-          "classId": 6020
+          "subject": "EDU",
+          "classId": 6205
         },
         {
           "type": "COURSE",
-          "subject": "CMN",
-          "classId": 6910
+          "subject": "EDU",
+          "classId": 6219
         }
       ],
       "minRequirementCount": 3
     },
     {
       "type": "SECTION",
-      "title": "Elective Courses",
+      "title": "Elective",
       "requirements": [
         {
-          "type": "XOM",
-          "numCreditsMin": 7,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6080
+              "subject": "EDU",
+              "classId": 6217
             },
             {
               "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6090
+              "subject": "EDU",
+              "classId": 6218
             },
             {
               "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6096
+              "subject": "EDU",
+              "classId": 6224
             },
             {
               "type": "COURSE",
-              "subject": "CMN",
-              "classId": 6100
-            },
-            {
-              "type": "COURSE",
-              "subject": "PBR",
-              "classId": 6001
+              "subject": "EDU",
+              "classId": 6234
             }
           ]
         }

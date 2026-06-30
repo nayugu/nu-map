@@ -47,7 +47,8 @@
       "title": "Quantitative Techniques",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",
@@ -69,7 +70,8 @@
       "title": "Planning Law",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 2,
           "courses": [
             {
               "type": "COURSE",
@@ -92,7 +94,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 12,
+          "numCreditsMin": 2,
           "courses": [
             {
               "type": "COURSE",
@@ -423,7 +425,8 @@
       "title": "Optional Co-op Experience",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 2,
           "courses": [
             {
               "type": "AND",

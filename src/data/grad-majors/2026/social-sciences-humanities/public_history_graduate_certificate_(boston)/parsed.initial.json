@@ -25,14 +25,9 @@
       "title": "Fieldwork",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "HIST",
-              "classId": 8410
-            }
-          ]
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 8410
         }
       ],
       "minRequirementCount": 1

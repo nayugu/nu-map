@@ -13,14 +13,9 @@
       "title": "Seminar (Core Requirements)",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PHSC",
-              "classId": 6300
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6300
         }
       ],
       "minRequirementCount": 1
@@ -166,14 +161,9 @@
       "title": "Seminar (Core Requirements)",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PHSC",
-              "classId": 6300
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6300
         }
       ],
       "minRequirementCount": 1

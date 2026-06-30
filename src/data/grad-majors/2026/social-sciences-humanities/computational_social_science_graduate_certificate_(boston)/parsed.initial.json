@@ -41,7 +41,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 16,
+          "numCreditsMin": 4,
           "courses": [
             {
               "type": "COURSE",

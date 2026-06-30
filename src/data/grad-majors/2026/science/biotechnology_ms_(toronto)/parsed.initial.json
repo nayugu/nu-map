@@ -99,7 +99,8 @@
           "classId": 6100
         },
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 3,
           "courses": [
             {
               "type": "COURSE",

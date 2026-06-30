@@ -23,14 +23,14 @@
           "classId": 6226
         },
         {
+          "type": "COURSE",
+          "subject": "STRT",
+          "classId": 6210
+        },
+        {
           "type": "XOM",
-          "numCreditsMin": 32,
+          "numCreditsMin": 3,
           "courses": [
-            {
-              "type": "COURSE",
-              "subject": "STRT",
-              "classId": 6210
-            },
             {
               "type": "COURSE",
               "subject": "FINA",
@@ -57,7 +57,13 @@
               "type": "COURSE",
               "subject": "MKTG",
               "classId": 6212
-            },
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
             {
               "type": "COURSE",
               "subject": "INTB",
@@ -71,7 +77,7 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 5
     }
   ]
 }

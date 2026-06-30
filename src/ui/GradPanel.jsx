@@ -212,6 +212,11 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
 }
 // ── Requirement tree ─────────────────────────────────────────────
 
+function XomGroupHeader({ title, style }) {
+  const text = useTranslatedText(title);
+  return <span style={style}>{text}</span>;
+}
+
 function ReqNode({ r, depth = 0, dimmed = false }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
@@ -294,6 +299,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
     }
 
     const has = r.children?.length > 0;
+    const hasGroups = r.groups?.length > 0;
     return (
       <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
         <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
@@ -305,7 +311,17 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
           {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>}
         </div>
         {open && has && <div style={{ marginTop: 3 }}>
-          {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)}
+          {hasGroups
+            ? r.groups.map((g, gi) => (
+                <div key={gi}>
+                  <div style={{ paddingLeft: baseIndent + (depth + 1) * (isPhone ? 4 : 10), marginTop: gi > 0 ? 4 : 0, marginBottom: 2 }}>
+                    <XomGroupHeader title={g.title} style={{ fontSize: nodeFz - 1, fontWeight: 600, color: "var(--text-4)", textTransform: "uppercase", letterSpacing: "0.04em" }} />
+                  </div>
+                  {g.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)}
+                </div>
+              ))
+            : r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)
+          }
         </div>}
       </div>
     );

@@ -101,14 +101,9 @@
       "title": "Project",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 8401
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 8401
         }
       ],
       "minRequirementCount": 1
@@ -118,14 +113,9 @@
       "title": "Thesis",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 7990
-            }
-          ]
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 7990
         }
       ],
       "minRequirementCount": 1

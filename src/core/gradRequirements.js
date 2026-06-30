@@ -659,12 +659,25 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
       const allocatedCourses = new Set();
       children.forEach(child => collectAllocated(child, allocatedCourses));
 
+      // Reconstruct named area groups for display (present when scraper used "choose from areas" merge)
+      let allocatedGroups = null;
+      if (node.groups?.length) {
+        let offset = 0;
+        allocatedGroups = node.groups.map(g => {
+          const len = g.courses.length;
+          const groupChildren = children.slice(offset, offset + len);
+          offset += len;
+          return { title: g.title, children: groupChildren };
+        });
+      }
+
       return {
         type: 'XOM',
         sat,
         satSh,
         reqSh: node.numCreditsMin,
         children,
+        ...(allocatedGroups ? { groups: allocatedGroups } : {}),
         label: `${node.numCreditsMin}+ SH from pool`,
         allocatedCourses,
       };

@@ -28,14 +28,9 @@
           "classId": 7750
         },
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 5501
-            }
-          ]
+          "type": "COURSE",
+          "subject": "CHEM",
+          "classId": 5501
         }
       ],
       "minRequirementCount": 4

@@ -212,6 +212,15 @@ function parseCreditInstruction(text) {
   return m ? parseInt(m[1], 10) : null;
 }
 
+function flattenCourseNodes(reqs) {
+  const out = [];
+  for (const r of reqs) {
+    if (r.type === 'COURSE' || r.type === 'RANGE') out.push(r);
+    else if (r.courses) out.push(...flattenCourseNodes(r.courses));
+  }
+  return out;
+}
+
 /**
  * Convert a flat list of <tr> elements into a requirements array.
  * Handles: COURSE, AND (lab pairs), OR (orclass rows), RANGE (commentindent),
@@ -345,13 +354,19 @@ function parseRowGroup(rows) {
       const text = commentSpan.text.trim();
 
       const credits = parseCreditInstruction(text);
-      const count   = credits ? null : parseChooseInstruction(text);
+      const count   = credits !== null ? null : parseChooseInstruction(text);
+      // Last resort: credit is only in the hourscol, not in the comment text.
+      // Only used when both text-based parsers come up empty (e.g. "Complete three
+      // courses from two of the following breadth areas: [12 in hourscol]").
+      const hoursCredit = (credits === null && count === null)
+        ? (parseHoursCell(tr) || null) : null;
+      const effectiveCredits = credits ?? hoursCredit;
 
-      if (credits !== null || count !== null) {
+      if (effectiveCredits !== null || count !== null) {
         commitPending();
         commitChooseGroup();
         inChoose     = true;
-        chooseCreds  = credits ?? 0;
+        chooseCreds  = effectiveCredits ?? 0;
         chooseCount  = count  ?? 0;
       }
       continue;
@@ -408,6 +423,47 @@ function parseTable(table, h2Title) {
   if (cur?.rows.length) groups.push(cur);
 
   if (!groups.length) return [];
+
+  // "Choose from N areas" pattern (e.g. MSCS Breadth, AI MS Specialization):
+  // An initial comment row specifies a credit minimum for a pool that spans multiple
+  // areaheader sub-sections, but uses plain wording ("Complete three courses from two
+  // of the following…") so parseCreditInstruction misses it — the credit lives only
+  // in the row's hourscol. When detected, merge all areaheader groups into one XOM
+  // rather than emitting each area as an independent all-required section.
+  if (groups.length >= 3) {
+    const initial = groups[0];
+    if (initial.title === h2Title && initial.creditHint === 0) {
+      const areaGroups = groups.slice(1);
+      if (areaGroups.every(g => g.creditHint === 0)) {
+        let poolCredit = 0;
+        for (const tr of initial.rows) {
+          const span = tr.querySelector('span.courselistcomment');
+          if (span && !span.getAttribute('class')?.includes('areaheader')) {
+            const h = parseHoursCell(tr);
+            if (h > 0 && parseCreditInstruction(span.text.trim()) === null) {
+              poolCredit = h;
+              break;
+            }
+          }
+        }
+        if (poolCredit > 0 && parseRowGroup(initial.rows).length === 0) {
+          const groups2 = areaGroups.map(g => ({
+            title: g.title,
+            courses: flattenCourseNodes(parseRowGroup(g.rows)),
+          })).filter(g => g.courses.length > 0);
+          const allCourses = groups2.flatMap(g => g.courses);
+          if (allCourses.length > 0) {
+            return [{
+              type: 'SECTION',
+              title: h2Title,
+              requirements: [{ type: 'XOM', numCreditsMin: poolCredit, courses: allCourses, groups: groups2 }],
+              minRequirementCount: 1,
+            }];
+          }
+        }
+      }
+    }
+  }
 
   return groups.map(g => {
     const requirements = parseRowGroup(g.rows);

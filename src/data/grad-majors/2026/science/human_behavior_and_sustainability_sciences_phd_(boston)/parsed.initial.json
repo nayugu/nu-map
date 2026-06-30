@@ -60,7 +60,8 @@
       "title": "Research",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 6,
           "courses": [
             {
               "type": "OR",

@@ -35,14 +35,9 @@
       "title": "Lab Project Seminar",
       "requirements": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "INSH",
-              "classId": 7910
-            }
-          ]
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7910
         }
       ],
       "minRequirementCount": 1

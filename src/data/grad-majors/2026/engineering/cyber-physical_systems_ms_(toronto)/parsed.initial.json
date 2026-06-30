@@ -29,7 +29,7 @@
         },
         {
           "type": "XOM",
-          "numCreditsMin": 12,
+          "numCreditsMin": 8,
           "courses": [
             {
               "type": "OR",
