@@ -28,6 +28,7 @@ function PlannerApp() {
     SEMESTERS,
     timelineRef,
     setSelectedId, setShowPanel,
+    studentType,
   } = usePlanner();
 
   if (loading || loadErr) {
@@ -40,6 +41,8 @@ function PlannerApp() {
   while (i < SEMESTERS.length) {
     const sem  = SEMESTERS[i];
     const next = SEMESTERS[i + 1];
+    // Graduate plans don't use incoming credit
+    if (sem.id === 'incoming' && studentType === 'graduate') { i += 1; continue; }
     if (
       sem.type === 'summer' &&
       next?.type === 'summer' &&

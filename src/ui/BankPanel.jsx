@@ -152,6 +152,7 @@ export default function BankPanel() {
     selectedId, setSelectedId,
     setShowPanel,
     substitutions, addSubstitution, removeSubstitution,
+    studentType,
   } = usePlanner();
 
   const q = bankSearch.trim().toLowerCase();
@@ -375,97 +376,99 @@ export default function BankPanel() {
           <div style={{ display: "flex", gap: 3, padding: "3px 8px 7px" }}>
           </div>
 
-        {/* Placed Out section */}
-        <div
-          onClick={() => setCollapsePlacedOut(v => !v)}
-          style={{
-            display: "flex", alignItems: "center", gap: 5, padding: "6px 8px",
-            cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
-          }}
-        >
-          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
-            {t("bank.section.placedout")}{placedOut.size > 0 ? ` (${placedOut.size})` : ""}
-          </span>
-          <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut ? "▶" : "▼"}</span>
-        </div>
-        {!collapsePlacedOut && (
+        {/* Placed Out section — undergrad only */}
+        {studentType !== "graduate" && <>
           <div
-            data-drop-placedout="true"
-            onDragOver={e => {
-              e.preventDefault();
-              e.dataTransfer.dropEffect = "move";
-            }}
-            onDrop={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (dragInfo) onDropPlacedOut(dragInfo);
-            }}
+            onClick={() => setCollapsePlacedOut(v => !v)}
             style={{
-              padding: placedOut.size > 0 ? "0 8px 6px" : "8px",
-              display: "flex", flexDirection: "column", gap: 3,
-              minHeight: placedOut.size === 0 ? (isPhone ? "40px" : "50px") : "auto",
-              border: placedOut.size === 0 ? "2px dashed var(--border-2)" : "none",
-              borderRadius: "4px",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "var(--text-5)",
-              fontSize: isPhone ? 9 : 10,
+              display: "flex", alignItems: "center", gap: 5, padding: "6px 8px",
+              cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
             }}
           >
-            {placedOut.size > 0 ? (
-              Array.from(placedOut).map(id => {
-                const c = courseMap[id];
-                if (!c) return null;
-                return (
-                  <div
-                    key={id}
-                    draggable
-                    data-drag-id={id}
-                    data-drag-type="course"
-                    onDragStart={e => onDragStart(e, id, "course", null)}
-                    onClick={() => {
-                      setSelectedId(id);
-                      setShowPanel(true);
-                    }}
-                    onMouseEnter={() => setHoveredPlacedOutId(id)}
-                    onMouseLeave={() => setHoveredPlacedOutId(null)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: isPhone ? 4 : 6,
-                      padding: isPhone ? "2px 4px" : "3px 6px",
-                      background: "var(--bg-surface-2)", borderRadius: 4,
-                      cursor: "grab",
-                      textDecoration: selectedId === id || hoveredPlacedOutId === id ? "underline" : "none",
-                      textDecorationStyle: "dotted",
-                      textDecorationColor: "var(--text-4)",
-                      textUnderlineOffset: 2,
-                      fontSize: isPhone ? 5 : 10,
-                    }}
-                  >
-                    <span style={{ fontSize: isPhone ? 6 : 10, fontWeight: 600, color: "var(--text-2)" }}>{c.code}</span>
-                    <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        const newSet = new Set(placedOut);
-                        newSet.delete(id);
-                        setPlacedOut(newSet);
-                      }}
-                      style={{
-                        marginLeft: "auto", background: "none", border: "none",
-                        color: "var(--text-4)", cursor: "pointer",
-                        fontSize: isPhone ? 10 : 11, padding: "0 4px",
-                      }}
-                      title="Remove from placed out"
-                    >✕</button>
-                  </div>
-                );
-              })
-            ) : (
-              <div style={{ textAlign: "center", padding: "4px", fontSize: isPhone ? 7 : 10 }}>
-                {t("bank.placedout.hint")}
-              </div>
-            )}
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
+              {t("bank.section.placedout")}{placedOut.size > 0 ? ` (${placedOut.size})` : ""}
+            </span>
+            <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut ? "▶" : "▼"}</span>
           </div>
-        )}
+          {!collapsePlacedOut && (
+            <div
+              data-drop-placedout="true"
+              onDragOver={e => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+              }}
+              onDrop={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (dragInfo) onDropPlacedOut(dragInfo);
+              }}
+              style={{
+                padding: placedOut.size > 0 ? "0 8px 6px" : "8px",
+                display: "flex", flexDirection: "column", gap: 3,
+                minHeight: placedOut.size === 0 ? (isPhone ? "40px" : "50px") : "auto",
+                border: placedOut.size === 0 ? "2px dashed var(--border-2)" : "none",
+                borderRadius: "4px",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "var(--text-5)",
+                fontSize: isPhone ? 9 : 10,
+              }}
+            >
+              {placedOut.size > 0 ? (
+                Array.from(placedOut).map(id => {
+                  const c = courseMap[id];
+                  if (!c) return null;
+                  return (
+                    <div
+                      key={id}
+                      draggable
+                      data-drag-id={id}
+                      data-drag-type="course"
+                      onDragStart={e => onDragStart(e, id, "course", null)}
+                      onClick={() => {
+                        setSelectedId(id);
+                        setShowPanel(true);
+                      }}
+                      onMouseEnter={() => setHoveredPlacedOutId(id)}
+                      onMouseLeave={() => setHoveredPlacedOutId(null)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: isPhone ? 4 : 6,
+                        padding: isPhone ? "2px 4px" : "3px 6px",
+                        background: "var(--bg-surface-2)", borderRadius: 4,
+                        cursor: "grab",
+                        textDecoration: selectedId === id || hoveredPlacedOutId === id ? "underline" : "none",
+                        textDecorationStyle: "dotted",
+                        textDecorationColor: "var(--text-4)",
+                        textUnderlineOffset: 2,
+                        fontSize: isPhone ? 5 : 10,
+                      }}
+                    >
+                      <span style={{ fontSize: isPhone ? 6 : 10, fontWeight: 600, color: "var(--text-2)" }}>{c.code}</span>
+                      <button
+                        onClick={e => {
+                          e.stopPropagation();
+                          const newSet = new Set(placedOut);
+                          newSet.delete(id);
+                          setPlacedOut(newSet);
+                        }}
+                        style={{
+                          marginLeft: "auto", background: "none", border: "none",
+                          color: "var(--text-4)", cursor: "pointer",
+                          fontSize: isPhone ? 10 : 11, padding: "0 4px",
+                        }}
+                        title="Remove from placed out"
+                      >✕</button>
+                    </div>
+                  );
+                })
+              ) : (
+                <div style={{ textAlign: "center", padding: "4px", fontSize: isPhone ? 7 : 10 }}>
+                  {t("bank.placedout.hint")}
+                </div>
+              )}
+            </div>
+          )}
+        </>}
 
         </>}
         {/* ── End sticky header ── */}
@@ -656,6 +659,7 @@ export default function BankPanel() {
               return (
                 <div key={c.id} style={{ position: "relative", opacity: placedIds.has(c.id) ? 0.55 : 1 }}>
                   <CourseCard course={c} inSem={false} semId={null} />
+                  {studentType !== "graduate" && (
                   <button
                     onClick={() => {
                       const newSet = new Set(placedOut);
@@ -674,6 +678,7 @@ export default function BankPanel() {
                   >
                     {placedOut.has(c.id) ? "✓" : "↪"}
                   </button>
+                  )}
                   {/* The "in plan" badge is removed because placed courses are filtered out of the bank */}
                 </div>
               );
