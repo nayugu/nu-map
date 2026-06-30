@@ -392,6 +392,11 @@ export default function SemRow({ sem }) {
               style={{
                 display: "grid",
                 gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+                // Phone wraps to 2 rows — keep them equal height so a partly-filled
+                // grid (e.g. 3 courses) doesn't leave one card stretched tall and the
+                // others squat. The placeholder's minHeight floor is also dropped on
+                // phone so it can't force one row taller than the rest.
+                gridAutoRows: isPhone ? "1fr" : undefined,
                 gap: 4, overflow: "hidden",
                 borderRadius: 6, padding: 3,
                 minHeight: 76,
@@ -404,7 +409,7 @@ export default function SemRow({ sem }) {
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
               {Array.from({ length: emptySlots }).map((_, i) => (
-                <div key={`ms-${i}`} style={{ minHeight: 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
+                <div key={`ms-${i}`} style={{ minHeight: isPhone ? 0 : 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
               ))}
             </div>
 
