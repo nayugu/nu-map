@@ -209,6 +209,8 @@ export function PlannerProvider({ children }) {
   const [newPlanInitialType,  setNewPlanInitialType]  = useState(null);
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
     try {
+      // DEV: always show on reload for testing
+      return true;
       if (localStorage.getItem(key("seen-cohort-setup"))) return false;
       localStorage.setItem(key("seen-cohort-setup"), "1");
       return true;
@@ -1026,6 +1028,14 @@ export function PlannerProvider({ children }) {
   };
 
   // ── Drag / drop ───────────────────────────────────────────────
+  // Clear dragInfo whenever any HTML5 drag ends — covers drops outside valid targets
+  // where onDrop never fires and dragInfo would otherwise stay set permanently.
+  useEffect(() => {
+    const clear = () => setDragInfo(null);
+    document.addEventListener('dragend', clear);
+    return () => document.removeEventListener('dragend', clear);
+  }, []);
+
   const onDragStart = (e, id, type, fromSem, extra = {}) => {
     e.stopPropagation();
     setDragInfo({ id, type, fromSem: fromSem ?? null, ...extra });
