@@ -59,6 +59,7 @@ const _KEYS = {
   minor1: 'm1', minor2: 'm2',
   placedOut: 'po', planName: 'pn',
   locale: 'lc', substitutions: 'su',
+  studentType: 'st',
 };
 const _KEYS_R = Object.fromEntries(Object.entries(_KEYS).map(([k, v]) => [v, k]));
 
