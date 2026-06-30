@@ -1,0 +1,152 @@
+{
+  "name": "Mechanical Engineering with Concentration in Mechanics and Design, MSME (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Mathematics Competency",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ME",
+          "classId": 6200
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Mechanics Competency",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5650
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5654
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5655
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5657
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5659
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6100
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Course List",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 32,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5374
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5374
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5658
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5665
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 6260
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7238
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7374
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

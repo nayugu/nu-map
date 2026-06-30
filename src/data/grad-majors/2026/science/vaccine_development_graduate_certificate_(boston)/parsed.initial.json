@@ -1,0 +1,49 @@
+{
+  "name": "Vaccine Development, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5220
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5630
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5910
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5920
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5930
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 6310
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

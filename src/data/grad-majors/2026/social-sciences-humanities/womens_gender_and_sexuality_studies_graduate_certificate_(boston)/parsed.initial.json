@@ -1,0 +1,132 @@
+{
+  "name": "Women’s, Gender, and Sexuality Studies, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Requirement",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 6100
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "WMNS",
+                  "classId": 7100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 7100
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives List",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 40,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 5292
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5250
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6910
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 7100
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 7231
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "WMNS",
+                  "classId": 5240
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 5240
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HIST",
+                  "classId": 5240
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 6100
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "WMNS",
+                  "classId": 7100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 7100
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 7900
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 7976
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

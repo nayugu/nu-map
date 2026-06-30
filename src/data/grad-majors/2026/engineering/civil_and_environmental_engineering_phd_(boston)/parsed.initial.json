@@ -1,0 +1,80 @@
+{
+  "name": "Civil and Environmental Engineering, PhD (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 50,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7001
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7001
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

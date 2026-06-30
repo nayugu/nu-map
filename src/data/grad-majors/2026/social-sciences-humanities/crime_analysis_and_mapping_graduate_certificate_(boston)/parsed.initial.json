@@ -1,0 +1,82 @@
+{
+  "name": "Crime Analysis and Mapping, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 6801
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 6802
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5301
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5302
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6304
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6406
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5262
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6502
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6509
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "name": "Applied Analytics, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6015
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6070
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6020
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6030
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6040
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6110
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Interactive Design, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6217
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6317
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6461
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6463
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6471
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

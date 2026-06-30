@@ -1,0 +1,61 @@
+{
+  "name": "Arts Administration, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AACE",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "AACE",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "AACE",
+          "classId": 6020
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AACE",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "AACE",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "AACE",
+              "classId": 6210
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

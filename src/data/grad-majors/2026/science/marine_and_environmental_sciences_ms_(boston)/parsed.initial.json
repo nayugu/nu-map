@@ -1,0 +1,143 @@
+{
+  "name": "Marine and Environmental Sciences, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Statistics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 6501
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 8984
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Seminars",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 7102
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 7101
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 7103
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 7104
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Readings",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 8102
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentration-Specific Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5504
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5506
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5508
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5520
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5260
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

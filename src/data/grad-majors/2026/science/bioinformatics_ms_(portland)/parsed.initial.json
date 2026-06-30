@@ -1,0 +1,136 @@
+{
+  "name": "Bioinformatics, MS (Portland)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Programming",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BINF",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5001
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Computational Methods",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BINF",
+          "classId": 6310
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 7340
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research and Seminar",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 6381
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5310
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Professional Development",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 6500
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BINF",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "BINF",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5120
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5621
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5750
+        }
+      ],
+      "minRequirementCount": 3
+    }
+  ]
+}

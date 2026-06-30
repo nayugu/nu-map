@@ -1,0 +1,172 @@
+{
+  "name": "English, MA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Proseminar",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 5103
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Theories and Methods",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7351
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7358
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7370
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7380
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 6100
+            },
+            {
+              "type": "COURSE",
+              "subject": "WMNS",
+              "classId": 7976
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing and Rhetoric",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7360
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7392
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7395
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Literary Periods",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7281
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7282
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7284
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7352
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7351
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 6964
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6864
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

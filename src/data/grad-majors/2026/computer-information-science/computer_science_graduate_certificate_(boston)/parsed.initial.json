@@ -1,0 +1,69 @@
+{
+  "name": "Computer Science, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5001
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5003
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 5002
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5004
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5005
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5008
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5009
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

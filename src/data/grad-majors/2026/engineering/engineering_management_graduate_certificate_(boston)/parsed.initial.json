@@ -1,0 +1,61 @@
+{
+  "name": "Engineering Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 5220
+        },
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 6225
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 6200
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6305
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 6205
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

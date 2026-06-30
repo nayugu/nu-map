@@ -1,0 +1,124 @@
+{
+  "name": "Population Health, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Population Health Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5232
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5234
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 6410
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Core Research and Statistics Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 5202
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 5210
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 6202
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 6210
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5212
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 6381
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 7,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6224
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6440
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6800
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5234
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

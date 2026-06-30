@@ -1,0 +1,66 @@
+{
+  "name": "Human-Centered Informatics, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6410
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6461
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6168
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6268
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6463
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6070
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6355
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

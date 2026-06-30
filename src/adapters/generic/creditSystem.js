@@ -15,7 +15,7 @@ export default {
   getUnitName()      { return "credits"; },
   getUnitLabel()     { return "Credits"; },
   getStandardValue() { return 3; },
-  getFullTimeMin()   { return 12; },
-  getSemesterMax()   { return 21; },
+  getFullTimeMin(_studentType) { return 12; },
+  getSemesterMax(_studentType) { return 21; },
   getSources()       { return []; },
 };

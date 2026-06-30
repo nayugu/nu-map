@@ -25,7 +25,6 @@ export default function Header() {
     placements, courseMap, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
     resetAll, setShowDisclaimer,
     showSettings, setShowSettings,
-    studentType, setStudentType,
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd, semOrd,
     setEntSem, setEntYear, setGradSem, setGradYear,
@@ -68,7 +67,7 @@ export default function Header() {
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const lastClickedIdx = useRef(-1);
-  const [showNewPlanModal, setShowNewPlanModal] = useState(false);
+  const { showNewPlanModal, setShowNewPlanModal } = usePlanner();
 
   useEffect(() => {
     if (!showPlanMenu) { setPlanSearch(""); setSelectMode(false); setSelectedIds(new Set()); lastClickedIdx.current = -1; return; }
@@ -1024,28 +1023,6 @@ export default function Header() {
                 </div>
               </div>
 
-              {/* Student type toggle */}
-              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 8 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>STUDENT TYPE</div>
-                <div style={{ display: "flex", borderRadius: 4, overflow: "hidden", border: "1px solid var(--border-2)" }}>
-                  {[["undergrad", "Undergraduate"], ["graduate", "Graduate"]].map(([val, label]) => (
-                    <button key={val}
-                      onClick={() => {
-                        if (val === studentType) return;
-                        if (!window.confirm("Switching student type will clear your current major and concentration selections. Continue?")) return;
-                        setStudentType(val);
-                      }}
-                      style={{ flex: 1, fontSize: 9, padding: "3px 6px", cursor: "pointer",
-                        background: studentType === val ? "var(--active-bg)" : "transparent",
-                        border: "none",
-                        borderRight: val === "undergrad" ? "1px solid var(--border-2)" : "none",
-                        color: studentType === val ? "var(--active)" : "var(--text-4)",
-                        fontWeight: studentType === val ? 700 : 400 }}>
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
         </div>}

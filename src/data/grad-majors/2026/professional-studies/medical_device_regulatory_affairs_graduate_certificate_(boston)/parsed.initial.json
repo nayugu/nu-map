@@ -1,0 +1,72 @@
+{
+  "name": "Medical Device Regulatory Affairs, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6001
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6202
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6233
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6222
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6243
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6275
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6370
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Information Systems, MSIS (Silicon Valley)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

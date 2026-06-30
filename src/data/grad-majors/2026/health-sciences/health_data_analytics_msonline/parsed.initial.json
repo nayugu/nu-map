@@ -1,0 +1,92 @@
+{
+  "name": "Health Data Analytics, MS—Online",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DADS",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "DADS",
+          "classId": 6600
+        },
+        {
+          "type": "COURSE",
+          "subject": "DADS",
+          "classId": 7275
+        },
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 5101
+        },
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 5102
+        },
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 6355
+        },
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "HSCI",
+          "classId": 5130
+        }
+      ],
+      "minRequirementCount": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 5407
+            },
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 6404
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5210
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

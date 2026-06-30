@@ -1,0 +1,214 @@
+{
+  "name": "Physician Assistant, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 103,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6208
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6326
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6327
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6328
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6329
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6330
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Anatomy and Physiology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6201
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Diagnosis and Evaluation",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6203
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6204
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6209
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6210
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Pharmacology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6205
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6206
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Principles",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6311
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6312
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6313
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6320
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6321
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6322
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6323
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6324
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6325
+        }
+      ],
+      "minRequirementCount": 9
+    },
+    {
+      "type": "SECTION",
+      "title": "Clinical",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6401
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6402
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6403
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6404
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6405
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6406
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6407
+        },
+        {
+          "type": "COURSE",
+          "subject": "PA",
+          "classId": 6408
+        }
+      ],
+      "minRequirementCount": 9
+    }
+  ]
+}

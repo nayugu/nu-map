@@ -1,0 +1,39 @@
+{
+  "name": "Technology Systems Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 5220
+        },
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 5300
+        },
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 6225
+        },
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 6305
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

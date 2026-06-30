@@ -32,12 +32,12 @@ export const ICreditSystem = "creditSystem";
  *                                         e.g. 4 (NU), 3 (many US schools), 6 (ECTS).
  *
  * Enrollment thresholds — used for load warnings and status badges
- * @property {() => number} getFullTimeMin - Minimum credits for full-time enrollment status per term.
- *                                         e.g. 12 SH.  Plans falling below this in any non-coop term
- *                                         receive a "part-time" indicator.
- * @property {() => number} getSemesterMax - Maximum credits registrar allows per term before an
- *                                         overload petition is required.  e.g. 22 SH.
- *                                         Plans exceeding this receive an overload warning.
+ * @property {(studentType?: string) => number} getFullTimeMin - Minimum credits for full-time status per term.
+ *                                         Accepts optional studentType ("undergrad" | "graduate").
+ *                                         e.g. 12 SH (undergrad) / 8 SH (grad).
+ * @property {(studentType?: string) => number} getSemesterMax - Maximum credits before overload warning.
+ *                                         Accepts optional studentType ("undergrad" | "graduate").
+ *                                         e.g. 19 SH (undergrad) / 16 SH (grad).
  *
  * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
  *   External data sources this adapter draws from.  See IAttributable.

@@ -29,6 +29,7 @@ export default function SummerRow({ semA, semB }) {
     pushUndo, isPhone,
     collapseOtherCredits, showContLogo,
     semTrackingMode,
+    studentType,
   } = usePlanner();
 
   const isLive = semTrackingMode === "live";
@@ -156,10 +157,18 @@ export default function SummerRow({ semA, semB }) {
     }
 
     // ── Normal course session ─────────────────────────────────────
-    const courseIds = getOrderedCourses(sem.id, placements, semOrders, effectiveCourseMap);
-    const crs    = courseIds.map(id => effectiveCourseMap[id]).filter(Boolean);
-    const main4  = crs.filter(c => c.sh >= 3);
-    const others = crs.filter(c => c.sh <= 2);
+    const courseIds  = getOrderedCourses(sem.id, placements, semOrders, effectiveCourseMap);
+    const crs        = courseIds.map(id => effectiveCourseMap[id]).filter(Boolean);
+    const main4      = crs.filter(c => c.sh >= 3);
+    const others     = crs.filter(c => c.sh <= 2);
+    const isGrad     = studentType === "graduate";
+    const isDragging = dragInfo?.type === "course";
+    // Grad: compact at rest (1 course fills the slot), slots reveal while dragging.
+    // Undergrad: always 2 slots.
+    const slotCount  = isGrad
+      ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : main4.length)
+      : 2;
+    const emptySlots = (isGrad && !isDragging) ? 0 : Math.max(0, slotCount - main4.length);
 
     return (
       <div key={sem.id}
@@ -184,9 +193,11 @@ export default function SummerRow({ semA, semB }) {
           {semIsDone && <span style={{ fontSize: 8, color: "var(--success)" }}>✓</span>}
         </div>
 
-        {/* Main ≥4 SH slots */}
+        {/* Main ≥3 SH slots */}
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 4, minHeight: isPhone ? 35 : 66, overflow: "hidden",
+          display: "grid", gridTemplateColumns: `repeat(${Math.max(1, slotCount || 1)}, 1fr)`, gap: 4,
+          minHeight: (isGrad && main4.length === 0 && !isDragging) ? 0 : (isPhone ? 35 : 66),
+          overflow: "hidden",
           borderRadius: 4, padding: 2,
           border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
             ? "1px solid var(--active)" : "1px solid transparent",
@@ -207,7 +218,7 @@ export default function SummerRow({ semA, semB }) {
           }}
         >
           {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
-          {Array.from({ length: Math.max(0, 2 - main4.length) }).map((_, i) => (
+          {Array.from({ length: emptySlots }).map((_, i) => (
             <div key={`ms-${i}`} style={{
               height: isPhone ? 35 : 66,
               border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg,

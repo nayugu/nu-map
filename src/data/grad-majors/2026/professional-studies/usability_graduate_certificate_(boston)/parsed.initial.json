@@ -1,0 +1,61 @@
+{
+  "name": "Usability, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6168
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6268
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6461
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6525
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6308
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6451
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

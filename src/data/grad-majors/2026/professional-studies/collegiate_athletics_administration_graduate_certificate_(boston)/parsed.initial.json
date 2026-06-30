@@ -1,0 +1,49 @@
+{
+  "name": "Collegiate Athletics Administration, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6427
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6442
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6455
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6465
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6470
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6615
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

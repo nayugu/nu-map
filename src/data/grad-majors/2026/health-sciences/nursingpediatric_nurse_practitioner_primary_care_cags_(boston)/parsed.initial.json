@@ -1,0 +1,77 @@
+{
+  "name": "Nursing—Pediatric Nurse Practitioner, Primary Care, CAGS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 24,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Prerequisite or Equivalent Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "NRSG",
+              "classId": 5117
+            },
+            {
+              "type": "COURSE",
+              "subject": "NRSG",
+              "classId": 5126
+            },
+            {
+              "type": "COURSE",
+              "subject": "NRSG",
+              "classId": 6115
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6262
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6264
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6265
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6275
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6460
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6461
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

@@ -1,0 +1,304 @@
+{
+  "name": "Criminology and Justice Policy, PhD (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 54,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Pro-Seminar (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7001
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7002
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Criminal Justice Process (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7203
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Criminological Theory (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7710
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7711
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Analysis & Methods (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7300
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7400
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7500
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Practicum (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7706
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7700
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Exam Preparation (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 8960
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 8986
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation Continuation (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 9996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Pro-Seminar (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7001
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7002
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Criminal Justice Process (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7203
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Criminological Theory (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7710
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7711
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Analysis & Methods (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7300
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7400
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7500
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Practicum (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7706
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 7700
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Exam Preparation (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 8960
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 8986
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation Continuation (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 9996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

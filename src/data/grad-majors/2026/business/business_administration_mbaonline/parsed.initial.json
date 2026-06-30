@@ -1,0 +1,98 @@
+{
+  "name": "Business Administration, MBA—Online",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 50,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Business Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 6318
+        },
+        {
+          "type": "COURSE",
+          "subject": "EEBA",
+          "classId": 6401
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6318
+        },
+        {
+          "type": "COURSE",
+          "subject": "HRMG",
+          "classId": 6318
+        },
+        {
+          "type": "COURSE",
+          "subject": "INNO",
+          "classId": 6318
+        },
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 6318
+        },
+        {
+          "type": "COURSE",
+          "subject": "SCHM",
+          "classId": 6318
+        },
+        {
+          "type": "COURSE",
+          "subject": "STRT",
+          "classId": 6318
+        }
+      ],
+      "minRequirementCount": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Societal Challenges Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BUSN",
+          "classId": 6402
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEBA",
+              "classId": 6402
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEBA",
+              "classId": 6403
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Business Electives",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EEBA",
+          "classId": 6401
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

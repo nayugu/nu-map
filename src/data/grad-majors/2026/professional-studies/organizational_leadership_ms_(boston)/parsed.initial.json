@@ -1,0 +1,165 @@
+{
+  "name": "Organizational Leadership, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6115
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6135
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 7980
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentration or Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 52,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6095
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6042
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6070
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6074
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6900
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6150
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6190
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6190
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6195
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6095
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6150
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    }
+  ]
+}

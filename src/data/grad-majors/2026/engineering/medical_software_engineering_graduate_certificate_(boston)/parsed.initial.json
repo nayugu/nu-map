@@ -1,0 +1,49 @@
+{
+  "name": "Medical Software Engineering, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CSYE",
+          "classId": 7280
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5101
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7405
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7410
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

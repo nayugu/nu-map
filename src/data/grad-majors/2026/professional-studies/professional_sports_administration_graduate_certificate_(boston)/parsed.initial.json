@@ -1,0 +1,49 @@
+{
+  "name": "Professional Sports Administration, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6323
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6435
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6440
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6443
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6445
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6460
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

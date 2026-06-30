@@ -1,0 +1,127 @@
+{
+  "name": "Information Systems—Online, MSIS",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 28,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 6225
+            },
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 6255
+            },
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 7280
+            },
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 7400
+            },
+            {
+              "type": "COURSE",
+              "subject": "DAMG",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "DAMG",
+              "classId": 7330
+            },
+            {
+              "type": "COURSE",
+              "subject": "DAMG",
+              "classId": 7350
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6105
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6150
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6245
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6255
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 7245
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 7260
+            },
+            {
+              "type": "COURSE",
+              "subject": "TELE",
+              "classId": 5600
+            },
+            {
+              "type": "COURSE",
+              "subject": "TELE",
+              "classId": 6300
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

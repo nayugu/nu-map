@@ -1,0 +1,98 @@
+{
+  "name": "Education, MEd (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6050
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6051
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (Program Credit/GPA Requirements)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6185
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6513
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6310
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6319
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6336
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6415
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6426
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6517
+        }
+      ],
+      "minRequirementCount": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Practicum",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6874
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

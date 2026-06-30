@@ -1,0 +1,44 @@
+{
+  "name": "Media Innovation and Data Communication, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 36,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5330
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6306
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6307
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6340
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6341
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

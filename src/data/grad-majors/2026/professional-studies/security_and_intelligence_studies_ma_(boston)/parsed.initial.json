@@ -1,0 +1,81 @@
+{
+  "name": "Security and Intelligence Studies, MA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CJS",
+          "classId": 6125
+        },
+        {
+          "type": "COURSE",
+          "subject": "HLS",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "HLS",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "SIA",
+          "classId": 6040
+        },
+        {
+          "type": "COURSE",
+          "subject": "SIA",
+          "classId": 6140
+        },
+        {
+          "type": "COURSE",
+          "subject": "SIA",
+          "classId": 6980
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CJS",
+          "classId": 6430
+        },
+        {
+          "type": "COURSE",
+          "subject": "HLS",
+          "classId": 6080
+        },
+        {
+          "type": "COURSE",
+          "subject": "HLS",
+          "classId": 6150
+        },
+        {
+          "type": "COURSE",
+          "subject": "SIA",
+          "classId": 6150
+        },
+        {
+          "type": "COURSE",
+          "subject": "SIA",
+          "classId": 6160
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

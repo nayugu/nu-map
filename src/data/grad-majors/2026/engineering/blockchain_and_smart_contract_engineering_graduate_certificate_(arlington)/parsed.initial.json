@@ -1,0 +1,44 @@
+{
+  "name": "Blockchain and Smart Contract Engineering, Graduate Certificate (Arlington)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7500
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7510
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7520
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7525
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7535
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

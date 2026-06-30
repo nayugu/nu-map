@@ -1,0 +1,67 @@
+{
+  "name": "Remote Sensing, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "RMS",
+          "classId": 5105
+        },
+        {
+          "type": "COURSE",
+          "subject": "RMS",
+          "classId": 6110
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Remote Sensing Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6345
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6480
+            },
+            {
+              "type": "COURSE",
+              "subject": "RMS",
+              "classId": 6240
+            },
+            {
+              "type": "COURSE",
+              "subject": "RMS",
+              "classId": 6280
+            },
+            {
+              "type": "COURSE",
+              "subject": "RMS",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

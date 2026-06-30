@@ -1,0 +1,191 @@
+{
+  "name": "Political Science, MA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Methods Course",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 6220
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5263
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Component",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7976
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7980
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7990
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 8407
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 6964
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6864
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Seminar",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "POLS",
+          "classId": 7205
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "American Government Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7341
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5232
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5233
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5234
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5240
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5245
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5270
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6502
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6505
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6522
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6551
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6552
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

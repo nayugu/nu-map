@@ -1,0 +1,49 @@
+{
+  "name": "Biotechnology Regulatory Science, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5330
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5500
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5621
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5340
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

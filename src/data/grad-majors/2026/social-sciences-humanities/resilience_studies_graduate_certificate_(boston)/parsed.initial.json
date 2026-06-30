@@ -1,0 +1,62 @@
+{
+  "name": "Resilience Studies, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "POLS",
+          "classId": 7341
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 5408
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7343
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7346
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5390
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

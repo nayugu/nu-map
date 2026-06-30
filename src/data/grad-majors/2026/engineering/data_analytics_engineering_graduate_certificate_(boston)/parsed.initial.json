@@ -1,0 +1,39 @@
+{
+  "name": "Data Analytics Engineering, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 6600
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 6700
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 7275
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

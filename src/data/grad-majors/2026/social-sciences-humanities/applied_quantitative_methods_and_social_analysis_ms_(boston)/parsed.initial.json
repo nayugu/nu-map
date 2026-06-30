@@ -1,0 +1,104 @@
+{
+  "name": "Applied Quantitative Methods and Social Analysis, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6500
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6864
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6964
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentration Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DA",
+          "classId": 5030
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5302
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7334
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5262
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5263
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6406
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    }
+  ]
+}

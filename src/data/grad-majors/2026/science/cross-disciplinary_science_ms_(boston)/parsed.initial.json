@@ -1,0 +1,146 @@
+{
+  "name": "Cross-Disciplinary Science, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 31,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Thermodynamics and Statistical Mechanics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5636
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 7305
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemistry",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5621
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5638
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5641
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Cell and Molecular Biology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 6301
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Biological Physics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 7731
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Graduate Biophysics Seminar",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSC",
+          "classId": 7100
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Laboratory Rotation",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 9984
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Human Behavior and Sustainability Sciences Concentration",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 7103
+        },
+        {
+          "type": "COURSE",
+          "subject": "EEMB",
+          "classId": 8103
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 5450
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5180
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5181
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5410
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "name": "Chemistry, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Concentration or Option",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5621
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5622
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5628
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5631
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5638
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5641
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5649
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 6500
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CHEM",
+          "classId": 5611
+        },
+        {
+          "type": "COURSE",
+          "subject": "CHEM",
+          "classId": 5612
+        },
+        {
+          "type": "COURSE",
+          "subject": "CHEM",
+          "classId": 5628
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 21,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5614
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5642
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5660
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5670
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5688
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

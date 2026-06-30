@@ -1,0 +1,66 @@
+{
+  "name": "Information Security Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6305
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6315
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6520
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6530
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

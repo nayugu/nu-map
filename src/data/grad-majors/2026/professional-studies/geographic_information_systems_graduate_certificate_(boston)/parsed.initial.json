@@ -1,0 +1,87 @@
+{
+  "name": "Geographic Information Systems, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "GIS",
+          "classId": 5103
+        },
+        {
+          "type": "COURSE",
+          "subject": "RMS",
+          "classId": 5105
+        },
+        {
+          "type": "COURSE",
+          "subject": "GIS",
+          "classId": 5201
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6480
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6345
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6360
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6370
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

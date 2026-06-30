@@ -1,0 +1,127 @@
+{
+  "name": "Business Analytics, MS—Online",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6200
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 6202
+            },
+            {
+              "type": "COURSE",
+              "subject": "DADS",
+              "classId": 6400
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6205
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "DADS",
+              "classId": 6600
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "DADS",
+              "classId": 7275
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6213
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6214
+        }
+      ],
+      "minRequirementCount": 7
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Coursework",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 24,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6217
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6223
+            },
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 6201
+            },
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 6206
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6234
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

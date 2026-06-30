@@ -1,0 +1,59 @@
+{
+  "name": "Information Design and Data Visualization, MS (Vancouver)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5120
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5310
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5320
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5330
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 7890
+        }
+      ],
+      "minRequirementCount": 8
+    }
+  ]
+}

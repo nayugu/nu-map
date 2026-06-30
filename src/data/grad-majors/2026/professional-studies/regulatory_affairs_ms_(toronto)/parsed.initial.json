@@ -1,0 +1,124 @@
+{
+  "name": "Regulatory Affairs, MS (Toronto)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BTC",
+          "classId": 6210
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6002
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6212
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6463
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6203
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6204
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentrations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6101
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6207
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6217
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6235
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6219
+            },
+            {
+              "type": "COURSE",
+              "subject": "RGA",
+              "classId": 6244
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

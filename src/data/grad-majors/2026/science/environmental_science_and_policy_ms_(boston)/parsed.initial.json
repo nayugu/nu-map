@@ -1,0 +1,147 @@
+{
+  "name": "Environmental Science and Policy, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 36,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Seminars",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PPUA",
+          "classId": 6101
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 6102
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Skills Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 84,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5522
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5301
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7400
+            },
+            {
+              "type": "COURSE",
+              "subject": "LPSC",
+              "classId": 7311
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5261
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5263
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6502
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6505
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6506
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6509
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 7237
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

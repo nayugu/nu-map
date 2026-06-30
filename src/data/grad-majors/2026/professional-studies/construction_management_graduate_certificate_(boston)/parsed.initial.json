@@ -1,0 +1,39 @@
+{
+  "name": "Construction Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMG",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMG",
+          "classId": 6402
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMG",
+          "classId": 6403
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMG",
+          "classId": 6405
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

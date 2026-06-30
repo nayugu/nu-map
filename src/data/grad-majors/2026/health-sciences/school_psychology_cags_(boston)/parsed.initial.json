@@ -1,0 +1,154 @@
+{
+  "name": "School Psychology, CAGS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 31,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Clinical/Applied",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6345
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6347
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6353
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6354
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6401
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6402
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Practicum",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 8415
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 8416
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 6999
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Internship",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 8501
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 8502
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Concentration",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6326
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6327
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6329
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6336
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Intensive Practicum",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8417
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8418
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8419
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8421
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

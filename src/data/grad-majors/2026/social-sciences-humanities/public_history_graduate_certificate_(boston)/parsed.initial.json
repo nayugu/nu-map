@@ -1,0 +1,68 @@
+{
+  "name": "Public History, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Issues and Methods",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 5237
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Fieldwork",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 8410
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 5241
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 7250
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 7250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

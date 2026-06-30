@@ -1,0 +1,39 @@
+{
+  "name": "Nonclinical Biomedical Product Regulation, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6207
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6233
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6405
+        },
+        {
+          "type": "COURSE",
+          "subject": "RGA",
+          "classId": 6420
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

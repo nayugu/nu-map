@@ -1,0 +1,92 @@
+{
+  "name": "Information Ethics, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5240
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 5005
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5010
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5110
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 5001
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 5002
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 5005
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5010
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5110
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

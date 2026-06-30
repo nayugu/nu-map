@@ -1,0 +1,216 @@
+{
+  "name": "Analytics, MPS (Portland)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6015
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6050
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6070
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6000
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6080
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6040
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6020
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 88,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6020
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6030
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6130
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6983
+            },
+            {
+              "type": "COURSE",
+              "subject": "CED",
+              "classId": 6230
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6005
+            },
+            {
+              "type": "COURSE",
+              "subject": "EAI",
+              "classId": 6000
+            },
+            {
+              "type": "COURSE",
+              "subject": "EAI",
+              "classId": 6010
+            },
+            {
+              "type": "COURSE",
+              "subject": "EAI",
+              "classId": 6020
+            },
+            {
+              "type": "COURSE",
+              "subject": "EAI",
+              "classId": 6400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6020
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6045
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6135
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6015
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6125
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6180
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "name": "Urban Informatics, MS (Arlington)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 33,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Data Science Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DA",
+              "classId": 5020
+            },
+            {
+              "type": "COURSE",
+              "subject": "DA",
+              "classId": 5030
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 7237
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 5301
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 5302
+        },
+        {
+          "type": "COURSE",
+          "subject": "PPUA",
+          "classId": 5263
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Methods and Applications",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PPUA",
+          "classId": 5262
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6964
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6864
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

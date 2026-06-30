@@ -1,0 +1,93 @@
+{
+  "name": "Information Systems, MSIS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Concentration in Medical Software Engineering",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CSYE",
+          "classId": 7280
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7405
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7410
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6000
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "name": "Insurance Analytics and Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INS",
+          "classId": 6020
+        },
+        {
+          "type": "COURSE",
+          "subject": "INS",
+          "classId": 6030
+        },
+        {
+          "type": "COURSE",
+          "subject": "INS",
+          "classId": 6040
+        },
+        {
+          "type": "COURSE",
+          "subject": "INS",
+          "classId": 6050
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6070
+            },
+            {
+              "type": "COURSE",
+              "subject": "EAI",
+              "classId": 6000
+            },
+            {
+              "type": "COURSE",
+              "subject": "EAI",
+              "classId": 6020
+            },
+            {
+              "type": "COURSE",
+              "subject": "INS",
+              "classId": 6120
+            },
+            {
+              "type": "COURSE",
+              "subject": "INS",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "INS",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

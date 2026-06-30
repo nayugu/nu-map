@@ -11,6 +11,7 @@ export default function NewPlanModal({ open, onClose }) {
   const {
     planEntSem, planEntYear, planGradSem, planGradYear,
     semOrd, createPlan, studentType: activeStudentType,
+    newPlanInitialType, setNewPlanInitialType,
   } = usePlanner();
   const { t } = useLanguage();
 
@@ -29,11 +30,14 @@ export default function NewPlanModal({ open, onClose }) {
   useEffect(() => {
     if (!open) return;
     setName("");
-    setStudentType(activeStudentType);
+    const seedType = newPlanInitialType ?? activeStudentType;
+    const defaultYears = seedType === "graduate" ? GRAD_YEARS : NUM_YEARS;
+    setStudentType(seedType);
     setLocalEntSem(planEntSem);
     setLocalEntYear(planEntYear);
     setLocalGradSem(planGradSem);
-    setLocalGradYear(planGradYear);
+    setLocalGradYear(newPlanInitialType ? planEntYear + defaultYears : planGradYear);
+    if (newPlanInitialType) setNewPlanInitialType(null);
     setTimeout(() => nameRef.current?.focus(), 0);
   }, [open]);
 

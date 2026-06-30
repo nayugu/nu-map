@@ -1,0 +1,154 @@
+{
+  "name": "Project Management, MS (Miami)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 5900
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6005
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6015
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6025
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6135
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6910
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentration or Electives Option",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 48,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6075
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6125
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6175
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6180
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6185
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6710
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6205
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6210
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6215
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6810
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6825
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

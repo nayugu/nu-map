@@ -1,0 +1,79 @@
+{
+  "name": "Media, Technology, and Ethics, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses (Media, Technology, and Ethics Core)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 5250
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 5300
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Data and Technology Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6330
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6340
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (Program Credit/GPA Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 6995
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 6360
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "name": "Nursing, DNP—Post-Master's (Charlotte)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7900
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7120
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7130
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7924
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7925
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7919
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7921
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7922
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 7923
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

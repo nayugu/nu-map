@@ -1,0 +1,77 @@
+{
+  "name": "Corporate Renewal, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "HRMG",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 6200
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 24,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6218
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6223
+            },
+            {
+              "type": "COURSE",
+              "subject": "MGMT",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6216
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

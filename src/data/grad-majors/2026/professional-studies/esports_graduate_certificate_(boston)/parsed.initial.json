@@ -1,0 +1,49 @@
+{
+  "name": "eSports, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6040
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6516
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6323
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6445
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6480
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

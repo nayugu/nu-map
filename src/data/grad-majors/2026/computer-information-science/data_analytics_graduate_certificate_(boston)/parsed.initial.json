@@ -1,0 +1,39 @@
+{
+  "name": "Data Analytics, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DA",
+          "classId": 5020
+        },
+        {
+          "type": "COURSE",
+          "subject": "DA",
+          "classId": 5030
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 5301
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 5302
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

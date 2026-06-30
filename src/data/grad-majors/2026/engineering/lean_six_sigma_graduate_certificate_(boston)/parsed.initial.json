@@ -1,0 +1,39 @@
+{
+  "name": "Lean Six Sigma, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 5617
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 7280
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 7285
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

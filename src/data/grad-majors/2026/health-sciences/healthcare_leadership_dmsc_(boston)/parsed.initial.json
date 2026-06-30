@@ -1,0 +1,119 @@
+{
+  "name": "Healthcare Leadership, DMSc (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 36,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Healthcare Leadership",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MSCI",
+          "classId": 6001
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MSCI",
+              "classId": 6002
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5800
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCI",
+          "classId": 6003
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 6204
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Research",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HLTH",
+          "classId": 5410
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCI",
+          "classId": 6900
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCI",
+          "classId": 6901
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCI",
+          "classId": 7990
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MSCI",
+              "classId": 7996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5047
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 5110
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

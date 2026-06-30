@@ -1,0 +1,112 @@
+{
+  "name": "United States Law, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundational Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6400
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 60,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 6401
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 6402
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 6403
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 6404
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 6405
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7000
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7004
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7005
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7006
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7007
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7009
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7010
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7011
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7012
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7672
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

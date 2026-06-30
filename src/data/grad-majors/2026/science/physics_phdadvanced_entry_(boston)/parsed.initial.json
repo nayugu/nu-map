@@ -1,0 +1,40 @@
+{
+  "name": "Physics, PhD—Advanced Entry (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 9991
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 9996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

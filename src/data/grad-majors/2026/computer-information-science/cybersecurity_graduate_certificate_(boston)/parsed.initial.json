@@ -1,0 +1,61 @@
+{
+  "name": "Cybersecurity, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CY",
+          "classId": 5010
+        },
+        {
+          "type": "COURSE",
+          "subject": "CY",
+          "classId": 5130
+        },
+        {
+          "type": "COURSE",
+          "subject": "CY",
+          "classId": 5210
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5200
+            },
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5240
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "name": "Sociology, MA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 7200
+        },
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 7201
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6300
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistical Methods",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6500
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 14,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7990,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "name": "Biotechnology Enterprise, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5120
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5219
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5220
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5225
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 28,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5228
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6211
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "MGSC",
+              "classId": 6200
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

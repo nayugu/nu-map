@@ -1,0 +1,39 @@
+{
+  "name": "Journalism, MA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 37,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6201
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6202
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6340
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

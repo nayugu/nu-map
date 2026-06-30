@@ -1,0 +1,146 @@
+{
+  "name": "Higher Education Administration, MEd (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "General Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6051
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6204
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6205
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6217
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6218
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6219
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6234
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6222
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 48,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6065
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6002
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6202
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6224
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6227
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6228
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6229
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6231
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6319
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6329
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6100
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

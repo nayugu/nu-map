@@ -1,0 +1,161 @@
+{
+  "name": "Applied Machine Intelligence, MPS (Portland)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6020
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6400
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Network and Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6980
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6080
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6940
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 36,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6000
+            },
+            {
+              "type": "COURSE",
+              "subject": "EAI",
+              "classId": 6080
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 5201
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6360
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6135
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6005
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6015
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6205
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentrations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6040
+        },
+        {
+          "type": "COURSE",
+          "subject": "CED",
+          "classId": 6230
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6080
+        },
+        {
+          "type": "COURSE",
+          "subject": "EAI",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6015
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

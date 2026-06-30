@@ -1,0 +1,135 @@
+{
+  "name": "Sustainability Sciences, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to Sustainability Science",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 6102
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Physical and Environmental Processes and Systems",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5670
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5700
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Environmental Planning, Management, and Sustainability",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 6475
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5750
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 6150
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research and Analytical Skills Development",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5984
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "name": "Bioengineering, MSBioE—Connect (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 41,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Connect Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 5150
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 5151
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 6100
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Seminar",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 7390
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-Op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6100
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 56,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5115
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5510
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5520
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5648
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5770
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIOE",
+                  "classId": 5820
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHME",
+                  "classId": 5631
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5850
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5632
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5606
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 7200
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 7203
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 7204
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5657
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5370
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Required Courses",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOE",
+            "classId": 5800
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 5235
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 5648
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5250
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5810
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Primary Care Nursing FNP, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 29,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6392
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6561
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6222
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6390
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6391
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6395
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6396
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

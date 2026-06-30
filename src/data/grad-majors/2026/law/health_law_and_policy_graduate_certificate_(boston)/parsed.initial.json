@@ -1,0 +1,152 @@
+{
+  "name": "Health Law and Policy, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Law Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 7335
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Non-Law Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 5200
+            },
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 6335
+            },
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5600
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5700
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6220
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5212
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5214
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5222
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5226
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5230
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5232
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5320
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6204
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6208
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6224
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5240
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 7267
+            },
+            {
+              "type": "COURSE",
+              "subject": "STRT",
+              "classId": 6220
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "name": "Early Intervention, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 5150
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 5151
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 5153
+        },
+        {
+          "type": "COURSE",
+          "subject": "SLPA",
+          "classId": 5152
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Practicum",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SLPA",
+              "classId": 5154
+            },
+            {
+              "type": "COURSE",
+              "subject": "SLPA",
+              "classId": 5155
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

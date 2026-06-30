@@ -1,0 +1,123 @@
+{
+  "name": "Pharmacology, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 33,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 5100
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 5102
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5212
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6213
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 7010
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 7010
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6214
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6216
+        }
+      ],
+      "minRequirementCount": 7
+    },
+    {
+      "type": "SECTION",
+      "title": "Pharmacology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PMCL",
+          "classId": 6250
+        },
+        {
+          "type": "COURSE",
+          "subject": "PMCL",
+          "classId": 6252
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6990
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "Nursing—Adult-Gerontology Nurse Practitioner, Primary Care, CAGS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 24,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Prerequisite Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 5117
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 5126
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6115
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6222
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6249
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6253
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6254
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6449
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6450
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6451
+        }
+      ],
+      "minRequirementCount": 7
+    }
+  ]
+}

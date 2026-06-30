@@ -1,0 +1,79 @@
+{
+  "name": "Data Analytics Engineering, Graduate Certificate—Online",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6400
+            },
+            {
+              "type": "COURSE",
+              "subject": "DADS",
+              "classId": 6400
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6600
+            },
+            {
+              "type": "COURSE",
+              "subject": "DADS",
+              "classId": 6600
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6700
+            },
+            {
+              "type": "COURSE",
+              "subject": "DADS",
+              "classId": 6700
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7275
+            },
+            {
+              "type": "COURSE",
+              "subject": "DADS",
+              "classId": 7275
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

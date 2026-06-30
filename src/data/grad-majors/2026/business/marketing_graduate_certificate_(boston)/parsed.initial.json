@@ -1,0 +1,87 @@
+{
+  "name": "Marketing, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 6200
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 40,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6218
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6222
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6223
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6226
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6230
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6234
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

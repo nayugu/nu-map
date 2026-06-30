@@ -1,0 +1,97 @@
+{
+  "name": "Creative Collaboration and Multidisciplinary Design, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Foundation",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5300
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5305
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5310
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Seminars",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5507
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5508
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5400
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5405
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5410
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Studio",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 5415
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 6900
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

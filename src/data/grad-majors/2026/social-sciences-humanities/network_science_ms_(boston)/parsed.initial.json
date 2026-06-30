@@ -1,0 +1,44 @@
+{
+  "name": "Network Science, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 40,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NETS",
+          "classId": 6116
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 5116
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 7332
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 7335
+        },
+        {
+          "type": "COURSE",
+          "subject": "POLS",
+          "classId": 7334
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

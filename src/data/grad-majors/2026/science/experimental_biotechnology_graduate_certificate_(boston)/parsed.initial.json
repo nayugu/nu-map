@@ -1,0 +1,44 @@
+{
+  "name": "Experimental Biotechnology, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5145
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5219
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 5549
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 6214
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 7245
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

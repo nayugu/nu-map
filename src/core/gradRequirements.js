@@ -587,6 +587,29 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
     }
 
     case 'XOM': {
+      // Split-credit pattern: a single required course whose SH is divided across
+      // multiple sections (common in combined-degree programs like IECS).
+      // Bypass originalUsed so the course can satisfy XOM requirements in more than
+      // one section; still add to used so it is excluded from General Electives.
+      if (node.courses?.length === 1 && node.courses[0].type === 'COURSE') {
+        const child = node.courses[0];
+        const key = courseKey(child.subject, child.classId);
+        const sat = placedSet.has(key);
+        const course = courseMap[key];
+        const satSh = sat ? (course?.sh ?? 4) : 0;
+        const allocatedCourses = sat ? new Set([key]) : new Set();
+        if (sat) used.add(key);
+        const desc = child.description ? ` — ${child.description}` : '';
+        return {
+          type: 'XOM',
+          sat: satSh >= node.numCreditsMin,
+          satSh, reqSh: node.numCreditsMin,
+          children: [{ type: 'COURSE', key, sat, label: `${child.subject} ${child.classId}${desc}`, allocatedCourses }],
+          label: `${node.numCreditsMin}+ SH from pool`,
+          allocatedCourses,
+        };
+      }
+
       // Recursively allocate all children
       const children = (node.courses ?? []).map(child =>
         allocateNode(child, placedSet, used, originalUsed, courseMap)

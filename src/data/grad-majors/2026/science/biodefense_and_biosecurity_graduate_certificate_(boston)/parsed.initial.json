@@ -1,0 +1,39 @@
+{
+  "name": "Biodefense and Biosecurity, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 5810
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 6610
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOT",
+          "classId": 6600
+        },
+        {
+          "type": "COURSE",
+          "subject": "PPUA",
+          "classId": 6532
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ]
+}

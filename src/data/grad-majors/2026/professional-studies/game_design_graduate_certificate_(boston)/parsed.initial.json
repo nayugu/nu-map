@@ -1,0 +1,44 @@
+{
+  "name": "Game Design, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6308
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6403
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6405
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6410
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

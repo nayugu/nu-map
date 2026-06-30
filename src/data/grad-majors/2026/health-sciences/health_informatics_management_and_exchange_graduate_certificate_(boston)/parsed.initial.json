@@ -1,0 +1,51 @@
+{
+  "name": "Health Informatics Management and Exchange, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 5101
+        },
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 5102
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Management and Exchange",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 6205
+        },
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 6220
+        },
+        {
+          "type": "COURSE",
+          "subject": "HINF",
+          "classId": 6355
+        }
+      ],
+      "minRequirementCount": 3
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "name": "Mechanical Engineering, PhD (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 40,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Recommended Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MEIE",
+              "classId": 6830
+            },
+            {
+              "type": "COURSE",
+              "subject": "MEIE",
+              "classId": 6860
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Recommended Courses (semester hours can be counted toward coursework component with adviser approval)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MEIE",
+              "classId": 6830
+            },
+            {
+              "type": "COURSE",
+              "subject": "MEIE",
+              "classId": 6860
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

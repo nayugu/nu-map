@@ -1,0 +1,92 @@
+{
+  "name": "Nonprofit Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6125
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6130
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6150
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 28,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6940
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6000
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6100
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6995
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6001
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

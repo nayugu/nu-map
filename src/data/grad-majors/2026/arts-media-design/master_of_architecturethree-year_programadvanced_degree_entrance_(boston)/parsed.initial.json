@@ -1,0 +1,203 @@
+{
+  "name": "Master of Architecture—Three-Year Program—Advanced Degree Entrance (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 96,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "History",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 2340
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 5340
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Building, Design, and Environment (Foundation Courses)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 2240
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 5210
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 5230
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Building, Design, and Environment (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 3450
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 7220
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Studio",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 5115
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6115
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 7120
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Professional Practice",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 5430
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6440
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Topics and Seminars",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 5310
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 5330
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6340
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Research and Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 7140
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 7430
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5151
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5330
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6330
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    }
+  ]
+}

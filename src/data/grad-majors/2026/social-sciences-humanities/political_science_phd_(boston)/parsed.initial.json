@@ -1,0 +1,282 @@
+{
+  "name": "Political Science, PhD (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 56,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Seminars",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7204
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7205
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7206
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7207
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Inquiry and Design (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6300
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Quantitative Techniques (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6500
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7400
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Exam Preparation (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 8960
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 9986
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation Continuation (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 9996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Seminar",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7204
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7205
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7206
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7207
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Inquiry and Design (Core Requirements)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6300
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Quantitative Techniques (Core Requirements)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7400
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 7500
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Exam Preparation (Dissertation)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "POLS",
+          "classId": 8960
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research (Dissertation)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "POLS",
+          "classId": 9986
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation Continuation (Dissertation)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 9996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

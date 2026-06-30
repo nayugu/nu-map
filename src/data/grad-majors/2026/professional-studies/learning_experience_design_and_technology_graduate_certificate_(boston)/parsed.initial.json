@@ -1,0 +1,127 @@
+{
+  "name": "Learning Experience Design and Technology, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6319
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6334
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6335
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 64,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6080
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6501
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6001
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6002
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6003
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6004
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6202
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6323
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6329
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6331
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6332
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6336
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6338
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6558
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 5900
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

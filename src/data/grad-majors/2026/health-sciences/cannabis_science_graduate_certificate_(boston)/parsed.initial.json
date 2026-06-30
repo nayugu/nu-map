@@ -1,0 +1,45 @@
+{
+  "name": "Cannabis Science, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Requirements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5910
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5920
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5930
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5940
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

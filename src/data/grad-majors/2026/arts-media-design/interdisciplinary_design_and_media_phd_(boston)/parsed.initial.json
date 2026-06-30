@@ -1,0 +1,286 @@
+{
+  "name": "Interdisciplinary Design and Media, PhD (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 48,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Coursework",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7000
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7001
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7900
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7901
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods Elective (Required Coursework)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 60,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5320
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5620
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6984
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5400
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation (Required Coursework)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Coursework",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7000
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7001
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7900
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7901
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods Elective (Required Coursework)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 60,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5320
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5620
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6984
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5400
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation (Required Coursework)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

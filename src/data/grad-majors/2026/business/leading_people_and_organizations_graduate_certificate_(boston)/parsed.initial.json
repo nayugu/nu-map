@@ -1,0 +1,62 @@
+{
+  "name": "Leading People and Organizations, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HRMG",
+          "classId": 6200
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6218
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6220
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6223
+            },
+            {
+              "type": "COURSE",
+              "subject": "MGMT",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "STRT",
+              "classId": 6210
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

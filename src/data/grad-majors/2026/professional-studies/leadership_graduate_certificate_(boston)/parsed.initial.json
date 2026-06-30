@@ -1,0 +1,72 @@
+{
+  "name": "Leadership, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6140
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Leadership Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6135
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6005
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6150
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6010
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

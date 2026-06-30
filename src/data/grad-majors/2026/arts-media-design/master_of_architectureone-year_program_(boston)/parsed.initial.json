@@ -1,0 +1,63 @@
+{
+  "name": "Master of Architecture—One-Year Program (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Professional Practice",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6430
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6440
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Topics and Seminars",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6330
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 6340
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Research and Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 7130
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARCH",
+          "classId": 7140
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

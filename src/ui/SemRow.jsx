@@ -29,6 +29,7 @@ export default function SemRow({ sem }) {
     pushUndo, isPhone,
     bonusSH, setBonusSH,
     semTrackingMode,
+    studentType,
   } = usePlanner();
 
   const isLive = semTrackingMode === "live";
@@ -65,10 +66,24 @@ export default function SemRow({ sem }) {
   const courseIds  = getOrderedCourses(sem.id, placements, semOrders, courseMap);
   const crs        = courseIds.map(id => effectiveCourseMap[id] ?? courseMap[id]).filter(Boolean);
   const sh         = getSemSH(sem.id, placements, effectiveCourseMap);
-  const mainSlots  = (sem.type === "fall" || sem.type === "spring") ? 4
-                   : sem.type === "summer" ? 2 : null;
   const main4      = crs.filter(c => c.sh >= 3);
   const others     = crs.filter(c => c.sh <= 2);
+  const isGrad      = studentType === "graduate";
+  const isDragging  = dragInfo?.type === "course";
+  // Undergrad: fixed slots always visible (4 for fall/spring, 2 for summer).
+  // Grad: compact at rest, slots reveal across all grad semesters while a drag is active.
+  //   fall/spring: 2 min → 4 max while dragging. summer: 1 min → 2 max while dragging.
+  const mainSlots = (sem.type === "fall" || sem.type === "spring")
+    ? (isGrad
+        ? (isDragging ? Math.min(4, Math.max(2, main4.length < 4 ? main4.length + 1 : 4)) : main4.length)
+        : 4)
+    : sem.type === "summer"
+      ? (isGrad
+          ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : main4.length)
+          : 2)
+      : null;
+  const hideEmpty  = isGrad && !isDragging;
+  const emptySlots = hideEmpty ? 0 : Math.max(0, (isPhone ? Math.min(2, mainSlots ?? 2) : mainSlots ?? 0) - main4.length);
 
   // Collapsible other credits
   const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo } = usePlanner();
@@ -110,15 +125,18 @@ export default function SemRow({ sem }) {
     <span style={{ width: 14, height: 14, borderRadius: 3, border: "1px solid var(--border-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }} />
   );
 
-  const shColor = sh > 19 ? "var(--error)" : (sh < 12 && (sem.type === "fall" || sem.type === "spring")) ? "var(--warn-bright)" : "var(--success)";
+  const isRegularSem = sem.type === "fall" || sem.type === "spring";
+  const shMin = isRegularSem ? creditSystem.getFullTimeMin(studentType) : 0;
+  const shMax = creditSystem.getSemesterMax(studentType);
+  const shColor = sh > shMax ? "var(--error)" : (sh > 0 && sh < shMin && isRegularSem) ? "var(--warn-bright)" : "var(--success)";
   const shEl = sh > 0 ? (
     <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: shColor }}>
-      {sh} SH{sh > 19 ? " ⚠" : ""}
+      {sh} SH{sh > shMax ? " ⚠" : ""}
     </span>
   ) : null;
   const shElPhone = sh > 0 ? (
     <span style={{ fontSize: 7, fontWeight: 700, color: shColor, lineHeight: 1.2, textAlign: "center" }}>
-      {sh} SH{sh > 19 ? " ⚠" : ""}
+      {sh} SH{sh > shMax ? " ⚠" : ""}
     </span>
   ) : null;
 
@@ -358,19 +376,22 @@ export default function SemRow({ sem }) {
             <div
               onDragOver={e => {
                 if (!dragInfo || dragInfo.type !== "course") return;
-                const c = courseMap[dragInfo.id]; if (!c || c.sh < 4) return;
+                const c = courseMap[dragInfo.id]; if (!c || c.sh < 3) return;
                 e.preventDefault(); e.stopPropagation();
                 setHoveredZone({ semId: sem.id, zone: "main" }); setHoveredSem(null);
               }}
               onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
               onDrop={e => {
                 if (!dragInfo || dragInfo.type !== "course") return;
-                const c = courseMap[dragInfo.id]; if (!c || c.sh < 4) return;
+                const c = courseMap[dragInfo.id]; if (!c || c.sh < 3) return;
                 e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
               }}
               style={{
-                display: "grid", gridTemplateColumns: `repeat(${isPhone ? 2 : mainSlots}, 1fr)`, gap: 4, overflow: "hidden",
-                borderRadius: 6, padding: 3, minHeight: 76,
+                display: "grid",
+                gridTemplateColumns: `repeat(${Math.max(1, mainSlots || main4.length || 1)}, 1fr)`,
+                gap: 4, overflow: "hidden",
+                borderRadius: 6, padding: 3,
+                minHeight: (isGrad && main4.length === 0 && !isDragging) ? 0 : 76,
                 border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
                   ? "1px solid var(--active)" : "1px solid transparent",
                 background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
@@ -379,17 +400,17 @@ export default function SemRow({ sem }) {
               }}
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
-              {Array.from({ length: Math.max(0, (isPhone ? 2 : mainSlots) - main4.length) }).map((_, i) => (
+              {Array.from({ length: emptySlots }).map((_, i) => (
                 <div key={`ms-${i}`} style={{ minHeight: 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
               ))}
             </div>
 
-            {/* Override zone — only visible when all main slots full + dragging a ≥4 SH course */}
-            {main4.length >= (isPhone ? 2 : mainSlots) && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 4 && (
+            {/* Override zone — only visible when all main slots full + dragging a ≥3 SH course */}
+            {main4.length >= (isPhone ? 2 : mainSlots) && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 3 && (
               <div
                 onDragOver={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;
-                  const c = courseMap[dragInfo.id]; if (!c || c.sh < 4) return;
+                  const c = courseMap[dragInfo.id]; if (!c || c.sh < 3) return;
                   e.preventDefault(); e.stopPropagation();
                   setHoveredZone({ semId: sem.id, zone: "override" }); setHoveredSem(null);
                 }}
@@ -414,8 +435,8 @@ export default function SemRow({ sem }) {
               </div>
             )}
 
-            {/* Other <4 SH zone (collapsible) */}
-            {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 4) < 4)) && (
+            {/* Other <3 SH zone (collapsible) */}
+            {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 3) < 3)) && (
               <div style={{ marginTop: 5 }}>
                 <button
                   onClick={() => setShowOther(v => !v)}
@@ -436,14 +457,14 @@ export default function SemRow({ sem }) {
                   <div
                     onDragOver={e => {
                       if (!dragInfo || dragInfo.type !== "course") return;
-                      const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
+                      const c = courseMap[dragInfo.id]; if (!c || c.sh >= 3) return;
                       e.preventDefault(); e.stopPropagation();
                       setHoveredZone({ semId: sem.id, zone: "other" }); setHoveredSem(null);
                     }}
                     onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
                     onDrop={e => {
                       if (!dragInfo || dragInfo.type !== "course") return;
-                      const c = courseMap[dragInfo.id]; if (!c || c.sh >= 4) return;
+                      const c = courseMap[dragInfo.id]; if (!c || c.sh >= 3) return;
                       e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id);
                     }}
                     style={{

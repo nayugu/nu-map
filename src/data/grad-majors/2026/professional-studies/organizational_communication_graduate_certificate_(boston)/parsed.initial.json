@@ -1,0 +1,72 @@
+{
+  "name": "Organizational Communication, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6020
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6910
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6080
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6090
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6100
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6001
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

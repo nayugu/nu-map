@@ -1,0 +1,69 @@
+{
+  "name": "Sustainable Urban Environments, MDes—One-Year Program (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 36,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Studio",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SUEN",
+          "classId": 7130
+        },
+        {
+          "type": "COURSE",
+          "subject": "SUEN",
+          "classId": 7140
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Proseminar",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SUEN",
+              "classId": 7320
+            },
+            {
+              "type": "COURSE",
+              "subject": "SUEN",
+              "classId": 6340
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Technology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SUEN",
+          "classId": 7230
+        },
+        {
+          "type": "COURSE",
+          "subject": "SUEN",
+          "classId": 7240
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

@@ -642,6 +642,7 @@ export default function GradPanel({ wideCatalog = false }) {
     minor2, setMinor2,
     getSemStatus,
     studentType,
+    setShowNewPlanModal, setNewPlanInitialType,
   } = usePlanner();
 
   const isGrad = studentType === "graduate";
@@ -675,6 +676,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const [fetching2,     setFetching2]     = useState(false);
   const major2Name = useTranslatedText(major2Data?.name ?? null);
   const [showMajor2,    setShowMajor2]    = useState(() => major2Path !== "");
+  const [showSwitchPrompt, setShowSwitchPrompt] = useState(false);
   const [showNP,        setShowNP]        = useState(() => {
     try { const v = localStorage.getItem(`${pfx}-grad-show-np`); return v === null ? true : v !== "false"; } catch { return true; }
   });
@@ -857,15 +859,67 @@ export default function GradPanel({ wideCatalog = false }) {
         <div style={{ marginBottom: 10, position: "relative" }}>
           {/* Collapsed: show header with triangle and text */}
           <div
-            onClick={() => setShowProgram(v => !v)}
-            style={{
-              display: "flex", alignItems: "center", gap: 5, cursor: "pointer",
-              marginBottom: showProgram ? 4 : 0, userSelect: "none",
-            }}
+            style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", userSelect: "none", marginBottom: showProgram ? 4 : 0 }}
           >
-            <span style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, flex: 1 }}>{t("grad.programSelection")}</span>
-            <span style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1 }}>{showProgram ? "▼" : "▶"}</span>
+            <span
+              onClick={() => setShowProgram(v => !v)}
+              style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, flex: 1 }}
+            >{t("grad.programSelection")}</span>
+            {/* Plan type badge — always visible, left of collapse arrow */}
+            <button
+              onClick={() => setShowSwitchPrompt(v => !v)}
+              style={{
+                fontSize: 8, fontWeight: 700, padding: "2px 6px", borderRadius: 99,
+                background: "var(--bg-surface-2)",
+                border: "1px solid var(--border-2)",
+                color: "var(--text-4)",
+                cursor: "pointer", flexShrink: 0, letterSpacing: "0.04em",
+              }}
+            >
+              {isGrad ? "GRADUATE" : "UNDERGRAD"}
+            </button>
+            <span onClick={() => setShowProgram(v => !v)} style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1 }}>{showProgram ? "▼" : "▶"}</span>
           </div>
+
+          {/* Switch type prompt */}
+          {showSwitchPrompt && (
+            <div style={{
+              marginBottom: 8, padding: "8px 10px", borderRadius: 6,
+              background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+              fontSize: 9, color: "var(--text-3)", lineHeight: 1.5,
+            }}>
+              <div style={{ marginBottom: 6 }}>
+                This is {isGrad ? "a Graduate" : "an Undergraduate"} plan. To access {isGrad ? "undergraduate" : "graduate"} programs, create a new plan.
+              </div>
+              <div style={{ display: "flex", gap: 5 }}>
+                <button
+                  onClick={() => {
+                    const otherType = isGrad ? "undergrad" : "graduate";
+                    setNewPlanInitialType(otherType);
+                    setShowNewPlanModal(true);
+                    setShowSwitchPrompt(false);
+                  }}
+                  style={{
+                    fontSize: 8, fontWeight: 700, padding: "3px 8px", borderRadius: 4,
+                    background: "var(--link-bg)", border: "1px solid var(--link-1)",
+                    color: "var(--link-1)", cursor: "pointer",
+                  }}
+                >
+                  New {isGrad ? "Undergraduate" : "Graduate"} plan
+                </button>
+                <button
+                  onClick={() => setShowSwitchPrompt(false)}
+                  style={{
+                    fontSize: 8, padding: "3px 8px", borderRadius: 4,
+                    background: "transparent", border: "1px solid var(--border-2)",
+                    color: "var(--text-4)", cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
           {showProgram && (
             <>
               {/* Major selector */}
@@ -955,7 +1009,8 @@ export default function GradPanel({ wideCatalog = false }) {
                 >{t("grad.major2.add")}</button>
               )}
 
-              {/* Minor selectors */}
+              {/* Minor selectors — undergrad only */}
+              {!isGrad && (
               <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
                 {[[t("grad.minor1.label"), minor1, setMinor1], [t("grad.minor2.label"), minor2, setMinor2]].map(([lbl, val, set]) => (
                   <div key={lbl} style={{ minWidth: 0, overflow: "hidden" }}>
@@ -964,12 +1019,13 @@ export default function GradPanel({ wideCatalog = false }) {
                   </div>
                 ))}
               </div>
+              )}
             </>
           )}
         </div>
 
-        {/* ── Attribute grid — hidden when adapter has no attributes ── */}
-        {attributeSystem.getGridCodes().length > 0 && (
+        {/* ── Attribute grid — hidden for grad plans and when adapter has no attributes ── */}
+        {!isGrad && attributeSystem.getGridCodes().length > 0 && (
         <div style={{ marginBottom: 8 }}>
           <div onClick={(e) => { e.stopPropagation(); setShowNP(v => !v); }} style={{
             display: "flex", alignItems: "center", gap: 5, cursor: "pointer", marginBottom: 4, userSelect: "none",
@@ -1032,9 +1088,9 @@ export default function GradPanel({ wideCatalog = false }) {
           {major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
         </MajorCard>}
 
-        {/* ── Minor requirement sections ───────────────────────── */}
-        <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />
-        <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />
+        {/* ── Minor requirement sections — undergrad only ─────── */}
+        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />}
+        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />}
 
                 {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !major2Data && !minor1 && !minor2 && !fetching && !loadErr && (

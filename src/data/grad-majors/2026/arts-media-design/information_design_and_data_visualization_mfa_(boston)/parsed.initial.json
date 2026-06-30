@@ -1,0 +1,198 @@
+{
+  "name": "Information Design and Data Visualization, MFA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 60,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Studio",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6700
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Theory and Research Methods",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5310
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5320
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5330
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6110
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Design and History",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5110
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5120
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5710
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 7100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 7910
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 64,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5151
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5430
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5620
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5710
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6555
+            },
+            {
+              "type": "COURSE",
+              "subject": "EXRE",
+              "classId": 5020
+            },
+            {
+              "type": "COURSE",
+              "subject": "EXRE",
+              "classId": 5030
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 6341
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

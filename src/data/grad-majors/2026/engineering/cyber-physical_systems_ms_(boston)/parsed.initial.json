@@ -1,0 +1,87 @@
+{
+  "name": "Cyber-Physical Systems, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "TELE",
+          "classId": 6510
+        },
+        {
+          "type": "COURSE",
+          "subject": "TELE",
+          "classId": 6530
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "TELE",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "TELE",
+              "classId": 6550
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6000
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

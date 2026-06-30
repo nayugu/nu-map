@@ -1,0 +1,76 @@
+{
+  "name": "Data Architecture and Management, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DAMG",
+          "classId": 6105
+        },
+        {
+          "type": "COURSE",
+          "subject": "DAMG",
+          "classId": 6210
+        },
+        {
+          "type": "COURSE",
+          "subject": "DAMG",
+          "classId": 7250
+        },
+        {
+          "type": "COURSE",
+          "subject": "DAMG",
+          "classId": 7370
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6000
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

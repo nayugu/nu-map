@@ -1,0 +1,110 @@
+{
+  "name": "Applied Behavior Analysis, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6326
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6327
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6328
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6329
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6341
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6342
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6343
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6344
+        }
+      ],
+      "minRequirementCount": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8412
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8413
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Project-Based Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 7412
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 7413
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8417
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8418
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

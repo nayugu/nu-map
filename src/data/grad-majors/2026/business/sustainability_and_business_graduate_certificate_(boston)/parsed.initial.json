@@ -1,0 +1,67 @@
+{
+  "name": "Sustainability and Business, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MECN",
+          "classId": 6200
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 24,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "MECN",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "MGMT",
+              "classId": 6225
+            },
+            {
+              "type": "COURSE",
+              "subject": "MGMT",
+              "classId": 6226
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6221
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

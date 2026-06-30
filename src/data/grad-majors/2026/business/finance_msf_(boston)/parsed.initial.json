@@ -1,0 +1,122 @@
+{
+  "name": "Finance, MSF (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 30,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6202
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6203
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6204
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6205
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6206
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 48,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6207
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6211
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6217
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6219
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6220
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6292
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6360
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6361
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

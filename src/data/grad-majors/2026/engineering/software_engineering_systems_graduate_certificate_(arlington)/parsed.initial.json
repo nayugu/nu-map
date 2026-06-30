@@ -1,0 +1,57 @@
+{
+  "name": "Software Engineering Systems, Graduate Certificate (Arlington)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CSYE",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 6205
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 6225
+            },
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 7215
+            },
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 7280
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

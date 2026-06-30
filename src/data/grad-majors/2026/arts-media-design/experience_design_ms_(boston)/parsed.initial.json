@@ -1,0 +1,112 @@
+{
+  "name": "Experience Design, MS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5120
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5600
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5610
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5620
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6310
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6600
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 40,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5320
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5710
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6330
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6340
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

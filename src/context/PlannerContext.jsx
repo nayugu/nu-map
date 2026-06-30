@@ -205,6 +205,8 @@ export function PlannerProvider({ children }) {
 
   // ── Settings / modal state ───────────────────────────────────
   const [showDisclaimer,   setShowDisclaimer]   = useState(false);
+  const [showNewPlanModal,    setShowNewPlanModal]    = useState(false);
+  const [newPlanInitialType,  setNewPlanInitialType]  = useState(null);
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
     try {
       if (localStorage.getItem(key("seen-cohort-setup"))) return false;
@@ -2016,6 +2018,8 @@ export function PlannerProvider({ children }) {
     totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
     major, setMajor, major2, setMajor2, conc, setConc, minor1, setMinor1, minor2, setMinor2,
     studentType, setStudentType,
+    showNewPlanModal, setShowNewPlanModal,
+    newPlanInitialType, setNewPlanInitialType,
     placedOut, setPlacedOut,
     // MCP / AI assistant
     pendingMCPProposal, setPendingMCPProposal,

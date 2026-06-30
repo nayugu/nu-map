@@ -1,0 +1,154 @@
+{
+  "name": "Digital Media, MPS (Vancouver)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6122
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6145
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6168
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6521
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6890
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 7990
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone Option",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 7980
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6322
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6410
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Workshops",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6506
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6515
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6516
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentrations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6230
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6279
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6280
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6285
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6290
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

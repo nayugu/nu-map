@@ -1,0 +1,81 @@
+{
+  "name": "Business Administration, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Part-Time MBA Path Curriculum",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 6201
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "HRMG",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "MGSC",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "MGSC",
+          "classId": 6204
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Eight-Month International Student Cohort Curriculum",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "HRMG",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "INNO",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 6200
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

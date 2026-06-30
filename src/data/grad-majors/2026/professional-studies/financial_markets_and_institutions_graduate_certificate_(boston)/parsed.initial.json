@@ -1,0 +1,44 @@
+{
+  "name": "Financial Markets and Institutions, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "FIN",
+          "classId": 6101
+        },
+        {
+          "type": "COURSE",
+          "subject": "FIN",
+          "classId": 6102
+        },
+        {
+          "type": "COURSE",
+          "subject": "FIN",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "FIN",
+          "classId": 6161
+        },
+        {
+          "type": "COURSE",
+          "subject": "CED",
+          "classId": 6995
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ]
+}

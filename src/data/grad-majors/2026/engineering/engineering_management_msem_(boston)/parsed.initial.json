@@ -1,0 +1,186 @@
+{
+  "name": "Engineering Management, MSEM (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 32,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 5220
+        },
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 6225
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "OR",
+          "classId": 6205
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6100
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Program Credit/GPA Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 6700
+        },
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 6750
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Online Course List",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 64,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6305
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5000
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7200
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7215
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7280
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7285
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7290
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7315
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7230
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7240
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7310
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

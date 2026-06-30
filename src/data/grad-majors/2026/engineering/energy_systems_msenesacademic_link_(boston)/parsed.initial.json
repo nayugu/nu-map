@@ -1,0 +1,269 @@
+{
+  "name": "Energy Systems, MSEneS—Academic Link (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 40,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6225
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5050
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5060
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5700
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6305
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6309
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives List",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5621
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5585
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5650
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATL",
+              "classId": 6270
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5685
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 6200
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Other Electives List",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5614
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5651
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5670
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5680
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5682
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5684
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 7440
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 7442
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 7945
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5690
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7270
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7300
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7305
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5264
+            },
+            {
+              "type": "COURSE",
+              "subject": "SBSY",
+              "classId": 5200
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6100
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Supply Chain Engineering Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 5617
+        },
+        {
+          "type": "COURSE",
+          "subject": "IE",
+          "classId": 7200
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7310
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

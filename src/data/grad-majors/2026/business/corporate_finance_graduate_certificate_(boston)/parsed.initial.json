@@ -1,0 +1,92 @@
+{
+  "name": "Corporate Finance, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6205
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 44,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ACCT",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6204
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6213
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRMG",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "MECN",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "STRT",
+              "classId": 6200
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

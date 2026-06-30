@@ -1,0 +1,59 @@
+{
+  "name": "Cloud Computing Application and Management, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6420
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6450
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6015
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6460
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6520
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6355
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6480
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ]
+}

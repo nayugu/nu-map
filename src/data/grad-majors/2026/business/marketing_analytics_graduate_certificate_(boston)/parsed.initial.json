@@ -1,0 +1,62 @@
+{
+  "name": "Marketing Analytics, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 6234
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6222
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 6230
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "name": "Information Systems, MSIS—Bridge (Silicon Valley)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "6/30/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 40,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 5001
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 5002
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 5101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DAMG",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6150
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6245
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6255
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 7245
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 7385
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}
