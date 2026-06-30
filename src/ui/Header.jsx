@@ -1210,7 +1210,15 @@ function LanguagePicker({ locale, locales, setLocale }) {
   const openAt = () => {
     if (!wrapRef.current) return;
     const r = wrapRef.current.getBoundingClientRect();
-    setPos({ top: r.bottom + 4, left: r.left, width: r.width });
+    // iOS: when the keyboard is open the visual viewport is offset from the
+    // layout viewport that position:fixed resolves against. Without this, the
+    // dropdown lands offsetTop px too high (right under the keyboard, not the input).
+    const vv = window.visualViewport;
+    setPos({
+      top:   r.bottom + 4 + (vv?.offsetTop ?? 0),
+      left:  r.left + (vv?.offsetLeft ?? 0),
+      width: r.width,
+    });
   };
 
   const handleChange = e => {
