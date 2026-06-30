@@ -1038,8 +1038,13 @@ export function PlannerProvider({ children }) {
 
   const onDragStart = (e, id, type, fromSem, extra = {}) => {
     e.stopPropagation();
-    setDragInfo({ id, type, fromSem: fromSem ?? null, ...extra });
     e.dataTransfer.effectAllowed = "move";
+    // Defer the dragInfo state update by a frame. Setting it synchronously here
+    // re-renders the source mid-`dragstart` — e.g. a grad summer session expands
+    // its slot grid 1→2 columns, relaying out the very card being grabbed — which
+    // makes the browser abort the drag ("sometimes clicking doesn't drag"). A rAF
+    // lets the browser lock in the drag image before any layout change.
+    requestAnimationFrame(() => setDragInfo({ id, type, fromSem: fromSem ?? null, ...extra }));
   };
 
   const canDropSem = semId => {
