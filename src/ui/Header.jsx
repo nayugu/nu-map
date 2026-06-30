@@ -3,7 +3,6 @@
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
@@ -1188,14 +1187,11 @@ function SemToastLabel({ semId, SEMESTERS }) {
 function LanguagePicker({ locale, locales, setLocale }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
-  const [pos,   setPos]   = useState({ top: 0, left: 0, width: 0 });
   const wrapRef = useRef(null);
-  const dropRef = useRef(null);
 
   useEffect(() => {
     const handler = e => {
       if (wrapRef.current?.contains(e.target)) return;
-      if (dropRef.current?.contains(e.target)) return;
       setOpen(false);
       setQuery("");
     };
@@ -1207,25 +1203,10 @@ function LanguagePicker({ locale, locales, setLocale }) {
     };
   }, []);
 
-  const openAt = () => {
-    if (!wrapRef.current) return;
-    const r = wrapRef.current.getBoundingClientRect();
-    // iOS: when the keyboard is open the visual viewport is offset from the
-    // layout viewport that position:fixed resolves against. Without this, the
-    // dropdown lands offsetTop px too high (right under the keyboard, not the input).
-    const vv = window.visualViewport;
-    setPos({
-      top:   r.bottom + 4 + (vv?.offsetTop ?? 0),
-      left:  r.left + (vv?.offsetLeft ?? 0),
-      width: r.width,
-    });
-  };
-
   const handleChange = e => {
     const v = e.target.value;
     setQuery(v);
-    if (v.trim()) { openAt(); setOpen(true); }
-    else setOpen(false);
+    setOpen(!!v.trim());
   };
 
   const select = l => {
@@ -1245,41 +1226,12 @@ function LanguagePicker({ locale, locales, setLocale }) {
 
   const currentNativeName = locales.find(l => l.code === locale)?.nativeName ?? "";
 
-  const dropdown = open && filtered.length > 0 && createPortal(
-    <div ref={dropRef} style={{
-      position: "fixed", top: pos.top, left: pos.left, width: pos.width,
-      zIndex: 99999,
-      background: "var(--bg-surface)", border: "1px solid var(--border-2)",
-      borderRadius: 6, boxShadow: "0 6px 24px rgba(0,0,0,0.35)",
-      maxHeight: 200, overflowY: "auto",
-      fontFamily: "'Inter', system-ui, sans-serif",
-    }}>
-      {filtered.map(l => (
-        <div key={l.code}
-          onMouseDown={e => { e.preventDefault(); select(l); }}
-          onTouchEnd={e => { e.preventDefault(); select(l); }}
-          style={{
-            padding: "7px 10px", cursor: "pointer", fontSize: 11,
-            color: l.code === locale ? "var(--active)" : "var(--text-2)",
-            fontWeight: l.code === locale ? 700 : 400,
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = "var(--card-bg-hov)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-        >
-          {l.nativeName}
-          {l.code === locale && <span style={{ fontSize: 9, marginLeft: 6 }}>✓</span>}
-        </div>
-      ))}
-    </div>,
-    document.body
-  );
-
   return (
     <div ref={wrapRef} style={{ position: "relative" }}>
       <input
         value={query}
         onChange={handleChange}
-        onFocus={() => { if (filtered.length) { openAt(); setOpen(true); } }}
+        onFocus={() => setOpen(!!query.trim() && filtered.length > 0)}
         onMouseDown={e => e.stopPropagation()}
         placeholder={currentNativeName}
         style={{
@@ -1289,7 +1241,35 @@ function LanguagePicker({ locale, locales, setLocale }) {
           color: "var(--text-3)", outline: "none",
         }}
       />
-      {dropdown}
+      {/* Anchored to the input via the DOM (absolute, not a fixed portal) so it
+          stays put under the input on iOS when the keyboard shifts the viewport. */}
+      {open && filtered.length > 0 && (
+        <div style={{
+          position: "absolute", top: "calc(100% + 4px)", left: 0, width: "100%",
+          zIndex: 99999,
+          background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+          borderRadius: 6, boxShadow: "0 6px 24px rgba(0,0,0,0.35)",
+          maxHeight: 200, overflowY: "auto",
+          fontFamily: "'Inter', system-ui, sans-serif",
+        }}>
+          {filtered.map(l => (
+            <div key={l.code}
+              onMouseDown={e => { e.preventDefault(); select(l); }}
+              onTouchEnd={e => { e.preventDefault(); select(l); }}
+              style={{
+                padding: "7px 10px", cursor: "pointer", fontSize: 11,
+                color: l.code === locale ? "var(--active)" : "var(--text-2)",
+                fontWeight: l.code === locale ? 700 : 400,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "var(--card-bg-hov)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+            >
+              {l.nativeName}
+              {l.code === locale && <span style={{ fontSize: 9, marginLeft: 6 }}>✓</span>}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

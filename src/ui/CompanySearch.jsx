@@ -39,14 +39,7 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
   const openAt = () => {
     if (!wrapRef.current) return;
     const r = wrapRef.current.getBoundingClientRect();
-    // iOS: with the keyboard open the visual viewport is offset from the layout
-    // viewport that position:fixed uses, so add the offset or the dropdown lands
-    // too high. offsetLeft is ~0 for the keyboard but kept for correctness.
-    const vv = window.visualViewport;
-    setPos({
-      top:   r.bottom + 5 + (vv?.offsetTop ?? 0),
-      right: window.innerWidth - r.right - (vv?.offsetLeft ?? 0),
-    });
+    setPos({ top: r.bottom + 5, right: window.innerWidth - r.right });
   };
 
   const fetchSuggestions = q => {
