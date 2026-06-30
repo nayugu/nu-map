@@ -82,7 +82,11 @@ export default function SemRow({ sem }) {
           ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : Math.max(1, main4.length))
           : 2)
       : null;
-  const emptySlots = Math.max(0, (isPhone ? Math.min(2, mainSlots ?? 2) : mainSlots ?? 0) - main4.length);
+  const emptySlots = Math.max(0, (mainSlots ?? 0) - main4.length);
+  // Phone wraps the slots into a 2-wide grid (so 4 fall/spring slots become a
+  // 2×2 block); desktop keeps every slot on a single row.
+  const slotCount = Math.max(1, mainSlots || main4.length || 1);
+  const gridCols  = isPhone ? Math.min(2, slotCount) : slotCount;
 
   // Collapsible other credits
   const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo } = usePlanner();
@@ -387,7 +391,7 @@ export default function SemRow({ sem }) {
               }}
               style={{
                 display: "grid",
-                gridTemplateColumns: `repeat(${Math.max(1, mainSlots || main4.length || 1)}, 1fr)`,
+                gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
                 gap: 4, overflow: "hidden",
                 borderRadius: 6, padding: 3,
                 minHeight: 76,
@@ -405,7 +409,7 @@ export default function SemRow({ sem }) {
             </div>
 
             {/* Override zone — only visible when all main slots full + dragging a ≥3 SH course */}
-            {main4.length >= (isPhone ? 2 : mainSlots) && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 3 && (
+            {main4.length >= mainSlots && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 3 && (
               <div
                 onDragOver={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;
