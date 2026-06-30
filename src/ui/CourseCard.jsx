@@ -102,7 +102,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           position: "relative",
           background: isCardHov ? "var(--card-bg-hov)" : "var(--card-bg)",
           border: `2px solid ${borderColor}`,
-          borderRadius: 6, padding: "2px 5px 2px 28px",
+          borderRadius: 6, padding: "2px 5px 2px 8px",
           cursor: "grab", userSelect: "none", touchAction: "manipulation",
           display: "flex", alignItems: "center", minHeight: 18,
           opacity: dimmed ? 0.35 : 1,
@@ -111,18 +111,6 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         }}
       >
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: course.color, borderRadius: "4px 0 0 4px" }} />
-        <button
-          onClick={e => { e.stopPropagation(); toggleStar(course.id); }}
-          title={starredIds.has(course.id) ? t("course.star.remove") : t("course.star.save")}
-          style={{
-            position: "absolute", left: 4, top: 0, bottom: 0, width: 26,
-            background: starredIds.has(course.id) ? "var(--warn-bg)" : "transparent",
-            border: "none", padding: 0, cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 14, lineHeight: 1,
-            color: starredIds.has(course.id) ? "var(--warn-bright)" : "var(--text-5)",
-          }}
-        >{starredIds.has(course.id) ? "★" : "☆"}</button>
         <span style={{ fontSize: 8, fontWeight: 800, color: course.color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {noSubject ? course.code.replace(/^[A-Z]+ /, "") : course.code}
         </span>

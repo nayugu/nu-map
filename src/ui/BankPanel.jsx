@@ -261,17 +261,14 @@ export default function BankPanel() {
           {isPhone && (
             <div style={{ padding: "4px 5px 2px", display: "flex", gap: 3 }}>
               <button
-                onClick={() => {
-                  if (sideMode === "bank") { setBankTab(bankTab === "all" ? "starred" : "all"); }
-                  else { setSideMode("bank"); setBankTab("all"); }
-                }}
+                onClick={() => { setSideMode("bank"); setBankTab("all"); }}
                 style={{
                   flex: 1, fontSize: 7, padding: "3px 0", borderRadius: 4, cursor: "pointer",
-                  background: sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bg)" : "var(--bg-surface)") : "transparent",
-                  border: `1px solid ${sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--border-2)"}`,
-                  color: sideMode === "bank" ? (bankTab === "starred" ? "var(--warn-bright)" : "var(--active)") : "var(--text-4)",
+                  background: sideMode === "bank" ? "var(--bg-surface)" : "transparent",
+                  border: `1px solid ${sideMode === "bank" ? "var(--active)" : "var(--border-2)"}`,
+                  color: sideMode === "bank" ? "var(--active)" : "var(--text-4)",
                   fontWeight: sideMode === "bank" ? 700 : 400,
-                }}>{sideMode === "bank" && bankTab === "starred" ? t("bank.tab.saved") : t("bank.tab.courses")}</button>
+                }}>{t("bank.tab.courses")}</button>
               <button
                 onClick={() => setSideMode("grad")}
                 style={{
@@ -659,7 +656,7 @@ export default function BankPanel() {
               return (
                 <div key={c.id} style={{ position: "relative", opacity: placedIds.has(c.id) ? 0.55 : 1 }}>
                   <CourseCard course={c} inSem={false} semId={null} />
-                  {studentType !== "graduate" && (
+                  {studentType !== "graduate" && !isPhone && (
                   <button
                     onClick={() => {
                       const newSet = new Set(placedOut);
