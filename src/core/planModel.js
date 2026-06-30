@@ -187,7 +187,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const {
     majorPath = "", major2Path = "", concLabel = "", minor1Path = "", minor2Path = "",
     npCovered = new Set(), doneKeys = new Set(), totalSHRequired = 0,
-    placedOut = new Set(), substitutions = [],
+    placedOut = new Set(), substitutions = [], isGrad = false,
   } = gradInfo;
 
   // effectivePlacements: add virtual entries for substitution targets
@@ -200,11 +200,16 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   })();
 
   // ── Load major + minors (async) ───────────────────────────────
+  // Graduate plans resolve their programs through loadGradMajor (different data
+  // tree) and have no minors / NUPath.
+  const loadMajorFn = isGrad
+    ? (p) => majorRequirements?.loadGradMajor(p)
+    : (p) => majorRequirements?.loadMajor(p);
   const [major, major2, minor1, minor2] = await Promise.all([
-    majorPath  ? majorRequirements?.loadMajor(majorPath).catch(() => null)  : null,
-    major2Path ? majorRequirements?.loadMajor(major2Path).catch(() => null) : null,
-    minor1Path ? majorRequirements?.loadMinor(minor1Path).catch(() => null) : null,
-    minor2Path ? majorRequirements?.loadMinor(minor2Path).catch(() => null) : null,
+    majorPath  ? loadMajorFn(majorPath).catch(() => null)  : null,
+    major2Path ? loadMajorFn(major2Path).catch(() => null) : null,
+    (!isGrad && minor1Path) ? majorRequirements?.loadMinor(minor1Path).catch(() => null) : null,
+    (!isGrad && minor2Path) ? majorRequirements?.loadMinor(minor2Path).catch(() => null) : null,
   ]);
 
   // Use major's totalCreditsRequired if caller didn't supply one
@@ -632,8 +637,8 @@ ${metaLines ? `<div class="section-title">Program</div>${metaLines}` : ""}
 <div class="section-title">Credits</div>
 ${creditHtml}
 
-<div class="section-title">${attrName} <span class="prog-name">(${npCovered.size}/${gridCodes.length} fulfilled)</span></div>
-<div class="np-grid">${npHtml}</div>
+${isGrad ? "" : `<div class="section-title">${attrName} <span class="prog-name">(${npCovered.size}/${gridCodes.length} fulfilled)</span></div>
+<div class="np-grid">${npHtml}</div>`}
 
 ${reqHtml}
 

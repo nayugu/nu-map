@@ -40,7 +40,7 @@ export default function Header() {
     exportPlanJSON, importPlanJSON, copyPlanLink,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
-    placedOut, substitutions,
+    placedOut, substitutions, studentType,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -108,6 +108,7 @@ export default function Header() {
       majorPath, major2Path, concLabel, minor1Path, minor2Path,
       npCovered, doneKeys, totalSHRequired: 0,
       placedOut, substitutions,
+      isGrad: studentType === "graduate",
     };
     exportReport(placements, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
   };
