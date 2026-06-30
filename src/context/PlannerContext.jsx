@@ -210,7 +210,7 @@ export function PlannerProvider({ children }) {
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
     try {
       // DEV: always show on reload for testing
-      return true;
+      // return true;
       if (localStorage.getItem(key("seen-cohort-setup"))) return false;
       localStorage.setItem(key("seen-cohort-setup"), "1");
       return true;
