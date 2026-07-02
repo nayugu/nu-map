@@ -2,7 +2,7 @@
   "name": "Political Science and Communication Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/1/2026",
+    "lastEdited": "7/2/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -290,13 +290,19 @@
       "title": "Capstone Requirement",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 0,
           "courses": [
             {
               "type": "COURSE",
               "subject": "COMM",
               "classId": 4102
-            },
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
             {
               "type": "COURSE",
               "subject": "COMM",
@@ -330,7 +336,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

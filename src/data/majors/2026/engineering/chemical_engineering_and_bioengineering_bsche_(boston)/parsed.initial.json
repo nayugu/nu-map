@@ -2,7 +2,7 @@
   "name": "Chemical Engineering and Bioengineering, BSChE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/1/2026",
+    "lastEdited": "7/2/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 135,
@@ -75,14 +75,26 @@
       "title": "Supplemental Credit (Chemical Engineering Requirements)",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1501
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
         },
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1502
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ]
         }
       ],
       "minRequirementCount": 2
@@ -265,13 +277,18 @@
       "title": "Supplemental Credit (Supporting Courses: Mathematics/Science)",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1501
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -300,18 +317,29 @@
       "title": "Additional Required Courses",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1501
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
         },
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1502
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ]
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

@@ -2,7 +2,7 @@
   "name": "Environmental Engineering and Chemical Engineering, BSEnvE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/1/2026",
+    "lastEdited": "7/2/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -207,36 +207,44 @@
           "numCreditsMin": 3,
           "courses": [
             {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CIVE",
-                  "classId": 3430
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "EEMB",
-                  "classId": 3455
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3430
             }
           ]
         },
         {
-          "type": "COURSE",
-          "subject": "CIVE",
-          "classId": 3464
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3464
+            }
+          ]
         },
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1501
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
         },
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1502
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ]
         }
       ],
       "minRequirementCount": 4
@@ -416,35 +424,36 @@
           "numCreditsMin": 1,
           "courses": [
             {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CIVE",
-                  "classId": 3430
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "EEMB",
-                  "classId": 3455
-                }
-              ]
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3430
             }
           ]
         },
         {
-          "type": "COURSE",
-          "subject": "CIVE",
-          "classId": 3464
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3464
+            }
+          ]
         },
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1501
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
         }
       ],
-      "minRequirementCount": 3,
-      "shared": true
+      "minRequirementCount": 3
     },
     {
       "type": "SECTION",
@@ -473,18 +482,29 @@
       "title": "Additional Required Courses",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1501
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
         },
         {
-          "type": "COURSE",
-          "subject": "GE",
-          "classId": 1502
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ]
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -518,7 +538,8 @@
       "title": "Integrative Courses",
       "requirements": [
         {
-          "type": "OR",
+          "type": "XOM",
+          "numCreditsMin": 0,
           "courses": [
             {
               "type": "COURSE",
@@ -528,8 +549,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     }
   ],
   "generalElectiveSH": 8
