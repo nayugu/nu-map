@@ -455,7 +455,8 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "shared": true
     }
   ]
 }

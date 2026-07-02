@@ -28,6 +28,7 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname }            from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
+import { markSharedSections }       from './lib/major-integrity.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -218,6 +219,7 @@ function parseRowGroup(rows) {
   let chooseCreds = 0;
   let chooseCount = 0;
   let chooseExplicit = false;   // true when a "Complete N"/credit comment opened the group
+  let splitPendingCredit = null; // split/supplemental credit (SH) awaiting its single course
 
   function commitPending() {
     if (!pending) return;
@@ -299,6 +301,16 @@ function parseRowGroup(rows) {
         ? { type: 'AND', courses: [{ type: 'COURSE', ...primary }, ...andCourses.map(c => ({ type: 'COURSE', ...c }))] }
         : { type: 'COURSE', ...primary };
 
+      // A split/supplemental-credit annotation is awaiting this course → emit as a
+      // single-course XOM carrying the section's allotted SH, so the course can satisfy
+      // this section while also counting toward the others it appears in.
+      if (splitPendingCredit !== null && node.type === 'COURSE') {
+        requirements.push({ type: 'XOM', numCreditsMin: splitPendingCredit, courses: [node] });
+        splitPendingCredit = null;
+        continue;
+      }
+      splitPendingCredit = null;
+
       if (isIndented) {
         commitPending();
         if (!inChoose) inChoose = true;
@@ -327,6 +339,17 @@ function parseRowGroup(rows) {
     const commentSpan = wide.querySelector('span.courselistcomment');
     if (commentSpan && !commentSpan.getAttribute('class')?.includes('areaheader')) {
       const text = commentSpan.text.trim();
+
+      // Split/supplemental credit: a per-course annotation cross-counting one course into
+      // this section (e.g. "3 semester hours from the following count toward the … requirement:"
+      // or "…already required above and also fulfills the … requirement:"). Attach the allotted
+      // SH to the next single course as an XOM so it can satisfy every section it appears in
+      // without inflating total credits. (Mirrors scrape-majors.js.)
+      if (/(?:counts? toward|fulfills) the .+? requirement/i.test(text)) {
+        commitPending();
+        splitPendingCredit = parseCreditInstruction(text) ?? 0;
+        continue;
+      }
 
       const credits = parseCreditInstruction(text);
       const count   = credits !== null ? null : parseChooseInstruction(text);
@@ -569,7 +592,7 @@ async function scrapeProgram(url) {
 
   if (!requirementSections.length) return null;
 
-  return {
+  const data = {
     name,
     metadata:  { verified: false, lastEdited: new Date().toLocaleDateString('en-US'), branch: 'main' },
     totalCreditsRequired,
@@ -578,6 +601,12 @@ async function scrapeProgram(url) {
     ...(concentrations ? { concentrations } : {}),
     ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
   };
+
+  // Mark cross-count sections (integrative / GPA re-lists / shared credit) that would
+  // otherwise be impossible to satisfy under single-use allocation. See lib/major-integrity.js.
+  markSharedSections(data);
+
+  return data;
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────

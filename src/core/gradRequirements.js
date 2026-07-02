@@ -103,6 +103,19 @@ export function checkReq(req, placedSet, courseMap) {
 
     // ── X or more credit-hours from the listed pool ───────────────
     case 'XOM': {
+      // Split-credit: a single required course cross-counted into multiple sections
+      // (e.g. IECS supplemental credit). Satisfied iff the course is taken; report only
+      // the SH allotted to this section so cross-counting doesn't inflate credits.
+      if (req.courses?.length === 1 && req.courses[0].type === 'COURSE') {
+        const child = checkReq(req.courses[0], placedSet, courseMap);
+        const allotted = req.numCreditsMin ?? (courseMap[child.key]?.sh ?? 4);
+        return {
+          type: 'XOM', sat: child.sat,
+          satSh: child.sat ? allotted : 0, reqSh: allotted,
+          children: [child], label: child.label,
+        };
+      }
+
       const children = (req.courses ?? []).map(c => checkReq(c, placedSet, courseMap));
 
       // Sum the SH of every satisfied leaf course in the pool.
@@ -349,6 +362,16 @@ function collectCandidateKeys(sections, placedSet) {
 export function allocateSections(sections, placedSet, globalUsed, courseMap) {
   const results = [];
   for (const section of sections) {
+    // Cross-count section (integrative/GPA re-lists, shared/split credit): its courses are
+    // deliberately counted toward multiple requirements, so it must not be starved by, nor
+    // starve, the sections that also list those courses. Evaluate it permissively (empty
+    // originalUsed → never blocked by an earlier section) and do NOT commit its courses to
+    // the global used set. Its allocatedCourses still exclude those courses from General
+    // Electives, so credit is not double-counted toward the total.
+    if (section.shared) {
+      results.push(allocateSection(section, placedSet, new Set(), new Set(), courseMap));
+      continue;
+    }
     // Make a working copy of the global used set for this section
     const workingUsed = new Set(globalUsed);
     // Process the section with its own working set, and pass the original global set as 'originalUsed'
@@ -596,16 +619,21 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         const key = courseKey(child.subject, child.classId);
         const sat = placedSet.has(key);
         const course = courseMap[key];
-        const satSh = sat ? (course?.sh ?? 4) : 0;
+        // Report only the SH allotted to this section (numCreditsMin), not the full course
+        // SH — the course's credit is split across the sections it appears in, so summing
+        // the full SH per section would over-count. Satisfaction depends solely on whether
+        // the course is taken.
+        const allotted = node.numCreditsMin ?? (course?.sh ?? 4);
+        const satSh = sat ? allotted : 0;
         const allocatedCourses = sat ? new Set([key]) : new Set();
         if (sat) used.add(key);
         const desc = child.description ? ` — ${child.description}` : '';
         return {
           type: 'XOM',
-          sat: satSh >= node.numCreditsMin,
-          satSh, reqSh: node.numCreditsMin,
+          sat,
+          satSh, reqSh: allotted,
           children: [{ type: 'COURSE', key, sat, label: `${child.subject} ${child.classId}${desc}`, allocatedCourses }],
-          label: `${node.numCreditsMin}+ SH from pool`,
+          label: `${child.subject} ${child.classId}${desc}`,
           allocatedCourses,
         };
       }

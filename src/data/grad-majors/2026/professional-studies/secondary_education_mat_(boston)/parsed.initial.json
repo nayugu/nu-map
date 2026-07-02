@@ -178,7 +178,8 @@
           "classId": 6874
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "shared": true
     }
   ]
 }

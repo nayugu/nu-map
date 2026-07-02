@@ -75,7 +75,8 @@
           "classId": 5100
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "shared": true
     },
     {
       "type": "SECTION",

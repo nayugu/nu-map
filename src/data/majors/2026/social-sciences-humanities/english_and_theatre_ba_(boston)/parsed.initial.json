@@ -733,7 +733,8 @@
           "classId": 2330
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     }
   ]
 }

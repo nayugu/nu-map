@@ -34,8 +34,9 @@
     "data:grad-majors:dry": "node scripts/scrape-grad-majors.js --dry-run",
     "catalog:check": "node scripts/catalog-check-server.js",
     "dev:pw": "node scripts/generate-dev-password.js",
-    "test": "node scripts/test-rotate-logic.js && node scripts/test-cs2100.js",
+    "test": "node scripts/test-rotate-logic.js && node scripts/check-major-integrity.js && node scripts/test-cs2100.js",
     "test:unit": "node scripts/test-rotate-logic.js",
+    "test:integrity": "node scripts/check-major-integrity.js",
     "test:live": "node scripts/test-cs2100.js"
   },
   "dependencies": {

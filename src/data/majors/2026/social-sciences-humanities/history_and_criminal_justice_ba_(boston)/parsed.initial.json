@@ -331,7 +331,8 @@
           "classId": 1100
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

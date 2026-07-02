@@ -172,7 +172,8 @@
           "classId": 6964
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "shared": true
     },
     {
       "type": "SECTION",

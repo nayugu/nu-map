@@ -41,6 +41,12 @@ jobs:
       - name: Scrape graduate major requirements
         run: node scripts/scrape-grad-majors.js --write 2>&1 | tee /tmp/grad-majors-log.txt
 
+      # ── Guard: fail (before committing) if the scrape introduced a section that is
+      #    impossible to satisfy (shared/split-credit course not emitted as single-course
+      #    XOM). Update scripts/major-integrity-baseline.json to accept intentional debt. ──
+      - name: Check major integrity
+        run: node scripts/check-major-integrity.js
+
       # ── Commit and push directly to main ──────────────────────────────────
       - name: Check for changes
         id: changes

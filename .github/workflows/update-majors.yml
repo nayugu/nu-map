@@ -40,6 +40,13 @@ jobs:
       - name: Scrape major requirements
         run: node scripts/scrape-majors.js --write 2>&1 | tee /tmp/majors-log.txt
 
+      # ── Guard: fail (before committing) if the scrape introduced a section that is
+      #    impossible to satisfy — e.g. a shared/split-credit course that was not emitted
+      #    as a single-course XOM. Update scripts/major-integrity-baseline.json to accept
+      #    intentional new debt. ─────────────────────────────────────────────────────────
+      - name: Check major integrity
+        run: node scripts/check-major-integrity.js
+
       # ── Commit and push directly to main ──────────────────────────────────
       - name: Check for changes
         id: changes

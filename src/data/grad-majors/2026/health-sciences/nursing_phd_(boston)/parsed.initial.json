@@ -92,7 +92,8 @@
           "classId": 9984
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -200,7 +201,8 @@
           "classId": 9984
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -232,7 +234,8 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "shared": true
     }
   ]
 }

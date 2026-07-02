@@ -345,7 +345,8 @@
           "classId": 1501
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -384,7 +385,8 @@
           "classId": 1502
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",

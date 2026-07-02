@@ -90,7 +90,8 @@
           "classId": 3470
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "shared": true
     }
   ]
 }

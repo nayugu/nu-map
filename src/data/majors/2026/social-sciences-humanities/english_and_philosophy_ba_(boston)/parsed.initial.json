@@ -513,7 +513,8 @@
           "classId": 3435
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     }
   ]
 }

@@ -305,7 +305,8 @@
           "classId": 3201
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

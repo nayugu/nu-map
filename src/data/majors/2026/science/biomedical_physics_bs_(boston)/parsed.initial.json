@@ -503,7 +503,8 @@
           "classId": 2280
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "shared": true
     }
   ]
 }
