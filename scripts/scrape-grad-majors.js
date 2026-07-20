@@ -162,19 +162,19 @@ function parseRangeText(raw) {
   const text = raw.trim();
 
   const exceptions = [];
-  const excMatch = text.match(/,?\s*except\s+(.*)/i);
+  const excMatch = text.match(/,?\s*(?:except|but\s+not)\s+(.*)/i);
   if (excMatch) {
-    for (const chunk of excMatch[1].split(/,\s*/)) {
+    for (const chunk of excMatch[1].split(/,\s*|\s+(?:and|or)\s+/i)) {
       const em = chunk.trim().match(/([A-Z]{2,6})\s+(\d+)/);
       if (em) exceptions.push({ type: 'COURSE', subject: em[1], classId: parseInt(em[2], 10) });
     }
   }
-  const clean = text.replace(/,?\s*except.*/i, '').trim();
+  const clean = text.replace(/,?\s*(?:except|but\s+not).*/i, '').trim();
 
   let m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s+(?:or\s+higher|and\s+above)/i);
   if (m) return { type: 'RANGE', subject: m[1], idRangeStart: parseInt(m[2], 10), idRangeEnd: 9999, exceptions };
 
-  m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s*[-–]\s*(\d+)/);
+  m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s*(?:[-–]|\bto\b|\bthrough\b)\s*(?:[A-Z]{2,6}\s+)?(\d+)/i);
   if (m) return { type: 'RANGE', subject: m[1], idRangeStart: parseInt(m[2], 10), idRangeEnd: parseInt(m[3], 10), exceptions };
 
   m = clean.match(/^[Aa]ny\s+([A-Z]{2,6})\s+course/i);

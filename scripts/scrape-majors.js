@@ -153,28 +153,29 @@ function firstCourseLink(container) {
 /**
  * Parse free-text range descriptions into RANGE nodes.
  * Handles: "CS 2500 or higher", "Any ENGW course", "CS 2500-2999",
- *          "CS 2500 and above", "CS 2500 or higher, except CS 5010"
+ *          "CS 2500 and above", "CS 2500 or higher, except CS 5010",
+ *          "MATH 3001 to MATH 4999 but not MATH 4000"
  */
 function parseRangeText(raw) {
   const text = raw.trim();
 
-  // Extract exceptions first: ", except CS 5010, CS 5020"
+  // Extract exceptions first: ", except CS 5010, CS 5020" / "but not MATH 4000"
   const exceptions = [];
-  const excMatch = text.match(/,?\s*except\s+(.*)/i);
+  const excMatch = text.match(/,?\s*(?:except|but\s+not)\s+(.*)/i);
   if (excMatch) {
-    for (const chunk of excMatch[1].split(/,\s*/)) {
+    for (const chunk of excMatch[1].split(/,\s*|\s+(?:and|or)\s+/i)) {
       const em = chunk.trim().match(/([A-Z]{2,6})\s+(\d+)/);
       if (em) exceptions.push({ type: 'COURSE', subject: em[1], classId: parseInt(em[2], 10) });
     }
   }
-  const clean = text.replace(/,?\s*except.*/i, '').trim();
+  const clean = text.replace(/,?\s*(?:except|but\s+not).*/i, '').trim();
 
   // "SUBJ NNNN or higher" / "SUBJ NNNN and above"
   let m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s+(?:or\s+higher|and\s+above)/i);
   if (m) return { type: 'RANGE', subject: m[1], idRangeStart: parseInt(m[2], 10), idRangeEnd: 9999, exceptions };
 
-  // "SUBJ NNNN-MMMM" or "SUBJ NNNN–MMMM"
-  m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s*[-–]\s*(\d+)/);
+  // "SUBJ NNNN-MMMM" / "SUBJ NNNN–MMMM" / "SUBJ NNNN to [SUBJ ]MMMM" / "… through …"
+  m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s*(?:[-–]|\bto\b|\bthrough\b)\s*(?:[A-Z]{2,6}\s+)?(\d+)/i);
   if (m) return { type: 'RANGE', subject: m[1], idRangeStart: parseInt(m[2], 10), idRangeEnd: parseInt(m[3], 10), exceptions };
 
   // "Any SUBJ course"
