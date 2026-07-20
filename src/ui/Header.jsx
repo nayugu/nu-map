@@ -737,6 +737,74 @@ export default function Header() {
               padding: "10px 12px", minWidth: 190, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
             }}>
+              {/* Language picker + course translation toggle — moved to the top */}
+              {locales.length > 1 && (
+                <div style={{ borderBottom: "1px solid var(--border-1)", paddingBottom: 12, marginBottom: 4 }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.language")}</div>
+                  <LanguagePicker locale={locale} locales={locales} setLocale={setLocale} />
+
+                  {locale !== catalogLocale && (
+                    <div style={{ marginTop: 7 }}>
+                      <label style={{ display: "flex", alignItems: "flex-start", gap: 6, cursor: "pointer", userSelect: "none" }}>
+                        <input
+                          type="checkbox"
+                          checked={courseTranslationEnabled}
+                          onChange={e => setCourseTranslationEnabled(e.target.checked)}
+                          style={{ marginTop: 1, flexShrink: 0, accentColor: "var(--active)" }}
+                        />
+                        <span style={{ flex: 1, minWidth: 0 }}>
+                          <span style={{ fontSize: 10, color: "var(--text-2)" }}>
+                            {t("translation.toggle")}
+                          </span>
+                          {/* Hint line: changes based on engine + download + cache state */}
+                          <span style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2, flexWrap: "wrap" }}>
+                            <span style={{ fontSize: 9, color: "var(--text-5)" }}>
+                              {engineTier === "native"
+                                ? t("translation.toggle.hint.native")
+                                : engineTier === "api"
+                                  ? "" /* "Online · results cached locally" hint hidden */
+                                  : modelProgress
+                                    ? `${Math.round((modelProgress.loaded / (modelProgress.total || 1)) * 100)}% ${t("translation.progress.of")} ~890 MB`
+                                    : modelCached
+                                      ? t("translation.toggle.hint.cached")
+                                      : t("translation.toggle.hint.wasm")}
+                            </span>
+                            {/* Cancel button — visible while downloading */}
+                            {engineTier === "wasm" && modelProgress && (
+                              <button
+                                onMouseDown={e => e.preventDefault()}
+                                onClick={cancelDownload}
+                                style={{
+                                  fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
+                                  background: "transparent", border: "1px solid var(--border-2)",
+                                  color: "var(--text-4)", lineHeight: 1.4,
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
+                              >{t("translation.cancel")}</button>
+                            )}
+                            {/* Clear cache button — visible when model is fully cached and not downloading */}
+                            {engineTier === "wasm" && modelCached && !modelProgress && (
+                              <button
+                                onMouseDown={e => e.preventDefault()}
+                                onClick={clearModelCache}
+                                style={{
+                                  fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
+                                  background: "transparent", border: "1px solid var(--border-2)",
+                                  color: "var(--text-5)", lineHeight: 1.4,
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-5)"; }}
+                              >{t("translation.clear.cache")}</button>
+                            )}
+                          </span>
+                        </span>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Save toggle */}
               <button
                 className="hdr-btn-dd"
@@ -866,74 +934,6 @@ export default function Header() {
                     })}
                     <YearStepper year={planGradYear} min={2010} max={2040} canDec={gradOrd - 2 > entOrd} onDec={() => { if (gradOrd - 2 > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }} onInc={() => { if (planGradYear < 2040) setGradYear(planGradYear + 1); }} />
                   </div>
-                </div>
-              )}
-
-              {/* Language picker + course translation toggle */}
-              {locales.length > 1 && (
-                <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.language")}</div>
-                  <LanguagePicker locale={locale} locales={locales} setLocale={setLocale} />
-
-                  {locale !== catalogLocale && (
-                    <div style={{ marginTop: 7 }}>
-                      <label style={{ display: "flex", alignItems: "flex-start", gap: 6, cursor: "pointer", userSelect: "none" }}>
-                        <input
-                          type="checkbox"
-                          checked={courseTranslationEnabled}
-                          onChange={e => setCourseTranslationEnabled(e.target.checked)}
-                          style={{ marginTop: 1, flexShrink: 0, accentColor: "var(--active)" }}
-                        />
-                        <span style={{ flex: 1, minWidth: 0 }}>
-                          <span style={{ fontSize: 10, color: "var(--text-2)" }}>
-                            {t("translation.toggle")}
-                          </span>
-                          {/* Hint line: changes based on engine + download + cache state */}
-                          <span style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2, flexWrap: "wrap" }}>
-                            <span style={{ fontSize: 9, color: "var(--text-5)" }}>
-                              {engineTier === "native"
-                                ? t("translation.toggle.hint.native")
-                                : engineTier === "api"
-                                  ? t("translation.toggle.hint.api")
-                                  : modelProgress
-                                    ? `${Math.round((modelProgress.loaded / (modelProgress.total || 1)) * 100)}% ${t("translation.progress.of")} ~890 MB`
-                                    : modelCached
-                                      ? t("translation.toggle.hint.cached")
-                                      : t("translation.toggle.hint.wasm")}
-                            </span>
-                            {/* Cancel button — visible while downloading */}
-                            {engineTier === "wasm" && modelProgress && (
-                              <button
-                                onMouseDown={e => e.preventDefault()}
-                                onClick={cancelDownload}
-                                style={{
-                                  fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
-                                  background: "transparent", border: "1px solid var(--border-2)",
-                                  color: "var(--text-4)", lineHeight: 1.4,
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
-                                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
-                              >{t("translation.cancel")}</button>
-                            )}
-                            {/* Clear cache button — visible when model is fully cached and not downloading */}
-                            {engineTier === "wasm" && modelCached && !modelProgress && (
-                              <button
-                                onMouseDown={e => e.preventDefault()}
-                                onClick={clearModelCache}
-                                style={{
-                                  fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
-                                  background: "transparent", border: "1px solid var(--border-2)",
-                                  color: "var(--text-5)", lineHeight: 1.4,
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
-                                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-5)"; }}
-                              >{t("translation.clear.cache")}</button>
-                            )}
-                          </span>
-                        </span>
-                      </label>
-                    </div>
-                  )}
                 </div>
               )}
 
