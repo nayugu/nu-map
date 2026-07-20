@@ -47,6 +47,7 @@ const summary = {};
 for (const [courseId, byTerm] of Object.entries(details)) {
   const fill = {};
   const open = {};                                    // seats remaining = cap - enr
+  const secs = {};                                    // section count (for open-per-section colour)
   const formats  = new Set();
   const campuses = new Set();
   const weekday  = { M: 0, T: 0, W: 0, R: 0, F: 0 };  // R = Thursday
@@ -57,6 +58,7 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     if (d.cap > 0) {
       fill[termCode] = Math.round((d.enr / d.cap) * 100);
       open[termCode] = Math.max(0, d.cap - d.enr);
+      secs[termCode] = d.sections || 1;
     }
     for (const f of d.formats ?? [])  formats.add(f);
     for (const c of d.campuses ?? []) campuses.add(c);
@@ -77,6 +79,7 @@ for (const [courseId, byTerm] of Object.entries(details)) {
   summary[courseId] = {
     f:   fill,     // fill % per term → gauge height ("how full it got")
     o:   open,     // seats remaining per term → gauge colour ("can I get a seat")
+    s:   secs,     // section count per term → colour uses open ÷ sections
     fmt: [...formats].sort(),
     cmp: [...campuses].sort(),
     ...(dow ? { dow } : {}),
