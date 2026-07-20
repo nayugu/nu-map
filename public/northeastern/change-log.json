@@ -3,6 +3,132 @@
     {
       "type": "majors",
       "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:36:52.145Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-07-20T18:32:10.827Z",
+      "done": 476,
+      "written": 476,
+      "skipped": 210,
+      "failed": 9
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:26:00.988Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:59.823Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:58.769Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:57.658Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:56.229Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:55.067Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:54.058Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:52.975Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:25:12.092Z",
+      "done": 0,
+      "written": 0,
+      "skipped": 0,
+      "failed": 1
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:21:04.914Z",
+      "done": 514,
+      "written": 514,
+      "skipped": 24,
+      "failed": 8
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:15:02.966Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-07-20T18:11:44.439Z",
+      "done": 1,
+      "written": 1,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
       "timestamp": "2026-06-30T18:25:06.866Z",
       "done": 520,
       "written": 520,

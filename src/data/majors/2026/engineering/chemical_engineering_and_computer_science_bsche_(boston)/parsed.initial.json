@@ -2,7 +2,7 @@
   "name": "Chemical Engineering and Computer Science, BSChE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 136,
@@ -270,8 +270,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

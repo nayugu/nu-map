@@ -2,7 +2,7 @@
   "name": "Political Science and Communication Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -83,6 +83,26 @@
               "type": "COURSE",
               "subject": "COMM",
               "classId": 2301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Political Science Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 2000,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }
@@ -283,7 +303,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -374,7 +395,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

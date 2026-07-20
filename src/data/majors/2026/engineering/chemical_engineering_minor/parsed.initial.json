@@ -2,7 +2,7 @@
   "name": "Chemical Engineering, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -340,6 +340,26 @@
               "type": "COURSE",
               "subject": "PHSC",
               "classId": 3430
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemical Engineering Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CHME",
+              "idRangeStart": 2000,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

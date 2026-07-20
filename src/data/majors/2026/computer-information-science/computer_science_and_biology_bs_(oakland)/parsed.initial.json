@@ -2,7 +2,7 @@
   "name": "Computer Science and Biology, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 142,
@@ -327,6 +327,39 @@
     },
     {
       "type": "SECTION",
+      "title": "Intermediate/Advanced Biology Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2311,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5515,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 5548,
+              "idRangeEnd": 5569,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "Biology Capstone",
       "requirements": [
         {
@@ -350,7 +383,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -514,6 +548,75 @@
               "type": "COURSE",
               "subject": "SOCL",
               "classId": 4528
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate or Advanced Science",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2327,
+              "idRangeEnd": 3999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 4705,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHEM",
+              "idRangeStart": 2311,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ENVR",
+              "idRangeStart": 2310,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 2280,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 2303,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PSYC",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

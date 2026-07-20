@@ -2,7 +2,7 @@
   "name": "Urban Studies, Graduate Certificate (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -77,6 +77,26 @@
               "type": "COURSE",
               "subject": "SUEN",
               "classId": 6340
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "PPUA",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
             }
           ]
         }

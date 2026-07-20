@@ -2,7 +2,7 @@
   "name": "Creative Collaboration and Multidisciplinary Design, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 32,
@@ -89,6 +89,47 @@
           "type": "COURSE",
           "subject": "INAM",
           "classId": 6900
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "INAM",
+              "idRangeStart": 5300,
+              "idRangeEnd": 5349,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "INAM",
+              "idRangeStart": 5400,
+              "idRangeEnd": 5449,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "INAM",
+              "idRangeStart": 5500,
+              "idRangeEnd": 5549,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "INAM",
+              "idRangeStart": 6500,
+              "idRangeEnd": 6549,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

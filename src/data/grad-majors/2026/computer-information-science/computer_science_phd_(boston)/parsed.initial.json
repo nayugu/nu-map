@@ -2,7 +2,7 @@
   "name": "Computer Science, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 48,
@@ -796,6 +796,26 @@
           "type": "XOM",
           "numCreditsMin": 24,
           "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 5100,
+              "idRangeEnd": 5850,
+              "exceptions": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5340
+                }
+              ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 6110,
+              "idRangeEnd": 6810,
+              "exceptions": []
+            },
             {
               "type": "COURSE",
               "subject": "CS",

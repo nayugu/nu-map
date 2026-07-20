@@ -2,7 +2,7 @@
   "name": "Computer Science and History, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 136,
@@ -364,6 +364,46 @@
     },
     {
       "type": "SECTION",
+      "title": "Intermediate/Advanced History Course",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 2000,
+              "idRangeEnd": 2999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced History",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 3000,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "History Capstone Seminar or Senior Project",
       "requirements": [
         {
@@ -372,7 +412,8 @@
           "classId": 4701
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -384,7 +425,8 @@
           "classId": 2211
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",

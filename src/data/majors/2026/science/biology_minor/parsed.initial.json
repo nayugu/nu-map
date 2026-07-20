@@ -2,7 +2,7 @@
   "name": "Biology, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -131,6 +131,20 @@
               "type": "COURSE",
               "subject": "BIOL",
               "classId": 5585
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 2290,
+              "idRangeEnd": 3450,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 3460,
+              "idRangeEnd": 5130,
+              "exceptions": []
             }
           ]
         }
@@ -158,6 +172,27 @@
                   "classId": 2222
                 }
               ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2327,
+              "idRangeEnd": 3990,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 4705,
+              "idRangeEnd": 4709,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 5301,
+              "idRangeEnd": 5597,
+              "exceptions": []
             }
           ]
         }

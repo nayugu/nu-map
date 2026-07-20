@@ -2,7 +2,7 @@
   "name": "Political Science, MA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 32,
@@ -35,6 +35,26 @@
               "type": "COURSE",
               "subject": "PPUA",
               "classId": 5263
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 5408,
+              "idRangeEnd": 7976,
+              "exceptions": []
             }
           ]
         }
@@ -365,6 +385,13 @@
                 "type": "COURSE",
                 "subject": "POLS",
                 "classId": 7207
+              },
+              {
+                "type": "RANGE",
+                "subject": "POLS",
+                "idRangeStart": 7343,
+                "idRangeEnd": 7346,
+                "exceptions": []
               },
               {
                 "type": "COURSE",

@@ -2,7 +2,7 @@
   "name": "Communication Studies, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -51,6 +51,25 @@
               "type": "COURSE",
               "subject": "COMM",
               "classId": 1255
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "COMM",
+              "idRangeStart": 1120,
+              "idRangeEnd": 4799,
+              "exceptions": []
             }
           ]
         }

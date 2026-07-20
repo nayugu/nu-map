@@ -2,7 +2,7 @@
   "name": "Media and Screen Studies and Journalism, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 131,
@@ -264,6 +264,26 @@
           "type": "COURSE",
           "subject": "JRNL",
           "classId": 4650
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Journalism Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "JRNL",
+              "idRangeStart": 2000,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

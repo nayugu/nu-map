@@ -2,7 +2,7 @@
   "name": "Electrical Engineering, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -96,9 +96,30 @@
           "type": "OR",
           "courses": [
             {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 2322,
+              "idRangeEnd": 2750,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 3324,
+              "idRangeEnd": 4698,
+              "exceptions": []
+            },
+            {
               "type": "COURSE",
               "subject": "EECE",
               "classId": 5670
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 5576,
+              "idRangeEnd": 5698,
+              "exceptions": []
             }
           ]
         }

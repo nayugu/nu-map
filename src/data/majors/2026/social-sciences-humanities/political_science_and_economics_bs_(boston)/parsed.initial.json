@@ -2,7 +2,7 @@
   "name": "Political Science and Economics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 128,
@@ -56,6 +56,26 @@
               "type": "COURSE",
               "subject": "POLS",
               "classId": 2332
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Political Science Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 2000,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }
@@ -163,6 +183,54 @@
     },
     {
       "type": "SECTION",
+      "title": "Economics Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 1200,
+              "idRangeEnd": 1999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 2990,
+              "idRangeEnd": 3559,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 3561,
+              "idRangeEnd": 4689,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 4900,
+              "idRangeEnd": 4996,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 5200,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "Supporting Courses",
       "requirements": [
         {
@@ -175,9 +243,44 @@
               "classId": 2400
             },
             {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 1200,
+              "idRangeEnd": 1999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 2990,
+              "idRangeEnd": 4689,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 4900,
+              "idRangeEnd": 4996,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 5200,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
               "type": "COURSE",
               "subject": "ECON",
               "classId": 2350
+            },
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 2401,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ],
           "groups": [
@@ -188,6 +291,34 @@
                   "type": "COURSE",
                   "subject": "POLS",
                   "classId": 2400
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 1200,
+                  "idRangeEnd": 1999,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 2990,
+                  "idRangeEnd": 4689,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 4900,
+                  "idRangeEnd": 4996,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "ECON",
+                  "idRangeStart": 5200,
+                  "idRangeEnd": 5999,
+                  "exceptions": []
                 }
               ]
             },
@@ -198,13 +329,21 @@
                   "type": "COURSE",
                   "subject": "ECON",
                   "classId": 2350
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "POLS",
+                  "idRangeStart": 2401,
+                  "idRangeEnd": 5999,
+                  "exceptions": []
                 }
               ]
             }
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -317,7 +456,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

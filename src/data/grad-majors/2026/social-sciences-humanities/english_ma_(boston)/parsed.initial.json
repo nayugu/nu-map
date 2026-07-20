@@ -2,7 +2,7 @@
   "name": "English, MA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 32,
@@ -134,9 +134,22 @@
       "title": "Electives",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "ENGL",
-          "classId": 7990
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "ENGL",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7980,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 7990
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

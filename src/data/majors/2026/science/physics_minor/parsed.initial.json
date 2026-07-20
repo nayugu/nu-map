@@ -2,7 +2,7 @@
   "name": "Physics, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -140,6 +140,13 @@
               "type": "COURSE",
               "subject": "MATH",
               "classId": 4606
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 2300,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

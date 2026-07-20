@@ -1,0 +1,32 @@
+{
+  "name": "Pharmacy, PharmD (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "7/20/2026",
+    "branch": "main"
+  },
+  "totalCreditsRequired": 36,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 36,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "PHMD",
+              "idRangeStart": 6440,
+              "idRangeEnd": 6474,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "name": "Computer Engineering and Computer Science, BSCmpE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 140,
@@ -135,6 +135,13 @@
           "numCreditsMin": 8,
           "courses": [
             {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 2412,
+              "idRangeEnd": 2530,
+              "exceptions": []
+            },
+            {
               "type": "OR",
               "courses": [
                 {
@@ -158,6 +165,13 @@
               "type": "COURSE",
               "subject": "EECE",
               "classId": 4992
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 5115,
+              "idRangeEnd": 5699,
+              "exceptions": []
             },
             {
               "type": "COURSE",

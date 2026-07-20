@@ -2,7 +2,7 @@
   "name": "Public Health and Sociology, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -88,6 +88,39 @@
           "type": "COURSE",
           "subject": "SOCL",
           "classId": 3300
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 1102,
+              "idRangeEnd": 2999,
+              "exceptions": []
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 3000,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 2
@@ -204,7 +237,8 @@
           "classId": 3441
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",

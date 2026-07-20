@@ -2,7 +2,7 @@
   "name": "Media and Screen Studies and History, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -309,6 +309,26 @@
     },
     {
       "type": "SECTION",
+      "title": "Introductory-Level Course",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 1001,
+              "idRangeEnd": 1999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "Capstone",
       "requirements": [
         {
@@ -329,7 +349,8 @@
           "classId": 1357
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

@@ -2,7 +2,7 @@
   "name": "Human Services and Communication Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -291,9 +291,22 @@
           "type": "COURSE",
           "subject": "HUSV",
           "classId": 4700
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "COMM",
+              "idRangeStart": 3000,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            }
+          ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

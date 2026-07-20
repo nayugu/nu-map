@@ -2,7 +2,7 @@
   "name": "Mathematics and Physics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -74,9 +74,22 @@
       "title": "Mathematics Elective",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "PHYS",
-          "classId": 4115
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 3101,
+              "idRangeEnd": 4899,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 4115
+            }
+          ]
         }
       ],
       "minRequirementCount": 1
@@ -256,6 +269,26 @@
     },
     {
       "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 3000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "Capstone Requirement",
       "requirements": [
         {
@@ -296,7 +329,8 @@
           "classId": 3601
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",

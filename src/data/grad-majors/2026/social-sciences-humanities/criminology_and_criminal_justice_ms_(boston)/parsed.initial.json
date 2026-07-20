@@ -2,7 +2,7 @@
   "name": "Criminology and Criminal Justice, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 32,
@@ -50,6 +50,41 @@
           "type": "XOM",
           "numCreditsMin": 16,
           "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CRIM",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "INSH",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PPUA",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
             {
               "type": "COURSE",
               "subject": "ARTG",
@@ -121,7 +156,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ],
   "concentrations": {

@@ -2,7 +2,7 @@
   "name": "Journalism, MA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 37,
@@ -34,6 +34,26 @@
         }
       ],
       "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "JRNL",
+              "idRangeStart": 5309,
+              "idRangeEnd": 7976,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ]
 }

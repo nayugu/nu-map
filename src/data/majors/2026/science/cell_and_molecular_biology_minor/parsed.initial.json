@@ -2,7 +2,7 @@
   "name": "Cell and Molecular Biology, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -176,6 +176,34 @@
                   "classId": 3612
                 }
               ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 4705,
+              "idRangeEnd": 4709,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 5301,
+              "idRangeEnd": 5306,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 5499,
+              "idRangeEnd": 5583,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 5587,
+              "idRangeEnd": 5597,
+              "exceptions": []
             }
           ]
         }

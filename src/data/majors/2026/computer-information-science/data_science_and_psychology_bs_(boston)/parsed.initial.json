@@ -2,7 +2,7 @@
   "name": "Data Science and Psychology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -527,6 +527,25 @@
               "type": "COURSE",
               "subject": "PSYC",
               "classId": 4682
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Psychology Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "PSYC",
+              "idRangeStart": 2370,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

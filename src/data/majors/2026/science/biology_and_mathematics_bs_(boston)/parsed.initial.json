@@ -2,7 +2,7 @@
   "name": "Biology and Mathematics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 139,
@@ -203,6 +203,32 @@
     },
     {
       "type": "SECTION",
+      "title": "Intermediate/Advanced Biology Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2327,
+              "idRangeEnd": 3999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 4705,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "Supporting Courses for Biology",
       "requirements": [
         {
@@ -372,6 +398,13 @@
               "type": "COURSE",
               "subject": "MATH",
               "classId": 2331
+            },
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 3001,
+              "idRangeEnd": 4899,
+              "exceptions": []
             }
           ]
         }

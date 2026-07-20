@@ -2,7 +2,7 @@
   "name": "Sociology, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 60,
@@ -116,6 +116,61 @@
               "type": "COURSE",
               "subject": "PPUA",
               "classId": 6509
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 32,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CRIM",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "INSH",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PPUA",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "WMNS",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
             }
           ]
         }
@@ -303,6 +358,61 @@
               "type": "COURSE",
               "subject": "PPUA",
               "classId": 6509
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CRIM",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "INSH",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PPUA",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "WMNS",
+              "idRangeStart": 6000,
+              "idRangeEnd": 7999,
+              "exceptions": []
             }
           ]
         }

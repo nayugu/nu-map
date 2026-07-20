@@ -2,7 +2,7 @@
   "name": "Political Science and Human Services, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 128,
@@ -61,6 +61,26 @@
               "type": "COURSE",
               "subject": "POLS",
               "classId": 2332
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Political Science Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 2000,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }
@@ -168,7 +188,8 @@
           "classId": 3307
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -200,6 +221,13 @@
           "type": "OR",
           "courses": [
             {
+              "type": "RANGE",
+              "subject": "HUSV",
+              "idRangeStart": 1100,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
               "type": "OR",
               "courses": [
                 {
@@ -218,6 +246,13 @@
               "type": "COURSE",
               "subject": "HUSV",
               "classId": 4700
+            },
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 2000,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }
@@ -260,7 +295,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

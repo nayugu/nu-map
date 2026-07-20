@@ -2,7 +2,7 @@
   "name": "Behavioral Neuroscience, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 132,
@@ -520,6 +520,13 @@
                   "classId": 4900
                 }
               ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "PSYC",
+              "idRangeStart": 4654,
+              "idRangeEnd": 4678,
+              "exceptions": []
             }
           ]
         }

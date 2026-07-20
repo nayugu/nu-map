@@ -2,7 +2,7 @@
   "name": "Biophysics, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 31,
@@ -163,6 +163,34 @@
               "classId": 7741
             }
           ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology Breadth Courses",
+      "requirements": [
+        {
+          "type": "RANGE",
+          "subject": "BIOL",
+          "idRangeStart": 5103,
+          "idRangeEnd": 6961,
+          "exceptions": []
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemistry Breadth Courses",
+      "requirements": [
+        {
+          "type": "RANGE",
+          "subject": "CHEM",
+          "idRangeStart": 5610,
+          "idRangeEnd": 5688,
+          "exceptions": []
         }
       ],
       "minRequirementCount": 1

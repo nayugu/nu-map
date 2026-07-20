@@ -2,7 +2,7 @@
   "name": "Data Science and Chemistry, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -401,9 +401,22 @@
       "title": "Advanced-Level Chemistry",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "CHEM",
-          "classId": 3410
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 3410
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHEM",
+              "idRangeStart": 3501,
+              "idRangeEnd": 4628,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

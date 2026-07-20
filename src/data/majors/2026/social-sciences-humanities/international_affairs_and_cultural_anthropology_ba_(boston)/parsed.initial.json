@@ -2,7 +2,7 @@
   "name": "International Affairs and Cultural Anthropology, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -69,6 +69,26 @@
     },
     {
       "type": "SECTION",
+      "title": "Anthropology Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "ANTH",
+              "idRangeStart": 2000,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "Research Methods",
       "requirements": [
         {
@@ -99,7 +119,8 @@
           "classId": 2305
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",

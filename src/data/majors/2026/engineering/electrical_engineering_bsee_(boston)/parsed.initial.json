@@ -2,7 +2,7 @@
   "name": "Electrical Engineering, BSEE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -150,6 +150,27 @@
               ]
             },
             {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 2540,
+              "idRangeEnd": 2750,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 3324,
+              "idRangeEnd": 3410,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 4512,
+              "idRangeEnd": 4698,
+              "exceptions": []
+            },
+            {
               "type": "COURSE",
               "subject": "EECE",
               "classId": 4991
@@ -160,6 +181,13 @@
               "classId": 4992
             },
             {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 5115,
+              "idRangeEnd": 5699,
+              "exceptions": []
+            },
+            {
               "type": "COURSE",
               "subject": "EECE",
               "classId": 5670
@@ -167,8 +195,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -485,7 +512,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",

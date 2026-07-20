@@ -2,7 +2,7 @@
   "name": "Public Policy, MPP (Arlington)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 40,
@@ -103,6 +103,75 @@
           "type": "COURSE",
           "subject": "PPUA",
           "classId": 6861
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CRIM",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ENGL",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "LPSC",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "POLS",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PPUA",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7999,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

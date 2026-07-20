@@ -2,7 +2,7 @@
   "name": "History, MA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 32,
@@ -75,9 +75,56 @@
             "type": "COURSE",
             "subject": "HIST",
             "classId": 8411
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 6000,
+                "idRangeEnd": 6900,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 7301,
+                "idRangeEnd": 7325,
+                "exceptions": []
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 6238,
+                "idRangeEnd": 6248,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 6295,
+                "idRangeEnd": 6966,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 7201,
+                "idRangeEnd": 7297,
+                "exceptions": []
+              }
+            ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 6
       },
       {
         "type": "SECTION",
@@ -87,9 +134,49 @@
             "type": "COURSE",
             "subject": "HIST",
             "classId": 5102
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 7301,
+                "idRangeEnd": 7325,
+                "exceptions": []
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 20,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 6103,
+                "idRangeEnd": 6295,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 7205,
+                "idRangeEnd": 7218,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 7220,
+                "idRangeEnd": 7297,
+                "exceptions": []
+              }
+            ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 3
       }
     ]
   }

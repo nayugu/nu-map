@@ -2,7 +2,7 @@
   "name": "Mathematics, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -133,6 +133,26 @@
           "type": "COURSE",
           "subject": "MATH",
           "classId": 3000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 3001,
+              "idRangeEnd": 4899,
+              "exceptions": []
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

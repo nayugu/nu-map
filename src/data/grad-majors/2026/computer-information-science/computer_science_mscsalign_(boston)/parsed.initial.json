@@ -2,7 +2,7 @@
   "name": "Computer Science, MSCS—Align (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 36,
@@ -390,6 +390,13 @@
               "type": "COURSE",
               "subject": "CS",
               "classId": 5097
+            },
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 5100,
+              "idRangeEnd": 7980,
+              "exceptions": []
             },
             {
               "type": "COURSE",

@@ -2,7 +2,7 @@
   "name": "Computer Science and Mathematics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 134,
@@ -254,6 +254,32 @@
         }
       ],
       "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 3001,
+              "idRangeEnd": 4999,
+              "exceptions": [
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 4000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

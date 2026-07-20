@@ -2,7 +2,7 @@
   "name": "Computer Science and Physics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 136,
@@ -313,6 +313,26 @@
               "type": "COURSE",
               "subject": "MKTG",
               "classId": 4606
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Physics Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 3000,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

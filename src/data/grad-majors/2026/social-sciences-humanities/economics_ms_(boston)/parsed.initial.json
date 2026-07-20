@@ -2,7 +2,7 @@
   "name": "Economics, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 0,
@@ -218,9 +218,22 @@
                 "classId": 7275
               }
             ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "ECON",
+                "idRangeStart": 5200,
+                "idRangeEnd": 7772,
+                "exceptions": []
+              }
+            ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 4
       }
     ]
   }

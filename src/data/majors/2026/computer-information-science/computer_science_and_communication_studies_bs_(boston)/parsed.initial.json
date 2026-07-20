@@ -2,7 +2,7 @@
   "name": "Computer Science and Communication Studies, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 135,
@@ -379,6 +379,26 @@
               "type": "COURSE",
               "subject": "COMM",
               "classId": 4631
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Communication Studies Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "COMM",
+              "idRangeStart": 1131,
+              "idRangeEnd": 4996,
+              "exceptions": []
             }
           ]
         }

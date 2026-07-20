@@ -2,7 +2,7 @@
   "name": "Economics, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 48,
@@ -89,9 +89,22 @@
       "title": "Elective",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "ECON",
-          "classId": 7976
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 7200,
+              "idRangeEnd": 7299,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 7976
+            }
+          ]
         }
       ],
       "minRequirementCount": 1
@@ -201,9 +214,22 @@
       "title": "Elective",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "ECON",
-          "classId": 7976
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "ECON",
+              "idRangeStart": 7200,
+              "idRangeEnd": 7299,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 7976
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

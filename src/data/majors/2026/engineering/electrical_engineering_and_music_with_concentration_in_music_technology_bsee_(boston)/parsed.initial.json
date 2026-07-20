@@ -2,7 +2,7 @@
   "name": "Electrical Engineering and Music with Concentration in Music Technology, BSEE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 137,
@@ -183,6 +183,13 @@
               "type": "COURSE",
               "subject": "EECE",
               "classId": 4992
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 5115,
+              "idRangeEnd": 5699,
+              "exceptions": []
             },
             {
               "type": "COURSE",
@@ -426,6 +433,13 @@
               "type": "COURSE",
               "subject": "MUSC",
               "classId": 2350
+            },
+            {
+              "type": "RANGE",
+              "subject": "MUSC",
+              "idRangeStart": 2000,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

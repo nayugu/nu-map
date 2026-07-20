@@ -2,7 +2,7 @@
   "name": "Computer Engineering and Physics, BSCmpE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 133,
@@ -135,9 +135,23 @@
           "numCreditsMin": 8,
           "courses": [
             {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 2412,
+              "idRangeEnd": 2530,
+              "exceptions": []
+            },
+            {
               "type": "COURSE",
               "subject": "EECE",
               "classId": 2750
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 3324,
+              "idRangeEnd": 4698,
+              "exceptions": []
             },
             {
               "type": "COURSE",
@@ -150,6 +164,13 @@
               "classId": 4992
             },
             {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 5115,
+              "idRangeEnd": 5699,
+              "exceptions": []
+            },
+            {
               "type": "COURSE",
               "subject": "CS",
               "classId": 3100
@@ -158,6 +179,20 @@
               "type": "COURSE",
               "subject": "CS",
               "classId": 3200
+            },
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 3540,
+              "idRangeEnd": 3800,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 4100,
+              "idRangeEnd": 4770,
+              "exceptions": []
             },
             {
               "type": "COURSE",
@@ -442,6 +477,13 @@
               "type": "COURSE",
               "subject": "MATH",
               "classId": 4606
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 3600,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

@@ -2,7 +2,7 @@
   "name": "Business Administration and Psychology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
+    "lastEdited": "7/20/2026",
     "branch": "main"
   },
   "totalCreditsRequired": 130,
@@ -315,6 +315,26 @@
               "type": "COURSE",
               "subject": "PSYC",
               "classId": 4628
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Psychology Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "PSYC",
+              "idRangeStart": 1001,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }
