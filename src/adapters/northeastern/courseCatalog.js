@@ -31,6 +31,7 @@ import calendar from "./calendar.js";
 
 const LOCAL_URL    = `${import.meta.env.BASE_URL}northeastern/catalog-courses.json`;
 const HISTORY_URL  = `${import.meta.env.BASE_URL}northeastern/term-history.json`;
+const OFFERING_URL = `${import.meta.env.BASE_URL}northeastern/offering-summary.json`;
 const COLLEGES_URL = `${import.meta.env.BASE_URL}northeastern/subject-colleges.json`;
 // Supplemental nuPath source — catalog scraper sometimes drops nuPath on full re-scrapes.
 // all-courses.json (SearchNEU) is used only to back-fill nuPath when catalog-courses has none.
@@ -172,9 +173,10 @@ export default {
    * Then merges term-history.json (if present) to enrich termHistory and recompute terms.
    */
   async fetchAll() {
-    // Start the two small optional fetches immediately while catalog loads.
+    // Start the small optional fetches immediately while catalog loads.
     const collegesPromise = tryFetch(COLLEGES_URL);
     const historyPromise  = tryFetch(HISTORY_URL);
+    const offeringPromise = tryFetch(OFFERING_URL);
 
     // Catalog is required — fetch it first so we can gate the supplemental download.
     let catalogJson;
@@ -193,10 +195,11 @@ export default {
       ? Promise.resolve(null)
       : tryFetch(ALL_COURSES_URL);
 
-    const [allCoursesResult, collegesResult, historyResult] = await Promise.allSettled([
+    const [allCoursesResult, collegesResult, historyResult, offeringResult] = await Promise.allSettled([
       suppPromise,
       collegesPromise,
       historyPromise,
+      offeringPromise,
     ]);
 
     // Back-fill nuPath from all-courses.json if the supplemental fetch ran.
@@ -211,25 +214,30 @@ export default {
     const subjectColleges = collegesResult.status === "fulfilled" ? collegesResult.value : {};
     const courses = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
 
-    // Merge Banner availability history if the file exists.
-    // Silently skip if absent — app works without it.
-    if (historyResult.status === "fulfilled") {
-      const history = historyResult.value;
-      if (history && typeof history === "object") {
-        return courses.map(course => {
-          const hist = history[course.id];
-          if (!hist || typeof hist !== "object") return course;
-          // Only merge past terms — future terms with false values skew probability.
-          const pastHist = Object.fromEntries(
-            Object.entries(hist).filter(([code]) => calendar.isTermPast(code))
-          );
-          const termHistory   = { ...course.termHistory, ...pastHist };
-          const birthTermCode = computeBirthTermCode(termHistory);
-          return { ...course, termHistory, birthTermCode, terms: deriveTerms(termHistory, birthTermCode) };
-        });
+    // Merge Banner availability history + per-term offering detail if present.
+    // Both are optional — app works without them.
+    const history = historyResult.status === "fulfilled" && historyResult.value && typeof historyResult.value === "object"
+      ? historyResult.value : null;
+    const offering = offeringResult.status === "fulfilled" && offeringResult.value && typeof offeringResult.value === "object"
+      ? offeringResult.value : null;
+
+    if (!history && !offering) return courses;
+
+    return courses.map(course => {
+      let c = course;
+      const hist = history?.[course.id];
+      if (hist && typeof hist === "object") {
+        // Only merge past terms — future terms with false values skew probability.
+        const pastHist = Object.fromEntries(
+          Object.entries(hist).filter(([code]) => calendar.isTermPast(code))
+        );
+        const termHistory   = { ...course.termHistory, ...pastHist };
+        const birthTermCode = computeBirthTermCode(termHistory);
+        c = { ...course, termHistory, birthTermCode, terms: deriveTerms(termHistory, birthTermCode) };
       }
-    }
-    return courses;
+      const off = offering?.[course.id];
+      return off ? { ...c, offering: off } : c;
+    });
   },
 
   /** Normalize a single raw catalog record into the Course shape. */

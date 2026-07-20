@@ -114,9 +114,12 @@ export const strings = {
   "course.tooltip.variable-sh":   "Variable credit: {min}–{max} {unit} — click to set",
   "info.prereqs":                 "Prereqs:",
   "info.relationships.title":     "UNLOCKS",
-  "info.offered.title":           "OFFERED IN",
-  "info.offered.hint":            "Boxed = most recent term. Click to override: \u2713 always offered \xb7 \u2715 never.",
-  "info.offered.nodata":          "No Banner data for this course. Click to override: \u2713 offered \xb7 \u2715 not.",
+  "info.offered.title":           "AVAILABILITY",
+  "info.offered.legend":          "Semesters offered \u2014 each year shaded by how full it got",
+  "info.offered.schedule":        "TYPICALLY MEETS",
+  "info.offered.async":           "Online / no set meeting time",
+  "info.offered.hint":            "Click a box to override: \u2713 always offered \xb7 \u2715 never.",
+  "info.offered.nodata":          "No Banner data for this course. Click a box to override: \u2713 offered \xb7 \u2715 not.",
   "info.drag.title":              "drag to place",
 
   // ── Header ─────────────────────────────────────────────────────

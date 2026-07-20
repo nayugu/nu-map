@@ -440,7 +440,43 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
   );
 }
 
-const YR_CELL = 20; // px per year column
+const YR_CELL = 22; // px per year column (framed enrollment gauges)
+const ROW_H   = 22; // px height of a gauge row
+
+// Weekday boxes for the typical meeting pattern. `dow` = [M,T,W,Th,F] % of sections meeting
+// that day — each box is shaded by frequency (gradient), so "mostly MWR, some TF" reads at a
+// glance instead of a single binary pattern. Uses the subject colour at varying opacity.
+const WEEKDAY_LABELS = ["M", "T", "W", "Th", "F"];
+function WeekdayStrip({ dow, color }) {
+  return (
+    <div style={{ display: "flex", gap: 3 }}>
+      {WEEKDAY_LABELS.map((label, i) => {
+        const pct = dow?.[i] ?? 0;                       // 0..100
+        const on  = pct > 0;
+        const op  = on ? 0.1 + 0.7 * (pct / 100) : 0;    // faint floor → strong at 100%
+        return (
+          <span key={label} title={`Meets ${label} in ${pct}% of sections`}
+            style={{
+              position: "relative", overflow: "hidden",
+              minWidth: 19, height: 19, borderRadius: 4,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
+            }}>
+            {on && <span style={{ position: "absolute", inset: 0, background: color || "var(--text-3)", opacity: op }} />}
+            <span style={{
+              position: "relative",
+              fontSize: 9.5, fontWeight: pct >= 50 ? 800 : 600,
+              color: on ? "var(--text-1)" : "var(--text-5)",
+              opacity: on ? 1 : 0.5,
+            }}>
+              {label}
+            </span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const cal         = usePort(ICalendar);
@@ -449,6 +485,10 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const termHistory = selCourse.termHistory ?? {};
   const hasHistory  = Object.keys(termHistory).length > 0;
   const birth       = selCourse.birthTermCode ?? null;
+
+  // Per-term enrollment detail (completed terms only): { f:{code:fillPct}, fmt[], cmp[], day, lab }
+  const offering = selCourse.offering ?? null;
+  const fillMap  = offering?.f ?? {};
 
   // Build lookup: { semTypeId → { calYear → offered:boolean } }
   // Pre-birth terms are excluded — they represent the course not yet existing, not a "not offered" signal.
@@ -461,6 +501,18 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
       (byType[semType] ??= {})[yr] = offered;
     }
   }
+
+  // Parallel lookup for enrollment fill %: { semTypeId → { calYear → fillPct } }
+  const fillByType = {};
+  for (const [code, pct] of Object.entries(fillMap)) {
+    if (birth !== null && Number(code) < birth) continue;
+    const semType = cal.decodeTermCode(code);
+    const yr      = cal.getTermCodeYear?.(code);
+    if (semType && yr != null) (fillByType[semType] ??= {})[yr] = pct;
+  }
+  // High fill = hard to get into (hot); low fill = room (cool). Vibrant hex so the tint stays
+  // legible in dark mode (muted CSS-var tokens wash out on a dark background).
+  const fillBand = (pct) => pct >= 90 ? "#ef4444" : pct >= 75 ? "#f59e0b" : "#22c55e";
 
   // Latest year with data per semType — simply the max key in each byType row.
   const latestPastYearByType = {};
@@ -521,8 +573,13 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     setOfferedOverrides(prev => { const n = { ...prev }; delete n[selCourse.id]; return n; });
   }
 
+  // Typical meeting days as a per-weekday frequency gradient. Competitiveness is intentionally
+  // NOT summarized in words — the per-term fill shading on the cells above shows it directly.
+  const dow    = offering?.dow ?? null;                 // [M,T,W,Th,F] % of sections
+  const anyDay = dow?.some(v => v > 0) ?? false;
+
   return (
-    <div style={{ flexShrink: 0, width: compact ? "100%" : "auto", display: "flex", flexDirection: "column", paddingRight: compact ? 0 : 12 }}>
+    <div style={{ flexShrink: 0, width: compact ? "100%" : "fit-content", display: "flex", flexDirection: "column", padding: compact ? 0 : "0 12px 0 6px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
         <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em" }}>
           {t("info.offered.title")}
@@ -534,6 +591,12 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
           </button>
         )}
       </div>
+
+      {offering && Object.keys(fillMap).length > 0 && (
+        <div style={{ fontSize: 8.5, color: "var(--text-5)", marginBottom: 8, lineHeight: 1.35, maxWidth: histWidth + 44 }}>
+          {t("info.offered.legend")}
+        </div>
+      )}
 
       {semTypes.map(({ id, label, shortLabel }) => {
         const yrMap  = byType[id] ?? {};
@@ -549,7 +612,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
 
         return (
           <div key={id}
-            style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, userSelect: "none" }}>
+            style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3, userSelect: "none" }}>
 
             {/* Semtype label */}
             <span title={label}
@@ -557,32 +620,48 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
               {shortLabel}
             </span>
 
-            {/* Year history — one fixed column per calendar year, all years in global range */}
+            {/* Year history — one framed enrollment gauge per calendar year */}
             {histWidth > 0 && (
-              <div style={{ width: histWidth, position: "relative", flexShrink: 0, height: 14 }}>
+              <div style={{ width: histWidth, position: "relative", flexShrink: 0, height: ROW_H }}>
                 {Object.entries(yrMap).map(([yrStr, offered]) => {
-                  const yr       = Number(yrStr);
-                  const right    = (globalMaxYear - yr) * YR_CELL;
-                  const isLatest = yr === latestPastYr;
+                  const yr      = Number(yrStr);
+                  const right   = (globalMaxYear - yr) * YR_CELL;
+                  const fill    = fillByType[id]?.[yr] ?? null;   // enrollment fill %, if known
+                  const fillTip = fill != null ? ` — ${fill}% full` : "";
                   return (
                     <span key={yr}
-                      title={`${label} ${yr}: ${offered ? "offered" : "not offered"}${isLatest ? " — latest data" : ""}`}
+                      title={`${label} ${yr}: ${offered ? "offered" : "not offered"}${fillTip}`}
                       style={{
-                        position: "absolute", right,
-                        width: YR_CELL - (isLatest ? 2 : 0),
-                        textAlign: "center",
-                        fontSize: 9, fontWeight: isLatest ? 800 : 700,
-                        lineHeight: "12px",
-                        fontVariantNumeric: "tabular-nums",
-                        color: offered ? "var(--text-2)" : "var(--text-5)",
-                        opacity: offered ? 1 : 0.35,
-                        ...(isLatest ? {
-                          border: "1px solid rgba(128,128,128,0.25)",
-                          borderRadius: 2,
-                          marginTop: 1,
-                        } : {}),
+                        position: "absolute", right: right + 2, bottom: 0,
+                        width: YR_CELL - 4,
+                        height: ROW_H,
+                        borderRadius: 4, overflow: "hidden",
+                        // Thick but subtle frame = the 100% reference, so the fill height reads
+                        // as a clear fraction. Uses the themed control-border (light grey in
+                        // light mode, muted in dark); thickness — not darkness — carries it.
+                        border: offered ? "2px solid var(--border-2)" : "2px solid transparent",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        opacity: offered ? 1 : 0.45,
                       }}>
-                      {String(yr).slice(-2)}
+                      {/* Enrollment gauge: fill rises inside the frame to the exact % */}
+                      {offered && fill != null && (
+                        <span style={{
+                          position: "absolute", left: 0, right: 0, bottom: 0,
+                          height: `${Math.max(4, Math.min(100, fill))}%`,
+                          background: fillBand(fill),
+                          opacity: 0.55,
+                          pointerEvents: "none",
+                        }} />
+                      )}
+                      <span style={{
+                        position: "relative",
+                        fontSize: 9.5, fontWeight: 700,
+                        lineHeight: 1,
+                        fontVariantNumeric: "tabular-nums",
+                        color: offered ? "var(--text-1)" : "var(--text-5)",
+                      }}>
+                        {String(yr).slice(-2)}
+                      </span>
                     </span>
                   );
                 })}
@@ -597,7 +676,9 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                 flexShrink: 0,
                 position: "relative",
                 width: 14, height: 14,
-                border: `1.5px solid ${ovr === true ? "#22c55e" : ovr === false ? "var(--error)" : "var(--border-1)"}`,
+                // Neutral / monochrome on purpose: the traffic-light palette is reserved for
+                // the enrollment-fill cells, so this override control never competes with it.
+                border: `1.5px solid ${ovr === true ? "var(--text-3)" : "var(--border-1)"}`,
                 borderRadius: 3,
                 background: "transparent",
                 cursor: "pointer",
@@ -605,32 +686,31 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                 overflow: "hidden",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
-              {ovr === undefined && (
-                <div style={{
-                  position: "absolute", bottom: 0, left: 0, right: 0,
-                  height: `${probPct * 100}%`,
-                  background: probPct <= 1/3 ? "var(--error)" : probPct <= 2/3 ? "#f59e0b" : "var(--success)", opacity: 0.55,
-                  pointerEvents: "none",
-                }} />
-              )}
               {ovr === true && (
-                <div style={{ position: "absolute", inset: 0, background: "#22c55e", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 9, color: "#fff", lineHeight: 1, fontWeight: 700 }}>✓</span>
-                </div>
+                <span style={{ fontSize: 9, lineHeight: 1, fontWeight: 800, color: "var(--text-1)" }}>✓</span>
               )}
               {ovr === false && (
-                <div style={{ position: "absolute", inset: 0, background: "var(--error)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 8, color: "rgba(255,255,255,0.9)", lineHeight: 1, fontWeight: 700 }}>✕</span>
-                </div>
+                <span style={{ fontSize: 8, lineHeight: 1, fontWeight: 800, color: "var(--text-4)" }}>✕</span>
               )}
             </button>
           </div>
         );
       })}
 
-      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 10, lineHeight: 1.4, width: 0, minWidth: "100%" }}>
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 9, lineHeight: 1.4, width: 0, minWidth: "100%" }}>
         {hasHistory ? t("info.offered.hint") : t("info.offered.nodata")}
       </div>
+
+      {dow && (
+        <div style={{ marginTop: 14 }}>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 5 }}>
+            {t("info.offered.schedule")}
+          </div>
+          {anyDay
+            ? <WeekdayStrip dow={dow} color={selCourse.color} />
+            : <span style={{ fontSize: 10, color: "var(--text-3)", fontStyle: "italic" }}>{t("info.offered.async")}</span>}
+        </div>
+      )}
     </div>
   );
 }
