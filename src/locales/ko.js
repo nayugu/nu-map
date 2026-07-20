@@ -114,6 +114,9 @@ export const strings = {
   "info.prereqs":                 "선수 과목:",
   "info.relationships.title":     "이후 수강 가능",
   "info.offered.title":           "개설 학기",
+  "info.offered.schedule":        "일반 수업 요일",
+  "info.offered.async":           "온라인 / 정해진 시간 없음",
+  "info.offered.weekdays":        "월,화,수,목,금",
   "info.offered.hint":            "개설 현황은 연도에 따라 다를 수 있습니다. 필요시 체크박스로 수정하세요.",
   "info.drag.title":              "드래그하여 배치",
 

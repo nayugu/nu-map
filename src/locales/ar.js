@@ -113,6 +113,9 @@ export const strings = {
   "info.prereqs":                 "المتطلبات السابقة:",
   "info.relationships.title":     "يفتح",
   "info.offered.title":           "يُقدم في",
+  "info.offered.schedule":        "المواعيد المعتادة",
+  "info.offered.async":           "عبر الإنترنت / بدون وقت محدد",
+  "info.offered.weekdays":        "إث,ثل,أر,خم,جم",
   "info.offered.hint":            "قد تختلف الإتاحة حسب السنة — تجاوز باستخدام مربعات الاختيار إذا لزم الأمر.",
   "info.drag.title":              "اسحب لوضعه",
 

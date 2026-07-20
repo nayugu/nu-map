@@ -114,6 +114,9 @@ export const strings = {
   "info.prereqs":                 "Prerrequisitos:",
   "info.relationships.title":     "DESBLOQUEA",
   "info.offered.title":           "OFRECIDO EN",
+  "info.offered.schedule":        "HORARIO HABITUAL",
+  "info.offered.async":           "En línea / sin horario fijo",
+  "info.offered.weekdays":        "L,M,X,J,V",
   "info.offered.hint":            "La disponibilidad puede variar por año — sobrescribe con casillas si es necesario.",
   "info.drag.title":              "arrastrar para colocar",
 

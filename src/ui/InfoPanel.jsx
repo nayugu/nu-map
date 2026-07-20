@@ -443,29 +443,30 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
 const YR_CELL = 22; // px per year column (framed enrollment gauges)
 const ROW_H   = 18; // px height of a gauge row (year labelled in the header above)
 
-// Weekday boxes for the typical meeting pattern. `dow` = [M,T,W,Th,F] % of sections meeting
-// that day — each box is shaded by frequency (gradient), so "mostly MWR, some TF" reads at a
-// glance instead of a single binary pattern. Uses the subject colour at varying opacity.
-const WEEKDAY_LABELS = ["M", "T", "W", "Th", "F"];
+// Weekday boxes for the typical meeting pattern. `dow` = [Mon..Fri] % of sections meeting
+// that day — each box is shaded by frequency, so "mostly MWR, some TF" reads at a glance.
+// Day letters are localised (e.g. 月火水木金 in Japanese) via the "info.offered.weekdays" key.
 function WeekdayStrip({ dow, color }) {
+  const { t } = useLanguage();
+  const labels = (t("info.offered.weekdays") || "M,T,W,Th,F").split(",");
   return (
     <div style={{ display: "flex", gap: 3 }}>
-      {WEEKDAY_LABELS.map((label, i) => {
+      {labels.map((label, i) => {
         const pct = dow?.[i] ?? 0;                       // 0..100
         const on  = pct > 0;
         const op  = on ? 0.1 + 0.7 * (pct / 100) : 0;    // faint floor → strong at 100%
         return (
-          <span key={label} title={`Meets ${label} in ${pct}% of sections`}
+          <span key={i} title={`${label}: ${pct}%`}
             style={{
               position: "relative", overflow: "hidden",
-              minWidth: 19, height: 19, borderRadius: 4,
+              minWidth: 19, height: 19, borderRadius: 4, padding: "0 3px",
               display: "flex", alignItems: "center", justifyContent: "center",
               border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
             }}>
             {on && <span style={{ position: "absolute", inset: 0, background: color || "var(--text-3)", opacity: op }} />}
             <span style={{
               position: "relative",
-              fontSize: 9.5, fontWeight: pct >= 50 ? 800 : 600,
+              fontSize: 10, fontWeight: pct >= 50 ? 800 : 600,
               color: on ? "var(--text-1)" : "var(--text-5)",
               opacity: on ? 1 : 0.5,
             }}>

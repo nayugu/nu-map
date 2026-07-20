@@ -114,6 +114,9 @@ export const strings = {
   "info.prereqs":                 "पूर्व-आवश्यकताएँ:",
   "info.relationships.title":     "अनलॉक",
   "info.offered.title":           "प्रस्तुत सेमेस्टर",
+  "info.offered.schedule":        "सामान्य कक्षा दिवस",
+  "info.offered.async":           "ऑनलाइन / कोई निश्चित समय नहीं",
+  "info.offered.weekdays":        "सो,मं,बु,गु,शु",
   "info.offered.hint":            "उपलब्धता वर्ष के अनुसार बदल सकती है — आवश्यकता अनुसार चेकबॉक्स से ओवरराइड करें।",
   "info.drag.title":              "स्थान के लिए ड्रैग करें",
 

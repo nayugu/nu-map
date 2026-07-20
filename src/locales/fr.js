@@ -114,6 +114,9 @@ export const strings = {
   "info.prereqs":                 "Prérequis :",
   "info.relationships.title":     "DÉBLOQUE",
   "info.offered.title":           "PROPOSÉ EN",
+  "info.offered.schedule":        "HORAIRE HABITUEL",
+  "info.offered.async":           "En ligne / sans horaire fixe",
+  "info.offered.weekdays":        "Lu,Ma,Me,Je,Ve",
   "info.offered.hint":            "La disponibilité peut varier selon l'année — outrepasser avec les cases à cocher si besoin.",
   "info.drag.title":              "glisser pour placer",
 
