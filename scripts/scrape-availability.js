@@ -5,18 +5,34 @@
  * Queries Northeastern's official Banner SSB system (nubanner.neu.edu) for the
  * last two academic years (~8 terms) to build a per-course offering history.
  *
- * Output: public/northeastern/term-history.json
+ * Output 1: public/northeastern/term-history.json  (all queried terms)
  *   {
  *     "CS3500": { "202510": true, "202530": false, "202610": true, ... },
  *     ...
  *   }
+ *   true = offered, false = not offered that term.
+ *
+ * Output 2: public/northeastern/term-details.json  (COMPLETED terms only)
+ *   {
+ *     "CS3500": {
+ *       "202610": { sections, cap, enr, formats[], campuses[], days{pattern:count}, linked },
+ *       ...
+ *     }
+ *   }
+ *   Course-level aggregate across the course's sections: enrollment (cap/enr → fill rate),
+ *   instructional formats, campuses, and day-pattern frequency ({"MWF":9,"TF":3,"async":2}).
+ *   Recorded ONLY for terms whose end date has passed, so the numbers are final (nu-map is
+ *   stable-only; a running term's seats churn hourly). Waitlist is intentionally omitted —
+ *   Northeastern does not expose Banner waitlist capacity/counts (always 0).
  *
  * Keys are Banner term codes (YYYY = AY end year; 10=Fall, 30=Spring,
- * 40=Summer 1, 60=Summer 2).  true = offered, false = not offered that term.
+ * 40=Summer 1, 60=Summer 2).
  *
  * Usage:
- *   node scripts/scrape-availability.js           # dry run — prints summary
- *   node scripts/scrape-availability.js --write   # write term-history.json
+ *   node scripts/scrape-availability.js              # dry run — prints summary
+ *   node scripts/scrape-availability.js --write      # write both JSON files
+ *   node scripts/scrape-availability.js --write --details-only  # write only term-details.json
+ *   node scripts/scrape-availability.js --term=202610,202630   # restrict terms (testing)
  *
  * Rate limiting: 500 ms between page requests by default.
  * Override: BANNER_DELAY_MS=200 node scripts/scrape-availability.js --write
@@ -37,6 +53,7 @@ const __dirname      = dirname(fileURLToPath(import.meta.url));
 const ROOT           = resolve(__dirname, "..");
 const ALL_COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
 const HISTORY_OUT    = resolve(ROOT, "public/northeastern/term-history.json");
+const DETAILS_OUT    = resolve(ROOT, "public/northeastern/term-details.json");
 const COLLEGES_OUT   = resolve(ROOT, "public/northeastern/subject-colleges.json");
 const CHANGE_LOG     = resolve(ROOT, "public/northeastern/change-log.json");
 const CHANGE_LOG_MAX = 600;
@@ -142,9 +159,42 @@ async function fetchPage(termCode, offset) {
   return await res.json();
 }
 
+// ── Section-detail helpers ───────────────────────────────────────
+
+const num = (v) => (Number.isFinite(v) ? v : 0);
+
+/** Parse a Banner "MM/DD/YYYY" date into a Date, or null. */
+function parseMDY(raw) {
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec((raw || "").trim());
+  return m ? new Date(+m[3], +m[1] - 1, +m[2]) : null;
+}
+
+// Banner day flags → single-letter codes (R = Thursday, U = Sunday).
+const DAY_KEYS = [
+  ["monday", "M"], ["tuesday", "T"], ["wednesday", "W"], ["thursday", "R"],
+  ["friday", "F"], ["saturday", "S"], ["sunday", "U"],
+];
+
+/** Day pattern ("MWF") for a meetingTime, or "" if it has no fixed days (async/online). */
+function dayPattern(mt) {
+  if (!mt) return "";
+  return DAY_KEYS.filter(([k]) => mt[k]).map(([, c]) => c).join("");
+}
+
 /**
- * Fetch all course IDs (subject+number) offered in a given term.
- * Returns a Set<string> of courseIds like "CS3500".
+ * Fetch a term's offerings plus a per-course section aggregate.
+ *
+ * Returns:
+ *   offered  Set<courseId>                 — courses offered ("CS3500")
+ *   detail   Map<courseId, aggregate>      — enrollment/waitlist/format/campus/meeting,
+ *                                            summed & unioned across the course's sections
+ *   termEnd  Date | null                   — latest section end date seen in the term
+ *
+ * A course usually has several sections; enrollment/waitlist are summed, while format,
+ * campus and meeting pattern are collected as unique sets (a course may run in-person in
+ * Boston and online at once). `termEnd` lets the caller keep detail only for terms that have
+ * already ended, whose numbers are final — nu-map is stable-only, and a still-running term's
+ * seats churn hourly.
  */
 async function fetchTermOfferings(termCode) {
   await activateTerm(termCode);
@@ -153,6 +203,8 @@ async function fetchTermOfferings(termCode) {
   await sleep(DELAY_MS);
 
   const offered = new Set();
+  const detail  = new Map();
+  let termEnd = null;
   let offset = 0;
   let totalCount = null;
 
@@ -174,7 +226,35 @@ async function fetchTermOfferings(termCode) {
     for (const s of sections) {
       const subject = (s.subject || "").toUpperCase().trim();
       const number  = (s.courseNumber || "").trim();
-      if (subject && number) offered.add(`${subject}${number}`);
+      if (!subject || !number) continue;
+      const id = `${subject}${number}`;
+      offered.add(id);
+
+      const agg = detail.get(id) ?? {
+        sections: 0, cap: 0, enr: 0,
+        formats: new Set(), campuses: new Set(), days: {}, linked: false,
+      };
+      agg.sections += 1;
+      agg.cap += num(s.maximumEnrollment);
+      agg.enr += num(s.enrollment);
+      if (s.instructionalMethodDescription) agg.formats.add(s.instructionalMethodDescription.trim());
+      if (s.campusDescription)              agg.campuses.add(s.campusDescription.trim());
+      if (s.isSectionLinked)                agg.linked = true;
+
+      // Tally each section once, under its PRIMARY meeting's day pattern (the first meeting
+      // is the main class; later ones are recitations/labs that would otherwise dominate).
+      // Sections with no fixed days (fully async/online) are counted under "async".
+      let primary = "";
+      for (const mf of s.meetingsFaculty ?? []) {
+        const p = dayPattern(mf.meetingTime);
+        if (p && !primary) primary = p;
+        const d = parseMDY(mf.meetingTime?.endDate);
+        if (d && (!termEnd || d > termEnd)) termEnd = d;
+      }
+      const key = primary || "async";
+      agg.days[key] = (agg.days[key] ?? 0) + 1;
+
+      detail.set(id, agg);
     }
 
     if (totalCount === null) totalCount = data.totalCount ?? 0;
@@ -183,7 +263,19 @@ async function fetchTermOfferings(termCode) {
     await sleep(DELAY_MS);
   }
 
-  return offered;
+  return { offered, detail, termEnd };
+}
+
+/** Serialize a per-course aggregate to the compact stored form (Sets → sorted arrays). */
+function serializeDetail(agg) {
+  return {
+    sections: agg.sections,
+    cap: agg.cap, enr: agg.enr,
+    formats:  [...agg.formats].sort(),
+    campuses: [...agg.campuses].sort(),
+    days: agg.days,
+    linked: agg.linked,
+  };
 }
 
 /**
@@ -232,6 +324,9 @@ async function fetchCollegeSubjects(termCode, collegeCode) {
 
 async function main() {
   const doWrite = process.argv.includes("--write");
+  // --details-only: write just term-details.json, leaving the existing term-history.json /
+  // subject-colleges.json untouched (isolates the enrollment/format/meeting capture).
+  const detailsOnly = process.argv.includes("--details-only");
 
   // Load catalog so we only track courses the app knows about
   if (!existsSync(ALL_COURSES)) {
@@ -252,8 +347,13 @@ async function main() {
   const bannerTermCodes = new Set(termList.map(t => t.code));
   console.log(`Banner has ${bannerTermCodes.size} terms available`);
 
-  // Determine which standard terms to query (last 3 AYs, standard suffixes only)
-  const desired = recentTermCodes(3);
+  // Determine which standard terms to query (last 3 AYs, standard suffixes only).
+  // --term=CODE[,CODE] restricts the run — handy for testing a single term.
+  const termArgs = process.argv
+    .filter(a => a.startsWith("--term="))
+    .flatMap(a => a.slice("--term=".length).split(","))
+    .filter(Boolean);
+  const desired = termArgs.length ? termArgs : recentTermCodes(3);
   const toQuery = desired.filter(code => bannerTermCodes.has(code));
 
   if (toQuery.length === 0) {
@@ -269,13 +369,18 @@ async function main() {
 
   // Query each term
   const termResults = {}; // termCode → Set<courseId>
+  const termDetail  = {}; // termCode → Map<courseId, aggregate>
+  const termEndByCode = {}; // termCode → Date | null (latest section end date)
   for (const termCode of toQuery) {
     const meta = termList.find(t => t.code === termCode);
     process.stdout.write(`\n[${termCode}] ${meta?.description ?? ""} — `);
     try {
-      const offered = await fetchTermOfferings(termCode);
-      termResults[termCode] = offered;
-      console.log(`${offered.size} courses`);
+      const { offered, detail, termEnd } = await fetchTermOfferings(termCode);
+      termResults[termCode]   = offered;
+      termDetail[termCode]    = detail;
+      termEndByCode[termCode] = termEnd;
+      const ended = termEnd && termEnd < new Date();
+      console.log(`${offered.size} courses${ended ? " (ended — detail kept)" : " (in progress — detail skipped)"}`);
     } catch (err) {
       console.warn(`FAILED: ${err.message}`);
       termResults[termCode] = new Set();
@@ -287,7 +392,7 @@ async function main() {
   // Uses the most recent successfully-queried term.
   const subjectColleges = {};
   const recentTerm = [...toQuery].reverse().find(c => (termResults[c]?.size ?? 0) > 0);
-  if (recentTerm) {
+  if (recentTerm && !termArgs.length && !detailsOnly) { // skip the expensive college map in --term/--details-only mode
     console.log(`\nFetching college→subject map from term ${recentTerm}...`);
     try {
       // Fetch all college codes from Banner, then map subjects per college
@@ -321,6 +426,18 @@ async function main() {
     }
   }
 
+  // Build term-details: enrollment/format/campus/meeting aggregate, ONLY for terms whose end
+  // date has passed (final, stable numbers) and only for catalog courses.
+  const now = new Date();
+  const completedTerms = toQuery.filter(c => termEndByCode[c] && termEndByCode[c] < now);
+  const termDetails = {};
+  for (const termCode of completedTerms) {
+    for (const [courseId, agg] of (termDetail[termCode] ?? new Map())) {
+      if (!catalogIds.has(courseId)) continue;
+      (termDetails[courseId] ??= {})[termCode] = serializeDetail(agg);
+    }
+  }
+
   // Summary
   const covered = Object.keys(termHistory).length;
   const total   = catalogIds.size;
@@ -340,11 +457,22 @@ async function main() {
     console.log(`  ${termCode}  ${(meta?.description ?? "").padEnd(28)}  ${count} Banner sections  /  ${matched} in catalog`);
   }
 
-  if (doWrite) {
-    writeFileSync(HISTORY_OUT, JSON.stringify(termHistory, null, 2));
-    console.log(`\nWrote ${HISTORY_OUT}`);
+  console.log(`\nCompleted terms with detail: ${completedTerms.length} (${completedTerms.join(", ") || "none"})`);
+  console.log(`Courses with detail: ${Object.keys(termDetails).length}`);
+  for (const cid of ["CS3500", "CS2500", "MATH1341", "ENGW1111"]) {
+    if (termDetails[cid]) console.log(`  sample ${cid}: ${JSON.stringify(termDetails[cid])}`);
+  }
 
-    if (Object.keys(subjectColleges).length > 0) {
+  if (doWrite) {
+    if (!detailsOnly) {
+      writeFileSync(HISTORY_OUT, JSON.stringify(termHistory, null, 2));
+      console.log(`\nWrote ${HISTORY_OUT}`);
+    }
+
+    writeFileSync(DETAILS_OUT, JSON.stringify(termDetails, null, 2));
+    console.log(`Wrote ${DETAILS_OUT} (${Object.keys(termDetails).length} courses)`);
+
+    if (!detailsOnly && Object.keys(subjectColleges).length > 0) {
       writeFileSync(COLLEGES_OUT, JSON.stringify(subjectColleges, null, 2));
       console.log(`Wrote ${COLLEGES_OUT} (${Object.keys(subjectColleges).length} subjects)`);
     }
@@ -362,12 +490,14 @@ async function main() {
       terms:     toQuery,
       covered,
       total,
+      detailTerms:   completedTerms,
+      detailCovered: Object.keys(termDetails).length,
     });
     if (changeLog.runs.length > CHANGE_LOG_MAX) changeLog.runs = changeLog.runs.slice(0, CHANGE_LOG_MAX);
     writeFileSync(CHANGE_LOG, JSON.stringify(changeLog, null, 2) + "\n", "utf8");
     console.log(`Wrote ${CHANGE_LOG}`);
   } else {
-    console.log("\nDry run — pass --write to save term-history.json");
+    console.log("\nDry run — pass --write to save term-history.json + term-details.json");
   }
 }
 
