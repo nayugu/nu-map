@@ -115,7 +115,6 @@ export const strings = {
   "info.prereqs":                 "Prereqs:",
   "info.relationships.title":     "UNLOCKS",
   "info.offered.title":           "AVAILABILITY",
-  "info.offered.legend":          "Semesters offered \u2014 each year shaded by how full it got",
   "info.offered.schedule":        "TYPICALLY MEETS",
   "info.offered.async":           "Online / no set meeting time",
   "info.offered.hint":            "Click a box to override: \u2713 always offered \xb7 \u2715 never.",

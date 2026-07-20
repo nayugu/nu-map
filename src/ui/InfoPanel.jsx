@@ -441,7 +441,7 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
 }
 
 const YR_CELL = 22; // px per year column (framed enrollment gauges)
-const ROW_H   = 22; // px height of a gauge row
+const ROW_H   = 18; // px height of a gauge row (year labelled in the header above)
 
 // Weekday boxes for the typical meeting pattern. `dow` = [M,T,W,Th,F] % of sections meeting
 // that day — each box is shaded by frequency (gradient), so "mostly MWR, some TF" reads at a
@@ -510,9 +510,17 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     const yr      = cal.getTermCodeYear?.(code);
     if (semType && yr != null) (fillByType[semType] ??= {})[yr] = pct;
   }
-  // High fill = hard to get into (hot); low fill = room (cool). Vibrant hex so the tint stays
-  // legible in dark mode (muted CSS-var tokens wash out on a dark background).
-  const fillBand = (pct) => pct >= 90 ? "#ef4444" : pct >= 75 ? "#f59e0b" : "#22c55e";
+  // Below the threshold it's simply "has room" → flat green (no muddy green→amber blend).
+  // Above it, a clean amber→red gradient grades the competitive zone (both warm, no mud).
+  const FILL_GREEN_MAX = 75;
+  const fillBand = (pct) => {
+    const p = Math.max(0, Math.min(100, pct));
+    if (p < FILL_GREEN_MAX) return "#22c55e";
+    const t = (p - FILL_GREEN_MAX) / (100 - FILL_GREEN_MAX);   // 75→0 .. 100→1
+    const Y = [250, 204, 21], R = [239, 68, 68];               // yellow (#facc15) → red
+    const c = Y.map((v, i) => Math.round(v + (R[i] - v) * t));
+    return `rgb(${c[0]},${c[1]},${c[2]})`;
+  };
 
   // Latest year with data per semType — simply the max key in each byType row.
   const latestPastYearByType = {};
@@ -592,9 +600,23 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
         )}
       </div>
 
-      {offering && Object.keys(fillMap).length > 0 && (
-        <div style={{ fontSize: 8.5, color: "var(--text-5)", marginBottom: 8, lineHeight: 1.35, maxWidth: histWidth + 44 }}>
-          {t("info.offered.legend")}
+      {/* Legend intentionally omitted — the year header + shaded gauges are self-explanatory. */}
+
+      {/* Year header — labels the columns once, above the gauges */}
+      {histWidth > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
+          <span style={{ width: 24, flexShrink: 0 }} />
+          <div style={{ width: histWidth, position: "relative", flexShrink: 0, height: 11 }}>
+            {Array.from({ length: totalCols }, (_, i) => globalMinYear + i).map(yr => (
+              <span key={yr} style={{
+                position: "absolute", right: (globalMaxYear - yr) * YR_CELL + 2,
+                width: YR_CELL - 4, textAlign: "center",
+                fontSize: 8.5, fontWeight: 700, color: "var(--text-4)",
+                fontVariantNumeric: "tabular-nums",
+              }}>{String(yr).slice(-2)}</span>
+            ))}
+          </div>
+          <span style={{ width: 14, flexShrink: 0 }} />
         </div>
       )}
 
@@ -624,44 +646,31 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
             {histWidth > 0 && (
               <div style={{ width: histWidth, position: "relative", flexShrink: 0, height: ROW_H }}>
                 {Object.entries(yrMap).map(([yrStr, offered]) => {
-                  const yr      = Number(yrStr);
-                  const right   = (globalMaxYear - yr) * YR_CELL;
-                  const fill    = fillByType[id]?.[yr] ?? null;   // enrollment fill %, if known
-                  const fillTip = fill != null ? ` — ${fill}% full` : "";
+                  if (!offered) return null;                        // not offered that year → blank slot
+                  const yr    = Number(yrStr);
+                  const right = (globalMaxYear - yr) * YR_CELL;
+                  const fill  = fillByType[id]?.[yr] ?? null;       // enrollment fill %, if known
                   return (
                     <span key={yr}
-                      title={`${label} ${yr}: ${offered ? "offered" : "not offered"}${fillTip}`}
+                      title={`${label} ${yr}: offered${fill != null ? ` — ${fill}% full` : ""}`}
                       style={{
                         position: "absolute", right: right + 2, bottom: 0,
                         width: YR_CELL - 4,
                         height: ROW_H,
-                        borderRadius: 4, overflow: "hidden",
-                        // Thick but subtle frame = the 100% reference, so the fill height reads
-                        // as a clear fraction. Uses the themed control-border (light grey in
-                        // light mode, muted in dark); thickness — not darkness — carries it.
-                        border: offered ? "2px solid var(--border-2)" : "2px solid transparent",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        opacity: offered ? 1 : 0.45,
+                        borderRadius: 3, overflow: "hidden",
+                        // Thick but subtle frame = the 100% reference so the fill reads as a
+                        // clear fraction; the year is labelled once in the header above.
+                        border: "2px solid var(--border-2)",
                       }}>
-                      {/* Enrollment gauge: fill rises inside the frame to the exact % */}
-                      {offered && fill != null && (
+                      {fill != null && (
                         <span style={{
                           position: "absolute", left: 0, right: 0, bottom: 0,
                           height: `${Math.max(4, Math.min(100, fill))}%`,
                           background: fillBand(fill),
-                          opacity: 0.55,
+                          opacity: 0.85,
                           pointerEvents: "none",
                         }} />
                       )}
-                      <span style={{
-                        position: "relative",
-                        fontSize: 9.5, fontWeight: 700,
-                        lineHeight: 1,
-                        fontVariantNumeric: "tabular-nums",
-                        color: offered ? "var(--text-1)" : "var(--text-5)",
-                      }}>
-                        {String(yr).slice(-2)}
-                      </span>
                     </span>
                   );
                 })}
