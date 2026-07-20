@@ -487,9 +487,10 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const hasHistory  = Object.keys(termHistory).length > 0;
   const birth       = selCourse.birthTermCode ?? null;
 
-  // Per-term enrollment detail (completed terms only): { f:{code:fillPct}, fmt[], cmp[], day, lab }
+  // Per-term enrollment detail (completed terms only): { f:{fillPct}, o:{seatsOpen}, fmt[], cmp[], dow[], lab }
   const offering = selCourse.offering ?? null;
-  const fillMap  = offering?.f ?? {};
+  const fillMap  = offering?.f ?? {};   // fill % → gauge height
+  const openMap  = offering?.o ?? {};   // seats remaining → gauge colour
 
   // Build lookup: { semTypeId → { calYear → offered:boolean } }
   // Pre-birth terms are excluded — they represent the course not yet existing, not a "not offered" signal.
@@ -503,7 +504,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     }
   }
 
-  // Parallel lookup for enrollment fill %: { semTypeId → { calYear → fillPct } }
+  // Parallel lookups per (semType, year): fill % (bar height) and seats remaining (bar colour).
   const fillByType = {};
   for (const [code, pct] of Object.entries(fillMap)) {
     if (birth !== null && Number(code) < birth) continue;
@@ -511,14 +512,22 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     const yr      = cal.getTermCodeYear?.(code);
     if (semType && yr != null) (fillByType[semType] ??= {})[yr] = pct;
   }
-  // Below the threshold it's simply "has room" → flat green (no muddy green→amber blend).
-  // Above it, a clean amber→red gradient grades the competitive zone (both warm, no mud).
-  const FILL_GREEN_MAX = 75;
-  const fillBand = (pct) => {
-    const p = Math.max(0, Math.min(100, pct));
-    if (p < FILL_GREEN_MAX) return "#22c55e";
-    const t = (p - FILL_GREEN_MAX) / (100 - FILL_GREEN_MAX);   // 75→0 .. 100→1
-    const Y = [250, 204, 21], R = [239, 68, 68];               // yellow (#facc15) → red
+  const openByType = {};
+  for (const [code, open] of Object.entries(openMap)) {
+    if (birth !== null && Number(code) < birth) continue;
+    const semType = cal.decodeTermCode(code);
+    const yr      = cal.getTermCodeYear?.(code);
+    if (semType && yr != null) (openByType[semType] ??= {})[yr] = open;
+  }
+  // Colour by SEATS REMAINING, not fill % — that's the real "can I get a seat?" signal, and it
+  // captures class size (1 of 2 seats reads full; 50 of 100 reads open). 6+ seats left = flat
+  // green ("room"); below that a yellow→red gradient tightens as the last seats vanish (0 = red).
+  // The bar HEIGHT still shows fill %, so height = how-full, colour = can-I-get-in.
+  const SEATS_ROOM = 6;
+  const seatColor = (open) => {
+    if (open == null || open >= SEATS_ROOM) return "#22c55e";
+    const t = (SEATS_ROOM - 1 - Math.max(0, open)) / (SEATS_ROOM - 1);  // 5 open→0 (yellow) .. 0 open→1 (red)
+    const Y = [250, 204, 21], R = [239, 68, 68];                        // yellow (#facc15) → red
     const c = Y.map((v, i) => Math.round(v + (R[i] - v) * t));
     return `rgb(${c[0]},${c[1]},${c[2]})`;
   };
@@ -650,10 +659,11 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                   if (!offered) return null;                        // not offered that year → blank slot
                   const yr    = Number(yrStr);
                   const right = (globalMaxYear - yr) * YR_CELL;
-                  const fill  = fillByType[id]?.[yr] ?? null;       // enrollment fill %, if known
+                  const fill  = fillByType[id]?.[yr] ?? null;       // enrollment fill %  → height
+                  const open  = openByType[id]?.[yr] ?? null;       // seats remaining     → colour
                   return (
                     <span key={yr}
-                      title={`${label} ${yr}: offered${fill != null ? ` — ${fill}% full` : ""}`}
+                      title={`${label} ${yr}: offered${fill != null ? ` — ${fill}% full` : ""}${open != null ? ` · ${open} seat${open === 1 ? "" : "s"} left` : ""}`}
                       style={{
                         position: "absolute", right: right + 2, bottom: 0,
                         width: YR_CELL - 4,
@@ -667,7 +677,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                         <span style={{
                           position: "absolute", left: 0, right: 0, bottom: 0,
                           height: `${Math.max(4, Math.min(100, fill))}%`,
-                          background: fillBand(fill),
+                          background: seatColor(open),
                           opacity: 0.85,
                           pointerEvents: "none",
                         }} />
