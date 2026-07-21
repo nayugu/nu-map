@@ -847,7 +847,9 @@ export default function Header() {
                 {t(`header.settings.theme.${themeName}`) || THEME_LABELS[themeName] || themeName}
               </button>
 
-              {/* Continuation logo toggle */}
+              {/* Co-op continuation logo toggle — hidden for now: the logo stays on by default
+                  and we like it that way. Drop the `false &&` to bring the toggle back. */}
+              {false && (
               <button className="hdr-btn-dd" onClick={() => setShowContLogo(v => !v)}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 400, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -855,6 +857,7 @@ export default function Header() {
                   color: showContLogo ? "var(--text-3)" : "var(--text-5)" }}>
                 {showContLogo ? t("header.settings.contlogo.on") : t("header.settings.contlogo.off")}
               </button>
+              )}
 
               {/* Show unlocks toggle */}
               <button className="hdr-btn-dd" onClick={() => setShowUnlocks(v => !v)}
@@ -891,8 +894,9 @@ export default function Header() {
                 </div>
               </div>
 
-              {/* Zoom */}
-              {!isPhone && (
+              {/* Zoom — hidden for now: the buttons mislabel the actual scale (browser zoom
+                  often defaults to 125%, so "100%" here is wrong) and browser ⌘+/- covers it. */}
+              {false && !isPhone && (
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.zoom")}</div>
                 <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
