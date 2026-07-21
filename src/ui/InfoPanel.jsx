@@ -547,11 +547,11 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     if (v >= SEATS_ROOM) {
       // room: pale mint (near threshold) → saturated ENVR green (wide open)
       const t = Math.min(1, (v - SEATS_ROOM) / (ROOM_OPEN - SEATS_ROOM));  // 6→0 (pale) .. 15+→1 (saturated)
-      return lerpRGB([209, 250, 224], [52, 211, 141], t);                 // #d1fae0 → #34d38d (a touch more green, less blue)
+      return lerpRGB([216, 250, 209], [52, 211, 141], t);                 // #d8fad1 → #34d38d (pale end has a faint warm/yellow tint)
     }
     // competitive: pale coral (near threshold) → darkest combined red, leaning coral (jammed)
     const t = (SEATS_ROOM - 1 - Math.max(0, v)) / (SEATS_ROOM - 1);       // 5→0 (pale) .. 0→1 (darkest)
-    return lerpRGB([254, 205, 211], [238, 72, 78], t);                    // #fecdd3 → #ee484e (coral-leaning)
+    return lerpRGB([254, 207, 204], [238, 72, 78], t);                    // #fecfcc → #ee484e (pale end: only a whisper of warmth — coral+yellow muddies fast)
   };
 
   // Latest year with data per semType — simply the max key in each byType row.
