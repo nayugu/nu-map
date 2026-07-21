@@ -8,6 +8,15 @@ import { THEMES, DEFAULT_THEME } from '../core/themes.js';
 
 const ThemeCtx = createContext(null);
 
+/** Theme matching the OS / browser colour-scheme preference. */
+function systemTheme() {
+  try {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  } catch {
+    return DEFAULT_THEME;
+  }
+}
+
 /** Write all CSS custom properties for `tokens` onto <html>. */
 function applyTheme(tokens) {
   const root = document.documentElement;
@@ -34,9 +43,9 @@ export function ThemeProvider({ storagePrefix = 'app', children }) {
   const [themeName, setThemeState] = useState(() => {
     try {
       const saved = localStorage.getItem(LS_KEY);
-      return (saved && THEMES[saved]) ? saved : DEFAULT_THEME;
+      return (saved && THEMES[saved]) ? saved : systemTheme();
     } catch {
-      return DEFAULT_THEME;
+      return systemTheme();
     }
   });
 
@@ -45,6 +54,23 @@ export function ThemeProvider({ storagePrefix = 'app', children }) {
     setThemeState(name);
     try { localStorage.setItem(LS_KEY, name); } catch {}
   };
+
+  // Until the user explicitly picks a theme, keep tracking the OS preference live.
+  useEffect(() => {
+    let mq;
+    try {
+      if (localStorage.getItem(LS_KEY)) return;
+      mq = window.matchMedia('(prefers-color-scheme: dark)');
+    } catch {
+      return;
+    }
+    const onChange = () => {
+      try { if (localStorage.getItem(LS_KEY)) return; } catch {}
+      setThemeState(systemTheme());
+    };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, [LS_KEY]);
 
   // Apply CSS vars whenever theme changes (and on first mount).
   useEffect(() => { applyTheme(THEMES[themeName]); }, [themeName]);
