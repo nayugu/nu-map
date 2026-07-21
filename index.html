@@ -40,7 +40,21 @@
       /* Prevent browser text-selection on draggable cards (fixes serif font flash on touch) */
       [data-drag-id] { -webkit-user-select: none; user-select: none; }
     </style>
-    <script type="module" crossorigin src="./assets/index-KzmNAwUe.js"></script>
+    <script>
+      // Paint the correct background before React mounts so dark-mode users
+      // don't see a white flash. Mirrors ThemeContext's resolution: saved
+      // choice first ("ncp"/"map" storage prefixes), then the OS preference.
+      (function () {
+        var theme;
+        try { theme = localStorage.getItem('ncp-theme') || localStorage.getItem('map-theme'); } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.style.background = theme === 'dark' ? '#0d1117' : '#fefefe';
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-CeaTL6e-.js"></script>
   </head>
   <body>
     <div id="root"></div>
