@@ -110,7 +110,7 @@ export default function InfoPanel() {
               />
             )}
             {!isMobile && showUnlocks && selEdges.length > 0 && (
-              <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
+              <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} navTo={navTo} />
             )}
 
             {/* Tablet: single narrow right column — Relationships under Offered */}
@@ -123,7 +123,7 @@ export default function InfoPanel() {
                   compact
                 />
                 {showUnlocks && selEdges.length > 0 && (
-                  <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} compact />
+                  <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} navTo={navTo} compact />
                 )}
               </div>
             )}
@@ -144,7 +144,7 @@ export default function InfoPanel() {
                 setOfferedOverrides={setOfferedOverrides}
               />
               {showUnlocks && selEdges.length > 0 && (
-                <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} />
+                <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} navTo={navTo} />
               )}
             </div>
           )}
@@ -401,7 +401,7 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
   return null;
 }
 
-function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
+function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = false }) {
   const { t } = useLanguage();
 
   // Only show courses this course unlocks (outgoing prereqs) and coreqs.
@@ -418,15 +418,20 @@ function RelationshipList({ selCourse, selEdges, courseMap, compact = false }) {
       </div>
       <div style={{ overflowY: "auto", maxHeight: 220, paddingRight: 14 }}>
         {unlocks.map((rel, i) => {
-          const isOut  = rel.from === selCourse.id;
-          const other  = courseMap[isOut ? rel.to : rel.from];
-          const rs     = REL_STYLE[rel.type];
-          const coreq  = isCoreq(rel.type);
+          const isOut   = rel.from === selCourse.id;
+          const otherId = isOut ? rel.to : rel.from;
+          const other   = courseMap[otherId];
+          const rs      = REL_STYLE[rel.type];
+          const coreq   = isCoreq(rel.type);
           return (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
-              <span title={other?.title || undefined}
-                style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)" }}>
-                {other?.code || (isOut ? rel.to : rel.from)}
+              <span title={other ? `${other.title} — click to view` : undefined}
+                onClick={other ? (e => { e.stopPropagation(); navTo(otherId); }) : undefined}
+                onMouseEnter={other ? (e => { e.currentTarget.style.textDecoration = "underline"; }) : undefined}
+                onMouseLeave={other ? (e => { e.currentTarget.style.textDecoration = "none"; }) : undefined}
+                style={{ fontSize: 10, fontWeight: 700, color: other?.color || "var(--text-3)",
+                  cursor: other ? "pointer" : "default", textUnderlineOffset: 2, userSelect: "none" }}>
+                {other?.code || otherId}
               </span>
               {coreq && (
                 <span style={{ fontSize: 8, background: `${rs?.color}20`, color: rs?.color, borderRadius: 3, padding: "1px 4px", whiteSpace: "nowrap" }}>
