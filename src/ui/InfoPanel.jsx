@@ -1015,12 +1015,14 @@ function SchedulePopover({ pat, color, rect }) {
           const isStrip = !isOther && !isAsync;   // every real pattern is now covered by the day columns
           return (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: LABEL_W, flexShrink: 0, display: "flex", alignItems: "center" }}>
+              <span style={{ width: LABEL_W, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {isStrip
                   ? <PatternStrip pattern={pattern} days={days} labels={labels} color={color} />
-                  : <bdi style={{ fontSize: 10.5, color: "var(--text-4)", fontStyle: "italic" }}>
-                      {isOther ? t("info.offered.pop.other") : isAsync ? t("info.offered.pop.online") : pattern}
-                    </bdi>}
+                  : isAsync
+                    ? <bdi style={{ fontSize: 11, fontWeight: 700, color: color || "var(--text-3)" }}>{t("info.offered.pop.online")}</bdi>
+                    : <bdi style={{ fontSize: 10.5, color: "var(--text-4)", fontStyle: "italic" }}>
+                        {isOther ? t("info.offered.pop.other") : pattern}
+                      </bdi>}
               </span>
               <div style={{ flex: 1, height: 9, borderRadius: 5, background: "var(--bg-surface-2)", overflow: "hidden" }}>
                 <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 5, background: isOther ? "var(--text-5)" : (color || "var(--text-3)"), opacity: isOther ? 0.55 : 0.85 }} />
