@@ -936,18 +936,18 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
 // U=Sun) into visible, localised day letters. `days`/`labels` are parallel arrays.
 function PatternStrip({ pattern, days, labels, color }) {
   return (
-    <span style={{ display: "flex", gap: 2, flexShrink: 0 }}>
+    <span style={{ display: "flex", gap: 3, flexShrink: 0 }}>
       {days.map((d, i) => {
         const on = pattern.includes(d);
         return (
           <span key={i} style={{
             position: "relative", overflow: "hidden",
-            minWidth: 14, height: 14, borderRadius: 3,
+            minWidth: 18, height: 18, borderRadius: 4,
             display: "flex", alignItems: "center", justifyContent: "center",
             border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
           }}>
             {on && <span style={{ position: "absolute", inset: 0, background: color || "var(--text-3)", opacity: 0.85 }} />}
-            <span style={{ position: "relative", fontSize: 7.5, fontWeight: on ? 800 : 500, color: on ? "var(--text-1)" : "var(--text-5)" }}>{labels[i]}</span>
+            <span style={{ position: "relative", fontSize: 9.5, fontWeight: on ? 800 : 500, color: on ? "var(--text-1)" : "var(--text-5)" }}>{labels[i]}</span>
           </span>
         );
       })}
@@ -968,9 +968,9 @@ function SchedulePopover({ pat, color, rect }) {
   const hasSun = pat.some(([p]) => p.includes("U"));
   const days   = ["M", "T", "W", "R", "F", ...(hasSat ? ["S"] : []), ...(hasSun ? ["U"] : [])];
   const labels = [...wd, ...(hasSat ? [we[0]] : []), ...(hasSun ? [we[1] ?? we[0]] : [])];
-  const LABEL_W = days.length * 16;   // fixed label column so every bar starts at the same x
+  const LABEL_W = days.length * 21;   // fixed label column so every bar starts at the same x
 
-  const WIDTH = LABEL_W + 132;
+  const WIDTH = LABEL_W + 158;
   const GAP   = 12;
   const EDGE  = 8;
   const ref = useRef(null);
@@ -996,36 +996,36 @@ function SchedulePopover({ pat, color, rect }) {
     position: "fixed",
     left: placed ? placed.left : Math.round(rect.left + rect.width / 2 - WIDTH / 2),
     top:  placed ? placed.top  : Math.round(rect.top - GAP),
-    zIndex: 9000, width: WIDTH, padding: "12px 14px",
+    zIndex: 9000, width: WIDTH, padding: "15px 17px",
     background: "var(--bg-surface)", border: "1px solid var(--border-card)",
-    borderRadius: 8, boxShadow: "var(--shadow-modal)", pointerEvents: "none",
+    borderRadius: 9, boxShadow: "var(--shadow-modal)", pointerEvents: "none",
     fontFamily: "'Inter', system-ui, sans-serif",
     visibility: placed ? "visible" : "hidden",
   };
 
   return createPortal(
     <div ref={ref} style={style}>
-      <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 10 }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 13 }}>
         <bdi>{t("info.offered.schedule")}</bdi>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {rows.map(([pattern, pct], i) => {
           const isOther = pattern === "__other";
           const isAsync = pattern === "async";
           const isStrip = !isOther && !isAsync;   // every real pattern is now covered by the day columns
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ width: LABEL_W, flexShrink: 0, display: "flex", alignItems: "center" }}>
                 {isStrip
                   ? <PatternStrip pattern={pattern} days={days} labels={labels} color={color} />
-                  : <bdi style={{ fontSize: 9, color: "var(--text-4)", fontStyle: "italic" }}>
+                  : <bdi style={{ fontSize: 10.5, color: "var(--text-4)", fontStyle: "italic" }}>
                       {isOther ? t("info.offered.pop.other") : isAsync ? t("info.offered.pop.online") : pattern}
                     </bdi>}
               </span>
-              <div style={{ flex: 1, height: 7, borderRadius: 4, background: "var(--bg-surface-2)", overflow: "hidden" }}>
-                <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 4, background: isOther ? "var(--text-5)" : (color || "var(--text-3)"), opacity: isOther ? 0.55 : 0.85 }} />
+              <div style={{ flex: 1, height: 9, borderRadius: 5, background: "var(--bg-surface-2)", overflow: "hidden" }}>
+                <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 5, background: isOther ? "var(--text-5)" : (color || "var(--text-3)"), opacity: isOther ? 0.55 : 0.85 }} />
               </div>
-              <span style={{ minWidth: 26, textAlign: "right", fontSize: 9.5, color: "var(--text-3)", fontVariantNumeric: "tabular-nums" }}>{pct}%</span>
+              <span style={{ minWidth: 30, textAlign: "right", fontSize: 11, color: "var(--text-3)", fontVariantNumeric: "tabular-nums" }}>{pct}%</span>
             </div>
           );
         })}
