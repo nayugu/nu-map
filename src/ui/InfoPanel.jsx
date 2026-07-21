@@ -640,6 +640,9 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   // NOT summarized in words — the per-term fill shading on the cells above shows it directly.
   const dow    = offering?.dow ?? null;                 // [M,T,W,Th,F] % of sections
   const anyDay = dow?.some(v => v > 0) ?? false;
+  const pat    = offering?.pat ?? null;                 // [[pattern, %], …] most common first
+  // Hover state for the meeting-pattern breakdown chart (desktop only; same as the gauge popover).
+  const [schedHover, setSchedHover] = useState(null);
 
   return (
     <div style={{ flexShrink: 0, width: compact ? "100%" : "fit-content", display: "flex", flexDirection: "column", padding: compact ? 0 : "0 12px 0 6px" }}>
@@ -780,9 +783,18 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
             {t("info.offered.schedule")}
           </div>
           {anyDay
-            ? <WeekdayStrip dow={dow} color={selCourse.color} />
+            ? <div
+                style={{ width: "fit-content", cursor: pat ? "help" : "default" }}
+                onMouseEnter={pat ? e => setSchedHover(e.currentTarget.getBoundingClientRect()) : undefined}
+                onMouseLeave={pat ? () => setSchedHover(null) : undefined}>
+                <WeekdayStrip dow={dow} color={selCourse.color} />
+              </div>
             : <span style={{ fontSize: 10, color: "var(--text-3)", fontStyle: "italic" }}>{t("info.offered.async")}</span>}
         </div>
+      )}
+
+      {schedHover && pat && (
+        <SchedulePopover pat={pat} color={selCourse.color} rect={schedHover} />
       )}
 
       {hoverCell && (
@@ -913,6 +925,110 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
       <div dir="ltr" style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 8, color: "var(--text-4)", fontWeight: 500 }}>
         <bdi>{t("info.offered.pop.packed")}</bdi>
         <bdi>{t("info.offered.pop.open2")}</bdi>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+// One row's mini day strip: a cell per relevant weekday with the pattern's days filled in the
+// subject colour (mirrors the WeekdayStrip look), deciphering the Banner codes (R=Thu, S=Sat,
+// U=Sun) into visible, localised day letters. `days`/`labels` are parallel arrays.
+function PatternStrip({ pattern, days, labels, color }) {
+  return (
+    <span style={{ display: "flex", gap: 2, flexShrink: 0 }}>
+      {days.map((d, i) => {
+        const on = pattern.includes(d);
+        return (
+          <span key={i} style={{
+            position: "relative", overflow: "hidden",
+            minWidth: 14, height: 14, borderRadius: 3,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
+          }}>
+            {on && <span style={{ position: "absolute", inset: 0, background: color || "var(--text-3)", opacity: 0.85 }} />}
+            <span style={{ position: "relative", fontSize: 7.5, fontWeight: on ? 800 : 500, color: on ? "var(--text-1)" : "var(--text-5)" }}>{labels[i]}</span>
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+// Hover chart for the meeting-pattern breakdown (desktop only). Anchored to the weekday strip,
+// portaled to document.body (escapes the app's transform:scale). Horizontal bars, most common on
+// top; day-patterns get a mini strip, async/other a text label. Laid out LTR as a chart.
+function SchedulePopover({ pat, color, rect }) {
+  const { t } = useLanguage();
+  // Weekday columns M–F always; add Saturday/Sunday columns only when this course actually has
+  // weekend sections, so the rare weekend patterns (S/U) render visibly instead of as raw codes.
+  const wd = (t("info.offered.weekdays") || "M,T,W,Th,F").split(",");   // [M,T,W,Th,F]
+  const we = (t("info.offered.weekend")  || "Sa,Su").split(",");        // [Sat, Sun]
+  const hasSat = pat.some(([p]) => p.includes("S"));
+  const hasSun = pat.some(([p]) => p.includes("U"));
+  const days   = ["M", "T", "W", "R", "F", ...(hasSat ? ["S"] : []), ...(hasSun ? ["U"] : [])];
+  const labels = [...wd, ...(hasSat ? [we[0]] : []), ...(hasSun ? [we[1] ?? we[0]] : [])];
+  const LABEL_W = days.length * 16;   // fixed label column so every bar starts at the same x
+
+  const WIDTH = LABEL_W + 132;
+  const GAP   = 12;
+  const EDGE  = 8;
+  const ref = useRef(null);
+  const [placed, setPlaced] = useState(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const h = el.offsetHeight;
+    let left = rect.left + rect.width / 2 - WIDTH / 2;               // centred over the strip
+    left = Math.min(Math.max(EDGE, left), window.innerWidth - WIDTH - EDGE);
+    let top = rect.top - GAP - h;                                    // above the strip…
+    if (top < EDGE) top = rect.bottom + GAP;                         // …or below if it'd clip the top
+    top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
+    setPlaced({ top: Math.round(top), left: Math.round(left) });
+  }, [rect]);
+
+  // Long tail beyond the stored top patterns → an "other" row.
+  const shown = pat.reduce((s, [, p]) => s + p, 0);
+  const other = Math.max(0, 100 - shown);
+  const rows  = other >= 1 ? [...pat, ["__other", other]] : pat;
+
+  const style = {
+    position: "fixed",
+    left: placed ? placed.left : Math.round(rect.left + rect.width / 2 - WIDTH / 2),
+    top:  placed ? placed.top  : Math.round(rect.top - GAP),
+    zIndex: 9000, width: WIDTH, padding: "12px 14px",
+    background: "var(--bg-surface)", border: "1px solid var(--border-card)",
+    borderRadius: 8, boxShadow: "var(--shadow-modal)", pointerEvents: "none",
+    fontFamily: "'Inter', system-ui, sans-serif",
+    visibility: placed ? "visible" : "hidden",
+  };
+
+  return createPortal(
+    <div ref={ref} style={style}>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 10 }}>
+        <bdi>{t("info.offered.schedule")}</bdi>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+        {rows.map(([pattern, pct], i) => {
+          const isOther = pattern === "__other";
+          const isAsync = pattern === "async";
+          const isStrip = !isOther && !isAsync;   // every real pattern is now covered by the day columns
+          return (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ width: LABEL_W, flexShrink: 0, display: "flex", alignItems: "center" }}>
+                {isStrip
+                  ? <PatternStrip pattern={pattern} days={days} labels={labels} color={color} />
+                  : <bdi style={{ fontSize: 9, color: "var(--text-4)", fontStyle: "italic" }}>
+                      {isOther ? t("info.offered.pop.other") : isAsync ? t("info.offered.pop.online") : pattern}
+                    </bdi>}
+              </span>
+              <div style={{ flex: 1, height: 7, borderRadius: 4, background: "var(--bg-surface-2)", overflow: "hidden" }}>
+                <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 4, background: isOther ? "var(--text-5)" : (color || "var(--text-3)"), opacity: isOther ? 0.55 : 0.85 }} />
+              </div>
+              <span style={{ minWidth: 26, textAlign: "right", fontSize: 9.5, color: "var(--text-3)", fontVariantNumeric: "tabular-nums" }}>{pct}%</span>
+            </div>
+          );
+        })}
       </div>
     </div>,
     document.body

@@ -116,6 +116,7 @@ export const strings = {
   "info.offered.schedule":        "المواعيد المعتادة",
   "info.offered.async":           "عبر الإنترنت / بدون وقت محدد",
   "info.offered.weekdays":        "إث,ثل,أر,خم,جم",
+  "info.offered.weekend":        "سب,أح",
   "info.offered.hint":            "قد تختلف الإتاحة حسب السنة — تجاوز باستخدام مربعات الاختيار إذا لزم الأمر.",
   "info.offered.pop.enrolled":    "مسجّل",
   "info.offered.pop.seats":       "مقعد",
@@ -125,6 +126,8 @@ export const strings = {
   "info.offered.pop.packed":      "ممتلئ",
   "info.offered.pop.open2":       "واسع",
   "info.offered.pop.avgDesc":     "متوسط المقاعد الشاغرة لكل شعبة",
+  "info.offered.pop.online":      "عبر الإنترنت",
+  "info.offered.pop.other":       "أخرى",
   "info.drag.title":              "اسحب لوضعه",
 
   // ── Header ─────────────────────────────────────────────────────

@@ -14,6 +14,7 @@
  *       fmt: ["Traditional"],                  // instructional formats ever seen (union)
  *       cmp: ["Boston"],                       // campuses ever seen (union)
  *       dow: [80, 0, 80, 60, 20],              // % of sections meeting each weekday [M,T,W,Th,F]
+ *       pat: [["MWR",60],["TF",20]],           // [day-pattern, % of sections], top 6, most common first
  *       lab: false                             // any section requires a linked lab/co-section
  *     }
  *   }
@@ -55,6 +56,7 @@ for (const [courseId, byTerm] of Object.entries(details)) {
   const formats  = new Set();
   const campuses = new Set();
   const weekday  = { M: 0, T: 0, W: 0, R: 0, F: 0 };  // R = Thursday
+  const patterns = {};                                // primary day-pattern → section count
   let totalSec = 0;
   let lab = false;
 
@@ -68,6 +70,7 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     for (const c of d.campuses ?? []) campuses.add(c);
     for (const [pattern, n] of Object.entries(d.days ?? {})) {
       totalSec += n;                                   // includes async / weekend sections
+      patterns[pattern] = (patterns[pattern] ?? 0) + n;
       for (const ch of pattern) if (ch in weekday) weekday[ch] += n;
     }
     if (d.linked) lab = true;
@@ -80,6 +83,16 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     ? ["M", "T", "W", "R", "F"].map(k => Math.round((weekday[k] / totalSec) * 100))
     : null;
 
+  // Meeting-pattern distribution: [pattern, % of sections] for the top patterns, most common
+  // first — powers the schedule hover chart. Capped to the top 6; the UI shows the remainder as
+  // "other". "async" is its own pattern here (no fixed days).
+  const pat = totalSec > 0
+    ? Object.entries(patterns)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6)
+        .map(([p, c]) => [p, Math.round((c / totalSec) * 100)])
+    : null;
+
   summary[courseId] = {
     e:   enr,      // enrolled count per term → fill% (height) = e/c
     c:   cap,      // capacity per term       → open = max(0, c - e)
@@ -87,6 +100,7 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     fmt: [...formats].sort(),
     cmp: [...campuses].sort(),
     ...(dow ? { dow } : {}),
+    ...(pat ? { pat } : {}),
     ...(lab ? { lab: true } : {}),
   };
 }

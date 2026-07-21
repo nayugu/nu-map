@@ -117,6 +117,7 @@ export const strings = {
   "info.offered.schedule":        "HORAIRE HABITUEL",
   "info.offered.async":           "En ligne / sans horaire fixe",
   "info.offered.weekdays":        "Lu,Ma,Me,Je,Ve",
+  "info.offered.weekend":        "Sa,Di",
   "info.offered.hint":            "La disponibilité peut varier selon l'année — outrepasser avec les cases à cocher si besoin.",
   "info.offered.pop.enrolled":    "inscrits",
   "info.offered.pop.seats":       "places",
@@ -126,6 +127,8 @@ export const strings = {
   "info.offered.pop.packed":      "complet",
   "info.offered.pop.open2":       "spacieux",
   "info.offered.pop.avgDesc":     "moy. de places libres par section",
+  "info.offered.pop.online":      "en ligne",
+  "info.offered.pop.other":       "autres",
   "info.drag.title":              "glisser pour placer",
 
   // ── Header ─────────────────────────────────────────────────────

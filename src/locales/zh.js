@@ -197,6 +197,7 @@ export const strings = {
   "info.offered.schedule":        "常规上课日",
   "info.offered.async":           "在线 / 无固定时间",
   "info.offered.weekdays":        "一,二,三,四,五",
+  "info.offered.weekend":        "六,日",
   "info.offered.hint":            "\u5f00\u8bfe\u60c5\u51b5\u56e0\u5e74\u4efd\u800c\u5f02\u2014\u53ef\u901a\u8fc7\u590d\u9009\u6846\u8986\u76d6\u3002",
   "info.offered.pop.enrolled":    "\u5df2\u9009",
   "info.offered.pop.seats":       "\u540d\u989d",
@@ -206,6 +207,8 @@ export const strings = {
   "info.offered.pop.packed":      "\u6ee1\u5458",
   "info.offered.pop.open2":       "\u5145\u8db3",
   "info.offered.pop.avgDesc":     "\u6bcf\u73ed\u5e73\u5747\u7a7a\u4f4d",
+  "info.offered.pop.online":      "\u5728\u7ebf",
+  "info.offered.pop.other":       "\u5176\u4ed6",
   "info.drag.title":              "\u62d6\u62fd\u653e\u7f6e",
   "info.catalog.link":            "\u8bfe\u7a0b\u76ee\u5f55 \u2197",
 

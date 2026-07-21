@@ -117,6 +117,7 @@ export const strings = {
   "info.offered.schedule":        "सामान्य कक्षा दिवस",
   "info.offered.async":           "ऑनलाइन / कोई निश्चित समय नहीं",
   "info.offered.weekdays":        "सो,मं,बु,गु,शु",
+  "info.offered.weekend":        "श,र",
   "info.offered.hint":            "उपलब्धता वर्ष के अनुसार बदल सकती है — आवश्यकता अनुसार चेकबॉक्स से ओवरराइड करें।",
   "info.offered.pop.enrolled":    "नामांकित",
   "info.offered.pop.seats":       "सीटें",
@@ -126,6 +127,8 @@ export const strings = {
   "info.offered.pop.packed":      "भरा हुआ",
   "info.offered.pop.open2":       "काफ़ी खाली",
   "info.offered.pop.avgDesc":     "प्रति सेक्शन औसत खाली सीटें",
+  "info.offered.pop.online":      "ऑनलाइन",
+  "info.offered.pop.other":       "अन्य",
   "info.drag.title":              "स्थान के लिए ड्रैग करें",
 
   // ── Header ─────────────────────────────────────────────────────
