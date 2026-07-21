@@ -530,19 +530,28 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
       (secByType[semType]  ??= {})[yr] = secMap[code] ?? 1;
     }
   }
-  // Colour by OPEN SEATS PER SECTION — that's the real "can I get a seat (in a section I can
-  // take)?" signal. It captures both class size (1 of 2 = full) AND how thinly the open seats
-  // are spread (5 sections with 5 open total = ~1 each = a scramble). 6+ open per section = flat
-  // green ("room"); below that a yellow→red gradient tightens to red at 0. Height still shows
-  // fill %, so height = how-full, colour = can-I-get-in.
-  const SEATS_ROOM = 6;
-  const seatColor = (openPerSection) => {
-    const v = openPerSection;
-    if (v == null || v >= SEATS_ROOM) return "#22c55e";
-    const t = (SEATS_ROOM - 1 - Math.max(0, v)) / (SEATS_ROOM - 1);  // 5→0 (yellow) .. 0→1 (red)
-    const Y = [250, 204, 21], R = [239, 68, 68];                     // yellow (#facc15) → red
-    const c = Y.map((x, i) => Math.round(x + (R[i] - x) * t));
-    return `rgb(${c[0]},${c[1]},${c[2]})`;
+  // Colour by OPEN SEATS PER SECTION — the real "can I get a seat (in a section I can take)?"
+  // signal. Captures class size (1 of 2 = full) AND how thinly open seats spread (5 sections
+  // with 5 open ≈ 1 each = a scramble). A diverging ramp built from the app's own subject
+  // colours, which are already max-saturation, so each extreme IS the given colour and the
+  // near-threshold ends are lighter tints of it:
+  //   wide-open → ENVR green #34d399   (light mint #a7f3d0 near the 6-seat threshold)
+  //   jammed    → #e31f2b = ECON #f87171 ⊗ ENLR #e94560 (the two reds multiplied = darkest)
+  //               (light coral #fca5a5 near the threshold)
+  // No yellow. Height still shows fill %, so height = how-full, colour = can-I-get-in.
+  const SEATS_ROOM = 6;    // ≥ this open/section = "room" (green side)
+  const ROOM_OPEN  = 15;   // ≥ this = wide open (fully-saturated ENVR green)
+  const lerpRGB = (A, B, t) => { const c = A.map((x, i) => Math.round(x + (B[i] - x) * t)); return `rgb(${c[0]},${c[1]},${c[2]})`; };
+  const seatColor = (v) => {
+    if (v == null) return "#34d399";
+    if (v >= SEATS_ROOM) {
+      // room: pale mint (near threshold) → saturated ENVR green (wide open)
+      const t = Math.min(1, (v - SEATS_ROOM) / (ROOM_OPEN - SEATS_ROOM));  // 6→0 (pale) .. 15+→1 (saturated)
+      return lerpRGB([209, 250, 224], [52, 211, 141], t);                 // #d1fae0 → #34d38d (a touch more green, less blue)
+    }
+    // competitive: pale coral (near threshold) → darkest combined red, leaning coral (jammed)
+    const t = (SEATS_ROOM - 1 - Math.max(0, v)) / (SEATS_ROOM - 1);       // 5→0 (pale) .. 0→1 (darkest)
+    return lerpRGB([254, 205, 211], [238, 72, 78], t);                    // #fecdd3 → #ee484e (coral-leaning)
   };
 
   // Latest year with data per semType — simply the max key in each byType row.
