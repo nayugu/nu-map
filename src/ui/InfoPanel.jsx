@@ -482,7 +482,13 @@ function WeekdayStrip({ dow, color }) {
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const cal         = usePort(ICalendar);
   const { t }       = useLanguage();
-  const semTypes    = cal.getSemesterTypes();
+  // Order rows Spring → Summer → Fall (Fall last), so each calendar-year column reads
+  // top-to-bottom in chronological order — Fall is the last term of its calendar year.
+  const semTypesRaw = cal.getSemesterTypes();
+  const semTypes    = [
+    ...semTypesRaw.filter(s => s.id !== "fall"),
+    ...semTypesRaw.filter(s => s.id === "fall"),
+  ];
   const termHistory = selCourse.termHistory ?? {};
   const hasHistory  = Object.keys(termHistory).length > 0;
   const birth       = selCourse.birthTermCode ?? null;
