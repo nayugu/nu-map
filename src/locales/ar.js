@@ -117,6 +117,13 @@ export const strings = {
   "info.offered.async":           "عبر الإنترنت / بدون وقت محدد",
   "info.offered.weekdays":        "إث,ثل,أر,خم,جم",
   "info.offered.hint":            "قد تختلف الإتاحة حسب السنة — تجاوز باستخدام مربعات الاختيار إذا لزم الأمر.",
+  "info.offered.pop.enrolled":    "مسجّل",
+  "info.offered.pop.seats":       "مقعد",
+  "info.offered.pop.open":        "شاغر",
+  "info.offered.pop.section":     "شعبة",
+  "info.offered.pop.sections":    "شعب",
+  "info.offered.pop.packed":      "ممتلئ",
+  "info.offered.pop.open2":       "واسع",
   "info.drag.title":              "اسحب لوضعه",
 
   // ── Header ─────────────────────────────────────────────────────

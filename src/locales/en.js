@@ -120,6 +120,13 @@ export const strings = {
   "info.offered.weekdays":        "M,T,W,Th,F",
   "info.offered.hint":            "Click a box to override: \u2713 always offered \xb7 \u2715 never.",
   "info.offered.nodata":          "No Banner data for this course. Click a box to override: \u2713 offered \xb7 \u2715 not.",
+  "info.offered.pop.enrolled":    "enrolled",
+  "info.offered.pop.seats":       "seats",
+  "info.offered.pop.open":        "open",
+  "info.offered.pop.section":     "section",
+  "info.offered.pop.sections":    "sections",
+  "info.offered.pop.packed":      "packed",
+  "info.offered.pop.open2":       "wide open",
   "info.drag.title":              "drag to place",
 
   // ── Header ─────────────────────────────────────────────────────

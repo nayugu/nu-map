@@ -118,6 +118,13 @@ export const strings = {
   "info.offered.async":           "ऑनलाइन / कोई निश्चित समय नहीं",
   "info.offered.weekdays":        "सो,मं,बु,गु,शु",
   "info.offered.hint":            "उपलब्धता वर्ष के अनुसार बदल सकती है — आवश्यकता अनुसार चेकबॉक्स से ओवरराइड करें।",
+  "info.offered.pop.enrolled":    "नामांकित",
+  "info.offered.pop.seats":       "सीटें",
+  "info.offered.pop.open":        "खाली",
+  "info.offered.pop.section":     "सेक्शन",
+  "info.offered.pop.sections":    "सेक्शन",
+  "info.offered.pop.packed":      "भरा हुआ",
+  "info.offered.pop.open2":       "काफ़ी खाली",
   "info.drag.title":              "स्थान के लिए ड्रैग करें",
 
   // ── Header ─────────────────────────────────────────────────────

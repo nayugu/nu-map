@@ -1,7 +1,8 @@
 // ═══════════════════════════════════════════════════════════════════
 // INFO PANEL  — bottom drawer for selected course details
 // ═══════════════════════════════════════════════════════════════════
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { usePort }                  from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }         from "../ports/IAttributeSystem.js";
@@ -493,11 +494,16 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const hasHistory  = Object.keys(termHistory).length > 0;
   const birth       = selCourse.birthTermCode ?? null;
 
-  // Per-term enrollment detail (completed terms only): { f:{fillPct}, o:{seatsOpen}, fmt[], cmp[], dow[], lab }
+  // Per-term enrollment detail (completed terms only): { e:{enrolled}, c:{capacity}, s:{sections}, fmt[], cmp[], dow[], lab }
   const offering = selCourse.offering ?? null;
-  const fillMap  = offering?.f ?? {};   // fill % → gauge height
-  const openMap  = offering?.o ?? {};   // seats remaining
-  const secMap   = offering?.s ?? {};   // section count → colour uses seats ÷ sections
+  const enrMap = offering?.e ?? {};   // enrolled count  → fill% (height) = enr/cap
+  const capMap = offering?.c ?? {};   // capacity        → open = max(0, cap - enr)
+  const secMap = offering?.s ?? {};   // section count   → colour uses open ÷ sections
+
+  // Hover popover state: which gauge cell the pointer is over (desktop only — hover never
+  // fires on touch, so phones simply keep the plain gauges). Holds the cell's numbers plus
+  // its on-screen rect so the popover can anchor to it.
+  const [hoverCell, setHoverCell] = useState(null);
 
   // Build lookup: { semTypeId → { calYear → offered:boolean } }
   // Pre-birth terms are excluded — they represent the course not yet existing, not a "not offered" signal.
@@ -511,23 +517,19 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     }
   }
 
-  // Parallel lookups per (semType, year): fill % (bar height) and seats remaining (bar colour).
-  const fillByType = {};
-  for (const [code, pct] of Object.entries(fillMap)) {
-    if (birth !== null && Number(code) < birth) continue;
-    const semType = cal.decodeTermCode(code);
-    const yr      = cal.getTermCodeYear?.(code);
-    if (semType && yr != null) (fillByType[semType] ??= {})[yr] = pct;
-  }
-  const openByType = {};
-  const secByType  = {};
-  for (const [code, open] of Object.entries(openMap)) {
+  // Parallel lookups per (semType, year): enrolled, capacity, section count. Everything the
+  // gauges and popover need (open, fill%, open-per-section) is derived from these three.
+  const enrByType = {};
+  const capByType = {};
+  const secByType = {};
+  for (const [code, cap] of Object.entries(capMap)) {
     if (birth !== null && Number(code) < birth) continue;
     const semType = cal.decodeTermCode(code);
     const yr      = cal.getTermCodeYear?.(code);
     if (semType && yr != null) {
-      (openByType[semType] ??= {})[yr] = open;
-      (secByType[semType]  ??= {})[yr] = secMap[code] ?? 1;
+      (capByType[semType] ??= {})[yr] = cap;
+      (enrByType[semType] ??= {})[yr] = enrMap[code] ?? 0;
+      (secByType[semType] ??= {})[yr] = secMap[code] ?? 1;
     }
   }
   // Colour by OPEN SEATS PER SECTION — the real "can I get a seat (in a section I can take)?"
@@ -553,6 +555,11 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     const t = (SEATS_ROOM - 1 - Math.max(0, v)) / (SEATS_ROOM - 1);       // 5→0 (pale) .. 0→1 (darkest)
     return lerpRGB([254, 207, 204], [238, 72, 78], t);                    // #fecfcc → #ee484e (pale end: only a whisper of warmth — coral+yellow muddies fast)
   };
+  // The same ramp sampled left→right for the popover legend, so the bar shown on hover IS the
+  // exact scale the cells are coloured by. Domain 0 → ROOM_OPEN open-seats-per-section.
+  const seatGradient = Array.from({ length: 25 }, (_, i) =>
+    `${seatColor((i / 24) * ROOM_OPEN)} ${Math.round((i / 24) * 100)}%`
+  ).join(", ");
 
   // Latest year with data per semType — simply the max key in each byType row.
   const latestPastYearByType = {};
@@ -681,18 +688,24 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                   if (!offered) return null;                        // not offered that year → blank slot
                   const yr    = Number(yrStr);
                   const right = (globalMaxYear - yr) * YR_CELL;
-                  const fill  = fillByType[id]?.[yr] ?? null;       // enrollment fill %  → height
-                  const open  = openByType[id]?.[yr] ?? null;       // seats remaining
+                  const cap   = capByType[id]?.[yr] ?? null;        // capacity
+                  const hasData = cap != null && cap > 0;
+                  const enr   = hasData ? (enrByType[id]?.[yr] ?? 0) : null;
                   const sec   = secByType[id]?.[yr] ?? 1;           // section count
-                  const perSec = open != null ? open / sec : null; // seats per section  → colour
+                  const open  = hasData ? Math.max(0, cap - enr) : null;   // seats remaining
+                  const fill  = hasData ? Math.round((enr / cap) * 100) : null; // fill %  → height
+                  const perSec = open != null ? open / sec : null;  // seats per section  → colour
+                  const cell = { label, yr, enr, cap, open, sec, fill, perSec };
                   return (
                     <span key={yr}
-                      title={`${label} ${yr}: offered${fill != null ? ` — ${fill}% full` : ""}${open != null ? ` · ${open} seat${open === 1 ? "" : "s"} left${sec > 1 ? ` across ${sec} sections` : ""}` : ""}`}
+                      onMouseEnter={hasData ? e => setHoverCell({ ...cell, rect: e.currentTarget.getBoundingClientRect() }) : undefined}
+                      onMouseLeave={hasData ? () => setHoverCell(c => (c && c.yr === yr && c.label === label) ? null : c) : undefined}
                       style={{
                         position: "absolute", right: right + 2, bottom: 0,
                         width: YR_CELL - 4,
                         height: ROW_H,
                         borderRadius: 3, overflow: "hidden",
+                        cursor: hasData ? "help" : "default",
                         // Thick but subtle frame = the 100% reference so the fill reads as a
                         // clear fraction; the year is labelled once in the header above.
                         border: "2px solid var(--border-2)",
@@ -755,6 +768,120 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
             : <span style={{ fontSize: 10, color: "var(--text-3)", fontStyle: "italic" }}>{t("info.offered.async")}</span>}
         </div>
       )}
+
+      {hoverCell && (
+        <OfferingPopover
+          cell={hoverCell}
+          gradient={seatGradient}
+          gradMax={ROOM_OPEN}
+          color={seatColor(hoverCell.perSec)}
+        />
+      )}
     </div>
+  );
+}
+
+// Rich hover card for a single availability gauge (desktop only). Anchors to the hovered cell's
+// on-screen rect (position: fixed) and explains the colour: the exact numbers behind the cell,
+// the open-seats-per-section value that drives the shade, and the full colour scale with a
+// pointer marking where this term lands on it.
+function OfferingPopover({ cell, gradient, gradMax, color }) {
+  const { t } = useLanguage();
+  const { label, yr, enr, cap, open, sec, fill, perSec, rect } = cell;
+
+  const WIDTH = 216;
+  const GAP   = 22;   // horizontal clearance between the cell and the popover
+  const EDGE  = 8;    // min clearance from any viewport edge
+
+  // Anchor to the hovered CELL, off to its right, with the "open ÷ sections = …" equation line
+  // level with the cell's vertical centre. Flip to the left of the cell if there's no room, and
+  // clamp inside the viewport so it can never be cut off. Rendered through a portal to
+  // document.body so it escapes the app container's transform:scale (which would otherwise throw
+  // fixed-positioning coordinates completely off).
+  const ref     = useRef(null);
+  const lineRef = useRef(null);   // the per-section equation line, aligned to the cell centre
+  const [placed, setPlaced] = useState(null);   // {top, left} once measured
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const h = el.offsetHeight;
+    const lineMid = lineRef.current
+      ? lineRef.current.offsetTop + lineRef.current.offsetHeight / 2
+      : h / 2;
+    let left = rect.right + GAP;                                    // to the right of the cell…
+    if (left + WIDTH > window.innerWidth - EDGE) left = rect.left - GAP - WIDTH;  // …or left if tight
+    left = Math.min(Math.max(EDGE, left), window.innerWidth - WIDTH - EDGE);
+    let top = (rect.top + rect.bottom) / 2 - lineMid;              // line level with cell centre
+    top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
+    setPlaced({ top: Math.round(top), left: Math.round(left) });
+  }, [rect]);
+
+  const style = {
+    position: "fixed",
+    left: placed ? placed.left : Math.round(rect.right + GAP),
+    top:  placed ? placed.top  : Math.round(rect.top),
+    zIndex: 9000,
+    width: WIDTH,
+    padding: "9px 11px 10px",
+    background: "var(--bg-surface)",
+    border: "1px solid var(--border-card)",
+    borderRadius: 8,
+    boxShadow: "var(--shadow-modal)",
+    pointerEvents: "none",
+    fontVariantNumeric: "tabular-nums",
+    fontFamily: "'Inter', system-ui, sans-serif",
+    visibility: placed ? "visible" : "hidden",   // avoid a first-frame flash at the pre-measure spot
+  };
+
+  const pos = Math.max(0, Math.min(1, (perSec ?? 0) / gradMax)) * 100; // marker along the ramp
+  const sectionWord = sec === 1 ? t("info.offered.pop.section") : t("info.offered.pop.sections");
+
+  return createPortal(
+    <div ref={ref} style={style}>
+      {/* Header */}
+      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", marginBottom: 8 }}>
+        {label} {yr}
+      </div>
+
+      {/* Two derivations, each an explicit division ending in the value that drives one visual
+          channel: enrolled ÷ seats = fill% (gauge HEIGHT), open ÷ sections = per-section (gauge
+          COLOUR). The per-section result is tinted with the gauge's own colour so the number and
+          the shade are visibly the same thing; labelled operands + ÷ keep them from reading as
+          products, and each derived value sits with its own equation (no split-off header %). */}
+      <div style={{ fontSize: 10.5, color: "var(--text-2)", fontVariantNumeric: "tabular-nums", lineHeight: 1.75, marginBottom: 9 }}>
+        {/* Fullness → gauge height */}
+        <div>
+          <b style={{ color: "var(--text-1)" }}>{enr}</b> {t("info.offered.pop.enrolled")}
+          <span style={{ color: "var(--text-4)" }}> ÷ </span>
+          <b style={{ color: "var(--text-1)" }}>{cap}</b> {t("info.offered.pop.seats")}
+          <span style={{ color: "var(--text-4)" }}> = </span>
+          <b style={{ color: "var(--text-1)" }}>{fill}%</b>
+        </div>
+        {/* Open per section → gauge colour (result tinted with that colour) */}
+        <div ref={lineRef}>
+          <b style={{ color: "var(--text-1)" }}>{open}</b> {t("info.offered.pop.open")}
+          <span style={{ color: "var(--text-4)" }}> ÷ </span>
+          <b style={{ color: "var(--text-1)" }}>{sec}</b> {sectionWord}
+          <span style={{ color: "var(--text-4)" }}> = </span>
+          <b style={{ fontSize: 12.5, fontWeight: 800, color }}>{(perSec ?? 0).toFixed(2)}</b>
+        </div>
+      </div>
+
+      {/* The colour scale, with a pointer where this term lands */}
+      <div style={{ position: "relative", height: 9, borderRadius: 5, background: `linear-gradient(to right, ${gradient})`, marginTop: 2 }}>
+        <span style={{
+          position: "absolute", top: -3, bottom: -3, left: `${pos}%`,
+          width: 2, transform: "translateX(-1px)",
+          background: "var(--text-1)", borderRadius: 1,
+          boxShadow: "0 0 0 1.5px var(--bg-surface)",
+        }} />
+      </div>
+      <div style={{ position: "relative", height: 11, marginTop: 3, fontSize: 8, color: "var(--text-4)", fontWeight: 600 }}>
+        <span style={{ position: "absolute", left: 0 }}>{t("info.offered.pop.packed")}</span>
+        <span style={{ position: "absolute", left: `${(6 / gradMax) * 100}%`, transform: "translateX(-50%)" }}>6</span>
+        <span style={{ position: "absolute", right: 0 }}>{t("info.offered.pop.open2")}</span>
+      </div>
+    </div>,
+    document.body
   );
 }

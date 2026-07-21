@@ -118,6 +118,13 @@ export const strings = {
   "info.offered.async":           "온라인 / 정해진 시간 없음",
   "info.offered.weekdays":        "월,화,수,목,금",
   "info.offered.hint":            "개설 현황은 연도에 따라 다를 수 있습니다. 필요시 체크박스로 수정하세요.",
+  "info.offered.pop.enrolled":    "등록",
+  "info.offered.pop.seats":       "좌석",
+  "info.offered.pop.open":        "여석",
+  "info.offered.pop.section":     "분반",
+  "info.offered.pop.sections":    "분반",
+  "info.offered.pop.packed":      "만석",
+  "info.offered.pop.open2":       "여유",
   "info.drag.title":              "드래그하여 배치",
 
   // ── Header ─────────────────────────────────────────────────────

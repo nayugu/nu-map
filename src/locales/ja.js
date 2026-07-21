@@ -119,6 +119,13 @@ export const strings = {
   "info.offered.async":           "オンライン / 時間指定なし",
   "info.offered.weekdays":        "月,火,水,木,金",
   "info.offered.hint":            "開講状況は年度によって異なる場合があります。必要に応じてチェックボックスで上書きしてください。",
+  "info.offered.pop.enrolled":    "登録",
+  "info.offered.pop.seats":       "席",
+  "info.offered.pop.open":        "空き",
+  "info.offered.pop.section":     "クラス",
+  "info.offered.pop.sections":    "クラス",
+  "info.offered.pop.packed":      "満席",
+  "info.offered.pop.open2":       "余裕あり",
   "info.drag.title":              "ドラッグして配置",
 
   // ── Header ─────────────────────────────────────────────────────

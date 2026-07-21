@@ -8,17 +8,21 @@
  *   public/northeastern/offering-summary.json
  *   {
  *     "CS3500": {
- *       f:   { "202610": 96, "202630": 73 },  // fill % (enrolled/capacity) per completed term
- *       fmt: ["Traditional"],                 // instructional formats ever seen (union)
- *       cmp: ["Boston"],                      // campuses ever seen (union)
- *       day: "MWF",                           // modal primary meeting day-pattern
- *       lab: false                            // any section requires a linked lab/co-section
+ *       e:   { "202610": 240, "202630": 180 }, // enrolled count per completed term
+ *       c:   { "202610": 250, "202630": 246 }, // capacity per completed term
+ *       s:   { "202610": 6,   "202630": 5 },   // section count per completed term
+ *       fmt: ["Traditional"],                  // instructional formats ever seen (union)
+ *       cmp: ["Boston"],                       // campuses ever seen (union)
+ *       dow: [80, 0, 80, 60, 20],              // % of sections meeting each weekday [M,T,W,Th,F]
+ *       lab: false                             // any section requires a linked lab/co-section
  *     }
  *   }
  *
- * Per-semester fill (Fall vs Spring vs Summer) and a competitiveness label are derived in the
- * app from `f` (the term code carries the semester type). Keeping only fill% + course-level
- * summary drops the file to well under 1 MB.
+ * Storing raw enrolled + capacity + sections (rather than a pre-computed fill%) lets the app
+ * derive everything exactly and losslessly: open = max(0, c - e), fill% = e/c, open-per-section
+ * = open/s, and it preserves overenrollment (e > c). Per-semester breakdown (Fall vs Spring vs
+ * Summer) is derived in the app since the term code carries the semester type. Still well under
+ * 1 MB — three small int maps are no larger than the old fill%/open pair.
  *
  * Usage:
  *   node scripts/derive-offering-summary.js            # dry run — prints size + samples
@@ -45,8 +49,8 @@ const details = JSON.parse(readFileSync(DETAILS_IN, "utf8"));
 const summary = {};
 
 for (const [courseId, byTerm] of Object.entries(details)) {
-  const fill = {};
-  const open = {};                                    // seats remaining = cap - enr
+  const enr  = {};                                    // enrolled count
+  const cap  = {};                                    // capacity
   const secs = {};                                    // section count (for open-per-section colour)
   const formats  = new Set();
   const campuses = new Set();
@@ -56,8 +60,8 @@ for (const [courseId, byTerm] of Object.entries(details)) {
 
   for (const [termCode, d] of Object.entries(byTerm)) {
     if (d.cap > 0) {
-      fill[termCode] = Math.round((d.enr / d.cap) * 100);
-      open[termCode] = Math.max(0, d.cap - d.enr);
+      enr[termCode]  = d.enr;
+      cap[termCode]  = d.cap;
       secs[termCode] = d.sections || 1;
     }
     for (const f of d.formats ?? [])  formats.add(f);
@@ -77,9 +81,9 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     : null;
 
   summary[courseId] = {
-    f:   fill,     // fill % per term → gauge height ("how full it got")
-    o:   open,     // seats remaining per term → gauge colour ("can I get a seat")
-    s:   secs,     // section count per term → colour uses open ÷ sections
+    e:   enr,      // enrolled count per term → fill% (height) = e/c
+    c:   cap,      // capacity per term       → open = max(0, c - e)
+    s:   secs,     // section count per term  → colour uses open ÷ sections
     fmt: [...formats].sort(),
     cmp: [...campuses].sort(),
     ...(dow ? { dow } : {}),
