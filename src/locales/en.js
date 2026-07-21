@@ -127,6 +127,7 @@ export const strings = {
   "info.offered.pop.sections":    "sections",
   "info.offered.pop.packed":      "packed",
   "info.offered.pop.open2":       "wide open",
+  "info.offered.pop.avgDesc":     "avg. open seats per section",
   "info.drag.title":              "drag to place",
 
   // ── Header ─────────────────────────────────────────────────────

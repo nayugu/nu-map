@@ -125,6 +125,7 @@ export const strings = {
   "info.offered.pop.sections":    "सेक्शन",
   "info.offered.pop.packed":      "भरा हुआ",
   "info.offered.pop.open2":       "काफ़ी खाली",
+  "info.offered.pop.avgDesc":     "प्रति सेक्शन औसत खाली सीटें",
   "info.drag.title":              "स्थान के लिए ड्रैग करें",
 
   // ── Header ─────────────────────────────────────────────────────

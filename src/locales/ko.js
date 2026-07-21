@@ -125,6 +125,7 @@ export const strings = {
   "info.offered.pop.sections":    "분반",
   "info.offered.pop.packed":      "만석",
   "info.offered.pop.open2":       "여유",
+  "info.offered.pop.avgDesc":     "분반당 평균 여석",
   "info.drag.title":              "드래그하여 배치",
 
   // ── Header ─────────────────────────────────────────────────────

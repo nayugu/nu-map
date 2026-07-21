@@ -124,6 +124,7 @@ export const strings = {
   "info.offered.pop.sections":    "شعب",
   "info.offered.pop.packed":      "ممتلئ",
   "info.offered.pop.open2":       "واسع",
+  "info.offered.pop.avgDesc":     "متوسط المقاعد الشاغرة لكل شعبة",
   "info.drag.title":              "اسحب لوضعه",
 
   // ── Header ─────────────────────────────────────────────────────

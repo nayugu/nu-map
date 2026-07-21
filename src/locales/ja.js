@@ -126,6 +126,7 @@ export const strings = {
   "info.offered.pop.sections":    "クラス",
   "info.offered.pop.packed":      "満席",
   "info.offered.pop.open2":       "余裕あり",
+  "info.offered.pop.avgDesc":     "1クラスあたりの平均空き席",
   "info.drag.title":              "ドラッグして配置",
 
   // ── Header ─────────────────────────────────────────────────────

@@ -205,6 +205,7 @@ export const strings = {
   "info.offered.pop.sections":    "\u73ed",
   "info.offered.pop.packed":      "\u6ee1\u5458",
   "info.offered.pop.open2":       "\u5145\u8db3",
+  "info.offered.pop.avgDesc":     "\u6bcf\u73ed\u5e73\u5747\u7a7a\u4f4d",
   "info.drag.title":              "\u62d6\u62fd\u653e\u7f6e",
   "info.catalog.link":            "\u8bfe\u7a0b\u76ee\u5f55 \u2197",
 

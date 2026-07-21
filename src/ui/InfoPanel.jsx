@@ -810,7 +810,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
   // to the planner rows (see SemLabel.jsx for the naming/translation rules).
   const header = <SemLabel typeId={id} year={yr} />;
 
-  const WIDTH = 216;
+  const WIDTH = 246;
   const GAP   = 22;   // horizontal clearance between the cell and the popover
   const EDGE  = 8;    // min clearance from any viewport edge
 
@@ -843,7 +843,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
     top:  placed ? placed.top  : Math.round(rect.top),
     zIndex: 9000,
     width: WIDTH,
-    padding: "9px 11px 10px",
+    padding: "13px 15px 14px",
     background: "var(--bg-surface)",
     border: "1px solid var(--border-card)",
     borderRadius: 8,
@@ -862,7 +862,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
     <div ref={ref} style={style}>
       {/* Header — rendered with the planner's exact label patterns (see `header` above) so the
           popover title always matches the corresponding planner row's translation. */}
-      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", marginBottom: 8 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", marginBottom: 12 }}>
         {header}
       </div>
 
@@ -871,25 +871,31 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
           COLOUR). The per-section result is tinted with the gauge's own colour so the number and
           the shade are visibly the same thing; labelled operands + ÷ keep them from reading as
           products, and each derived value sits with its own equation (no split-off header %). */}
-      {/* dir="ltr": these are maths expressions and must read left-to-right even in RTL locales.
-          Each translated word is wrapped in <bdi> so an Arabic/RTL label can't drag the adjacent
-          numbers/operators out of order (which is what scrambled the equation before). */}
-      <div dir="ltr" style={{ fontSize: 10.5, color: "var(--text-2)", fontVariantNumeric: "tabular-nums", lineHeight: 1.75, marginBottom: 9, textAlign: dir === "rtl" ? "right" : "left" }}>
-        {/* Fullness → gauge height */}
-        <div>
-          <b style={{ color: "var(--text-1)" }}>{enr}</b> <bdi>{t("info.offered.pop.enrolled")}</bdi>
-          <span style={{ color: "var(--text-4)" }}> ÷ </span>
-          <b style={{ color: "var(--text-1)" }}>{cap}</b> <bdi>{t("info.offered.pop.seats")}</bdi>
-          <span style={{ color: "var(--text-4)" }}> = </span>
-          <b style={{ color: "var(--text-1)" }}>{fill}%</b>
+      {/* Result-forward stats: the derived number leads (big), its plain-language meaning sits
+          beside it, and the derivation is a muted line beneath. The derivation is dir="ltr" (maths
+          reads left-to-right even in RTL) with every translated word <bdi>-isolated so an Arabic
+          label can't reorder the numbers. 90% needs no word-label (percent is self-evident); the
+          per-section figure gets one because a bare 3.20 is easy to misread. */}
+      {/* Fullness → gauge height */}
+      <div style={{ marginBottom: 14 }}>
+        <b style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", lineHeight: 1.1 }}>{fill}%</b>
+        <div dir="ltr" style={{ fontSize: 10, color: "var(--text-5)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
+          <span style={{ color: "var(--text-4)" }}>{enr}</span> <bdi>{t("info.offered.pop.enrolled")}</bdi>
+          <span> ÷ </span>
+          <span style={{ color: "var(--text-4)" }}>{cap}</span> <bdi>{t("info.offered.pop.seats")}</bdi>
         </div>
-        {/* Open per section → gauge colour (result tinted with that colour) */}
-        <div ref={lineRef}>
-          <b style={{ color: "var(--text-1)" }}>{open}</b> <bdi>{t("info.offered.pop.open")}</bdi>
-          <span style={{ color: "var(--text-4)" }}> ÷ </span>
-          <b style={{ color: "var(--text-1)" }}>{sec}</b> <bdi>{sectionWord}</bdi>
-          <span style={{ color: "var(--text-4)" }}> = </span>
-          <b style={{ fontSize: 12.5, fontWeight: 800, color }}>{(perSec ?? 0).toFixed(2)}</b>
+      </div>
+
+      {/* Open per section → gauge colour (result tinted with that colour) */}
+      <div ref={lineRef} style={{ marginBottom: 15 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
+          <b style={{ fontSize: 16, fontWeight: 700, color, lineHeight: 1.1 }}>{(perSec ?? 0).toFixed(2)}</b>
+          <span style={{ fontSize: 9.5, color: "var(--text-5)" }}>{t("info.offered.pop.avgDesc")}</span>
+        </div>
+        <div dir="ltr" style={{ fontSize: 10, color: "var(--text-5)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
+          <span style={{ color: "var(--text-4)" }}>{open}</span> <bdi>{t("info.offered.pop.open")}</bdi>
+          <span> ÷ </span>
+          <span style={{ color: "var(--text-4)" }}>{sec}</span> <bdi>{sectionWord}</bdi>
         </div>
       </div>
 
@@ -904,7 +910,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
       </div>
       {/* dir="ltr" so the labels stay physically aligned with the bar (which is always drawn
           left→red … right→green): packed under the red end, wide-open under the green end. */}
-      <div dir="ltr" style={{ display: "flex", justifyContent: "space-between", marginTop: 3, fontSize: 8, color: "var(--text-4)", fontWeight: 600 }}>
+      <div dir="ltr" style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 8, color: "var(--text-5)", fontWeight: 500 }}>
         <bdi>{t("info.offered.pop.packed")}</bdi>
         <bdi>{t("info.offered.pop.open2")}</bdi>
       </div>

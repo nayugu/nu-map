@@ -125,6 +125,7 @@ export const strings = {
   "info.offered.pop.sections":    "secciones",
   "info.offered.pop.packed":      "lleno",
   "info.offered.pop.open2":       "amplio",
+  "info.offered.pop.avgDesc":     "prom. de plazas libres por sección",
   "info.drag.title":              "arrastrar para colocar",
 
   // ── Header ─────────────────────────────────────────────────────
