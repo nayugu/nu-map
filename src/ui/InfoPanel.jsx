@@ -879,10 +879,10 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
       {/* Fullness → gauge height */}
       <div style={{ marginBottom: 14 }}>
         <b style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", lineHeight: 1.1 }}>{fill}%</b>
-        <div dir="ltr" style={{ fontSize: 10, color: "var(--text-5)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
-          <span style={{ color: "var(--text-4)" }}>{enr}</span> <bdi>{t("info.offered.pop.enrolled")}</bdi>
+        <div dir="ltr" style={{ fontSize: 10, color: "var(--text-4)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
+          <span style={{ color: "var(--text-3)" }}>{enr}</span> <bdi>{t("info.offered.pop.enrolled")}</bdi>
           <span> ÷ </span>
-          <span style={{ color: "var(--text-4)" }}>{cap}</span> <bdi>{t("info.offered.pop.seats")}</bdi>
+          <span style={{ color: "var(--text-3)" }}>{cap}</span> <bdi>{t("info.offered.pop.seats")}</bdi>
         </div>
       </div>
 
@@ -890,12 +890,12 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
       <div ref={lineRef} style={{ marginBottom: 15 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
           <b style={{ fontSize: 16, fontWeight: 700, color, lineHeight: 1.1 }}>{(perSec ?? 0).toFixed(2)}</b>
-          <span style={{ fontSize: 9.5, color: "var(--text-5)" }}>{t("info.offered.pop.avgDesc")}</span>
+          <span style={{ fontSize: 9.5, color: "var(--text-4)" }}>{t("info.offered.pop.avgDesc")}</span>
         </div>
-        <div dir="ltr" style={{ fontSize: 10, color: "var(--text-5)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
-          <span style={{ color: "var(--text-4)" }}>{open}</span> <bdi>{t("info.offered.pop.open")}</bdi>
+        <div dir="ltr" style={{ fontSize: 10, color: "var(--text-4)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
+          <span style={{ color: "var(--text-3)" }}>{open}</span> <bdi>{t("info.offered.pop.open")}</bdi>
           <span> ÷ </span>
-          <span style={{ color: "var(--text-4)" }}>{sec}</span> <bdi>{sectionWord}</bdi>
+          <span style={{ color: "var(--text-3)" }}>{sec}</span> <bdi>{sectionWord}</bdi>
         </div>
       </div>
 
@@ -910,7 +910,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
       </div>
       {/* dir="ltr" so the labels stay physically aligned with the bar (which is always drawn
           left→red … right→green): packed under the red end, wide-open under the green end. */}
-      <div dir="ltr" style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 8, color: "var(--text-5)", fontWeight: 500 }}>
+      <div dir="ltr" style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 8, color: "var(--text-4)", fontWeight: 500 }}>
         <bdi>{t("info.offered.pop.packed")}</bdi>
         <bdi>{t("info.offered.pop.open2")}</bdi>
       </div>
