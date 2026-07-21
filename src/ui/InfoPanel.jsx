@@ -13,6 +13,7 @@ import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTranslation, useCourseTranslation, TText } from "../context/TranslationContext.jsx";
+import { SemLabel } from "./SemLabel.jsx";
 
 export default function InfoPanel() {
   const {
@@ -560,11 +561,21 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
     const t = (SEATS_ROOM - 1 - Math.max(0, v)) / (SEATS_ROOM - 1);       // 5→0 (pale) .. 0→1 (darkest)
     return lerpRGB([254, 207, 204], [238, 72, 78], t);                    // #fecfcc → #ee484e (pale end: only a whisper of warmth — coral+yellow muddies fast)
   };
-  // The same ramp sampled left→right for the popover legend, so the bar shown on hover IS the
-  // exact scale the cells are coloured by. Domain 0 → ROOM_OPEN open-seats-per-section.
-  const seatGradient = Array.from({ length: 25 }, (_, i) =>
-    `${seatColor((i / 24) * ROOM_OPEN)} ${Math.round((i / 24) * 100)}%`
-  ).join(", ");
+  // Diverging legend: the two sides get EQUAL halves of the bar with the pale transition dead
+  // centre — competitive (coral) fills the left 50%, roomy (green) the right 50% — instead of a
+  // raw 0→ROOM_OPEN domain that would shove the transition off to ~40% and leave the sides
+  // visibly lopsided. `seatsToPos` maps an open-per-section value to its 0..1 spot on the bar;
+  // the gradient and the hover pointer both use it, so the bar stays an exact key to the colours.
+  const seatsToPos = (v) => v <= SEATS_ROOM
+    ? (Math.max(0, v) / SEATS_ROOM) * 0.5                                    // 0→0 … 6→0.5
+    : 0.5 + Math.min(1, (v - SEATS_ROOM) / (ROOM_OPEN - SEATS_ROOM)) * 0.5;  // 6→0.5 … 15+→1
+  const posToSeats = (p) => p <= 0.5
+    ? (p / 0.5) * SEATS_ROOM
+    : SEATS_ROOM + ((p - 0.5) / 0.5) * (ROOM_OPEN - SEATS_ROOM);
+  const seatGradient = Array.from({ length: 25 }, (_, i) => {
+    const p = i / 24;
+    return `${seatColor(posToSeats(p))} ${Math.round(p * 100)}%`;
+  }).join(", ");
 
   // Latest year with data per semType — simply the max key in each byType row.
   const latestPastYearByType = {};
@@ -700,7 +711,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                   const open  = hasData ? Math.max(0, cap - enr) : null;   // seats remaining
                   const fill  = hasData ? Math.round((enr / cap) * 100) : null; // fill %  → height
                   const perSec = open != null ? open / sec : null;  // seats per section  → colour
-                  const cell = { label, yr, enr, cap, open, sec, fill, perSec };
+                  const cell = { id, label, yr, enr, cap, open, sec, fill, perSec };
                   return (
                     <span key={yr}
                       onMouseEnter={hasData ? e => setHoverCell({ ...cell, rect: e.currentTarget.getBoundingClientRect() }) : undefined}
@@ -778,7 +789,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
         <OfferingPopover
           cell={hoverCell}
           gradient={seatGradient}
-          gradMax={ROOM_OPEN}
+          markerPos={seatsToPos(hoverCell.perSec ?? 0) * 100}
           color={seatColor(hoverCell.perSec)}
         />
       )}
@@ -790,9 +801,14 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
 // on-screen rect (position: fixed) and explains the colour: the exact numbers behind the cell,
 // the open-seats-per-section value that drives the shade, and the full colour scale with a
 // pointer marking where this term lands on it.
-function OfferingPopover({ cell, gradient, gradMax, color }) {
-  const { t } = useLanguage();
-  const { label, yr, enr, cap, open, sec, fill, perSec, rect } = cell;
+function OfferingPopover({ cell, gradient, markerPos, color }) {
+  const { t, locale, locales } = useLanguage();
+  const dir = locales.find(l => l.code === locale)?.dir ?? "ltr";   // popover follows locale direction
+  const { id, yr, enr, cap, open, sec, fill, perSec, rect } = cell;
+
+  // Header = "<semester> <year>", rendered by the shared <SemLabel> so it's translated identically
+  // to the planner rows (see SemLabel.jsx for the naming/translation rules).
+  const header = <SemLabel typeId={id} year={yr} />;
 
   const WIDTH = 216;
   const GAP   = 22;   // horizontal clearance between the cell and the popover
@@ -835,17 +851,19 @@ function OfferingPopover({ cell, gradient, gradMax, color }) {
     pointerEvents: "none",
     fontVariantNumeric: "tabular-nums",
     fontFamily: "'Inter', system-ui, sans-serif",
+    direction: dir,                               // RTL locales (Arabic) flip the layout…
     visibility: placed ? "visible" : "hidden",   // avoid a first-frame flash at the pre-measure spot
   };
 
-  const pos = Math.max(0, Math.min(1, (perSec ?? 0) / gradMax)) * 100; // marker along the ramp
+  const pos = Math.max(0, Math.min(100, markerPos));                   // marker along the diverging ramp
   const sectionWord = sec === 1 ? t("info.offered.pop.section") : t("info.offered.pop.sections");
 
   return createPortal(
     <div ref={ref} style={style}>
-      {/* Header */}
+      {/* Header — rendered with the planner's exact label patterns (see `header` above) so the
+          popover title always matches the corresponding planner row's translation. */}
       <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", marginBottom: 8 }}>
-        {label} {yr}
+        {header}
       </div>
 
       {/* Two derivations, each an explicit division ending in the value that drives one visual
@@ -853,20 +871,23 @@ function OfferingPopover({ cell, gradient, gradMax, color }) {
           COLOUR). The per-section result is tinted with the gauge's own colour so the number and
           the shade are visibly the same thing; labelled operands + ÷ keep them from reading as
           products, and each derived value sits with its own equation (no split-off header %). */}
-      <div style={{ fontSize: 10.5, color: "var(--text-2)", fontVariantNumeric: "tabular-nums", lineHeight: 1.75, marginBottom: 9 }}>
+      {/* dir="ltr": these are maths expressions and must read left-to-right even in RTL locales.
+          Each translated word is wrapped in <bdi> so an Arabic/RTL label can't drag the adjacent
+          numbers/operators out of order (which is what scrambled the equation before). */}
+      <div dir="ltr" style={{ fontSize: 10.5, color: "var(--text-2)", fontVariantNumeric: "tabular-nums", lineHeight: 1.75, marginBottom: 9, textAlign: dir === "rtl" ? "right" : "left" }}>
         {/* Fullness → gauge height */}
         <div>
-          <b style={{ color: "var(--text-1)" }}>{enr}</b> {t("info.offered.pop.enrolled")}
+          <b style={{ color: "var(--text-1)" }}>{enr}</b> <bdi>{t("info.offered.pop.enrolled")}</bdi>
           <span style={{ color: "var(--text-4)" }}> ÷ </span>
-          <b style={{ color: "var(--text-1)" }}>{cap}</b> {t("info.offered.pop.seats")}
+          <b style={{ color: "var(--text-1)" }}>{cap}</b> <bdi>{t("info.offered.pop.seats")}</bdi>
           <span style={{ color: "var(--text-4)" }}> = </span>
           <b style={{ color: "var(--text-1)" }}>{fill}%</b>
         </div>
         {/* Open per section → gauge colour (result tinted with that colour) */}
         <div ref={lineRef}>
-          <b style={{ color: "var(--text-1)" }}>{open}</b> {t("info.offered.pop.open")}
+          <b style={{ color: "var(--text-1)" }}>{open}</b> <bdi>{t("info.offered.pop.open")}</bdi>
           <span style={{ color: "var(--text-4)" }}> ÷ </span>
-          <b style={{ color: "var(--text-1)" }}>{sec}</b> {sectionWord}
+          <b style={{ color: "var(--text-1)" }}>{sec}</b> <bdi>{sectionWord}</bdi>
           <span style={{ color: "var(--text-4)" }}> = </span>
           <b style={{ fontSize: 12.5, fontWeight: 800, color }}>{(perSec ?? 0).toFixed(2)}</b>
         </div>
@@ -881,10 +902,11 @@ function OfferingPopover({ cell, gradient, gradMax, color }) {
           boxShadow: "0 0 0 1.5px var(--bg-surface)",
         }} />
       </div>
-      <div style={{ position: "relative", height: 11, marginTop: 3, fontSize: 8, color: "var(--text-4)", fontWeight: 600 }}>
-        <span style={{ position: "absolute", left: 0 }}>{t("info.offered.pop.packed")}</span>
-        <span style={{ position: "absolute", left: `${(6 / gradMax) * 100}%`, transform: "translateX(-50%)" }}>6</span>
-        <span style={{ position: "absolute", right: 0 }}>{t("info.offered.pop.open2")}</span>
+      {/* dir="ltr" so the labels stay physically aligned with the bar (which is always drawn
+          left→red … right→green): packed under the red end, wide-open under the green end. */}
+      <div dir="ltr" style={{ display: "flex", justifyContent: "space-between", marginTop: 3, fontSize: 8, color: "var(--text-4)", fontWeight: 600 }}>
+        <bdi>{t("info.offered.pop.packed")}</bdi>
+        <bdi>{t("info.offered.pop.open2")}</bdi>
       </div>
     </div>,
     document.body
