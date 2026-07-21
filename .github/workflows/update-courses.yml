@@ -42,8 +42,13 @@ jobs:
         run: node scripts/scrape-catalog.js --write 2>&1 | tee /tmp/catalog-log.txt
 
       # ── Step 2: Fetch term availability from nubanner.neu.edu ─────────────────
+      #   Writes term-history.json (offered?) + term-details.json (enrollment/schedule).
       - name: Scrape term availability
         run: node scripts/scrape-availability.js --write 2>&1 | tee /tmp/availability-log.txt
+
+      # ── Step 2b: Derive the slim offering summary the app loads ───────────────
+      - name: Derive offering summary
+        run: node scripts/derive-offering-summary.js --write 2>&1 | tee /tmp/offering-log.txt
 
       # ── Step 3: Apply manual patches ──────────────────────────────────────────
       - name: Apply patches
@@ -65,6 +70,8 @@ jobs:
           git add \
             public/northeastern/catalog-courses.json \
             public/northeastern/term-history.json \
+            public/northeastern/term-details.json \
+            public/northeastern/offering-summary.json \
             src/core/dataMeta.json \
             public/data-meta.json
           git diff --cached --quiet || git commit -m "data: update courses (catalog + availability) [$DATE]
