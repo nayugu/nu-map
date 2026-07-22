@@ -36,6 +36,15 @@ export const ICalendar = "calendar";
  *                                    whose (idPrefix ?? id) is a prefix of the semId string.
  * @property {string}   label       - Full display name, e.g. "Fall", "Winter Quarter", "Summer"
  * @property {string}   shortLabel  - Abbreviated label for tight spaces, e.g. "FA", "Q1", "SU"
+ * @property {string}   [altLabel]  - Optional display override for standalone "<term> <year>"
+ *                                    headings where a different phrasing reads better than `label`
+ *                                    (e.g. NEU shows summer half-terms as "Summer A"/"Summer B"
+ *                                    rather than "Summer 1"/"Summer 2"). Falls back to `label`.
+ * @property {string}   [translateAs] - Optional rephrasing fed to the runtime translation engine
+ *                                    in place of the display text, to disambiguate a term whose
+ *                                    literal wording translates poorly (e.g. "Summer half-term A"
+ *                                    so it doesn't render as a time-of-day). Source locale is
+ *                                    unaffected; only translated locales see the rephrasing.
  * @property {string}   [sub]       - Date-range subtitle under the semester heading, e.g. "Sep – Dec".
  *                                    If omitted, derived from months[].
  * @property {number}   weight      - Relative duration on a scale where 1.0 = one full academic

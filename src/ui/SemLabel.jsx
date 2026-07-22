@@ -10,15 +10,17 @@ import { TText } from "../context/TranslationContext.jsx";
 // builds one here instead, using the same rules.
 //
 // The whole "<label> <year>" phrase is translated together so the year reorders naturally per
-// locale (e.g. Chinese year-first: 2024年春季). Summer halves display as "Summer A/B" but feed
-// the engine the academic phrasing "Summer half-term A/B <year>" via <TText as=…>, which resolves
-// correctly (夏季半学期 A) where a bare "Summer 1" would not.
+// locale (e.g. Chinese year-first: 2024年春季). Any institution-specific phrasing lives in the
+// calendar adapter, not here: a SemesterType may carry `altLabel` (a display override, e.g. NEU's
+// "Summer A") and `translateAs` (an engine disambiguation hint, e.g. "Summer half-term A"). This
+// component stays institution-agnostic — it just reads those optional fields from the port.
 export function semLabelPhrases(typeId, year, calendar) {
-  const isSumA = typeId === "sumA", isSumB = typeId === "sumB";
-  const typeLabel = calendar.getSemesterTypes().find(s => s.id === typeId)?.label ?? typeId;
+  const st = calendar.getSemesterTypes().find(s => s.id === typeId);
+  const base = st?.altLabel ?? st?.label ?? typeId;   // display text (source locale)
+  const hint = st?.translateAs;                        // optional engine rephrasing
   return {
-    display: isSumA ? `Summer A ${year}` : isSumB ? `Summer B ${year}` : `${typeLabel} ${year}`,
-    as:      isSumA ? `Summer half-term A ${year}` : isSumB ? `Summer half-term B ${year}` : undefined,
+    display: `${base} ${year}`,
+    as:      hint ? `${hint} ${year}` : undefined,
   };
 }
 

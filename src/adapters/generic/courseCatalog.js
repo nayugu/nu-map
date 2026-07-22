@@ -44,6 +44,7 @@ function normalizeCourse(raw) {
     terms:        raw.terms   ?? [],
     attributes:   raw.attributes ?? [],
     color:        subjectColor(subject),
+    ...(raw.offering ? { offering: raw.offering } : {}),  // optional availability detail (see ICourseCatalog)
   };
 }
 

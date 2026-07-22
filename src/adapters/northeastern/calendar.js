@@ -30,6 +30,8 @@ const _semesterTypes = [
     id:         "sumA",
     label:      "Summer 1",
     shortLabel: "S1",
+    altLabel:   "Summer A",              // standalone headings read "Summer A <year>"
+    translateAs:"Summer half-term A",    // engine hint (avoids "summer 1" mistranslation)
     sub:        "May \u2013 Jun",
     weight:     0.5,
     optional:   true,
@@ -41,6 +43,8 @@ const _semesterTypes = [
     id:         "sumB",
     label:      "Summer 2",
     shortLabel: "S2",
+    altLabel:   "Summer B",
+    translateAs:"Summer half-term B",
     sub:        "Jul \u2013 Aug",
     weight:     0.5,
     optional:   true,
