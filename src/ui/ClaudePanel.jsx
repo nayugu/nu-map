@@ -425,22 +425,29 @@ export function ClaudeConnectModal({ open, onClose }) {
   const { confirmClaudePairing } = usePlanner();
   const { t } = useLanguage();
 
-  const [copied, setCopied]       = useState(false);
+  const [tab, setTab]             = useState("web");   // web | code
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [copied, setCopied]       = useState(null);    // "url" | "cmd" | null
   const [codeInput, setCodeInput] = useState("");
-  const [pairState, setPairState] = useState("idle"); // idle | working | error | done
+  const [pairState, setPairState] = useState("idle");  // idle | working | error | done
 
   useEffect(() => {
-    if (open) { setCodeInput(""); setPairState("idle"); setCopied(false); }
+    if (open) { setTab("web"); setShowAdvanced(false); setCodeInput(""); setPairState("idle"); setCopied(null); }
   }, [open]);
 
   if (!open || !aiAssistant?.getMCPUrl) return null;
-  const url = aiAssistant.getMCPUrl();
 
-  const handleCopy = async () => {
+  const url    = aiAssistant.getMCPUrl();               // personal session URL (advanced/dev)
+  const isDev  = url.includes("localhost") || url.includes("127.0.0.1");
+  // OAuth endpoint: one fixed URL for everyone (strip the session segment)
+  const oauthUrl = url.replace(/\/session\/[^/]+\/mcp$/, "/mcp");
+  const cmd      = `claude mcp add --transport http --scope user nu-map ${isDev ? url : oauthUrl}`;
+
+  const copy = async (what, text) => {
     try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2_000);
+      await navigator.clipboard.writeText(text);
+      setCopied(what);
+      setTimeout(() => setCopied(null), 2000);
     } catch {}
   };
 
@@ -448,16 +455,104 @@ export function ClaudeConnectModal({ open, onClose }) {
     if (!codeInput.trim() || pairState === "working") return;
     setPairState("working");
     const ok = await confirmClaudePairing(codeInput);
-    if (ok) {
-      setPairState("done");
-      setTimeout(onClose, 1200);
-    } else {
-      setPairState("error");
-    }
+    if (ok) { setPairState("done"); setTimeout(onClose, 1200); }
+    else    { setPairState("error"); }
   };
 
-  const stepLabel = { fontSize: 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em", marginBottom: 5 };
-  const body      = { fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 };
+  const body  = { fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 };
+  const small = { fontSize: 8.5, color: "var(--text-5)", lineHeight: 1.5 };
+
+  const CopyRow = ({ what, text }) => (
+    <div style={{ display: "flex", gap: 5, alignItems: "stretch" }}>
+      <div style={{
+        flex: 1, fontSize: 8.5, fontFamily: "monospace",
+        background: "var(--bg-app)", border: "1px solid var(--border-2)",
+        borderRadius: 4, padding: "5px 7px", color: "var(--text-3)",
+        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+        userSelect: "all",
+      }} title={text}>
+        {text}
+      </div>
+      <button
+        onClick={() => copy(what, text)}
+        style={{
+          flexShrink: 0, fontSize: 9, fontWeight: 700, cursor: "pointer",
+          background: copied === what ? "var(--success-bg)" : "var(--bg-surface-2)",
+          border: `1px solid ${copied === what ? "var(--success-border)" : "var(--border-2)"}`,
+          color: copied === what ? "var(--success)" : "var(--text-3)",
+          borderRadius: 4, padding: "0 9px",
+        }}
+      >
+        {copied === what ? t("claude.copied") : t("claude.copy")}
+      </button>
+    </div>
+  );
+
+  const Steps = ({ items }) => (
+    <ol style={{ margin: 0, padding: "0 0 0 18px", display: "flex", flexDirection: "column", gap: 6 }}>
+      {items.map((item, i) => (
+        <li key={i} style={{ fontSize: 10.5, color: "var(--text-3)", lineHeight: 1.55 }}>{item}</li>
+      ))}
+    </ol>
+  );
+
+  const tabBtn = (id, label) => (
+    <button
+      onClick={() => setTab(id)}
+      style={{
+        flex: 1, fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "5px 8px",
+        background: tab === id ? "var(--bg-app)" : "var(--bg-surface-2)",
+        border: `1px solid ${tab === id ? CLAUDE_ORANGE : "var(--border-2)"}`,
+        color: tab === id ? "var(--text-2)" : "var(--text-4)",
+        borderRadius: 5,
+      }}
+    >
+      {label}
+    </button>
+  );
+
+  // Manual pairing (code entry) — the only path for dev, the fallback otherwise
+  const pairingSection = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={body}>{t("claude.modal.adv.hint")}</div>
+      <CopyRow what="url" text={url} />
+      <div style={{ display: "flex", gap: 5 }}>
+        <input
+          value={codeInput}
+          onChange={e => { setCodeInput(e.target.value.toUpperCase()); setPairState("idle"); }}
+          onKeyDown={e => { if (e.key === "Enter") handleConnect(); }}
+          placeholder={t("claude.modal.code.placeholder")}
+          maxLength={8}
+          spellCheck={false}
+          style={{
+            flex: 1, fontSize: 13, fontFamily: "monospace", letterSpacing: "0.25em",
+            background: "var(--bg-app)",
+            border: `1px solid ${pairState === "error" ? "var(--error)" : "var(--border-2)"}`,
+            borderRadius: 4, padding: "6px 10px", color: "var(--text-2)",
+            textTransform: "uppercase", minWidth: 0,
+          }}
+        />
+        <button
+          onClick={handleConnect}
+          disabled={pairState === "working" || !codeInput.trim()}
+          style={{
+            flexShrink: 0, fontSize: 11, fontWeight: 700,
+            cursor: pairState === "working" ? "wait" : "pointer",
+            background: pairState === "done" ? "var(--success-bg)" : "var(--bg-surface-2)",
+            border: `1px solid ${pairState === "done" ? "var(--success-border)" : CLAUDE_ORANGE}`,
+            color: pairState === "done" ? "var(--success)" : CLAUDE_ORANGE,
+            borderRadius: 4, padding: "0 14px",
+            opacity: codeInput.trim() || pairState === "done" ? 1 : 0.5,
+          }}
+        >
+          {pairState === "done" ? t("claude.modal.linked") : pairState === "working" ? "…" : t("claude.modal.connect")}
+        </button>
+      </div>
+      {pairState === "error" && (
+        <div style={{ fontSize: 9, color: "var(--error)" }}>{t("claude.modal.error")}</div>
+      )}
+    </div>
+  );
 
   return (
     <div
@@ -473,8 +568,8 @@ export function ClaudeConnectModal({ open, onClose }) {
         onClick={e => e.stopPropagation()}
         style={{
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
-          borderRadius: 12, maxWidth: 340, width: "100%",
-          padding: "16px 16px 14px", boxShadow: "var(--shadow-modal)",
+          borderRadius: 12, maxWidth: 350, width: "100%", maxHeight: "85vh", overflowY: "auto",
+          padding: "16px 16px 12px", boxShadow: "var(--shadow-modal)",
           color: "var(--text-2)", display: "flex", flexDirection: "column", gap: 12,
         }}
       >
@@ -485,132 +580,55 @@ export function ClaudeConnectModal({ open, onClose }) {
 
         <div style={body}>{t("claude.modal.intro")}</div>
 
-        {/* Step 1 — instructions depend on deployment: hosted builds point
-            students at the claude.ai Directory (no tools, no terminal);
-            local dev builds show the Claude Code command. */}
-        {url.includes("localhost") || url.includes("127.0.0.1") ? (
-          <div>
-            <div style={stepLabel}>{t("claude.modal.step1.dev")}</div>
-            <div style={{ display: "flex", gap: 5, alignItems: "stretch" }}>
-              <div style={{
-                flex: 1, fontSize: 9, fontFamily: "monospace",
-                background: "var(--bg-app)", border: "1px solid var(--border-2)",
-                borderRadius: 4, padding: "5px 7px", color: "var(--text-3)",
-                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                userSelect: "all",
-              }} title={url}>
-                {url}
-              </div>
-              <button
-                onClick={handleCopy}
-                style={{
-                  flexShrink: 0, fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: copied ? "var(--success-bg)" : "var(--bg-surface-2)",
-                  border: `1px solid ${copied ? "var(--success-border)" : "var(--border-2)"}`,
-                  color: copied ? "var(--success)" : "var(--text-3)",
-                  borderRadius: 4, padding: "0 10px",
-                }}
-              >
-                {copied ? t("claude.copied") : t("claude.copy")}
-              </button>
-            </div>
-            <div style={{ fontSize: 9, color: "var(--text-5)", marginTop: 4, lineHeight: 1.5 }}>
-              {t("claude.modal.step1.dev.hint")}
-            </div>
-          </div>
+        {isDev ? (
+          // Local dev: the Node server has no OAuth — manual pairing is the flow.
+          <>
+            <div style={small}>{t("claude.modal.step1.dev.hint")}</div>
+            {pairingSection}
+          </>
         ) : (
           <>
-            {/* OAuth path (claude.ai / mobile): Connect in the Directory →
-                approve here. No codes — the pairing code below is only for
-                the Claude Code path. */}
-            <div>
-              <div style={stepLabel}>{t("claude.modal.step1")}</div>
-              <div style={body}>{t("claude.modal.step1.body")}</div>
+            {/* Path picker */}
+            <div style={{ display: "flex", gap: 6 }}>
+              {tabBtn("web", t("claude.modal.tab.web"))}
+              {tabBtn("code", t("claude.modal.tab.code"))}
             </div>
-            <div style={body}>{t("claude.modal.step2.oauth")}</div>
 
-            {/* Power-user path: Claude Code / custom connector via the raw
-                session URL + pairing code. */}
-            <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 10 }}>
-              <div style={stepLabel}>{t("claude.modal.power.title")}</div>
-              <div style={{ display: "flex", gap: 5, alignItems: "stretch" }}>
-                <div style={{
-                  flex: 1, fontSize: 8.5, fontFamily: "monospace",
-                  background: "var(--bg-app)", border: "1px solid var(--border-2)",
-                  borderRadius: 4, padding: "4px 6px", color: "var(--text-5)",
-                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                  userSelect: "all",
-                }} title={url}>
-                  {url}
-                </div>
-                <button
-                  onClick={handleCopy}
-                  style={{
-                    flexShrink: 0, fontSize: 9, fontWeight: 700, cursor: "pointer",
-                    background: copied ? "var(--success-bg)" : "var(--bg-surface-2)",
-                    border: `1px solid ${copied ? "var(--success-border)" : "var(--border-2)"}`,
-                    color: copied ? "var(--success)" : "var(--text-4)",
-                    borderRadius: 4, padding: "0 8px",
-                  }}
-                >
-                  {copied ? t("claude.copied") : t("claude.copy")}
-                </button>
-              </div>
-              <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 3, lineHeight: 1.5 }}>
-                {t("claude.modal.url.hint")}
-              </div>
+            {tab === "web" ? (
+              <>
+                <Steps items={[
+                  t("claude.modal.web.1"),
+                  t("claude.modal.web.2"),
+                  t("claude.modal.web.3"),
+                ]} />
+                <div style={small}>{t("claude.modal.web.notlisted")}</div>
+              </>
+            ) : (
+              <>
+                <Steps items={[
+                  <span key="1">
+                    {t("claude.modal.code.1")}
+                    <span style={{ display: "block", marginTop: 4 }}><CopyRow what="cmd" text={cmd} /></span>
+                  </span>,
+                  t("claude.modal.code.2"),
+                  t("claude.modal.code.3"),
+                ]} />
+              </>
+            )}
+
+            {/* Fallback for MCP clients without OAuth */}
+            <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 8 }}>
+              <button
+                onClick={() => setShowAdvanced(v => !v)}
+                style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", cursor: "pointer",
+                  background: "none", border: "none", color: "var(--text-5)", padding: 0 }}
+              >
+                {showAdvanced ? "▾" : "▸"} {t("claude.modal.adv.title")}
+              </button>
+              {showAdvanced && <div style={{ marginTop: 8 }}>{pairingSection}</div>}
             </div>
           </>
         )}
-
-        {/* Pairing-code entry — the Claude Code path (and dev). On the OAuth
-            path this is never needed; approval happens via the modal above. */}
-        <div style={body}>
-          <span style={{ fontWeight: 700, color: "var(--text-3)" }}>{t("claude.modal.step2")}</span>{" "}
-          {t("claude.modal.step2.body")}
-        </div>
-
-        <div>
-          <div style={stepLabel}>{t("claude.modal.step3")}</div>
-          <div style={{ display: "flex", gap: 5 }}>
-            <input
-              value={codeInput}
-              onChange={e => { setCodeInput(e.target.value.toUpperCase()); setPairState("idle"); }}
-              onKeyDown={e => { if (e.key === "Enter") handleConnect(); }}
-              placeholder="ABC123"
-              maxLength={8}
-              spellCheck={false}
-              autoFocus
-              style={{
-                flex: 1, fontSize: 13, fontFamily: "monospace", letterSpacing: "0.25em",
-                background: "var(--bg-app)",
-                border: `1px solid ${pairState === "error" ? "var(--error)" : "var(--border-2)"}`,
-                borderRadius: 4, padding: "6px 10px", color: "var(--text-2)",
-                textTransform: "uppercase", minWidth: 0,
-              }}
-            />
-            <button
-              onClick={handleConnect}
-              disabled={pairState === "working" || !codeInput.trim()}
-              style={{
-                flexShrink: 0, fontSize: 11, fontWeight: 700,
-                cursor: pairState === "working" ? "wait" : "pointer",
-                background: pairState === "done" ? "var(--success-bg)" : "var(--bg-surface-2)",
-                border: `1px solid ${pairState === "done" ? "var(--success-border)" : CLAUDE_ORANGE}`,
-                color: pairState === "done" ? "var(--success)" : CLAUDE_ORANGE,
-                borderRadius: 4, padding: "0 14px",
-                opacity: codeInput.trim() || pairState === "done" ? 1 : 0.5,
-              }}
-            >
-              {pairState === "done" ? t("claude.modal.linked") : pairState === "working" ? "…" : t("claude.modal.connect")}
-            </button>
-          </div>
-          {pairState === "error" && (
-            <div style={{ fontSize: 9, color: "var(--error)", marginTop: 4 }}>
-              {t("claude.modal.error")}
-            </div>
-          )}
-        </div>
 
         <button
           onClick={onClose}
