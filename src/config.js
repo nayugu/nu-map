@@ -33,5 +33,8 @@ export const institutionAdapter = wire({
   majorRequirements,
   courseCatalog,
   localization,
-  aiAssistant,
+  // Claude integration: active in dev (localhost MCP server) or when a
+  // hosted server URL is baked into the build. Excluded otherwise so
+  // production never shows a Connect flow pointing at localhost.
+  ...(import.meta.env.DEV || import.meta.env.VITE_MCP_SERVER_URL ? { aiAssistant } : {}),
 });
