@@ -1,11 +1,13 @@
 {
   "name": "nu-map-mcp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
-  "description": "MCP server for NU Map — gives Claude read/write access to the course catalog, requirements, and live plan state",
+  "description": "MCP server for NU Map — gives Claude deep read access to the catalog, requirements, offerings, and live plan state; changes are propose-for-review by default",
   "scripts": {
     "start": "node index.js",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "test": "node --test test/unit.test.mjs",
+    "test:e2e": "node test/e2e.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",

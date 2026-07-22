@@ -1,27 +1,29 @@
-// McpServer factory — registers all 13 NU Map tools and the numap://plan resource.
-// Import once; call createServer() per MCP request (stateless HTTP transport).
+// McpServer factory — a thin transport over the planner ports.
+//
+// Every tool is a serialization of a method on the IPlannerQuery /
+// IPlannerAction adapters (src/adapters/mcp/); no domain logic lives
+// here. Every response is `{ _plan, data }`: `_plan` is the liveness
+// envelope (revision, sync time, what the user changed since Claude's
+// last call), `data` is the tool result.
+//
+// Plan-scoped tools are consent-gated: the in-app kill switch (POST
+// /consent/:sid { enabled:false }) makes them all return
+// "access disabled by user" until re-enabled. Catalog and program tools
+// are public data and never gated.
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import * as planState from "./planState.js";
-import { applyChangeset } from "./actions.js";
 import { broadcast, clientCount } from "./events.js";
 import {
-  buildPlacedKeySet,
-  allocateMajorWithElectives,
-} from "../../src/core/gradRequirements.js";
-import { evalPrereqTree } from "../../src/core/prereqEval.js";
-import attributeSystem from "../../src/adapters/northeastern/attributeSystem.js";
-import { normalizeProgramId } from "./data.js";
+  SUPPORTED_ACTIONS,
+  SUPPORTED_UI_COMMANDS,
+} from "../../src/adapters/mcp/plannerActionAdapter.js";
 
-const NUPATH_CODES  = attributeSystem.getGridCodes();
-const NUPATH_LABELS = Object.fromEntries(
-  attributeSystem.getAttributes().map(a => [a.code, a.label])
-);
+export const SYNC_PAYLOAD_VERSION = 1;
 
 // Zod schema for an arbitrary action object (type + any extra fields)
 const ActionSchema = z.object({ type: z.string() }).passthrough();
-// Shared changeset args
 const ChangesetArgs = {
   actions:            z.array(ActionSchema),
   rationale:          z.string().optional().describe("Why — shown to the user in the review UI"),
@@ -30,390 +32,416 @@ const ChangesetArgs = {
     .describe("Must be true when the changeset includes a DELETE_PLAN action"),
 };
 
+const COURSE_INCLUDE = ["offerings", "patterns", "relationships", "links"];
+const PLAN_INCLUDE   = ["schedule", "semesters", "violations", "nupath", "changes", "proposals"];
+
 /**
- * Create a new McpServer instance wired to the shared data + plan state.
- * @param {{ data: Awaited<ReturnType<import('./data.js').loadData>>, sessionId: string }} opts
+ * @param {{ query: ReturnType<import('../../src/adapters/mcp/plannerQueryAdapter.js').createPlannerQuery>, sessionId: string }} opts
  */
-export function createServer({ data, sessionId }) {
+export function createServer({ query, sessionId }) {
   const server = new McpServer({
     name:        "NU Map",
-    version:     "1.0.0",
+    version:     "2.0.0",
     description: "Read and modify a Northeastern University course plan in NU Map",
   });
 
-  // ── Resource: live plan ─────────────────────────────────────────
+  // ── Response helpers ────────────────────────────────────────────
+
+  const respond = (data) => ({
+    content: [{ type: "text", text: JSON.stringify({
+      _plan: planState.planEnvelope(sessionId),
+      data,
+    }) }],
+  });
+
+  const NO_PLAN  = { error: "No plan synced yet. Open NU Map — the plan syncs automatically on load." };
+  const DISABLED = { error: "Access paused by user. Plan tools are off until Claude access is re-enabled in NU Map settings. Catalog and program tools still work." };
+  const UNPAIRED = { error: "Not linked to the user's NU Map. Call request_pairing to get a 6-character code, show it to the user, and ask them to enter it in NU Map → Claude panel → Connect. Catalog and program tools work without linking." };
+
+  /** Live plan for plan-scoped tools; deny reason when unavailable. */
+  const livePlan = () => {
+    const consent = planState.getConsent(sessionId);
+    if (!consent.paired)  return { deny: UNPAIRED };
+    if (!consent.enabled) return { deny: DISABLED };
+    const plan = planState.getPlan(sessionId);
+    if (!plan) return { deny: NO_PLAN };
+    return { plan };
+  };
+
+  const guardChangeset = (actions, confirmDestructive, { needsAutoApply = false } = {}) => {
+    if (!planState.getConsent(sessionId).paired)
+      return { status: "rejected", reason: UNPAIRED.error };
+    if (!planState.getConsent(sessionId).enabled)
+      return { status: "rejected", reason: DISABLED.error };
+    if (needsAutoApply && !planState.getConsent(sessionId).autoApply)
+      return { status: "rejected", reason: "Automatic apply is off (the default). Use propose_changes so the user can review and approve, or the user can enable auto-apply in NU Map settings." };
+    if (actions.some(a => a.type === "DELETE_PLAN") && !confirmDestructive)
+      return { status: "rejected", reason: "DELETE_PLAN requires confirmDestructive: true on the changeset." };
+    if (clientCount(sessionId) === 0)
+      return { status: "rejected", reason: "No NU Map browser tab is connected. Open NU Map and ensure the MCP integration is active." };
+    return null;
+  };
+
+  /** Resolve program labels for the plan snapshot (browser sends nulls). */
+  const withLabels = (plan) => {
+    const label = (id) => (id ? query.getProgram(id, [])?.label ?? null : null);
+    return {
+      ...plan,
+      majorLabel:  plan.majorLabel  ?? label(plan.major),
+      major2Label: plan.major2Label ?? label(plan.major2),
+      minor1Label: plan.minor1Label ?? label(plan.minor1),
+      minor2Label: plan.minor2Label ?? label(plan.minor2),
+    };
+  };
+
+  // ── Resources ───────────────────────────────────────────────────
+
   server.resource(
-    "plan",
-    "numap://plan",
+    "plan", "numap://plan",
     { description: "Current NU Map plan state — placements, programs, work experience, violations, and more" },
     async (uri) => ({
       contents: [{
-        uri:      uri.href,
-        mimeType: "application/json",
-        text:     JSON.stringify(planState.getPlan(sessionId) ?? null, null, 2),
+        uri: uri.href, mimeType: "application/json",
+        text: JSON.stringify(
+          planState.getConsent(sessionId).enabled ? planState.getPlan(sessionId) : DISABLED,
+          null, 2
+        ),
       }],
     })
   );
 
-  // ── Tool: search_courses ────────────────────────────────────────
+  server.resource(
+    "meta", "numap://meta",
+    { description: "Data freshness, sources, and server capabilities" },
+    async (uri) => ({
+      contents: [{
+        uri: uri.href, mimeType: "application/json",
+        text: JSON.stringify(buildMeta(), null, 2),
+      }],
+    })
+  );
+
+  function buildMeta() {
+    return {
+      data: query.meta,
+      sources: query.getSources(),
+      capabilities: {
+        syncPayloadVersion: SYNC_PAYLOAD_VERSION,
+        actions:     SUPPORTED_ACTIONS,
+        uiCommands:  SUPPORTED_UI_COMMANDS,
+        courseInclude: COURSE_INCLUDE,
+        planInclude:   PLAN_INCLUDE,
+      },
+      session: {
+        browserConnected: clientCount(sessionId) > 0,
+        consent: planState.getConsent(sessionId),
+      },
+    };
+  }
+
+  // ── Pairing ─────────────────────────────────────────────────────
+
+  server.tool(
+    "request_pairing",
+    "Link this conversation to the user's NU Map plan. Returns a 6-character code — show it to the user and ask them to enter it in NU Map (Claude button → enter code → Connect). Plan tools stay locked until they do. Codes expire after 10 minutes.",
+    {},
+    async () => {
+      if (planState.getConsent(sessionId).paired) {
+        return respond({ status: "already_paired" });
+      }
+      const { code, expiresInMinutes } = planState.createPairingCode(sessionId);
+      return respond({
+        status: "pending_user_confirmation",
+        code,
+        expiresInMinutes,
+        instructions: "Show the user this code and ask them to open NU Map, click the Claude button in the header, enter the code, and press Connect. Then retry the plan tool.",
+      });
+    }
+  );
+
+  // ── Catalog tools (public data — never consent-gated) ───────────
+
   server.tool(
     "search_courses",
-    "Search the course catalog. Returns up to `limit` courses matching all supplied filters.",
+    "Search the course catalog. Returns compact records; use get_course for full detail. All filters combine (AND).",
     {
-      query:      z.string().optional()
-        .describe("Free-text search across course code, title, and description (case-insensitive)"),
-      subject:    z.string().optional()
-        .describe("Subject code, e.g. 'CS', 'MATH'"),
-      attributes: z.array(z.string()).optional()
-        .describe("NUPath codes that must ALL be present, e.g. ['ND', 'FQ']"),
-      minSH:      z.number().optional().describe("Minimum credit hours (inclusive)"),
-      maxSH:      z.number().optional().describe("Maximum credit hours (inclusive)"),
-      term:       z.string().optional()
-        .describe("Semester type id: 'fall', 'spring', 'sumA', 'sumB'"),
-      limit:      z.number().int().min(1).max(200).optional()
-        .describe("Max results to return (default 20)"),
+      query:      z.string().optional().describe("Free-text search across code, title, description"),
+      subject:    z.string().optional().describe("Subject code, e.g. 'CS'"),
+      attributes: z.array(z.string()).optional().describe("NUPath codes that must ALL be present, e.g. ['ND','FQ']"),
+      level:      z.enum(["undergrad", "grad"]).optional().describe("Course level (grad = 5000+)"),
+      college:    z.string().optional().describe("Banner college code, e.g. 'CS' — see subject-colleges"),
+      campus:     z.string().optional().describe("Campus substring, e.g. 'Boston', 'Oakland', 'Online'"),
+      format:     z.string().optional().describe("Instructional format substring, e.g. 'Online', 'Traditional'"),
+      meetsOn:    z.array(z.string()).optional()
+        .describe("Day letters (M,T,W,R,F) — keep courses whose dominant meeting pattern fits these days (async always fits)"),
+      term:       z.string().optional().describe("Semester type id: 'fall', 'spring', 'sumA', 'sumB'"),
+      minSH:      z.number().optional(),
+      maxSH:      z.number().optional(),
+      limit:      z.number().int().min(1).max(200).optional().describe("Max results (default 20)"),
     },
-    async (args) => {
-      const courses = data.searchCourses(args);
-      return { content: [{ type: "text", text: JSON.stringify(courses) }] };
-    }
+    async (args) => respond(query.searchCourses(args))
   );
 
-  // ── Tool: get_course ────────────────────────────────────────────
   server.tool(
     "get_course",
-    "Look up one course by its stable id (e.g. 'CS3500'). Returns the full catalog record or null.",
-    { courseId: z.string().describe("Course id with no spaces, e.g. 'CS3500'") },
-    async ({ courseId }) => {
-      const id     = courseId.toUpperCase().replace(/\s+/g, "");
-      const course = data.courseMap[id] ?? null;
-      return { content: [{ type: "text", text: JSON.stringify(course) }] };
+    "Full course record(s) by id. Facets via include: 'offerings' (per-term enrolment/capacity/fill/open-seats + per-semester-type offering probability honoring the user's overrides), 'patterns' (weekday distribution, enrolment-weighted meeting patterns, formats, campuses, per-term detail), 'relationships' (what this course unlocks; coreq partners), 'links' (official catalog URL).",
+    {
+      ids:     z.array(z.string()).min(1).max(10).describe("Course ids, e.g. ['CS3650']"),
+      include: z.array(z.enum(COURSE_INCLUDE)).optional().describe("Facets to attach"),
+    },
+    async ({ ids, include = [] }) => {
+      const plan = planState.getConsent(sessionId).enabled ? planState.getPlan(sessionId) : null;
+      return respond(Object.fromEntries(
+        ids.map(id => [id, query.getCourse(id, include, plan)])
+      ));
     }
   );
 
-  // ── Tool: get_offered_in ────────────────────────────────────────
   server.tool(
     "get_offered_in",
-    "Return the complete 'OFFERED IN' history for a course — every scraped semester with offered=true/false, newest-first. Covers confirmed-absent terms too (offered: false), so you can spot patterns.",
+    "Complete offering history for a course, newest-first: offered true/false per scraped term, with seat stats (enrolled, capacity, sections, fill %, open seats per section) for completed terms.",
     { courseId: z.string() },
-    async ({ courseId }) => {
-      const id      = courseId.toUpperCase().replace(/\s+/g, "");
-      const history = data.getOfferedIn(id);
-      return { content: [{ type: "text", text: JSON.stringify(history) }] };
-    }
+    async ({ courseId }) => respond(query.getOfferedIn(courseId))
   );
 
-  // ── Tool: list_programs ─────────────────────────────────────────
+  // ── Program tools (public data) ─────────────────────────────────
+
   server.tool(
     "list_programs",
-    "List all available majors and minors. Use the returned `id` with audit_requirements.",
+    "List programs: undergrad + graduate, majors + minors. Records include verified flag, total credits required, concentration count, and newer-catalog-year signal. Use the id with get_program / audit_requirements.",
     {
-      type:  z.enum(["major", "minor", "all"]).optional()
-        .describe("Filter by program type (default: all)"),
-      query: z.string().optional()
-        .describe("Filter by label substring, case-insensitive"),
+      type:    z.enum(["major", "minor", "all"]).optional(),
+      level:   z.enum(["undergrad", "grad", "all"]).optional(),
+      college: z.string().optional().describe("College slug, e.g. 'computer-information-science'"),
+      year:    z.number().int().optional().describe("Catalog year, e.g. 2026"),
+      query:   z.string().optional().describe("Label substring, case-insensitive"),
     },
-    async ({ type = "all", query } = {}) => {
-      let programs = data.programs;
-      if (type !== "all") programs = programs.filter(p => p.type === type);
-      if (query) {
-        const q = query.toLowerCase();
-        programs = programs.filter(p => p.label.toLowerCase().includes(q));
-      }
-      return { content: [{ type: "text", text: JSON.stringify(programs) }] };
+    async (args) => respond(query.listPrograms(args))
+  );
+
+  server.tool(
+    "get_program",
+    "One program with its full requirement tree and concentration options. Stale ids resolve to the newest catalog year automatically.",
+    {
+      programId: z.string().describe("Program id from list_programs, e.g. '2026/computer-information-science/computer_science_bscs_(boston)'"),
+      include:   z.array(z.enum(["tree", "concentrations"])).optional(),
+    },
+    async ({ programId, include }) => {
+      const program = query.getProgram(programId, include ?? ["tree", "concentrations"]);
+      return respond(program ?? { error: `Program not found: ${programId}. Call list_programs for valid ids.` });
     }
   );
 
-  // ── Tool: audit_requirements ────────────────────────────────────
   server.tool(
     "audit_requirements",
-    "Audit a plan against a program's requirements. Returns the full requirement tree annotated with satisfaction status, credits done/needed at each node, and which courses fulfill each requirement.",
+    "Audit a plan against a program's requirements: full tree annotated with satisfaction, credits done/needed, and per-course status completed/planned/missing. Applies substitutions, the one-course-used-once rule, General Electives, and the selected concentration. Defaults: the live plan and its selected major/concentration.",
     {
-      programId: z.string().describe("Program id from list_programs, e.g. '2026/khoury/computer_science_bs_(boston)'"),
-      plan:      z.any().optional()
-        .describe("PlanContext snapshot to audit — omit to use the live synced plan"),
+      programId:     z.string().optional().describe("Program id — omit to audit the live plan's major"),
+      concentration: z.string().optional().describe("Concentration title — omit to use the plan's selection"),
+      plan:          z.any().optional().describe("PlanContext snapshot — omit to use the live synced plan"),
     },
-    async ({ programId, plan: planArg }) => {
-      const plan = planArg ?? planState.getPlan(sessionId);
+    async ({ programId, concentration, plan: planArg }) => {
+      let plan = planArg;
       if (!plan) {
-        return noplan();
+        const live = livePlan();
+        if (live.deny) return respond(live.deny);
+        plan = live.plan;
       }
-
-      const majorJson = data.majorData.get(normalizeProgramId(programId));
-      if (!majorJson) {
-        return { content: [{ type: "text", text: JSON.stringify({
-          error: `Program not found: ${programId}. Call list_programs to get valid ids.`,
-        }) }] };
-      }
-
-      // Apply substitutions: placing fromId also satisfies toId requirements
-      const { placements = {}, placedOut = [], substitutions = [] } = plan;
-      const effectivePlacements = { ...placements };
-      for (const { from, to } of substitutions) {
-        if (effectivePlacements[from] && !effectivePlacements[to]) {
-          effectivePlacements[to] = effectivePlacements[from];
-        }
-      }
-
-      // placedSet includes virtual substitution targets (for requirement satisfaction).
-      // realPlacedSet excludes them so GE only lists courses the student actually placed.
-      const placedOut_ = new Set(placedOut);
-      const placedSet     = buildPlacedKeySet(effectivePlacements, placedOut_, data.courseMap);
-      const realPlacedSet = buildPlacedKeySet(placements,          placedOut_, data.courseMap);
-      const result = allocateMajorWithElectives(majorJson, placedSet, data.courseMap, null, realPlacedSet);
-      return { content: [{ type: "text", text: JSON.stringify(result) }] };
+      const target = programId ?? plan.major;
+      if (!target) return respond({ error: "No programId given and the plan has no major selected." });
+      return respond(query.auditRequirements(target, plan, { concentration }));
     }
   );
 
-  // ── Tool: get_plan ──────────────────────────────────────────────
+  // ── Plan tools (consent-gated) ──────────────────────────────────
+
   server.tool(
     "get_plan",
-    "Return the complete live plan snapshot — placements, work experience, programs, offered overrides, violation counts, NUPath summary, and more.",
-    {},
-    async () => {
-      const plan = planState.getPlan(sessionId);
-      if (!plan) return noplan();
-      return { content: [{ type: "text", text: JSON.stringify(plan) }] };
+    "The live plan snapshot: cohort (incl. studentType), program selections with resolved labels, placements, work experience, overrides, scratch pad, starred courses, totals, violation counts. Facets via include: 'schedule' (per-semester view exactly as rendered, with credit-load flags and co-op blocks), 'semesters' (every valid semester id with status and capacity), 'violations' (per-course prereq/coreq detail), 'nupath' (coverage grid), 'changes' (recent user edits).",
+    { include: z.array(z.enum(PLAN_INCLUDE)).optional() },
+    async ({ include = [] } = {}) => {
+      const live = livePlan();
+      if (live.deny) return respond(live.deny);
+      const plan = live.plan;
+
+      const out = withLabels(plan);
+      if (include.includes("semesters"))  out._semesters  = query.getSemesters(plan);
+      if (include.includes("schedule"))   out._schedule   = query.getSchedule(plan);
+      if (include.includes("violations")) out._violations = query.validateChangeset([], plan).violations;
+      if (include.includes("nupath"))     out._nupath     = query.getNUPathCoverage(plan);
+      if (include.includes("changes"))    out._changes    = planState.getChanges(sessionId);
+      if (include.includes("proposals"))  out._proposals  = planState.listProposals(sessionId);
+      return respond(out);
     }
   );
 
-  // ── Tool: list_plans ────────────────────────────────────────────
   server.tool(
     "list_plans",
-    "List all saved plans (id, name, active flag). Use SWITCH_PLAN in apply_changes to change the active plan.",
+    "All saved plans (id, name, studentType, active flag). Use get_plan_contents to read a non-active plan without switching the user's screen; use SWITCH_PLAN to actually switch.",
     {},
     async () => {
-      const plan = planState.getPlan(sessionId);
-      if (!plan) return { content: [{ type: "text", text: "[]" }] };
-      // allPlans is an optional field the browser can include in sync
-      const list = plan.allPlans ?? [{ id: plan.planId, name: plan.planName, active: true }];
-      return { content: [{ type: "text", text: JSON.stringify(list) }] };
+      const live = livePlan();
+      if (live.deny) return respond(live.deny);
+      const plan = live.plan;
+      return respond(plan.allPlans ?? [{ id: plan.planId, name: plan.planName, active: true }]);
     }
   );
 
-  // ── Tool: get_nupath_coverage ───────────────────────────────────
+  server.tool(
+    "get_plan_contents",
+    "Read the contents of a saved (non-active) plan by id, fetched live from the browser. Does not change which plan is active on the user's screen.",
+    { planId: z.string().describe("Plan id from list_plans") },
+    async ({ planId }) => {
+      const live = livePlan();
+      if (live.deny) return respond(live.deny);
+      if (clientCount(sessionId) === 0)
+        return respond({ error: "No NU Map browser tab is connected." });
+
+      const { requestId, promise } = planState.createPlanRequest(sessionId);
+      broadcast(sessionId, { type: "REQUEST_PLAN", requestId, planId });
+      const contents = await promise;
+      return respond(contents ?? { error: `Browser did not return plan ${planId} (timeout). It may not exist.` });
+    }
+  );
+
   server.tool(
     "get_nupath_coverage",
-    "Return NUPath attribute coverage for a plan — which codes are satisfied, which courses satisfy each one, and which are still missing.",
-    {
-      plan: z.any().optional()
-        .describe("PlanContext snapshot — omit to use the live plan"),
-    },
+    "NUPath attribute coverage for a plan: each grid code with satisfied flag and the courses (or co-op terms) satisfying it.",
+    { plan: z.any().optional().describe("PlanContext snapshot — omit to use the live plan") },
     async ({ plan: planArg } = {}) => {
-      const plan = planArg ?? planState.getPlan(sessionId);
-      if (!plan) return noplan();
-
-      const { placements = {}, workExperience = {} } = plan;
-
-      // Co-ops grant Integration Experience (EX)
-      const grantedAttrs = new Set();
-      for (const wt of Object.values(workExperience)) {
-        if (wt.typeId === "coop") grantedAttrs.add("EX");
+      let plan = planArg;
+      if (!plan) {
+        const live = livePlan();
+        if (live.deny) return respond(live.deny);
+        plan = live.plan;
       }
-
-      const covered = attributeSystem.getCoverage(placements, data.courseMap, grantedAttrs);
-
-      const coverage = NUPATH_CODES.map(code => ({
-        code,
-        label:       NUPATH_LABELS[code] ?? code,
-        satisfied:   covered.has(code),
-        satisfiedBy: [
-          ...Object.entries(placements)
-            .filter(([id]) => (data.courseMap[id]?.attributes ?? []).includes(code))
-            .map(([id]) => id),
-          // Add work-term instance ids if the attribute is co-op-granted
-          ...(grantedAttrs.has(code)
-            ? Object.entries(workExperience)
-                .filter(([, wt]) => wt.typeId === "coop")
-                .map(([id]) => id)
-            : []),
-        ],
-      }));
-
-      return { content: [{ type: "text", text: JSON.stringify(coverage) }] };
+      return respond(query.getNUPathCoverage(plan));
     }
   );
 
-  // ── Tool: check_prereqs ─────────────────────────────────────────
   server.tool(
     "check_prereqs",
-    "Check whether a course's prerequisites are satisfied given a list of completed course ids (placed, placed-out, or incoming). Returns satisfied, missing, and concurrent-eligible prereqs.",
+    "Check whether a course's prerequisites are satisfied. Omit completedIds to use the live plan's completed courses (incoming credit + semesters before the current one + placed-out).",
     {
-      courseId:     z.string().describe("Course to check, e.g. 'CS3500'"),
-      completedIds: z.array(z.string())
-        .describe("Course ids the student has already completed"),
+      courseId:     z.string().describe("Course to check, e.g. 'CS3650'"),
+      completedIds: z.array(z.string()).optional()
+        .describe("Explicit completed course ids — omit to derive from the live plan"),
     },
     async ({ courseId, completedIds }) => {
-      const id     = courseId.toUpperCase().replace(/\s+/g, "");
-      const course = data.courseMap[id];
-      if (!course) {
-        return { content: [{ type: "text", text: JSON.stringify({
-          satisfied: false, missing: [], concurrent: [],
-          error: `Course not found: ${id}`,
-        }) }] };
+      let plan = null;
+      if (!completedIds) {
+        const live = livePlan();
+        if (live.deny) return respond(live.deny);
+        plan = live.plan;
       }
-
-      if (!course.prereqs?.length) {
-        return { content: [{ type: "text", text: JSON.stringify({
-          satisfied: true, missing: [], concurrent: [],
-        }) }] };
-      }
-
-      // Build fake placement map: completed courses at sem0, target at sem1
-      const fakePlacements = {};
-      for (const cid of completedIds) {
-        fakePlacements[cid.toUpperCase().replace(/\s+/g, "")] = "s0";
-      }
-      fakePlacements[id] = "s1";
-      const fakeSemIndex = { s0: 0, s1: 1 };
-
-      const result = evalPrereqTree(course.prereqs, fakePlacements, fakeSemIndex, 1);
-
-      const missing    = [];
-      const concurrent = [];
-      if (result !== "satisfied") {
-        function collectMissing(tree) {
-          if (!tree) return;
-          for (const tok of tree) {
-            if (Array.isArray(tok)) { collectMissing(tok); continue; }
-            if (tok?.subject && tok?.number) {
-              const cid = `${tok.subject.toUpperCase()}${tok.number}`;
-              if (!fakePlacements[cid]) {
-                if (tok.concurrent) concurrent.push(cid);
-                else missing.push(cid);
-              }
-            }
-          }
-        }
-        collectMissing(course.prereqs);
-      }
-
-      return { content: [{ type: "text", text: JSON.stringify({
-        satisfied: result === "satisfied",
-        missing:   [...new Set(missing)],
-        concurrent: [...new Set(concurrent)],
-      }) }] };
+      return respond(query.checkPrereqs(courseId, completedIds ?? null, plan));
     }
   );
 
-  // ── Tool: validate_changeset ────────────────────────────────────
+  // ── Write tools (consent-gated) ─────────────────────────────────
+
   server.tool(
     "validate_changeset",
-    "Dry-run a sequence of actions against the plan — returns the resulting plan state and any violations without touching real plan state. Use this before propose_changes or apply_changes to catch problems early.",
+    "Dry-run a sequence of actions against the plan: returns the resulting plan, violations, and any unsupported action types — without touching real state. Use before propose_changes or apply_changes.",
     {
       actions: z.array(ActionSchema).describe("Actions to apply in order"),
-      plan:    z.any().optional()
-        .describe("Starting plan — omit to use the live plan"),
+      plan:    z.any().optional().describe("Starting plan — omit to use the live plan"),
     },
     async ({ actions, plan: planArg }) => {
-      const plan = planArg ?? planState.getPlan(sessionId);
-      if (!plan) return noplan();
-
-      const { plan: resultingPlan, appliedCount, violations, error } =
-        applyChangeset(plan, actions, data.courseMap);
-
-      return { content: [{ type: "text", text: JSON.stringify({
-        valid:        !error && violations.length === 0,
-        violations,
-        resultingPlan,
-        appliedCount,
-        totalCount:   actions.length,
-        ...(error && { error }),
-      }) }] };
+      let plan = planArg;
+      if (!plan) {
+        const live = livePlan();
+        if (live.deny) return respond(live.deny);
+        plan = live.plan;
+      }
+      return respond(query.validateChangeset(actions, plan));
     }
   );
 
-  // ── Tool: propose_changes ───────────────────────────────────────
   server.tool(
     "propose_changes",
-    "Queue a changeset for the user to review in the NU Map UI. The user sees the rationale and each action individually, and can approve or reject before anything changes. Use for substantive plan restructuring.",
+    "The standard way to change a plan: queue a changeset for the user to review in the NU Map UI. The user sees the rationale, each action, and a live preview, then approves or rejects — nothing is modified without their approval. Their decision appears in the _plan envelope of your next tool call (and in get_plan include:'proposals'). EXCEPTION: when the _plan envelope shows autoApplyEnabled: true, the user has opted into direct edits — use apply_changes instead for clearly-intended changes.",
     ChangesetArgs,
     async ({ actions, rationale, label, confirmDestructive }) => {
       const rejection = guardChangeset(actions, confirmDestructive);
-      if (rejection) return rejection;
+      if (rejection) return respond(rejection);
+
+      // Dry-run at propose time: the violations delta and any unsupported
+      // actions ride along with the proposal so the review card can show
+      // consequences without re-computing.
+      const plan = planState.getPlan(sessionId);
+      let meta = {};
+      if (plan) {
+        const before = query.validateChangeset([], plan).violations.length;
+        const v      = query.validateChangeset(actions, plan);
+        meta = {
+          violationsBefore: before,
+          violationsAfter:  v.violations.length,
+          ...(v.unsupported.length && { unsupported: v.unsupported }),
+        };
+      }
 
       const changeset  = { actions, rationale, label, confirmDestructive };
-      const proposalId = planState.addProposal(sessionId, changeset);
-      broadcast(sessionId, { type: "PROPOSAL", proposalId, changeset });
-
-      return { content: [{ type: "text", text: JSON.stringify({
+      const proposalId = planState.addProposal(sessionId, changeset, meta);
+      broadcast(sessionId, { type: "PROPOSAL", proposalId, changeset, meta });
+      return respond({
         status: "queued",
         proposalId,
-      }) }] };
+        ...meta,
+        note: "The user's approve/reject decision will appear in the _plan envelope of your next tool call.",
+      });
     }
   );
 
-  // ── Tool: apply_changes ─────────────────────────────────────────
   server.tool(
     "apply_changes",
-    "Apply a changeset immediately to the plan — exactly as if the user made each change by hand. The entire batch is one undo entry (Ctrl+Z reverses all). Use for unambiguous, clearly-intended actions.",
+    "Apply a changeset immediately WITHOUT per-change review — only works when the user has enabled auto-apply in NU Map settings (check for autoApplyEnabled: true in the _plan envelope; rejected otherwise). When auto-apply is on, use this for clearly-intended changes instead of propose_changes. Applies as one undo entry; server state updates optimistically.",
     ChangesetArgs,
     async ({ actions, rationale, label, confirmDestructive }) => {
-      const rejection = guardChangeset(actions, confirmDestructive);
-      if (rejection) return rejection;
+      const rejection = guardChangeset(actions, confirmDestructive, { needsAutoApply: true });
+      if (rejection) return respond(rejection);
 
       const plan = planState.getPlan(sessionId);
-      const { appliedCount, violations, error } = plan
-        ? applyChangeset(plan, actions, data.courseMap)
-        : { appliedCount: actions.length, violations: [], error: null };
+      let result = { appliedCount: actions.length, unsupported: [], violations: [] };
+      if (plan) {
+        const v = query.validateChangeset(actions, plan);
+        result = { appliedCount: v.appliedCount, unsupported: v.unsupported, violations: v.violations };
+        // Optimistic update: the browser's confirming re-sync (~0.5 s)
+        // reconciles this snapshot; until then reads see the applied state.
+        planState.setPlan(sessionId, v.resultingPlan, "claude");
+      }
 
       broadcast(sessionId, { type: "APPLY", changeset: { actions, rationale, label, confirmDestructive } });
-
-      return { content: [{ type: "text", text: JSON.stringify({
-        status:       error ? "rejected" : violations.length > 0 ? "partial" : "applied",
-        appliedCount,
-        totalCount:   actions.length,
-        violations,
-        ...(error && { reason: error }),
-      }) }] };
+      return respond({
+        status: result.unsupported.length === actions.length ? "rejected"
+              : result.unsupported.length > 0 ? "partial" : "applied",
+        ...result,
+      });
     }
   );
 
-  // ── Tool: ui_command ────────────────────────────────────────────
   server.tool(
     "ui_command",
-    "Fire an immediate UI-only action in NU Map: highlight a course, open the search bar, or switch the course bank tab. No plan data changes, no undo entry.",
-    {
-      command: z.object({ type: z.string() }).passthrough().describe(
-        "UI command. type must be one of: FOCUS_COURSE (courseId: string|null), " +
-        "OPEN_SEARCH (query: string), SET_BANK_TAB (tab: 'all'|'placed'|'starred')"
-      ),
-    },
+    `Fire an immediate UI-only action in the open NU Map tab (no plan change, no undo entry). Supported: ${SUPPORTED_UI_COMMANDS.join(", ")}. FOCUS_COURSE {courseId}, OPEN_SEARCH {query}, SET_BANK_TAB {tab: all|placed|starred}, EXPORT_PDF, EXPORT_JSON, COPY_SHARE_LINK.`,
+    { command: z.object({ type: z.string() }).passthrough() },
     async ({ command }) => {
+      if (!planState.getConsent(sessionId).enabled) return respond(DISABLED);
       if (clientCount(sessionId) === 0) {
-        return { content: [{ type: "text", text: JSON.stringify({
-          ok:     false,
-          reason: "No NU Map browser tab is connected. Open NU Map and ensure the MCP integration is active.",
-        }) }] };
+        return respond({ ok: false, reason: "No NU Map browser tab is connected. Open NU Map and ensure the MCP integration is active." });
       }
       broadcast(sessionId, { type: "COMMAND", command });
-      return { content: [{ type: "text", text: JSON.stringify({ ok: true }) }] };
+      return respond({ ok: true });
     }
+  );
+
+  // ── Meta ────────────────────────────────────────────────────────
+
+  server.tool(
+    "get_meta",
+    "Data freshness (per-file scrape timestamps, recent scrape runs), data sources, and server capabilities (supported actions, ui commands, include facets, payload version). Check capabilities instead of assuming.",
+    {},
+    async () => respond(buildMeta())
   );
 
   return server;
-}
-
-// ── Shared helpers ────────────────────────────────────────────────
-
-function noplan() {
-  return { content: [{ type: "text", text: JSON.stringify({
-    error: "No plan synced yet. Open NU Map — the plan syncs automatically on load.",
-  }) }] };
-}
-
-function guardChangeset(actions, confirmDestructive) {
-  if (actions.some(a => a.type === "DELETE_PLAN") && !confirmDestructive) {
-    return { content: [{ type: "text", text: JSON.stringify({
-      status: "rejected",
-      reason: "DELETE_PLAN requires confirmDestructive: true on the changeset.",
-    }) }] };
-  }
-  if (clientCount(sessionId) === 0) {
-    return { content: [{ type: "text", text: JSON.stringify({
-      status: "rejected",
-      reason: "No NU Map browser tab is connected. Open NU Map and ensure the MCP integration is active.",
-    }) }] };
-  }
-  return null;
 }
