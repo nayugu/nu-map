@@ -252,6 +252,14 @@ export function ClaudeProposalCard() {
 
   const { changeset, meta = {} } = head;
   const actions    = changeset?.actions ?? [];
+  // Single-action proposals: our localized action description IS the
+  // headline (guaranteed in the app language), and the redundant
+  // one-item bullet list is dropped. Claude's free-text label is only
+  // used as a summary over multi-action changesets.
+  const single     = actions.length === 1;
+  const title      = single
+    ? describeAction(actions[0], courseMap, SEMESTERS, t)
+    : (changeset?.label || t("claude.card.title"));
   const previewing = claudePreview?.proposalId === head.proposalId;
   const hasDelta   = meta.violationsBefore !== undefined && meta.violationsAfter !== undefined;
   const deltaGood  = hasDelta && meta.violationsAfter < meta.violationsBefore;
@@ -269,7 +277,7 @@ export function ClaudeProposalCard() {
       <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
         <span style={{ width: 7, height: 7, borderRadius: "50%", background: CLAUDE_ORANGE, flexShrink: 0 }} />
         <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-2)", flex: 1, minWidth: 0 }}>
-          {changeset?.label || t("claude.card.title")}
+          {title}
         </span>
         {mcpProposals.length > 1 && (
           <span style={{ fontSize: 9, color: "var(--text-5)", flexShrink: 0 }}>
@@ -284,13 +292,15 @@ export function ClaudeProposalCard() {
         </div>
       )}
 
-      <ul style={{ margin: 0, padding: "0 0 0 14px", display: "flex", flexDirection: "column", gap: 3 }}>
-        {actions.map((a, i) => (
-          <li key={i} style={{ fontSize: 10, color: "var(--text-3)", lineHeight: 1.45 }}>
-            {describeAction(a, courseMap, SEMESTERS, t)}
-          </li>
-        ))}
-      </ul>
+      {!single && (
+        <ul style={{ margin: 0, padding: "0 0 0 14px", display: "flex", flexDirection: "column", gap: 3 }}>
+          {actions.map((a, i) => (
+            <li key={i} style={{ fontSize: 10, color: "var(--text-3)", lineHeight: 1.45 }}>
+              {describeAction(a, courseMap, SEMESTERS, t)}
+            </li>
+          ))}
+        </ul>
+      )}
 
       {/* Consequences: prereq/coreq conflict delta from the propose-time dry-run */}
       {hasDelta && (
