@@ -1,0 +1,107 @@
+// ═══════════════════════════════════════════════════════════════════
+// ADAPTER: northeastern/programRegistry.node  (Node.js, fs-based)
+//
+// The Node counterpart of majorLoader/minorLoader: scans BOTH program
+// trees (src/data/majors = undergrad, src/data/grad-majors = graduate)
+// and exposes the same option shape the app builds, plus the parsed
+// requirement JSON. Stale saved paths resolve through the same tiered
+// logic (programPaths.resolveInMap) the browser uses.
+// ═══════════════════════════════════════════════════════════════════
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { fmtLabel, fmtLocation } from "./programNaming.js";
+import { parseMajorPathParts, resolveInMap } from "../../data/programPaths.js";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
+
+const TREES = [
+  { dir: join(ROOT, "src/data/majors"),      level: "undergrad" },
+  { dir: join(ROOT, "src/data/grad-majors"), level: "grad" },
+];
+
+function scanTree(dir, level, programs, programData) {
+  let entries;
+  try { entries = readdirSync(dir); } catch { return; }
+
+  for (const entry of entries) {
+    const full = join(dir, entry);
+    let stat;
+    try { stat = statSync(full); } catch { continue; }
+
+    if (stat.isDirectory()) {
+      scanTree(full, level, programs, programData);
+    } else if (entry === "parsed.initial.json") {
+      const parts = parseMajorPathParts(full);
+      if (!parts || !parts.college || !parts.folder) continue;
+      const { year, college, folder } = parts;
+
+      let json;
+      try { json = JSON.parse(readFileSync(full, "utf8")); } catch { continue; }
+
+      const id = `${year}/${college}/${folder}`;
+      programs.push({
+        id,
+        label:    json.name ?? fmtLabel(folder),
+        location: fmtLocation(folder),
+        type:     folder.includes("_minor") ? "minor" : "major",
+        level,
+        college,
+        year,
+        verified:             json.metadata?.verified === true,
+        totalCreditsRequired: json.totalCreditsRequired ?? null,
+        concentrationCount:   json.concentrations?.concentrationOptions?.length ?? 0,
+        concentrationRequired: (json.concentrations?.minOptions ?? 0) > 0,
+      });
+      programData.set(id, json);
+    }
+  }
+}
+
+/**
+ * Scan both program trees.
+ * @returns {{
+ *   programs: object[],                       // sorted option records (see scanTree)
+ *   programData: Map<string, object>,         // id → parsed requirement JSON
+ *   resolveProgramId: (id: string) => string|null,  // stale-path tolerant
+ * }}
+ */
+export function loadPrograms() {
+  const programs    = [];
+  const programData = new Map();
+  for (const { dir, level } of TREES) scanTree(dir, level, programs, programData);
+
+  programs.sort((a, b) =>
+    b.year - a.year ||
+    a.college.localeCompare(b.college) ||
+    a.label.localeCompare(b.label)
+  );
+
+  // Flag programs that have a newer catalog-year version of the same folder.
+  const byFolder = new Map();
+  for (const p of programs) {
+    const key = p.id.split("/").slice(1).join("/"); // college/folder
+    byFolder.set(key, Math.max(byFolder.get(key) ?? 0, p.year));
+  }
+  for (const p of programs) {
+    const key = p.id.split("/").slice(1).join("/");
+    p.newerVersionYear = byFolder.get(key) > p.year ? byFolder.get(key) : null;
+  }
+
+  // Registry keyed by compact id for stale-path resolution. Incoming ids may
+  // be full Vite module paths ("./majors/2026/khoury/…/parsed.initial.json")
+  // or compact "2026/college/folder" — parseMajorPathParts handles both.
+  const registry = Object.fromEntries([...programData.keys()].map(k => [k, true]));
+
+  function resolveProgramId(id) {
+    if (!id) return null;
+    const parts = parseMajorPathParts(id);
+    const compact = parts && parts.college && parts.folder
+      ? `${parts.year}/${parts.college}/${parts.folder}`
+      : id;
+    if (programData.has(compact)) return compact;
+    return resolveInMap(registry, compact, parseMajorPathParts);
+  }
+
+  return { programs, programData, resolveProgramId };
+}
