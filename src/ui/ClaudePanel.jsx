@@ -519,47 +519,57 @@ export function ClaudeConnectModal({ open, onClose }) {
             </div>
           </div>
         ) : (
-          <div>
-            <div style={stepLabel}>{t("claude.modal.step1")}</div>
-            <div style={body}>{t("claude.modal.step1.body")}</div>
-            {/* Power users (Claude Code / custom connectors) still need the
-                raw session URL until the Directory listing exists. */}
-            <div style={{ display: "flex", gap: 5, alignItems: "stretch", marginTop: 6 }}>
-              <div style={{
-                flex: 1, fontSize: 8.5, fontFamily: "monospace",
-                background: "var(--bg-app)", border: "1px solid var(--border-2)",
-                borderRadius: 4, padding: "4px 6px", color: "var(--text-5)",
-                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                userSelect: "all",
-              }} title={url}>
-                {url}
+          <>
+            {/* OAuth path (claude.ai / mobile): Connect in the Directory →
+                approve here. No codes — the pairing code below is only for
+                the Claude Code path. */}
+            <div>
+              <div style={stepLabel}>{t("claude.modal.step1")}</div>
+              <div style={body}>{t("claude.modal.step1.body")}</div>
+            </div>
+            <div style={body}>{t("claude.modal.step2.oauth")}</div>
+
+            {/* Power-user path: Claude Code / custom connector via the raw
+                session URL + pairing code. */}
+            <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 10 }}>
+              <div style={stepLabel}>{t("claude.modal.power.title")}</div>
+              <div style={{ display: "flex", gap: 5, alignItems: "stretch" }}>
+                <div style={{
+                  flex: 1, fontSize: 8.5, fontFamily: "monospace",
+                  background: "var(--bg-app)", border: "1px solid var(--border-2)",
+                  borderRadius: 4, padding: "4px 6px", color: "var(--text-5)",
+                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                  userSelect: "all",
+                }} title={url}>
+                  {url}
+                </div>
+                <button
+                  onClick={handleCopy}
+                  style={{
+                    flexShrink: 0, fontSize: 9, fontWeight: 700, cursor: "pointer",
+                    background: copied ? "var(--success-bg)" : "var(--bg-surface-2)",
+                    border: `1px solid ${copied ? "var(--success-border)" : "var(--border-2)"}`,
+                    color: copied ? "var(--success)" : "var(--text-4)",
+                    borderRadius: 4, padding: "0 8px",
+                  }}
+                >
+                  {copied ? t("claude.copied") : t("claude.copy")}
+                </button>
               </div>
-              <button
-                onClick={handleCopy}
-                style={{
-                  flexShrink: 0, fontSize: 9, fontWeight: 700, cursor: "pointer",
-                  background: copied ? "var(--success-bg)" : "var(--bg-surface-2)",
-                  border: `1px solid ${copied ? "var(--success-border)" : "var(--border-2)"}`,
-                  color: copied ? "var(--success)" : "var(--text-4)",
-                  borderRadius: 4, padding: "0 8px",
-                }}
-              >
-                {copied ? t("claude.copied") : t("claude.copy")}
-              </button>
+              <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 3, lineHeight: 1.5 }}>
+                {t("claude.modal.url.hint")}
+              </div>
             </div>
-            <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 3, lineHeight: 1.5 }}>
-              {t("claude.modal.url.hint")}
-            </div>
-          </div>
+          </>
         )}
 
-        {/* Step 2 */}
+        {/* Pairing-code entry — the Claude Code path (and dev). On the OAuth
+            path this is never needed; approval happens via the modal above. */}
         <div style={body}>
           <span style={{ fontWeight: 700, color: "var(--text-3)" }}>{t("claude.modal.step2")}</span>{" "}
           {t("claude.modal.step2.body")}
         </div>
 
-        {/* Step 3 */}
         <div>
           <div style={stepLabel}>{t("claude.modal.step3")}</div>
           <div style={{ display: "flex", gap: 5 }}>
