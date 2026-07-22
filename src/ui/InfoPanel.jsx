@@ -494,13 +494,11 @@ function WeekdayStrip({ dow, color }) {
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const cal         = usePort(ICalendar);
   const { t }       = useLanguage();
-  // Order rows Spring → Summer → Fall (Fall last), so each calendar-year column reads
-  // top-to-bottom in chronological order — Fall is the last term of its calendar year.
-  const semTypesRaw = cal.getSemesterTypes();
-  const semTypes    = [
-    ...semTypesRaw.filter(s => s.id !== "fall"),
-    ...semTypesRaw.filter(s => s.id === "fall"),
-  ];
+  // Order rows so each calendar-year column reads top-to-bottom in chronological order. Sort by
+  // the earliest calendar month each term covers (Spring=Jan → Summer=May/Jul → Fall=Sep), via the
+  // SemesterType.months contract — no hardcoded "fall", so it generalises to any calendar.
+  const monthKey    = s => (s.months?.length ? Math.min(...s.months.map(Number)) : 99);
+  const semTypes    = [...cal.getSemesterTypes()].sort((a, b) => monthKey(a) - monthKey(b));
   const termHistory = selCourse.termHistory ?? {};
   const hasHistory  = Object.keys(termHistory).length > 0;
   const birth       = selCourse.birthTermCode ?? null;

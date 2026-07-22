@@ -1169,18 +1169,16 @@ export default function Header() {
 }
 
 // Renders a semester name via the shared <SemLabel>, so the toast, the planner rows and the
-// availability popover all translate semester names identically. Falls back to the raw cohort
-// label for non-standard ids (e.g. "incoming").
+// availability popover all translate semester names identically. Resolves the semester's type via
+// the grid's own `semTypeId` (the documented field for type comparisons) rather than parsing id
+// prefixes — no hardcoded semester ids. Falls back to the raw label for non-standard entries.
 function SemToastLabel({ semId, SEMESTERS }) {
   if (!semId) return null;
-  const typeId = semId.startsWith("sumA") ? "sumA"
-               : semId.startsWith("sumB") ? "sumB"
-               : semId.startsWith("spr")  ? "spring"
-               : semId.startsWith("fall") ? "fall"
-               : null;
-  if (typeId) return <SemLabel typeId={typeId} year={Number(semId.replace(/\D/g, "")) || ""} />;
-  const label = SEMESTERS.find(s => s.id === semId)?.label ?? semId;
-  return <TText>{label}</TText>;
+  const sem = SEMESTERS.find(s => s.id === semId);
+  if (sem?.semTypeId && sem.semTypeId !== "incoming") {
+    return <SemLabel typeId={sem.semTypeId} year={Number(semId.replace(/\D/g, "")) || ""} />;
+  }
+  return <TText>{sem?.label ?? semId}</TText>;
 }
 
 /**
