@@ -425,14 +425,13 @@ export function ClaudeConnectModal({ open, onClose }) {
   const { confirmClaudePairing } = usePlanner();
   const { t } = useLanguage();
 
-  const [tab, setTab]             = useState("web");   // web | code
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [copied, setCopied]       = useState(null);    // "url" | "cmd" | null
   const [codeInput, setCodeInput] = useState("");
   const [pairState, setPairState] = useState("idle");  // idle | working | error | done
 
   useEffect(() => {
-    if (open) { setTab("web"); setShowAdvanced(false); setCodeInput(""); setPairState("idle"); setCopied(null); }
+    if (open) { setShowAdvanced(false); setCodeInput(""); setPairState("idle"); setCopied(null); }
   }, [open]);
 
   if (!open || !aiAssistant?.getMCPUrl) return null;
@@ -461,6 +460,7 @@ export function ClaudeConnectModal({ open, onClose }) {
 
   const body  = { fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 };
   const small = { fontSize: 8.5, color: "var(--text-5)", lineHeight: 1.5 };
+  const sectionHead = { fontSize: 11, fontWeight: 700, color: "var(--text-2)", marginBottom: 6 };
 
   const CopyRow = ({ what, text }) => (
     <div style={{ display: "flex", gap: 5, alignItems: "stretch" }}>
@@ -496,26 +496,9 @@ export function ClaudeConnectModal({ open, onClose }) {
     </ol>
   );
 
-  const tabBtn = (id, label) => (
-    <button
-      onClick={() => setTab(id)}
-      style={{
-        flex: 1, fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "5px 8px",
-        background: tab === id ? "var(--bg-app)" : "var(--bg-surface-2)",
-        border: `1px solid ${tab === id ? CLAUDE_ORANGE : "var(--border-2)"}`,
-        color: tab === id ? "var(--text-2)" : "var(--text-4)",
-        borderRadius: 5,
-      }}
-    >
-      {label}
-    </button>
-  );
-
-  // Manual pairing (code entry) — the only path for dev, the fallback otherwise
-  const pairingSection = (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <div style={body}>{t("claude.modal.adv.hint")}</div>
-      <CopyRow what="url" text={url} />
+  // Pairing-code entry row — embedded in dev step 3 and in manual pairing
+  const codeEntry = (
+    <>
       <div style={{ display: "flex", gap: 5 }}>
         <input
           value={codeInput}
@@ -551,6 +534,15 @@ export function ClaudeConnectModal({ open, onClose }) {
       {pairState === "error" && (
         <div style={{ fontSize: 9, color: "var(--error)" }}>{t("claude.modal.error")}</div>
       )}
+    </>
+  );
+
+  // Manual pairing — the collapsed fallback for MCP clients without OAuth
+  const pairingSection = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={body}>{t("claude.modal.adv.hint")}</div>
+      <CopyRow what="url" text={url} />
+      {codeEntry}
     </div>
   );
 
@@ -581,49 +573,55 @@ export function ClaudeConnectModal({ open, onClose }) {
         <div style={body}>{t("claude.modal.intro")}</div>
 
         {isDev ? (
-          // Local dev: the Node server has no OAuth — manual pairing is the flow.
-          <>
-            <div style={small}>{t("claude.modal.step1.dev.hint")}</div>
-            {pairingSection}
-          </>
+          // Local dev: no OAuth on the Node server — Claude Code + pairing code.
+          <div>
+            <div style={sectionHead}>{t("claude.modal.tab.code")}</div>
+            <Steps items={[
+              <span key="1">
+                {t("claude.modal.code.1")}
+                <span style={{ display: "block", marginTop: 4 }}><CopyRow what="cmd" text={cmd} /></span>
+              </span>,
+              t("claude.modal.dev.2"),
+              <span key="3">
+                {t("claude.modal.dev.3")}
+                <span style={{ display: "block", marginTop: 4 }}>{codeEntry}</span>
+              </span>,
+            ]} />
+          </div>
         ) : (
           <>
-            {/* Path picker */}
-            <div style={{ display: "flex", gap: 6 }}>
-              {tabBtn("web", t("claude.modal.tab.web"))}
-              {tabBtn("code", t("claude.modal.tab.code"))}
+            {/* Section 1: the student path — claude.ai, plain language. */}
+            <div>
+              <div style={sectionHead}>Claude.ai</div>
+              <Steps items={[
+                t("claude.modal.web.1"),
+                t("claude.modal.web.2"),
+                t("claude.modal.web.3"),
+              ]} />
+              <div style={{ ...small, marginTop: 5 }}>{t("claude.modal.web.notlisted")}</div>
             </div>
 
-            {tab === "web" ? (
-              <>
-                <Steps items={[
-                  t("claude.modal.web.1"),
-                  t("claude.modal.web.2"),
-                  t("claude.modal.web.3"),
-                ]} />
-                <div style={small}>{t("claude.modal.web.notlisted")}</div>
-              </>
-            ) : (
-              <>
-                <Steps items={[
-                  <span key="1">
-                    {t("claude.modal.code.1")}
-                    <span style={{ display: "block", marginTop: 4 }}><CopyRow what="cmd" text={cmd} /></span>
-                  </span>,
-                  t("claude.modal.code.2"),
-                  t("claude.modal.code.3"),
-                ]} />
-              </>
-            )}
+            {/* Section 2: Claude Code, for people who know what that is. */}
+            <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 10 }}>
+              <div style={sectionHead}>{t("claude.modal.tab.code")}</div>
+              <Steps items={[
+                <span key="1">
+                  {t("claude.modal.code.1")}
+                  <span style={{ display: "block", marginTop: 4 }}><CopyRow what="cmd" text={cmd} /></span>
+                </span>,
+                t("claude.modal.code.2"),
+                t("claude.modal.code.3"),
+              ]} />
+            </div>
 
-            {/* Fallback for MCP clients without OAuth */}
+            {/* Collapsed fallback: manual pairing for clients without OAuth. */}
             <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 8 }}>
               <button
                 onClick={() => setShowAdvanced(v => !v)}
                 style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.05em", cursor: "pointer",
                   background: "none", border: "none", color: "var(--text-5)", padding: 0 }}
               >
-                {showAdvanced ? "▾" : "▸"} {t("claude.modal.adv.title")}
+                {showAdvanced ? "▾" : "▸"} {t("claude.modal.adv.pairing")}
               </button>
               {showAdvanced && <div style={{ marginTop: 8 }}>{pairingSection}</div>}
             </div>
