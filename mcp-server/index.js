@@ -29,9 +29,12 @@ import creditSystem from "../src/adapters/northeastern/creditSystem.js";
 import * as offeringStats from "../src/adapters/northeastern/offeringStats.js";
 import { createPlannerQuery } from "../src/adapters/mcp/plannerQueryAdapter.js";
 
-import { addClient, broadcast } from "./src/events.js";
+import { addClient, broadcast, clientCount } from "./src/events.js";
 import * as planState from "./src/planState.js";
 import { createServer, SYNC_PAYLOAD_VERSION } from "./src/server.js";
+
+// Node flavor of the injected deps: module singletons.
+const channel = { broadcast, clientCount };
 
 const PORT = parseInt(process.env.PORT ?? "27182", 10);
 
@@ -121,7 +124,7 @@ app.all("/session/:sessionId/mcp", async (req, res) => {
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: undefined, // stateless — no session cookies
   });
-  const mcpServer = createServer({ query, sessionId });
+  const mcpServer = createServer({ query, sessionId, state: planState, channel });
   try {
     await mcpServer.connect(transport);
     await transport.handleRequest(req, res, req.body);

@@ -1,0 +1,25 @@
+# NU Map MCP server — Cloudflare Worker.
+#
+# Deploy:  npx wrangler deploy          (from this directory, after wrangler login)
+# Domain:  dashboard → this worker → Settings → Domains & Routes → add mcp.numap.app
+# Then set VITE_MCP_SERVER_URL=https://mcp.numap.app in Cloudflare Pages →
+# nu-map → Settings → Environment variables, and redeploy the site.
+
+name = "numap-mcp"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Where the scraped data JSONs are fetched from (the deployed site serves
+# them: catalog-courses, term-history, term-details, offering-summary,
+# subject-colleges, programs-bundle, data-meta).
+[vars]
+DATA_ORIGIN = "https://numap.app"
+
+[[durable_objects.bindings]]
+name = "SESSION"
+class_name = "SessionDO"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["SessionDO"]

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/copy-ort-wasm.js && vite",
-    "build": "node scripts/copy-ort-wasm.js && vite build",
+    "build": "node scripts/copy-ort-wasm.js && node scripts/build-programs-bundle.js && vite build",
+    "data:programs-bundle": "node scripts/build-programs-bundle.js",
     "preview": "vite preview",
     "data:fetch": "node scripts/fetch-courses.js",
     "data:fetch:write": "node scripts/fetch-courses.js --write",

@@ -2,7 +2,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
-const BASE = "http://localhost:27182";
+const BASE = process.env.MCP_BASE ?? "http://localhost:27182";
 const SID  = "e2e-test";
 
 const plan = {
@@ -84,7 +84,7 @@ await fetch(`${BASE}/consent/${SID}`, { method: "POST", headers: { "Content-Type
 // 7. get_meta capabilities
 const meta = await callTool(client, "get_meta", {});
 console.log("capabilities.actions:", meta.data.capabilities.actions.length, "| uiCommands:", meta.data.capabilities.uiCommands.join(","));
-console.log("data freshness term-details:", meta.data.data.files["term-details.json"]);
+console.log("data freshness:", meta.data.data.files?.["term-details.json"] ?? `origin=${meta.data.data.dataOrigin} lastUpdated=${meta.data.data.lastUpdated}`);
 
 // 8. Kill switch: disable → plan tools deny, catalog tools still work
 await fetch(`${BASE}/consent/${SID}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ enabled: false }) });

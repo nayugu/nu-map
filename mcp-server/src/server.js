@@ -13,8 +13,6 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import * as planState from "./planState.js";
-import { broadcast, clientCount } from "./events.js";
 import {
   SUPPORTED_ACTIONS,
   SUPPORTED_UI_COMMANDS,
@@ -36,9 +34,18 @@ const COURSE_INCLUDE = ["offerings", "patterns", "relationships", "links"];
 const PLAN_INCLUDE   = ["schedule", "semesters", "violations", "nupath", "changes", "proposals"];
 
 /**
- * @param {{ query: ReturnType<import('../../src/adapters/mcp/plannerQueryAdapter.js').createPlannerQuery>, sessionId: string }} opts
+ * Environment-agnostic McpServer factory. The session state store and the
+ * server→browser channel are INJECTED so the same tool definitions run on
+ * the Node dev server (module singletons) and on Cloudflare Workers
+ * (a per-session Durable Object).
+ *
+ * @param {object} opts
+ * @param {ReturnType<import('../../src/adapters/mcp/plannerQueryAdapter.js').createPlannerQuery>} opts.query
+ * @param {string} opts.sessionId
+ * @param {object} opts.state    planState-shaped API (getPlan, setPlan, consent, pairing, proposals, envelope)
+ * @param {object} opts.channel  { broadcast(sessionId, event), clientCount(sessionId) }
  */
-export function createServer({ query, sessionId }) {
+export function createServer({ query, sessionId, state, channel }) {
   const server = new McpServer({
     name:        "NU Map",
     version:     "2.0.0",
@@ -49,7 +56,7 @@ export function createServer({ query, sessionId }) {
 
   const respond = (data) => ({
     content: [{ type: "text", text: JSON.stringify({
-      _plan: planState.planEnvelope(sessionId),
+      _plan: state.planEnvelope(sessionId),
       data,
     }) }],
   });
@@ -60,24 +67,24 @@ export function createServer({ query, sessionId }) {
 
   /** Live plan for plan-scoped tools; deny reason when unavailable. */
   const livePlan = () => {
-    const consent = planState.getConsent(sessionId);
+    const consent = state.getConsent(sessionId);
     if (!consent.paired)  return { deny: UNPAIRED };
     if (!consent.enabled) return { deny: DISABLED };
-    const plan = planState.getPlan(sessionId);
+    const plan = state.getPlan(sessionId);
     if (!plan) return { deny: NO_PLAN };
     return { plan };
   };
 
   const guardChangeset = (actions, confirmDestructive, { needsAutoApply = false } = {}) => {
-    if (!planState.getConsent(sessionId).paired)
+    if (!state.getConsent(sessionId).paired)
       return { status: "rejected", reason: UNPAIRED.error };
-    if (!planState.getConsent(sessionId).enabled)
+    if (!state.getConsent(sessionId).enabled)
       return { status: "rejected", reason: DISABLED.error };
-    if (needsAutoApply && !planState.getConsent(sessionId).autoApply)
+    if (needsAutoApply && !state.getConsent(sessionId).autoApply)
       return { status: "rejected", reason: "Automatic apply is off (the default). Use propose_changes so the user can review and approve, or the user can enable auto-apply in NU Map settings." };
     if (actions.some(a => a.type === "DELETE_PLAN") && !confirmDestructive)
       return { status: "rejected", reason: "DELETE_PLAN requires confirmDestructive: true on the changeset." };
-    if (clientCount(sessionId) === 0)
+    if (channel.clientCount(sessionId) === 0)
       return { status: "rejected", reason: "No NU Map browser tab is connected. Open NU Map and ensure the MCP integration is active." };
     return null;
   };
@@ -103,7 +110,7 @@ export function createServer({ query, sessionId }) {
       contents: [{
         uri: uri.href, mimeType: "application/json",
         text: JSON.stringify(
-          planState.getConsent(sessionId).enabled ? planState.getPlan(sessionId) : DISABLED,
+          state.getConsent(sessionId).enabled ? state.getPlan(sessionId) : DISABLED,
           null, 2
         ),
       }],
@@ -133,8 +140,8 @@ export function createServer({ query, sessionId }) {
         planInclude:   PLAN_INCLUDE,
       },
       session: {
-        browserConnected: clientCount(sessionId) > 0,
-        consent: planState.getConsent(sessionId),
+        browserConnected: channel.clientCount(sessionId) > 0,
+        consent: state.getConsent(sessionId),
       },
     };
   }
@@ -146,10 +153,10 @@ export function createServer({ query, sessionId }) {
     "Link this conversation to the user's NU Map plan. Returns a 6-character code — show it to the user and ask them to enter it in NU Map (Claude button → enter code → Connect). Plan tools stay locked until they do. Codes expire after 10 minutes.",
     {},
     async () => {
-      if (planState.getConsent(sessionId).paired) {
+      if (state.getConsent(sessionId).paired) {
         return respond({ status: "already_paired" });
       }
-      const { code, expiresInMinutes } = planState.createPairingCode(sessionId);
+      const { code, expiresInMinutes } = state.createPairingCode(sessionId);
       return respond({
         status: "pending_user_confirmation",
         code,
@@ -190,7 +197,7 @@ export function createServer({ query, sessionId }) {
       include: z.array(z.enum(COURSE_INCLUDE)).optional().describe("Facets to attach"),
     },
     async ({ ids, include = [] }) => {
-      const plan = planState.getConsent(sessionId).enabled ? planState.getPlan(sessionId) : null;
+      const plan = state.getConsent(sessionId).enabled ? state.getPlan(sessionId) : null;
       return respond(Object.fromEntries(
         ids.map(id => [id, query.getCourse(id, include, plan)])
       ));
@@ -269,8 +276,8 @@ export function createServer({ query, sessionId }) {
       if (include.includes("schedule"))   out._schedule   = query.getSchedule(plan);
       if (include.includes("violations")) out._violations = query.validateChangeset([], plan).violations;
       if (include.includes("nupath"))     out._nupath     = query.getNUPathCoverage(plan);
-      if (include.includes("changes"))    out._changes    = planState.getChanges(sessionId);
-      if (include.includes("proposals"))  out._proposals  = planState.listProposals(sessionId);
+      if (include.includes("changes"))    out._changes    = state.getChanges(sessionId);
+      if (include.includes("proposals"))  out._proposals  = state.listProposals(sessionId);
       return respond(out);
     }
   );
@@ -294,11 +301,11 @@ export function createServer({ query, sessionId }) {
     async ({ planId }) => {
       const live = livePlan();
       if (live.deny) return respond(live.deny);
-      if (clientCount(sessionId) === 0)
+      if (channel.clientCount(sessionId) === 0)
         return respond({ error: "No NU Map browser tab is connected." });
 
-      const { requestId, promise } = planState.createPlanRequest(sessionId);
-      broadcast(sessionId, { type: "REQUEST_PLAN", requestId, planId });
+      const { requestId, promise } = state.createPlanRequest(sessionId);
+      channel.broadcast(sessionId, { type: "REQUEST_PLAN", requestId, planId });
       const contents = await promise;
       return respond(contents ?? { error: `Browser did not return plan ${planId} (timeout). It may not exist.` });
     }
@@ -369,7 +376,7 @@ export function createServer({ query, sessionId }) {
       // Dry-run at propose time: the violations delta and any unsupported
       // actions ride along with the proposal so the review card can show
       // consequences without re-computing.
-      const plan = planState.getPlan(sessionId);
+      const plan = state.getPlan(sessionId);
       let meta = {};
       if (plan) {
         const before = query.validateChangeset([], plan).violations.length;
@@ -382,8 +389,8 @@ export function createServer({ query, sessionId }) {
       }
 
       const changeset  = { actions, rationale, label, confirmDestructive };
-      const proposalId = planState.addProposal(sessionId, changeset, meta);
-      broadcast(sessionId, { type: "PROPOSAL", proposalId, changeset, meta });
+      const proposalId = state.addProposal(sessionId, changeset, meta);
+      channel.broadcast(sessionId, { type: "PROPOSAL", proposalId, changeset, meta });
       return respond({
         status: "queued",
         proposalId,
@@ -401,17 +408,17 @@ export function createServer({ query, sessionId }) {
       const rejection = guardChangeset(actions, confirmDestructive, { needsAutoApply: true });
       if (rejection) return respond(rejection);
 
-      const plan = planState.getPlan(sessionId);
+      const plan = state.getPlan(sessionId);
       let result = { appliedCount: actions.length, unsupported: [], violations: [] };
       if (plan) {
         const v = query.validateChangeset(actions, plan);
         result = { appliedCount: v.appliedCount, unsupported: v.unsupported, violations: v.violations };
         // Optimistic update: the browser's confirming re-sync (~0.5 s)
         // reconciles this snapshot; until then reads see the applied state.
-        planState.setPlan(sessionId, v.resultingPlan, "claude");
+        state.setPlan(sessionId, v.resultingPlan, "claude");
       }
 
-      broadcast(sessionId, { type: "APPLY", changeset: { actions, rationale, label, confirmDestructive } });
+      channel.broadcast(sessionId, { type: "APPLY", changeset: { actions, rationale, label, confirmDestructive } });
       return respond({
         status: result.unsupported.length === actions.length ? "rejected"
               : result.unsupported.length > 0 ? "partial" : "applied",
@@ -425,11 +432,11 @@ export function createServer({ query, sessionId }) {
     `Fire an immediate UI-only action in the open NU Map tab (no plan change, no undo entry). Supported: ${SUPPORTED_UI_COMMANDS.join(", ")}. FOCUS_COURSE {courseId}, OPEN_SEARCH {query}, SET_BANK_TAB {tab: all|placed|starred}, EXPORT_PDF, EXPORT_JSON, COPY_SHARE_LINK.`,
     { command: z.object({ type: z.string() }).passthrough() },
     async ({ command }) => {
-      if (!planState.getConsent(sessionId).enabled) return respond(DISABLED);
-      if (clientCount(sessionId) === 0) {
+      if (!state.getConsent(sessionId).enabled) return respond(DISABLED);
+      if (channel.clientCount(sessionId) === 0) {
         return respond({ ok: false, reason: "No NU Map browser tab is connected. Open NU Map and ensure the MCP integration is active." });
       }
-      broadcast(sessionId, { type: "COMMAND", command });
+      channel.broadcast(sessionId, { type: "COMMAND", command });
       return respond({ ok: true });
     }
   );
