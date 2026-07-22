@@ -72,6 +72,7 @@ jobs:
             public/northeastern/term-history.json \
             public/northeastern/term-details.json \
             public/northeastern/offering-summary.json \
+            public/northeastern/change-log.json \
             src/core/dataMeta.json \
             public/data-meta.json
           git diff --cached --quiet || git commit -m "data: update courses (catalog + availability) [$DATE]
