@@ -26,17 +26,65 @@ import { IClock }         from "../ports/IClock.js";
 import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAIAssistant }   from "../ports/IAIAssistant.js";
+// Shared pure dry-run — the same applier the MCP server validates with,
+// reused here for the proposal ghost preview.
+import { applyChangeset as dryRunChangeset } from "../adapters/mcp/plannerActionAdapter.js";
 
 const PlannerContext = createContext(null);
 
 export function PlannerProvider({ children }) {
-  const { setLocale, locales } = useLanguage();
+  const { locale, setLocale, locales } = useLanguage();
   const institution    = usePort(IInstitution);
   const calendar       = usePort(ICalendar);
   const clock          = usePort(IClock);
   const courseCatalog  = usePort(ICourseCatalog);
   const specialTerms   = usePort(ISpecialTerms);
   const aiAssistant    = usePort(IAIAssistant);
+
+  // ── Claude access (pairing + kill switch) ──────────────────────
+  // DEFAULT OFF: no sync and no plan access until the user pairs — Claude
+  // shows a code in the chat, the user enters it in the Claude panel.
+  // Mirrors the adapter's persisted consent into React state so the UI
+  // re-renders; claudeAccessRev re-arms the sync effect after (re)enabling
+  // (the plan may have changed while access was off).
+  const [claudePaired, setClaudePairedRaw] = useState(
+    () => aiAssistant?.isPaired?.() ?? false
+  );
+  const [claudeAccessEnabled, setClaudeAccessEnabledRaw] = useState(
+    () => aiAssistant?.isConsentEnabled?.() ?? false
+  );
+  const [claudeAccessRev, setClaudeAccessRev] = useState(0);
+  const setClaudeAccess = (enabled) => {
+    aiAssistant?.setConsent?.(enabled);
+    setClaudeAccessEnabledRaw((aiAssistant?.isPaired?.() ?? false) && !!enabled);
+    if (enabled) setClaudeAccessRev(r => r + 1);
+  };
+  /** Confirm the code from Claude's chat — the only way access turns on. */
+  const confirmClaudePairing = async (code) => {
+    const ok = await aiAssistant?.confirmPairing?.(code);
+    if (ok) {
+      setClaudePairedRaw(true);
+      setClaudeAccessEnabledRaw(true);
+      setClaudeAccessRev(r => r + 1);
+    }
+    return !!ok;
+  };
+  /** Sever the link — reconnecting requires a fresh code. */
+  const claudeDisconnect = () => {
+    aiAssistant?.disconnect?.();
+    setClaudePairedRaw(false);
+    setClaudeAccessEnabledRaw(false);
+    setClaudeAutoApplyRaw(false);
+  };
+  // Auto-apply is opt-in: while off (default), Claude may only propose
+  // changes for review — apply_changes is rejected server-side.
+  const [claudeAutoApply, setClaudeAutoApplyRaw] = useState(
+    () => aiAssistant?.isAutoApplyEnabled?.() ?? false
+  );
+  const setClaudeAutoApply = (enabled) => {
+    aiAssistant?.setAutoApply?.(enabled);
+    setClaudeAutoApplyRaw(!!enabled);
+  };
   const storagePrefix    = institution.storagePrefix;
   const key              = n => `${storagePrefix}-${n}`;
   const defaultStartYear = calendar.getDefaultStartYear();
@@ -109,8 +157,16 @@ export function PlannerProvider({ children }) {
     return Array.isArray(saved) ? saved : [];
   });
 
-  // Pending proposal from Claude (null = no pending proposal)
-  const [pendingMCPProposal, setPendingMCPProposal] = useState(null);
+  // Proposals from Claude — a FIFO queue, reviewed oldest-first (later
+  // changesets may assume earlier ones landed). Each entry carries a
+  // placements fingerprint from arrival time so the review card can warn
+  // when the plan has changed underneath the proposal.
+  const [mcpProposals, setMcpProposals] = useState([]);
+
+  // Ghost preview of the proposal under review: simulated placements plus
+  // the diff sets that drive the orange ghost styling on course cards.
+  // null = no preview. Cleared automatically on any real plan mutation.
+  const [claudePreview, setClaudePreview] = useState(null);
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
@@ -580,6 +636,7 @@ export function PlannerProvider({ children }) {
     // These can't be batched from a snapshot, so we build final state from
     // the functional-update form and commit once per action group.
     const poAdds = [], poDels = [], subAdds = [], subDels = [];
+    const starAdds = [], starDels = [], palAdds = [], palDels = [];
     const programUpdates = {};
     const shOvUpdates = {};
     const ooUpdates = {};
@@ -589,6 +646,7 @@ export function PlannerProvider({ children }) {
         case "ADD_COURSE":
           newPl[action.courseId] = action.semId;
           poDels.push(action.courseId);
+          palDels.push(action.courseId); // placing removes from the scratch pad, like drag-drop
           break;
         case "REMOVE_COURSE":
           delete newPl[action.courseId];
@@ -635,6 +693,11 @@ export function PlannerProvider({ children }) {
           break;
         case "SET_MAJOR":         programUpdates.major  = action.programId; break;
         case "SET_MAJOR2":        programUpdates.major2 = action.programId; break;
+        case "SET_STUDENT_TYPE":  programUpdates.studentType = action.studentType; break;
+        case "STAR_COURSE":         starAdds.push(action.courseId); break;
+        case "UNSTAR_COURSE":       starDels.push(action.courseId); break;
+        case "ADD_TO_PALETTE":      palAdds.push(action.courseId); break;
+        case "REMOVE_FROM_PALETTE": palDels.push(action.courseId); break;
         case "SET_CONCENTRATION": programUpdates.conc   = action.label;     break;
         case "SET_MINOR1":        programUpdates.minor1 = action.programId; break;
         case "SET_MINOR2":        programUpdates.minor2 = action.programId; break;
@@ -698,6 +761,7 @@ export function PlannerProvider({ children }) {
     if ("conc"          in programUpdates) setConc(programUpdates.conc);
     if ("minor1"        in programUpdates) setMinor1(programUpdates.minor1);
     if ("minor2"        in programUpdates) setMinor2(programUpdates.minor2);
+    if ("studentType"   in programUpdates) setStudentType(programUpdates.studentType);
     if ("bonusSH"       in programUpdates) setBonusSH(programUpdates.bonusSH);
     if ("currentSemId"  in programUpdates) setCurrentSemId(programUpdates.currentSemId);
     if ("entSem"        in programUpdates) setEntSem(programUpdates.entSem);
@@ -730,6 +794,28 @@ export function PlannerProvider({ children }) {
         return next;
       });
     }
+
+    // Commit star changes (persisted like toggleStar)
+    if (starAdds.length || starDels.length) {
+      setStarredIds(prev => {
+        const next = new Set(prev);
+        starAdds.forEach(id => next.add(id));
+        starDels.forEach(id => next.delete(id));
+        try { localStorage.setItem(key("starred"), JSON.stringify([...next])); } catch {}
+        return next;
+      });
+    }
+
+    // Commit scratch-pad (palette) changes — placed courses can't be added
+    if (palAdds.length || palDels.length) {
+      setPalette(prev => {
+        let next = prev.filter(id => !palDels.includes(id));
+        for (const id of palAdds) {
+          if (!next.includes(id) && newPl[id] === undefined) next.push(id);
+        }
+        return next;
+      });
+    }
   }
 
   function executeMCPCommand(cmd) {
@@ -746,6 +832,18 @@ export function PlannerProvider({ children }) {
       case "SET_BANK_TAB":
         if (["all", "placed", "starred"].includes(cmd.tab)) setBankTab(cmd.tab);
         break;
+      case "EXPORT_JSON":
+        exportPlanJSON();
+        break;
+      case "COPY_SHARE_LINK":
+        copyPlanLink(locale).catch(() => {});
+        break;
+      case "EXPORT_PDF":
+        // The PDF assembly lives in Header (it composes grad info from the
+        // panel); a DOM event keeps this handler UI-agnostic.
+        window.dispatchEvent(new CustomEvent("numap:export-pdf"));
+        break;
+      // Unknown command types are ignored (additive-only registry).
     }
   }
 
@@ -1967,13 +2065,15 @@ export function PlannerProvider({ children }) {
   // are fully initialized before the dependency array is evaluated.
   useEffect(() => {
     if (!aiAssistant?.notifyChange) return;
+    if (aiAssistant.isConsentEnabled && !aiAssistant.isConsentEnabled()) return;
     const timer = setTimeout(() => {
       const planName = plans.find(p => p.id === activePlanId)?.name ?? "Untitled";
       aiAssistant.notifyChange({
         planId:    activePlanId,
         planName,
         major, major2, concentration: conc, minor1, minor2,
-        majorLabel: null, minor1Label: null, minor2Label: null,
+        majorLabel: null, major2Label: null, minor1Label: null, minor2Label: null,
+        studentType,
         currentSemId,
         entSem: planEntSem, entYear: planEntYear,
         gradSem: planGradSem, gradYear: planGradYear,
@@ -1989,28 +2089,91 @@ export function PlannerProvider({ children }) {
         totalSHDone,
         prereqViolationCount: prereqViolations.size,
         coreqViolationCount:  coreqViolations.size,
+        prereqViolations: Object.fromEntries(prereqViolations),
+        coreqViolations:  Object.fromEntries(coreqViolations),
+        starredIds: [...starredIds],
+        palette,
+        locale,
+        coopGradConflicts,
         selectedCourseId: selectedId,
-        allPlans: plans.map(p => ({ id: p.id, name: p.name, active: p.id === activePlanId })),
+        allPlans: plans.map(p => ({
+          id: p.id, name: p.name, active: p.id === activePlanId,
+          ...(p.studentType && { studentType: p.studentType }),
+        })),
       });
     }, 400);
     return () => clearTimeout(timer);
   }, [ // eslint-disable-line react-hooks/exhaustive-deps
     aiAssistant, placements, specialTermPl, placedOut, substitutions,
-    major, major2, conc, minor1, minor2, currentSemId, bonusSH, shOverrides,
+    major, major2, conc, minor1, minor2, studentType, currentSemId, bonusSH, shOverrides,
     offeredOverrides, semOrders, planEntSem, planEntYear, planGradSem, planGradYear,
-    selectedId, activePlanId, plans,
+    selectedId, activePlanId, plans, starredIds, palette, locale,
+    prereqViolations, coreqViolations, coopGradConflicts, claudeAccessRev,
   ]);
 
+  // ── Claude ghost preview ──────────────────────────────────────────
+  // Simulates a proposal with the SAME pure dry-run the MCP server uses
+  // (shared adapter), so what the user previews is exactly what was
+  // validated. The grid renders the simulated placements; the diff sets
+  // drive the orange ghost styling on affected cards.
+  const toggleClaudePreview = (proposal) => {
+    if (!proposal || claudePreview?.proposalId === proposal.proposalId) {
+      setClaudePreview(null);
+      return;
+    }
+    const planSnapshot = {
+      placements, placedOut: [...placedOut], substitutions,
+      workExperience: specialTermPl, shOverrides, offeredOverrides, currentSemId,
+    };
+    const { plan: next } = dryRunChangeset(planSnapshot, proposal.changeset?.actions ?? [], courseMap);
+    const added = {}, moved = {}, removed = new Set();
+    for (const [id, sem] of Object.entries(next.placements)) {
+      if (!(id in placements)) added[id] = sem;
+      else if (placements[id] !== sem) moved[id] = { from: placements[id], to: sem };
+    }
+    for (const id of Object.keys(placements)) {
+      if (!(id in next.placements)) removed.add(id);
+    }
+    setClaudePreview({ proposalId: proposal.proposalId, placements: next.placements, added, moved, removed });
+  };
+
+  // Any real plan mutation invalidates the preview (it was computed
+  // against the previous state).
+  useEffect(() => { setClaudePreview(null); }, [placements, specialTermPl]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Effect: AI assistant — handle incoming MCP events ────────────
+  // Fresh-closure ref: the effect subscribes once, but plan reads must see
+  // current state (same pattern as onDropPaletteRef).
+  const readPlanContentsRef = useRef(null);
+  readPlanContentsRef.current = (planId) => {
+    if (!planId || planId === activePlanId) return captureCurrentPlan();
+    try {
+      const raw = localStorage.getItem(key(`plan-data-${planId}`));
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  };
+
   useEffect(() => {
     if (!aiAssistant?.onEvent) return;
     const unsubscribe = aiAssistant.onEvent((event) => {
+      if (event.type === "REQUEST_PLAN") {
+        aiAssistant.respondPlanContents?.(
+          event.requestId,
+          readPlanContentsRef.current?.(event.planId) ?? null
+        );
+        return;
+      }
       if (event.type === "PROPOSAL") {
-        setPendingMCPProposal({ proposalId: event.proposalId, changeset: event.changeset });
+        setMcpProposals(prev => [...prev, {
+          proposalId:  event.proposalId,
+          changeset:   event.changeset,
+          meta:        event.meta ?? {},
+          fingerprint: JSON.stringify(stateRef.current.placements),
+        }]);
         return;
       }
       if (event.type === "PROPOSAL_RESOLVED") {
-        setPendingMCPProposal(prev => prev?.proposalId === event.proposalId ? null : prev);
+        setMcpProposals(prev => prev.filter(p => p.proposalId !== event.proposalId));
         return;
       }
       if (event.type === "APPLY") {
@@ -2034,7 +2197,11 @@ export function PlannerProvider({ children }) {
     // Load state
     loading, loadErr, loadPct,
     // Planner state
-    placements, effectivePlacements, specialTermPl, currentSemId, persistEnabled,
+    // While a Claude proposal preview is active, the grid renders the
+    // simulated placements; all real state (sync, persistence, undo)
+    // keeps using the actual `placements` state var.
+    placements: claudePreview ? claudePreview.placements : placements,
+    effectivePlacements, specialTermPl, currentSemId, persistEnabled,
     semOrders, offeredOverrides, collapsedSubs, shOverrides,
     // Semester grid
     SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
@@ -2069,16 +2236,27 @@ export function PlannerProvider({ children }) {
     newPlanInitialType, setNewPlanInitialType,
     placedOut, setPlacedOut,
     // MCP / AI assistant
-    pendingMCPProposal, setPendingMCPProposal,
+    mcpProposals,
+    // Head proposal was computed against a plan the user has since edited
+    // (compared against the REAL placements, not a preview).
+    mcpProposalStale: mcpProposals.length > 0 &&
+      mcpProposals[0].fingerprint !== JSON.stringify(placements),
+    claudeAccessEnabled, setClaudeAccess, aiAssistantAvailable: !!aiAssistant,
+    claudeAutoApply, setClaudeAutoApply,
+    claudePaired, confirmClaudePairing, claudeDisconnect,
+    claudePreview, toggleClaudePreview,
+    // Decide the proposal at the head of the queue (FIFO — later
+    // changesets may assume earlier ones landed).
     confirmMCPProposal: (accepted) => {
-      if (!pendingMCPProposal) return;
-      const { proposalId, changeset } = pendingMCPProposal;
+      const head = mcpProposals[0];
+      if (!head) return;
+      setClaudePreview(null);
       if (accepted) {
         pushUndo();
-        applyMCPActions(changeset.actions ?? []);
+        applyMCPActions(head.changeset?.actions ?? []);
       }
-      aiAssistant?.confirmProposal?.(proposalId, accepted);
-      setPendingMCPProposal(null);
+      aiAssistant?.confirmProposal?.(head.proposalId, accepted);
+      setMcpProposals(prev => prev.filter(p => p.proposalId !== head.proposalId));
     },
     // Refs (passed through for DOM measurements)
     timelineRef, cardRefs, bankRef, bankResizing, panelResizing, uiScaleRef,

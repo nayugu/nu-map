@@ -67,7 +67,12 @@ function connect() {
     return;
   }
 
-  _sse.onopen = () => { _connected = true; };
+  _sse.onopen = () => {
+    _connected = true;
+    // Re-assert pairing/consent — covers server restarts that wiped the
+    // in-memory session state.
+    if (_consent.paired) pushConsent();
+  };
 
   _sse.onerror = () => {
     _connected = false;
@@ -94,19 +99,146 @@ connect();
 
 // ── Adapter ───────────────────────────────────────────────────────
 
+// ── Consent (pairing + kill switch) ───────────────────────────────
+// DEFAULT OFF. Nothing syncs and no plan tool works until the user has
+// LINKED their Claude to this NU Map: Claude shows a 6-character code
+// in the chat (request_pairing tool), the user types it into the Claude
+// panel here, and only that confirms the link. `enabled` is the pause
+// switch on top of pairing; `autoApply` is the review-free opt-in.
+// Enforcement is server-side; these local flags are defense in depth
+// (no data leaves the tab while unpaired/paused) and survive reloads.
+
+const CONSENT_KEY = "nu-map-claude-consent";
+
+function readConsentState() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CONSENT_KEY) || "{}");
+    return {
+      paired:    raw.paired    === true,
+      enabled:   raw.paired === true && raw.enabled === true,
+      autoApply: raw.autoApply === true,
+    };
+  } catch {
+    return { paired: false, enabled: false, autoApply: false };
+  }
+}
+
+let _consent = readConsentState();
+
+function saveConsentState() {
+  try { localStorage.setItem(CONSENT_KEY, JSON.stringify(_consent)); } catch {}
+}
+
+// Restore server-side consent (e.g. after a server restart). The browser
+// owns the session secret, so it is authoritative for its own pairing.
+function pushConsent() {
+  fetch(`${SERVER}/consent/${SESSION_ID}`, {
+    method:  "POST",
+    headers: { "Content-Type": "application/json" },
+    body:    JSON.stringify(_consent),
+  }).catch(() => {});
+}
+
+/** Version envelope for the sync payload — see mcp-server tolerant reader. */
+const SYNC_PAYLOAD_VERSION = 1;
+
 /** @type {import('../../ports/IAIAssistant.js').IAIAssistant} */
 export default {
   isAvailable() { return _connected; },
 
   /**
    * Push the current plan state to the MCP server.
-   * Fire-and-forget; never throws.
+   * Fire-and-forget; never throws. No-ops until paired + enabled.
+   * If the server lost the pairing (restart), restores consent and
+   * retries once.
    */
   notifyChange(context) {
-    fetch(`${SERVER}/sync-plan/${SESSION_ID}`, {
+    if (!_consent.paired || !_consent.enabled) return;
+    const body = JSON.stringify({ v: SYNC_PAYLOAD_VERSION, plan: context });
+    const send = () => fetch(`${SERVER}/sync-plan/${SESSION_ID}`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body,
+    });
+    send()
+      .then(r => r.json())
+      .then(j => {
+        if (j?.ok === false && j.reason === "not_paired") {
+          pushConsent();
+          setTimeout(() => send().catch(() => {}), 300);
+        }
+      })
+      .catch(() => {});
+  },
+
+  /** Whether this browser is linked to a Claude conversation. */
+  isPaired() { return _consent.paired; },
+
+  /** Whether plan access for Claude is currently enabled (paired + not paused). */
+  isConsentEnabled() { return _consent.paired && _consent.enabled; },
+
+  /**
+   * Confirm a pairing code the user got from Claude in their chat.
+   * Resolves true on success. This is the ONLY way plan access turns on.
+   */
+  async confirmPairing(code) {
+    try {
+      const res = await fetch(`${SERVER}/pair/${SESSION_ID}`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ code }),
+      });
+      const json = await res.json();
+      if (json?.ok) {
+        _consent = { ..._consent, paired: true, enabled: true };
+        saveConsentState();
+        return true;
+      }
+    } catch {}
+    return false;
+  },
+
+  /** Sever the link entirely — requires a fresh pairing code to reconnect. */
+  disconnect() {
+    _consent = { paired: false, enabled: false, autoApply: false };
+    saveConsentState();
+    fetch(`${SERVER}/consent/${SESSION_ID}`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify(context),
+      body:    JSON.stringify({ unpair: true }),
+    }).catch(() => {});
+  },
+
+  /**
+   * Pause/resume plan access without unpairing (the kill switch).
+   * Only meaningful while paired.
+   */
+  setConsent(enabled) {
+    _consent = { ..._consent, enabled: _consent.paired && !!enabled };
+    saveConsentState();
+    pushConsent();
+  },
+
+  /** Whether apply-without-review is enabled (off by default). */
+  isAutoApplyEnabled() { return _consent.autoApply; },
+
+  /**
+   * Opt in/out of automatic apply. While off (the default), the server
+   * rejects apply_changes and Claude can only propose changes for review.
+   */
+  setAutoApply(enabled) {
+    _consent = { ..._consent, autoApply: !!enabled };
+    saveConsentState();
+    pushConsent();
+  },
+
+  /**
+   * Answer a REQUEST_PLAN event with a saved plan's contents (or null).
+   * Fire-and-forget; never throws.
+   */
+  respondPlanContents(requestId, contents) {
+    fetch(`${SERVER}/plan-contents/${SESSION_ID}/${requestId}`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify(contents ?? null),
     }).catch(() => {});
   },
 

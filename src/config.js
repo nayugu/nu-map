@@ -21,7 +21,7 @@ import specialTerms      from './adapters/northeastern/specialTerms.js';
 import majorRequirements from './adapters/northeastern/majorRequirements.js';
 import courseCatalog     from './adapters/northeastern/courseCatalog.js';
 import localization      from './adapters/northeastern/localization.js';
-// import aiAssistant from './adapters/northeastern/aiAssistant.js'; // MCP integration — disabled until hosted
+import aiAssistant       from './adapters/northeastern/aiAssistant.js'; // MCP integration (defaults to localhost:27182; set VITE_MCP_SERVER_URL when hosted)
 
 // Comment out any line to fall back to the generic default for that port.
 export const institutionAdapter = wire({
@@ -33,5 +33,5 @@ export const institutionAdapter = wire({
   majorRequirements,
   courseCatalog,
   localization,
-  // aiAssistant, // re-enable once VITE_MCP_SERVER_URL is set to a live hosted server
+  aiAssistant,
 });

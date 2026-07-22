@@ -13,7 +13,7 @@ import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText } from "../context/TranslationContext.jsx";
-// import ClaudePanel from "./ClaudePanel.jsx"; // MCP integration — disabled until hosted
+import { ClaudeDot, ClaudeSettings, ClaudeConnectModal, ClaudeProposalCard } from "./ClaudePanel.jsx";
 import dataMeta from "../core/dataMeta.json";
 import YearStepper    from "./YearStepper.jsx";
 import { SemLabel }   from "./SemLabel.jsx";
@@ -38,6 +38,7 @@ export default function Header() {
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
+    aiAssistantAvailable,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
@@ -59,6 +60,7 @@ export default function Header() {
   const isMaintenanceDay = new Date().getUTCDate() === 1;
   const [showUpdatedDate, setShowUpdatedDate] = useState(false);
   const [showQuickSet, setShowQuickSet] = useState(false);
+  const [showClaudeConnect, setShowClaudeConnect] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
@@ -112,6 +114,17 @@ export default function Header() {
     };
     exportReport(placements, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
   };
+
+  // EXPORT_PDF ui-command from the MCP integration — the PDF assembly
+  // lives here (grad info composition), so PlannerContext raises a DOM
+  // event and this listener runs the same export the ⇅ menu does.
+  const handleExportRef = useRef(null);
+  handleExportRef.current = handleExport;
+  useEffect(() => {
+    const h = () => handleExportRef.current?.({ stopPropagation() {} });
+    window.addEventListener("numap:export-pdf", h);
+    return () => window.removeEventListener("numap:export-pdf", h);
+  }, []);
 
   const handleCopyHumanReadable = async () => {
     // Gather plan metadata
@@ -629,6 +642,8 @@ export default function Header() {
         {/* Spacer */}
           <div style={{ flex: 1, minWidth: isPhone ? 16 : 0 }} />
 
+        {/* Claude liveness dot — invisible unless the user has linked Claude */}
+        <ClaudeDot />
 
         {/* Input/Output Dropdown */}
         <div style={{ position: "relative", flexShrink: 0 }}>
@@ -716,9 +731,6 @@ export default function Header() {
           {isMobile ? "↺" : "↺ Erase"}
         </button>}
         */}
-
-        {/* ◆ Claude integration panel — disabled until MCP server is hosted */}
-        {/* <ClaudePanel isMobile={isMobile} /> */}
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative", flexShrink: 0 }}>
@@ -942,6 +954,13 @@ export default function Header() {
                 </div>
               )}
 
+              {/* Claude — optional integration; a single quiet entry until linked */}
+              {aiAssistantAvailable && (
+                <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7, display: "flex", flexDirection: "column", gap: 5 }}>
+                  <ClaudeSettings onConnect={() => { setShowQuickSet(false); setShowClaudeConnect(true); }} />
+                </div>
+              )}
+
               {/* Links */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7, display: "flex", flexDirection: "column", gap: 4 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 1 }}>{t("header.links.title")}</div>
@@ -1147,6 +1166,8 @@ export default function Header() {
 
       {/* ── New plan modal ── */}
       <NewPlanModal open={showNewPlanModal} onClose={() => setShowNewPlanModal(false)} />
+      <ClaudeConnectModal open={showClaudeConnect} onClose={() => setShowClaudeConnect(false)} />
+      <ClaudeProposalCard />
 
       {/* ── Auto-advance toast ── */}
       {semAdvanceToast && (

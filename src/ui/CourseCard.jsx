@@ -24,7 +24,13 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     starredIds, toggleStar,
     onDragStart, onDropOnCard, cardRefs,
     isPhone, shOverrides, setShOverride,
+    claudePreview,
   } = usePlanner();
+
+  // Claude proposal ghost: this card is being added or moved by the
+  // previewed changeset — render it translucent with an orange dashed ring.
+  const isClaudeGhost = inSem && claudePreview != null &&
+    (claudePreview.added?.[course.id] !== undefined || claudePreview.moved?.[course.id] !== undefined);
   const creditSystem = usePort(ICreditSystem);
   const calendar     = usePort(ICalendar);
   const { t }        = useLanguage();
@@ -234,12 +240,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         flex: inSem ? "1 1 110px" : "1 1 0%", minWidth: 0, minHeight: 58, flexShrink: 1, overflow: "hidden",
         position: "relative",
         background: orderViolBg ? "var(--card-bg-viol)" : isCardHov ? "var(--card-bg-hov)" : "var(--card-bg)",
-        border: `2px solid ${borderColor}`,
+        border: isClaudeGhost ? "2px dashed #fb923c" : `2px solid ${borderColor}`,
         borderRadius: 6,
         padding: inSem ? "4px 6px 4px 10px" : "4px 6px 4px 30px",
         cursor: "grab", userSelect: "none",
         touchAction: "manipulation",
-        opacity: dimmed ? 0.35 : 1,
+        opacity: dimmed ? 0.35 : isClaudeGhost ? 0.75 : 1,
         transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
         boxShadow: isSel          ? selGlow
                  : isCardHov      ? "var(--shadow-card-hov)"
