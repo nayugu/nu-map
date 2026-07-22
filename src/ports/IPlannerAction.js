@@ -121,6 +121,17 @@ export const IPlannerAction = "plannerAction";
  */
 
 /**
+ * Set the second major (double major).  Pass an empty string to clear.
+ * @typedef {{ type: 'SET_MAJOR2', programId: string }} SetMajor2Action
+ */
+
+/**
+ * Set the student type for the plan's cohort ("undergrad" | "graduate").
+ * Switches the program tree, slot counts, and NUPath visibility.
+ * @typedef {{ type: 'SET_STUDENT_TYPE', studentType: string }} SetStudentTypeAction
+ */
+
+/**
  * Set the concentration label.  Pass an empty string to clear.
  * Concentration labels are freeform strings, not path ids.
  * @typedef {{ type: 'SET_CONCENTRATION', label: string }} SetConcentrationAction
@@ -200,15 +211,35 @@ export const IPlannerAction = "plannerAction";
  */
 
 /**
+ * Star / unstar a course in the bank (★ tab).
+ * @typedef {{ type: 'STAR_COURSE', courseId: string }} StarCourseAction
+ * @typedef {{ type: 'UNSTAR_COURSE', courseId: string }} UnstarCourseAction
+ */
+
+/**
+ * Add / remove a course on the scratch-pad palette.
+ * Placing a palette course in a semester removes it from the palette,
+ * matching drag-and-drop behavior.
+ * @typedef {{ type: 'ADD_TO_PALETTE', courseId: string }} AddToPaletteAction
+ * @typedef {{ type: 'REMOVE_FROM_PALETTE', courseId: string }} RemoveFromPaletteAction
+ */
+
+/**
  * Union of all plan-mutating action types.
+ *
+ * Compatibility rule: this registry is ADDITIVE-ONLY. Appliers must treat
+ * unknown types as unsupported (skip + report), never as a hard error, so
+ * version skew between browser and server stays safe in both directions.
  *
  * @typedef {AddCourseAction|RemoveCourseAction|MoveCourseAction|
  *           AddPlacedOutAction|RemovePlacedOutAction|
  *           AddSubstitutionAction|RemoveSubstitutionAction|
  *           AddWorkTermAction|RemoveWorkTermAction|MoveWorkTermAction|UpdateWorkTermAction|
- *           SetMajorAction|SetConcentrationAction|SetMinor1Action|SetMinor2Action|
+ *           SetMajorAction|SetMajor2Action|SetStudentTypeAction|
+ *           SetConcentrationAction|SetMinor1Action|SetMinor2Action|
  *           SetBonusSHAction|SetSHOverrideAction|SetOfferedOverrideAction|
  *           SetEntryAction|SetGraduationAction|SetCurrentSemAction|
+ *           StarCourseAction|UnstarCourseAction|AddToPaletteAction|RemoveFromPaletteAction|
  *           CreatePlanAction|RenamePlanAction|SwitchPlanAction|DeletePlanAction} Action
  */
 
@@ -234,8 +265,26 @@ export const IPlannerAction = "plannerAction";
  */
 
 /**
+ * Export the current plan as a PDF report, exactly as the ⇅ menu does.
+ * The PDF renders client-side; this command triggers it in the open tab.
+ * @typedef {{ type: 'EXPORT_PDF' }} ExportPdfCommand
+ */
+
+/**
+ * Download the current plan as a JSON export (⇅ menu equivalent).
+ * @typedef {{ type: 'EXPORT_JSON' }} ExportJsonCommand
+ */
+
+/**
+ * Copy a share link for the current plan to the user's clipboard.
+ * @typedef {{ type: 'COPY_SHARE_LINK' }} CopyShareLinkCommand
+ */
+
+/**
  * Union of all UI command types (no plan mutation).
- * @typedef {FocusCourseCommand|OpenSearchCommand|SetBankTabCommand} UICommand
+ * Additive-only; unknown command types must be ignored by the browser.
+ * @typedef {FocusCourseCommand|OpenSearchCommand|SetBankTabCommand|
+ *           ExportPdfCommand|ExportJsonCommand|CopyShareLinkCommand} UICommand
  */
 
 // ─── Changeset ───────────────────────────────────────────────────

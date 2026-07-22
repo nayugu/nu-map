@@ -45,6 +45,20 @@ export const IAIAssistant = "aiAssistant";
  *   The adapter must never throw — swallow and log internally so a broken
  *   AI connection never disrupts the planner.
  *
+ * @property {() => boolean} [isConsentEnabled]
+ *   Whether the user currently allows the assistant to access plan data
+ *   (the kill switch in settings). Catalog data is public regardless.
+ *
+ * @property {(enabled: boolean) => void} [setConsent]
+ *   Flip the kill switch. Must take effect immediately in both directions:
+ *   stop/resume the plan sync locally AND inform the server so plan-scoped
+ *   tools deny server-side even for in-flight conversations.
+ *
+ * @property {(requestId: string, contents: object|null) => void} [respondPlanContents]
+ *   Answer a REQUEST_PLAN event with the saved contents of a (possibly
+ *   non-active) plan, or null when it doesn't exist. Lets the assistant
+ *   read other plans without switching the user's screen.
+ *
  * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
  *   External systems this adapter communicates with.  See IAttributable.
  */

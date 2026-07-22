@@ -47,16 +47,20 @@ export const IPlannerQuery = "plannerQuery";
  * Program selections (raw path IDs — pass to auditRequirements)
  * @property {string}   major         - Major program path id, e.g. "2026/khoury/computer-science".
  *                                      Empty string if not selected.
+ * @property {string}   major2        - Second major path id (double major). Empty if none.
  * @property {string}   concentration - Concentration label, e.g. "Data Science". Empty if none.
  * @property {string}   minor1        - First minor path id.  Empty if none.
  * @property {string}   minor2        - Second minor path id.  Empty if none.
  *
  * Program labels (human-readable; resolved by the adapter from path ids)
  * @property {string|null} majorLabel        - Resolved major label, e.g. "Computer Science, BS".
+ * @property {string|null} major2Label       - Resolved second-major label.
  * @property {string|null} minor1Label       - Resolved first minor label.
  * @property {string|null} minor2Label       - Resolved second minor label.
  *
- * Timeline
+ * Cohort & timeline
+ * @property {string}   studentType   - "undergrad" | "graduate". Drives program tree,
+ *                                      slot counts, and NUPath visibility.
  * @property {string}   currentSemId  - Semester the user considers "now", e.g. "fall2025".
  * @property {string}   entSem        - Entry semester type id, e.g. "fall".
  * @property {number}   entYear       - Entry year.
@@ -104,9 +108,22 @@ export const IPlannerQuery = "plannerQuery";
  * @property {number}   totalSHPlaced - All placed credits + bonusSH.
  * @property {number}   totalSHDone   - Credits in completed semesters + bonusSH.
  *
- * Violations (counts only; use checkPrereqs for details)
+ * Violations
  * @property {number}   prereqViolationCount  - Courses placed before their prerequisites.
  * @property {number}   coreqViolationCount   - Courses not co-placed with their corequisites.
+ * @property {Object.<string, string>} [prereqViolations] - { courseId → "order" | "missing" },
+ *                                      the same per-course detail behind the red card badges.
+ * @property {Object.<string, string>} [coreqViolations]  - { courseId → "alone" | "sep" }.
+ *
+ * Bank & scratch pad
+ * @property {string[]} [starredIds]  - Courses starred in the bank (★ tab).
+ * @property {string[]} [palette]     - Course ids on the scratch-pad palette.
+ *
+ * Environment
+ * @property {string}   [locale]      - The user's UI locale, e.g. "en", "ko". Lets external
+ *                                      actors answer in the user's language.
+ * @property {{label: string, gradSem: string, gradYear: number}[]} [coopGradConflicts]
+ *                                      Co-op ↔ graduation conflicts shown in the header.
  *
  * UI focus (what the user has selected/is looking at right now)
  * @property {string|null} selectedCourseId  - Currently highlighted course, or null.
