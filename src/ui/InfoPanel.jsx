@@ -450,18 +450,22 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
 const YR_CELL = 22; // px per year column (framed enrollment gauges)
 const ROW_H   = 18; // px height of a gauge row (year labelled in the header above)
 
-// Weekday boxes for the typical meeting pattern. `dow` = [Mon..Fri] % of sections meeting
-// that day — each box is shaded by frequency, so "mostly MWR, some TF" reads at a glance.
-// Day letters are localised (e.g. 月火水木金 in Japanese) via the "info.offered.weekdays" key.
+// Weekday boxes for the typical meeting pattern. `dow` = [Mon..Fri] % of enrolment meeting
+// that day. Shading is scaled RELATIVE to the course's busiest day, so the most-likely days
+// always read strongly and rarer days recede — the pattern's shape is obvious even when the
+// absolute percentages are modest (e.g. a course spread thinly across many patterns). The real
+// percentage stays in the tooltip. Day letters are localised via the "info.offered.weekdays" key.
 function WeekdayStrip({ dow, color }) {
   const { t } = useLanguage();
   const labels = (t("info.offered.weekdays") || "M,T,W,Th,F").split(",");
+  const peak = Math.max(1, ...(dow ?? []));           // busiest day → full emphasis
   return (
     <div style={{ display: "flex", gap: 3 }}>
       {labels.map((label, i) => {
-        const pct = dow?.[i] ?? 0;                       // 0..100
-        const on  = pct > 0;
-        const op  = on ? 0.1 + 0.7 * (pct / 100) : 0;    // faint floor → strong at 100%
+        const pct  = dow?.[i] ?? 0;                      // 0..100 (real value, shown in tooltip)
+        const on   = pct > 0;
+        const frac = pct / peak;                         // 0..1 relative to the busiest day
+        const op   = on ? 0.14 + 0.78 * frac : 0;        // faint floor → strong at the peak
         return (
           <span key={i} title={`${label}: ${pct}%`}
             style={{
@@ -473,7 +477,7 @@ function WeekdayStrip({ dow, color }) {
             {on && <span style={{ position: "absolute", inset: 0, background: color || "var(--text-3)", opacity: op }} />}
             <span style={{
               position: "relative",
-              fontSize: 10, fontWeight: pct >= 50 ? 800 : 600,
+              fontSize: 10, fontWeight: frac >= 0.6 ? 800 : 600,
               color: on ? "var(--text-1)" : "var(--text-5)",
               opacity: on ? 1 : 0.5,
             }}>
