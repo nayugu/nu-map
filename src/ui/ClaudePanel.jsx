@@ -30,6 +30,9 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
 
 const CLAUDE_ORANGE = "#fb923c";
+// Header-dot variant: deliberately muted — the always-visible indicator
+// should confirm the link without advertising Claude on every login.
+const CLAUDE_ORANGE_SOFT = "rgba(251, 146, 60, 0.45)";
 
 /** Poll SSE liveness every 2 s while mounted. */
 function useClaudeLive() {
@@ -48,6 +51,7 @@ function useClaudeLive() {
 
 export function ClaudeDot() {
   const { claudePaired, claudeAccessEnabled } = usePlanner();
+  const { t } = useLanguage();
   const connected = useClaudeLive();
   if (!claudePaired) return null;
   // Orange = connected and On (Claude can see the plan right now).
@@ -55,13 +59,13 @@ export function ClaudeDot() {
   const active = connected && claudeAccessEnabled;
   return (
     <span
-      title={active ? "Claude is connected to this plan"
-           : connected ? "Claude is connected but paused (Off)"
-           : "Claude is linked but the connection is down"}
+      title={active ? t("claude.dot.active")
+           : connected ? t("claude.dot.paused")
+           : t("claude.dot.down")}
       style={{
-        width: 7, height: 7, borderRadius: "50%", flexShrink: 0,
+        width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
         alignSelf: "center", margin: "0 2px",
-        background: active ? CLAUDE_ORANGE : connected ? "var(--border-2)" : "transparent",
+        background: active ? CLAUDE_ORANGE_SOFT : connected ? "var(--border-2)" : "transparent",
         border: connected ? "none" : "1.5px solid var(--text-5)",
         boxSizing: "border-box",
         opacity: active ? 1 : 0.8,
@@ -93,7 +97,7 @@ export function ClaudeSettings({ onConnect }) {
       </span>
       {claudePaired && (
         <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 8.5, color: "var(--text-5)" }}>
-          {connected ? "Connected" : "Reconnecting…"}
+          {connected ? t("claude.connected") : t("claude.reconnecting")}
           <span style={{
             width: 5, height: 5, borderRadius: "50%",
             background: connected && claudeAccessEnabled ? CLAUDE_ORANGE
@@ -113,11 +117,11 @@ export function ClaudeSettings({ onConnect }) {
         <button
           className="hdr-btn-dd"
           onClick={e => { e.stopPropagation(); onConnect?.(); }}
-          title="Optional: link Claude AI to help with planning. Off by default."
+          title={t("claude.connect.title")}
           style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
             background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
             border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-          Connect Claude…
+          {t("claude.connect")}
         </button>
       </>
     );
@@ -163,11 +167,11 @@ export function ClaudeSettings({ onConnect }) {
       <button
         className="hdr-btn-dd"
         onClick={e => { e.stopPropagation(); claudeDisconnect(); }}
-        title="Sever the link entirely — reconnecting requires a fresh code."
+        title={t("claude.disconnect.title")}
         style={{ width: "100%", textAlign: "left", fontSize: 10, cursor: "pointer",
           background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
           border: "1px solid var(--border-2)", color: "var(--error)" }}>
-        Disconnect
+        {t("claude.disconnect")}
       </button>
     </>
   );
@@ -178,51 +182,59 @@ export function ClaudeSettings({ onConnect }) {
 // sees the headline, rationale, and every action in plain language, and
 // approves or rejects — nothing touches the plan until Approve.
 
-const SEM_TYPE_WORD = { fall: "Fall", spring: "Spring", spr: "Spring", sumA: "Summer 1", sumB: "Summer 2" };
+const SEM_TYPE_KEY = { fall: "claude.sem.fall", spring: "claude.sem.spring", spr: "claude.sem.spring", sumA: "claude.sem.sum1", sumB: "claude.sem.sum2" };
 
-function semLabelOf(semId, semesters) {
-  if (semId === "incoming") return "Incoming Credit";
-  const hit = semesters?.find(s => s.id === semId);
-  if (hit) return hit.label;
+function semLabelOf(semId, semesters, t) {
+  if (semId === "incoming") return t("claude.sem.incoming");
   const m = String(semId).match(/^(fall|spring|spr|sumA|sumB)(\d{4})$/);
-  return m ? `${SEM_TYPE_WORD[m[1]] ?? m[1]} ${m[2]}` : semId;
+  if (m) return `${t(SEM_TYPE_KEY[m[1]])} ${m[2]}`;
+  return semesters?.find(s => s.id === semId)?.label ?? semId;
 }
 
-function describeAction(a, courseMap, semesters) {
+function describeAction(a, courseMap, semesters, t) {
   const code = (id) => courseMap?.[id]?.code ?? id;
-  const sem  = (id) => semLabelOf(id, semesters);
+  const sem  = (id) => semLabelOf(id, semesters, t);
+  const semWord = (id) => t(SEM_TYPE_KEY[id] ?? id);
   switch (a.type) {
-    case "ADD_COURSE":          return `Add ${code(a.courseId)} to ${sem(a.semId)}`;
-    case "REMOVE_COURSE":       return `Remove ${code(a.courseId)}`;
-    case "MOVE_COURSE":         return `Move ${code(a.courseId)} to ${sem(a.toSemId)}`;
-    case "ADD_PLACED_OUT":      return `Mark ${code(a.courseId)} as placed out`;
-    case "REMOVE_PLACED_OUT":   return `Remove placed-out status from ${code(a.courseId)}`;
-    case "ADD_SUBSTITUTION":    return `Substitute ${code(a.fromId)} for ${code(a.toId)}`;
-    case "REMOVE_SUBSTITUTION": return `Remove substitution ${code(a.fromId)} → ${code(a.toId)}`;
-    case "ADD_WORK_TERM":       return `Add ${a.typeId === "coop" ? "co-op" : a.typeId} (${a.duration} mo)${a.company ? ` at ${a.company}` : ""} starting ${sem(a.semId)}`;
-    case "REMOVE_WORK_TERM":    return "Remove a work term";
-    case "MOVE_WORK_TERM":      return `Move a work term to ${sem(a.toSemId)}`;
-    case "UPDATE_WORK_TERM":    return "Update work-term details";
-    case "SET_MAJOR":           return a.programId ? "Change major" : "Clear major";
-    case "SET_MAJOR2":          return a.programId ? "Change second major" : "Clear second major";
-    case "SET_CONCENTRATION":   return a.label ? `Set concentration: ${a.label}` : "Clear concentration";
+    case "ADD_COURSE":          return t("claude.act.add", { code: code(a.courseId), sem: sem(a.semId) });
+    case "REMOVE_COURSE":       return t("claude.act.remove", { code: code(a.courseId) });
+    case "MOVE_COURSE":         return t("claude.act.move", { code: code(a.courseId), sem: sem(a.toSemId) });
+    case "ADD_PLACED_OUT":      return t("claude.act.placeout", { code: code(a.courseId) });
+    case "REMOVE_PLACED_OUT":   return t("claude.act.unplaceout", { code: code(a.courseId) });
+    case "ADD_SUBSTITUTION":    return t("claude.act.sub", { from: code(a.fromId), to: code(a.toId) });
+    case "REMOVE_SUBSTITUTION": return t("claude.act.unsub", { from: code(a.fromId), to: code(a.toId) });
+    case "ADD_WORK_TERM":       return t("claude.act.workterm.add", {
+                                  type: a.typeId === "coop" ? "co-op" : a.typeId,
+                                  n: a.duration, sem: sem(a.semId),
+                                }) + (a.company ? ` — ${a.company}` : "");
+    case "REMOVE_WORK_TERM":    return t("claude.act.workterm.remove");
+    case "MOVE_WORK_TERM":      return t("claude.act.workterm.move", { sem: sem(a.toSemId) });
+    case "UPDATE_WORK_TERM":    return t("claude.act.workterm.update");
+    case "SET_MAJOR":           return t(a.programId ? "claude.act.major.set" : "claude.act.major.clear");
+    case "SET_MAJOR2":          return t(a.programId ? "claude.act.major2.set" : "claude.act.major2.clear");
+    case "SET_CONCENTRATION":   return a.label ? t("claude.act.conc.set", { label: a.label }) : t("claude.act.conc.clear");
     case "SET_MINOR1": case "SET_MINOR2":
-                                return a.programId ? "Change a minor" : "Clear a minor";
-    case "SET_STUDENT_TYPE":    return `Switch plan type to ${a.studentType}`;
-    case "SET_BONUS_SH":        return `Set incoming general credits to ${a.amount} SH`;
-    case "SET_SH_OVERRIDE":     return a.value == null ? `Reset credits for ${code(a.courseId)}` : `Set ${code(a.courseId)} to ${a.value} SH`;
-    case "SET_OFFERED_OVERRIDE":return `Override ${code(a.courseId)} offering in ${SEM_TYPE_WORD[a.semTypeId] ?? a.semTypeId}: ${a.status == null ? "auto" : a.status ? "offered" : "not offered"}`;
-    case "SET_ENTRY":           return `Set entry to ${SEM_TYPE_WORD[a.sem] ?? a.sem} ${a.year}`;
-    case "SET_GRADUATION":      return `Set graduation to ${SEM_TYPE_WORD[a.sem] ?? a.sem} ${a.year}`;
-    case "SET_CURRENT_SEM":     return `Set current semester to ${sem(a.semId)}`;
-    case "STAR_COURSE":         return `Star ${code(a.courseId)}`;
-    case "UNSTAR_COURSE":       return `Unstar ${code(a.courseId)}`;
-    case "ADD_TO_PALETTE":      return `Add ${code(a.courseId)} to the scratch pad`;
-    case "REMOVE_FROM_PALETTE": return `Remove ${code(a.courseId)} from the scratch pad`;
-    case "CREATE_PLAN":         return `Create plan “${a.name}”`;
-    case "RENAME_PLAN":         return `Rename a plan to “${a.name}”`;
-    case "SWITCH_PLAN":         return "Switch active plan";
-    case "DELETE_PLAN":         return "⚠ Delete a plan";
+                                return t(a.programId ? "claude.act.minor.set" : "claude.act.minor.clear");
+    case "SET_STUDENT_TYPE":    return t("claude.act.studenttype", { type: a.studentType });
+    case "SET_BONUS_SH":        return t("claude.act.bonus", { n: a.amount });
+    case "SET_SH_OVERRIDE":     return a.value == null
+                                  ? t("claude.act.sh.clear", { code: code(a.courseId) })
+                                  : t("claude.act.sh.set", { code: code(a.courseId), n: a.value });
+    case "SET_OFFERED_OVERRIDE":return t("claude.act.offered", {
+                                  code: code(a.courseId), sem: semWord(a.semTypeId),
+                                  status: t(a.status == null ? "claude.act.offered.auto" : a.status ? "claude.act.offered.on" : "claude.act.offered.off"),
+                                });
+    case "SET_ENTRY":           return t("claude.act.entry", { sem: semWord(a.sem), year: a.year });
+    case "SET_GRADUATION":      return t("claude.act.grad", { sem: semWord(a.sem), year: a.year });
+    case "SET_CURRENT_SEM":     return t("claude.act.cursem", { sem: sem(a.semId) });
+    case "STAR_COURSE":         return t("claude.act.star", { code: code(a.courseId) });
+    case "UNSTAR_COURSE":       return t("claude.act.unstar", { code: code(a.courseId) });
+    case "ADD_TO_PALETTE":      return t("claude.act.palette.add", { code: code(a.courseId) });
+    case "REMOVE_FROM_PALETTE": return t("claude.act.palette.remove", { code: code(a.courseId) });
+    case "CREATE_PLAN":         return t("claude.act.plan.create", { name: a.name });
+    case "RENAME_PLAN":         return t("claude.act.plan.rename", { name: a.name });
+    case "SWITCH_PLAN":         return t("claude.act.plan.switch");
+    case "DELETE_PLAN":         return t("claude.act.plan.delete");
     default:                    return a.type;
   }
 }
@@ -233,6 +245,7 @@ export function ClaudeProposalCard() {
     claudePreview, toggleClaudePreview,
     courseMap, SEMESTERS,
   } = usePlanner();
+  const { t } = useLanguage();
 
   const head = mcpProposals[0];
   if (!head) return null;
@@ -256,11 +269,11 @@ export function ClaudeProposalCard() {
       <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
         <span style={{ width: 7, height: 7, borderRadius: "50%", background: CLAUDE_ORANGE, flexShrink: 0 }} />
         <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-2)", flex: 1, minWidth: 0 }}>
-          {changeset?.label || "Claude suggests a change"}
+          {changeset?.label || t("claude.card.title")}
         </span>
         {mcpProposals.length > 1 && (
           <span style={{ fontSize: 9, color: "var(--text-5)", flexShrink: 0 }}>
-            1 of {mcpProposals.length}
+            {t("claude.card.queue", { n: mcpProposals.length })}
           </span>
         )}
       </div>
@@ -274,7 +287,7 @@ export function ClaudeProposalCard() {
       <ul style={{ margin: 0, padding: "0 0 0 14px", display: "flex", flexDirection: "column", gap: 3 }}>
         {actions.map((a, i) => (
           <li key={i} style={{ fontSize: 10, color: "var(--text-3)", lineHeight: 1.45 }}>
-            {describeAction(a, courseMap, SEMESTERS)}
+            {describeAction(a, courseMap, SEMESTERS, t)}
           </li>
         ))}
       </ul>
@@ -283,26 +296,26 @@ export function ClaudeProposalCard() {
       {hasDelta && (
         <div style={{ fontSize: 9.5, color: deltaGood ? "var(--success)" : deltaBad ? "var(--error)" : "var(--text-5)" }}>
           {meta.violationsBefore === meta.violationsAfter
-            ? `No new conflicts (${meta.violationsAfter} existing)`
-            : `Conflicts: ${meta.violationsBefore} → ${meta.violationsAfter}`}
+            ? t("claude.card.noconflicts", { n: meta.violationsAfter })
+            : t("claude.card.conflicts", { before: meta.violationsBefore, after: meta.violationsAfter })}
         </div>
       )}
 
       {mcpProposalStale && (
         <div style={{ fontSize: 9.5, color: "var(--warn, #b45309)", lineHeight: 1.5 }}>
-          ⚠ Your plan has changed since Claude proposed this — review carefully.
+          {t("claude.card.stale")}
         </div>
       )}
 
       <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
         <button
           onClick={() => toggleClaudePreview(head)}
-          title="Show this change on the grid as translucent ghosts — nothing is applied"
+          title={t("claude.card.preview.title")}
           style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 10px",
             background: previewing ? "var(--bg-app)" : "var(--bg-surface-2)",
             border: `1px dashed ${previewing ? CLAUDE_ORANGE : "var(--border-2)"}`,
             color: previewing ? CLAUDE_ORANGE : "var(--text-4)", borderRadius: 5 }}>
-          {previewing ? "Previewing…" : "Preview"}
+          {previewing ? t("claude.card.previewing") : t("claude.card.preview")}
         </button>
         <div style={{ flex: 1 }} />
         <button
@@ -310,15 +323,15 @@ export function ClaudeProposalCard() {
           style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 12px",
             background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
             color: "var(--text-4)", borderRadius: 5 }}>
-          Reject
+          {t("claude.card.reject")}
         </button>
         <button
           onClick={() => confirmMCPProposal(true)}
-          title="Applies as a single undo entry (Cmd+Z reverses all of it)"
+          title={t("claude.card.approve.title")}
           style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 12px",
             background: "var(--bg-surface-2)", border: `1px solid ${CLAUDE_ORANGE}`,
             color: CLAUDE_ORANGE, borderRadius: 5 }}>
-          Approve
+          {t("claude.card.approve")}
         </button>
       </div>
     </div>
@@ -330,6 +343,7 @@ export function ClaudeProposalCard() {
 export function ClaudeConnectModal({ open, onClose }) {
   const aiAssistant = usePort(IAIAssistant);
   const { confirmClaudePairing } = usePlanner();
+  const { t } = useLanguage();
 
   const [copied, setCopied]       = useState(false);
   const [codeInput, setCodeInput] = useState("");
@@ -386,24 +400,17 @@ export function ClaudeConnectModal({ open, onClose }) {
       >
         <div style={{ fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", gap: 7 }}>
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: CLAUDE_ORANGE }} />
-          Connect Claude
+          {t("claude.modal.title")}
         </div>
 
-        <div style={body}>
-          Optional — nu-map works fully without this. Linking lets Claude help
-          you plan: it can already browse the <b>public course database</b>{" "}
-          (any course, offering history, degree requirements) once the connector
-          is added. Linking below <b>additionally shares this plan</b> — your
-          placements, co-ops, and programs — and lets Claude <b>propose</b>{" "}
-          changes that you approve here first.
-        </div>
+        <div style={body}>{t("claude.modal.intro")}</div>
 
         {/* Step 1 — instructions depend on deployment: hosted builds point
             students at the claude.ai Directory (no tools, no terminal);
             local dev builds show the Claude Code command. */}
         {url.includes("localhost") || url.includes("127.0.0.1") ? (
           <div>
-            <div style={stepLabel}>STEP 1 — ADD THE NU MAP CONNECTOR (DEV)</div>
+            <div style={stepLabel}>{t("claude.modal.step1.dev")}</div>
             <div style={{ display: "flex", gap: 5, alignItems: "stretch" }}>
               <div style={{
                 flex: 1, fontSize: 9, fontFamily: "monospace",
@@ -424,36 +431,29 @@ export function ClaudeConnectModal({ open, onClose }) {
                   borderRadius: 4, padding: "0 10px",
                 }}
               >
-                {copied ? "Copied!" : "Copy"}
+                {copied ? t("claude.copied") : t("claude.copy")}
               </button>
             </div>
             <div style={{ fontSize: 9, color: "var(--text-5)", marginTop: 4, lineHeight: 1.5 }}>
-              Local dev server — add it in Claude Code:{" "}
-              <span style={{ fontFamily: "monospace" }}>claude mcp add --transport http nu-map &lt;URL&gt;</span>.
-              This step grants access to public course data only.
+              {t("claude.modal.step1.dev.hint")}
             </div>
           </div>
         ) : (
           <div>
-            <div style={stepLabel}>STEP 1 — ADD NU MAP TO CLAUDE</div>
-            <div style={body}>
-              Open <b>claude.ai → Directory → Your organization</b> and add{" "}
-              <b>NU Map</b>. This step grants access to public course data only
-              (catalog, offerings, degree requirements).
-            </div>
+            <div style={stepLabel}>{t("claude.modal.step1")}</div>
+            <div style={body}>{t("claude.modal.step1.body")}</div>
           </div>
         )}
 
         {/* Step 2 */}
         <div style={body}>
-          <span style={{ fontWeight: 700, color: "var(--text-3)" }}>Step 2 —</span>{" "}
-          In the chat, ask Claude to <i>“connect to my NU Map”</i>.
-          It will show you a 6-character code.
+          <span style={{ fontWeight: 700, color: "var(--text-3)" }}>{t("claude.modal.step2")}</span>{" "}
+          {t("claude.modal.step2.body")}
         </div>
 
         {/* Step 3 */}
         <div>
-          <div style={stepLabel}>STEP 3 — ENTER THE CODE TO SHARE THIS PLAN</div>
+          <div style={stepLabel}>{t("claude.modal.step3")}</div>
           <div style={{ display: "flex", gap: 5 }}>
             <input
               value={codeInput}
@@ -484,12 +484,12 @@ export function ClaudeConnectModal({ open, onClose }) {
                 opacity: codeInput.trim() || pairState === "done" ? 1 : 0.5,
               }}
             >
-              {pairState === "done" ? "Linked ✓" : pairState === "working" ? "…" : "Connect"}
+              {pairState === "done" ? t("claude.modal.linked") : pairState === "working" ? "…" : t("claude.modal.connect")}
             </button>
           </div>
           {pairState === "error" && (
             <div style={{ fontSize: 9, color: "var(--error)", marginTop: 4 }}>
-              Code not recognized (or expired — codes last 10 minutes). Ask Claude for a new one.
+              {t("claude.modal.error")}
             </div>
           )}
         </div>
@@ -501,7 +501,7 @@ export function ClaudeConnectModal({ open, onClose }) {
             background: "none", border: "none", color: "var(--text-5)", padding: 2,
           }}
         >
-          Close
+          {t("claude.modal.close")}
         </button>
       </div>
     </div>

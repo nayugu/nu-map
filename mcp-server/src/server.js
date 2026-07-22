@@ -26,8 +26,8 @@ export const SYNC_PAYLOAD_VERSION = 1;
 const ActionSchema = z.object({ type: z.string() }).passthrough();
 const ChangesetArgs = {
   actions:            z.array(ActionSchema),
-  rationale:          z.string().optional().describe("Why — shown to the user in the review UI"),
-  label:              z.string().optional().describe("Short headline, e.g. 'Restructure Fall 2025'"),
+  rationale:          z.string().optional().describe("Why — shown to the user in the review UI. Write it in the user's language (the plan's `locale` field)."),
+  label:              z.string().optional().describe("Short headline, e.g. 'Restructure Fall 2025'. Write it in the user's language (the plan's `locale` field)."),
   confirmDestructive: z.boolean().optional()
     .describe("Must be true when the changeset includes a DELETE_PLAN action"),
 };
