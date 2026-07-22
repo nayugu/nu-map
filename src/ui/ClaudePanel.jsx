@@ -452,6 +452,34 @@ export function ClaudeConnectModal({ open, onClose }) {
           <div>
             <div style={stepLabel}>{t("claude.modal.step1")}</div>
             <div style={body}>{t("claude.modal.step1.body")}</div>
+            {/* Power users (Claude Code / custom connectors) still need the
+                raw session URL until the Directory listing exists. */}
+            <div style={{ display: "flex", gap: 5, alignItems: "stretch", marginTop: 6 }}>
+              <div style={{
+                flex: 1, fontSize: 8.5, fontFamily: "monospace",
+                background: "var(--bg-app)", border: "1px solid var(--border-2)",
+                borderRadius: 4, padding: "4px 6px", color: "var(--text-5)",
+                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                userSelect: "all",
+              }} title={url}>
+                {url}
+              </div>
+              <button
+                onClick={handleCopy}
+                style={{
+                  flexShrink: 0, fontSize: 9, fontWeight: 700, cursor: "pointer",
+                  background: copied ? "var(--success-bg)" : "var(--bg-surface-2)",
+                  border: `1px solid ${copied ? "var(--success-border)" : "var(--border-2)"}`,
+                  color: copied ? "var(--success)" : "var(--text-4)",
+                  borderRadius: 4, padding: "0 8px",
+                }}
+              >
+                {copied ? t("claude.copied") : t("claude.copy")}
+              </button>
+            </div>
+            <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 3, lineHeight: 1.5 }}>
+              {t("claude.modal.url.hint")}
+            </div>
           </div>
         )}
 

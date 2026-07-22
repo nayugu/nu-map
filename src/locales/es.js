@@ -262,6 +262,7 @@ export const strings = {
   "claude.modal.step1.dev.hint": "Servidor local de desarrollo — añádelo en Claude Code: claude mcp add --transport http nu-map <URL>. Este paso solo da acceso a datos públicos de cursos.",
   "claude.modal.step1": "PASO 1 — AÑADE NU MAP A CLAUDE",
   "claude.modal.step1.body": "Abre claude.ai → Directory → Your organization y añade NU Map. Este paso solo da acceso a datos públicos de cursos (catálogo, oferta, requisitos de titulación).",
+  "claude.modal.url.hint": "Usuarios avanzados: esta URL personal también funciona en Claude Code o como conector personalizado.",
   "claude.modal.step2": "Paso 2 —",
   "claude.modal.step2.body": "En el chat, pide a Claude «conectar con mi NU Map». Te mostrará un código de 6 caracteres.",
   "claude.modal.step3": "PASO 3 — INTRODUCE EL CÓDIGO PARA COMPARTIR ESTE PLAN",

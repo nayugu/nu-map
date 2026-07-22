@@ -261,6 +261,7 @@ export const strings = {
   "claude.modal.step1.dev.hint": "लोकल डेव सर्वर — Claude Code में जोड़ें: claude mcp add --transport http nu-map <URL>। यह चरण केवल सार्वजनिक कोर्स डेटा की पहुँच देता है।",
   "claude.modal.step1": "चरण 1 — CLAUDE में NU MAP जोड़ें",
   "claude.modal.step1.body": "claude.ai → Directory → Your organization खोलें और NU Map जोड़ें। यह चरण केवल सार्वजनिक कोर्स डेटा की पहुँच देता है (कैटलॉग, पेशकश, डिग्री आवश्यकताएँ)।",
+  "claude.modal.url.hint": "एडवांस उपयोगकर्ता: यह व्यक्तिगत URL Claude Code या कस्टम कनेक्टर में भी काम करता है।",
   "claude.modal.step2": "चरण 2 —",
   "claude.modal.step2.body": "चैट में Claude से कहें “मेरे NU Map से कनेक्ट करो”। वह 6 अक्षरों का कोड दिखाएगा।",
   "claude.modal.step3": "चरण 3 — इस योजना को साझा करने के लिए कोड डालें",

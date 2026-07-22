@@ -261,6 +261,7 @@ export const strings = {
   "claude.modal.step1.dev.hint": "로컬 개발 서버 — Claude Code에서 추가하세요: claude mcp add --transport http nu-map <URL>. 이 단계는 공개 강의 데이터에만 접근합니다.",
   "claude.modal.step1": "1단계 — CLAUDE에 NU MAP 추가",
   "claude.modal.step1.body": "claude.ai → Directory → Your organization에서 NU Map을 추가하세요. 이 단계는 공개 강의 데이터(카탈로그, 개설 이력, 졸업 요건)에만 접근합니다.",
+  "claude.modal.url.hint": "고급 사용자: 이 개인 URL은 Claude Code나 사용자 지정 커넥터에서도 사용할 수 있습니다.",
   "claude.modal.step2": "2단계 —",
   "claude.modal.step2.body": "채팅에서 Claude에게 “내 NU Map에 연결해 줘”라고 요청하세요. 6자리 코드를 보여줍니다.",
   "claude.modal.step3": "3단계 — 코드를 입력해 이 계획 공유",

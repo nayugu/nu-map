@@ -262,6 +262,7 @@ export const strings = {
   "claude.modal.step1.dev.hint": "ローカル開発サーバー — Claude Code で追加：claude mcp add --transport http nu-map <URL>。このステップで許可されるのは公開講義データのみです。",
   "claude.modal.step1": "ステップ 1 — CLAUDE に NU MAP を追加",
   "claude.modal.step1.body": "claude.ai → Directory → Your organization を開き、NU Map を追加します。このステップで許可されるのは公開講義データ（カタログ、開講履歴、卒業要件）のみです。",
+  "claude.modal.url.hint": "上級ユーザー向け：この個人 URL は Claude Code やカスタムコネクタでも使えます。",
   "claude.modal.step2": "ステップ 2 —",
   "claude.modal.step2.body": "チャットで Claude に「私の NU Map に接続して」と頼んでください。6 文字のコードが表示されます。",
   "claude.modal.step3": "ステップ 3 — コードを入力してこのプランを共有",

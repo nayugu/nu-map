@@ -260,6 +260,7 @@ export const strings = {
   "claude.modal.step1.dev.hint": "本地开发服务器 — 在 Claude Code 中添加：claude mcp add --transport http nu-map <URL>。此步骤仅授予公开课程数据的访问权限。",
   "claude.modal.step1": "第 1 步 — 将 NU MAP 添加到 CLAUDE",
   "claude.modal.step1.body": "打开 claude.ai → Directory → Your organization，添加 NU Map。此步骤仅授予公开课程数据的访问权限（目录、开课历史、学位要求）。",
+  "claude.modal.url.hint": "高级用户：此个人 URL 也可用于 Claude Code 或自定义连接器。",
   "claude.modal.step2": "第 2 步 —",
   "claude.modal.step2.body": "在对话中让 Claude“连接我的 NU Map”。它会显示一个 6 位配对码。",
   "claude.modal.step3": "第 3 步 — 输入配对码以共享此计划",
