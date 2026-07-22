@@ -90,12 +90,16 @@ function scheduleReconnect() {
   if (_reconnectTimer) return;
   _reconnectTimer = setTimeout(() => {
     _reconnectTimer = null;
-    connect();
+    if (_consent.paired) connect();
   }, 5_000);
 }
 
-// Connect as soon as the module loads (non-blocking — SSE connects async)
-connect();
+function disconnectSSE() {
+  if (_reconnectTimer) { clearTimeout(_reconnectTimer); _reconnectTimer = null; }
+  _sse?.close();
+  _sse = null;
+  _connected = false;
+}
 
 // ── Adapter ───────────────────────────────────────────────────────
 
@@ -124,6 +128,11 @@ function readConsentState() {
 }
 
 let _consent = readConsentState();
+
+// The SSE channel (and its Durable Object server-side) exists ONLY for
+// paired sessions — unpaired visitors never open a connection, so casual
+// traffic costs nothing and touches nothing.
+if (_consent.paired) connect();
 
 function saveConsentState() {
   try { localStorage.setItem(CONSENT_KEY, JSON.stringify(_consent)); } catch {}
@@ -190,6 +199,7 @@ export default {
       if (json?.ok) {
         _consent = { ..._consent, paired: true, enabled: true };
         saveConsentState();
+        connect(); // open the channel only once a link exists
         return true;
       }
     } catch {}
@@ -200,6 +210,7 @@ export default {
   disconnect() {
     _consent = { paired: false, enabled: false, autoApply: false };
     saveConsentState();
+    disconnectSSE(); // close the channel; the session DO can idle out
     fetch(`${SERVER}/consent/${SESSION_ID}`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
