@@ -450,11 +450,12 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
 const YR_CELL = 22; // px per year column (framed enrollment gauges)
 const ROW_H   = 18; // px height of a gauge row (year labelled in the header above)
 
-// Weekday boxes for the typical meeting pattern. `dow` = [Mon..Fri] % of enrolment meeting
-// that day. Shading is scaled RELATIVE to the course's busiest day, so the most-likely days
-// always read strongly and rarer days recede — the pattern's shape is obvious even when the
-// absolute percentages are modest (e.g. a course spread thinly across many patterns). The real
-// percentage stays in the tooltip. Day letters are localised via the "info.offered.weekdays" key.
+// Weekday boxes for the typical meeting pattern. `dow` = [Mon..Fri] % of enrolment meeting that
+// day — prominence is BY DAY (F dark because ~75% of enrolment meets Friday), which is honest for
+// spread courses where no single pattern dominates (the popover shows the by-pattern breakdown).
+// Shading is scaled relative to the busiest day through a steep (gamma) curve, so the dominant
+// day(s) clearly dominate and secondary days recede rather than all lighting up like a daily
+// course. The real percentage stays in the tooltip. Day letters are localised.
 function WeekdayStrip({ dow, color }) {
   const { t } = useLanguage();
   const labels = (t("info.offered.weekdays") || "M,T,W,Th,F").split(",");
@@ -462,10 +463,10 @@ function WeekdayStrip({ dow, color }) {
   return (
     <div style={{ display: "flex", gap: 3 }}>
       {labels.map((label, i) => {
-        const pct  = dow?.[i] ?? 0;                      // 0..100 (real value, shown in tooltip)
+        const pct  = dow?.[i] ?? 0;                      // real value, shown in tooltip
         const on   = pct > 0;
         const frac = pct / peak;                         // 0..1 relative to the busiest day
-        const op   = on ? 0.14 + 0.78 * frac : 0;        // faint floor → strong at the peak
+        const op   = on ? 0.12 + 0.85 * Math.pow(frac, 2.2) : 0;   // steep: peaks dominate, rest recede
         return (
           <span key={i} title={`${label}: ${pct}%`}
             style={{
