@@ -142,7 +142,13 @@ export function getConsent(sessionId) { return sess(sessionId).consent; }
 export function setConsent(sessionId, patch = {}) {
   const s = sess(sessionId);
   if (patch.unpair) {
+    // Disconnect = deletion, not just gating: the plan snapshot, change
+    // history, and pending proposals are all dropped (the privacy policy
+    // promises exactly this).
     s.consent = { paired: false, enabled: false, autoApply: false, updatedAt: new Date().toISOString() };
+    s.plan = null;
+    s.changes = [];
+    s.proposals.clear();
     return;
   }
   const next = {

@@ -33,6 +33,32 @@ const ChangesetArgs = {
 const COURSE_INCLUDE = ["offerings", "patterns", "relationships", "links"];
 const PLAN_INCLUDE   = ["schedule", "semesters", "violations", "nupath", "changes", "proposals"];
 
+// Tool annotations (title + read-only/destructive hints) — required by the
+// Anthropic directory review and used by clients to gate confirmations.
+// openWorldHint is false everywhere: the tools act on a closed domain
+// (one catalog, one plan).
+const RO = { readOnlyHint: true, destructiveHint: false, openWorldHint: false };
+const RW = { readOnlyHint: false, destructiveHint: false, openWorldHint: false };
+const TOOL_ANNOTATIONS = {
+  request_pairing:     { title: "Link to NU Map",                 ...RW },
+  search_courses:      { title: "Search courses",                 ...RO },
+  get_course:          { title: "Get course details",             ...RO },
+  get_offered_in:      { title: "Get offering history",           ...RO },
+  list_programs:       { title: "List degree programs",           ...RO },
+  get_program:         { title: "Get program requirements",       ...RO },
+  audit_requirements:  { title: "Audit degree requirements",      ...RO },
+  get_plan:            { title: "Get the live plan",              ...RO },
+  list_plans:          { title: "List saved plans",               ...RO },
+  get_plan_contents:   { title: "Read a saved plan",              ...RO },
+  get_nupath_coverage: { title: "Get NUPath coverage",            ...RO },
+  check_prereqs:       { title: "Check prerequisites",            ...RO },
+  validate_changeset:  { title: "Dry-run plan changes",           ...RO },
+  propose_changes:     { title: "Propose plan changes (user reviews)", ...RW },
+  apply_changes:       { title: "Apply plan changes directly",    readOnlyHint: false, destructiveHint: true, openWorldHint: false },
+  ui_command:          { title: "Nudge the NU Map UI",            ...RW },
+  get_meta:            { title: "Get data freshness & capabilities", ...RO },
+};
+
 /**
  * Environment-agnostic McpServer factory. The session state store and the
  * server→browser channel are INJECTED so the same tool definitions run on
@@ -449,6 +475,15 @@ export function createServer({ query, sessionId, state, channel }) {
     {},
     async () => respond(buildMeta())
   );
+
+  // Attach annotations post-registration. Reads the SDK's registered-tool
+  // records directly (the 5-arg tool() overload would mean rewriting every
+  // registration); test/unit.test.mjs verifies the annotations actually
+  // surface through tools/list, so an SDK internals change fails loudly.
+  for (const [name, annotations] of Object.entries(TOOL_ANNOTATIONS)) {
+    const reg = server._registeredTools?.[name];
+    if (reg) reg.annotations = annotations;
+  }
 
   return server;
 }

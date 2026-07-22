@@ -241,6 +241,24 @@ test("planState: unpair resets everything; kill switch pauses without unpairing"
   );
 });
 
+test("every tool surfaces a title and read-only/destructive annotations", async () => {
+  const { createServer } = await import("../src/server.js");
+  const stubQuery = { meta: {}, getSources: () => [] };
+  const server = createServer({ query: stubQuery, sessionId: "ann-test", state: planState, channel: { broadcast() {}, clientCount: () => 0 } });
+  const tools = server._registeredTools;
+  const names = Object.keys(tools);
+  assert.ok(names.length >= 17, `expected ≥17 tools, got ${names.length}`);
+  for (const name of names) {
+    const ann = tools[name].annotations;
+    assert.ok(ann?.title, `${name} missing annotations.title`);
+    assert.ok(typeof ann.readOnlyHint === "boolean", `${name} missing readOnlyHint`);
+    assert.ok(typeof ann.destructiveHint === "boolean", `${name} missing destructiveHint`);
+  }
+  // The one destructive-capable tool is apply_changes (DELETE_PLAN)
+  assert.equal(tools.apply_changes.annotations.destructiveHint, true);
+  assert.equal(tools.get_plan.annotations.readOnlyHint, true);
+});
+
 test("planState: plan-contents request resolves or times out", async () => {
   const sid = "unit-test-4";
   const { requestId, promise } = planState.createPlanRequest(sid, 50);

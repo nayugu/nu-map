@@ -175,6 +175,10 @@ export class SessionDO {
       if (seg[0] === "consent") {
         const body = await request.json().catch(() => ({}));
         this.state.setConsent(this.sid, body ?? {});
+        if (body?.unpair) {
+          // Disconnect deletes the durable copy too — nothing outlives the link.
+          await this.ctx.storage.delete("plan").catch(() => {});
+        }
         return json({ ok: true, consent: this.state.getConsent(this.sid) });
       }
 
