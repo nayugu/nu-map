@@ -13,7 +13,7 @@ import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText } from "../context/TranslationContext.jsx";
-import { ClaudeDot, ClaudeSettings, ClaudeConnectModal, ClaudeProposalCard } from "./ClaudePanel.jsx";
+import { ClaudeDot, ClaudeSettings, ClaudeConnectModal, ClaudeProposalCard, ClaudeOAuthModal } from "./ClaudePanel.jsx";
 import dataMeta from "../core/dataMeta.json";
 import YearStepper    from "./YearStepper.jsx";
 import { SemLabel }   from "./SemLabel.jsx";
@@ -1167,6 +1167,7 @@ export default function Header() {
       {/* ── New plan modal ── */}
       <NewPlanModal open={showNewPlanModal} onClose={() => setShowNewPlanModal(false)} />
       <ClaudeConnectModal open={showClaudeConnect} onClose={() => setShowClaudeConnect(false)} />
+      <ClaudeOAuthModal />
       <ClaudeProposalCard />
 
       {/* ── Auto-advance toast ── */}

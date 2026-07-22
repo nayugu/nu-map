@@ -348,6 +348,76 @@ export function ClaudeProposalCard() {
   );
 }
 
+// ── OAuth approval modal ───────────────────────────────────────────
+// Rendered when claude.ai redirected the user here to authorize the
+// connector (?claude_connect=…). One decision, made in the app; approval
+// finishes the OAuth grant and returns the user to Claude.
+
+export function ClaudeOAuthModal() {
+  const { claudeOAuthRequest, resolveClaudeOAuth } = usePlanner();
+  const { t } = useLanguage();
+  const [working, setWorking] = useState(false);
+  const [failed, setFailed]   = useState(false);
+
+  if (!claudeOAuthRequest && !failed) return null;
+
+  const approve = async () => {
+    setWorking(true);
+    const ok = await resolveClaudeOAuth(true);
+    if (!ok) { setFailed(true); setWorking(false); }
+    // on success the page navigates back to Claude
+  };
+
+  return (
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 210,
+      background: "rgba(0,0,0,0.6)",
+      display: "flex", alignItems: "center", justifyContent: "center", padding: 14,
+    }}>
+      <div style={{
+        background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+        borderRadius: 12, maxWidth: 330, width: "100%",
+        padding: "18px 18px 14px", boxShadow: "var(--shadow-modal)",
+        color: "var(--text-2)", display: "flex", flexDirection: "column", gap: 12,
+      }}>
+        <div style={{ fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", gap: 7 }}>
+          <span style={{ width: 8, height: 8, borderRadius: "50%", background: CLAUDE_ORANGE }} />
+          {t("claude.oauth.title")}
+        </div>
+        {failed ? (
+          <div style={{ fontSize: 10.5, color: "var(--error)", lineHeight: 1.6 }}>
+            {t("claude.oauth.error")}
+          </div>
+        ) : (
+          <div style={{ fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 }}>
+            {t("claude.oauth.body")}
+          </div>
+        )}
+        <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
+          <button
+            onClick={() => { setFailed(false); resolveClaudeOAuth(false); }}
+            style={{ fontSize: 11, fontWeight: 700, cursor: "pointer", padding: "5px 14px",
+              background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+              color: "var(--text-4)", borderRadius: 5 }}>
+            {failed ? t("claude.modal.close") : t("claude.oauth.deny")}
+          </button>
+          {!failed && (
+            <button
+              onClick={approve}
+              disabled={working}
+              style={{ fontSize: 11, fontWeight: 700, padding: "5px 14px",
+                cursor: working ? "wait" : "pointer",
+                background: "var(--bg-surface-2)", border: `1px solid ${CLAUDE_ORANGE}`,
+                color: CLAUDE_ORANGE, borderRadius: 5 }}>
+              {working ? "…" : t("claude.oauth.approve")}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Pairing modal ──────────────────────────────────────────────────
 
 export function ClaudeConnectModal({ open, onClose }) {

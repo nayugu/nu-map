@@ -31,10 +31,17 @@ Then:
 Local dev against the local site: `npx wrangler dev --var DATA_ORIGIN:http://localhost:5173`,
 then `MCP_BASE=http://localhost:8787 node ../../mcp-server/test/e2e.mjs`.
 
-> **Still to do before the directory/org submission:** OAuth (the worker is
-> currently unauthenticated — plan data is gated by pairing, but admins and
-> the Anthropic directory review expect OAuth 2.0), a privacy policy URL,
-> and tool annotations.
+**OAuth:** the worker is an OAuth 2.1 authorization server
+(@cloudflare/workers-oauth-provider, PKCE S256 only, dynamic client
+registration). The canonical MCP endpoint for OAuth clients is
+**`https://mcp.numap.app/mcp`** — one URL for every user; the access token
+carries the approved nu-map session. Consent happens **inside numap.app**:
+`/authorize` bounces the user to the app with a pending-grant id, the user
+approves in an in-app modal, and `/authorize/complete` finishes the grant
+(single-use, 10-minute expiry). The legacy pairing-code path
+(`/session/:sid/mcp`) remains for Claude Code and local dev.
+
+Flow test: `MCP_BASE=https://mcp.numap.app node ../../mcp-server/test/oauth-e2e.mjs`
 
 ## translate-proxy
 

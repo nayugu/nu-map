@@ -76,6 +76,32 @@ export function PlannerProvider({ children }) {
     setClaudeAccessEnabledRaw(false);
     setClaudeAutoApplyRaw(false);
   };
+  // OAuth arrival: claude.ai bounced the user here with ?claude_connect=
+  // <pendingId>. The user approves or denies IN THE APP; approval finishes
+  // the grant and sends them back to Claude.
+  const [claudeOAuthRequest, setClaudeOAuthRequest] = useState(() => {
+    try { return new URLSearchParams(window.location.search).get("claude_connect"); }
+    catch { return null; }
+  });
+  const resolveClaudeOAuth = async (approved) => {
+    const pendingId = claudeOAuthRequest;
+    setClaudeOAuthRequest(null);
+    try {
+      const clean = new URL(window.location.href);
+      clean.searchParams.delete("claude_connect");
+      window.history.replaceState({}, "", clean);
+    } catch {}
+    if (!approved || !pendingId) return false;
+    const redirectTo = await aiAssistant?.completeOAuth?.(pendingId);
+    if (redirectTo) {
+      setClaudePairedRaw(true);
+      setClaudeAccessEnabledRaw(true);
+      window.location.href = redirectTo;
+      return true;
+    }
+    return false;
+  };
+
   // Auto-apply is opt-in: while off (default), Claude may only propose
   // changes for review — apply_changes is rejected server-side.
   const [claudeAutoApply, setClaudeAutoApplyRaw] = useState(
@@ -2244,6 +2270,7 @@ export function PlannerProvider({ children }) {
     claudeAccessEnabled, setClaudeAccess, aiAssistantAvailable: !!aiAssistant,
     claudeAutoApply, setClaudeAutoApply,
     claudePaired, confirmClaudePairing, claudeDisconnect,
+    claudeOAuthRequest, resolveClaudeOAuth,
     claudePreview, toggleClaudePreview,
     // Decide the proposal at the head of the queue (FIFO — later
     // changesets may assume earlier ones landed).

@@ -190,6 +190,11 @@ export const strings = {
   "header.settings.claude.auto.title": "Off (default): Claude can only propose changes for your review. On: Claude may apply changes directly (single undo entry).",
 
   // ── Claude integration (settings, dot, pairing modal, proposal card) ──
+  "claude.oauth.title": "Claude is requesting access",
+  "claude.oauth.body": "A Claude conversation wants to connect to this plan. Approving shares this plan with your Claude account and lets it propose changes that you review here first. You can pause or disconnect at any time in settings.",
+  "claude.oauth.approve": "Approve",
+  "claude.oauth.deny": "Deny",
+  "claude.oauth.error": "Could not complete the connection — the request may have expired. Go back to Claude and try connecting again.",
   "claude.connected":       "Connected",
   "claude.reconnecting":    "Reconnecting…",
   "claude.connect":         "Connect Claude…",

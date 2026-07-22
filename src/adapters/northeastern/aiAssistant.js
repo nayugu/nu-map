@@ -206,6 +206,30 @@ export default {
     return false;
   },
 
+  /**
+   * Complete an OAuth authorization that claude.ai started (the user
+   * arrived with ?claude_connect=<pendingId> and approved in the app).
+   * Marks the session linked and returns the URL to send the user back
+   * to Claude — or null on failure.
+   */
+  async completeOAuth(pendingId) {
+    try {
+      const res = await fetch(`${SERVER}/authorize/complete`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ pendingId, sessionId: SESSION_ID }),
+      });
+      const json = await res.json();
+      if (json?.redirectTo) {
+        _consent = { ..._consent, paired: true, enabled: true };
+        saveConsentState();
+        connect();
+        return json.redirectTo;
+      }
+    } catch {}
+    return null;
+  },
+
   /** Sever the link entirely — requires a fresh pairing code to reconnect. */
   disconnect() {
     _consent = { paired: false, enabled: false, autoApply: false };

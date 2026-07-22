@@ -20,6 +20,11 @@ DATA_ORIGIN = "https://numap.app"
 name = "SESSION"
 class_name = "SessionDO"
 
+# OAuth token/client storage for @cloudflare/workers-oauth-provider
+[[kv_namespaces]]
+binding = "OAUTH_KV"
+id = "4a12f332a27146c9996769ebc5e6f837"
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["SessionDO"]
