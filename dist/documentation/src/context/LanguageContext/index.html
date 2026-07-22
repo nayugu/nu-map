@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LanguageContext — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/context/LanguageContext">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../../">nu-map/documentation</a><span class="sep"> / </span>
+      <a href="../../../">src/</a><span class="sep"> / </span>
+      <a href="../../">context/</a><span class="sep"> / </span>
+      <strong>LanguageContext.jsx</strong>
+    </div>
+
+    <h1>LanguageContext.jsx <span class="badge purple">i18n</span></h1>
+    <p class="lead">Cross-cutting i18n layer. Loads all locale files at build time, exposes a <code>t(key, vars)</code> translation function, and persists the user's language choice to <code>localStorage</code>. Independent of the hexagonal adapter system — but anchored to it at one point: <code>IInstitution.defaultLocale</code> sets the language the app opens with.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">context/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Hook</div><div class="nb-value"><code>const { t, locale, setLocale, locales } = useLanguage()</code></div></div>
+      <div class="nb-group"><div class="nb-label">Locale files</div><div class="nb-value"><code>src/locales/</code> — ar, en, es, fr, hi, ja, zh (eager Vite glob)</div></div>
+      <div class="nb-group"><div class="nb-label">Storage key</div><div class="nb-value"><code>{storagePrefix}-locale</code> in localStorage</div></div>
+      <div class="nb-group"><div class="nb-label">Adapter touchpoint</div><div class="nb-value"><code>IInstitution.defaultLocale</code> — the locale to open with if no saved preference</div></div>
+    </div>
+
+    <h2>How translation works</h2>
+    <p>All 7 locale files are loaded eagerly at build time via <code>import.meta.glob("../locales/*.js", { eager: true })</code>. Each file exports <code>{ meta, strings, default }</code> where <code>strings</code> is a flat key-value map.</p>
+
+    <p>The <code>t(key, vars)</code> function resolves a key against the active locale, falls back to English if the key is missing, and then falls back to the raw key string if English also doesn't have it. Named interpolation uses <code>{variableName}</code> placeholders:</p>
+
+    <pre><code><span class="cmt">// inside any component</span>
+import { useLanguage } from "../context/LanguageContext.jsx";
+
+function MyComponent() {
+  const { t } = useLanguage();
+
+  return (
+    &lt;div&gt;
+      {t("bank.title")}                       <span class="cmt">// → "COURSE BANK" (en) or "课程库" (zh)</span>
+      {t("sem.sh.total", { count: 128 })}     <span class="cmt">// → "128 SH total"</span>
+      {t("header.credits.placed", { n: 64 })} <span class="cmt">// → "64 SH placed"</span>
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+    <h2>What useLanguage() returns</h2>
+    <div class="state-block"><div class="sb-name">t</div><div class="sb-type">function</div><div class="sb-desc"><code>t(key: string, vars?: Record&lt;string, string|number&gt;) → string</code>. Translate a key. Falls back to English, then to the raw key. Performs <code>{name}</code> interpolation.</div></div>
+    <div class="state-block"><div class="sb-name">locale</div><div class="sb-type">string</div><div class="sb-desc">Current locale code, e.g. <code>"en"</code>, <code>"zh"</code>, <code>"ar"</code>.</div></div>
+    <div class="state-block"><div class="sb-name">setLocale</div><div class="sb-type">function</div><div class="sb-desc"><code>setLocale(code: string) → void</code>. Switch to a different locale. Persists to localStorage. React re-renders all components that call useLanguage().</div></div>
+    <div class="state-block"><div class="sb-name">locales</div><div class="sb-type">array</div><div class="sb-desc">Array of all available locale metadata objects: <code>{ code, name, nativeName, dir }</code>. Sorted: English first, then alphabetical by nativeName. Used by Header to populate the language picker.</div></div>
+
+    <h2>Locale file format</h2>
+    <p>Each file in <code>src/locales/</code> must export:</p>
+    <pre><code><span class="cmt">// src/locales/en.js (example)</span>
+export const meta = {
+  code:       "en",
+  name:       "English",
+  nativeName: "English",
+  dir:        "ltr",
+};
+
+export const strings = {
+  "bank.title":            "COURSE BANK",
+  "bank.search.placeholder": "Search courses…",
+  "sem.sh.total":          "{count} SH total",
+  <span class="cmt">// …</span>
+};
+
+export default strings;</code></pre>
+
+    <h2>Institution adapter touchpoint</h2>
+    <p>LanguageContext reads one field from the IInstitution adapter: <code>institution.defaultLocale</code>. This determines the language the app opens with on first visit (before the user has made a choice). If the field is absent or null, <code>"en"</code> is used.</p>
+    <pre><code><span class="cmt">// src/adapters/northeastern/institution.js</span>
+export default {
+  id:            "northeastern",
+  defaultLocale: "en",  <span class="cmt">// &lt;-- what LanguageContext reads</span>
+  <span class="cmt">// …</span>
+};</code></pre>
+
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Adding a new language:</strong> Create <code>src/locales/xx.js</code> following the format above. LanguageContext picks it up automatically via the Vite glob — no code changes needed. The language picker in Header will show the new option immediately.</div></div>
+
+    <h2>What's not translated</h2>
+    <p>LanguageContext translates <strong>UI chrome</strong> — labels, buttons, placeholders, aria text. It does not translate course titles, descriptions, or requirement names, which come from the course catalog and major requirement JSONs.</p>
+
+  </main>
+</div>
+<script src="../../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
