@@ -15,12 +15,14 @@
  * Output 2: public/northeastern/term-details.json  (COMPLETED terms only)
  *   {
  *     "CS3500": {
- *       "202610": { sections, cap, enr, formats[], campuses[], days{pattern:count}, linked },
+ *       "202610": { sections, cap, enr, formats[], campuses[], days{pattern:{n,e}}, linked },
  *       ...
  *     }
  *   }
  *   Course-level aggregate across the course's sections: enrollment (cap/enr → fill rate),
- *   instructional formats, campuses, and day-pattern frequency ({"MWF":9,"TF":3,"async":2}).
+ *   instructional formats, campuses, and day-pattern distribution. Each `days` value stores the
+ *   raw facts per pattern — n = section count, e = enrolled headcount ({"MWF":{n:9,e:420},...}) —
+ *   so the derive step can weight by enrolment (with a section-count fallback) without re-scraping.
  *   Recorded ONLY for terms whose end date has passed, so the numbers are final (nu-map is
  *   stable-only; a running term's seats churn hourly). Waitlist is intentionally omitted —
  *   Northeastern does not expose Banner waitlist capacity/counts (always 0).
@@ -241,9 +243,12 @@ async function fetchTermOfferings(termCode) {
       if (s.campusDescription)              agg.campuses.add(s.campusDescription.trim());
       if (s.isSectionLinked)                agg.linked = true;
 
-      // Tally each section once, under its PRIMARY meeting's day pattern (the first meeting
-      // is the main class; later ones are recitations/labs that would otherwise dominate).
-      // Sections with no fixed days (fully async/online) are counted under "async".
+      // Tally each section under its PRIMARY meeting's day pattern (the first meeting is the main
+      // class; later ones are recitations/labs that would otherwise dominate). Store BOTH the
+      // section count (n) and the enrolled headcount (e) per pattern — the raw facts — so the
+      // presentation layer (derive) can weight by enrolment ("where students actually are") yet
+      // fall back to section counts when enrolment is missing, all without a re-scrape. Sections
+      // with no fixed days (fully async/online) fall under "async".
       let primary = "";
       for (const mf of s.meetingsFaculty ?? []) {
         const p = dayPattern(mf.meetingTime);
@@ -252,7 +257,9 @@ async function fetchTermOfferings(termCode) {
         if (d && (!termEnd || d > termEnd)) termEnd = d;
       }
       const key = primary || "async";
-      agg.days[key] = (agg.days[key] ?? 0) + 1;
+      const slot = (agg.days[key] ??= { n: 0, e: 0 });
+      slot.n += 1;                     // sections on this pattern
+      slot.e += num(s.enrollment);     // enrolled students on this pattern
 
       detail.set(id, agg);
     }

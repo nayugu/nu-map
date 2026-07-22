@@ -56,8 +56,8 @@ for (const [courseId, byTerm] of Object.entries(details)) {
   const formats  = new Set();
   const campuses = new Set();
   const weekday  = { M: 0, T: 0, W: 0, R: 0, F: 0 };  // R = Thursday
-  const patterns = {};                                // primary day-pattern → section count
-  let totalSec = 0;
+  const patterns = {};                                // primary day-pattern → enrolled headcount
+  let totalWt = 0;                                    // total enrolled across all patterns
   let lab = false;
 
   for (const [termCode, d] of Object.entries(byTerm)) {
@@ -68,29 +68,38 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     }
     for (const f of d.formats ?? [])  formats.add(f);
     for (const c of d.campuses ?? []) campuses.add(c);
-    for (const [pattern, n] of Object.entries(d.days ?? {})) {
-      totalSec += n;                                   // includes async / weekend sections
-      patterns[pattern] = (patterns[pattern] ?? 0) + n;
-      for (const ch of pattern) if (ch in weekday) weekday[ch] += n;
+    // Each `days` value is {n: sections, e: enrolled} (see scrape-availability); a legacy plain
+    // number is treated as a section count. Weight by enrolment when this term has any (where
+    // students actually are), otherwise fall back to section counts so a term with missing/zero
+    // enrolment still contributes its patterns instead of disappearing.
+    const daysObj = d.days ?? {};
+    const wOf = v => (typeof v === "number" ? { n: v, e: 0 } : { n: v?.n ?? 0, e: v?.e ?? 0 });
+    const useEnr = Object.values(daysObj).reduce((s, v) => s + wOf(v).e, 0) > 0;
+    for (const [pattern, v] of Object.entries(daysObj)) {
+      const w = wOf(v);
+      const wt = useEnr ? w.e : w.n;                   // includes async / weekend
+      totalWt += wt;
+      patterns[pattern] = (patterns[pattern] ?? 0) + wt;
+      for (const ch of pattern) if (ch in weekday) weekday[ch] += wt;
     }
     if (d.linked) lab = true;
   }
 
-  // Per-weekday frequency: % of all sections that meet on each weekday (M,T,W,Th,F). Captures
+  // Per-weekday frequency: % of enrolment that meets on each weekday (M,T,W,Th,F). Captures
   // "mostly MWR, occasionally TF" as a gradient rather than a single binary pattern. Async /
-  // weekend sections count toward the total, so a heavily-online course reads as all-faint.
-  const dow = totalSec > 0
-    ? ["M", "T", "W", "R", "F"].map(k => Math.round((weekday[k] / totalSec) * 100))
+  // weekend enrolment counts toward the total, so a heavily-online course reads as all-faint.
+  const dow = totalWt > 0
+    ? ["M", "T", "W", "R", "F"].map(k => Math.round((weekday[k] / totalWt) * 100))
     : null;
 
-  // Meeting-pattern distribution: [pattern, % of sections] for the top patterns, most common
+  // Meeting-pattern distribution: [pattern, % of enrolment] for the top patterns, most common
   // first — powers the schedule hover chart. Capped to the top 6; the UI shows the remainder as
   // "other". "async" is its own pattern here (no fixed days).
-  const pat = totalSec > 0
+  const pat = totalWt > 0
     ? Object.entries(patterns)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 6)
-        .map(([p, c]) => [p, Math.round((c / totalSec) * 100)])
+        .map(([p, c]) => [p, Math.round((c / totalWt) * 100)])
     : null;
 
   summary[courseId] = {
