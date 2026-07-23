@@ -422,7 +422,7 @@ export function ClaudeOAuthModal() {
 
 export function ClaudeConnectModal({ open, onClose }) {
   const aiAssistant = usePort(IAIAssistant);
-  const { confirmClaudePairing } = usePlanner();
+  const { confirmClaudePairing, claudeDisconnect } = usePlanner();
   const { t } = useLanguage();
 
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -543,6 +543,19 @@ export function ClaudeConnectModal({ open, onClose }) {
       <div style={body}>{t("claude.modal.adv.hint")}</div>
       <CopyRow what="url" text={url} />
       {codeEntry}
+      {/* Universal escape hatch: when any side is stuck or out of sync,
+          reset to a fresh identity — every stale connection anywhere
+          loses access, and the user starts the normal flow over. */}
+      <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+        <div style={small}>{t("claude.modal.reset.hint")}</div>
+        <button
+          onClick={() => claudeDisconnect()}
+          style={{ alignSelf: "flex-start", fontSize: 10, fontWeight: 700, cursor: "pointer",
+            background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+            color: "var(--error)", borderRadius: 5, padding: "4px 12px" }}>
+          {t("claude.modal.reset")}
+        </button>
+      </div>
     </div>
   );
 

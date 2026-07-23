@@ -230,16 +230,30 @@ export default {
     return null;
   },
 
-  /** Sever the link entirely — requires a fresh pairing code to reconnect. */
+  /**
+   * Sever the link and reset to a completely fresh slate. Tells the
+   * server to unpair and delete its data, discards the local consent
+   * AND the session identity, then reloads. Discarding the identity is
+   * what makes this a universal reset: any Claude client still holding
+   * old credentials (a stale Claude Code entry, an old OAuth grant)
+   * points at the abandoned identity and simply loses access — no
+   * cleanup needed on the other side, reconnecting follows the normal
+   * instructions from scratch.
+   */
   disconnect() {
     _consent = { paired: false, enabled: false, autoApply: false };
-    saveConsentState();
     disconnectSSE(); // close the channel; the session DO can idle out
     fetch(`${SERVER}/consent/${SESSION_ID}`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
       body:    JSON.stringify({ unpair: true }),
-    }).catch(() => {});
+    }).catch(() => {}).finally(() => {
+      try {
+        localStorage.removeItem(CONSENT_KEY);
+        localStorage.removeItem("nu-map-mcp-session");
+      } catch {}
+      window.location.reload();
+    });
   },
 
   /**
