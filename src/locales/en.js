@@ -191,10 +191,13 @@ export const strings = {
 
   // ── Claude integration (settings, dot, pairing modal, proposal card) ──
   "claude.oauth.title": "Claude is requesting access",
-  "claude.oauth.body": "A Claude conversation wants to connect to this plan. Approving shares this plan with your Claude account and lets it propose changes that you review here first. You can pause or disconnect at any time in settings.",
+  "claude.oauth.body": "A Claude conversation wants to connect to NU Map. Choose what it can access — you can pause or disconnect at any time in settings.",
   "claude.oauth.approve": "Approve",
   "claude.oauth.deny": "Deny",
-  "claude.oauth.catalogOnly": "Connect without sharing my plan",
+  "claude.oauth.full.title": "Share my plan",
+  "claude.oauth.full.desc": "Claude sees this plan and can propose changes — you review each one here first.",
+  "claude.oauth.catalog.title": "Catalog only",
+  "claude.oauth.catalog.desc": "Claude can search courses and programs. Your plan stays private.",
   "claude.oauth.error": "Could not complete the connection — the request may have expired. Go back to Claude and try connecting again.",
   "claude.connected":       "Connected",
   "claude.reconnecting":    "Reconnecting…",

@@ -385,45 +385,67 @@ export function ClaudeOAuthModal() {
           {t("claude.oauth.title")}
         </div>
         {failed ? (
-          <div style={{ fontSize: 10.5, color: "var(--error)", lineHeight: 1.6 }}>
-            {t("claude.oauth.error")}
-          </div>
+          <>
+            <div style={{ fontSize: 10.5, color: "var(--error)", lineHeight: 1.6 }}>
+              {t("claude.oauth.error")}
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <button
+                onClick={() => { setFailed(false); resolveClaudeOAuth(false); }}
+                style={{ fontSize: 11, fontWeight: 700, cursor: "pointer", padding: "5px 14px",
+                  background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+                  color: "var(--text-4)", borderRadius: 5 }}>
+                {t("claude.modal.close")}
+              </button>
+            </div>
+          </>
         ) : (
-          <div style={{ fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 }}>
-            {t("claude.oauth.body")}
-          </div>
-        )}
-        <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
-          <button
-            onClick={() => { setFailed(false); resolveClaudeOAuth(false); }}
-            style={{ fontSize: 11, fontWeight: 700, cursor: "pointer", padding: "5px 14px",
-              background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
-              color: "var(--text-4)", borderRadius: 5 }}>
-            {failed ? t("claude.modal.close") : t("claude.oauth.deny")}
-          </button>
-          {!failed && (
+          <>
+            <div style={{ fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 }}>
+              {t("claude.oauth.body")}
+            </div>
+
+            {/* Access choices — two self-explaining cards, full share first */}
             <button
               onClick={() => approve(true)}
               disabled={working}
-              style={{ fontSize: 11, fontWeight: 700, padding: "5px 14px",
+              style={{ display: "block", width: "100%", textAlign: "start",
+                boxSizing: "border-box", padding: "9px 12px",
                 cursor: working ? "wait" : "pointer",
-                background: "var(--bg-surface-2)", border: `1px solid ${CLAUDE_ORANGE}`,
-                color: CLAUDE_ORANGE, borderRadius: 5 }}>
-              {working ? "…" : t("claude.oauth.approve")}
+                background: "var(--bg-surface-2)",
+                border: `1.5px solid ${CLAUDE_ORANGE}`, borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: CLAUDE_ORANGE, marginBottom: 2 }}>
+                {working ? "…" : t("claude.oauth.full.title")}
+              </div>
+              <div style={{ fontSize: 9.5, color: "var(--text-4)", lineHeight: 1.5 }}>
+                {t("claude.oauth.full.desc")}
+              </div>
             </button>
-          )}
-        </div>
-        {!failed && (
-          <button
-            onClick={() => approve(false)}
-            disabled={working}
-            style={{ fontSize: 11, fontWeight: 700, width: "100%",
-              padding: "5px 14px", boxSizing: "border-box",
-              cursor: working ? "wait" : "pointer",
-              background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
-              color: "var(--text-4)", borderRadius: 5 }}>
-            {t("claude.oauth.catalogOnly")}
-          </button>
+            <button
+              onClick={() => approve(false)}
+              disabled={working}
+              style={{ display: "block", width: "100%", textAlign: "start",
+                boxSizing: "border-box", padding: "9px 12px", marginTop: -4,
+                cursor: working ? "wait" : "pointer",
+                background: "var(--bg-surface-2)",
+                border: "1.5px solid var(--border-2)", borderRadius: 8 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-2)", marginBottom: 2 }}>
+                {working ? "…" : t("claude.oauth.catalog.title")}
+              </div>
+              <div style={{ fontSize: 9.5, color: "var(--text-4)", lineHeight: 1.5 }}>
+                {t("claude.oauth.catalog.desc")}
+              </div>
+            </button>
+
+            <button
+              onClick={() => { setFailed(false); resolveClaudeOAuth(false); }}
+              disabled={working}
+              style={{ fontSize: 10.5, fontWeight: 700, alignSelf: "center",
+                cursor: working ? "wait" : "pointer", padding: "3px 10px",
+                background: "none", border: "none", color: "var(--text-5)" }}>
+              {t("claude.oauth.deny")}
+            </button>
+          </>
         )}
       </div>
     </div>
