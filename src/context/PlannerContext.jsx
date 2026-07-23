@@ -2158,11 +2158,7 @@ export function PlannerProvider({ children }) {
   // (shared adapter), so what the user previews is exactly what was
   // validated. The grid renders the simulated placements; the diff sets
   // drive the orange ghost styling on affected cards.
-  const toggleClaudePreview = (proposal) => {
-    if (!proposal || claudePreview?.proposalId === proposal.proposalId) {
-      setClaudePreview(null);
-      return;
-    }
+  const computeClaudePreview = (proposal) => {
     const planSnapshot = {
       placements, placedOut: [...placedOut], substitutions,
       workExperience: specialTermPl, shOverrides, offeredOverrides, currentSemId,
@@ -2179,9 +2175,32 @@ export function PlannerProvider({ children }) {
     setClaudePreview({ proposalId: proposal.proposalId, placements: next.placements, added, moved, removed });
   };
 
-  // Any real plan mutation invalidates the preview (it was computed
-  // against the previous state).
-  useEffect(() => { setClaudePreview(null); }, [placements, specialTermPl]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Manual toggle from the card. A user "hide" is remembered so the
+  // auto-preview effect doesn't immediately re-show it.
+  const [previewDismissed, setPreviewDismissed] = useState(null); // proposalId the user hid
+  const toggleClaudePreview = (proposal) => {
+    if (!proposal) { setClaudePreview(null); return; }
+    if (claudePreview?.proposalId === proposal.proposalId) {
+      setClaudePreview(null);
+      setPreviewDismissed(proposal.proposalId);
+    } else {
+      setPreviewDismissed(null);
+      computeClaudePreview(proposal);
+    }
+  };
+
+  // Single source of truth for the preview: whenever the head proposal or
+  // the real plan changes, recompute the head proposal's preview against
+  // current placements (so it's shown by default and stays accurate through
+  // edits), or clear it when there's no proposal or the user hid this one.
+  // One effect avoids an ordering race between "auto-show" and
+  // "clear-on-mutation" when approving 1 of N changes both at once.
+  const headProposalId = mcpProposals[0]?.proposalId ?? null;
+  useEffect(() => {
+    const head = mcpProposals[0];
+    if (head && previewDismissed !== head.proposalId) computeClaudePreview(head);
+    else setClaudePreview(null);
+  }, [headProposalId, placements, specialTermPl, previewDismissed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Effect: AI assistant — handle incoming MCP events ────────────
   // Fresh-closure ref: the effect subscribes once, but plan reads must see
