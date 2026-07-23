@@ -19,7 +19,7 @@ export const SUBJECT_PALETTE = [
   "#a78bfa","#ff69b4","#3ee8dc","#ff9365","#67e8f9",
   "#34d399","#f5d040","#85c0ff","#ff8dc7","#2dd4bf",
   "#ffb27d","#c084fc","#86efac","#fb7185","#ffd47e",
-  "#6bcb77","#22d3ee","#e879f9","#f87171","#7b68ee",
+  "#6bcb77","#22d3ee","#e879f9","#ff6b6b","#7b68ee",
 ];
 
 // Row background tokens live in src/core/themes.js (var(--row-*)).
