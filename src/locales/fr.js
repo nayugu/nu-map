@@ -269,7 +269,7 @@ export const strings = {
   "claude.modal.web.3": "Claude vous ramènera ici. Appuyez sur Approuver et c est terminé.",
   "claude.modal.web.notlisted": "NU Map n apparaît pas ? Northeastern ne l a pas encore activé.",
   "claude.modal.code.1": "Exécutez ceci dans votre terminal :",
-  "claude.modal.code.2": "Dans une discussion, tapez /mcp, sélectionnez nu-map, puis Authenticate.",
+  "claude.modal.code.2": "Dans une session Claude Code au terminal, tapez /mcp, sélectionnez nu-map, puis Authenticate.",
   "claude.modal.code.3": "Votre navigateur revient ici. Appuyez sur Approuver, c est terminé.",
   "claude.modal.adv.title": "Options développeur",
   "claude.modal.dev.2": "Demandez à Claude de se connecter à votre NU Map. Il affichera un code à 6 caractères.",

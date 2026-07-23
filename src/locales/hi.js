@@ -269,7 +269,7 @@ export const strings = {
   "claude.modal.web.3": "Claude आपको यहीं वापस लाएगा। Approve दबाएँ, बस हो गया।",
   "claude.modal.web.notlisted": "NU Map नहीं दिख रहा? Northeastern ने इसे अभी चालू नहीं किया है।",
   "claude.modal.code.1": "टर्मिनल में यह चलाएँ:",
-  "claude.modal.code.2": "चैट में /mcp लिखें, nu-map चुनें, फिर Authenticate चुनें।",
+  "claude.modal.code.2": "टर्मिनल में Claude Code सत्र के अंदर /mcp लिखें, nu-map चुनें, फिर Authenticate चुनें।",
   "claude.modal.code.3": "ब्राउज़र यहीं वापस आएगा। Approve दबाएँ, बस हो गया।",
   "claude.modal.adv.title": "डेवलपर विकल्प",
   "claude.modal.dev.2": "Claude से NU Map से जुड़ने को कहें। वह 6 अक्षरों का कोड दिखाएगा।",

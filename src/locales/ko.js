@@ -269,7 +269,7 @@ export const strings = {
   "claude.modal.web.3": "Claude가 여기로 다시 데려옵니다. 승인을 누르면 끝입니다.",
   "claude.modal.web.notlisted": "NU Map이 없나요? Northeastern에서 아직 켜지 않은 것입니다.",
   "claude.modal.code.1": "터미널에서 다음을 실행하세요:",
-  "claude.modal.code.2": "채팅에서 /mcp를 입력하고 nu-map을 선택한 뒤 Authenticate를 고르세요.",
+  "claude.modal.code.2": "터미널의 Claude Code 세션에서 /mcp를 입력하고 nu-map을 선택한 뒤 Authenticate를 고르세요.",
   "claude.modal.code.3": "브라우저가 이곳으로 돌아오면 승인을 누르세요. 끝입니다.",
   "claude.modal.adv.title": "개발자 옵션",
   "claude.modal.dev.2": "Claude에게 NU Map 연결을 요청하세요. 6자리 코드를 보여줍니다.",

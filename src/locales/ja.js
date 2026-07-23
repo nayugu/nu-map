@@ -270,7 +270,7 @@ export const strings = {
   "claude.modal.web.3": "Claude がここへ戻してくれます。「承認」を押せば完了です。",
   "claude.modal.web.notlisted": "NU Map が見つからない場合、Northeastern がまだ有効にしていません。",
   "claude.modal.code.1": "ターミナルで次を実行します:",
-  "claude.modal.code.2": "チャットで /mcp と入力し、nu-map を選んで Authenticate を選択します。",
+  "claude.modal.code.2": "ターミナルの Claude Code セッションで /mcp と入力し、nu-map を選んで Authenticate を選択します。",
   "claude.modal.code.3": "ブラウザがここに戻るので「承認」を押せば完了です。",
   "claude.modal.adv.title": "開発者向けオプション",
   "claude.modal.dev.2": "Claude に NU Map への接続を頼みます。6 文字のコードが表示されます。",

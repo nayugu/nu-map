@@ -268,7 +268,7 @@ export const strings = {
   "claude.modal.web.3": "Claude 会把你带回这里。点击批准即完成。",
   "claude.modal.web.notlisted": "找不到 NU Map？Northeastern 尚未开启它。",
   "claude.modal.code.1": "在终端中运行：",
-  "claude.modal.code.2": "在对话中输入 /mcp，选择 nu-map，然后选择 Authenticate。",
+  "claude.modal.code.2": "在终端的 Claude Code 会话中输入 /mcp，选择 nu-map，然后选择 Authenticate。",
   "claude.modal.code.3": "浏览器会回到这里，点击批准即可完成。",
   "claude.modal.adv.title": "开发者选项",
   "claude.modal.dev.2": "让 Claude 连接你的 NU Map。它会显示一个 6 位配对码。",

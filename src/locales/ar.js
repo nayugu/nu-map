@@ -268,7 +268,7 @@ export const strings = {
   "claude.modal.web.3": "سيعيدك Claude إلى هنا. اضغط موافقة وانتهيت.",
   "claude.modal.web.notlisted": "لا يظهر NU Map؟ لم تفعّله Northeastern بعد.",
   "claude.modal.code.1": "شغّل هذا في الطرفية:",
-  "claude.modal.code.2": "في محادثة، اكتب /mcp واختر nu-map ثم Authenticate.",
+  "claude.modal.code.2": "في جلسة Claude Code داخل الطرفية، اكتب /mcp واختر nu-map ثم Authenticate.",
   "claude.modal.code.3": "سيعود المتصفح إلى هنا؛ اضغط موافقة وانتهيت.",
   "claude.modal.adv.title": "خيارات المطورين",
   "claude.modal.dev.2": "اطلب من Claude الاتصال بـ NU Map. سيعرض رمزًا من 6 أحرف.",
