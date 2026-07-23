@@ -138,14 +138,19 @@ export function createPlannerQuery(deps) {
 
   function searchCourses(opts = {}) {
     const {
-      query, subject, attributes, minSH, maxSH, term,
-      level, college, campus, format, meetsOn, limit = 20,
+      query, anyOf, subject, attributes, minSH, maxSH, term,
+      level, college, campus, format, meetsOn,
+      minNumber, maxNumber, limit = 20,
     } = opts;
 
     let results = courses;
 
     if (subject)
       results = results.filter(c => c.subject === subject.toUpperCase().trim());
+    if (minNumber != null)
+      results = results.filter(c => parseInt(c.number, 10) >= minNumber);
+    if (maxNumber != null)
+      results = results.filter(c => parseInt(c.number, 10) <= maxNumber);
     if (attributes?.length)
       results = results.filter(c => attributes.every(a => c.attributes.includes(a)));
     if (minSH != null) results = results.filter(c => c.sh >= minSH);
@@ -171,17 +176,25 @@ export function createPlannerQuery(deps) {
       });
     }
 
-    if (query) {
-      const q = query.toLowerCase();
+    // Free-text scoring. `query` is a single term; `anyOf` is OR across
+    // several terms (synonym fan-out for concept searches like "building"
+    // / "construction" / "architecture") — a course keeps its best score.
+    const textTerms = anyOf?.length ? anyOf : query ? [query] : null;
+    if (textTerms) {
+      const qs = textTerms.map(t => String(t).toLowerCase()).filter(Boolean);
       results = results
         .map(c => {
           const idL = c.id.toLowerCase(), codeL = c.code.toLowerCase(), titleL = c.title.toLowerCase();
           let score = 0;
-          if (idL === q || codeL === q)                          score = 4;
-          else if (idL.startsWith(q) || codeL.startsWith(q))     score = 3;
-          else if (titleL.startsWith(q))                         score = 2;
-          else if (idL.includes(q) || codeL.includes(q) ||
-                   titleL.includes(q) || c.desc.toLowerCase().includes(q)) score = 1;
+          for (const q of qs) {
+            let s = 0;
+            if (idL === q || codeL === q)                          s = 4;
+            else if (idL.startsWith(q) || codeL.startsWith(q))     s = 3;
+            else if (titleL.startsWith(q))                         s = 2;
+            else if (idL.includes(q) || codeL.includes(q) ||
+                     titleL.includes(q) || c.desc.toLowerCase().includes(q)) s = 1;
+            if (s > score) score = s;
+          }
           return score > 0 ? { c, score } : null;
         })
         .filter(Boolean)

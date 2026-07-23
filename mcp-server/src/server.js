@@ -90,6 +90,8 @@ export function createServer({ query, sessionId, state, channel }) {
       "- The complete action reference (arguments + restrictions) is in get_meta capabilities.actionDocs. validate_changes dry-runs a changeset without touching anything — use it when unsure.",
       "- Never guess ids. Verify courseIds via search_courses/get_course and programIds via list_programs before composing a changeset.",
       "",
+      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. The full catalog lives server-side; you never need to fetch external pages.",
+      "",
       "Restrictions that most often reject changesets:",
       "- SET_SH_OVERRIDE: most courses have FIXED credits and cannot be overridden. Only valid when get_course shows a credit range (shMin < shMax).",
       "- Waiver vs equivalence: ADD_PLACED_OUT waives a course (satisfies prereqs, NO credit); ADD_SUBSTITUTION declares one real course fills another's requirement slot. They are not interchangeable.",
@@ -235,10 +237,14 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "search_courses",
-    "Search the course catalog. Returns compact records; use get_course for full detail. All filters combine (AND).",
+    "Search the course catalog. Returns compact records; use get_course for full detail. All filters combine (AND); anyOf is OR across its terms. For broad surveys ('all upper-level MATH', 'anything about sustainability') combine filters with limit up to 200, then get_course on the shortlist.",
     {
-      query:      z.string().optional().describe("Free-text search across code, title, description"),
+      query:      z.string().optional().describe("Free-text search across code, title, description (single term)"),
+      anyOf:      z.array(z.string()).optional()
+        .describe("OR search: match courses containing ANY of these terms — use synonym fan-out for concept searches, e.g. ['building','construction','architecture']. Overrides query."),
       subject:    z.string().optional().describe("Subject code, e.g. 'CS'"),
+      minNumber:  z.number().int().optional().describe("Minimum course number, e.g. 3000 for upper-level"),
+      maxNumber:  z.number().int().optional().describe("Maximum course number"),
       attributes: z.array(z.string()).optional().describe("NUPath codes that must ALL be present, e.g. ['ND','FQ']"),
       level:      z.enum(["undergrad", "grad"]).optional().describe("Course level (grad = 5000+)"),
       college:    z.string().optional().describe("Banner college code, e.g. 'CS' — see subject-colleges"),
