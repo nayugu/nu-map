@@ -200,10 +200,26 @@ export function PlannerProvider({ children }) {
   // when the plan has changed underneath the proposal.
   const [mcpProposals, setMcpProposals] = useState([]);
 
-  // Ghost preview of the proposal under review: simulated placements plus
-  // the diff sets that drive the orange ghost styling on course cards.
-  // null = no preview. Cleared automatically on any real plan mutation.
+  // Ghost preview of the proposal under review: the full simulated plan
+  // plus diff sets that drive the orange styling on changed elements.
+  // null = no preview.
   const [claudePreview, setClaudePreview] = useState(null);
+
+  // While a preview is active, ALL derivations below (credits, audits,
+  // violation checks, work-term maps) compute from the simulated plan so
+  // every surface renders the proposed world — placements on the grid,
+  // programs in the grad panel, totals in the header. Real state vars keep
+  // powering persistence, sync, and undo untouched.
+  const pv              = claudePreview?.plan ?? null;
+  const pvPlacements    = pv?.placements     ?? placements;
+  const pvSpecialTerms  = pv?.workExperience ?? specialTermPl;
+  const pvBonusSH       = pv?.bonusSH        ?? bonusSH;
+  const pvSubstitutions = pv?.substitutions  ?? substitutions;
+  const pvShOverrides   = pv?.shOverrides    ?? shOverrides;
+  const pvPlacedOut     = useMemo(
+    () => (pv ? new Set(pv.placedOut ?? []) : placedOut),
+    [pv, placedOut]
+  );
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
@@ -258,16 +274,16 @@ export function PlannerProvider({ children }) {
 
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
   const effectiveCourseMap = useMemo(() => {
-    if (!Object.keys(shOverrides).length) return courseMap;
+    if (!Object.keys(pvShOverrides).length) return courseMap;
     return Object.fromEntries(
       Object.entries(courseMap).map(([id, c]) => {
-        const ov = shOverrides[id];
+        const ov = pvShOverrides[id];
         if (ov == null || !c.shMax) return [id, c];
         // Preserve the data-minimum as shMin so the edit UI knows the valid range.
         return [id, { ...c, sh: ov, shMin: c.shMin ?? c.sh }];
       })
     );
-  }, [courseMap, shOverrides]);
+  }, [courseMap, pvShOverrides]);
 
   // ── UI interaction state ──────────────────────────────────────
   const [selectedId,    setSelectedId]    = useState(null);
@@ -535,14 +551,14 @@ export function PlannerProvider({ children }) {
   // When CS3500 → CS4400 substitution exists and CS3500 is placed in fall2024,
   // CS4400 is added as if placed in fall2024. Credits use only real `placements`.
   const effectivePlacements = useMemo(() => {
-    if (!substitutions.length) return placements;
-    const result = { ...placements };
-    for (const { from, to } of substitutions) {
-      const fromSemId = placements[from];
+    if (!pvSubstitutions.length) return pvPlacements;
+    const result = { ...pvPlacements };
+    for (const { from, to } of pvSubstitutions) {
+      const fromSemId = pvPlacements[from];
       if (fromSemId) result[to] = fromSemId;
     }
     return result;
-  }, [placements, substitutions]);
+  }, [pvPlacements, pvSubstitutions]);
 
   // ── Effect: SVG lines ─────────────────────────────────────────
   useEffect(() => {
@@ -982,7 +998,7 @@ export function PlannerProvider({ children }) {
   // ── Derived plan state ────────────────────────────────────────
   // When graduated and the live semester has drifted past the plan boundary, treat it as
   // one past the last plan semester so all plan semesters render as completed.
-  const currentSemIdx = SEM_INDEX[currentSemId] ?? (isGraduated ? SEMESTERS.length : 1);
+  const currentSemIdx = SEM_INDEX[pv?.currentSemId ?? currentSemId] ?? (isGraduated ? SEMESTERS.length : 1);
   const placedIds = useMemo(
     () => new Set([...Object.keys(placements), ...placedOut]),
     [placements, placedOut]
@@ -995,7 +1011,7 @@ export function PlannerProvider({ children }) {
     const startMap = {};
     const contMap  = {};
     const types    = specialTerms?.getTypes() ?? [];
-    Object.entries(specialTermPl).forEach(([id, data]) => {
+    Object.entries(pvSpecialTerms).forEach(([id, data]) => {
       const { typeId, semId, duration } = data || {};
       if (!semId) return;
       startMap[semId] = id;
@@ -1014,7 +1030,7 @@ export function PlannerProvider({ children }) {
       }
     });
     return [startMap, contMap];
-  }, [specialTermPl, specialTerms, calendar, SEMESTERS, SEM_NEXT]);
+  }, [pvSpecialTerms, specialTerms, calendar, SEMESTERS, SEM_NEXT]);
 
   // Returns true if a slot (start or cont) is occupied by any special term other than excludeId.
   const isSlotOccupied = (semId, excludeId = null) => {
@@ -1060,17 +1076,17 @@ export function PlannerProvider({ children }) {
   const prereqViolations = useMemo(() => {
     const v = new Map();
     courses.forEach(c => {
-      if (!placements[c.id] && !placedOut.has(c.id)) return; // not taken at all
-      if (placements[c.id] === "incoming") return;
-      if (typeof placements[c.id] === "string" && placements[c.id].startsWith("__overflow:")) return;
-      if (placedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
+      if (!pvPlacements[c.id] && !pvPlacedOut.has(c.id)) return; // not taken at all
+      if (pvPlacements[c.id] === "incoming") return;
+      if (typeof pvPlacements[c.id] === "string" && pvPlacements[c.id].startsWith("__overflow:")) return;
+      if (pvPlacedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
       if (!c.prereqs?.length) return;
-      const ti = SEM_INDEX[placements[c.id]];
-      const result = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, placedOut);
+      const ti = SEM_INDEX[pvPlacements[c.id]];
+      const result = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut);
       if (result !== "satisfied") v.set(c.id, result);
     });
     return v;
-  }, [courses, placements, effectivePlacements, placedOut, SEM_INDEX]);
+  }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
@@ -1137,20 +1153,20 @@ export function PlannerProvider({ children }) {
 
   // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
   const totalSHPlaced = useMemo(
-    () => bonusSH + courses
-      .filter(c => placements[c.id] && !placements[c.id].startsWith?.("__overflow:") && !placedOut.has(c.id))
+    () => pvBonusSH + courses
+      .filter(c => pvPlacements[c.id] && !pvPlacements[c.id].startsWith?.("__overflow:") && !pvPlacedOut.has(c.id))
       .reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [bonusSH, courses, placements, placedOut, effectiveCourseMap]
+    [pvBonusSH, courses, pvPlacements, pvPlacedOut, effectiveCourseMap]
   );
 
   const totalSHDone = useMemo(
-    () => bonusSH + courses.filter(c => {
-      const sid = placements[c.id];
-      if (!sid || placedOut.has(c.id)) return false;
+    () => pvBonusSH + courses.filter(c => {
+      const sid = pvPlacements[c.id];
+      if (!sid || pvPlacedOut.has(c.id)) return false;
       const sidx = SEM_INDEX[sid] ?? 99;
       return isGraduated ? sidx <= currentSemIdx : sidx < currentSemIdx;
     }).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [bonusSH, courses, placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
+    [pvBonusSH, courses, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
   );
 
   // ── Star toggle ───────────────────────────────────────────────
@@ -2159,20 +2175,92 @@ export function PlannerProvider({ children }) {
   // validated. The grid renders the simulated placements; the diff sets
   // drive the orange ghost styling on affected cards.
   const computeClaudePreview = (proposal) => {
-    const planSnapshot = {
-      placements, placedOut: [...placedOut], substitutions,
-      workExperience: specialTermPl, shOverrides, offeredOverrides, currentSemId,
+    // Dry-run the changeset against a full snapshot (adapter field names)
+    // so the simulated plan covers EVERY field a proposal can touch, not
+    // just placements. The value block swaps these in so the whole UI
+    // renders the proposed world; `diff` marks what changed (orange).
+    const snap = {
+      placements, semOrders,
+      placedOut: [...placedOut], substitutions,
+      workExperience: specialTermPl, shOverrides, offeredOverrides,
+      currentSemId, bonusSH,
+      major, major2, concentration: conc, minor1, minor2, studentType,
+      entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear,
+      starredIds: [...starredIds], palette: [...palette],
     };
-    const { plan: next } = dryRunChangeset(planSnapshot, proposal.changeset?.actions ?? [], courseMap);
+    const { plan: next } = dryRunChangeset(snap, proposal.changeset?.actions ?? [], courseMap);
+
+    // Course-placement diff (drives the grid ghosts).
     const added = {}, moved = {}, removed = new Set();
-    for (const [id, sem] of Object.entries(next.placements)) {
+    for (const [id, sem] of Object.entries(next.placements ?? {})) {
       if (!(id in placements)) added[id] = sem;
       else if (placements[id] !== sem) moved[id] = { from: placements[id], to: sem };
     }
     for (const id of Object.keys(placements)) {
-      if (!(id in next.placements)) removed.add(id);
+      if (!(id in (next.placements ?? {}))) removed.add(id);
     }
-    setClaudePreview({ proposalId: proposal.proposalId, placements: next.placements, added, moved, removed });
+
+    // Scalar-field diff (drives orange marks on selectors/badges) + a
+    // focus target so the right panel opens and scrolls into view.
+    const changed = new Set();
+    const scalar = { major, major2, conc, studentType, bonusSH, currentSemId,
+      entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear,
+      minor1, minor2 };
+    const nextScalar = { major: next.major, major2: next.major2, conc: next.concentration,
+      studentType: next.studentType, bonusSH: next.bonusSH, currentSemId: next.currentSemId,
+      entSem: next.entSem, entYear: next.entYear, gradSem: next.gradSem, gradYear: next.gradYear,
+      minor1: next.minor1, minor2: next.minor2 };
+    for (const k of Object.keys(scalar)) if (scalar[k] !== nextScalar[k]) changed.add(k);
+
+    const shOvChanged = new Set();
+    for (const id of new Set([...Object.keys(shOverrides), ...Object.keys(next.shOverrides ?? {})]))
+      if (shOverrides[id] !== next.shOverrides?.[id]) shOvChanged.add(id);
+
+    const setDiff = (a, b) => {
+      const A = new Set(a), B = new Set(b);
+      return { added: [...B].filter(x => !A.has(x)), removed: [...A].filter(x => !B.has(x)) };
+    };
+    const starDiff = setDiff([...starredIds], next.starredIds ?? []);
+    const palDiff  = setDiff([...palette], next.palette ?? []);
+    const poDiff   = setDiff([...placedOut], next.placedOut ?? []);
+    const subKey = s => `${s.from}→${s.to}`;
+    const subDiff = setDiff(substitutions.map(subKey), (next.substitutions ?? []).map(subKey));
+    // Work-term instances that are new or modified (drive orange term cards).
+    const workTermsChanged = new Set();
+    for (const [id, wt] of Object.entries(next.workExperience ?? {})) {
+      if (JSON.stringify(wt) !== JSON.stringify(specialTermPl[id])) workTermsChanged.add(id);
+    }
+    const workChanged = workTermsChanged.size > 0 ||
+      Object.keys(specialTermPl).some(id => !(next.workExperience ?? {})[id]);
+
+    // Where to send the user's attention: programs → grad panel; a placed
+    // course → focus it; cohort/credits → header; star/palette → bank.
+    const programChanged = ["major", "major2", "conc", "minor1", "minor2", "studentType"].some(k => changed.has(k));
+    const firstCourse = Object.keys(added)[0] ?? Object.keys(moved)[0] ?? [...removed][0] ?? null;
+    let focus = null;
+    if (programChanged)                              focus = { kind: "grad", field: [...changed].find(k => ["major","major2","conc","minor1","minor2","studentType"].includes(k)) };
+    else if (firstCourse)                            focus = { kind: "course", courseId: firstCourse };
+    else if (changed.has("bonusSH") || [...changed].some(k => k.startsWith("ent") || k.startsWith("grad") || k === "currentSemId")) focus = { kind: "header" };
+    else if (starDiff.added.length || starDiff.removed.length || palDiff.added.length || palDiff.removed.length ||
+             poDiff.added.length || poDiff.removed.length || subDiff.added.length || subDiff.removed.length) focus = { kind: "bank", starred: starDiff.added.length + starDiff.removed.length > 0 };
+
+    // Display placements keep removed courses at their original semester so
+    // they render as strike-through ghosts instead of silently vanishing.
+    // (Audits/credits use the true simulated plan via the pv* sources.)
+    const displayPlacements = { ...(next.placements ?? {}) };
+    for (const id of removed) displayPlacements[id] = placements[id];
+
+    setClaudePreview({
+      proposalId: proposal.proposalId,
+      plan: next,
+      placements: displayPlacements,
+      added, moved, removed,
+      changed,                    // scalar field keys
+      shOvChanged,
+      star: starDiff, palette: palDiff, placedOut: poDiff, substitutions: subDiff,
+      workChanged, workTermsChanged,
+      focus,
+    });
   };
 
   // Manual toggle from the card. A user "hide" is remembered so the
@@ -2188,6 +2276,18 @@ export function PlannerProvider({ children }) {
       computeClaudePreview(proposal);
     }
   };
+
+  // Preview auto-focus: scroll the first affected course into view. Panel
+  // switching (grad panel / bank) is handled where that local state lives
+  // (BankPanel); course cards register DOM nodes in cardRefs.
+  useEffect(() => {
+    const f = claudePreview?.focus;
+    if (f?.kind !== "course") return;
+    const timer = setTimeout(() => {
+      cardRefs.current[f.courseId]?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [claudePreview?.proposalId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Single source of truth for the preview: whenever the head proposal or
   // the real plan changes, recompute the head proposal's preview against
@@ -2258,12 +2358,19 @@ export function PlannerProvider({ children }) {
     // Load state
     loading, loadErr, loadPct,
     // Planner state
-    // While a Claude proposal preview is active, the grid renders the
-    // simulated placements; all real state (sync, persistence, undo)
-    // keeps using the actual `placements` state var.
+    // While a Claude proposal preview is active, the WHOLE simulated plan
+    // renders (placements, work terms, programs, credits, stars, palette…)
+    // so every proposal type has a visible preview. All real state (sync,
+    // persistence, undo) keeps using the actual state vars.
     placements: claudePreview ? claudePreview.placements : placements,
-    effectivePlacements, specialTermPl, currentSemId, persistEnabled,
-    semOrders, offeredOverrides, collapsedSubs, shOverrides,
+    effectivePlacements,
+    specialTermPl: pvSpecialTerms,
+    currentSemId: pv?.currentSemId ?? currentSemId,
+    persistEnabled,
+    semOrders,
+    offeredOverrides: pv?.offeredOverrides ?? offeredOverrides,
+    collapsedSubs,
+    shOverrides: pvShOverrides,
     // Semester grid
     SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
     // UI state
@@ -2272,7 +2379,8 @@ export function PlannerProvider({ children }) {
     // Bank state
     bankSearch, bankSort, bankTab, bankWidth, showSubjectKeys,
     wideCatalog, setWideCatalog, wideWidth, setWideWidth,
-    starredIds, bankCourseIds,
+    starredIds: pv ? new Set(pv.starredIds ?? []) : starredIds,
+    bankCourseIds,
     // Settings
     showDisclaimer, showSettings,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
@@ -2282,7 +2390,13 @@ export function PlannerProvider({ children }) {
     semAdvanceToast, setSemAdvanceToast,
     clockOverride, setClockOverride,
     stickyCourses, setStickyCourses,
-    planEntSem, planEntYear, planGradSem, planGradYear, entOrd, gradOrd, semOrd: _semOrd,
+    // Cohort previews swap the displayed values (orange in the 🎓 dropdown)
+    // without rebuilding the semester grid — SEMESTERS stays on real state.
+    planEntSem:  pv?.entSem   ?? planEntSem,
+    planEntYear: pv?.entYear  ?? planEntYear,
+    planGradSem: pv?.gradSem  ?? planGradSem,
+    planGradYear: pv?.gradYear ?? planGradYear,
+    entOrd, gradOrd, semOrd: _semOrd,
     panelHeight,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,
     // Derived
@@ -2290,12 +2404,18 @@ export function PlannerProvider({ children }) {
     gradSemId, coopGradConflicts,
     isGraduated, setIsGraduated,
     prereqViolations, coreqViolations, connectedIds,
-    totalSHPlaced, totalSHDone, bonusSH, setBonusSH,
-    major, setMajor, major2, setMajor2, conc, setConc, minor1, setMinor1, minor2, setMinor2,
-    studentType, setStudentType,
+    totalSHPlaced, totalSHDone,
+    bonusSH: pvBonusSH, setBonusSH,
+    major:  pv?.major  ?? major,  setMajor,
+    major2: pv?.major2 ?? major2, setMajor2,
+    conc:   pv?.concentration ?? conc, setConc,
+    minor1: pv?.minor1 ?? minor1, setMinor1,
+    minor2: pv?.minor2 ?? minor2, setMinor2,
+    studentType: pv?.studentType ?? studentType,
+    setStudentType,
     showNewPlanModal, setShowNewPlanModal,
     newPlanInitialType, setNewPlanInitialType,
-    placedOut, setPlacedOut,
+    placedOut: pvPlacedOut, setPlacedOut,
     // MCP / AI assistant
     mcpProposals,
     // Head proposal was computed against a plan the user has since edited
@@ -2343,14 +2463,14 @@ export function PlannerProvider({ children }) {
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,
-    substitutions,
+    substitutions: pvSubstitutions,
     addSubstitution: (fromId, toId) => setSubstitutions(prev =>
       prev.some(s => s.from === fromId && s.to === toId) ? prev : [...prev, { from: fromId, to: toId }]
     ),
     removeSubstitution: (fromId, toId) => setSubstitutions(prev =>
       prev.filter(s => !(s.from === fromId && s.to === toId))
     ),
-    palette, removeFromPalette, onDropPalette, showPalette, setShowPalette,
+    palette: pv?.palette ?? palette, removeFromPalette, onDropPalette, showPalette, setShowPalette,
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard, onDropPlacedOut,
     canDropSem,
     doUndo, doRedo, pushUndo,

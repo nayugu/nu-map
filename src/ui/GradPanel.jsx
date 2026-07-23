@@ -733,9 +733,19 @@ export default function GradPanel({ wideCatalog = false }) {
     getSemStatus,
     studentType,
     setShowNewPlanModal, setNewPlanInitialType,
+    claudePreview,
   } = usePlanner();
 
   const isGrad = studentType === "graduate";
+
+  // Claude proposal preview: outline the selector(s) the changeset touches
+  // in orange, and give each an anchor the auto-focus scroll can target.
+  const pvMark = (field) => ({
+    "data-claude-focus": field,
+    style: claudePreview?.changed?.has?.(field)
+      ? { outline: "2px dashed #fb923c", outlineOffset: 3, borderRadius: 6 }
+      : undefined,
+  });
 
   const selPath    = majorPath || "";
   const setSelPath = setMajorPath;
@@ -1013,7 +1023,7 @@ export default function GradPanel({ wideCatalog = false }) {
           {showProgram && (
             <>
               {/* Major selector */}
-              <div style={{ marginBottom: 3 }}>
+              <div data-claude-focus="major" style={{ marginBottom: 3, ...(pvMark("major").style ?? {}) }}>
                 <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
                   {showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
                 </div>
@@ -1068,7 +1078,7 @@ export default function GradPanel({ wideCatalog = false }) {
 
               {/* Concentration selector */}
               {major?.concentrations?.concentrationOptions?.length > 0 && (
-                <div style={{ marginBottom: 8, marginTop: 8 }}>
+                <div data-claude-focus="conc" style={{ marginBottom: 8, marginTop: 8, ...(pvMark("conc").style ?? {}) }}>
                   <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
                     {t("grad.conc.label")}
                   </div>
@@ -1083,7 +1093,7 @@ export default function GradPanel({ wideCatalog = false }) {
 
               {/* Second major selector */}
               {showMajor2 ? (
-                <div style={{ marginBottom: 8, marginTop: 8 }}>
+                <div data-claude-focus="major2" style={{ marginBottom: 8, marginTop: 8, ...(pvMark("major2").style ?? {}) }}>
                   <div style={{ display: "flex", alignItems: "center", marginBottom: 4 }}>
                     <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>{t("grad.major2.label")}</div>
                     <button
@@ -1118,8 +1128,8 @@ export default function GradPanel({ wideCatalog = false }) {
               {/* Minor selectors — undergrad only */}
               {!isGrad && (
               <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
-                {[[t("grad.minor1.label"), minor1, setMinor1], [t("grad.minor2.label"), minor2, setMinor2]].map(([lbl, val, set]) => (
-                  <div key={lbl} style={{ minWidth: 0, overflow: "hidden" }}>
+                {[[t("grad.minor1.label"), minor1, setMinor1, "minor1"], [t("grad.minor2.label"), minor2, setMinor2, "minor2"]].map(([lbl, val, set, field]) => (
+                  <div key={lbl} data-claude-focus={field} style={{ minWidth: 0, overflow: "hidden", ...(pvMark(field).style ?? {}) }}>
                     <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
                     <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
                   </div>

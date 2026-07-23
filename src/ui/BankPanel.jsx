@@ -153,6 +153,7 @@ export default function BankPanel() {
     setShowPanel,
     substitutions, addSubstitution, removeSubstitution,
     studentType,
+    claudePreview,
   } = usePlanner();
 
   const q = bankSearch.trim().toLowerCase();
@@ -207,6 +208,25 @@ export default function BankPanel() {
   }, [bankCourses, q, bankTab]);
 
   const [sideMode, setSideMode] = useState("bank"); // "bank" | "grad"
+
+  // Claude proposal preview auto-focus: a program change opens the grad
+  // panel and scrolls to the affected selector; star/palette/placed-out/
+  // substitution changes open the bank (starred tab when stars changed).
+  useEffect(() => {
+    const f = claudePreview?.focus;
+    if (!f) return;
+    if (f.kind === "grad") {
+      setSideMode("grad");
+      const field = f.field === "studentType" ? "major" : (f.field ?? "major");
+      setTimeout(() => {
+        document.querySelector(`[data-claude-focus="${field}"]`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 350);
+    } else if (f.kind === "bank") {
+      setSideMode("bank");
+      if (f.starred) setBankTab("starred");
+    }
+  }, [claudePreview?.proposalId]); // eslint-disable-line react-hooks/exhaustive-deps
   const wideResizing = useRef(null);
   useEffect(() => {
     const onMove = e => {
@@ -435,6 +455,9 @@ export default function BankPanel() {
                         padding: isPhone ? "2px 4px" : "3px 6px",
                         background: "var(--bg-surface-2)", borderRadius: 4,
                         cursor: "grab",
+                        // Orange ring when a Claude proposal adds this placed-out entry
+                        border: claudePreview?.placedOut?.added?.includes?.(id)
+                          ? "1.5px dashed #fb923c" : "1.5px solid transparent",
                         textDecoration: selectedId === id || hoveredPlacedOutId === id ? "underline" : "none",
                         textDecorationStyle: "dotted",
                         textDecorationColor: "var(--text-4)",

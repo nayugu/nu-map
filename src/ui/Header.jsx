@@ -38,7 +38,7 @@ export default function Header() {
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
-    aiAssistantAvailable,
+    aiAssistantAvailable, claudePreview,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
@@ -89,6 +89,11 @@ export default function Header() {
     const idx = themeNames.indexOf(themeName);
     setThemeName(themeNames[(idx + 1) % themeNames.length]);
   };
+
+  // Claude proposal preview touches the cohort (entry/graduation/current
+  // semester) — flag the 🎓 button orange so the change is discoverable.
+  const cohortPreviewChanged = !!claudePreview?.changed &&
+    ["entSem", "entYear", "gradSem", "gradYear", "currentSemId"].some(k => claudePreview.changed.has(k));
 
   const handleExport = e => {
     e.stopPropagation();
@@ -999,9 +1004,9 @@ export default function Header() {
             title={t("header.cohort.button.title")}
             style={{
               fontSize: 10, cursor: "pointer", whiteSpace: "nowrap",
-            color: showSettings ? "var(--text-2)" : "var(--text-4)",
+            color: cohortPreviewChanged ? "#fb923c" : showSettings ? "var(--text-2)" : "var(--text-4)",
             background: showSettings ? "var(--bg-surface)" : "var(--bg-surface-2)",
-            border: `1px solid ${showSettings ? "var(--active)" : "var(--border-2)"}`,
+            border: cohortPreviewChanged ? "2px dashed #fb923c" : `1px solid ${showSettings ? "var(--active)" : "var(--border-2)"}`,
               borderRadius: 5, padding: "0 8px", height: 22, display: "inline-flex", alignItems: "center", lineHeight: 1, whiteSpace: "nowrap",
             }}
           >{isMobile ? "🎓" : `🎓 ${t("header.cohort.button")}`}</button>

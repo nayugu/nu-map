@@ -30,6 +30,7 @@ export default function SemRow({ sem }) {
     bonusSH, setBonusSH,
     semTrackingMode,
     studentType,
+    claudePreview,
   } = usePlanner();
 
   const isLive = semTrackingMode === "live";
@@ -250,8 +251,10 @@ export default function SemRow({ sem }) {
                 style={{
                   width: 52, fontSize: 11, fontWeight: 700,
                   padding: "2px 5px", borderRadius: 4,
-                  border: "1px solid var(--border-2)",
-                  background: "var(--bg-surface-2)", color: "var(--text-1)",
+                  border: claudePreview?.changed?.has?.("bonusSH")
+                    ? "2px dashed #fb923c" : "1px solid var(--border-2)",
+                  background: "var(--bg-surface-2)",
+                  color: claudePreview?.changed?.has?.("bonusSH") ? "#fb923c" : "var(--text-1)",
                   outline: "none",
                 }}
               />
@@ -277,7 +280,9 @@ export default function SemRow({ sem }) {
               flex: 1, minHeight: 58, minWidth: 200,
               position: "relative",
               background: "var(--card-bg)",
-              border: "1px solid var(--border-card)",
+              border: claudePreview?.workTermsChanged?.has?.(termStartId)
+                ? "2px dashed #fb923c" : "1px solid var(--border-card)",
+              opacity: claudePreview?.workTermsChanged?.has?.(termStartId) ? 0.8 : 1,
               borderRadius: 6, padding: "8px 12px 8px 14px", cursor: "grab",
               display: "flex", flexDirection: "column", justifyContent: "center",
             }}
