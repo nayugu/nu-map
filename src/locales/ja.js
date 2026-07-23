@@ -249,6 +249,7 @@ export const strings = {
   "claude.oauth.body": "Claude の会話がこのプランへの接続を求めています。承認するとこのプランが Claude アカウントと共有され、Claude が提案する変更をここで先に確認できます。設定からいつでも一時停止・接続解除できます。",
   "claude.oauth.approve": "承認",
   "claude.oauth.deny": "拒否",
+  "claude.oauth.catalogOnly": "プランを共有せずに接続",
   "claude.oauth.error": "接続を完了できませんでした。リクエストの期限が切れた可能性があります。Claude に戻ってもう一度お試しください。",
   "claude.connected": "接続中",
   "claude.reconnecting": "再接続中…",

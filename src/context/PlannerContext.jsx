@@ -83,7 +83,7 @@ export function PlannerProvider({ children }) {
     try { return new URLSearchParams(window.location.search).get("claude_connect"); }
     catch { return null; }
   });
-  const resolveClaudeOAuth = async (approved) => {
+  const resolveClaudeOAuth = async (approved, { planAccess = true } = {}) => {
     const pendingId = claudeOAuthRequest;
     setClaudeOAuthRequest(null);
     try {
@@ -99,14 +99,14 @@ export function PlannerProvider({ children }) {
       if (denyTo) window.location.href = denyTo;
       return false;
     }
-    const redirectTo = await aiAssistant?.completeOAuth?.(pendingId);
+    const redirectTo = await aiAssistant?.completeOAuth?.(pendingId, { planAccess });
     if (redirectTo) {
       setClaudePairedRaw(true);
-      setClaudeAccessEnabledRaw(true);
+      setClaudeAccessEnabledRaw(planAccess);
       // Push the plan once, awaited, BEFORE leaving for Claude — otherwise
       // this OAuth path navigates away and the server would have no
       // snapshot, so Claude's first read would say "no plan synced".
-      await aiAssistant?.syncPlanNow?.(buildPlanContextRef.current());
+      if (planAccess) await aiAssistant?.syncPlanNow?.(buildPlanContextRef.current());
       window.location.href = redirectTo;
       return true;
     }

@@ -361,9 +361,9 @@ export function ClaudeOAuthModal() {
 
   if (!claudeOAuthRequest && !failed) return null;
 
-  const approve = async () => {
+  const approve = async (planAccess = true) => {
     setWorking(true);
-    const ok = await resolveClaudeOAuth(true);
+    const ok = await resolveClaudeOAuth(true, { planAccess });
     if (!ok) { setFailed(true); setWorking(false); }
     // on success the page navigates back to Claude
   };
@@ -403,7 +403,7 @@ export function ClaudeOAuthModal() {
           </button>
           {!failed && (
             <button
-              onClick={approve}
+              onClick={() => approve(true)}
               disabled={working}
               style={{ fontSize: 11, fontWeight: 700, padding: "5px 14px",
                 cursor: working ? "wait" : "pointer",
@@ -413,6 +413,18 @@ export function ClaudeOAuthModal() {
             </button>
           )}
         </div>
+        {!failed && (
+          <button
+            onClick={() => approve(false)}
+            disabled={working}
+            style={{ fontSize: 10, alignSelf: "center", marginTop: -4,
+              cursor: working ? "wait" : "pointer",
+              background: "none", border: "none", padding: "2px 4px",
+              color: "var(--text-5)", textDecoration: "underline",
+              textDecorationStyle: "dotted", textUnderlineOffset: 2 }}>
+            {t("claude.oauth.catalogOnly")}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -227,7 +227,7 @@ export default {
    * Marks the session linked and returns the URL to send the user back
    * to Claude — or null on failure.
    */
-  async completeOAuth(pendingId) {
+  async completeOAuth(pendingId, { planAccess = true } = {}) {
     try {
       const res = await fetch(`${SERVER}/authorize/complete`, {
         method:  "POST",
@@ -236,8 +236,20 @@ export default {
       });
       const json = await res.json();
       if (json?.redirectTo) {
-        _consent = { ..._consent, paired: true, enabled: true };
+        _consent = { ..._consent, paired: true, enabled: !!planAccess };
         saveConsentState();
+        if (!planAccess) {
+          // Catalog-only connect: the grant completes but the plan kill
+          // switch starts OFF. Awaited — the redirect must not race it,
+          // or the server would briefly believe plan access is on.
+          try {
+            await fetch(`${SERVER}/consent/${SESSION_ID}`, {
+              method:  "POST",
+              headers: { "Content-Type": "application/json" },
+              body:    JSON.stringify({ enabled: false }),
+            });
+          } catch {}
+        }
         connect();
         return json.redirectTo;
       }

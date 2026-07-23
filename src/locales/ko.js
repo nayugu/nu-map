@@ -248,6 +248,7 @@ export const strings = {
   "claude.oauth.body": "Claude 대화가 이 계획에 연결하려고 합니다. 승인하면 이 계획이 내 Claude 계정과 공유되며, Claude가 제안한 변경을 여기서 먼저 검토하게 됩니다. 설정에서 언제든지 일시 중지하거나 연결을 해제할 수 있습니다.",
   "claude.oauth.approve": "승인",
   "claude.oauth.deny": "거부",
+  "claude.oauth.catalogOnly": "플랜을 공유하지 않고 연결",
   "claude.oauth.error": "연결을 완료할 수 없습니다. 요청이 만료되었을 수 있습니다. Claude로 돌아가 다시 시도하세요.",
   "claude.connected": "연결됨",
   "claude.reconnecting": "다시 연결 중…",

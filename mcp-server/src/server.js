@@ -90,7 +90,7 @@ export function createServer({ query, sessionId, state, channel }) {
       "- The complete action reference (arguments + restrictions) is in get_meta capabilities.actionDocs. validate_changes dry-runs a changeset without touching anything — use it when unsure.",
       "- Never guess ids. Verify courseIds via search_courses/get_course and programIds via list_programs before composing a changeset.",
       "",
-      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. The full catalog lives server-side; you never need to fetch external pages.",
+      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts, prereqsMetBy with the plan's completed + placed-out ids for 'what can the user take', unlockedBy for 'what does course X open up', sortBy: 'enrollment' for popularity — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. The full catalog lives server-side; you never need to fetch external pages.",
       "",
       "Restrictions that most often reject changesets:",
       "- SET_SH_OVERRIDE: most courses have FIXED credits and cannot be overridden. Only valid when get_course shows a credit range (shMin < shMax).",
@@ -245,6 +245,14 @@ export function createServer({ query, sessionId, state, channel }) {
       subject:    z.string().optional().describe("Subject code, e.g. 'CS'"),
       minNumber:  z.number().int().optional().describe("Minimum course number, e.g. 3000 for upper-level"),
       maxNumber:  z.number().int().optional().describe("Maximum course number"),
+      noPrereqs:  z.boolean().optional().describe("Only courses with no prerequisites"),
+      unlockedBy: z.string().optional().describe("Courses whose prerequisites reference this course id — 'what does CS2000 unlock'"),
+      prereqsMetBy: z.array(z.string()).optional()
+        .describe("Completed course ids — keep only courses whose full prerequisite tree these satisfy. Pass the plan's completed + placed-out ids to answer 'what is the user eligible to take'."),
+      scheduleType: z.string().optional().describe("Schedule type substring: 'Lecture', 'Lab', 'Seminar', 'Studio', 'Recitation'"),
+      excludeIds: z.array(z.string()).optional().describe("Course ids to leave out (e.g. already placed or already suggested)"),
+      sortBy:     z.enum(["relevance", "number", "enrollment"]).optional()
+        .describe("'enrollment' = most-taken first (recent enrolment) — good for 'popular electives'; default is relevance/catalog order"),
       attributes: z.array(z.string()).optional().describe("NUPath codes that must ALL be present, e.g. ['ND','FQ']"),
       level:      z.enum(["undergrad", "grad"]).optional().describe("Course level (grad = 5000+)"),
       college:    z.string().optional().describe("Banner college code, e.g. 'CS' — see subject-colleges"),
@@ -293,6 +301,7 @@ export function createServer({ query, sessionId, state, channel }) {
       college: z.string().optional().describe("College slug, e.g. 'computer-information-science'"),
       year:    z.number().int().optional().describe("Catalog year, e.g. 2026"),
       query:   z.string().optional().describe("Label substring, case-insensitive"),
+      campus:  z.string().optional().describe("Campus substring for campus-specific variants, e.g. 'boston', 'oakland'"),
     },
     async (args) => respond(query.listPrograms(args))
   );

@@ -249,6 +249,7 @@ export const strings = {
   "claude.oauth.body": "Una conversación de Claude quiere conectarse a este plan. Al aprobar, compartes este plan con tu cuenta de Claude y podrá proponer cambios que tú revisas aquí primero. Puedes pausar o desconectar en cualquier momento desde los ajustes.",
   "claude.oauth.approve": "Aprobar",
   "claude.oauth.deny": "Denegar",
+  "claude.oauth.catalogOnly": "Conectar sin compartir mi plan",
   "claude.oauth.error": "No se pudo completar la conexión; puede que la solicitud haya caducado. Vuelve a Claude e inténtalo de nuevo.",
   "claude.connected": "Conectado",
   "claude.reconnecting": "Reconectando…",

@@ -140,10 +140,30 @@ export function createPlannerQuery(deps) {
     const {
       query, anyOf, subject, attributes, minSH, maxSH, term,
       level, college, campus, format, meetsOn,
-      minNumber, maxNumber, limit = 20,
+      minNumber, maxNumber, noPrereqs, unlockedBy, prereqsMetBy,
+      scheduleType, excludeIds, sortBy, limit = 20,
     } = opts;
 
     let results = courses;
+
+    if (excludeIds?.length) {
+      const ex = new Set(excludeIds.map(canonId));
+      results = results.filter(c => !ex.has(c.id));
+    }
+    if (scheduleType)
+      results = results.filter(c => (c.scheduleType ?? "").toLowerCase().includes(scheduleType.toLowerCase()));
+    if (noPrereqs)
+      results = results.filter(c => !c.prereqs?.length);
+    if (unlockedBy) {
+      const target = canonId(unlockedBy);
+      const references = (tree) => (tree ?? []).some(tok =>
+        Array.isArray(tok) ? references(tok)
+        : tok?.subject && tok?.number && `${tok.subject.toUpperCase()}${tok.number}` === target
+      );
+      results = results.filter(c => references(c.prereqs));
+    }
+    if (prereqsMetBy)
+      results = results.filter(c => checkPrereqs(c.id, prereqsMetBy).satisfied);
 
     if (subject)
       results = results.filter(c => c.subject === subject.toUpperCase().trim());
@@ -202,6 +222,18 @@ export function createPlannerQuery(deps) {
         .map(x => x.c);
     }
 
+    if (sortBy === "enrollment") {
+      // Most-taken first: total recorded enrolment (recent terms only —
+      // the offering summary window). Courses with no data sink to the end.
+      const enr = (c) => Object.values(c.offering?.e ?? {}).reduce((s, v) => s + v, 0);
+      results = [...results].sort((a, b) => enr(b) - enr(a));
+    } else if (sortBy === "number") {
+      results = [...results].sort((a, b) =>
+        a.subject === b.subject
+          ? parseInt(a.number, 10) - parseInt(b.number, 10)
+          : a.subject.localeCompare(b.subject));
+    }
+
     return results.slice(0, limit).map(trimCourse);
   }
 
@@ -255,12 +287,16 @@ export function createPlannerQuery(deps) {
     }));
   }
 
-  function listPrograms({ type, level, college, year, query } = {}) {
+  function listPrograms({ type, level, college, year, query, campus } = {}) {
     let list = programList;
     if (type && type !== "all")   list = list.filter(p => p.type === type);
     if (level && level !== "all") list = list.filter(p => p.level === level);
     if (college)                  list = list.filter(p => p.college === college);
     if (year)                     list = list.filter(p => p.year === year);
+    if (campus) {
+      const q = campus.toLowerCase();
+      list = list.filter(p => p.id.toLowerCase().includes(q) || p.label.toLowerCase().includes(q));
+    }
     if (query) {
       const q = query.toLowerCase();
       list = list.filter(p => p.label.toLowerCase().includes(q));

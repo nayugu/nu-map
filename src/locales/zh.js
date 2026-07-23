@@ -247,6 +247,7 @@ export const strings = {
   "claude.oauth.body": "一个 Claude 对话想要连接到此计划。批准后，此计划将与你的 Claude 账户共享，Claude 可以提出变更并由你先在此审核。你可以随时在设置中暂停或断开连接。",
   "claude.oauth.approve": "批准",
   "claude.oauth.deny": "拒绝",
+  "claude.oauth.catalogOnly": "连接但不共享我的计划",
   "claude.oauth.error": "无法完成连接——请求可能已过期。请回到 Claude 重新连接。",
   "claude.connected": "已连接",
   "claude.reconnecting": "重新连接中…",

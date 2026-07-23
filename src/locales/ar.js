@@ -247,6 +247,7 @@ export const strings = {
   "claude.oauth.body": "تريد محادثة Claude الاتصال بهذه الخطة. الموافقة تشارك هذه الخطة مع حسابك في Claude وتتيح له اقتراح تغييرات تراجعها هنا أولًا. يمكنك الإيقاف المؤقت أو قطع الاتصال في أي وقت من الإعدادات.",
   "claude.oauth.approve": "موافقة",
   "claude.oauth.deny": "رفض",
+  "claude.oauth.catalogOnly": "الاتصال دون مشاركة خطتي",
   "claude.oauth.error": "تعذّر إكمال الاتصال — ربما انتهت صلاحية الطلب. عُد إلى Claude وحاول مجددًا.",
   "claude.connected": "متصل",
   "claude.reconnecting": "جارٍ إعادة الاتصال…",
