@@ -84,6 +84,12 @@ export function createServer({ query, sessionId, state, channel }) {
     instructions: [
       "NU Map's primary purpose is READING: understand the user's plan and Northeastern's catalog so you can discuss them accurately. Changing the plan is secondary and always user-controlled.",
       "",
+      "Etiquette:",
+      "- Catalog tools always work; plan tools require the user to pair and enable access on the NU Map side. If a plan tool is denied, mention once how to connect (the Claude button in the NU Map header) and keep helping with catalog data — never nag, never call request_pairing unprompted.",
+      "- Every plan tool response carries a _plan envelope. If it shows changedSinceLastRead, re-read (get_plan) before composing changes — proposals built on a stale view get flagged to the user.",
+      "- Actions that move things on the user's screen (SWITCH_PLAN, ui_command) only in direct response to what the user asked.",
+      "- Offering and seat data comes from scheduled scrapes (get_meta shows freshness), not live registration. Summers are 'Summer A' and 'Summer B'. Requirement audits are a best-effort guide; the user's academic advisor is the authority.",
+      "",
       "Making changes:",
       "- Default to propose_changes — the user reviews a live preview and approves or rejects. Use apply_changes only when the _plan envelope shows autoApplyEnabled: true.",
       "- Changesets are atomic: one invalid action rejects the whole batch, with a per-action reason saying what to fix.",
@@ -217,7 +223,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "request_pairing",
-    "Link this conversation to the user's NU Map plan. Returns a 6-character code — show it to the user and ask them to enter it in NU Map (Claude button → enter code → Connect). Plan tools stay locked until they do. Codes expire after 10 minutes.",
+    "Link this conversation to the user's NU Map plan. Returns a 6-character code — show it to the user and ask them to enter it in NU Map (Claude button → enter code → Connect). Plan tools stay locked until they do. Codes expire after 10 minutes. Only call this when the user wants plan access and a plan tool was denied as not paired — never proactively; catalog tools work without pairing.",
     {},
     async () => {
       if (state.getConsent(sessionId).paired) {
@@ -285,7 +291,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "get_offered_in",
-    "Complete offering history for a course, newest-first: offered true/false per scraped term, with seat stats (enrolled, capacity, sections, fill %, open seats per section) for completed terms.",
+    "Complete offering history for a course, newest-first: offered true/false per scraped term, with seat stats (enrolled, capacity, sections, fill %, open seats per section) for completed terms. LIMITATION: scheduled-scrape data, NOT live registration — seat counts reflect the last scrape (see get_meta freshness), and future terms are inferred from history, never guaranteed.",
     { courseId: z.string() },
     async ({ courseId }) => respond(query.getOfferedIn(courseId))
   );
@@ -321,7 +327,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "audit_requirements",
-    "Audit a plan against a program's requirements: full tree annotated with satisfaction, credits done/needed, and per-course status completed/planned/missing. Applies substitutions, the one-course-used-once rule, General Electives, and the selected concentration. Defaults: the live plan and its selected major/concentration.",
+    "Audit a plan against a program's requirements: full tree annotated with satisfaction, credits done/needed, and per-course status completed/planned/missing. Applies substitutions, the one-course-used-once rule, General Electives, and the selected concentration. Defaults: the live plan and its selected major/concentration. Programs without the verified flag (see list_programs) may have scraping imperfections — present those audits as a best-effort guide, and remind the user their academic advisor is the authority on degree progress.",
     {
       programId:     z.string().optional().describe("Program id — omit to audit the live plan's major"),
       concentration: z.string().optional().describe("Concentration title — omit to use the plan's selection"),
@@ -376,7 +382,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "get_plan_contents",
-    "Read the contents of a saved (non-active) plan by id, fetched live from the browser. Does not change which plan is active on the user's screen.",
+    "Read the contents of a saved (non-active) plan by id, fetched live from the browser. Does not change which plan is active on the user's screen. Requires an open NU Map tab and may time out if the browser doesn't respond — on timeout, ask the user to check the tab is open rather than retrying repeatedly.",
     { planId: z.string().describe("Plan id from list_plans") },
     async ({ planId }) => {
       const live = livePlan();
@@ -393,7 +399,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "get_nupath_coverage",
-    "NUPath attribute coverage for a plan: each grid code with satisfied flag and the courses (or co-op terms) satisfying it.",
+    "NUPath attribute coverage for a plan: each grid code with satisfied flag and the courses (or co-op terms) satisfying it. Undergrad only — graduate programs have no NUPath requirements.",
     { plan: z.any().optional().describe("PlanContext snapshot — omit to use the live plan") },
     async ({ plan: planArg } = {}) => {
       let plan = planArg;
@@ -509,7 +515,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "ui_command",
-    `Fire an immediate UI-only action in the open NU Map tab (no plan change, no undo entry). Supported: ${SUPPORTED_UI_COMMANDS.join(", ")}. FOCUS_COURSE {courseId}, OPEN_SEARCH {query}, SET_BANK_TAB {tab: all|placed|starred}, EXPORT_PDF, EXPORT_JSON, COPY_SHARE_LINK.`,
+    `Fire an immediate UI-only action in the open NU Map tab (no plan change, no undo entry). Supported: ${SUPPORTED_UI_COMMANDS.join(", ")}. FOCUS_COURSE {courseId}, OPEN_SEARCH {query}, SET_BANK_TAB {tab: all|placed|starred}, EXPORT_PDF, EXPORT_JSON, COPY_SHARE_LINK. This moves things on the user's screen — use it only in direct response to what the user is doing (e.g. highlight the course you're discussing), never to make plan changes and never unprompted.`,
     { command: z.object({ type: z.string() }).passthrough() },
     async ({ command }) => {
       if (!state.getConsent(sessionId).enabled) return respond(DISABLED);
