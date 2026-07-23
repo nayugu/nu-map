@@ -134,6 +134,29 @@ const defaultHandler = {
     // Browser channel + legacy session-URL MCP.
     const sid = sessionIdOf(pathname);
     if (!sid) return json({ error: "Not found" }, 404);
+
+    // Disconnect is a full reset: alongside the DO wiping its state, revoke
+    // every OAuth grant for this session identity so stale tokens anywhere
+    // (an old Claude Code entry, a claude.ai connector) die immediately and
+    // those clients cleanly report "needs authentication" instead of
+    // half-working against an abandoned identity.
+    if (pathname.startsWith("/consent/") && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      if (body?.unpair) {
+        try {
+          const { items } = await env.OAUTH_PROVIDER.listUserGrants(sid);
+          await Promise.all((items ?? []).map(g => env.OAUTH_PROVIDER.revokeGrant(g.id, sid)));
+        } catch {}
+      }
+      return sessionStub(env, sid).fetch(
+        new Request(request.url, {
+          method: "POST",
+          headers: request.headers,
+          body: JSON.stringify(body ?? {}),
+        })
+      );
+    }
+
     return sessionStub(env, sid).fetch(request);
   },
 };
