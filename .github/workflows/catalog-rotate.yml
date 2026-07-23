@@ -1,14 +1,15 @@
-name: Catalog Rotate [DISABLED]
+name: Catalog Rotate [LEGACY]
 
-# ⚠️ DISABLED - GitHub Actions is not permitted to create or approve pull requests
+# ⚠️ SUPERSEDED — do not re-enable.
 #
-# Original concept: Runs every 3 days to scrape exactly one subject (rotating through all
-# ~130 subjects), with the entire catalog refreshing roughly every 3–4 months.
-# Developer approval is required before any data changes reach production:
-# the workflow opens a PR instead of pushing directly to main.
+# update-courses.yml now does a FULL catalog scrape (descriptions, credits,
+# prereqs, NUPath, all ~130 subjects) every month, which replaces this
+# workflow's gradual rotation entirely.
 #
-# The idea is sound, but this needs to be triggered manually or by a different service
-# that has permission to create pull requests in this repository.
+# Original concept: scrape one subject every 3 days (full refresh every 3–4
+# months) with data changes reviewed via PR. The schedule was disabled because
+# GitHub Actions is not permitted to create pull requests in this repository —
+# and then the monthly full scrape made the whole approach obsolete.
 
 on:
   # DISABLED: schedule not runs anymore

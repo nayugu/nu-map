@@ -1,15 +1,14 @@
-name: Update NUpath Data
+name: Update NUpath Data [LEGACY]
 
-# Scrapes official NUpath source (Tableau dashboard + catalog fallback) and
-# commits updated nuPath fields directly to main — no PR needed.
+# ⚠️ SUPERSEDED — do not schedule this workflow.
 #
-# ┌─ MANUAL trigger ──────────────────────────────────────────────────────┐
+# NUPath now refreshes MONTHLY as part of update-courses.yml: the full catalog
+# scrape (scrape-catalog.js) extracts nuPath per course and diffs it. This
+# standalone Tableau-dashboard scraper is kept ONLY as a manual cross-check
+# against the Registrar's authoritative source when catalog pages look wrong.
+#
+# ┌─ MANUAL trigger (the only intended use) ──────────────────────────────┐
 # │  GitHub → Actions → "Update NUpath Data" → Run workflow              │
-# └───────────────────────────────────────────────────────────────────────┘
-#
-# ┌─ AUTOMATIC trigger ────────────────────────────────────────────────────┐
-# │  Uncomment the `schedule:` block below to enable weekly automation.   │
-# │  Default: disabled (you control when data updates run).               │
 # └───────────────────────────────────────────────────────────────────────┘
 
 on:
