@@ -264,7 +264,7 @@ export const strings = {
   "claude.modal.head.web": "连接 Claude.ai",
   "claude.modal.tab.code": "连接 Claude Code",
   "claude.modal.web.1": "打开 Claude（claude.ai 或 Claude 应用）。",
-  "claude.modal.web.2": "在 Directory 的 Connectors 中找到 NU Map，点击连接。",
+  "claude.modal.web.2": "在 Claude 中打开设置，进入 Connectors（或浏览 Directory）。找到 NU Map，点击连接。",
   "claude.modal.web.3": "Claude 会把你带回这里。点击批准即完成。",
   "claude.modal.web.notlisted": "找不到 NU Map？Northeastern 尚未开启它。",
   "claude.modal.code.1": "在终端中运行：",

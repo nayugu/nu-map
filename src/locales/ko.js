@@ -265,7 +265,7 @@ export const strings = {
   "claude.modal.head.web": "Claude.ai 연결",
   "claude.modal.tab.code": "Claude Code 연결",
   "claude.modal.web.1": "Claude를 여세요 (claude.ai 또는 Claude 앱).",
-  "claude.modal.web.2": "Directory의 Connectors에서 NU Map을 찾아 연결을 누르세요.",
+  "claude.modal.web.2": "Claude에서 설정을 열고 Connectors로 이동하세요 (또는 Directory를 둘러보세요). NU Map을 찾아 연결을 누르세요.",
   "claude.modal.web.3": "Claude가 여기로 다시 데려옵니다. 승인을 누르면 끝입니다.",
   "claude.modal.web.notlisted": "NU Map이 없나요? Northeastern에서 아직 켜지 않은 것입니다.",
   "claude.modal.code.1": "터미널에서 다음을 실행하세요:",

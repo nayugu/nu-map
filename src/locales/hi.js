@@ -265,7 +265,7 @@ export const strings = {
   "claude.modal.head.web": "Claude.ai जोड़ें",
   "claude.modal.tab.code": "Claude Code जोड़ें",
   "claude.modal.web.1": "Claude खोलें (claude.ai या Claude ऐप)।",
-  "claude.modal.web.2": "Directory में Connectors के अंदर NU Map खोजें और Connect दबाएँ।",
+  "claude.modal.web.2": "Claude में Settings खोलें, फिर Connectors (या Directory ब्राउज़ करें)। NU Map खोजें और Connect दबाएँ।",
   "claude.modal.web.3": "Claude आपको यहीं वापस लाएगा। Approve दबाएँ, बस हो गया।",
   "claude.modal.web.notlisted": "NU Map नहीं दिख रहा? Northeastern ने इसे अभी चालू नहीं किया है।",
   "claude.modal.code.1": "टर्मिनल में यह चलाएँ:",

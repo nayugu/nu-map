@@ -266,7 +266,7 @@ export const strings = {
   "claude.modal.head.web": "Claude.ai を接続",
   "claude.modal.tab.code": "Claude Code を接続",
   "claude.modal.web.1": "Claude を開きます（claude.ai または Claude アプリ）。",
-  "claude.modal.web.2": "Directory の Connectors で NU Map を見つけて「接続」を押します。",
+  "claude.modal.web.2": "Claude で設定を開き、Connectors に進みます（または Directory を参照）。NU Map を見つけて「接続」を押します。",
   "claude.modal.web.3": "Claude がここへ戻してくれます。「承認」を押せば完了です。",
   "claude.modal.web.notlisted": "NU Map が見つからない場合、Northeastern がまだ有効にしていません。",
   "claude.modal.code.1": "ターミナルで次を実行します:",

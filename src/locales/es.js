@@ -266,7 +266,7 @@ export const strings = {
   "claude.modal.head.web": "Conectar Claude.ai",
   "claude.modal.tab.code": "Conectar Claude Code",
   "claude.modal.web.1": "Abre Claude (claude.ai o la app de Claude).",
-  "claude.modal.web.2": "En el Directorio, dentro de Connectors, busca NU Map y pulsa Conectar.",
+  "claude.modal.web.2": "En Claude, abre Ajustes y luego Connectors (o explora el Directorio). Busca NU Map y pulsa Conectar.",
   "claude.modal.web.3": "Claude te traerá de vuelta aquí. Pulsa Aprobar y listo.",
   "claude.modal.web.notlisted": "¿NU Map no aparece? Northeastern aún no lo ha activado.",
   "claude.modal.code.1": "Ejecuta esto en tu terminal:",

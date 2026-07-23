@@ -264,7 +264,7 @@ export const strings = {
   "claude.modal.head.web": "ربط Claude.ai",
   "claude.modal.tab.code": "ربط Claude Code",
   "claude.modal.web.1": "افتح Claude (‏claude.ai أو تطبيق Claude).",
-  "claude.modal.web.2": "في الـ Directory ضمن Connectors، ابحث عن NU Map واضغط اتصال.",
+  "claude.modal.web.2": "في Claude، افتح الإعدادات ثم Connectors (أو تصفح الـ Directory). ابحث عن NU Map واضغط اتصال.",
   "claude.modal.web.3": "سيعيدك Claude إلى هنا. اضغط موافقة وانتهيت.",
   "claude.modal.web.notlisted": "لا يظهر NU Map؟ لم تفعّله Northeastern بعد.",
   "claude.modal.code.1": "شغّل هذا في الطرفية:",
