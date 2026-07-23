@@ -6,13 +6,20 @@
 
 export const NUM_YEARS = 5;
 
-// 25 distinct dark-theme subject colours
+// 25 distinct subject colours — all vibrant; no greys, mustards, or
+// yellow-greens. The register is "vivid pastel" (reference: #f87171):
+// saturation stays high but lightness sits around 60–75%, with a few
+// slightly deeper anchors (~45–55%) so families can still spread by
+// lightness. When retuning a slot, stay in the same hue family and
+// adjust lightness/saturation only (subjectColor() hashes into this by
+// index, so keep the length at 25 and edit slots in place to avoid
+// reshuffling).
 export const SUBJECT_PALETTE = [
-  "#e94560","#ff8c42","#e8a500","#4ecca3","#58a6ff",
-  "#a78bfa","#ff69b4","#43aa8b","#ff9365","#67e8f9",
-  "#34d399","#c48b00","#60a5fa","#f472b6","#2dd4bf",
-  "#fb923c","#c084fc","#86efac","#f87171","#e8a838",
-  "#6bcb77","#4cb8c4","#c77dba","#95a5a6","#7b68ee",
+  "#ef5e78","#ff9b59","#ffc14d","#66efc2","#58a6ff",
+  "#a78bfa","#ff69b4","#3ee8dc","#ff9365","#67e8f9",
+  "#34d399","#f5d040","#85c0ff","#ff8dc7","#2dd4bf",
+  "#ffb27d","#c084fc","#86efac","#fb7185","#ffd47e",
+  "#6bcb77","#22d3ee","#e879f9","#f87171","#7b68ee",
 ];
 
 // Row background tokens live in src/core/themes.js (var(--row-*)).
