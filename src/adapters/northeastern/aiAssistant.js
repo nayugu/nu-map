@@ -58,6 +58,16 @@ let _sse = null;
 let _connected = false;
 let _reconnectTimer = null;
 
+// Returning from Claude via the Back button restores this page from the
+// back/forward cache with a dead SSE channel — the status dot would show
+// link-down (or stale consent) until a manual refresh. Reload on bfcache
+// restore so the page always comes back live.
+if (typeof window !== "undefined") {
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) window.location.reload();
+  });
+}
+
 function connect() {
   if (_sse) return;
   try {
