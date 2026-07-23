@@ -103,6 +103,10 @@ export function PlannerProvider({ children }) {
     if (redirectTo) {
       setClaudePairedRaw(true);
       setClaudeAccessEnabledRaw(true);
+      // Push the plan once, awaited, BEFORE leaving for Claude — otherwise
+      // this OAuth path navigates away and the server would have no
+      // snapshot, so Claude's first read would say "no plan synced".
+      await aiAssistant?.syncPlanNow?.(buildPlanContextRef.current());
       window.location.href = redirectTo;
       return true;
     }
@@ -370,6 +374,7 @@ export function PlannerProvider({ children }) {
   const redoStack     = useRef([]);
   // Stale-closure escape hatches for keyboard handler
   const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {} });
+  const buildPlanContextRef = useRef(() => ({})); // sync-payload builder, refreshed each render
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
   const onDropRef      = useRef(null);   // updated each render for touch drag
@@ -2096,44 +2101,48 @@ export function PlannerProvider({ children }) {
   // Debounced: fires 400 ms after the last change so rapid edits don't flood.
   // Placed here (after all variable declarations) so deps like plans/activePlanId
   // are fully initialized before the dependency array is evaluated.
+  // Build the sync payload. Kept in a ref (refreshed every render) so
+  // one-off awaited syncs — e.g. right before an OAuth redirect leaves
+  // the app — can send the current plan without waiting for the debounce.
+  buildPlanContextRef.current = () => ({
+    planId:    activePlanId,
+    planName:  plans.find(p => p.id === activePlanId)?.name ?? "Untitled",
+    major, major2, concentration: conc, minor1, minor2,
+    majorLabel: null, major2Label: null, minor1Label: null, minor2Label: null,
+    studentType,
+    currentSemId,
+    entSem: planEntSem, entYear: planEntYear,
+    gradSem: planGradSem, gradYear: planGradYear,
+    placements,
+    semOrders,
+    workExperience: specialTermPl,
+    placedOut: [...placedOut],
+    substitutions,
+    bonusSH,
+    shOverrides,
+    offeredOverrides,
+    totalSHPlaced,
+    totalSHDone,
+    prereqViolationCount: prereqViolations.size,
+    coreqViolationCount:  coreqViolations.size,
+    prereqViolations: Object.fromEntries(prereqViolations),
+    coreqViolations:  Object.fromEntries(coreqViolations),
+    starredIds: [...starredIds],
+    palette,
+    locale,
+    coopGradConflicts,
+    selectedCourseId: selectedId,
+    allPlans: plans.map(p => ({
+      id: p.id, name: p.name, active: p.id === activePlanId,
+      ...(p.studentType && { studentType: p.studentType }),
+    })),
+  });
+
   useEffect(() => {
     if (!aiAssistant?.notifyChange) return;
     if (aiAssistant.isConsentEnabled && !aiAssistant.isConsentEnabled()) return;
     const timer = setTimeout(() => {
-      const planName = plans.find(p => p.id === activePlanId)?.name ?? "Untitled";
-      aiAssistant.notifyChange({
-        planId:    activePlanId,
-        planName,
-        major, major2, concentration: conc, minor1, minor2,
-        majorLabel: null, major2Label: null, minor1Label: null, minor2Label: null,
-        studentType,
-        currentSemId,
-        entSem: planEntSem, entYear: planEntYear,
-        gradSem: planGradSem, gradYear: planGradYear,
-        placements,
-        semOrders,
-        workExperience: specialTermPl,
-        placedOut: [...placedOut],
-        substitutions,
-        bonusSH,
-        shOverrides,
-        offeredOverrides,
-        totalSHPlaced,
-        totalSHDone,
-        prereqViolationCount: prereqViolations.size,
-        coreqViolationCount:  coreqViolations.size,
-        prereqViolations: Object.fromEntries(prereqViolations),
-        coreqViolations:  Object.fromEntries(coreqViolations),
-        starredIds: [...starredIds],
-        palette,
-        locale,
-        coopGradConflicts,
-        selectedCourseId: selectedId,
-        allPlans: plans.map(p => ({
-          id: p.id, name: p.name, active: p.id === activePlanId,
-          ...(p.studentType && { studentType: p.studentType }),
-        })),
-      });
+      aiAssistant.notifyChange(buildPlanContextRef.current());
     }, 400);
     return () => clearTimeout(timer);
   }, [ // eslint-disable-line react-hooks/exhaustive-deps

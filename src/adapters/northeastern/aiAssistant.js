@@ -181,6 +181,21 @@ export default {
   /** Whether this browser is linked to a Claude conversation. */
   isPaired() { return _consent.paired; },
 
+  /**
+   * Push the plan once and await it — used right before an OAuth redirect
+   * leaves the app, so the server has a snapshot before Claude reads it.
+   */
+  async syncPlanNow(context) {
+    if (!_consent.paired) return;
+    try {
+      await fetch(`${SERVER}/sync-plan/${SESSION_ID}`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ v: SYNC_PAYLOAD_VERSION, plan: context }),
+      });
+    } catch {}
+  },
+
   /** Whether plan access for Claude is currently enabled (paired + not paused). */
   isConsentEnabled() { return _consent.paired && _consent.enabled; },
 
