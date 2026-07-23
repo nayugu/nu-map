@@ -16,6 +16,7 @@ import { z } from "zod";
 import {
   SUPPORTED_ACTIONS,
   SUPPORTED_UI_COMMANDS,
+  ACTION_DOCS,
 } from "../../src/adapters/mcp/plannerActionAdapter.js";
 
 export const SYNC_PAYLOAD_VERSION = 1;
@@ -112,6 +113,22 @@ export function createServer({ query, sessionId, state, channel }) {
       return { status: "rejected", reason: "DELETE_PLAN requires confirmDestructive: true on the changeset." };
     if (channel.clientCount(sessionId) === 0)
       return { status: "rejected", reason: "No NU Map browser tab is connected. Open NU Map and ensure the MCP integration is active." };
+    // Changesets are atomic: any invalid or unknown action rejects the
+    // whole batch WITH the per-action reasons, so the model can fix its
+    // composition and retry instead of the user approving a half-broken
+    // proposal. (See get_meta capabilities.actionDocs for the reference.)
+    const plan = state.getPlan(sessionId);
+    if (plan) {
+      const v = query.validateChangeset(actions, plan);
+      if (v.unsupported.length || v.invalid.length) {
+        return {
+          status: "rejected",
+          reason: "The changeset contains invalid actions. Fix them and retry; action reference is in get_meta capabilities.actionDocs.",
+          unsupported: v.unsupported,
+          invalid: v.invalid,
+        };
+      }
+    }
     return null;
   };
 
@@ -161,6 +178,7 @@ export function createServer({ query, sessionId, state, channel }) {
       capabilities: {
         syncPayloadVersion: SYNC_PAYLOAD_VERSION,
         actions:     SUPPORTED_ACTIONS,
+        actionDocs:  ACTION_DOCS,
         uiCommands:  SUPPORTED_UI_COMMANDS,
         courseInclude: COURSE_INCLUDE,
         planInclude:   PLAN_INCLUDE,
@@ -375,7 +393,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "validate_changeset",
-    "Dry-run a sequence of actions against the plan: returns the resulting plan, violations, and any unsupported action types — without touching real state. Use before propose_changes or apply_changes.",
+    "Dry-run a sequence of actions against the plan: returns the resulting plan, violations, unsupported action types, and invalid actions with reasons — without touching real state. ALWAYS use this before propose_changes or apply_changes; compose actions from get_meta capabilities.actionDocs (exact argument shapes and when to use each).",
     {
       actions: z.array(ActionSchema).describe("Actions to apply in order"),
       plan:    z.any().optional().describe("Starting plan — omit to use the live plan"),

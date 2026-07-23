@@ -73,15 +73,46 @@ test("completedCourseIds: incoming + semesters before currentSemId", () => {
 });
 
 test("palette/star actions maintain their lists; ADD_COURSE clears palette", () => {
-  const plan = { ...basePlan(), palette: ["CS9999"], starredIds: [] };
+  const plan = { ...basePlan(), palette: ["CS2001"], starredIds: [] };
   const { plan: next } = applyChangeset(plan, [
     { type: "STAR_COURSE", courseId: "CS1000" },
-    { type: "ADD_TO_PALETTE", courseId: "CS1000" },   // rejected: already placed
-    { type: "ADD_COURSE", courseId: "CS9999", semId: "fall2025" },
+    { type: "ADD_TO_PALETTE", courseId: "CS1000" },   // no-op: already placed
+    { type: "ADD_COURSE", courseId: "CS2001", semId: "fall2025" },
   ], courseMap);
   assert.deepEqual(next.starredIds, ["CS1000"]);
   assert.deepEqual(next.palette, []);                  // placing removed it
-  assert.equal(next.placements.CS9999, "fall2025");
+  assert.equal(next.placements.CS2001, "fall2025");
+});
+
+test("argument validation rejects nonsense with reasons instead of applying it", () => {
+  const cm = { ...courseMap, VAR1: { id: "VAR1", sh: 1, shMin: 1, shMax: 4, prereqs: [], coreqs: [] } };
+  const { plan: next, invalid, appliedCount } = applyChangeset(basePlan(), [
+    { type: "ADD_COURSE", courseId: "NOPE123", semId: "fall2025" },      // unknown course
+    { type: "ADD_COURSE", courseId: "CS2001", semId: "garbage" },        // bad semId
+    { type: "SET_SH_OVERRIDE", courseId: "CS1000", value: 2 },           // fixed-credit course
+    { type: "SET_SH_OVERRIDE", courseId: "VAR1", value: 9 },             // out of range
+    { type: "SET_SH_OVERRIDE", courseId: "VAR1", value: 3 },             // valid
+    { type: "SET_OFFERED_OVERRIDE", courseId: "CS1000", semTypeId: "SP", status: false }, // bad semTypeId
+    { type: "SET_STUDENT_TYPE", studentType: "phd" },                    // bad value
+    { type: "SET_BONUS_SH", amount: "12" },                              // string, not number
+  ], cm);
+  assert.equal(appliedCount, 1);
+  assert.equal(invalid.length, 7);
+  assert.ok(invalid.find(x => x.type === "SET_SH_OVERRIDE" && x.reason.includes("fixed credits")));
+  assert.equal(next.shOverrides.VAR1, 3);
+  assert.equal(next.placements.NOPE123, undefined);      // nothing leaked
+});
+
+test("SET_STUDENT_TYPE clears programs, so type-then-program order works", () => {
+  const plan = { ...basePlan(), major: "2026/x/old_major", concentration: "Old" };
+  const { plan: next } = applyChangeset(plan, [
+    { type: "SET_STUDENT_TYPE", studentType: "graduate" },
+    { type: "SET_MAJOR", programId: "2026/y/new_ms" },
+    { type: "SET_CONCENTRATION", label: "ML" },
+  ], courseMap);
+  assert.equal(next.studentType, "graduate");
+  assert.equal(next.major, "2026/y/new_ms");             // survived the clear
+  assert.equal(next.concentration, "ML");
 });
 
 test("action registry covers the port's documented types", () => {

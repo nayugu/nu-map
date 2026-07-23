@@ -809,13 +809,16 @@ export function PlannerProvider({ children }) {
       });
     }
 
-    // Commit program / timeline updates
+    // Commit program / timeline updates. Student type MUST commit first:
+    // setStudentType clears major/major2/conc (switching program trees), so
+    // running it after the program setters would wipe what the changeset
+    // just set (e.g. "switch to grad + set AI MS + ML concentration").
+    if ("studentType"   in programUpdates) setStudentType(programUpdates.studentType);
     if ("major"         in programUpdates) setMajor(programUpdates.major);
     if ("major2"        in programUpdates) setMajor2(programUpdates.major2);
     if ("conc"          in programUpdates) setConc(programUpdates.conc);
     if ("minor1"        in programUpdates) setMinor1(programUpdates.minor1);
     if ("minor2"        in programUpdates) setMinor2(programUpdates.minor2);
-    if ("studentType"   in programUpdates) setStudentType(programUpdates.studentType);
     if ("bonusSH"       in programUpdates) setBonusSH(programUpdates.bonusSH);
     if ("currentSemId"  in programUpdates) setCurrentSemId(programUpdates.currentSemId);
     if ("entSem"        in programUpdates) setEntSem(programUpdates.entSem);

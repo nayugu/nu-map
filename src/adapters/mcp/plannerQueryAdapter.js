@@ -462,12 +462,13 @@ export function createPlannerQuery(deps) {
   }
 
   function validateChangeset(actions, plan) {
-    const { plan: resultingPlan, appliedCount, unsupported, violations } =
+    const { plan: resultingPlan, appliedCount, unsupported, invalid, violations } =
       applyChangeset(plan, actions, courseMap);
     return {
-      valid: violations.length === 0 && unsupported.length === 0,
+      valid: violations.length === 0 && unsupported.length === 0 && invalid.length === 0,
       violations,
       unsupported,
+      invalid,
       appliedCount,
       totalCount: actions.length,
       resultingPlan,

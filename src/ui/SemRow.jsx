@@ -238,7 +238,7 @@ export default function SemRow({ sem }) {
           </div>
           <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}><TText>{sem.sub}</TText></div>
           {shEl}
-          {sem.id === "incoming" && !isIncomingCollapsed && (
+          {sem.id === "incoming" && (!isIncomingCollapsed || claudePreview?.changed?.has?.("bonusSH")) && (
             <div style={{ paddingLeft: 19, marginTop: 5 }} onClick={e => e.stopPropagation()}>
               <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 2 }}><TText>general {unitName}</TText></div>
               <input
@@ -413,6 +413,19 @@ export default function SemRow({ sem }) {
               }}
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
+              {/* Claude preview: chips marking where moved courses came FROM */}
+              {claudePreview && Object.entries(claudePreview.moved ?? {})
+                .filter(([, m]) => m.from === sem.id)
+                .map(([id, m]) => (
+                  <div key={`mv-${id}`} style={{
+                    minHeight: isPhone ? 0 : 70, border: "2px dashed #fb923c", borderRadius: 6,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    opacity: 0.6, fontSize: 10, fontWeight: 700, color: "#fb923c",
+                    padding: "0 6px", textAlign: "center",
+                  }}>
+                    {courseMap[id]?.code ?? id} →
+                  </div>
+                ))}
               {Array.from({ length: emptySlots }).map((_, i) => (
                 <div key={`ms-${i}`} style={{ minHeight: isPhone ? 0 : 70, border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg }} />
               ))}
@@ -448,25 +461,36 @@ export default function SemRow({ sem }) {
               </div>
             )}
 
-            {/* Other <3 SH zone (collapsible) */}
-            {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 3) < 3)) && (
+            {/* Other <3 SH zone (collapsible; forced open while a Claude
+                preview touches one of its courses — a removed 1 SH course
+                must ghost visibly, not vanish behind a collapsed section) */}
+            {(others.length > 0 || (dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 3) < 3)) && (() => {
+              const previewTouchesOthers = !!claudePreview && others.some(c =>
+                claudePreview.added?.[c.id] !== undefined ||
+                claudePreview.moved?.[c.id] !== undefined ||
+                claudePreview.removed?.has?.(c.id) ||
+                claudePreview.shOvChanged?.has?.(c.id));
+              const otherOpen = showOther || previewTouchesOthers;
+              return (
               <div style={{ marginTop: 5 }}>
                 <button
                   onClick={() => setShowOther(v => !v)}
                   style={{
-                    fontSize: 9, color: "var(--text-5)", background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left"
+                    fontSize: 9, color: previewTouchesOthers ? "#fb923c" : "var(--text-5)",
+                    fontWeight: previewTouchesOthers ? 700 : 400,
+                    background: "none", border: "none", cursor: "pointer", padding: 0, marginBottom: 2, textAlign: "left"
                   }}
-                  aria-expanded={showOther}
-                  title={showOther ? t("sem.other.title.hide") : t("sem.other.title.show")}
+                  aria-expanded={otherOpen}
+                  title={otherOpen ? t("sem.other.title.hide") : t("sem.other.title.show")}
                 >
-                  {showOther
+                  {otherOpen
                     ? t("sem.other.label.open")
                     : (!isPhone && others.length > 0)
                       ? `► ${others.map(c => `${c.subject} ${c.number}`).join(", ")}`
                       : t("sem.other.label.closed")
                   }
                 </button>
-                {showOther && (
+                {otherOpen && (
                   <div
                     onDragOver={e => {
                       if (!dragInfo || dragInfo.type !== "course") return;
@@ -499,7 +523,8 @@ export default function SemRow({ sem }) {
                   </div>
                 )}
               </div>
-            )}
+              );
+            })()}
           </div>
         )}
       </div>
