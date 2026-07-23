@@ -126,8 +126,8 @@ export function checkViolations(plan, courseMap) {
 const asArray = (v) => (Array.isArray(v) ? v : []);
 const SEM_ID_RE = /^(incoming|(fall|spring|spr|sumA|sumB)\d{4})$/;
 
-const badCourse = (courseMap, id) =>
-  !id || typeof id !== "string" ? "courseId is required"
+const badCourse = (courseMap, id, field = "courseId") =>
+  !id || typeof id !== "string" ? `${field} is required`
   : courseMap && !courseMap[id] ? `Unknown course: ${id}`
   : null;
 const badSem = (semId) =>
@@ -167,11 +167,15 @@ const APPLIERS = {
     plan.placedOut = plan.placedOut.filter(id => id !== a.courseId);
   },
 
-  ADD_SUBSTITUTION: (plan, a) => {
+  ADD_SUBSTITUTION: (plan, a, courseMap) => {
+    const err = badCourse(courseMap, a.fromId, "fromId") ?? badCourse(courseMap, a.toId, "toId");
+    if (err) return err;
     if (!plan.substitutions.some(s => s.from === a.fromId && s.to === a.toId))
       plan.substitutions.push({ from: a.fromId, to: a.toId });
   },
   REMOVE_SUBSTITUTION: (plan, a) => {
+    if (!plan.substitutions.some(s => s.from === a.fromId && s.to === a.toId))
+      return `No substitution ${a.fromId} → ${a.toId} exists`;
     plan.substitutions = plan.substitutions.filter(
       s => !(s.from === a.fromId && s.to === a.toId)
     );

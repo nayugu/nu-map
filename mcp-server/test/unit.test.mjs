@@ -103,6 +103,22 @@ test("argument validation rejects nonsense with reasons instead of applying it",
   assert.equal(next.placements.NOPE123, undefined);      // nothing leaked
 });
 
+test("substitutions validate both courses and reject removing a missing pair", () => {
+  const { plan: next, invalid, appliedCount } = applyChangeset(basePlan(), [
+    { type: "ADD_SUBSTITUTION", fromId: "CS1000", toId: "GHOST999" },      // unknown toId
+    { type: "ADD_SUBSTITUTION", fromId: "CS1000" },                        // missing toId
+    { type: "ADD_SUBSTITUTION", fromId: "CS1000", toId: "CS2000" },        // valid
+    { type: "REMOVE_SUBSTITUTION", fromId: "CS1000", toId: "CS2001" },     // pair doesn't exist
+    { type: "REMOVE_SUBSTITUTION", fromId: "CS1000", toId: "CS2000" },     // valid (added above)
+  ], courseMap);
+  assert.equal(appliedCount, 2);
+  assert.equal(invalid.length, 3);
+  assert.ok(invalid.find(x => x.type === "ADD_SUBSTITUTION" && x.reason.includes("Unknown course: GHOST999")));
+  assert.ok(invalid.find(x => x.type === "ADD_SUBSTITUTION" && x.reason.includes("toId is required")));
+  assert.ok(invalid.find(x => x.type === "REMOVE_SUBSTITUTION" && x.reason.includes("No substitution")));
+  assert.deepEqual(next.substitutions, []);
+});
+
 test("SET_STUDENT_TYPE clears programs, so type-then-program order works", () => {
   const plan = { ...basePlan(), major: "2026/x/old_major", concentration: "Old" };
   const { plan: next } = applyChangeset(plan, [

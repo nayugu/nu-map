@@ -740,10 +740,14 @@ export default function GradPanel({ wideCatalog = false }) {
 
   // Claude proposal preview: outline the selector(s) the changeset touches
   // in orange, and give each an anchor the auto-focus scroll can target.
-  const pvMark = (field) => ({
+  // inset: draw the ring inside the element's box — needed where an
+  // overflow:hidden ancestor (the minor grid) would clip an offset outline.
+  const pvMark = (field, { inset = false } = {}) => ({
     "data-claude-focus": field,
     style: claudePreview?.changed?.has?.(field)
-      ? { outline: "2px dashed #fb923c", outlineOffset: 3, borderRadius: 6 }
+      ? inset
+        ? { outline: "2px dashed #fb923c", outlineOffset: -2, borderRadius: 6, padding: 4 }
+        : { outline: "2px dashed #fb923c", outlineOffset: 3, borderRadius: 6 }
       : undefined,
   });
 
@@ -1129,7 +1133,7 @@ export default function GradPanel({ wideCatalog = false }) {
               {!isGrad && (
               <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
                 {[[t("grad.minor1.label"), minor1, setMinor1, "minor1"], [t("grad.minor2.label"), minor2, setMinor2, "minor2"]].map(([lbl, val, set, field]) => (
-                  <div key={lbl} data-claude-focus={field} style={{ minWidth: 0, overflow: "hidden", ...(pvMark(field).style ?? {}) }}>
+                  <div key={lbl} data-claude-focus={field} style={{ minWidth: 0, overflow: "hidden", ...(pvMark(field, { inset: true }).style ?? {}) }}>
                     <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
                     <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
                   </div>

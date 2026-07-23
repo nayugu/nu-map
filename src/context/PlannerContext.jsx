@@ -2178,6 +2178,7 @@ export function PlannerProvider({ children }) {
   // validated. The grid renders the simulated placements; the diff sets
   // drive the orange ghost styling on affected cards.
   const computeClaudePreview = (proposal) => {
+    try {
     // Dry-run the changeset against a full snapshot (adapter field names)
     // so the simulated plan covers EVERY field a proposal can touch, not
     // just placements. The value block swaps these in so the whole UI
@@ -2264,6 +2265,13 @@ export function PlannerProvider({ children }) {
       workChanged, workTermsChanged,
       focus,
     });
+    } catch (e) {
+      // A proposal must never be able to crash the planner. No preview is
+      // strictly better than a white screen; the card still shows the
+      // action list so the user can review blind or reject.
+      console.warn("Claude preview dry-run failed:", e);
+      setClaudePreview(null);
+    }
   };
 
   // Manual toggle from the card. A user "hide" is remembered so the

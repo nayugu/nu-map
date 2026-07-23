@@ -243,6 +243,10 @@ export default function BankPanel() {
   const [collapsePlacedOut, setCollapsePlacedOut] = useState(true);
   const [hoveredPlacedOutId, setHoveredPlacedOutId] = useState(null);
   const [collapseSubstitutions, setCollapseSubstitutions] = useState(true);
+  // A Claude preview touching these sections force-opens them — otherwise
+  // the previewed chip/row would sit invisible behind a collapsed header.
+  const pvPlacedOutTouched = !!(claudePreview?.placedOut?.added?.length || claudePreview?.placedOut?.removed?.length);
+  const pvSubsTouched      = !!(claudePreview?.substitutions?.added?.length || claudePreview?.substitutions?.removed?.length);
   const [subFromId, setSubFromId] = useState(null);
   const [subToId,   setSubToId]   = useState(null);
   const [hoveredSubId, setHoveredSubId] = useState(null);
@@ -404,12 +408,12 @@ export default function BankPanel() {
               cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
             }}
           >
-            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: pvPlacedOutTouched ? "#fb923c" : "var(--text-5)", letterSpacing: "0.05em" }}>
               {t("bank.section.placedout")}{placedOut.size > 0 ? ` (${placedOut.size})` : ""}
             </span>
-            <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut ? "▶" : "▼"}</span>
+            <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut && !pvPlacedOutTouched ? "▶" : "▼"}</span>
           </div>
-          {!collapsePlacedOut && (
+          {(!collapsePlacedOut || pvPlacedOutTouched) && (
             <div
               data-drop-placedout="true"
               onDragOver={e => {
@@ -433,10 +437,13 @@ export default function BankPanel() {
                 fontSize: isPhone ? 9 : 10,
               }}
             >
-              {placedOut.size > 0 ? (
-                Array.from(placedOut).map(id => {
+              {(placedOut.size > 0 || pvPlacedOutTouched) ? (
+                // Union in preview-removed ids so they render as ghosts
+                // instead of silently vanishing from the list.
+                [...new Set([...placedOut, ...(claudePreview?.placedOut?.removed ?? [])])].map(id => {
                   const c = courseMap[id];
                   if (!c) return null;
+                  const pvRemoved = claudePreview?.placedOut?.removed?.includes?.(id);
                   return (
                     <div
                       key={id}
@@ -455,10 +462,11 @@ export default function BankPanel() {
                         padding: isPhone ? "2px 4px" : "3px 6px",
                         background: "var(--bg-surface-2)", borderRadius: 4,
                         cursor: "grab",
-                        // Orange ring when a Claude proposal adds this placed-out entry
-                        border: claudePreview?.placedOut?.added?.includes?.(id)
+                        // Orange ring when a Claude proposal adds or removes this entry
+                        border: claudePreview?.placedOut?.added?.includes?.(id) || pvRemoved
                           ? "1.5px dashed #fb923c" : "1.5px solid transparent",
-                        textDecoration: selectedId === id || hoveredPlacedOutId === id ? "underline" : "none",
+                        opacity: pvRemoved ? 0.45 : 1,
+                        textDecoration: pvRemoved ? "line-through" : selectedId === id || hoveredPlacedOutId === id ? "underline" : "none",
                         textDecorationStyle: "dotted",
                         textDecorationColor: "var(--text-4)",
                         textUnderlineOffset: 2,
@@ -514,12 +522,12 @@ export default function BankPanel() {
             cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
           }}
         >
-          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.05em" }}>
+          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: pvSubsTouched ? "#fb923c" : "var(--text-5)", letterSpacing: "0.05em" }}>
             {t("bank.section.substitutions")}{substitutions.length > 0 ? ` (${substitutions.length})` : ""}
           </span>
-          <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapseSubstitutions ? "▶" : "▼"}</span>
+          <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapseSubstitutions && !pvSubsTouched ? "▶" : "▼"}</span>
         </div>
-        {!collapseSubstitutions && (
+        {(!collapseSubstitutions || pvSubsTouched) && (
           <div style={{ padding: "0 8px 8px" }}>
             {!isPhone && (
               <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 5, lineHeight: 1.4 }}>
@@ -527,10 +535,18 @@ export default function BankPanel() {
               </div>
             )}
 
-            {substitutions.map(({ from, to }) => {
+            {[
+              ...substitutions,
+              // Preview-removed substitutions stay visible as ghosts.
+              ...(claudePreview?.substitutions?.removed ?? []).map(k => {
+                const [from, to] = k.split("→");
+                return { from, to, pvRemoved: true };
+              }),
+            ].map(({ from, to, pvRemoved }) => {
               const fc = courseMap[from];
               const tc = courseMap[to];
               const fromPlaced = !!placements[from];
+              const pvAdded = claudePreview?.substitutions?.added?.includes?.(`${from}→${to}`);
               const underlineStyle = (id) => ({
                 textDecoration: selectedId === id || hoveredSubId === id ? "underline" : "none",
                 textDecorationStyle: "dotted",
@@ -543,7 +559,9 @@ export default function BankPanel() {
                   display: "flex", alignItems: "center", gap: isPhone ? 2 : 5,
                   padding: isPhone ? "1px 3px" : "3px 5px", marginBottom: 2,
                   background: "var(--bg-surface-2)", borderRadius: 4,
-                  opacity: fromPlaced ? 1 : 0.55,
+                  border: pvAdded || pvRemoved ? "1.5px dashed #fb923c" : "1.5px solid transparent",
+                  opacity: pvRemoved ? 0.45 : fromPlaced ? 1 : 0.55,
+                  textDecoration: pvRemoved ? "line-through" : "none",
                   fontSize: isPhone ? 5 : 10,
                 }}>
                   {!fromPlaced && (
