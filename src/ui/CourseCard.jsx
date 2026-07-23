@@ -3,12 +3,45 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useState } from "react";
 import { usePlanner }     from "../context/PlannerContext.jsx";
+import { useRelevance }   from "../context/RelevanceContext.jsx";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
+import { useTheme }    from "../context/ThemeContext.jsx";
 import { useTranslatedText } from "../context/TranslationContext.jsx";
+
+// Vibrance-preserving relevance fade, hue-pure in both themes and
+// gentler than the nominal k in both (fading reads stronger than the
+// numbers suggest):
+//  - dark: scale the RGB channels toward black at 60% strength — a pure
+//    shade of the same hue. (Don't pin HSL saturation while darkening:
+//    chroma peaks at mid-lightness, so that makes colours MORE intense.)
+//  - light: raise HSL lightness toward a 0.92 ceiling at 80% strength
+//    with saturation pinned, so tints stay candy-bright instead of
+//    washing toward grey the way a plain white mix would.
+function fadeSubjectColor(hex, k, isDark) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = ((n >> 16) & 255) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+  if (isDark) {
+    const sc = v => Math.round(v * 255 * (1 - k * 0.6));
+    return `rgb(${sc(r)},${sc(g)},${sc(b)})`;
+  }
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+  let l = (max + min) / 2;
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+  let h = 0;
+  if (d !== 0) {
+    h = (max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4) * 60;
+  }
+  l = l + (0.92 - l) * k * 0.8;
+  const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs(((h / 60) % 2) - 1)), m = l - c / 2;
+  const [rr, gg, bb] =
+    h < 60  ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] :
+    h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+  return `rgb(${Math.round((rr + m) * 255)},${Math.round((gg + m) * 255)},${Math.round((bb + m) * 255)})`;
+}
 
 /**
  * @param {object} course   - normalised course object
@@ -93,6 +126,29 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
 
   const dimmed = hasSel && !isSel && !isConn;
   const [isMouseHov, setIsMouseHov] = useState(false);
+
+  // Relevance fade — courses allocated to the selected major(s) /
+  // concentration keep their full subject colour, minor courses a step
+  // below, everything else slightly below that, so the vibrant colours
+  // form a hierarchy instead of competing. Only the colour-bearing
+  // elements (stripe + code) fade, via alpha over the card background:
+  // that yields a lighter tint of the same hue (vibrance-preserving)
+  // rather than greying the whole card. Selection focus, connection
+  // highlighting and bank cards are exempt.
+  // The code text fades half as much as the stripe — it carries the
+  // card's identity, so it should stay closer to full strength.
+  const { active: relevanceOn, majorKeys, minorKeys } = useRelevance();
+  const { themeName } = useTheme();
+  let stripeColor = course.color, codeColor = course.color;
+  if (inSem && relevanceOn && !isSel && !isConn) {
+    const key = `${course.subject}${course.number}`;
+    if (!majorKeys.has(key)) {
+      const isMinor = minorKeys.has(key);
+      const isDark  = themeName === "dark";
+      stripeColor = fadeSubjectColor(course.color, isMinor ? 0.2 : 0.35, isDark);
+      codeColor   = fadeSubjectColor(course.color, isMinor ? 0.1 : 0.175, isDark);
+    }
+  }
 
   // Selection glow — tinted with the course's own subject colour. Only the
   // selected card glows; connected (prereq/coreq) cards get a rim change only,
@@ -190,9 +246,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           boxShadow: isSel ? selGlow : isCardHov ? "var(--shadow-card-hov)" : "none",
         }}
       >
-        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: course.color, borderRadius: "3px 0 0 3px" }} />
+        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: stripeColor, borderRadius: "3px 0 0 3px" }} />
         {/* Shrink code + SH when a warning icon is present so code is always readable */}
-        <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 8 : 10, fontWeight: 800, color: course.color, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 8 : 10, fontWeight: 800, color: codeColor, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {course.code}
         </span>
         <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
@@ -256,7 +312,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
       {/* Subject colour stripe */}
       <div style={{
         position: "absolute", left: 0, top: 0, bottom: 0, width: 4,
-        background: course.color, borderRadius: "4px 0 0 4px",
+        background: stripeColor, borderRadius: "4px 0 0 4px",
       }} />
 
       {/* Star toggle — bank cards only */}
@@ -280,7 +336,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
 
       {/* Course code */}
       <div style={{
-        fontSize: 11, fontWeight: 800, color: course.color,
+        fontSize: 11, fontWeight: 800, color: codeColor,
         letterSpacing: "0.02em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
         display: "flex", alignItems: "baseline", gap: 3,
       }}>

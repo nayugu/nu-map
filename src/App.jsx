@@ -1,5 +1,6 @@
 // APP  -- composition root (hexagonal architecture)
 import { PlannerProvider, usePlanner } from './context/PlannerContext.jsx';
+import { RelevanceProvider }           from './context/RelevanceContext.jsx';
 import { ThemeProvider }               from './context/ThemeContext.jsx';
 import { InstitutionProvider }         from './context/InstitutionContext.jsx';
 import { LanguageProvider }            from './context/LanguageContext.jsx';
@@ -121,7 +122,9 @@ export default function App() {
         <LanguageProvider>
           <TranslationProvider catalogLocale={institutionAdapter.institution?.contentLocale ?? institutionAdapter.institution?.defaultLocale ?? "en"}>
             <PlannerProvider>
-              <PlannerApp />
+              <RelevanceProvider>
+                <PlannerApp />
+              </RelevanceProvider>
             </PlannerProvider>
           </TranslationProvider>
         </LanguageProvider>
