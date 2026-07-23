@@ -77,6 +77,27 @@ export function createServer({ query, sessionId, state, channel }) {
     name:        "NU Map",
     version:     "2.0.0",
     description: "Read and modify a Northeastern University course plan in NU Map",
+  }, {
+    // Delivered to the model at initialize — the ground rules it needs
+    // BEFORE composing a changeset, so restrictions aren't discovered
+    // through rejections.
+    instructions: [
+      "NU Map's primary purpose is READING: understand the user's plan and Northeastern's catalog so you can discuss them accurately. Changing the plan is secondary and always user-controlled.",
+      "",
+      "Making changes:",
+      "- Default to propose_changes — the user reviews a live preview and approves or rejects. Use apply_changes only when the _plan envelope shows autoApplyEnabled: true.",
+      "- Changesets are atomic: one invalid action rejects the whole batch, with a per-action reason saying what to fix.",
+      "- The complete action reference (arguments + restrictions) is in get_meta capabilities.actionDocs. validate_changes dry-runs a changeset without touching anything — use it when unsure.",
+      "- Never guess ids. Verify courseIds via search_courses/get_course and programIds via list_programs before composing a changeset.",
+      "",
+      "Restrictions that most often reject changesets:",
+      "- SET_SH_OVERRIDE: most courses have FIXED credits and cannot be overridden. Only valid when get_course shows a credit range (shMin < shMax).",
+      "- Waiver vs equivalence: ADD_PLACED_OUT waives a course (satisfies prereqs, NO credit); ADD_SUBSTITUTION declares one real course fills another's requirement slot. They are not interchangeable.",
+      "- semId format: 'fall2026', 'spr2027', 'sumA2027', 'sumB2027', or 'incoming'.",
+      "- SET_STUDENT_TYPE clears major/major2/concentration — put SET_MAJOR (and SET_CONCENTRATION) after it in the same changeset.",
+      "- SET_OFFERED_OVERRIDE status and SET_BONUS_SH amount must be real booleans/numbers, not strings.",
+      "- DELETE_PLAN requires confirmDestructive: true on the changeset.",
+    ].join("\n"),
   });
 
   // ── Response helpers ────────────────────────────────────────────
@@ -411,7 +432,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "propose_changes",
-    "The standard way to change a plan: queue a changeset for the user to review in the NU Map UI. The user sees the rationale, each action, and a live preview, then approves or rejects — nothing is modified without their approval. Their decision appears in the _plan envelope of your next tool call (and in get_plan include:'proposals'). EXCEPTION: when the _plan envelope shows autoApplyEnabled: true, the user has opted into direct edits — use apply_changes instead for clearly-intended changes.",
+    "The standard way to change a plan: queue a changeset for the user to review in the NU Map UI. The user sees the rationale, each action, and a live preview, then approves or rejects — nothing is modified without their approval. Their decision appears in the _plan envelope of your next tool call (and in get_plan include:'proposals'). EXCEPTION: when the _plan envelope shows autoApplyEnabled: true, the user has opted into direct edits — use apply_changes instead for clearly-intended changes. Compose actions from get_meta capabilities.actionDocs (exact shapes + restrictions) and pre-flight with validate_changeset: one invalid action rejects the whole changeset.",
     ChangesetArgs,
     async ({ actions, rationale, label, confirmDestructive }) => {
       const rejection = guardChangeset(actions, confirmDestructive);
@@ -446,7 +467,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "apply_changes",
-    "Apply a changeset immediately WITHOUT per-change review — only works when the user has enabled auto-apply in NU Map settings (check for autoApplyEnabled: true in the _plan envelope; rejected otherwise). When auto-apply is on, use this for clearly-intended changes instead of propose_changes. Applies as one undo entry; server state updates optimistically.",
+    "Apply a changeset immediately WITHOUT per-change review — only works when the user has enabled auto-apply in NU Map settings (check for autoApplyEnabled: true in the _plan envelope; rejected otherwise). When auto-apply is on, use this for clearly-intended changes instead of propose_changes. Applies as one undo entry; server state updates optimistically. Compose actions from get_meta capabilities.actionDocs and pre-flight with validate_changeset: one invalid action rejects the whole changeset.",
     ChangesetArgs,
     async ({ actions, rationale, label, confirmDestructive }) => {
       const rejection = guardChangeset(actions, confirmDestructive, { needsAutoApply: true });
