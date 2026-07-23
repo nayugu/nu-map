@@ -66,6 +66,19 @@ if (typeof window !== "undefined") {
   window.addEventListener("pageshow", (e) => {
     if (e.persisted) window.location.reload();
   });
+
+  // Pairing can also complete in a DIFFERENT tab: the OAuth flow opens
+  // its own numap tab for consent, then lands on the client's callback
+  // page and gets closed — while a previously-open numap tab sits stale
+  // (no orange dot). `storage` events fire only in other same-origin
+  // tabs, exactly that case: when another tab rewrites the consent or
+  // session identity, reload this one into the new reality.
+  window.addEventListener("storage", (e) => {
+    if ((e.key === "nu-map-claude-consent" || e.key === "nu-map-mcp-session") &&
+        e.newValue !== e.oldValue) {
+      window.location.reload();
+    }
+  });
 }
 
 function connect() {
