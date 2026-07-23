@@ -417,11 +417,11 @@ export function ClaudeOAuthModal() {
           <button
             onClick={() => approve(false)}
             disabled={working}
-            style={{ fontSize: 10, alignSelf: "center", marginTop: -4,
+            style={{ fontSize: 11, fontWeight: 700, width: "100%",
+              padding: "5px 14px", boxSizing: "border-box",
               cursor: working ? "wait" : "pointer",
-              background: "none", border: "none", padding: "2px 4px",
-              color: "var(--text-5)", textDecoration: "underline",
-              textDecorationStyle: "dotted", textUnderlineOffset: 2 }}>
+              background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+              color: "var(--text-4)", borderRadius: 5 }}>
             {t("claude.oauth.catalogOnly")}
           </button>
         )}
