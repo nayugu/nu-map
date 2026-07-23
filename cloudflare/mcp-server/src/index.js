@@ -122,6 +122,29 @@ const defaultHandler = {
       return json({ redirectTo });
     }
 
+    // OAuth consent, denied: build the spec-compliant error redirect back
+    // to the client (redirect_uri?error=access_denied&state=…) so Claude
+    // Code / claude.ai get a clean rejection instead of hanging on a
+    // callback that never arrives.
+    if (pathname === "/authorize/deny" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const stored = body?.pendingId
+        ? await env.OAUTH_KV.get(`pending_auth:${body.pendingId}`, "json")
+        : null;
+      if (!stored) return json({ redirectTo: null });
+      await env.OAUTH_KV.delete(`pending_auth:${body.pendingId}`);
+      const info = stored.oauthReqInfo;
+      let redirectTo = null;
+      if (info?.redirectUri) {
+        const u = new URL(info.redirectUri);
+        u.searchParams.set("error", "access_denied");
+        u.searchParams.set("error_description", "The user declined to share their NU Map plan.");
+        if (info.state) u.searchParams.set("state", info.state);
+        redirectTo = u.href;
+      }
+      return json({ redirectTo });
+    }
+
     if (pathname === "/health") {
       try {
         const query = await getQuery(env);

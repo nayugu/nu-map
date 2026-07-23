@@ -91,7 +91,14 @@ export function PlannerProvider({ children }) {
       clean.searchParams.delete("claude_connect");
       window.history.replaceState({}, "", clean);
     } catch {}
-    if (!approved || !pendingId) return false;
+    if (!pendingId) return false;
+    if (!approved) {
+      // Send the user back to Claude with an access_denied error so the
+      // client stops waiting instead of hanging on the callback.
+      const denyTo = await aiAssistant?.denyOAuth?.(pendingId);
+      if (denyTo) window.location.href = denyTo;
+      return false;
+    }
     const redirectTo = await aiAssistant?.completeOAuth?.(pendingId);
     if (redirectTo) {
       setClaudePairedRaw(true);

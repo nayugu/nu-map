@@ -231,6 +231,22 @@ export default {
   },
 
   /**
+   * Tell the server the user denied an OAuth request; returns the URL to
+   * send the user back to Claude with an access_denied error (or null).
+   */
+  async denyOAuth(pendingId) {
+    try {
+      const res = await fetch(`${SERVER}/authorize/deny`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ pendingId }),
+      });
+      const json = await res.json();
+      return json?.redirectTo ?? null;
+    } catch { return null; }
+  },
+
+  /**
    * Sever the link and reset to a completely fresh slate. Tells the
    * server to unpair and delete its data, discards the local consent
    * AND the session identity, then reloads. Discarding the identity is
