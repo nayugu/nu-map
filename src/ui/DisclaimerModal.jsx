@@ -106,23 +106,28 @@ export default function DisclaimerModal() {
           ))}
         </div>
 
-        {/* GitHub link */}
-        <a
-          href="https://github.com/nayugu/nu-map"
-          target="_blank" rel="noreferrer"
-          style={{
-            display: "block", width: "100%", textAlign: "center", boxSizing: "border-box",
-            padding: "7px 0", marginBottom: 12, borderRadius: 7,
-            background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
-            fontSize: 11, fontWeight: 400, color: "var(--text-3)", textDecoration: "none",
-            fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
-            letterSpacing: "0.02em",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--text-4)"; e.currentTarget.style.color = "var(--text-2)"; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-3)"; }}
-        >
-          /github
-        </a>
+        {/* GitHub + privacy policy links */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+          {[["https://github.com/nayugu/nu-map", "/github"], ["/privacy", "/privacy"]].map(([href, label]) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank" rel="noreferrer"
+              style={{
+                display: "block", flex: 1, textAlign: "center", boxSizing: "border-box",
+                padding: "7px 0", borderRadius: 7,
+                background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+                fontSize: 11, fontWeight: 400, color: "var(--text-3)", textDecoration: "none",
+                fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
+                letterSpacing: "0.02em",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--text-4)"; e.currentTarget.style.color = "var(--text-2)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-3)"; }}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
 
         {/* Footer */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
