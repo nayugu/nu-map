@@ -991,6 +991,17 @@ export default function Header() {
                 >
                   /github
                 </a>
+                <a href={`${import.meta.env.BASE_URL}privacy.html`} target="_blank" rel="noreferrer"
+                  style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
+                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                    border: "1px solid var(--border-2)", color: "var(--text-4)",
+                    textDecoration: "none", boxSizing: "border-box",
+                    fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
+                >
+                  /privacy
+                </a>
               </div>
             </div>
           )}

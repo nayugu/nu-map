@@ -108,7 +108,7 @@ export default function DisclaimerModal() {
 
         {/* GitHub + privacy policy links */}
         <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-          {[["https://github.com/nayugu/nu-map", "/github"], ["/privacy", "/privacy"]].map(([href, label]) => (
+          {[["https://github.com/nayugu/nu-map", "/github"], [`${import.meta.env.BASE_URL}privacy.html`, "/privacy"]].map(([href, label]) => (
             <a
               key={label}
               href={href}
