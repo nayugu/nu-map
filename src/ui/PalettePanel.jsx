@@ -75,7 +75,7 @@ export default function PalettePanel() {
       {/* Scrollable chip list */}
       <div style={{ flex: 1, overflowY: "auto", padding: "5px 4px", display: "flex", flexDirection: "column", gap: 3 }}>
         {palette.length === 0 && (
-          <div style={{ fontSize: 8, color: "var(--text-5)", textAlign: "center", padding: "14px 4px", lineHeight: 1.5 }}>
+          <div style={{ fontSize: 8, color: "var(--text-5)", textAlign: "center", padding: "14px 4px", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
             {t("palette.empty")}
           </div>
         )}

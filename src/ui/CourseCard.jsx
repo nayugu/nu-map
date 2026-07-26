@@ -352,7 +352,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
 
       {/* Title */}
       <div style={{
-        fontSize: 10, color: "var(--text-3)", lineHeight: 1.25,
+        fontSize: 10, color: "var(--text-3)", lineHeight: "calc(1.25 * var(--lh-scale, 1))",
         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginBottom: 2,
       }}>
         {title || <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}

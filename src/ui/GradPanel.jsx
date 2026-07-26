@@ -204,7 +204,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           WebkitOverflowScrolling: "touch",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
-          fontFamily: "'Inter', system-ui, sans-serif", fontSize: 12,
+          fontFamily: "'InterTight', 'Inter', system-ui, sans-serif", fontSize: 12,
         }}>
           <div
             onMouseDown={() => select("")}
@@ -990,7 +990,7 @@ export default function GradPanel({ wideCatalog = false }) {
             <div style={{
               marginBottom: 8, padding: "8px 10px", borderRadius: 6,
               background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
-              fontSize: 9, color: "var(--text-3)", lineHeight: 1.5,
+              fontSize: 9, color: "var(--text-3)", lineHeight: "calc(1.5 * var(--lh-scale, 1))",
             }}>
               <div style={{ marginBottom: 6 }}>
                 This is {isGrad ? "a Graduate" : "an Undergraduate"} plan. To access {isGrad ? "undergraduate" : "graduate"} programs, create a new plan.
@@ -1217,7 +1217,7 @@ export default function GradPanel({ wideCatalog = false }) {
 
                 {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !major2Data && !minor1 && !minor2 && !fetching && !loadErr && !majorGone && !major2Gone && (
-          <div style={{ textAlign: "center", color: "var(--text-5)", fontSize: 10, paddingTop: 12, lineHeight: 1.7, whiteSpace: "pre-line" }}>
+          <div style={{ textAlign: "center", color: "var(--text-5)", fontSize: 10, paddingTop: 12, lineHeight: "calc(1.7 * var(--lh-scale, 1))", whiteSpace: "pre-line" }}>
             {t("grad.empty")}
           </div>
         )}

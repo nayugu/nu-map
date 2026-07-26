@@ -305,10 +305,33 @@ export function useCourseTranslation(course) {
  * In the source locale (English) the displayed text is unchanged; in
  * other locales the user sees the translation of the `as` phrase.
  */
+// ── Latin runs inside CJK text ─────────────────────────────────────
+// size-adjust (public/fonts-cjk.css) enlarges only CJK glyphs — fonts
+// select per codepoint and can't see context — so ASCII digits/symbols
+// INSIDE a translated sentence ("…微积分 2。") would stay small next to
+// the bigger CJK. This render-time helper wraps Latin runs of a
+// CJK-containing string in a matching-scale span. Strings without any
+// CJK (course codes, English UI) pass through completely untouched.
+const CJK_RE = /[⺀-鿿豈-﫿＀-￯]/;
+// Hangul (syllables + conjoining jamo). CJK_RE above covers Han/kana.
+const HANGUL_RE = /[가-힣ᄀ-ᇿ]/;
+export function scaleLatinRuns(str) {
+  if (typeof str !== "string") return str;
+  const isKo = HANGUL_RE.test(str);
+  // Match each script's size-adjust in fonts-cjk.css: Hangul 1.22, else 1.16.
+  if (!isKo && !CJK_RE.test(str)) return str;
+  const em = isKo ? "1.22em" : "1.16em";
+  const parts = str.split(/([\x20-\x7E]+)/);
+  if (parts.length === 1) return str;
+  return parts.map((p, i) =>
+    i % 2 ? <span key={i} style={{ fontSize: em }}>{p}</span> : p
+  );
+}
+
 export function TText({ children, text, as }) {
   const display = text ?? (typeof children === "string" ? children : "");
   const translated = useTranslatedText(display, { as });
-  return translated;
+  return scaleLatinRuns(translated);
 }
 
 /**

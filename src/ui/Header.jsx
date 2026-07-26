@@ -435,7 +435,7 @@ export default function Header() {
                 style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.04em",
                   color: "var(--text-5)", textDecoration: "none",
                   border: "1px solid var(--border-1)", borderRadius: 20,
-                  padding: "1px 7px", whiteSpace: "nowrap", lineHeight: 1.7,
+                  padding: "1px 7px", whiteSpace: "nowrap", lineHeight: "calc(1.7 * var(--lh-scale, 1))",
                   marginRight: 6 }}
                 onMouseEnter={e => { e.currentTarget.style.color = "var(--text-3)"; e.currentTarget.style.borderColor = "var(--border-2)"; }}
                 onMouseLeave={e => { e.currentTarget.style.color = "var(--text-5)"; e.currentTarget.style.borderColor = "var(--border-1)"; }}
@@ -448,7 +448,7 @@ export default function Header() {
                   color: "var(--warn-badge-text)", background: "var(--warn-bg)",
                   border: "1px solid var(--warn-bg)",
                   padding: "1px 7px", borderRadius: 6,
-                  userSelect: "none", lineHeight: 1.7, marginRight: 4,
+                  userSelect: "none", lineHeight: "calc(1.7 * var(--lh-scale, 1))", marginRight: 4,
                   cursor: "default",
                 }}>
                   updating
@@ -462,7 +462,7 @@ export default function Header() {
                   color: "var(--beta-text)", background: "var(--beta-bg)",
                   padding: "1px 7px", borderRadius: 6,
                   userSelect: "none", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.03)",
-                  lineHeight: 1.7, transition: "background 0.2s,color 0.2s",
+                  lineHeight: "calc(1.7 * var(--lh-scale, 1))", transition: "background 0.2s,color 0.2s",
                   cursor: "default",
                 }}
               >
@@ -489,7 +489,7 @@ export default function Header() {
                   marginLeft: 0,
                   userSelect: "none",
                   boxShadow: "0 1px 2px 0 rgba(0,0,0,0.03)",
-                  lineHeight: 1.7,
+                  lineHeight: "calc(1.7 * var(--lh-scale, 1))",
                   transition: "background 0.2s,color 0.2s",
                   alignSelf: "flex-end"
                 }}
@@ -797,7 +797,7 @@ export default function Header() {
                                 style={{
                                   fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
                                   background: "transparent", border: "1px solid var(--border-2)",
-                                  color: "var(--text-4)", lineHeight: 1.4,
+                                  color: "var(--text-4)", lineHeight: "calc(1.4 * var(--lh-scale, 1))",
                                 }}
                                 onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
                                 onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
@@ -811,7 +811,7 @@ export default function Header() {
                                 style={{
                                   fontSize: 8, padding: "1px 5px", borderRadius: 3, cursor: "pointer",
                                   background: "transparent", border: "1px solid var(--border-2)",
-                                  color: "var(--text-5)", lineHeight: 1.4,
+                                  color: "var(--text-5)", lineHeight: "calc(1.4 * var(--lh-scale, 1))",
                                 }}
                                 onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
                                 onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-5)"; }}
@@ -908,7 +908,7 @@ export default function Header() {
                     );
                   })}
                 </div>
-                <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 4, lineHeight: 1.4 }}>
+                <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 4, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
                   {semTrackingMode === "live"   && t("header.settings.tracking.live.hint")}
                   {semTrackingMode === "manual" && t("header.settings.tracking.manual.hint")}
                 </div>
@@ -1094,7 +1094,7 @@ export default function Header() {
               </div>
 
               {/* Summary */}
-              <div style={{ fontSize: 9, color: "var(--text-6)", lineHeight: 1.6, borderTop: "1px solid var(--border-1)", paddingTop: 8, display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ fontSize: 9, color: "var(--text-6)", lineHeight: "calc(1.6 * var(--lh-scale, 1))", borderTop: "1px solid var(--border-1)", paddingTop: 8, display: "flex", alignItems: "center", gap: 6 }}>
                 <span>{planEntSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {planEntYear} → {planGradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {planGradYear}</span>
                 {(planGradYear < planEntYear || (planGradYear === planEntYear && planGradSem === "fall" && planEntSem === "spring"))
                   ? <span style={{ color: "var(--error)" }}>{t("header.cohort.error")}</span>
@@ -1164,7 +1164,7 @@ export default function Header() {
             <div style={{ fontSize: 11, fontWeight: 700, color: "var(--warn-bright)", marginBottom: 2 }}>
               {t("header.coop.conflict.title")}
             </div>
-            <div style={{ fontSize: 10, color: "var(--warn)", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 10, color: "var(--warn)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
               {coopGradConflicts.length === 1
                 ? t("header.coop.conflict.single", {
                     label: coopGradConflicts[0].label,

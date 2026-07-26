@@ -25,13 +25,33 @@
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     </noscript>
+    <!-- Size-adjusted CJK faces (public/fonts-cjk.css) are injected by
+         LanguageContext only when the locale is zh/ja/ko, so the large
+         stylesheet never loads for the Latin-script majority. See the
+         file's header comment for the two families (Inter / InterTight). -->
     <style>
+      /* CJK reads dense at the UI's small sizes — add gentle tracking,
+         and scale explicit line-heights (components use
+         calc(N * var(--lh-scale, 1))) to keep leading proportional to
+         the size-adjusted glyphs from fonts-cjk.css.
+         LanguageContext keeps the document lang in sync with the locale;
+         components with explicit letterSpacing are unaffected. */
+      :root:lang(zh), :root:lang(ja) { letter-spacing: 0.02em; --lh-scale: 1.16; }
+      /* Korean: Hangul is enlarged more (size-adjust 122% in fonts-cjk.css);
+         match the leading. No tracking — Korean already word-spaces. */
+      :root:lang(ko) { --lh-scale: 1.22; }
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html, body, #root { height: 100%; overflow: hidden; }
       /* body + scrollbar colors are injected by ThemeContext at runtime */
       ::-webkit-scrollbar { width: 6px; height: 6px; }
-      button { font-family: inherit; }
-      input { font-family: inherit; }
+      /* Form controls prefer InterTight, which (like Inter) defines ONLY
+         CJK faces — at a gentler size-adjust — so tightly-wrapping
+         interactive chrome grows less than body text in zh/ja/ko. Latin
+         has no InterTight face and falls through to inherit/Inter, so
+         this is a no-op in Latin locales. */
+      button, input, select, textarea {
+        font-family: 'InterTight', 'Inter', system-ui, sans-serif;
+      }
       /* Header button hover — darker outline */
       .hdr-btn:hover   { border-color: var(--text-4, rgba(0,0,0,0.45)) !important; background: var(--bg-surface, #f5f5f5) !important; }
       .hdr-btn-dd:hover { border-color: var(--text-4, rgba(0,0,0,0.45)) !important; }

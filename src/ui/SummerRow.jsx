@@ -288,9 +288,9 @@ export default function SummerRow({ semA, semB }) {
             {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
             {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
           </span>
-          <span style={{ fontSize: 7, fontWeight: 700, color: "var(--text-2)", lineHeight: 1.2 }}>Sm</span>
-          <span style={{ fontSize: 7, fontWeight: 500, color: "var(--text-4)", lineHeight: 1.2 }}>{year}</span>
-          {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: 1.2, textAlign: "center" }}>{combinedSH} SH</span>}
+          <span style={{ fontSize: 7, fontWeight: 700, color: "var(--text-2)", lineHeight: "calc(1.2 * var(--lh-scale, 1))" }}>Sm</span>
+          <span style={{ fontSize: 7, fontWeight: 500, color: "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))" }}>{year}</span>
+          {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>{combinedSH} SH</span>}
         </div>
       ) : (
         <div onClick={onNowClick} style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer" }}>

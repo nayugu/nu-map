@@ -139,7 +139,7 @@ export default function SemRow({ sem }) {
     </span>
   ) : null;
   const shElPhone = sh > 0 ? (
-    <span style={{ fontSize: 7, fontWeight: 700, color: shColor, lineHeight: 1.2, textAlign: "center" }}>
+    <span style={{ fontSize: 7, fontWeight: 700, color: shColor, lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>
       {sh} SH{sh > shMax ? " ⚠" : ""}
     </span>
   ) : null;
@@ -163,7 +163,7 @@ export default function SemRow({ sem }) {
           <div style={{ width: 34, flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}>
             {statusDot}
             {sem.label.split(" ").map((part, i) => (
-              <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: 1.2, textAlign: "center" }}><TText>{part}</TText></span>
+              <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}><TText>{part}</TText></span>
             ))}
           </div>
         ) : (
@@ -216,7 +216,7 @@ export default function SemRow({ sem }) {
         >
           {statusDot}
           {sem.label.split(" ").map((part, i) => (
-            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: 1.2, textAlign: "center" }}><TText>{part}</TText></span>
+            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}><TText>{part}</TText></span>
           ))}
           {shElPhone}
         </div>
@@ -348,13 +348,13 @@ export default function SemRow({ sem }) {
             {termStartData.typeId === "intern" && (sem.type === "fall" || sem.type === "spring") && !isPhone && (
               <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", display: "flex", alignItems: "center", gap: 4, pointerEvents: "none" }}>
                 <span style={{ fontSize: 13, color: "#facc15" }}>⚠</span>
-                <span style={{ fontSize: 9, color: "#facc15", lineHeight: 1.3, whiteSpace: "nowrap" }}>{t("sem.intern.petition")}</span>
+                <span style={{ fontSize: 9, color: "#facc15", lineHeight: "calc(1.3 * var(--lh-scale, 1))", whiteSpace: "nowrap" }}>{t("sem.intern.petition")}</span>
               </div>
             )}
             {termStartData.typeId === "intern" && (sem.type === "fall" || sem.type === "spring") && isPhone && (
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6, pointerEvents: "none" }}>
                 <span style={{ fontSize: 11, color: "#facc15" }}>⚠</span>
-                <span style={{ fontSize: 8, color: "#facc15", lineHeight: 1.3 }}>{t("sem.intern.petition")}</span>
+                <span style={{ fontSize: 8, color: "#facc15", lineHeight: "calc(1.3 * var(--lh-scale, 1))" }}>{t("sem.intern.petition")}</span>
               </div>
             )}
           </div>

@@ -74,7 +74,7 @@ export default function DisclaimerModal() {
                   {src.author && (
                     <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: 5 }}><TText>{`by @${src.author}`}</TText></span>
                   )}
-                  <div style={{ fontSize: 10, color: "var(--text-3)", marginTop: 1, lineHeight: 1.4 }}>
+                  <div style={{ fontSize: 10, color: "var(--text-3)", marginTop: 1, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
                     <TText>{`used for ${src.usedFor.join(", ")}`}</TText>
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default function DisclaimerModal() {
           {disclaimers.map((text, i) => (
             <div key={i} style={{
               display: "flex", gap: 7, marginBottom: i < disclaimers.length - 1 ? 5 : 0,
-              fontSize: 10, color: "var(--error-text)", lineHeight: 1.5,
+              fontSize: 10, color: "var(--error-text)", lineHeight: "calc(1.5 * var(--lh-scale, 1))",
             }}>
               <span style={{ flexShrink: 0, marginTop: 1 }}>•</span>
               <span><TText>{text}</TText></span>

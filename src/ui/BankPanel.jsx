@@ -109,7 +109,7 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
           maxHeight: 280, overflowY: "auto",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
-          fontFamily: "'Inter', system-ui, sans-serif", fontSize: 12,
+          fontFamily: "'InterTight', 'Inter', system-ui, sans-serif", fontSize: 12,
         }}>
           {!q ? (
             <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)", fontStyle: "italic" }}>Type to search…</div>
@@ -530,7 +530,7 @@ export default function BankPanel() {
         {(!collapseSubstitutions || pvSubsTouched) && (
           <div style={{ padding: "0 8px 8px" }}>
             {!isPhone && (
-              <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 5, lineHeight: 1.4 }}>
+              <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 5, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
                 {t("bank.sub.desc")}
               </div>
             )}
@@ -690,7 +690,7 @@ export default function BankPanel() {
         ) : (
           <div style={{ padding: "4px 6px 6px", display: "flex", flexDirection: "column", gap: 3 }}>
             {bankCourses.length === 0 ? (
-              <div style={{ padding: "18px 8px", fontSize: 10, color: "var(--text-6)", textAlign: "center", lineHeight: 1.6 }}>
+              <div style={{ padding: "18px 8px", fontSize: 10, color: "var(--text-6)", textAlign: "center", lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
                 {bankTab === "starred" && !isPhone ? (
                   <><div style={{ fontSize: 20, marginBottom: 6 }}>☆</div>{t("bank.empty.saved")}<br /><span style={{ fontSize: 9 }}>{t("bank.empty.saved.hint")}</span></>
                 ) : t("bank.empty.search")}

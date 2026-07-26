@@ -29,7 +29,7 @@ export default function MigrationBanner() {
         <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-1)" }}>
           nu-map has moved
         </div>
-        <div style={{ fontSize: 11, color: "var(--text-2)", lineHeight: 1.6 }}>
+        <div style={{ fontSize: 11, color: "var(--text-2)", lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
           We're now at <strong>numap.app</strong>. Click below to move your saved plans — it only takes a second.
         </div>
         <button

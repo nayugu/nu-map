@@ -200,7 +200,7 @@ export default function NewPlanModal({ open, onClose }) {
 
         {/* Summary */}
         <div style={{
-          fontSize: 9, color: "var(--text-6)", lineHeight: 1.6,
+          fontSize: 9, color: "var(--text-6)", lineHeight: "calc(1.6 * var(--lh-scale, 1))",
           borderTop: "1px solid var(--border-1)", paddingTop: 8, marginBottom: 12,
           display: "flex", alignItems: "center", gap: 6,
         }}>

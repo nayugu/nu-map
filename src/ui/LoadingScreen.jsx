@@ -22,7 +22,7 @@ export default function LoadingScreen({ loadErr, loadPct }) {
           <div style={{ color: "var(--error-text)", fontSize: 14, fontWeight: 700 }}>
             {t("loading.error.title")}
           </div>
-          <div style={{ fontSize: 12, color: "var(--text-4)", maxWidth: 420, textAlign: "center", lineHeight: 1.6 }}>
+          <div style={{ fontSize: 12, color: "var(--text-4)", maxWidth: 420, textAlign: "center", lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
             {loadErr}<br />
             <span style={{ fontSize: 11 }}>
               {t("loading.error.hint")}

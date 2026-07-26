@@ -88,7 +88,7 @@ export default function CohortSetupModal() {
           <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-1)", marginBottom: 4 }}>
             Welcome to {institution.appName}
           </div>
-          <div style={{ fontSize: 10, color: "var(--text-4)", lineHeight: 1.5 }}>
+          <div style={{ fontSize: 10, color: "var(--text-4)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
             Set your cohort dates so the planner can track your progress accurately.
           </div>
         </div>
@@ -179,7 +179,7 @@ export default function CohortSetupModal() {
 
         {/* Summary */}
         <div style={{
-          fontSize: 9, color: "var(--text-6)", lineHeight: 1.6,
+          fontSize: 9, color: "var(--text-6)", lineHeight: "calc(1.6 * var(--lh-scale, 1))",
           borderTop: "1px solid var(--border-1)", paddingTop: 8, marginBottom: 14,
           display: "flex", alignItems: "center", gap: 6,
         }}>

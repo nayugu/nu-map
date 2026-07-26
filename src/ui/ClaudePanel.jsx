@@ -321,7 +321,7 @@ export function ClaudeProposalCard() {
       </div>
 
       {changeset?.rationale && (
-        <div style={{ fontSize: 10, color: "var(--text-4)", lineHeight: 1.55 }}>
+        <div style={{ fontSize: 10, color: "var(--text-4)", lineHeight: "calc(1.55 * var(--lh-scale, 1))" }}>
           {changeset.rationale}
         </div>
       )}
@@ -329,7 +329,7 @@ export function ClaudeProposalCard() {
       {!single && (
         <ul style={{ margin: 0, padding: "0 0 0 14px", display: "flex", flexDirection: "column", gap: 3 }}>
           {actions.map((a, i) => (
-            <li key={i} style={{ fontSize: 10, color: "var(--text-3)", lineHeight: 1.45 }}>
+            <li key={i} style={{ fontSize: 10, color: "var(--text-3)", lineHeight: "calc(1.45 * var(--lh-scale, 1))" }}>
               {describeAction(a, courseMap, SEMESTERS, t)}
             </li>
           ))}
@@ -346,7 +346,7 @@ export function ClaudeProposalCard() {
       )}
 
       {stale && (
-        <div style={{ fontSize: 9.5, color: "var(--warn, #b45309)", lineHeight: 1.5 }}>
+        <div style={{ fontSize: 9.5, color: "var(--warn, #b45309)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
           {t("claude.card.stale")}
         </div>
       )}
@@ -439,7 +439,7 @@ export function ClaudeOAuthModal() {
         </div>
         {failed ? (
           <>
-            <div style={{ fontSize: 10.5, color: "var(--error)", lineHeight: 1.6 }}>
+            <div style={{ fontSize: 10.5, color: "var(--error)", lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
               {t("claude.oauth.error")}
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -454,7 +454,7 @@ export function ClaudeOAuthModal() {
           </>
         ) : (
           <>
-            <div style={{ fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 }}>
+            <div style={{ fontSize: 10.5, color: "var(--text-4)", lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
               {t("claude.oauth.body")}
             </div>
 
@@ -470,7 +470,7 @@ export function ClaudeOAuthModal() {
               <div style={{ fontSize: 11.5, fontWeight: 700, color: CLAUDE_ORANGE, marginBottom: 2 }}>
                 {working ? "…" : t("claude.oauth.full.title")}
               </div>
-              <div style={{ fontSize: 9.5, color: "var(--text-4)", lineHeight: 1.5 }}>
+              <div style={{ fontSize: 9.5, color: "var(--text-4)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
                 {t("claude.oauth.full.desc")}
               </div>
             </button>
@@ -485,7 +485,7 @@ export function ClaudeOAuthModal() {
               <div style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-2)", marginBottom: 2 }}>
                 {working ? "…" : t("claude.oauth.catalog.title")}
               </div>
-              <div style={{ fontSize: 9.5, color: "var(--text-4)", lineHeight: 1.5 }}>
+              <div style={{ fontSize: 9.5, color: "var(--text-4)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
                 {t("claude.oauth.catalog.desc")}
               </div>
             </button>
@@ -545,8 +545,8 @@ export function ClaudeConnectModal({ open, onClose }) {
     else    { setPairState("error"); }
   };
 
-  const body  = { fontSize: 10.5, color: "var(--text-4)", lineHeight: 1.6 };
-  const small = { fontSize: 8.5, color: "var(--text-5)", lineHeight: 1.5 };
+  const body  = { fontSize: 10.5, color: "var(--text-4)", lineHeight: "calc(1.6 * var(--lh-scale, 1))" };
+  const small = { fontSize: 8.5, color: "var(--text-5)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" };
   const sectionHead = { fontSize: 11, fontWeight: 700, color: "var(--text-2)", marginBottom: 6 };
 
   const CopyRow = ({ what, text }) => (
@@ -578,7 +578,7 @@ export function ClaudeConnectModal({ open, onClose }) {
   const Steps = ({ items }) => (
     <ol style={{ margin: 0, padding: "0 0 0 18px", display: "flex", flexDirection: "column", gap: 6 }}>
       {items.map((item, i) => (
-        <li key={i} style={{ fontSize: 10.5, color: "var(--text-3)", lineHeight: 1.55 }}>{item}</li>
+        <li key={i} style={{ fontSize: 10.5, color: "var(--text-3)", lineHeight: "calc(1.55 * var(--lh-scale, 1))" }}>{item}</li>
       ))}
     </ol>
   );

@@ -12,7 +12,7 @@ import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
-import { useTranslation, useCourseTranslation, TText } from "../context/TranslationContext.jsx";
+import { useTranslation, useCourseTranslation, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { SemLabel } from "./SemLabel.jsx";
 
 export default function InfoPanel() {
@@ -209,7 +209,7 @@ function CourseInfo({ selCourse, navTo }) {
             opacity: isTranslating ? 0.45 : 1,
             transition: "opacity 0.2s",
           }}
-        >{title}</span>
+        >{scaleLatinRuns(title)}</span>
         <span style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 3, padding: "1px 6px" }}>
           {selCourse.sh} {creditSystem.getUnitName()}
         </span>
@@ -268,7 +268,7 @@ function CourseInfo({ selCourse, navTo }) {
               style={{
                 fontSize: 9, padding: "1px 6px", borderRadius: 3, cursor: "pointer",
                 background: "transparent", border: "1px solid var(--border-2)",
-                color: "var(--text-4)", lineHeight: 1.4, flexShrink: 0,
+                color: "var(--text-4)", lineHeight: "calc(1.4 * var(--lh-scale, 1))", flexShrink: 0,
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
@@ -290,7 +290,7 @@ function CourseInfo({ selCourse, navTo }) {
         <div
           dir={isNonEn ? dir : undefined}
           style={{
-            fontSize: 11, color: "var(--text-3)", lineHeight: 1.55, marginBottom: 4,
+            fontSize: 11, color: "var(--text-3)", lineHeight: "calc(1.55 * var(--lh-scale, 1))", marginBottom: 4,
             opacity: isTranslating ? 0.45 : 1,
             transition: "opacity 0.2s",
           }}
@@ -305,7 +305,7 @@ function CourseInfo({ selCourse, navTo }) {
         </div>
       )}
       {selCourse.prereqs?.length > 0 && (
-        <div style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: 1.9 }}>
+        <div style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
           <span style={{ color: "var(--error)", fontWeight: 700 }}>{t("info.prereqs")} </span>
           <PrereqChips nodes={selCourse.prereqs} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
         </div>
@@ -332,7 +332,7 @@ function DescriptionWithLinks({ text, courseMap, placements, navTo, onDragStart 
   return (
     <>
       {parts.map((p, i) => {
-        if (p.type === "text") return <span key={i}>{p.val}</span>;
+        if (p.type === "text") return <span key={i}>{scaleLatinRuns(p.val)}</span>;
         if (!p.c) return <span key={i}>{p.raw}</span>;
         const isPlaced = p.placed;
         return (
@@ -551,7 +551,7 @@ function CourseInstructors({ selCourse, compact = false }) {
                       fontWeight: 400,
                       color: "var(--text-3)",
                       opacity: 0.40 + 0.60 * Math.pow(frac, 1.4),
-                      lineHeight: 1.35,
+                      lineHeight: "calc(1.35 * var(--lh-scale, 1))",
                     }}>
                       <span>{name}</span>
                       <span style={{ fontSize: 8, fontWeight: 600, color: "var(--text-3)", flexShrink: 0 }}>{pct}%</span>
@@ -563,7 +563,7 @@ function CourseInstructors({ selCourse, compact = false }) {
           );
         })}
       </div>
-      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 12, lineHeight: 1.4 }}>
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 12, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
         {t("info.prof.share")}
       </div>
     </div>
@@ -856,7 +856,7 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
         );
       })}
 
-      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 9, lineHeight: 1.4, width: 0, minWidth: "100%" }}>
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 9, lineHeight: "calc(1.4 * var(--lh-scale, 1))", width: 0, minWidth: "100%" }}>
         {hasHistory ? t("info.offered.hint") : t("info.offered.nodata")}
       </div>
 
@@ -973,7 +973,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
           per-section figure gets one because a bare 3.20 is easy to misread. */}
       {/* Fullness → gauge height */}
       <div style={{ marginBottom: 14 }}>
-        <b style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", lineHeight: 1.1 }}>{fill}%</b>
+        <b style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", lineHeight: "calc(1.1 * var(--lh-scale, 1))" }}>{fill}%</b>
         <div dir="ltr" style={{ fontSize: 10, color: "var(--text-4)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
           <span style={{ color: "var(--text-3)" }}>{enr}</span> <bdi>{t("info.offered.pop.enrolled")}</bdi>
           <span> ÷ </span>
@@ -984,7 +984,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
       {/* Open per section → gauge colour (result tinted with that colour) */}
       <div ref={lineRef} style={{ marginBottom: 15 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
-          <b style={{ fontSize: 16, fontWeight: 700, color, lineHeight: 1.1 }}>{(perSec ?? 0).toFixed(2)}</b>
+          <b style={{ fontSize: 16, fontWeight: 700, color, lineHeight: "calc(1.1 * var(--lh-scale, 1))" }}>{(perSec ?? 0).toFixed(2)}</b>
           <span style={{ fontSize: 9.5, color: "var(--text-4)" }}>{t("info.offered.pop.avgDesc")}</span>
         </div>
         <div dir="ltr" style={{ fontSize: 10, color: "var(--text-4)", fontVariantNumeric: "tabular-nums", marginTop: 3, textAlign: dir === "rtl" ? "right" : "left" }}>
