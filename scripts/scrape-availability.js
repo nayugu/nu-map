@@ -347,13 +347,29 @@ function serializeDetail(agg) {
 
 // ── Instructors ──────────────────────────────────────────────────
 
-/** Decode the HTML entities Banner embeds in names ("O&#39;Kelly" → "O'Kelly"). */
+// Named HTML entities seen in people's names: punctuation + the Latin-1
+// accent set (Muñoz, Théberge, Böhm, …). Numeric forms are decoded
+// generically below; this map only has to cover the named spellings.
+const NAMED_ENTITIES = {
+  amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", nbsp: " ",
+  aacute: "á", agrave: "à", acirc: "â", atilde: "ã", auml: "ä", aring: "å", aelig: "æ",
+  ccedil: "ç", eacute: "é", egrave: "è", ecirc: "ê", euml: "ë",
+  iacute: "í", igrave: "ì", icirc: "î", iuml: "ï", ntilde: "ñ",
+  oacute: "ó", ograve: "ò", ocirc: "ô", otilde: "õ", ouml: "ö", oslash: "ø",
+  uacute: "ú", ugrave: "ù", ucirc: "û", uuml: "ü", yacute: "ý", yuml: "ÿ", szlig: "ß",
+  Aacute: "Á", Agrave: "À", Acirc: "Â", Atilde: "Ã", Auml: "Ä", Aring: "Å", AElig: "Æ",
+  Ccedil: "Ç", Eacute: "É", Egrave: "È", Ecirc: "Ê", Euml: "Ë",
+  Iacute: "Í", Igrave: "Ì", Icirc: "Î", Iuml: "Ï", Ntilde: "Ñ",
+  Oacute: "Ó", Ograve: "Ò", Ocirc: "Ô", Otilde: "Õ", Ouml: "Ö", Oslash: "Ø",
+  Uacute: "Ú", Ugrave: "Ù", Ucirc: "Û", Uuml: "Ü", Yacute: "Ý",
+};
+
+/** Decode the HTML entities Banner embeds in names ("O&#39;Kelly" → "O'Kelly", "Mu&ntilde;oz" → "Muñoz"). */
 function decodeEntities(s) {
   return String(s)
-    .replace(/&#(\d+);/g,        (_, n) => String.fromCodePoint(parseInt(n, 10)))
+    .replace(/&#(\d+);/g,         (_, n) => String.fromCodePoint(parseInt(n, 10)))
     .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
-    .replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'")
-    .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
+    .replace(/&([A-Za-z]+);/g,    (m, name) => NAMED_ENTITIES[name] ?? m);
 }
 
 /** Banner's "O&#39;Kelly, Peggy" → display form "Peggy O'Kelly". */
