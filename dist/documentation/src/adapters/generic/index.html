@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>generic/ adapter — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/adapters/generic">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">adapters/</a><span class="sep"> / </span><strong>generic/</strong>
+    </div>
+
+    <h1>generic/ <span class="badge gray">Fallback defaults</span></h1>
+    <p class="lead">Safe, working defaults for every port. A fork that only overrides <code>institution</code> and <code>courseCatalog</code> gets a functional planner — no attribute grid, no work terms, but a working course browser, major selector, and plan builder.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">adapters/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Used by</div><div class="nb-value"><code>wire(overrides)</code> — spread under institution-specific overrides</div></div>
+      <div class="nb-group"><div class="nb-label">Override rule</div><div class="nb-value">Every port has a generic default. Override only what differs at your institution.</div></div>
+    </div>
+
+    <h2>Default behavior — all 8 ports</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Port</th><th>Generic default</th><th>Override required?</th></tr></thead>
+      <tbody>
+        <tr><td><a href="../../ports/IInstitution/">IInstitution</a></td><td><code>id: "map"</code>, <code>name: "My University"</code>, <code>storagePrefix: "map"</code></td><td><strong>Yes</strong> — placeholder only</td></tr>
+        <tr><td><a href="../../ports/ICalendar/">ICalendar</a></td><td>Fall + Spring only, weight 1.0 each. <code>defaultStartYear</code> = current year.</td><td>If you have summer sessions, quarters, or trimesters</td></tr>
+        <tr><td><a href="../../ports/ICreditSystem/">ICreditSystem</a></td><td><code>unitName: "credits"</code>, <code>standardValue: 3</code>, <code>fullTimeMin: 12</code></td><td>If your unit name or standard value differs</td></tr>
+        <tr><td><a href="../../ports/IAttributeSystem/">IAttributeSystem</a></td><td>Empty everything. <code>getCoverage()</code> returns empty Set. Grad panel grid hidden.</td><td>If your institution has gen-ed requirements</td></tr>
+        <tr><td><a href="../../ports/ISpecialTerms/">ISpecialTerms</a></td><td>Empty <code>types</code> array. Work-experience section hidden in BankPanel.</td><td>If your institution has co-ops, exchanges, or similar blocks</td></tr>
+        <tr><td><a href="../../ports/IMajorRequirements/">IMajorRequirements</a></td><td>Title-case converter, no location extraction. <code>fmtLocation()</code> always returns <code>""</code>.</td><td>Only if your folder naming needs special parsing</td></tr>
+        <tr><td><a href="../../ports/ICourseCatalog/">ICourseCatalog</a></td><td><code>LOCAL_URL</code> → <code>${BASE_URL}courses.json</code>. <code>API_URL</code> → <code>null</code> (no fallback).</td><td><strong>Yes</strong> — set LOCAL_URL to your data path</td></tr>
+        <tr><td><a href="../../ports/ILocalization/">ILocalization</a></td><td>5 institution-neutral English disclaimer bullets.</td><td>Recommended — insert your institution's name and portal</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Minimum viable fork</h2>
+    <p>Two overrides give you a working planner for any institution:</p>
+    <pre><code><span class="cmt">// src/adapters/myuniversity/index.js</span>
+import { wire } from "../wire.js";
+import myInstitution  from "./institution.js";
+import myCourseCatalog from "./courseCatalog.js";
+
+export default wire({
+  institution:  myInstitution,    <span class="cmt">// required: name, prefix, etc.</span>
+  courseCatalog: myCourseCatalog, <span class="cmt">// required: path to your courses.json</span>
+  <span class="cmt">// everything else uses generic defaults</span>
+});</code></pre>
+    <p>With only these two overrides: course browser works, plan building works, major/minor loading works (if your data folder matches the expected layout). The grad panel attribute grid is hidden. No co-op/work-term blocks in BankPanel. Credit unit label shows as "credits".</p>
+
+    <h2>What happens with each empty default</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Empty port</th><th>UI effect</th><th>Error?</th></tr></thead>
+      <tbody>
+        <tr><td>IAttributeSystem (empty grid)</td><td>Grad panel shows no attribute section. Coverage badge hidden.</td><td>No</td></tr>
+        <tr><td>ISpecialTerms (empty types)</td><td>BankPanel shows no work-experience section. No co-op drag sources.</td><td>No</td></tr>
+        <tr><td>ICourseCatalog (null API_URL)</td><td>If local JSON fetch fails, error state shown with no fallback.</td><td>Only if local JSON is also missing</td></tr>
+        <tr><td>IInstitution (generic placeholder)</td><td>"My University" in About modal, plans stored as <code>"map-..."</code>.</td><td>No — but confusing for users</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>wire() — how overrides compose</h2>
+    <pre><code><span class="cmt">// src/adapters/wire.js (simplified)</span>
+import genericDefaults from "./generic/index.js";
+
+export function wire(overrides = {}) {
+  if (import.meta.env.DEV) {
+    <span class="cmt">// warn on unknown port keys to catch typos early</span>
+    for (const key of Object.keys(overrides)) {
+      if (!KNOWN_PORTS.has(key)) console.warn(`[wire] Unknown port: "${key}"`);
+    }
+  }
+  return { ...genericDefaults, ...overrides };
+}</code></pre>
+    <p>It's a simple spread. Generic defaults are the base; your overrides replace individual ports. No deep merge — each port is replaced atomically. If you override <code>calendar</code>, you replace the entire calendar implementation, not individual fields.</p>
+
+    <h2>Forking checklist</h2>
+    <ol>
+      <li>Copy <code>src/adapters/northeastern/</code> to <code>src/adapters/myuniversity/</code></li>
+      <li><strong>Required:</strong> Edit <code>institution.js</code> — set <code>id</code>, <code>name</code>, <code>shortName</code>, <code>portalName</code>, <code>degreeAuditName</code>, <code>storagePrefix</code></li>
+      <li><strong>Required:</strong> Edit <code>courseCatalog.js</code> — set <code>LOCAL_URL</code> to your data path; set <code>API_URL</code> or <code>null</code></li>
+      <li><strong>Required:</strong> Place your course data JSON at the path set in step 3</li>
+      <li>Optional: Edit <code>calendar.js</code> if your semester structure differs from Fall/Spring/SumA/SumB</li>
+      <li>Optional: Edit <code>creditSystem.js</code> if your unit name or credit values differ</li>
+      <li>Optional: Edit <code>attributeSystem.js</code> to define your gen-ed codes and grid</li>
+      <li>Optional: Edit <code>specialTerms.js</code> to define your work-term types</li>
+      <li>Optional: Edit <code>localization.js</code> to insert your institution names in disclaimers</li>
+      <li>Edit <code>src/config.js</code> — change the import from <code>northeastern/</code> to <code>myuniversity/</code></li>
+    </ol>
+
+    <h2>Named exports for selective import</h2>
+    <p><code>generic/index.js</code> provides both a default bundle export and named port exports so you can import individual sub-adapters:</p>
+    <pre><code><span class="cmt">// Import only what you need</span>
+import { calendar, creditSystem } from "../generic/index.js";
+
+<span class="cmt">// Use a generic sub-adapter as a base and override specific fields</span>
+export default wire({
+  institution: myInstitution,
+  calendar: {
+    ...calendar,             <span class="cmt">// spread generic calendar as base</span>
+    defaultStartYear: 2025,  <span class="cmt">// override just this one field</span>
+  },
+});</code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
