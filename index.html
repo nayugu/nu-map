@@ -53,6 +53,14 @@
       button, input, select, textarea {
         font-family: 'InterTight', 'Inter', system-ui, sans-serif;
       }
+      /* Header dropdown panels: cap to the viewport and scroll. vh first,
+         dvh (excludes mobile browser chrome) where supported. */
+      .hdr-pop {
+        max-height: calc(100vh - 110px);
+        max-height: calc(100dvh - 110px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+      }
       /* Header button hover — darker outline */
       .hdr-btn:hover   { border-color: var(--text-4, rgba(0,0,0,0.45)) !important; background: var(--bg-surface, #f5f5f5) !important; }
       .hdr-btn-dd:hover { border-color: var(--text-4, rgba(0,0,0,0.45)) !important; }

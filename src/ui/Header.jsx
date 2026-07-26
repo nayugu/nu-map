@@ -124,6 +124,32 @@ export default function Header() {
   // lives here (grad info composition), so PlannerContext raises a DOM
   // event and this listener runs the same export the ⇅ menu does.
   const handleExportRef = useRef(null);
+
+  // ── Settings dropdown touch scroll-lock ─────────────────────────
+  // The Header (and this dropdown) render INSIDE the planner's scroll
+  // container (App.jsx timeline div), so on touch devices any gesture the
+  // panel can't consume — at its scroll bounds, or when it doesn't
+  // overflow — chains into the planner behind it. overscroll-behavior
+  // doesn't cover every mobile browser, and React's root-level touch
+  // listeners are passive (preventDefault is ignored), so this attaches a
+  // native non-passive touchmove listener that consumes the gesture at
+  // the panel's bounds.
+  const settingsPopRef = useRef(null);
+  useEffect(() => {
+    const el = settingsPopRef.current;
+    if (!showSettings || !el) return;
+    let startY = 0;
+    const onStart = (e) => { startY = e.touches[0].clientY; };
+    const onMove  = (e) => {
+      const dy       = e.touches[0].clientY - startY;
+      const atTop    = el.scrollTop <= 0;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      if (el.scrollHeight <= el.clientHeight || (atTop && dy > 0) || (atBottom && dy < 0)) e.preventDefault();
+    };
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchmove",  onMove,  { passive: false });
+    return () => { el.removeEventListener("touchstart", onStart); el.removeEventListener("touchmove", onMove); };
+  }, [showSettings]);
   handleExportRef.current = handleExport;
   useEffect(() => {
     const h = () => handleExportRef.current?.({ stopPropagation() {} });
@@ -1025,14 +1051,14 @@ export default function Header() {
           >{isMobile ? "🎓" : `🎓 ${t("header.cohort.button")}`}</button>
 
           {showSettings && (
-            <div onClick={e => e.stopPropagation()} style={{
+            // Viewport cap + scrolling comes from .hdr-pop (index.html) — a
+            // class so the dvh declaration can fall back to vh where dvh is
+            // unsupported. The touch scroll-lock effect above pairs with it.
+            <div ref={settingsPopRef} onClick={e => e.stopPropagation()} className="hdr-pop" style={{
               position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 100,
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "14px 16px", minWidth: 270, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 12,
-              // Cap to the viewport and scroll — the panel outgrows short
-              // screens (phones especially), same treatment as the plan menu.
-              maxHeight: "calc(100dvh - 110px)", overflowY: "auto", overscrollBehavior: "contain",
             }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>{t("header.cohort.title")}</div>
 
