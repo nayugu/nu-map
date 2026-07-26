@@ -10,9 +10,8 @@
 //
 // We later built scripts/scrape-majors.js to pull major requirements
 // directly from catalog.northeastern.edu, writing to src/data/majors/.
-// Our scraped files now take precedence over the external submodule for
-// any program both sources cover (see majorLoader.js). The external
-// submodule remains as a fallback for programs not yet scraped.
+// The scraper fully replaced the submodule, which has been removed;
+// scraped data is now the sole source (see majorLoader.js).
 //
 // Minors: not yet migrated — all minor data still comes from the submodule.
 //
@@ -86,14 +85,7 @@ export default {
         id:      "catalog-majors",
         label:   "catalog.northeastern.edu",
         url:     "https://catalog.northeastern.edu/",
-        usedFor: "major requirement definitions (scraped, preferred)",
-      },
-      {
-        id:      "graduatenu",
-        label:   "sandboxnu/graduatenu",
-        url:     "https://github.com/sandboxnu/graduatenu",
-        author:  "sandboxnu",
-        usedFor: "major/minor requirement definitions (external submodule fallback)",
+        usedFor: "major/minor requirement definitions",
       },
     ];
   },

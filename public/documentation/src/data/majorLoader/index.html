@@ -19,27 +19,25 @@
     </div>
 
     <h1>majorLoader.js + minorLoader.js <span class="badge yellow">Data adapters</span></h1>
-    <p class="lead">Async-fetch graduation requirement trees from the <code>graduatenu/</code> fork. Requirements are not bundled — they're fetched on demand when a user selects a major. Also provides the grouped option lists for the major/minor search dropdowns.</p>
+    <p class="lead">Async-fetch graduation requirement trees from the scraped data in <code>src/data/majors/</code>. Requirements are not bundled — they're fetched on demand when a user selects a major. Also provides the grouped option lists for the major/minor search dropdowns.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">data/</a></div></div>
       <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">GradPanel.jsx (on major/minor selection)</div></div>
-      <div class="nb-group"><div class="nb-label">Source data</div><div class="nb-value"><code>graduatenu/packages/api/src/major/majors/**/*.json</code></div></div>
+      <div class="nb-group"><div class="nb-label">Source data</div><div class="nb-value"><code>src/data/majors/**/parsed.initial.json</code></div></div>
     </div>
 
-    <h2>graduatenu/ fork structure</h2>
+    <h2>src/data/majors/ structure</h2>
     <div class="diagram-wrap">
       <div class="mermaid">
 graph TD
-    A["graduatenu/\npackages/api/src/major/"] --> B["majors/"]
-    A --> C["minors/"]
-    B --> D["{year}/\ne.g. 2024/"]
-    D --> E["{college-slug}/\ne.g. computer-information-science/"]
-    E --> F["{major-slug}/\ne.g. computer_science_bscs/"]
+    A["src/data/majors/"] --> D["{year}/\ne.g. 2026/"]
+    D --> E["{college-slug}/\ne.g. khoury/"]
+    E --> F["{major-slug}/\ne.g. computer_science_bscs_(boston)/"]
     F --> G["parsed.initial.json\n← the requirement tree"]
-    F --> H["concentrations/\n{conc-slug}/parsed.initial.json"]
+    E --> M["{minor-slug}_minor/\nparsed.initial.json"]
       </div>
-      <div class="caption">File layout. loadMajor(path) fetches the parsed.initial.json at the given path.</div>
+      <div class="caption">File layout (output of scripts/scrape-majors.js). loadMajor(path) fetches the parsed.initial.json at the given path. Data originally came from an external/graduatenu submodule, since fully replaced by the scraper and removed.</div>
     </div>
 
     <h2>Exported functions — majorLoader.js</h2>
@@ -58,7 +56,7 @@ graph TD
 
     <div class="fn-block exported">
       <div class="fn-sig">loadMajor(path) → Promise&lt;Major2&gt;</div>
-      <div class="fn-desc">Lazily loads the <code>parsed.initial.json</code> at the given module path using <code>import.meta.glob</code> stubs. Both the scraped output (<code>src/data/majors/</code>) and the legacy submodule (<code>external/graduatenu/</code>) are registered; scraped files take priority on collision.</div>
+      <div class="fn-desc">Lazily loads the <code>parsed.initial.json</code> at the given module path using <code>import.meta.glob</code> stubs over the scraped output (<code>src/data/majors/</code>).</div>
       <div class="fn-returns">Returns: <span>Promise&lt;Major2&gt; — the requirement tree JSON</span></div>
     </div>
 

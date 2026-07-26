@@ -95,8 +95,8 @@ Push to `main` → GitHub Actions publishes `dist/` to the `gh-pages` branch (mi
 | [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, prereqs/coreqs, NUPath | Monthly (automated) |
 | [nubanner.neu.edu](https://nubanner.neu.edu) (Banner SSB) | Term availability, enrollment, instructors | Monthly (automated) |
 | [tableau.northeastern.edu](https://tableau.northeastern.edu) | NUPath designations (manual cross-check) | Manual |
+| [catalog.northeastern.edu](https://catalog.northeastern.edu/) (program pages) | Major/minor/grad requirement JSON | Every two months (automated) |
 | [ninest/nu-courses](https://github.com/ninest/nu-courses) (SearchNEU) | Original sections/terms baseline | Manual |
-| [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) | Major/minor requirement JSON | Every two months (automated) |
 
 ---
 
@@ -105,5 +105,5 @@ Push to `main` → GitHub Actions publishes `dist/` to the `gh-pages` branch (mi
 | | |
 |---|---|
 | **Course catalog** | [ninest/nu-courses](https://github.com/ninest/nu-courses) by [@ninest](https://github.com/ninest) |
-| **Graduation requirements** | [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) by [@denniwang](https://github.com/denniwang) and [Sandbox](https://github.com/sandboxnu) |
+| **Major2 schema & original requirements data** | [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) by [@denniwang](https://github.com/denniwang) and [Sandbox](https://github.com/sandboxnu) |
 | **Built with** | [Claude](https://www.anthropic.com/claude) (Anthropic) |

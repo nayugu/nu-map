@@ -37,10 +37,11 @@ export function normalizeFolder(folder) {
  * Resolve a (possibly stale) saved path to the best CURRENT registry path,
  * or null if no plausible match exists. Tiers, newest year wins at each:
  *   1. exact path                          — program unchanged
- *   2. legacy submodule prefix             — paths from before the reorg
- *   3. same college + folder               — catalog-year bump
- *   4. same folder, any college            — program moved colleges
- *   5. normalized folder (± college)       — program slug renamed
+ *   2. same college + folder               — catalog-year bump
+ *   3. same folder, any college            — program moved colleges
+ *   4. normalized folder (± college)       — program slug renamed
+ * Legacy submodule paths (../../graduatenu/…, ../../external/graduatenu/…)
+ * carry the same year/college/folder segments, so tiers 2–4 migrate them.
  *
  * @param {Record<string, unknown>} map  - a path-keyed registry (Vite module map or plain object)
  * @param {string} path
@@ -49,8 +50,6 @@ export function normalizeFolder(folder) {
  */
 export function resolveInMap(map, path, parse) {
   if (map[path]) return path;
-  const migrated = path.replace(/^\.\.\/\.\.\/graduatenu\//, '../../external/graduatenu/');
-  if (map[migrated]) return migrated;
 
   const want = parse(path);
   if (!want) return null;

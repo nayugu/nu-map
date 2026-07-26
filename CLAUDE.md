@@ -29,6 +29,10 @@ Facts that follow from this:
   scrape intermediate; `merge-nupath.js` backfills nuPath from it at build time.
 - Data fixes must live in the scrape scripts (both undergrad and grad paths),
   never in one-off migrations — the next scheduled scrape overwrites anything else.
+- The legacy `external/` git submodules (graduatenu, nu-courses, searchneu) were
+  removed in July 2026 — our scrapers are the sole data source, and the
+  `nayugu/*` forks backing them are deleted from GitHub. Never reintroduce a
+  submodule data path; `git submodule update` on pre-removal commits cannot work.
 
 ## Claude/MCP integration
 

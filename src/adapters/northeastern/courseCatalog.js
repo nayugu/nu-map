@@ -3,8 +3,8 @@
 //
 // DATA SOURCE HISTORY
 // ───────────────────
-// Course data originally came from the external/nu-courses git submodule
-// (a fork of ninest/nu-courses), which re-served data from SearchNEU via
+// Course data originally came from an external/nu-courses git submodule
+// (a fork of ninest/nu-courses, since removed), which re-served data from SearchNEU via
 // husker.vercel.app. This let us bootstrap quickly with a ready-made API.
 // The downside: dependency on an external hosted service we didn't control,
 // with no ability to backfill history or shape the schema.
@@ -52,7 +52,7 @@ async function tryFetch(url) {
 export default {
   /**
    * Fetch the full course catalog and return all courses normalized to the Course shape.
-   * Tries the bundled local JSON first; falls back to the live API.
+   * Loads the bundled local catalog JSON (required — no remote fallback).
    * Then merges term-history.json (if present) to enrich termHistory and recompute terms.
    */
   async fetchAll() {

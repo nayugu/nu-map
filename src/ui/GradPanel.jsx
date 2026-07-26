@@ -2,7 +2,7 @@
 // GRAD PANEL  — graduation requirements sidebar
 //
 // Rendered by BankPanel as an XOR alternative to the course bank.
-// Uses graduatenu Major2 JSON schema (local fork) + gradRequirements.js
+// Uses graduatenu's Major2 JSON schema + gradRequirements.js
 //
 // Double major: courses count freely toward both majors (NU policy).
 // Each major is allocated independently with allocateMajorWithElectives.

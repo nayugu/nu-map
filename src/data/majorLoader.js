@@ -3,43 +3,27 @@
 //
 // DATA SOURCE HISTORY
 // ───────────────────
-// Originally, all major/minor requirement JSON files came from the
-// external/graduatenu git submodule (a fork of sandboxnu/graduatenu).
-// This let us bootstrap quickly — the data was already there.
-// The downside: we had no control over schema, coverage, or update cadence,
-// and the submodule introduced a hard external dependency.
-//
-// We later built our own scraper (scripts/scrape-majors.js) that pulls
-// directly from catalog.northeastern.edu and writes to src/data/majors/.
-// Our scraped files take precedence over the external submodule on collision
-// (same year/college/program path). The submodule remains as a fallback for
-// programs not yet covered by the scraper.
-//
-// Goal: fully migrate to scraped data so the external submodule can be removed.
+// Originally, all major/minor requirement JSON files came from an
+// external/graduatenu git submodule (a fork of sandboxnu/graduatenu) —
+// a bootstrap shortcut with no control over schema, coverage, or cadence.
+// Our own scraper (scripts/scrape-majors.js) pulls directly from
+// catalog.northeastern.edu and writes to src/data/majors/; it fully
+// replaced the submodule, which has been removed. Saved plans may still
+// hold old submodule paths — resolveInMap (programPaths.js) migrates them.
 //
 // IMPLEMENTATION NOTE
 // ───────────────────
 // Uses Vite's import.meta.glob for lazy, on-demand loading of the
 // parsed.initial.json files.  Only the selected major's JSON is ever
-// fetched; the other 1400+ paths stay as stubs.
+// fetched; the other paths stay as stubs.
 // import.meta.glob requires static string literals at the call site.
 // ═══════════════════════════════════════════════════════════════════
 
-// Lazy stubs from the legacy external/graduatenu submodule (fallback).
-const _externalMap = import.meta.glob(
-  '../../external/graduatenu/packages/api/src/major/majors/**/parsed.initial.json',
-  { eager: false }
-);
-
 // Lazy stubs from our own scraper output (src/data/majors/).
-// import.meta.glob requires static string literals — two separate calls, merged below.
-const _scrapedMap = import.meta.glob(
+const _moduleMap = import.meta.glob(
   './majors/**/parsed.initial.json',
   { eager: false }
 );
-
-// Scraped entries win on collision — own data preferred over external submodule.
-const _moduleMap = { ..._externalMap, ..._scrapedMap };
 
 // Graduate program data (src/data/grad-majors/).
 const _gradMap = import.meta.glob(

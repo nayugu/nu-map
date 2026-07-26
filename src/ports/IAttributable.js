@@ -14,14 +14,14 @@
  * One external data source an adapter depends on.
  *
  * @typedef {Object} SourceInfo
- * @property {string}   id       - Stable unique key used for deduplication, e.g. "graduatenu".
+ * @property {string}   id       - Stable unique key used for deduplication, e.g. "catalog".
  *                                 Must be unique across all sources returned by all ports.
- * @property {string}   label    - Repository or dataset name, e.g. "sandboxnu/graduatenu"
+ * @property {string}   label    - Repository, dataset, or site name, e.g. "catalog.northeastern.edu"
  * @property {string}   url      - Canonical URL for the source (GitHub repo, dataset page, etc.)
- * @property {string}   [author] - GitHub username or org name, e.g. "sandboxnu".
+ * @property {string}   [author] - GitHub username or org name, e.g. "ninest".
  *                                 Omit if attribution is to an org already in label.
  * @property {string}   usedFor  - Plain-English description of what this source provides,
- *                                 e.g. "graduation requirement definitions".
+ *                                 e.g. "major/minor requirement definitions".
  *                                 Used in the About modal as "used for ___".
  */
 
