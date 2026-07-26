@@ -792,6 +792,14 @@ export function PlannerProvider({ children }) {
     setPlacements(newPl);
     setSpecialTermPl(newStp);
 
+    // Claude-originated applies must NOT trip the staleness warning on the
+    // rest of the queue — that warning exists for USER edits made since
+    // Claude reasoned about the plan. Refresh remaining fingerprints to
+    // the post-apply placements.
+    setMcpProposals(prev => prev.length
+      ? prev.map(p => ({ ...p, fingerprint: JSON.stringify(newPl) }))
+      : prev);
+
     // Commit placed-out changes
     if (poAdds.length || poDels.length) {
       setPlacedOut(prev => {
@@ -2442,6 +2450,8 @@ export function PlannerProvider({ children }) {
     // (compared against the REAL placements, not a preview).
     mcpProposalStale: mcpProposals.length > 0 &&
       mcpProposals[0].fingerprint !== JSON.stringify(placements),
+    // Per-proposal variant for the queue browser (same REAL-placements rule).
+    isProposalStale: (p) => !!p && p.fingerprint !== JSON.stringify(placements),
     claudeAccessEnabled, setClaudeAccess, aiAssistantAvailable: !!aiAssistant,
     claudeAutoApply, setClaudeAutoApply,
     claudePaired, confirmClaudePairing, claudeDisconnect,

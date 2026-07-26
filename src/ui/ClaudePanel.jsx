@@ -241,16 +241,22 @@ function describeAction(a, courseMap, semesters, t) {
 
 export function ClaudeProposalCard() {
   const {
-    mcpProposals, mcpProposalStale, confirmMCPProposal, confirmAllMCPProposals,
+    mcpProposals, isProposalStale, confirmMCPProposal, confirmAllMCPProposals,
     claudePreview, toggleClaudePreview,
     courseMap, SEMESTERS,
   } = usePlanner();
   const { t } = useLanguage();
+  // Queue browser: any proposal can be VIEWED (and previewed), but
+  // decisions stay front-only — changesets compose in order, so approving
+  // out of order would apply against a plan the proposal never assumed.
+  const [viewIdx, setViewIdx] = useState(0);
 
-  const head = mcpProposals[0];
-  if (!head) return null;
+  if (mcpProposals.length === 0) return null;
+  const idx     = Math.min(viewIdx, mcpProposals.length - 1);
+  const current = mcpProposals[idx];
+  const isHead  = idx === 0;
 
-  const { changeset, meta = {} } = head;
+  const { changeset, meta = {} } = current;
   const actions    = changeset?.actions ?? [];
   // Single-action proposals: our localized action description IS the
   // headline (guaranteed in the app language), and the redundant
@@ -260,10 +266,23 @@ export function ClaudeProposalCard() {
   const title      = single
     ? describeAction(actions[0], courseMap, SEMESTERS, t)
     : (changeset?.label || t("claude.card.title"));
-  const previewing = claudePreview?.proposalId === head.proposalId;
+  const previewing = claudePreview?.proposalId === current.proposalId;
   const hasDelta   = meta.violationsBefore !== undefined && meta.violationsAfter !== undefined;
   const deltaGood  = hasDelta && meta.violationsAfter < meta.violationsBefore;
   const deltaBad   = hasDelta && meta.violationsAfter > meta.violationsBefore;
+  const stale      = isProposalStale?.(current) ?? false;
+
+  const navBtn = (dir, enabled) => (
+    <button
+      onClick={() => enabled && setViewIdx(idx + dir)}
+      disabled={!enabled}
+      style={{ fontSize: 11, fontWeight: 700, lineHeight: 1, padding: "1px 5px",
+        background: "none", border: "none", borderRadius: 4,
+        color: enabled ? "var(--text-3)" : "var(--border-2)",
+        cursor: enabled ? "pointer" : "default" }}>
+      {dir < 0 ? "‹" : "›"}
+    </button>
+  );
 
   return (
     <div style={{
@@ -282,8 +301,12 @@ export function ClaudeProposalCard() {
           {title}
         </span>
         {mcpProposals.length > 1 && (
-          <span style={{ fontSize: 9, color: "var(--text-5)", flexShrink: 0 }}>
-            {t("claude.card.queue", { n: mcpProposals.length })}
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 1, flexShrink: 0 }}>
+            {navBtn(-1, idx > 0)}
+            <span style={{ fontSize: 9, color: "var(--text-5)" }}>
+              {t("claude.card.queue", { k: idx + 1, n: mcpProposals.length })}
+            </span>
+            {navBtn(+1, idx < mcpProposals.length - 1)}
           </span>
         )}
       </div>
@@ -313,7 +336,7 @@ export function ClaudeProposalCard() {
         </div>
       )}
 
-      {mcpProposalStale && (
+      {stale && (
         <div style={{ fontSize: 9.5, color: "var(--warn, #b45309)", lineHeight: 1.5 }}>
           {t("claude.card.stale")}
         </div>
@@ -321,7 +344,7 @@ export function ClaudeProposalCard() {
 
       <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
         <button
-          onClick={() => toggleClaudePreview(head)}
+          onClick={() => toggleClaudePreview(current)}
           title={t("claude.card.preview.title")}
           style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 10px",
             background: previewing ? "var(--bg-app)" : "var(--bg-surface-2)",
@@ -331,26 +354,31 @@ export function ClaudeProposalCard() {
         </button>
         <div style={{ flex: 1 }} />
         <button
-          onClick={() => confirmMCPProposal(false)}
-          style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 12px",
+          onClick={() => { if (isHead) { setViewIdx(0); confirmMCPProposal(false); } }}
+          disabled={!isHead}
+          title={isHead ? undefined : t("claude.card.inorder.title")}
+          style={{ fontSize: 10, fontWeight: 700, padding: "4px 12px",
+            cursor: isHead ? "pointer" : "not-allowed", opacity: isHead ? 1 : 0.45,
             background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
             color: "var(--text-4)", borderRadius: 5 }}>
           {t("claude.card.reject")}
         </button>
         {/* Approve (one proposal, reviewed) is the recommended action →
             filled. Approve all is the bulk shortcut → outlined, one visual
-            tier down, so scanning the row reads "review first". */}
+            tier down. Decisions are head-only: changesets compose in order. */}
         <button
-          onClick={() => confirmMCPProposal(true)}
-          title={t("claude.card.approve.title")}
-          style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 12px",
+          onClick={() => { if (isHead) { setViewIdx(0); confirmMCPProposal(true); } }}
+          disabled={!isHead}
+          title={isHead ? t("claude.card.approve.title") : t("claude.card.inorder.title")}
+          style={{ fontSize: 10, fontWeight: 700, padding: "4px 12px",
+            cursor: isHead ? "pointer" : "not-allowed", opacity: isHead ? 1 : 0.45,
             background: CLAUDE_ORANGE, border: `1px solid ${CLAUDE_ORANGE}`,
             color: "#fff", borderRadius: 5 }}>
           {t("claude.card.approve")}
         </button>
         {mcpProposals.length >= 2 && (
           <button
-            onClick={() => confirmAllMCPProposals()}
+            onClick={() => { setViewIdx(0); confirmAllMCPProposals(); }}
             title={t("claude.card.approveAll.title")}
             style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 10px",
               whiteSpace: "nowrap",
