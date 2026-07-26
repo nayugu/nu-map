@@ -2343,7 +2343,9 @@ export function PlannerProvider({ children }) {
         return;
       }
       if (event.type === "PROPOSAL") {
-        setMcpProposals(prev => [...prev, {
+        // Dedupe by id: reconnects replay pending proposals (see the
+        // server's SSE connect handler), so the same one can arrive twice.
+        setMcpProposals(prev => prev.some(p => p.proposalId === event.proposalId) ? prev : [...prev, {
           proposalId:  event.proposalId,
           changeset:   event.changeset,
           meta:        event.meta ?? {},
@@ -2457,6 +2459,18 @@ export function PlannerProvider({ children }) {
       }
       aiAssistant?.confirmProposal?.(head.proposalId, accepted);
       setMcpProposals(prev => prev.filter(p => p.proposalId !== head.proposalId));
+    },
+    // Approve the whole queue at once. Applied as ONE combined changeset
+    // (applyMCPActions reads a state snapshot, so per-proposal loops would
+    // clobber each other) and ONE undo entry; each proposal still gets its
+    // own resolution back to Claude.
+    confirmAllMCPProposals: () => {
+      if (mcpProposals.length === 0) return;
+      setClaudePreview(null);
+      pushUndo();
+      applyMCPActions(mcpProposals.flatMap(p => p.changeset?.actions ?? []));
+      for (const p of mcpProposals) aiAssistant?.confirmProposal?.(p.proposalId, true);
+      setMcpProposals([]);
     },
     // Refs (passed through for DOM measurements)
     timelineRef, cardRefs, bankRef, bankResizing, panelResizing, uiScaleRef,

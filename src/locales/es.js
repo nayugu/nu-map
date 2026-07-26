@@ -302,6 +302,8 @@ export const strings = {
   "claude.card.preview.title": "Muestra este cambio en la cuadrícula como fantasmas translúcidos — no se aplica nada",
   "claude.card.reject": "Rechazar",
   "claude.card.approve": "Aprobar",
+  "claude.card.approveAll": "Aprobar todo ({n})",
+  "claude.card.approveAll.title": "Aplica todas las propuestas en cola a la vez; un solo paso de deshacer las revierte todas.",
   "claude.card.approve.title": "Se aplica como una sola entrada de deshacer (Cmd+Z lo revierte todo)",
   "claude.sem.fall": "Otoño",
   "claude.sem.spring": "Primavera",

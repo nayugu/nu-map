@@ -99,6 +99,15 @@ export class SessionDO {
       start: (controller) => {
         client.controller = controller;
         controller.enqueue(enc.encode("retry: 3000\n\n"));
+        // Replay pending proposals so a tab that connects after the
+        // broadcast still shows the review card (browser dedupes by id).
+        for (const p of planState.listProposals(this.sid)) {
+          if (p.status === "pending") {
+            controller.enqueue(enc.encode(
+              `data: ${JSON.stringify({ type: "PROPOSAL", proposalId: p.id, changeset: p.changeset, meta: p.meta })}\n\n`
+            ));
+          }
+        }
         this.sseClients.add(client);
         this.heartbeat ??= setInterval(() => {
           for (const c of [...this.sseClients]) {

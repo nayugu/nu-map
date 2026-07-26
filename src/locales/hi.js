@@ -301,6 +301,8 @@ export const strings = {
   "claude.card.preview.title": "इस बदलाव को ग्रिड पर पारभासी छाया के रूप में दिखाता है — कुछ लागू नहीं होता",
   "claude.card.reject": "अस्वीकार",
   "claude.card.approve": "स्वीकृत",
+  "claude.card.approveAll": "सभी स्वीकृत करें ({n})",
+  "claude.card.approveAll.title": "कतार के सभी प्रस्ताव एक साथ लागू होते हैं — एक ही अनडू सबको वापस कर देता है।",
   "claude.card.approve.title": "एक ही undo प्रविष्टि के रूप में लागू होता है (Cmd+Z सब वापस कर देता है)",
   "claude.sem.fall": "पतझड़",
   "claude.sem.spring": "वसंत",

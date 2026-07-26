@@ -301,6 +301,8 @@ export const strings = {
   "claude.card.preview.title": "이 변경을 반투명 고스트로 그리드에 표시합니다 — 아무것도 적용되지 않습니다",
   "claude.card.reject": "거부",
   "claude.card.approve": "승인",
+  "claude.card.approveAll": "모두 승인 ({n})",
+  "claude.card.approveAll.title": "대기 중인 제안을 한 번에 적용합니다. 실행 취소 한 번으로 모두 되돌릴 수 있습니다.",
   "claude.card.approve.title": "실행 취소 한 번으로 되돌릴 수 있는 단일 항목으로 적용됩니다(Cmd+Z)",
   "claude.sem.fall": "가을",
   "claude.sem.spring": "봄",

@@ -301,6 +301,8 @@ export const strings = {
   "claude.card.preview.title": "Affiche cette modification sur la grille en fantômes translucides — rien n'est appliqué",
   "claude.card.reject": "Refuser",
   "claude.card.approve": "Approuver",
+  "claude.card.approveAll": "Tout approuver ({n})",
+  "claude.card.approveAll.title": "Applique toutes les propositions en attente d’un coup ; une seule annulation les annule toutes.",
   "claude.card.approve.title": "S'applique comme une seule entrée d'annulation (Cmd+Z annule tout)",
   "claude.sem.fall": "Automne",
   "claude.sem.spring": "Printemps",

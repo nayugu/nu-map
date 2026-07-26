@@ -302,6 +302,8 @@ export const strings = {
   "claude.card.preview.title": "この変更を半透明のゴーストとしてグリッドに表示します — 何も適用されません",
   "claude.card.reject": "却下",
   "claude.card.approve": "承認",
+  "claude.card.approveAll": "すべて承認 ({n})",
+  "claude.card.approveAll.title": "待機中の提案をまとめて適用します。取り消し 1 回で全部戻せます。",
   "claude.card.approve.title": "1 つの取り消し項目として適用されます（Cmd+Z で全て戻せます）",
   "claude.sem.fall": "秋",
   "claude.sem.spring": "春",

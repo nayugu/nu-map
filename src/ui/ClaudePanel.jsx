@@ -241,7 +241,7 @@ function describeAction(a, courseMap, semesters, t) {
 
 export function ClaudeProposalCard() {
   const {
-    mcpProposals, mcpProposalStale, confirmMCPProposal,
+    mcpProposals, mcpProposalStale, confirmMCPProposal, confirmAllMCPProposals,
     claudePreview, toggleClaudePreview,
     courseMap, SEMESTERS,
   } = usePlanner();
@@ -268,7 +268,9 @@ export function ClaudeProposalCard() {
   return (
     <div style={{
       position: "fixed", right: 14, bottom: 14, zIndex: 180,
-      width: 304, maxHeight: "62vh", overflowY: "auto",
+      // A queued batch adds the Approve-all button — widen so the button
+      // row stays on one line, Approve all at the far right.
+      width: mcpProposals.length >= 2 ? 396 : 304, maxHeight: "62vh", overflowY: "auto",
       background: "var(--bg-surface)", border: `1px solid ${CLAUDE_ORANGE}`,
       borderRadius: 10, padding: "12px 14px", boxShadow: "var(--shadow-modal)",
       display: "flex", flexDirection: "column", gap: 9,
@@ -317,7 +319,7 @@ export function ClaudeProposalCard() {
         </div>
       )}
 
-      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+      <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
         <button
           onClick={() => toggleClaudePreview(head)}
           title={t("claude.card.preview.title")}
@@ -343,6 +345,17 @@ export function ClaudeProposalCard() {
             color: CLAUDE_ORANGE, borderRadius: 5 }}>
           {t("claude.card.approve")}
         </button>
+        {mcpProposals.length >= 2 && (
+          <button
+            onClick={() => confirmAllMCPProposals()}
+            title={t("claude.card.approveAll.title")}
+            style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 10px",
+              whiteSpace: "nowrap",
+              background: CLAUDE_ORANGE, border: `1px solid ${CLAUDE_ORANGE}`,
+              color: "#fff", borderRadius: 5 }}>
+            {t("claude.card.approveAll", { n: mcpProposals.length })}
+          </button>
+        )}
       </div>
     </div>
   );

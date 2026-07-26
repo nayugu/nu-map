@@ -58,7 +58,17 @@ app.use(cors({ origin: "*" }));
 app.use(express.json({ limit: "2mb" }));
 
 // ── SSE  (server → browser) ─────────────────────────────────────────
-app.get("/events/:sessionId", (req, res) => addClient(req.params.sessionId, res));
+app.get("/events/:sessionId", (req, res) => {
+  addClient(req.params.sessionId, res);
+  // Replay pending proposals: a proposal broadcast while the tab's SSE was
+  // still connecting would otherwise never show its review card (Claude
+  // keeps waiting on a decision the user can't see).
+  for (const p of planState.listProposals(req.params.sessionId)) {
+    if (p.status === "pending") {
+      res.write(`data: ${JSON.stringify({ type: "PROPOSAL", proposalId: p.id, changeset: p.changeset, meta: p.meta })}\n\n`);
+    }
+  }
+});
 
 // ── Plan sync  (browser → server) ──────────────────────────────────
 // Tolerant reader: accepts the { v, plan } envelope or a bare legacy

@@ -300,6 +300,8 @@ export const strings = {
   "claude.card.preview.title": "以半透明虚影在网格上展示此变更 — 不会实际应用",
   "claude.card.reject": "拒绝",
   "claude.card.approve": "批准",
+  "claude.card.approveAll": "全部批准 ({n})",
+  "claude.card.approveAll.title": "一次应用所有排队的提议——撤销一步即可全部还原。",
   "claude.card.approve.title": "作为单个撤销条目应用（Cmd+Z 可全部还原）",
   "claude.sem.fall": "秋季",
   "claude.sem.spring": "春季",

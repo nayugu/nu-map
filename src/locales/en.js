@@ -247,6 +247,8 @@ export const strings = {
   "claude.card.preview.title": "Show this change on the grid as translucent ghosts — nothing is applied",
   "claude.card.reject":      "Reject",
   "claude.card.approve":     "Approve",
+  "claude.card.approveAll": "Approve all ({n})",
+  "claude.card.approveAll.title": "Applies every queued proposal at once — one undo step reverses them all.",
   "claude.card.approve.title": "Applies as a single undo entry (Cmd+Z reverses all of it)",
   "claude.sem.fall":     "Fall",
   "claude.sem.spring":   "Spring",

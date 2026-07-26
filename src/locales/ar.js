@@ -300,6 +300,8 @@ export const strings = {
   "claude.card.preview.title": "يعرض هذا التغيير على الشبكة كأشباح شفافة — لا يُطبَّق أي شيء",
   "claude.card.reject": "رفض",
   "claude.card.approve": "موافقة",
+  "claude.card.approveAll": "الموافقة على الكل ({n})",
+  "claude.card.approveAll.title": "يطبّق جميع المقترحات في قائمة الانتظار دفعة واحدة — خطوة تراجع واحدة تلغيها كلها.",
   "claude.card.approve.title": "يُطبَّق كإدخال تراجع واحد (Cmd+Z يعيد كل شيء)",
   "claude.sem.fall": "الخريف",
   "claude.sem.spring": "الربيع",
