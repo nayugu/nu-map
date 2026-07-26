@@ -201,18 +201,63 @@ function dayPattern(mt) {
  * already ended, whose numbers are final — nu-map is stable-only, and a still-running term's
  * seats churn hourly.
  */
-async function fetchTermOfferings(termCode) {
+/**
+ * Fold one Banner section into a part accumulator ({offered, detail, termEnd}).
+ * `fullSummer` tags aggregates that received a session-spanning section (the
+ * merged summer term's part-of-term "1") — preserved so a future "Full
+ * Summer" representation never needs a re-scrape.
+ */
+function accumulateSection(part, s, { fullSummer = false } = {}) {
+  const subject = (s.subject || "").toUpperCase().trim();
+  const number  = (s.courseNumber || "").trim();
+  if (!subject || !number) return;
+  const id = `${subject}${number}`;
+  part.offered.add(id);
+
+  const agg = part.detail.get(id) ?? {
+    sections: 0, cap: 0, enr: 0,
+    formats: new Set(), campuses: new Set(), days: {}, linked: false,
+    crns: [], // [crn, enrolled] per section — transient, feeds the instructor pass
+  };
+  agg.sections += 1;
+  agg.cap += num(s.maximumEnrollment);
+  agg.enr += num(s.enrollment);
+  if (s.courseReferenceNumber) agg.crns.push([s.courseReferenceNumber, num(s.enrollment)]);
+  if (fullSummer) agg.fullSummer = true;
+  if (s.instructionalMethodDescription) agg.formats.add(s.instructionalMethodDescription.trim());
+  if (s.campusDescription)              agg.campuses.add(s.campusDescription.trim());
+  if (s.isSectionLinked)                agg.linked = true;
+
+  // Tally each section under its PRIMARY meeting's day pattern (the first meeting is the main
+  // class; later ones are recitations/labs that would otherwise dominate). Store BOTH the
+  // section count (n) and the enrolled headcount (e) per pattern — the raw facts — so the
+  // presentation layer (derive) can weight by enrolment ("where students actually are") yet
+  // fall back to section counts when enrolment is missing, all without a re-scrape. Sections
+  // with no fixed days (fully async/online) fall under "async".
+  let primary = "";
+  for (const mf of s.meetingsFaculty ?? []) {
+    const p = dayPattern(mf.meetingTime);
+    if (p && !primary) primary = p;
+    const d = parseMDY(mf.meetingTime?.endDate);
+    if (d && (!part.termEnd || d > part.termEnd)) part.termEnd = d;
+  }
+  const key = primary || "async";
+  const slot = (agg.days[key] ??= { n: 0, e: 0 });
+  slot.n += 1;                     // sections on this pattern
+  slot.e += num(s.enrollment);     // enrolled students on this pattern
+
+  part.detail.set(id, agg);
+}
+
+/** Paginate a term's searchResults, feeding each section to `onSection`. */
+async function paginateTerm(termCode, onSection) {
   await activateTerm(termCode);
   await sleep(DELAY_MS);
   await resetForm();
   await sleep(DELAY_MS);
 
-  const offered = new Set();
-  const detail  = new Map();
-  let termEnd = null;
   let offset = 0;
   let totalCount = null;
-
   while (true) {
     let data;
     try {
@@ -221,61 +266,52 @@ async function fetchTermOfferings(termCode) {
       console.warn(`  Page fetch failed at offset ${offset}: ${err.message} — stopping`);
       break;
     }
-
     if (!data.success) {
       console.warn(`  Banner returned success:false for ${termCode} at offset ${offset}`);
       break;
     }
-
     const sections = data.data ?? [];
-    for (const s of sections) {
-      const subject = (s.subject || "").toUpperCase().trim();
-      const number  = (s.courseNumber || "").trim();
-      if (!subject || !number) continue;
-      const id = `${subject}${number}`;
-      offered.add(id);
-
-      const agg = detail.get(id) ?? {
-        sections: 0, cap: 0, enr: 0,
-        formats: new Set(), campuses: new Set(), days: {}, linked: false,
-        crns: [], // [crn, enrolled] per section — transient, feeds the instructor pass
-      };
-      agg.sections += 1;
-      agg.cap += num(s.maximumEnrollment);
-      agg.enr += num(s.enrollment);
-      if (s.courseReferenceNumber) agg.crns.push([s.courseReferenceNumber, num(s.enrollment)]);
-      if (s.instructionalMethodDescription) agg.formats.add(s.instructionalMethodDescription.trim());
-      if (s.campusDescription)              agg.campuses.add(s.campusDescription.trim());
-      if (s.isSectionLinked)                agg.linked = true;
-
-      // Tally each section under its PRIMARY meeting's day pattern (the first meeting is the main
-      // class; later ones are recitations/labs that would otherwise dominate). Store BOTH the
-      // section count (n) and the enrolled headcount (e) per pattern — the raw facts — so the
-      // presentation layer (derive) can weight by enrolment ("where students actually are") yet
-      // fall back to section counts when enrolment is missing, all without a re-scrape. Sections
-      // with no fixed days (fully async/online) fall under "async".
-      let primary = "";
-      for (const mf of s.meetingsFaculty ?? []) {
-        const p = dayPattern(mf.meetingTime);
-        if (p && !primary) primary = p;
-        const d = parseMDY(mf.meetingTime?.endDate);
-        if (d && (!termEnd || d > termEnd)) termEnd = d;
-      }
-      const key = primary || "async";
-      const slot = (agg.days[key] ??= { n: 0, e: 0 });
-      slot.n += 1;                     // sections on this pattern
-      slot.e += num(s.enrollment);     // enrolled students on this pattern
-
-      detail.set(id, agg);
-    }
-
+    for (const s of sections) onSection(s);
     if (totalCount === null) totalCount = data.totalCount ?? 0;
     if (sections.length === 0 || offset + sections.length >= totalCount) break;
     offset += PAGE_SIZE;
     await sleep(DELAY_MS);
   }
+}
 
-  return { offered, detail, termEnd };
+async function fetchTermOfferings(termCode) {
+  const part = { offered: new Set(), detail: new Map(), termEnd: null };
+  await paginateTerm(termCode, (s) => accumulateSection(part, s));
+  return part;
+}
+
+/**
+ * NEU merged the two summer sub-terms into one Banner code from AY2026
+ * (e.g. 202650 "Summer 2026 Semester"); the session now lives on each
+ * section's partOfTerm: "2A" = Summer 1, "2B" = Summer 2, "1" = full summer
+ * (May–Aug, spanning both). Scrape the merged code once and split it back
+ * into the synthetic 40/60 term codes everything downstream already
+ * understands. Full-summer sections COUNT TOWARD BOTH sessions — a course
+ * running May–Aug is genuinely available to someone planning either window —
+ * and their aggregates carry a fullSummer tag so the information survives.
+ */
+async function fetchMergedSummerTerm(termCode) {
+  const ay = String(termCode).slice(0, 4);
+  const parts = {
+    [`${ay}40`]: { offered: new Set(), detail: new Map(), termEnd: null },
+    [`${ay}60`]: { offered: new Set(), detail: new Map(), termEnd: null },
+  };
+  await paginateTerm(termCode, (s) => {
+    const pot = (s.partOfTerm ?? "").trim();
+    if (pot === "2A")      accumulateSection(parts[`${ay}40`], s);
+    else if (pot === "2B") accumulateSection(parts[`${ay}60`], s);
+    else if (pot === "1") {
+      accumulateSection(parts[`${ay}40`], s, { fullSummer: true });
+      accumulateSection(parts[`${ay}60`], s, { fullSummer: true });
+    }
+    // Other part-of-term values (rare, e.g. "3C") have no session mapping — skipped.
+  });
+  return parts;
 }
 
 /** Serialize a per-course aggregate to the compact stored form (Sets → sorted arrays). */
@@ -287,6 +323,7 @@ function serializeDetail(agg) {
     campuses: [...agg.campuses].sort(),
     days: agg.days,
     linked: agg.linked,
+    ...(agg.fullSummer && { fullSummer: true }),
     ...(agg.prof && { prof: agg.prof }),
   };
 }
@@ -437,15 +474,27 @@ async function main() {
     .flatMap(a => a.slice("--term=".length).split(","))
     .filter(Boolean);
   const desired = termArgs.length ? termArgs : recentTermCodes(3);
-  const toQuery = desired.filter(code => bannerTermCodes.has(code));
 
-  if (toQuery.length === 0) {
+  // Merged-summer detection (AY2026+): the 40/60 codes are gone and a single
+  // …50 code carries both sessions (split back apart via partOfTerm below).
+  // Guard on 40 being absent: e.g. 202550 "Summer Full 2025" coexists WITH
+  // real 40/60 codes and must NOT be treated as a merged term.
+  const mergedCodes = [];
+  for (const ay of new Set(desired.map(c => String(c).slice(0, 4)))) {
+    if (!bannerTermCodes.has(`${ay}40`) && !bannerTermCodes.has(`${ay}60`) && bannerTermCodes.has(`${ay}50`)) {
+      mergedCodes.push(`${ay}50`);
+    }
+  }
+
+  const toQuery = desired.filter(code => bannerTermCodes.has(code) && !mergedCodes.includes(code));
+
+  if (toQuery.length === 0 && mergedCodes.length === 0) {
     console.error("No matching terms found in Banner. Check term code logic.");
     process.exit(1);
   }
 
-  console.log(`\nQuerying ${toQuery.length} terms:`);
-  for (const code of toQuery) {
+  console.log(`\nQuerying ${toQuery.length} terms${mergedCodes.length ? ` + ${mergedCodes.length} merged summer` : ""}:`);
+  for (const code of [...toQuery, ...mergedCodes]) {
     const meta = termList.find(t => t.code === code);
     console.log(`  ${code}  ${meta?.description ?? "(no description)"}`);
   }
@@ -470,6 +519,32 @@ async function main() {
     }
     await sleep(DELAY_MS);
   }
+
+  // Merged summer terms: scrape once, split by part-of-term into the
+  // synthetic 40/60 codes (see fetchMergedSummerTerm). The synthetic codes
+  // join everything downstream exactly like real terms; bannerCodeOf maps
+  // them back for the requests that need a real Banner term (instructors).
+  const syntheticCodes = [];
+  const bannerCodeOf   = {};
+  for (const mcode of mergedCodes) {
+    const meta = termList.find(t => t.code === mcode);
+    process.stdout.write(`\n[${mcode}] ${meta?.description ?? ""} — splitting by session — `);
+    try {
+      const parts = await fetchMergedSummerTerm(mcode);
+      for (const [syn, part] of Object.entries(parts)) {
+        termResults[syn]   = part.offered;
+        termDetail[syn]    = part.detail;
+        termEndByCode[syn] = part.termEnd;
+        bannerCodeOf[syn]  = mcode;
+        syntheticCodes.push(syn);
+      }
+      console.log(Object.entries(parts).map(([syn, p]) => `${syn}: ${p.offered.size} courses`).join("  |  "));
+    } catch (err) {
+      console.warn(`FAILED: ${err.message}`);
+    }
+    await sleep(DELAY_MS);
+  }
+  const allCodes = [...toQuery, ...syntheticCodes];
 
   // Build subject→college map using Banner's college filter.
   // Uses the most recent successfully-queried term.
@@ -500,7 +575,7 @@ async function main() {
   const termHistory = {};
   for (const courseId of catalogIds) {
     const hist = {};
-    for (const termCode of toQuery) {
+    for (const termCode of allCodes) {
       hist[termCode] = termResults[termCode]?.has(courseId) ?? false;
     }
     // Only store if the course appeared in at least one queried term
@@ -508,11 +583,21 @@ async function main() {
       termHistory[courseId] = hist;
     }
   }
+  // A --term-restricted run must not wipe the other terms' history.
+  if (termArgs.length && !detailsOnly && existsSync(HISTORY_OUT)) {
+    try {
+      const prevHist = JSON.parse(readFileSync(HISTORY_OUT, "utf8"));
+      for (const [cid, hist] of Object.entries(prevHist)) {
+        const kept = Object.fromEntries(Object.entries(hist).filter(([tc]) => !allCodes.includes(tc)));
+        termHistory[cid] = { ...kept, ...(termHistory[cid] ?? {}) };
+      }
+    } catch {}
+  }
 
   // Build term-details: enrollment/format/campus/meeting aggregate, ONLY for terms whose end
   // date has passed (final, stable numbers) and only for catalog courses.
   const now = new Date();
-  const completedTerms = toQuery.filter(c => termEndByCode[c] && termEndByCode[c] < now);
+  const completedTerms = allCodes.filter(c => termEndByCode[c] && termEndByCode[c] < now);
 
   // Previous file: source for carrying forward instructor data (fetched once per
   // completed term, ever) and for preserving terms outside a --term test window.
@@ -536,7 +621,8 @@ async function main() {
       .reduce((s, a) => s + (a.crns?.length ?? 0), 0);
     console.log(`\n[${termCode}] fetching instructors for ${sections} sections (~${Math.round(sections * PROF_DELAY_MS / 60000)} min)…`);
     try {
-      const calls = await fetchTermProfessors(termCode, termDetail[termCode] ?? new Map());
+      // Synthetic summer codes must talk to Banner via their real merged term.
+      const calls = await fetchTermProfessors(bannerCodeOf[termCode] ?? termCode, termDetail[termCode] ?? new Map());
       console.log(`  done (${calls} section lookups)`);
     } catch (err) {
       console.warn(`  instructor fetch FAILED: ${err.message}`);
@@ -560,7 +646,7 @@ async function main() {
   if (termArgs.length) {
     for (const [courseId, byTerm] of Object.entries(prevDetails)) {
       for (const [tc, d] of Object.entries(byTerm)) {
-        if (!toQuery.includes(tc)) ((termDetails[courseId] ??= {})[tc] ??= d);
+        if (!allCodes.includes(tc)) ((termDetails[courseId] ??= {})[tc] ??= d);
       }
     }
   }
@@ -570,15 +656,15 @@ async function main() {
   const total   = catalogIds.size;
   const uncovered = total - covered;
   console.log(`\n── Summary ──────────────────────────────────────`);
-  console.log(`Terms queried: ${toQuery.length}`);
+  console.log(`Terms queried: ${allCodes.length}`);
   console.log(`Courses with history: ${covered} / ${total}`);
   if (uncovered > 0) {
     console.log(`Courses with no Banner history (catalog-only): ${uncovered}`);
   }
 
   // Per-term offering counts
-  for (const termCode of toQuery) {
-    const meta    = termList.find(t => t.code === termCode);
+  for (const termCode of allCodes) {
+    const meta    = termList.find(t => t.code === (bannerCodeOf[termCode] ?? termCode));
     const count   = termResults[termCode]?.size ?? 0;
     const matched = Object.values(termHistory).filter(h => h[termCode]).length;
     console.log(`  ${termCode}  ${(meta?.description ?? "").padEnd(28)}  ${count} Banner sections  /  ${matched} in catalog`);
@@ -614,7 +700,7 @@ async function main() {
       type:      "availability",
       subject:   "📅 Term Availability",
       timestamp: new Date().toISOString(),
-      terms:     toQuery,
+      terms:     allCodes,
       covered,
       total,
       detailTerms:   completedTerms,

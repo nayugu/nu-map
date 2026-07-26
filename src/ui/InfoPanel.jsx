@@ -74,7 +74,9 @@ export default function InfoPanel() {
         right: isPhone ? 0 : (wideCatalog ? (wideWidth ?? Math.min(340, Math.max(240, window.innerWidth * 0.24))) : bankWidth),
         background: "var(--bg-surface)",
         borderTop: `2px solid ${selCourse.color}50`,
-        zIndex: 50, height: panelHeight, display: "flex", flexDirection: "column",
+        // maxHeight (not height): the panel hugs its content and only the
+        // drag-set height caps it — short content leaves no dead space below.
+        zIndex: 50, maxHeight: panelHeight, display: "flex", flexDirection: "column",
       }}
     >
       {/* Drag-resize handle */}
@@ -96,7 +98,7 @@ export default function InfoPanel() {
         <div style={{ width: 32, height: 3, borderRadius: 99, background: "var(--border-2)" }} />
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", padding: "8px 14px 12px" }}>
+      <div style={{ flex: "0 1 auto", overflowY: "auto", padding: "8px 14px 12px" }}>
         <div style={{ display: "flex", flexDirection: isPhone ? "column" : "row", alignItems: "flex-start", gap: isPhone ? 8 : 14 }}>
           {/* Top row: course info + right column + close */}
           <div style={{ display: "flex", alignItems: "flex-start", gap: 14, width: "100%" }}>
@@ -511,38 +513,35 @@ function CourseInstructors({ selCourse, compact = false }) {
   if (rows.length === 0) return null;
 
   return (
-    <div style={{ flexShrink: 0, width: compact ? "auto" : 190 }}>
+    <div style={{ flexShrink: 0 }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
         {t("info.prof.title")}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
         {rows.map(({ st, entries }) => {
-          // Chip fill mirrors the WeekdayStrip: the course colour at an
-          // opacity scaled to the row's biggest share through a steep curve,
-          // so the usual instructor visibly dominates and one-offs recede.
+          // The TEXT is the indicator: the usual instructor reads big, bold
+          // and fully opaque; one-off substitutes recede to small and faint.
+          // Scaled to the row's biggest share through a steep curve (same
+          // emphasis philosophy as the weekday strip, without chip chrome).
           const peak = Math.max(1, ...entries.map(([, p]) => p));
           return (
             <div key={st.id}>
-              <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 2 }}>
+              <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
                 <TText as={st.translateAs}>{st.altLabel ?? st.label}</TText>
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 {entries.map(([name, pct]) => {
                   const frac = pct / peak;
-                  const op   = 0.10 + 0.72 * Math.pow(frac, 1.8);
                   return (
                     <span key={name} title={`${name}: ${pct}%`} style={{
-                      position: "relative", overflow: "hidden", borderRadius: 4,
-                      padding: "2px 6px", display: "inline-flex", alignItems: "baseline", gap: 4,
-                      border: "1px solid var(--border-1)",
+                      fontSize: 9 + 2 * frac,
+                      fontWeight: frac >= 0.75 ? 800 : frac >= 0.4 ? 650 : 500,
+                      color: selCourse.color || "var(--text-1)",
+                      opacity: 0.40 + 0.60 * Math.pow(frac, 1.4),
+                      lineHeight: 1.35,
                     }}>
-                      <span style={{ position: "absolute", inset: 0, background: selCourse.color || "var(--text-3)", opacity: op }} />
-                      <span style={{ position: "relative", fontSize: 9.5, fontWeight: frac >= 0.6 ? 700 : 600, color: "var(--text-1)" }}>
-                        {name}
-                      </span>
-                      <span style={{ position: "relative", fontSize: 8, fontWeight: 600, color: "var(--text-2)", opacity: 0.8 }}>
-                        {pct}%
-                      </span>
+                      {name}
+                      <span style={{ fontSize: 8, fontWeight: 600, color: "var(--text-3)" }}> {pct}%</span>
                     </span>
                   );
                 })}

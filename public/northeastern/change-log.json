@@ -3,6 +3,19 @@
     {
       "type": "availability",
       "subject": "📅 Term Availability",
+      "timestamp": "2026-07-26T01:41:48.734Z",
+      "terms": [
+        "202640",
+        "202660"
+      ],
+      "covered": 4726,
+      "total": 7879,
+      "detailTerms": [],
+      "detailCovered": 4626
+    },
+    {
+      "type": "availability",
+      "subject": "📅 Term Availability",
       "timestamp": "2026-07-26T01:09:42.089Z",
       "terms": [
         "202560"
