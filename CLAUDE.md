@@ -13,6 +13,13 @@ updates course data. Two workflows are legacy and easy to mistake for the live p
 | `catalog-rotate.yml` | **LEGACY — manual only** | Superseded by the monthly full scrape above. Old design: one subject every 3 days via PR review; its schedule was disabled because GitHub Actions here cannot open PRs. Do not re-enable. |
 | `update-nupath.yml` | **LEGACY — manual only** | Superseded: NUPath rides the monthly catalog scrape (`nuPath` is a diff field in `scrape-catalog.js`). Kept only as a manual cross-check against the Registrar's Tableau dashboard, the authoritative NUPath source. Do not schedule it. |
 
+Merged summer terms (AY2026+): NEU retired the 40/60 summer codes; a single
+`…50` code carries both sessions, split back into synthetic 40/60 codes by
+`partOfTerm` in `scrape-availability.js` (full-summer sections count toward
+both and carry a `fullSummer` tag). ⚠ The instructor fetch for a synthetic
+summer term (via its merged Banner code) first runs for real in the
+September 2026 monthly job — verify that run's log.
+
 Facts that follow from this:
 
 - NUPath designations, descriptions, and prereqs all refresh **monthly** — do not
