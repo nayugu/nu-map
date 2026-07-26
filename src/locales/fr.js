@@ -281,6 +281,7 @@ export const strings = {
   "claude.modal.dev.3": "Saisissez le code ici :",
   "claude.modal.adv.pairing": "Liaison manuelle",
   "claude.modal.adv.hint": "Pour les clients MCP sans OAuth : ajoutez votre URL personnelle, demandez à Claude de se connecter à votre NU Map, puis saisissez le code à 6 caractères affiché.",
+  "claude.modal.reauth.note": "Après une déconnexion, chaque application Claude se reconnecte séparément : relier à nouveau ce site ne rétablit ni claude.ai ni Claude Code. Dans Claude Code : tapez /mcp, choisissez nu-map, puis Authenticate.",
   "claude.modal.code.placeholder": "ABC123",
   "claude.modal.step1.dev": "ÉTAPE 1 — AJOUTEZ LE CONNECTEUR NU MAP (DEV)",
   "claude.modal.step1.dev.hint": "Serveur local de développement — ajoutez-le dans Claude Code : claude mcp add --transport http nu-map <URL>. Cette étape ne donne accès qu'aux données publiques des cours.",

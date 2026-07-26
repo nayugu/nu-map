@@ -652,6 +652,13 @@ export function ClaudeConnectModal({ open, onClose }) {
           ]} />
         </div>
 
+        {/* Each Claude app holds its own credential: reconnecting this
+            website after a Disconnect does NOT revive them — a recurring
+            point of confusion, so it's stated where people reconnect. */}
+        <div style={{ ...small, borderTop: "1px solid var(--border-1)", paddingTop: 8 }}>
+          {t("claude.modal.reauth.note")}
+        </div>
+
         {/* Collapsed fallback: manual pairing for clients without OAuth
             (hosted only — dev already has the code entry inline above). */}
         {!isDev && (

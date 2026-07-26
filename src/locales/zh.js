@@ -280,6 +280,7 @@ export const strings = {
   "claude.modal.dev.3": "在这里输入配对码：",
   "claude.modal.adv.pairing": "手动配对",
   "claude.modal.adv.hint": "适用于不支持 OAuth 的 MCP 客户端：添加下方的个人 URL，然后让 Claude 连接你的 NU Map，并输入它显示的 6 位配对码。",
+  "claude.modal.reauth.note": "断开连接后，每个 Claude 应用都需要单独重新连接——重新关联本网站不会恢复 claude.ai 或 Claude Code。在 Claude Code 中：输入 /mcp，选择 nu-map，然后 Authenticate。",
   "claude.modal.code.placeholder": "ABC123",
   "claude.modal.step1.dev": "第 1 步 — 添加 NU MAP 连接器（开发）",
   "claude.modal.step1.dev.hint": "本地开发服务器 — 在 Claude Code 中添加：claude mcp add --transport http nu-map <URL>。此步骤仅授予公开课程数据的访问权限。",

@@ -281,6 +281,7 @@ export const strings = {
   "claude.modal.dev.3": "여기에 코드를 입력하세요:",
   "claude.modal.adv.pairing": "수동 연동",
   "claude.modal.adv.hint": "OAuth를 지원하지 않는 MCP 클라이언트용: 아래 개인 URL을 추가한 뒤 Claude에게 NU Map 연결을 요청하고 표시되는 6자리 코드를 입력하세요.",
+  "claude.modal.reauth.note": "연결 해제 후에는 각 Claude 앱을 따로 다시 연결해야 합니다. 이 웹사이트를 다시 연결해도 claude.ai나 Claude Code는 복원되지 않습니다. Claude Code에서는 /mcp 입력 후 nu-map을 선택하고 Authenticate 하세요.",
   "claude.modal.code.placeholder": "ABC123",
   "claude.modal.step1.dev": "1단계 — NU MAP 커넥터 추가 (개발)",
   "claude.modal.step1.dev.hint": "로컬 개발 서버 — Claude Code에서 추가하세요: claude mcp add --transport http nu-map <URL>. 이 단계는 공개 강의 데이터에만 접근합니다.",

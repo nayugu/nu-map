@@ -280,6 +280,7 @@ export const strings = {
   "claude.modal.dev.3": "أدخل الرمز هنا:",
   "claude.modal.adv.pairing": "اقتران يدوي",
   "claude.modal.adv.hint": "لعملاء MCP بدون OAuth: أضف رابطك الشخصي أدناه، ثم اطلب من Claude الاتصال بـ NU Map وأدخل الرمز المكوّن من 6 أحرف الذي يعرضه.",
+  "claude.modal.reauth.note": "بعد قطع الاتصال، يعيد كل تطبيق Claude الاتصال على حدة — إعادة ربط هذا الموقع لا تستعيد claude.ai أو Claude Code. في Claude Code: اكتب /mcp ثم اختر nu-map ثم Authenticate.",
   "claude.modal.code.placeholder": "ABC123",
   "claude.modal.step1.dev": "الخطوة 1 — أضف موصّل NU MAP (تطوير)",
   "claude.modal.step1.dev.hint": "خادم تطوير محلي — أضفه في Claude Code:‏ claude mcp add --transport http nu-map <URL>. هذه الخطوة تمنح الوصول إلى بيانات المقررات العامة فقط.",
