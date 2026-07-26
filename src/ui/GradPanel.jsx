@@ -512,7 +512,7 @@ function NuPathGrid({ covered }) {
 
 // ── Minor block (loads + validates a minor's requirement sections) ─
 
-function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
+function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameColor }) {
   const { courseMap, majorRequirements, isPhone } = useContext(GradCtx);
   const { t } = useLanguage();
   const [minor, setMinor] = useState(null);
@@ -601,7 +601,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
             )}
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
-          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{minorName}</div>
+          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{minorName}</div>
         </div>
         {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>}
       </div>
@@ -636,7 +636,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR" }) {
 
 // ── MajorCard: framed collapsible card for a major's requirements ─
 // Frame is a subtle background tint (no border line) matching MinorBlock.
-function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, expanded, onToggle, isPhone, loading, loadingLabel, children }) {
+function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, expanded, onToggle, isPhone, loading, loadingLabel, children, nameColor, subtitleColor }) {
   return (
     <div style={{ border: "1px solid var(--border-1)", borderRadius: 6, marginBottom: 10 }}>
       {/* Header row: label + triangle toggle */}
@@ -649,8 +649,8 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
             )}
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
-          <div style={{ fontWeight: 400, color: "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{name}</div>
-          {subtitle && <div style={{ fontWeight: 400, color: "var(--text-4)", fontSize: isPhone ? 7 : 9, marginTop: 1 }}>{subtitle}</div>}
+          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{name}</div>
+          {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)", fontSize: isPhone ? 7 : 9, marginTop: 1 }}>{subtitle}</div>}
         </div>
         {!isPhone && progress.requiredSH > 0 && (
           <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>
@@ -1174,6 +1174,8 @@ export default function GradPanel({ wideCatalog = false }) {
           label={showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
           name={majorName}
           subtitle={selConc ? concName : null}
+          nameColor={claudePreview?.changed?.has?.("major") ? "#fb923c" : undefined}
+          subtitleColor={claudePreview?.changed?.has?.("conc") ? "#fb923c" : undefined}
           verified={!!major?.metadata?.verified}
           verifiedLabel={t("grad.verified")}
           progress={major1Progress}
@@ -1196,6 +1198,7 @@ export default function GradPanel({ wideCatalog = false }) {
         {(major2Data || fetching2) && <MajorCard
           label={t("grad.major2.label")}
           name={major2Name}
+          nameColor={claudePreview?.changed?.has?.("major2") ? "#fb923c" : undefined}
           verified={!!major2Data?.metadata?.verified}
           verifiedLabel={t("grad.verified")}
           progress={major2Progress}
@@ -1209,8 +1212,8 @@ export default function GradPanel({ wideCatalog = false }) {
         </MajorCard>}
 
         {/* ── Minor requirement sections — undergrad only ─────── */}
-        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} />}
-        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} />}
+        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
 
                 {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !major2Data && !minor1 && !minor2 && !fetching && !loadErr && !majorGone && !major2Gone && (

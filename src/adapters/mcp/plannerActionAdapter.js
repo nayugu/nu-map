@@ -284,7 +284,12 @@ const APPLIERS = {
   // Plan-management actions are no-ops in a dry-run (no multi-plan state
   // here); the browser executes them for real on APPLY.
   CREATE_PLAN: () => {},
-  RENAME_PLAN: () => {},
+  RENAME_PLAN: (plan, a) => {
+    if (!a.name || typeof a.name !== "string") return "name is required";
+    // Dry-run visualizes a rename of the ACTIVE plan; renames of other
+    // plans apply for real but have nothing to show in the active view.
+    if (!a.planId || !plan.planId || a.planId === plan.planId) plan.planName = a.name;
+  },
   SWITCH_PLAN: () => {},
   DELETE_PLAN: () => {},
 };

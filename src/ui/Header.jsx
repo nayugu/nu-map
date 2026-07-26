@@ -515,11 +515,13 @@ export default function Header() {
         {/* Plan switcher dropdown */}
         <div style={{ position: "relative", minWidth: 0, flexShrink: 1 }}>
           <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowPlanMenu(v => !v); }}
+            data-claude-focus="planName"
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? 70 : 160,
               overflow: "hidden",
-              color: showPlanMenu ? "var(--text-2)" : "var(--text-4)",
+              // A pending RENAME_PLAN proposal marks the plan button orange.
+              color: claudePreview?.changed?.has?.("planName") ? "#fb923c" : showPlanMenu ? "var(--text-2)" : "var(--text-4)",
               background: showPlanMenu ? "var(--bg-surface)" : "var(--bg-surface-2)",
-              border: `1px solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`,
+              border: `1px ${claudePreview?.changed?.has?.("planName") ? "dashed #fb923c" : `solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`}`,
               borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 5px" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
             {isPhone
               ? <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾</span>

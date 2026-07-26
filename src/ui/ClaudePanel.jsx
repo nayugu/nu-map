@@ -274,7 +274,16 @@ export function ClaudeProposalCard() {
 
   const navBtn = (dir, enabled) => (
     <button
-      onClick={() => enabled && setViewIdx(idx + dir)}
+      onClick={() => {
+        if (!enabled) return;
+        const next = mcpProposals[idx + dir];
+        setViewIdx(idx + dir);
+        // The ghosts on the plan must always match the card being read:
+        // browsing switches the preview to the viewed proposal.
+        if (next && claudePreview?.proposalId !== next.proposalId) {
+          toggleClaudePreview(next);
+        }
+      }}
       disabled={!enabled}
       style={{ fontSize: 11, fontWeight: 700, lineHeight: 1, padding: "1px 5px",
         background: "none", border: "none", borderRadius: 4,

@@ -2206,6 +2206,8 @@ export function PlannerProvider({ children }) {
       major, major2, concentration: conc, minor1, minor2, studentType,
       entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear,
       starredIds: [...starredIds], palette: [...palette],
+      planId: activePlanId,
+      planName: plans.find(p => p.id === activePlanId)?.name ?? "",
     };
     const { plan: next } = dryRunChangeset(snap, proposal.changeset?.actions ?? [], courseMap);
 
@@ -2224,11 +2226,11 @@ export function PlannerProvider({ children }) {
     const changed = new Set();
     const scalar = { major, major2, conc, studentType, bonusSH, currentSemId,
       entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear,
-      minor1, minor2 };
+      minor1, minor2, planName: snap.planName };
     const nextScalar = { major: next.major, major2: next.major2, conc: next.concentration,
       studentType: next.studentType, bonusSH: next.bonusSH, currentSemId: next.currentSemId,
       entSem: next.entSem, entYear: next.entYear, gradSem: next.gradSem, gradYear: next.gradYear,
-      minor1: next.minor1, minor2: next.minor2 };
+      minor1: next.minor1, minor2: next.minor2, planName: next.planName };
     for (const k of Object.keys(scalar)) if (scalar[k] !== nextScalar[k]) changed.add(k);
 
     const shOvChanged = new Set();
@@ -2251,6 +2253,15 @@ export function PlannerProvider({ children }) {
     }
     const workChanged = workTermsChanged.size > 0 ||
       Object.keys(specialTermPl).some(id => !(next.workExperience ?? {})[id]);
+    // Work terms leaving a semester render as ghosts at their ORIGINAL spot
+    // (removed → strike-through; moved → origin marker), mirroring how
+    // removed courses stay visible instead of silently vanishing.
+    const ghostWorkTerms = [];
+    for (const [id, orig] of Object.entries(specialTermPl)) {
+      const nxt = (next.workExperience ?? {})[id];
+      if (!nxt) ghostWorkTerms.push({ id, instance: orig });
+      else if (nxt.semId !== orig.semId) ghostWorkTerms.push({ id, instance: orig, moved: true });
+    }
 
     // Where to send the user's attention: programs → grad panel; a placed
     // course → focus it; cohort/credits → header; star/palette → bank.
@@ -2259,7 +2270,7 @@ export function PlannerProvider({ children }) {
     let focus = null;
     if (programChanged)                              focus = { kind: "grad", field: [...changed].find(k => ["major","major2","conc","minor1","minor2","studentType"].includes(k)) };
     else if (firstCourse)                            focus = { kind: "course", courseId: firstCourse };
-    else if (changed.has("bonusSH") || [...changed].some(k => k.startsWith("ent") || k.startsWith("grad") || k === "currentSemId")) focus = { kind: "header" };
+    else if (changed.has("bonusSH") || [...changed].some(k => k.startsWith("ent") || k.startsWith("grad") || k === "currentSemId" || k === "planName")) focus = { kind: "header" };
     else if (starDiff.added.length || starDiff.removed.length || palDiff.added.length || palDiff.removed.length ||
              poDiff.added.length || poDiff.removed.length || subDiff.added.length || subDiff.removed.length) focus = { kind: "bank", starred: starDiff.added.length + starDiff.removed.length > 0 };
 
@@ -2277,7 +2288,7 @@ export function PlannerProvider({ children }) {
       changed,                    // scalar field keys
       shOvChanged,
       star: starDiff, palette: palDiff, placedOut: poDiff, substitutions: subDiff,
-      workChanged, workTermsChanged,
+      workChanged, workTermsChanged, ghostWorkTerms,
       focus,
     });
     } catch (e) {

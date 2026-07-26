@@ -265,6 +265,33 @@ export default function SemRow({ sem }) {
 
       {/* Course slots */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4, flex: 1 }}>
+        {/* Claude preview: work terms leaving this semester stay visible as
+            ghosts — removed ones struck through, moved ones with an →
+            origin marker (mirrors removed-course ghosts). */}
+        {(claudePreview?.ghostWorkTerms ?? [])
+          .filter(g => g.instance.semId === sem.id)
+          .map(g => {
+            const gType = (specialTerms.getTypes() ?? []).find(tp => tp.id === g.instance.typeId);
+            return (
+              <div key={`pv-ghost-${g.id}`} style={{
+                width: "100%", minHeight: 42, boxSizing: "border-box",
+                border: "2px dashed #fb923c", borderRadius: 6, opacity: 0.45,
+                padding: "6px 12px", display: "flex", alignItems: "center", gap: 8,
+              }}>
+                <span style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: "var(--text-2)",
+                  letterSpacing: "0.05em", textTransform: "uppercase",
+                  textDecoration: g.moved ? "none" : "line-through" }}>
+                  <TText>{gType?.label ?? g.instance.typeId}</TText>{g.moved ? " →" : ""}
+                </span>
+                {g.instance.company && (
+                  <span style={{ fontSize: isPhone ? 7 : 12, color: "var(--text-4)",
+                    textDecoration: g.moved ? "none" : "line-through" }}>
+                    {g.instance.company}
+                  </span>
+                )}
+              </div>
+            );
+          })}
         {termStartId ? (
           // Full-width special term card (co-op, internship, or any custom type)
           <div
