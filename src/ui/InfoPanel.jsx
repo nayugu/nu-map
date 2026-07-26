@@ -19,7 +19,7 @@ export default function InfoPanel() {
   const {
     showPanel, setShowPanel, selectedId, setSelectedId,
     courseMap, allEdges, offeredOverrides, setOfferedOverrides,
-    panelHeight, panelResizing, isPhone, isMobile,
+    panelHeight, panelHeightManual, panelResizing, isPhone, isMobile,
     showUnlocks, bankWidth, showPalette, wideCatalog, wideWidth,
   } = usePlanner();
 
@@ -74,19 +74,23 @@ export default function InfoPanel() {
         right: isPhone ? 0 : (wideCatalog ? (wideWidth ?? Math.min(340, Math.max(240, window.innerWidth * 0.24))) : bankWidth),
         background: "var(--bg-surface)",
         borderTop: `2px solid ${selCourse.color}50`,
-        // maxHeight (not height): the panel hugs its content and only the
-        // drag-set height caps it — short content leaves no dead space below.
-        zIndex: 50, maxHeight: panelHeight, display: "flex", flexDirection: "column",
+        // Default: maxHeight so the panel hugs its content (short content
+        // leaves no dead space). Once the user drags the handle, the height
+        // becomes explicit and may stretch past the content.
+        zIndex: 50, display: "flex", flexDirection: "column",
+        ...(panelHeightManual ? { height: panelHeight } : { maxHeight: panelHeight }),
       }}
     >
-      {/* Drag-resize handle */}
+      {/* Drag-resize handle. Start from the panel's RENDERED height, not the
+          stored cap — content-hugging means they differ, and starting from
+          the stale cap left a dead zone where dragging appeared broken. */}
       <div
         onMouseDown={e => {
-          panelResizing.current = { startY: e.clientY, startH: panelHeight };
+          panelResizing.current = { startY: e.clientY, startH: e.currentTarget.parentElement?.offsetHeight ?? panelHeight };
           e.preventDefault();
         }}
         onTouchStart={e => {
-          panelResizing.current = { startY: e.touches[0].clientY, startH: panelHeight };
+          panelResizing.current = { startY: e.touches[0].clientY, startH: e.currentTarget.parentElement?.offsetHeight ?? panelHeight };
           e.stopPropagation();
         }}
         style={{

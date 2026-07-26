@@ -350,6 +350,10 @@ export function PlannerProvider({ children }) {
   const [panelHeight, setPanelHeight] = useState(
     () => window.innerWidth < PHONE_BP ? Math.round(window.innerHeight * 0.5) : 210
   );
+  // false = panel hugs its content (default, no dead space below); true =
+  // the user dragged the handle, so panelHeight is an explicit height that
+  // may stretch past the content.
+  const [panelHeightManual, setPanelHeightManual] = useState(false);
   const [manualZoom, setManualZoomRaw] = useState(() => {
     try {
       const stored = localStorage.getItem(key("zoom"));
@@ -488,6 +492,9 @@ export function PlannerProvider({ children }) {
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
       const dy = panelResizing.current.startY - clientY;
       setPanelHeight(Math.min(520, Math.max(90, panelResizing.current.startH + dy)));
+      // A manual drag switches the panel from content-hugging (the default)
+      // to an explicit height, so pulling UP can stretch past the content.
+      setPanelHeightManual(true);
     };
     const onUp = () => { panelResizing.current = null; };
     window.addEventListener("mousemove", onMove);
@@ -2408,7 +2415,7 @@ export function PlannerProvider({ children }) {
     planGradSem: pv?.gradSem  ?? planGradSem,
     planGradYear: pv?.gradYear ?? planGradYear,
     entOrd, gradOrd, semOrd: _semOrd,
-    panelHeight,
+    panelHeight, panelHeightManual,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,
     // Derived
     currentSemIdx, placedIds, specialTermStartMap, specialTermContMap,
