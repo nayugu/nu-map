@@ -216,7 +216,7 @@ export default function SemRow({ sem }) {
         >
           {statusDot}
           {sem.label.split(" ").map((part, i) => (
-            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}><TText>{part}</TText></span>
+            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}><TText tight>{part}</TText></span>
           ))}
           {shElPhone}
         </div>
@@ -227,8 +227,10 @@ export default function SemRow({ sem }) {
         >
           <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 1 }}>
             {statusDot}
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}>
-              <TText>{sem.label}</TText>
+            {/* Row titles use the gentler InterTight scale — a tight, prominent
+                block where the full CJK enlargement reads oversized. */}
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>
+              <TText tight>{sem.label}</TText>
             </span>
             {isActive && (
               <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>

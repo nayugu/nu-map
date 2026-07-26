@@ -88,7 +88,7 @@ export default function SummerRow({ semA, semB }) {
           transition: "background 0.1s, border-color 0.1s",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif" }}><TText as={sessionAs}>{sessionLabel}</TText></span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 600, color: companyColor, fontFamily: "'InterTight', 'Inter', sans-serif" }}><TText as={sessionAs} tight>{sessionLabel}</TText></span>
             <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}><TText>{sem.sub}</TText></span>
           </div>
           <div
@@ -137,7 +137,7 @@ export default function SummerRow({ semA, semB }) {
           background: "var(--card-bg)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)" }}><TText as={sessionAs}>{sessionLabel}</TText></span>
+            <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: "var(--text-3)", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}><TText as={sessionAs} tight>{sessionLabel}</TText></span>
             <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}><TText>{sem.sub}</TText></span>
           </div>
           <div style={{
@@ -186,8 +186,8 @@ export default function SummerRow({ semA, semB }) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 5 }}>
-          <span style={{ fontSize: 9, fontWeight: 700, color: semIsDone ? "var(--success)" : "var(--text-4)" }}>
-            <TText as={sessionAs}>{sessionLabel}</TText>
+          <span style={{ fontSize: 9, fontWeight: 700, color: semIsDone ? "var(--success)" : "var(--text-4)", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>
+            <TText as={sessionAs} tight>{sessionLabel}</TText>
           </span>
           <span style={{ fontSize: 9, color: "var(--text-5)" }}><TText>{sem.sub}</TText></span>
           {semIsDone && <span style={{ fontSize: 8, color: "var(--success)" }}>✓</span>}
@@ -299,7 +299,7 @@ export default function SummerRow({ semA, semB }) {
               {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
               {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
             </span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)" }}><TText>{`Summer ${year}`}</TText></span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}><TText tight>{`Summer ${year}`}</TText></span>
             {combinedActive && (
               <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700, marginLeft: 3 }}>NOW</span>
             )}

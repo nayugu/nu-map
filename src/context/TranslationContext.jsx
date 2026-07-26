@@ -315,12 +315,14 @@ export function useCourseTranslation(course) {
 const CJK_RE = /[⺀-鿿豈-﫿＀-￯]/;
 // Hangul (syllables + conjoining jamo). CJK_RE above covers Han/kana.
 const HANGUL_RE = /[가-힣ᄀ-ᇿ]/;
-export function scaleLatinRuns(str) {
+export function scaleLatinRuns(str, { tight = false } = {}) {
   if (typeof str !== "string") return str;
   const isKo = HANGUL_RE.test(str);
-  // Match each script's size-adjust in fonts-cjk.css: Hangul 1.22, else 1.16.
+  // Match each script's size-adjust in fonts-cjk.css: full-scale Inter
+  // (Hangul 1.22, else 1.16) or, with `tight`, the gentler InterTight
+  // factors (1.11 / 1.08) — for text rendered in the InterTight stack.
   if (!isKo && !CJK_RE.test(str)) return str;
-  const em = isKo ? "1.22em" : "1.16em";
+  const em = isKo ? (tight ? "1.11em" : "1.22em") : (tight ? "1.08em" : "1.16em");
   const parts = str.split(/([\x20-\x7E]+)/);
   if (parts.length === 1) return str;
   return parts.map((p, i) =>
@@ -328,10 +330,10 @@ export function scaleLatinRuns(str) {
   );
 }
 
-export function TText({ children, text, as }) {
+export function TText({ children, text, as, tight = false }) {
   const display = text ?? (typeof children === "string" ? children : "");
   const translated = useTranslatedText(display, { as });
-  return scaleLatinRuns(translated);
+  return scaleLatinRuns(translated, { tight });
 }
 
 /**
