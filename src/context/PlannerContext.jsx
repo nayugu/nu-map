@@ -1719,6 +1719,14 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("active-plan"), activePlanId); } catch {}
   }, [activePlanId]);
 
+  // Browser tab title = "<active plan> — <app>". The static <title> in
+  // index.html stays SEO/disclaimer-focused for crawlers (most don't run
+  // JS); this only overrides it at runtime for actual users.
+  useEffect(() => {
+    const name = plans.find(p => p.id === activePlanId)?.name;
+    document.title = name ? `${name} - ${institution.appName}` : institution.appName;
+  }, [plans, activePlanId, institution.appName]);
+
   // Keep each plan index entry's studentType up to date so the plan switcher can
   // group plans by undergraduate / graduate. The active plan is synced from live
   // state; other entries are backfilled (once) from their saved plan-data slot.
