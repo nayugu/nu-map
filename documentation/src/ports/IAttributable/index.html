@@ -30,8 +30,8 @@
     <div class="table-wrap"><table>
       <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Purpose</th></tr></thead>
       <tbody>
-        <tr><td><code>id</code></td><td>string</td><td>Yes</td><td>Stable unique key for deduplication. Must be the same across all ports that reference the same upstream source — e.g. both <code>courseCatalog</code> and a hypothetical future port could both claim <code>"nu-courses"</code> and <code>getAllSources()</code> would merge them. Never change this value after deployment.</td></tr>
-        <tr><td><code>label</code></td><td>string</td><td>Yes</td><td>Repository or dataset name as shown in the About modal. Typically <code>"org/repo"</code> format, e.g. <code>"sandboxnu/graduatenu"</code>.</td></tr>
+        <tr><td><code>id</code></td><td>string</td><td>Yes</td><td>Stable unique key for deduplication. Must be the same across all ports that reference the same upstream source — e.g. both <code>courseCatalog</code> and a hypothetical future port could both claim <code>"catalog"</code> and <code>getAllSources()</code> would merge them. Never change this value after deployment.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Yes</td><td>Repository, dataset, or site name as shown in the About modal, e.g. <code>"catalog.northeastern.edu"</code> or <code>"org/repo"</code>.</td></tr>
         <tr><td><code>url</code></td><td>string</td><td>Yes</td><td>Canonical URL — GitHub repo, dataset page, or project site.</td></tr>
         <tr><td><code>author</code></td><td>string</td><td>No</td><td>GitHub username or org. Shown as <code>@username</code> next to the label. Omit if attribution is already clear from the label.</td></tr>
         <tr><td><code>usedFor</code></td><td>string</td><td>Yes</td><td>Plain-English description of what this source provides, shown as "used for ___" in the About modal. E.g. <code>"graduation requirement definitions"</code>, <code>"course catalog data"</code>.</td></tr>
@@ -65,8 +65,9 @@ merged.getAllSources = () => {
       <thead><tr><th>Port</th><th>Source id(s)</th><th>usedFor</th></tr></thead>
       <tbody>
         <tr><td>courseCatalog</td><td><code>"catalog"</code>, <code>"nubanner"</code></td><td>course catalog data; term availability history</td></tr>
-        <tr><td>majorRequirements</td><td><code>"catalog-majors"</code>, <code>"graduatenu"</code></td><td>major requirement definitions (scraped); major requirement definitions (submodule fallback)</td></tr>
-        <tr><td>institution, calendar, creditSystem, attributeSystem, specialTerms, localization, aiAssistant</td><td>(none)</td><td><code>getSources()</code> returns <code>[]</code></td></tr>
+        <tr><td>majorRequirements</td><td><code>"catalog-majors"</code></td><td>major/minor requirement definitions</td></tr>
+        <tr><td>aiAssistant</td><td><code>"nu-map-mcp"</code></td><td>AI assistant (Claude) integration — only wired in dev or when <code>VITE_MCP_SERVER_URL</code> is set</td></tr>
+        <tr><td>institution, calendar, creditSystem, attributeSystem, specialTerms, localization</td><td>(none)</td><td><code>getSources()</code> returns <code>[]</code></td></tr>
       </tbody>
     </table></div>
 

@@ -48,18 +48,18 @@
         <tr>
           <td>Major requirements</td>
           <td><code>external/graduatenu</code> submodule (sandboxnu/graduatenu)</td>
-          <td><code>scripts/scrape-majors.js</code> → <code>src/data/majors/</code> (scraped wins; submodule is fallback)</td>
-          <td><span class="badge yellow">In progress</span></td>
+          <td><code>scripts/scrape-majors.js</code> → <code>src/data/majors/</code></td>
+          <td><span class="badge green">Migrated</span></td>
         </tr>
         <tr>
           <td>Minor requirements</td>
           <td><code>external/graduatenu</code> submodule</td>
-          <td><em>Not yet migrated — still from submodule</em></td>
-          <td><span class="badge red">Pending</span></td>
+          <td><code>scripts/scrape-majors.js</code> → <code>src/data/majors/*_minor/</code></td>
+          <td><span class="badge green">Migrated</span></td>
         </tr>
       </tbody>
     </table></div>
-    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Why we migrated:</strong> external submodules gave us a fast start but no control — schema changes, outages, or stale data in those repos would silently break the app. Own scrapers let us control the update cadence, validate output, and apply patches via <code>data/patches/</code>. The goal is to remove all external submodules once minor scraping is complete.</div></div>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Why we migrated:</strong> external submodules gave us a fast start but no control — schema changes, outages, or stale data in those repos would silently break the app. Own scrapers let us control the update cadence, validate output, and apply patches via <code>data/patches/</code>. The migration is complete — all external submodules have been removed.</div></div>
 
     <h2>File map</h2>
     <div class="table-wrap"><table>

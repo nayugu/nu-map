@@ -43,17 +43,18 @@ useEffect(() => {
     <div class="callout info"><div class="ci">ℹ</div><div class="callout-body">The adapter handles the entire strategy: local file first, API fallback, retry logic, error messages — all without touching PlannerContext. This is why there is no <code>courseLoader.js</code> wrapper. The adapter <em>is</em> the loader.</div></div>
 
     <h2>Northeastern implementation</h2>
-    <p>The NU adapter (<code>northeastern/courseCatalog.js</code>) fetches a bundled static JSON first, then falls back to the live SearchNEU API if the local file is unavailable. All Banner term code decoding (<code>"202430" → "spring"</code>) happens inside <code>normalizeCourse()</code> — PlannerContext never sees raw registrar codes.</p>
+    <p>The NU adapter (<code>northeastern/courseCatalog.js</code>) loads the bundled static catalog JSON (required — no remote fallback), then merges <code>term-history.json</code> and other supplemental files when present. All Banner term code decoding (<code>"202430" → "spring"</code>) happens inside <code>normalizeCourse()</code> — PlannerContext never sees raw registrar codes.</p>
 
     <pre><code><span class="cmt">// src/adapters/northeastern/courseCatalog.js (simplified)</span>
 export default {
   async fetchAll() {
-    const json = await tryLocal() ?? await tryAPI();
+    const json = await tryFetch(LOCAL_URL);        <span class="cmt">// catalog-courses.json</span>
+    <span class="cmt">// + term-history.json, colleges, offering summary (optional)</span>
     return json.map(normalizeCourse).filter(Boolean);
   },
   normalize: normalizeCourse,
   courseUrl: course => `https://catalog.northeastern.edu/course-descriptions/${course.subject.toLowerCase()}/`,
-  getSources: () => [{ id: "nu-courses", label: "ninest/nu-courses", ... }],
+  getSources: () => [{ id: "catalog", label: "catalog.northeastern.edu", ... }],
 };</code></pre>
 
     <h2>Implementing for your institution</h2>

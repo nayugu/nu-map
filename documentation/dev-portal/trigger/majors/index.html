@@ -18,7 +18,7 @@
     </div>
 
     <h1>Major Requirements <span class="badge blue">scrape-majors.js</span></h1>
-    <p class="lead">Scrapes undergraduate degree requirements from <code>catalog.northeastern.edu</code> and writes <code>parsed.initial.json</code> files in the Major2 schema. This is nu-map's own scraper — a ground-up replacement for the stale <code>external/graduatenu</code> data that was missing writing requirements for ~45% of combined/joint programs.</p>
+    <p class="lead">Scrapes undergraduate degree requirements from <code>catalog.northeastern.edu</code> and writes <code>parsed.initial.json</code> files in the Major2 schema. This is nu-map's own scraper — a ground-up replacement for the stale <code>external/graduatenu</code> submodule data (since removed) that was missing writing requirements for ~45% of combined/joint programs.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Script</div><div class="nb-value"><code>scripts/scrape-majors.js</code></div></div>
@@ -51,12 +51,11 @@
     ...</code></pre>
     <p>The path slug is derived from the program title: lowercased, commas removed, spaces replaced with underscores. The year tag defaults to the current calendar year but can be overridden with <code>--year 2025</code>.</p>
 
-    <h2>Relationship to external/graduatenu</h2>
-    <p>The <code>external/graduatenu</code> submodule contains ~1,400 major files scraped by the GraduateNU team. The scraped files in <code>src/data/majors/</code> take precedence on path collision — see <a href="../../../src/data/">data/ — majorLoader</a> for how the dual-source merge works. Run the Major Requirements adapter when:</p>
+    <h2>When to run</h2>
+    <p>The scraped files in <code>src/data/majors/</code> are the sole source of requirement data — the old <code>external/graduatenu</code> submodule (~1,400 major files scraped by the GraduateNU team) has been removed. Run the Major Requirements adapter when:</p>
     <ul>
       <li>A new catalog year is published (Jan or May)</li>
-      <li>A program's requirements have changed and the graduatenu data is stale</li>
-      <li>A combined/joint program was missing requirements from the graduatenu data</li>
+      <li>A program's requirements have changed and the scraped data is stale</li>
     </ul>
 
     <h2>Change log entry</h2>

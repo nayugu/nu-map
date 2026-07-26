@@ -30,12 +30,12 @@
       <a class="child-card" href="./majorLoader/">
         <div class="cc-type">module</div>
         <div class="cc-name">majorLoader.js</div>
-        <div class="cc-desc">Lazy-loads Major2 requirement JSONs on demand. Two Vite glob sources: scraped (src/data/majors/) and legacy external (external/graduatenu/). Scraped wins on collision.</div>
+        <div class="cc-desc">Lazy-loads Major2 requirement JSONs on demand from a Vite glob over the scraped data (src/data/majors/).</div>
       </a>
       <a class="child-card" href="./majorLoader/">
         <div class="cc-type">module</div>
         <div class="cc-name">minorLoader.js</div>
-        <div class="cc-desc">Mirror of majorLoader.js for minors. Only uses external/graduatenu source — no scraped minors currently.</div>
+        <div class="cc-desc">Mirror of majorLoader.js for minors — scraped folders ending in <code>_minor</code> inside src/data/majors/.</div>
       </a>
       <a class="child-card" href="./persistence/">
         <div class="cc-type">module</div>
@@ -45,37 +45,30 @@
     </div>
 
     <h2>majorLoader.js</h2>
-    <p>Major requirement JSONs come from two sources, merged at module load time. Scraped entries take precedence on path collision:</p>
+    <p>Major requirement JSONs come from our own scraper output (<code>scripts/scrape-majors.js</code> → <code>src/data/majors/</code>):</p>
 
-    <pre><code><span class="cmt">// Two separate glob calls (Vite requires static string literals)</span>
-const _externalMap = import.meta.glob(
-  '../../external/graduatenu/packages/api/src/major/majors/**/parsed.initial.json',
-  { eager: false }
-);
-const _scrapedMap = import.meta.glob(
+    <pre><code><span class="cmt">// Vite requires static string literals at the call site</span>
+const _moduleMap = import.meta.glob(
   './majors/**/parsed.initial.json',
   { eager: false }
-);
+);</code></pre>
 
-<span class="cmt">// Scraped wins: same path suffix → scrapedMap entry replaces externalMap entry</span>
-const _moduleMap = { ..._externalMap, ..._scrapedMap };</code></pre>
-
-    <p>All ~1,400+ path stubs are registered at build time by Vite, but the actual JSON is never loaded until a specific major is selected. <code>loadMajor(path)</code> calls the stub function lazily — only one JSON is ever in memory at a time.</p>
+    <p>All path stubs are registered at build time by Vite, but the actual JSON is never loaded until a specific major is selected. <code>loadMajor(path)</code> calls the stub function lazily — only one JSON is ever in memory at a time.</p>
 
     <div class="table-wrap"><table>
       <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
       <tbody>
         <tr><td><code>getMajorOptions(majorRequirements)</code></td><td>Return all available majors as <code>{ path, year, college, collegeLabel, folder, label, location }[]</code>. No JSON loaded — parses paths only. Sorted newest year first, then by college, then by label. Cached by <code>majorRequirements</code> identity.</td></tr>
         <tr><td><code>getMajorOptionGroups(majorRequirements)</code></td><td>Group <code>getMajorOptions()</code> output by <code>"YYYY — College Label"</code> for <code>&lt;optgroup&gt;</code> rendering in GradPanel. Returns an ordered <code>Map&lt;groupKey, options[]&gt;</code>.</td></tr>
-        <tr><td><code>loadMajor(path)</code></td><td>Async — lazily loads and returns the Major2 JSON for a given path. Calls <code>canonicalizeMajorPath()</code> first to handle legacy paths from before the <code>external/</code> submodule reorganization.</td></tr>
-        <tr><td><code>canonicalizeMajorPath(path)</code></td><td>Migrates old paths from before the submodule move. If the path isn't in the registry, tries replacing the old prefix <code>../../graduatenu/</code> with <code>../../external/graduatenu/</code>.</td></tr>
+        <tr><td><code>loadMajor(path)</code></td><td>Async — lazily loads and returns the Major2 JSON for a given path. Calls <code>canonicalizeMajorPath()</code> first to handle stale paths from saved plans.</td></tr>
+        <tr><td><code>canonicalizeMajorPath(path)</code></td><td>Migrates stale saved paths (older catalog years, renamed slugs, legacy submodule prefixes) to the best current registry entry via <code>resolveInMap()</code> in <code>programPaths.js</code>.</td></tr>
       </tbody>
     </table></div>
 
-    <p><strong>Why two sources?</strong> The <code>external/graduatenu/</code> submodule is the upstream legacy data — 1,400+ major files scraped by the GraduateNU team. The <code>src/data/majors/</code> folder contains our own scraped overrides for years or programs where the upstream data is out of date. The merger means we get broad coverage from upstream while maintaining accurate overrides for the programs we care most about.</p>
+    <p><strong>History:</strong> requirement data originally came from an <code>external/graduatenu</code> git submodule (1,400+ major files scraped by the GraduateNU team). Our own scraper fully replaced it and the submodule was removed; saved plans holding old submodule paths are migrated by <code>canonicalizeMajorPath()</code>.</p>
 
     <h2>minorLoader.js</h2>
-    <p>Identical architecture to majorLoader, but uses only the external/graduatenu source (pointing at the <code>minor/minors/</code> tree). There is no scraped minor override folder currently. Exports <code>getMinorOptions()</code>, <code>getMinorOptionGroups()</code>, <code>loadMinor()</code>, <code>canonicalizeMinorPath()</code>.</p>
+    <p>Identical architecture to majorLoader — scraped minors live alongside majors in <code>src/data/majors/</code>, in folders ending with <code>_minor</code>. Exports <code>getMinorOptions()</code>, <code>getMinorOptionGroups()</code>, <code>loadMinor()</code>, <code>canonicalizeMinorPath()</code>.</p>
 
     <h2>persistence.js</h2>
     <p>All plan state lives in one localStorage key, namespaced by <code>institution.storagePrefix</code>. The key format is <code>{prefix}-state-v2</code> — the <code>-v2</code> suffix is a schema version that allows breaking state changes to be handled cleanly (old keys are simply ignored).</p>
@@ -102,7 +95,6 @@ sequenceDiagram
     participant ML as majorLoader.js
     participant LS as localStorage
     participant FS as public/northeastern/ (static)
-    participant EXT as external/graduatenu/ (Vite stubs)
     participant SCR as src/data/majors/ (Vite stubs)
 
     PC->>PS: loadSaved(storagePrefix)
@@ -117,8 +109,7 @@ sequenceDiagram
 
     Note over PC: User selects major in GradPanel
     PC->>ML: loadMajor(path)
-    ML->>EXT: lazy-import parsed.initial.json
-    ML->>SCR: (wins if scraped version exists)
+    ML->>SCR: lazy-import parsed.initial.json
     ML-->>PC: Major2 requirement tree
 
     Note over PC: Any state mutation

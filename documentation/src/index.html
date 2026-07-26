@@ -58,7 +58,7 @@
       <a class="child-card" href="./data/">
         <div class="cc-type">I/O layer</div>
         <div class="cc-name">data/</div>
-        <div class="cc-desc">Three modules: majorLoader + minorLoader (Vite lazy-import from src/data/majors/ and external/graduatenu/), persistence (localStorage read/write). Course loading belongs to the ICourseCatalog adapter.</div>
+        <div class="cc-desc">Three modules: majorLoader + minorLoader (Vite lazy-import from src/data/majors/), persistence (localStorage read/write). Course loading belongs to the ICourseCatalog adapter.</div>
       </a>
       <a class="child-card" href="./ui/">
         <div class="cc-type">UI layer</div>
@@ -143,10 +143,10 @@ export const institutionAdapter = wire(northeasternOverrides);</code></pre>
         <tr><td><code>core/specialTermUtils.js</code></td><td>Core</td><td>resolveTermByDuration(), termSpans(), computeGrantedAttrs()</td></tr>
         <tr><td><code>core/themes.js</code></td><td>Core</td><td>THEMES map — CSS variable token sets for each theme</td></tr>
         <tr><td><code>core/constants.js</code></td><td>Core</td><td>SUBJECT_PALETTE, TYPE_BG, REL_STYLE, NUM_YEARS</td></tr>
-        <tr><td><code>data/majorLoader.js</code></td><td>Data</td><td>getMajorOptions/Groups(), loadMajor() — merges scraped + legacy major JSONs</td></tr>
+        <tr><td><code>data/majorLoader.js</code></td><td>Data</td><td>getMajorOptions/Groups(), loadMajor() — loads scraped major JSONs</td></tr>
         <tr><td><code>data/minorLoader.js</code></td><td>Data</td><td>Mirror of majorLoader for minors</td></tr>
         <tr><td><code>data/persistence.js</code></td><td>Data</td><td>storageKey(), loadSaved(), saveState(), clearState() — localStorage I/O</td></tr>
-        <tr><td><code>data/majors/</code></td><td>Data</td><td>Scraped major requirement JSONs (src-local, take precedence over external/)</td></tr>
+        <tr><td><code>data/majors/</code></td><td>Data</td><td>Scraped major requirement JSONs (src-local, sole source)</td></tr>
         <tr><td><code>locales/</code></td><td>—</td><td>7 locale files (ar, en, es, fr, hi, ja, zh) — loaded by LanguageContext</td></tr>
         <tr><td><code>ui/Header.jsx</code></td><td>UI</td><td>Top bar: title, SH counter, plan management, settings, PDF export</td></tr>
         <tr><td><code>ui/SemRow.jsx</code></td><td>UI</td><td>Fall/spring semester rows — drop zones, course cards, co-op blocks</td></tr>
