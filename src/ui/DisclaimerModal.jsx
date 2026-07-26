@@ -143,7 +143,7 @@ export default function DisclaimerModal() {
             Built with{" "}
             <a href="https://www.anthropic.com/claude" target="_blank" rel="noreferrer"
               style={{ color: "var(--text-5)", textDecoration: "none" }}>
-              Claude Sonnet
+              Claude
             </a>
           </span>
         </div>
