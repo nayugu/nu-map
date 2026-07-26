@@ -613,7 +613,9 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
       {/* Progress bar — always visible */}
       {showBar && (
         <div style={{ padding: "6px 10px 8px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
+          {/* Numeric stat line: opt out of the locale-wide CJK tracking and
+              never wrap — the phone column is barely wider than the digits. */}
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: isPhone ? 8.5 : 10, color: "var(--text-5)", marginBottom: 4, letterSpacing: 0, whiteSpace: "nowrap" }}>
             <span>
               <span style={{ color: "var(--success)" }}>{doneSat}</span>
               {plannedSat > 0 && <span style={{ color: "var(--link-1)" }}>+{plannedSat}</span>}
@@ -665,7 +667,8 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
       {/* Progress bar — always visible */}
       {progress.totalReq > 0 && (
         <div style={{ padding: "6px 10px 8px" }}>
-          <div style={{ fontSize: 10, color: "var(--text-5)", marginBottom: 4 }}>
+          {/* Numeric stat line — same treatment as MinorBlock's above. */}
+          <div style={{ fontSize: isPhone ? 8.5 : 10, color: "var(--text-5)", marginBottom: 4, letterSpacing: 0, whiteSpace: "nowrap" }}>
             <span style={{ color: "var(--success)" }}>{progress.doneSat}</span>
             {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--link-1)" }}>+{progress.totalSat - progress.doneSat}</span>}
             <span> / {progress.totalReq}</span>
