@@ -141,10 +141,25 @@ export function createPlannerQuery(deps) {
       query, anyOf, subject, attributes, minSH, maxSH, term,
       level, college, campus, format, meetsOn,
       minNumber, maxNumber, noPrereqs, unlockedBy, prereqsMetBy,
-      scheduleType, excludeIds, sortBy, limit = 20,
+      scheduleType, excludeIds, instructor, sortBy, limit = 20,
     } = opts;
 
     let results = courses;
+
+    if (instructor) {
+      // Match against the per-semester-type instructor shares (recorded
+      // history, primary instructors). Diacritic- and case-insensitive so
+      // "garcia" finds "García". Combine with `term` to ask "what does
+      // Aloupis teach in the fall".
+      const fold = (s) => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      const q = fold(instructor);
+      results = results.filter(c => {
+        const prof = c.offering?.prof;
+        if (!prof) return false;
+        const types = term ? [term] : Object.keys(prof);
+        return types.some(t => (prof[t] ?? []).some(([name]) => fold(name).includes(q)));
+      });
+    }
 
     if (excludeIds?.length) {
       const ex = new Set(excludeIds.map(canonId));

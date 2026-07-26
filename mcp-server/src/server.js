@@ -96,7 +96,7 @@ export function createServer({ query, sessionId, state, channel }) {
       "- The complete action reference (arguments + restrictions) is in get_meta capabilities.actionDocs. validate_changes dry-runs a changeset without touching anything — use it when unsure.",
       "- Never guess ids. Verify courseIds via search_courses/get_course and programIds via list_programs before composing a changeset.",
       "",
-      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts, prereqsMetBy with the plan's completed + placed-out ids for 'what can the user take', unlockedBy for 'what does course X open up', sortBy: 'enrollment' for popularity — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. The full catalog lives server-side; you never need to fetch external pages.",
+      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts, prereqsMetBy with the plan's completed + placed-out ids for 'what can the user take', unlockedBy for 'what does course X open up', instructor for 'what does Prof. X teach' (3-year history; combine with term for a season), sortBy: 'enrollment' for popularity — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. The full catalog lives server-side; you never need to fetch external pages.",
       "",
       "Restrictions that most often reject changesets:",
       "- SET_SH_OVERRIDE: most courses have FIXED credits and cannot be overridden. Only valid when get_course shows a credit range (shMin < shMax).",
@@ -256,6 +256,8 @@ export function createServer({ query, sessionId, state, channel }) {
       prereqsMetBy: z.array(z.string()).optional()
         .describe("Completed course ids — keep only courses whose full prerequisite tree these satisfy. Pass the plan's completed + placed-out ids to answer 'what is the user eligible to take'."),
       scheduleType: z.string().optional().describe("Schedule type substring: 'Lecture', 'Lab', 'Seminar', 'Studio', 'Recitation'"),
+      instructor: z.string().optional()
+        .describe("Instructor name substring (case/accent-insensitive) — courses this person has taught as primary instructor in the last 3 years. Combine with term ('fall') for 'what do they teach in the fall'. Historical record, not future staffing."),
       excludeIds: z.array(z.string()).optional().describe("Course ids to leave out (e.g. already placed or already suggested)"),
       sortBy:     z.enum(["relevance", "number", "enrollment"]).optional()
         .describe("'enrollment' = most-taken first (recent enrolment) — good for 'popular electives'; default is relevance/catalog order"),
