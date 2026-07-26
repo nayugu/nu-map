@@ -276,7 +276,7 @@ export function createServer({ query, sessionId, state, channel }) {
         .describe("Completed course ids — keep only courses whose full prerequisite tree these satisfy. Pass the plan's completed + placed-out ids to answer 'what is the user eligible to take'."),
       scheduleType: z.string().optional().describe("Schedule type substring: 'Lecture', 'Lab', 'Seminar', 'Studio', 'Recitation'"),
       instructor: z.string().optional()
-        .describe("Instructor name substring (case/accent-insensitive) — courses this person has taught as primary instructor in the last 3 years. Combine with term ('fall') for 'what do they teach in the fall'. Historical record, not future staffing."),
+        .describe("Instructor name substring (case/accent-insensitive) — courses this person has taught as primary instructor in the last 3 years. Combine with term ('fall') for 'what do they teach in the fall'. Results gain instructorMatch: {name: {semesterType: avg % of enrolment}} showing when and how much they teach each course. Historical record, not future staffing."),
       excludeIds: z.array(z.string()).optional().describe("Course ids to leave out (e.g. already placed or already suggested)"),
       sortBy:     z.enum(["relevance", "number", "enrollment"]).optional()
         .describe("'enrollment' = most-taken first (recent enrolment) — good for 'popular electives'; default is relevance/catalog order"),

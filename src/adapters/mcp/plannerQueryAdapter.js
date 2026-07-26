@@ -146,18 +146,19 @@ export function createPlannerQuery(deps) {
 
     let results = courses;
 
-    if (instructor) {
+    // Diacritic- and case-insensitive name folding ("garcia" finds "García").
+    const fold = (s) => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const instructorQ = instructor ? fold(instructor) : null;
+
+    if (instructorQ) {
       // Match against the per-semester-type instructor shares (recorded
-      // history, primary instructors). Diacritic- and case-insensitive so
-      // "garcia" finds "García". Combine with `term` to ask "what does
-      // Aloupis teach in the fall".
-      const fold = (s) => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-      const q = fold(instructor);
+      // history, primary instructors). Combine with `term` to ask "what
+      // does Aloupis teach in the fall".
       results = results.filter(c => {
         const prof = c.offering?.prof;
         if (!prof) return false;
         const types = term ? [term] : Object.keys(prof);
-        return types.some(t => (prof[t] ?? []).some(([name]) => fold(name).includes(q)));
+        return types.some(t => (prof[t] ?? []).some(([name]) => fold(name).includes(instructorQ)));
       });
     }
 
@@ -249,7 +250,23 @@ export function createPlannerQuery(deps) {
           : a.subject.localeCompare(b.subject));
     }
 
-    return results.slice(0, limit).map(trimCourse);
+    return results.slice(0, limit).map(c => {
+      const out = trimCourse(c);
+      // When searching BY instructor, ride the matched person's average
+      // enrolment share per semester type along with each result — the
+      // "which of these do they actually teach, when, and how often"
+      // answer, without a get_course round-trip per course.
+      if (instructorQ) {
+        const matched = {};   // name → { semTypeId: avg % of enrolment }
+        for (const [t, list] of Object.entries(c.offering?.prof ?? {})) {
+          for (const [name, pct] of list) {
+            if (fold(name).includes(instructorQ)) (matched[name] ??= {})[t] = pct;
+          }
+        }
+        if (Object.keys(matched).length) out.instructorMatch = matched;
+      }
+      return out;
+    });
   }
 
   /**
