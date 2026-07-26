@@ -639,7 +639,7 @@ export function PlannerProvider({ children }) {
             const toCourse = courseMap[rel.to];
             if (!toCourse || !toCourse.prereqs?.length) return;
             const ti = SEM_INDEX[placements[rel.to]];
-            const prereqResult = evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti);
+            const prereqResult = evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut);
             if (prereqResult !== "order") return; // Only draw if unsatisfied due to order
             // Now, check if THIS edge is the one out of order
             const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
@@ -682,7 +682,7 @@ export function PlannerProvider({ children }) {
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX]);
+  }, [selectedId, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut]);
 
   // ── MCP action applier ───────────────────────────────────────────
   // Applies a batch of IPlannerAction actions dispatched by Claude via APPLY events.

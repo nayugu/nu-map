@@ -19,12 +19,19 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
   if (!tree || !tree.length) return "satisfied";
   let pos = 0;
 
+  // null = phantom operand (dangling operator / stray token in scraped data);
+  // it must be neutral in merges, NOT "satisfied" — "MATH2331 Or <nothing>"
+  // would otherwise always pass and swallow real violations.
   function mergeOr(a, b) {
+    if (a === null) return b;
+    if (b === null) return a;
     return (a === "satisfied" || b === "satisfied") ? "satisfied"
          : (a === "order"     || b === "order")     ? "order"
          : "missing";
   }
   function mergeAnd(a, b) {
+    if (a === null) return b;
+    if (b === null) return a;
     return (a === "missing" || b === "missing") ? "missing"
          : (a === "order"   || b === "order")   ? "order"
          : "satisfied";
@@ -52,7 +59,7 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
 
   // Factor = "(" Expr ")" | NestedArray | CourseRef | (skip stray token)
   function parseFactor() {
-    if (pos >= tree.length) return "satisfied";
+    if (pos >= tree.length) return null;
     const tok = tree[pos];
 
     if (tok === "(") {
@@ -64,7 +71,7 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
 
     if (Array.isArray(tok)) {
       pos++;
-      return evalPrereqTree(tok, placements, semIndex, ti, placedOut);
+      return tok.length ? evalPrereqTree(tok, placements, semIndex, ti, placedOut) : null;
     }
 
     if (tok && typeof tok === "object" && tok.subject && tok.number) {
@@ -82,8 +89,8 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
 
     // Skip ")", stray operators, etc.
     pos++;
-    return "satisfied";
+    return null;
   }
 
-  return parseExpr();
+  return parseExpr() ?? "satisfied";
 }
