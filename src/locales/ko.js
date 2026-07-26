@@ -115,6 +115,7 @@ export const strings = {
   "info.relationships.title":     "이후 수강 가능",
   "info.offered.title":           "개설 학기",
   "info.offered.schedule":        "일반 수업 요일",
+  "info.prof.title":              "담당 교수",
   "info.offered.async":           "온라인 / 정해진 시간 없음",
   "info.offered.weekdays":        "월,화,수,목,금",
   "info.offered.weekend":        "토,일",

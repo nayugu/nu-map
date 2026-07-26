@@ -115,6 +115,7 @@ export const strings = {
   "info.relationships.title":     "DESBLOQUEA",
   "info.offered.title":           "OFRECIDO EN",
   "info.offered.schedule":        "HORARIO HABITUAL",
+  "info.prof.title":              "PROFESORES",
   "info.offered.async":           "En línea / sin horario fijo",
   "info.offered.weekdays":        "L,M,X,J,V",
   "info.offered.weekend":        "Sá,Do",

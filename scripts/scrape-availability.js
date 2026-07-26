@@ -63,6 +63,9 @@ const CHANGE_LOG_MAX = 600;
 const BASE      = "https://nubanner.neu.edu/StudentRegistrationSsb/ssb";
 const PAGE_SIZE = 500;
 const DELAY_MS  = parseInt(process.env.BANNER_DELAY_MS || "500", 10);
+// Instructor fetches are one light request per SECTION (Banner strips faculty
+// from the bulk search feed), so they get their own, tighter pacing.
+const PROF_DELAY_MS = parseInt(process.env.BANNER_PROF_DELAY_MS || "250", 10);
 
 // ── Term code logic ──────────────────────────────────────────────
 // Banner YYYY = AY end year.  Suffixes: 10=Fall, 30=Spring, 40=Sum1, 60=Sum2.
@@ -235,10 +238,12 @@ async function fetchTermOfferings(termCode) {
       const agg = detail.get(id) ?? {
         sections: 0, cap: 0, enr: 0,
         formats: new Set(), campuses: new Set(), days: {}, linked: false,
+        crns: [], // [crn, enrolled] per section — transient, feeds the instructor pass
       };
       agg.sections += 1;
       agg.cap += num(s.maximumEnrollment);
       agg.enr += num(s.enrollment);
+      if (s.courseReferenceNumber) agg.crns.push([s.courseReferenceNumber, num(s.enrollment)]);
       if (s.instructionalMethodDescription) agg.formats.add(s.instructionalMethodDescription.trim());
       if (s.campusDescription)              agg.campuses.add(s.campusDescription.trim());
       if (s.isSectionLinked)                agg.linked = true;
@@ -282,7 +287,70 @@ function serializeDetail(agg) {
     campuses: [...agg.campuses].sort(),
     days: agg.days,
     linked: agg.linked,
+    ...(agg.prof && { prof: agg.prof }),
   };
+}
+
+// ── Instructors ──────────────────────────────────────────────────
+
+/** Banner's "Aloupis, Gregory" → display form "Gregory Aloupis". */
+function flipName(displayName) {
+  const i = (displayName || "").indexOf(",");
+  if (i === -1) return (displayName || "").trim();
+  const last  = displayName.slice(0, i).trim();
+  const first = displayName.slice(i + 1).trim();
+  return first ? `${first} ${last}` : last;
+}
+
+/**
+ * Fetch PRIMARY instructors for every section of every course in `detail`
+ * via getFacultyMeetingTimes — one call per CRN, the only place NEU's Banner
+ * exposes faculty (the bulk search feed returns an empty faculty array).
+ * Mutates each aggregate: agg.prof = [[name, sections, enrolled], …] sorted
+ * by enrolment. Names are deduped within a section (Banner repeats the
+ * instructor per meeting block).
+ *
+ * Only run this for COMPLETED terms: assignments are final, so each term is
+ * fetched once ever and then carried forward from the previous file.
+ */
+async function fetchTermProfessors(termCode, detail) {
+  await activateTerm(termCode);
+  await sleep(DELAY_MS);
+  let calls = 0;
+  for (const agg of detail.values()) {
+    const tally = new Map(); // name → { n: sections, e: enrolled }
+    for (const [crn, enr] of agg.crns ?? []) {
+      try {
+        const res = await fetch(
+          `${BASE}/searchResults/getFacultyMeetingTimes?term=${termCode}&courseReferenceNumber=${crn}`,
+          { headers: { "Cookie": cookieHeader() } }
+        );
+        updateJar(res);
+        const j = await res.json();
+        const names = new Set();
+        for (const block of j?.fmt ?? []) {
+          for (const f of block.faculty ?? []) {
+            if (f.primaryIndicator && f.displayName) names.add(flipName(f.displayName));
+          }
+        }
+        for (const name of names) {
+          const slot = tally.get(name) ?? { n: 0, e: 0 };
+          slot.n += 1;
+          slot.e += enr;
+          tally.set(name, slot);
+        }
+      } catch { /* one section failing must not kill the term */ }
+      calls += 1;
+      if (calls % 1000 === 0) process.stdout.write(`    …${calls} sections\n`);
+      await sleep(PROF_DELAY_MS);
+    }
+    if (tally.size) {
+      agg.prof = [...tally.entries()]
+        .map(([name, { n, e }]) => [name, n, e])
+        .sort((a, b) => b[2] - a[2] || b[1] - a[1]);
+    }
+  }
+  return calls;
 }
 
 /**
@@ -334,6 +402,14 @@ async function main() {
   // --details-only: write just term-details.json, leaving the existing term-history.json /
   // subject-colleges.json untouched (isolates the enrollment/format/meeting capture).
   const detailsOnly = process.argv.includes("--details-only");
+  // --prof[=N]: fetch primary instructors for up to N completed terms that don't
+  // have them yet (newest first, one getFacultyMeetingTimes call per section —
+  // expensive, hence the cap; default 1 term per run). Completed terms never
+  // change, so instructor data is fetched once ever and carried forward.
+  const profArg = process.argv.find(a => a === "--prof" || a.startsWith("--prof="));
+  const profTermLimit = profArg
+    ? (profArg.includes("=") ? Math.max(0, parseInt(profArg.split("=")[1], 10) || 0) : 1)
+    : 0;
 
   // Load catalog so we only track courses the app knows about
   if (!existsSync(ALL_COURSES)) {
@@ -437,11 +513,55 @@ async function main() {
   // date has passed (final, stable numbers) and only for catalog courses.
   const now = new Date();
   const completedTerms = toQuery.filter(c => termEndByCode[c] && termEndByCode[c] < now);
+
+  // Previous file: source for carrying forward instructor data (fetched once per
+  // completed term, ever) and for preserving terms outside a --term test window.
+  let prevDetails = {};
+  if (existsSync(DETAILS_OUT)) {
+    try { prevDetails = JSON.parse(readFileSync(DETAILS_OUT, "utf8")); } catch {}
+  }
+  const termsWithProf = new Set();
+  for (const byTerm of Object.values(prevDetails)) {
+    for (const [tc, d] of Object.entries(byTerm)) if (d.prof) termsWithProf.add(tc);
+  }
+
+  // Instructor pass: newest completed terms that don't have prof data yet, capped per run.
+  const profTargets = [...completedTerms]
+    .filter(tc => !termsWithProf.has(tc))
+    .sort()
+    .reverse()
+    .slice(0, profTermLimit);
+  for (const termCode of profTargets) {
+    const sections = [...(termDetail[termCode] ?? new Map()).values()]
+      .reduce((s, a) => s + (a.crns?.length ?? 0), 0);
+    console.log(`\n[${termCode}] fetching instructors for ${sections} sections (~${Math.round(sections * PROF_DELAY_MS / 60000)} min)…`);
+    try {
+      const calls = await fetchTermProfessors(termCode, termDetail[termCode] ?? new Map());
+      console.log(`  done (${calls} section lookups)`);
+    } catch (err) {
+      console.warn(`  instructor fetch FAILED: ${err.message}`);
+    }
+  }
+
   const termDetails = {};
   for (const termCode of completedTerms) {
     for (const [courseId, agg] of (termDetail[termCode] ?? new Map())) {
       if (!catalogIds.has(courseId)) continue;
-      (termDetails[courseId] ??= {})[termCode] = serializeDetail(agg);
+      const entry = serializeDetail(agg);
+      // Carry instructor history forward for terms not (re)fetched this run.
+      if (!entry.prof) {
+        const prev = prevDetails[courseId]?.[termCode]?.prof;
+        if (prev) entry.prof = prev;
+      }
+      (termDetails[courseId] ??= {})[termCode] = entry;
+    }
+  }
+  // A --term-restricted run must not wipe the other terms from the file.
+  if (termArgs.length) {
+    for (const [courseId, byTerm] of Object.entries(prevDetails)) {
+      for (const [tc, d] of Object.entries(byTerm)) {
+        if (!toQuery.includes(tc)) ((termDetails[courseId] ??= {})[tc] ??= d);
+      }
     }
   }
 
@@ -499,6 +619,7 @@ async function main() {
       total,
       detailTerms:   completedTerms,
       detailCovered: Object.keys(termDetails).length,
+      ...(profTargets.length && { profTerms: profTargets }),
     });
     if (changeLog.runs.length > CHANGE_LOG_MAX) changeLog.runs = changeLog.runs.slice(0, CHANGE_LOG_MAX);
     writeFileSync(CHANGE_LOG, JSON.stringify(changeLog, null, 2) + "\n", "utf8");

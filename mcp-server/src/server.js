@@ -276,7 +276,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "get_course",
-    "Full course record(s) by id. Facets via include: 'offerings' (per-term enrolment/capacity/fill/open-seats + per-semester-type offering probability honoring the user's overrides), 'patterns' (weekday distribution, enrolment-weighted meeting patterns, formats, campuses, per-term detail), 'relationships' (what this course unlocks; coreq partners), 'links' (official catalog URL).",
+    "Full course record(s) by id. Facets via include: 'offerings' (per-term enrolment/capacity/fill/open-seats, per-semester-type offering probability honoring the user's overrides, and primary instructors per completed term — historical record, not a promise of future staffing), 'patterns' (weekday distribution, enrolment-weighted meeting patterns, formats, campuses, per-term detail), 'relationships' (what this course unlocks; coreq partners), 'links' (official catalog URL).",
     {
       ids:     z.array(z.string()).min(1).max(10).describe("Course ids, e.g. ['CS3650']"),
       include: z.array(z.enum(COURSE_INCLUDE)).optional().describe("Facets to attach"),

@@ -116,6 +116,7 @@ export const strings = {
   "info.relationships.title":     "アンロック",
   "info.offered.title":           "開講学期",
   "info.offered.schedule":        "通常の開講曜日",
+  "info.prof.title":              "担当教員",
   "info.offered.async":           "オンライン / 時間指定なし",
   "info.offered.weekdays":        "月,火,水,木,金",
   "info.offered.weekend":        "土,日",

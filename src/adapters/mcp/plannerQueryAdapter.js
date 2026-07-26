@@ -252,9 +252,25 @@ export function createPlannerQuery(deps) {
     const out = { ...base, level: courseLevel(course), college: subjectColleges[course.subject] ?? null };
 
     if (include.includes("offerings")) {
+      // Primary instructors per completed term, newest first, enrolment-ordered
+      // (from the monthly Banner scrape — historical record, not a promise of
+      // who teaches next).
+      const termLabel = (code) => {
+        const stId = calendar.decodeTermCode?.(code);
+        const yr   = calendar.getTermCodeYear?.(code);
+        const st   = calendar.getSemesterTypes().find(s => s.id === stId);
+        return st && yr != null ? `${st.altLabel ?? st.label} ${yr}` : code;
+      };
       out.offerings = {
         history:     offeringStats.offeringHistory(course),
         bySemesterType: offeringStats.semTypeSummary(course, plan?.offeredOverrides?.[id]),
+        instructors: Object.entries(offering?.prof ?? {})
+          .sort((a, b) => Number(b[0]) - Number(a[0]))
+          .map(([code, names]) => ({
+            term:        termLabel(code),
+            termCode:    code,
+            instructors: names.map(([name, enrolled]) => ({ name, enrolled })),
+          })),
       };
     }
     if (include.includes("patterns")) {

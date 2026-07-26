@@ -115,6 +115,7 @@ export const strings = {
   "info.relationships.title":     "DÉBLOQUE",
   "info.offered.title":           "PROPOSÉ EN",
   "info.offered.schedule":        "HORAIRE HABITUEL",
+  "info.prof.title":              "ENSEIGNANTS",
   "info.offered.async":           "En ligne / sans horaire fixe",
   "info.offered.weekdays":        "Lu,Ma,Me,Je,Ve",
   "info.offered.weekend":        "Sa,Di",

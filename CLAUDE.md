@@ -7,7 +7,7 @@ updates course data. Two workflows are legacy and easy to mistake for the live p
 
 | Workflow | Cadence | Role |
 |---|---|---|
-| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs, **NUPath** — plus Banner availability, offering summary, and manual patches. Pushes directly to main. |
+| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs, **NUPath** — plus Banner availability, **primary instructors** (`--prof`: one newest completed term per run, cached forever after — one getFacultyMeetingTimes call per section), offering summary, and manual patches. Pushes directly to main. |
 | `update-majors.yml` | Bimonthly (odd months) | Undergrad program requirements |
 | `update-grad-majors.yml` | Bimonthly (odd months) | Graduate program requirements |
 | `catalog-rotate.yml` | **LEGACY — manual only** | Superseded by the monthly full scrape above. Old design: one subject every 3 days via PR review; its schedule was disabled because GitHub Actions here cannot open PRs. Do not re-enable. |

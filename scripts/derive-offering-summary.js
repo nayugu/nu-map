@@ -15,7 +15,8 @@
  *       cmp: ["Boston"],                       // campuses ever seen (union)
  *       dow: [80, 0, 80, 60, 20],              // % of sections meeting each weekday [M,T,W,Th,F]
  *       pat: [["MWR",60],["TF",20]],           // [day-pattern, % of sections], top 6, most common first
- *       lab: false                             // any section requires a linked lab/co-section
+ *       lab: false,                            // any section requires a linked lab/co-section
+ *       prof: { "202610": [["Gregory Aloupis", 88]] } // primary instructors per term [name, enrolled], top 4
  *     }
  *   }
  *
@@ -60,11 +61,19 @@ for (const [courseId, byTerm] of Object.entries(details)) {
   let totalWt = 0;                                    // total enrolled across all patterns
   let lab = false;
 
+  const prof = {};                                    // termCode → [[name, enrolled], …]
+
   for (const [termCode, d] of Object.entries(byTerm)) {
     if (d.cap > 0) {
       enr[termCode]  = d.enr;
       cap[termCode]  = d.cap;
       secs[termCode] = d.sections || 1;
+    }
+    // Primary instructors per term (see scrape-availability --prof). Stored per
+    // term so the UI can show "who taught it, semester by semester"; capped to
+    // the top 4 by enrolment — beyond that it's lab-style staffing noise.
+    if (d.prof?.length) {
+      prof[termCode] = d.prof.slice(0, 4).map(([name, , e]) => [name, e]);
     }
     for (const f of d.formats ?? [])  formats.add(f);
     for (const c of d.campuses ?? []) campuses.add(c);
@@ -111,6 +120,7 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     ...(dow ? { dow } : {}),
     ...(pat ? { pat } : {}),
     ...(lab ? { lab: true } : {}),
+    ...(Object.keys(prof).length ? { prof } : {}),
   };
 }
 

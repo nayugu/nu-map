@@ -102,7 +102,7 @@ export default function InfoPanel() {
           <div style={{ display: "flex", alignItems: "flex-start", gap: 14, width: "100%" }}>
             <CourseInfo selCourse={selCourse} navTo={navTo} />
 
-            {/* Desktop only: two separate columns */}
+            {/* Desktop only: separate columns — availability, instructors, unlocks */}
             {!isMobile && (
               <CourseOfferingHistory
                 selCourse={selCourse}
@@ -110,6 +110,7 @@ export default function InfoPanel() {
                 setOfferedOverrides={setOfferedOverrides}
               />
             )}
+            {!isMobile && <CourseInstructors selCourse={selCourse} />}
             {!isMobile && showUnlocks && selEdges.length > 0 && (
               <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} navTo={navTo} />
             )}
@@ -123,6 +124,7 @@ export default function InfoPanel() {
                   setOfferedOverrides={setOfferedOverrides}
                   compact
                 />
+                <CourseInstructors selCourse={selCourse} compact />
                 {showUnlocks && selEdges.length > 0 && (
                   <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} navTo={navTo} compact />
                 )}
@@ -144,6 +146,7 @@ export default function InfoPanel() {
                 offeredOverrides={offeredOverrides}
                 setOfferedOverrides={setOfferedOverrides}
               />
+              <CourseInstructors selCourse={selCourse} compact />
               {showUnlocks && selEdges.length > 0 && (
                 <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} navTo={navTo} />
               )}
@@ -491,6 +494,47 @@ function WeekdayStrip({ dow, color }) {
   );
 }
 
+// Primary instructors per completed term — its own column beside the
+// availability history. Per-semester on purpose: fall, spring, and summer
+// staffing regularly differ, so a single merged list would mislead.
+function CourseInstructors({ selCourse, compact = false }) {
+  const cal   = usePort(ICalendar);
+  const { t } = useLanguage();
+  const birth = selCourse.birthTermCode ?? null;
+  const rows = Object.entries(selCourse.offering?.prof ?? {})
+    .filter(([code]) => birth === null || Number(code) >= birth)
+    .sort((a, b) => Number(b[0]) - Number(a[0]))    // newest term first
+    .slice(0, compact ? 4 : 6)
+    .map(([code, names]) => ({
+      code,
+      typeId: cal.decodeTermCode(code),
+      yr:     cal.getTermCodeYear?.(code),
+      names:  names.map(([n]) => n),                // already enrolment-ordered
+    }))
+    .filter(r => r.typeId && r.yr != null);
+  if (rows.length === 0) return null;
+
+  return (
+    <div style={{ flexShrink: 0, width: compact ? "auto" : 170 }}>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
+        {t("info.prof.title")}
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {rows.map(r => (
+          <div key={r.code}>
+            <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
+              <SemLabel typeId={r.typeId} year={r.yr} />
+            </div>
+            <div style={{ fontSize: 10, color: "var(--text-2)", lineHeight: 1.45 }}>
+              {r.names.join(" · ")}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const cal         = usePort(ICalendar);
   const { t }       = useLanguage();
@@ -503,11 +547,12 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const hasHistory  = Object.keys(termHistory).length > 0;
   const birth       = selCourse.birthTermCode ?? null;
 
-  // Per-term enrollment detail (completed terms only): { e:{enrolled}, c:{capacity}, s:{sections}, fmt[], cmp[], dow[], lab }
+  // Per-term enrollment detail (completed terms only): { e:{enrolled}, c:{capacity}, s:{sections}, fmt[], cmp[], dow[], lab, prof{} }
   const offering = selCourse.offering ?? null;
   const enrMap = offering?.e ?? {};   // enrolled count  → fill% (height) = enr/cap
   const capMap = offering?.c ?? {};   // capacity        → open = max(0, cap - enr)
   const secMap = offering?.s ?? {};   // section count   → colour uses open ÷ sections
+
 
   // Hover popover state: which gauge cell the pointer is over (desktop only — hover never
   // fires on touch, so phones simply keep the plain gauges). Holds the cell's numbers plus

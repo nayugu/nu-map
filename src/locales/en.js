@@ -116,6 +116,7 @@ export const strings = {
   "info.relationships.title":     "UNLOCKS",
   "info.offered.title":           "AVAILABILITY",
   "info.offered.schedule":        "TYPICALLY MEETS",
+  "info.prof.title":              "INSTRUCTORS",
   "info.offered.async":           "Online / no set meeting time",
   "info.offered.weekdays":        "M,T,W,Th,F",
   "info.offered.weekend":        "Sa,Su",

@@ -195,6 +195,7 @@ export const strings = {
   "info.relationships.title":     "\u89e3\u9501",
   "info.offered.title":           "\u5f00\u8bfe\u5b66\u671f",
   "info.offered.schedule":        "常规上课日",
+  "info.prof.title":              "授课教师",
   "info.offered.async":           "在线 / 无固定时间",
   "info.offered.weekdays":        "一,二,三,四,五",
   "info.offered.weekend":        "六,日",

@@ -114,6 +114,7 @@ export const strings = {
   "info.relationships.title":     "يفتح",
   "info.offered.title":           "يُقدم في",
   "info.offered.schedule":        "المواعيد المعتادة",
+  "info.prof.title":              "المدرّسون",
   "info.offered.async":           "عبر الإنترنت / بدون وقت محدد",
   "info.offered.weekdays":        "إث,ثل,أر,خم,جم",
   "info.offered.weekend":        "سب,أح",
