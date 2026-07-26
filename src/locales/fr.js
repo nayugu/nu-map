@@ -116,6 +116,7 @@ export const strings = {
   "info.offered.title":           "PROPOSÉ EN",
   "info.offered.schedule":        "HORAIRE HABITUEL",
   "info.prof.title":              "ENSEIGNANTS",
+  "info.prof.share":              "% = part moyenne des étudiants",
   "info.offered.async":           "En ligne / sans horaire fixe",
   "info.offered.weekdays":        "Lu,Ma,Me,Je,Ve",
   "info.offered.weekend":        "Sa,Di",

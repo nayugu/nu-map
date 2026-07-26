@@ -115,6 +115,7 @@ export const strings = {
   "info.offered.title":           "يُقدم في",
   "info.offered.schedule":        "المواعيد المعتادة",
   "info.prof.title":              "المدرّسون",
+  "info.prof.share":              "٪ = متوسط حصة الطلاب الذين يدرّسهم",
   "info.offered.async":           "عبر الإنترنت / بدون وقت محدد",
   "info.offered.weekdays":        "إث,ثل,أر,خم,جم",
   "info.offered.weekend":        "سب,أح",

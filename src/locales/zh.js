@@ -196,6 +196,7 @@ export const strings = {
   "info.offered.title":           "\u5f00\u8bfe\u5b66\u671f",
   "info.offered.schedule":        "常规上课日",
   "info.prof.title":              "授课教师",
+  "info.prof.share":              "% = 平均授课学生占比",
   "info.offered.async":           "在线 / 无固定时间",
   "info.offered.weekdays":        "一,二,三,四,五",
   "info.offered.weekend":        "六,日",

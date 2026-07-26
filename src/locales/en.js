@@ -117,6 +117,7 @@ export const strings = {
   "info.offered.title":           "AVAILABILITY",
   "info.offered.schedule":        "TYPICALLY MEETS",
   "info.prof.title":              "INSTRUCTORS",
+  "info.prof.share":              "% = avg. share of students taught",
   "info.offered.async":           "Online / no set meeting time",
   "info.offered.weekdays":        "M,T,W,Th,F",
   "info.offered.weekend":        "Sa,Su",

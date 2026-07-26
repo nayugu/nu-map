@@ -116,6 +116,7 @@ export const strings = {
   "info.offered.title":           "प्रस्तुत सेमेस्टर",
   "info.offered.schedule":        "सामान्य कक्षा दिवस",
   "info.prof.title":              "प्राध्यापक",
+  "info.prof.share":              "% = पढ़ाए गए छात्रों का औसत हिस्सा",
   "info.offered.async":           "ऑनलाइन / कोई निश्चित समय नहीं",
   "info.offered.weekdays":        "सो,मं,बु,गु,शु",
   "info.offered.weekend":        "श,र",

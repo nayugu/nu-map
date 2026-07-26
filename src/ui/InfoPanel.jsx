@@ -527,40 +527,44 @@ function CourseInstructors({ selCourse, compact = false }) {
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
         {rows.map(({ st, entries }) => {
-          // The TEXT is the indicator: the usual instructor reads big, bold
-          // and fully opaque; one-off substitutes recede to small and faint.
+          // The TEXT is the indicator: the usual instructor reads big and
+          // fully opaque; one-off substitutes recede to small and faint.
           // Scaled to the row's biggest share through a steep curve (same
           // emphasis philosophy as the weekday strip, without chip chrome).
           const peak = Math.max(1, ...entries.map(([, p]) => p));
           return (
             <div key={st.id}>
-              <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
+              <div style={{ fontSize: 8.5, fontWeight: 700, color: selCourse.color || "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
                 {/* Reuse the hand-written semester-name translations (claude.sem.*)
                     rather than the auto-translation engine. */}
                 {SEM_NAME_KEY[st.id]
                   ? t(SEM_NAME_KEY[st.id])
                   : <TText as={st.translateAs}>{st.altLabel ?? st.label}</TText>}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 1, paddingLeft: 6 }}>
                 {entries.map(([name, pct]) => {
                   const frac = pct / peak;
                   return (
-                    <span key={name} title={`${name}: ${pct}%`} style={{
-                      fontSize: 9 + 2 * frac,
-                      fontWeight: frac >= 0.75 ? 800 : frac >= 0.4 ? 650 : 500,
-                      color: selCourse.color || "var(--text-1)",
+                    <div key={name} title={`${name}: ${pct}%`} style={{
+                      display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8,
+                      fontSize: 9.5 + 1 * frac,
+                      fontWeight: 400,
+                      color: "var(--text-3)",
                       opacity: 0.40 + 0.60 * Math.pow(frac, 1.4),
                       lineHeight: 1.35,
                     }}>
-                      {name}
-                      <span style={{ fontSize: 8, fontWeight: 600, color: "var(--text-3)" }}> {pct}%</span>
-                    </span>
+                      <span>{name}</span>
+                      <span style={{ fontSize: 8, fontWeight: 600, color: "var(--text-3)", flexShrink: 0 }}>{pct}%</span>
+                    </div>
                   );
                 })}
               </div>
             </div>
           );
         })}
+      </div>
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 12, lineHeight: 1.4 }}>
+        {t("info.prof.share")}
       </div>
     </div>
   );
