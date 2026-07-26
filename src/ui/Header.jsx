@@ -19,6 +19,29 @@ import YearStepper    from "./YearStepper.jsx";
 import { SemLabel }   from "./SemLabel.jsx";
 import NewPlanModal   from "./NewPlanModal.jsx";
 
+// Touch scroll-lock for header dropdown panels: consume touchmove at the
+// panel's scroll bounds so the gesture never chains into the planner's
+// scroll container behind it. Native non-passive listener — React's
+// root-level touch listeners are passive, so JSX onTouchMove can't
+// preventDefault. See the usage comment inside Header.
+function usePopupTouchLock(ref, open) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!open || !el) return;
+    let startY = 0;
+    const onStart = (e) => { startY = e.touches[0].clientY; };
+    const onMove  = (e) => {
+      const dy       = e.touches[0].clientY - startY;
+      const atTop    = el.scrollTop <= 0;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      if (el.scrollHeight <= el.clientHeight || (atTop && dy > 0) || (atBottom && dy < 0)) e.preventDefault();
+    };
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchmove",  onMove,  { passive: false });
+    return () => { el.removeEventListener("touchstart", onStart); el.removeEventListener("touchmove", onMove); };
+  }, [ref, open]);
+}
+
 export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
@@ -125,31 +148,19 @@ export default function Header() {
   // event and this listener runs the same export the ⇅ menu does.
   const handleExportRef = useRef(null);
 
-  // ── Settings dropdown touch scroll-lock ─────────────────────────
-  // The Header (and this dropdown) render INSIDE the planner's scroll
-  // container (App.jsx timeline div), so on touch devices any gesture the
+  // ── Dropdown touch scroll-locks (⚙ settings + 🎓 cohort) ─────────
+  // The Header (and its dropdowns) render INSIDE the planner's scroll
+  // container (App.jsx timeline div), so on touch devices any gesture a
   // panel can't consume — at its scroll bounds, or when it doesn't
   // overflow — chains into the planner behind it. overscroll-behavior
   // doesn't cover every mobile browser, and React's root-level touch
   // listeners are passive (preventDefault is ignored), so this attaches a
   // native non-passive touchmove listener that consumes the gesture at
-  // the panel's bounds.
+  // the panel's bounds. Pairs with the .hdr-pop class (index.html).
   const settingsPopRef = useRef(null);
-  useEffect(() => {
-    const el = settingsPopRef.current;
-    if (!showSettings || !el) return;
-    let startY = 0;
-    const onStart = (e) => { startY = e.touches[0].clientY; };
-    const onMove  = (e) => {
-      const dy       = e.touches[0].clientY - startY;
-      const atTop    = el.scrollTop <= 0;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
-      if (el.scrollHeight <= el.clientHeight || (atTop && dy > 0) || (atBottom && dy < 0)) e.preventDefault();
-    };
-    el.addEventListener("touchstart", onStart, { passive: true });
-    el.addEventListener("touchmove",  onMove,  { passive: false });
-    return () => { el.removeEventListener("touchstart", onStart); el.removeEventListener("touchmove", onMove); };
-  }, [showSettings]);
+  const quickSetPopRef = useRef(null);
+  usePopupTouchLock(settingsPopRef, showSettings);
+  usePopupTouchLock(quickSetPopRef, showQuickSet);
   handleExportRef.current = handleExport;
   useEffect(() => {
     const h = () => handleExportRef.current?.({ stopPropagation() {} });
@@ -777,7 +788,9 @@ export default function Header() {
           </button>
 
           {showQuickSet && (
-            <div onClick={e => e.stopPropagation()} style={{
+            // .hdr-pop = viewport cap + scroll (index.html); the touch lock
+            // keeps gestures from chaining into the planner behind.
+            <div ref={quickSetPopRef} onClick={e => e.stopPropagation()} className="hdr-pop" style={{
               position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 100,
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "10px 12px", minWidth: 190, boxShadow: "var(--shadow-modal)",
