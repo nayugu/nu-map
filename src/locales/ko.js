@@ -117,6 +117,7 @@ export const strings = {
   "info.offered.schedule":        "일반 수업 요일",
   "info.prof.title":              "담당 교수",
   "info.prof.share":              "% = 담당 학생 평균 비율",
+  "info.offered.pending":         "개설됨 — 좌석 데이터 아직 없음 (최종 수치는 학기 종료 후 제공됩니다)",
   "info.offered.async":           "온라인 / 정해진 시간 없음",
   "info.offered.weekdays":        "월,화,수,목,금",
   "info.offered.weekend":        "토,일",

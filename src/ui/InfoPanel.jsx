@@ -802,15 +802,20 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                     <span key={yr}
                       onMouseEnter={hasData ? e => setHoverCell({ ...cell, rect: e.currentTarget.getBoundingClientRect() }) : undefined}
                       onMouseLeave={hasData ? () => setHoverCell(c => (c && c.yr === yr && c.label === label) ? null : c) : undefined}
+                      // Offered but no seat data (term not yet ended — details are
+                      // completed-terms-only, and merged summers finish in late Aug):
+                      // dashed frame (the app's "not final" motif) + a plain tooltip,
+                      // so the cell doesn't read as broken or as "0% full".
+                      title={hasData ? undefined : t("info.offered.pending")}
                       style={{
                         position: "absolute", right: right + 2, bottom: 0,
                         width: YR_CELL - 4,
                         height: ROW_H,
                         borderRadius: 3, overflow: "hidden",
-                        cursor: hasData ? "help" : "default",
+                        cursor: "help",
                         // Thick but subtle frame = the 100% reference so the fill reads as a
                         // clear fraction; the year is labelled once in the header above.
-                        border: "2px solid var(--border-2)",
+                        border: hasData ? "2px solid var(--border-2)" : "2px dashed var(--border-2)",
                       }}>
                       {fill != null && (
                         <span style={{

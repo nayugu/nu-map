@@ -117,6 +117,7 @@ export const strings = {
   "info.offered.schedule":        "सामान्य कक्षा दिवस",
   "info.prof.title":              "प्राध्यापक",
   "info.prof.share":              "% = पढ़ाए गए छात्रों का औसत हिस्सा",
+  "info.offered.pending":         "उपलब्ध — सीट डेटा अभी उपलब्ध नहीं (अंतिम आँकड़े सत्र समाप्त होने के बाद आएँगे)",
   "info.offered.async":           "ऑनलाइन / कोई निश्चित समय नहीं",
   "info.offered.weekdays":        "सो,मं,बु,गु,शु",
   "info.offered.weekend":        "श,र",

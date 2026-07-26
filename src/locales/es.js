@@ -117,6 +117,7 @@ export const strings = {
   "info.offered.schedule":        "HORARIO HABITUAL",
   "info.prof.title":              "PROFESORES",
   "info.prof.share":              "% = proporción media de estudiantes",
+  "info.offered.pending":         "Ofrecido — datos de plazas aún no disponibles (las cifras finales llegan al terminar el semestre)",
   "info.offered.async":           "En línea / sin horario fijo",
   "info.offered.weekdays":        "L,M,X,J,V",
   "info.offered.weekend":        "Sá,Do",
