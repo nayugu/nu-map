@@ -57,6 +57,7 @@ export const strings = {
   "sem.incoming.title.show":"편입 학점 상세 보기",
   "sem.incoming.title.hide":"편입 학점 상세 숨기기",
   "sem.cont.label":         "계속",
+  "sem.summer.abbr":        "여름",
   "sem.cont.abbr":          "계속",
   "sem.term.remove":        "{type} 삭제",
   "sem.work.company.placeholder": "회사",

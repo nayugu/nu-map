@@ -10,7 +10,7 @@ import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
-import { TText }          from "../context/TranslationContext.jsx";
+import { TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
@@ -288,7 +288,9 @@ export default function SummerRow({ semA, semB }) {
             {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
             {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
           </span>
-          <span style={{ fontSize: 7, fontWeight: 700, color: "var(--text-2)", lineHeight: "calc(1.2 * var(--lh-scale, 1))" }}>Sm</span>
+          {/* Hand-written per-locale abbreviation ("Sm" / 夏季 / 夏 / …) — a lone
+              engine-translated "Summer" is as ambiguous as the "Fall"→落下 bug. */}
+          <span style={{ fontSize: 7, fontWeight: 700, color: "var(--text-2)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>{scaleLatinRuns(t("sem.summer.abbr"), { tight: true })}</span>
           <span style={{ fontSize: 7, fontWeight: 500, color: "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))" }}>{year}</span>
           {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>{combinedSH} SH</span>}
         </div>

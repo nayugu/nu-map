@@ -57,6 +57,7 @@ export const strings = {
   "sem.incoming.title.show":"عرض تفاصيل الساعات المحولة",
   "sem.incoming.title.hide":"إخفاء تفاصيل الساعات المحولة",
   "sem.cont.label":         "مستمر",
+  "sem.summer.abbr":        "الصيف",
   "sem.cont.abbr":          "مستمر",
   "sem.term.remove":        "إزالة {type}",
   "sem.work.company.placeholder": "الشركة",

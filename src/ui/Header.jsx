@@ -1030,6 +1030,9 @@ export default function Header() {
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "14px 16px", minWidth: 270, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 12,
+              // Cap to the viewport and scroll — the panel outgrows short
+              // screens (phones especially), same treatment as the plan menu.
+              maxHeight: "calc(100dvh - 110px)", overflowY: "auto", overscrollBehavior: "contain",
             }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>{t("header.cohort.title")}</div>
 

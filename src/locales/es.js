@@ -57,6 +57,7 @@ export const strings = {
   "sem.incoming.title.show":"Mostrar detalles de créditos entrantes",
   "sem.incoming.title.hide":"Ocultar detalles de créditos entrantes",
   "sem.cont.label":         "Continúa",
+  "sem.summer.abbr":        "Verano",
   "sem.cont.abbr":          "CONT.",
   "sem.term.remove":        "Eliminar {type}",
   "sem.work.company.placeholder": "Empresa",

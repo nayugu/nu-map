@@ -409,16 +409,20 @@ function SectionBlock({ sec, defaultOpen = true }) {
 
   return (
     <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: ph ? 5 : 7, marginBottom: ph ? 5 : 7 }}>
-      {/* Clickable header — no background, just text */}
+      {/* Clickable header — no background, just text. On phone the column is
+          too narrow for the title, so only the text is dropped: checkbox,
+          counts and the collapse toggle stay. */}
       <div onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }} style={{
         display: "flex", alignItems: "center", gap: ph ? 4 : 6,
         cursor: "pointer", userSelect: "none",
       }}>
         <CheckBox sat={sec.sat} />
-        <span style={{ flex: 1, fontSize: ph ? 9 : 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
-          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {scaleLatinRuns(secTitle)}
-        </span>
+        {ph
+          ? <span style={{ flex: 1 }} />
+          : <span style={{ flex: 1, fontSize: 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
+              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {scaleLatinRuns(secTitle)}
+            </span>}
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>
           {hasSplit ? (
             <>

@@ -10,9 +10,36 @@ import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { ICreditSystem }  from "../ports/ICreditSystem.js";
+import { ICalendar }      from "../ports/ICalendar.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
-import { TText }          from "../context/TranslationContext.jsx";
+import { TText, useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import CourseCard from "./CourseCard.jsx";
+
+// Phone semester label: the label stacks in a 34px column — season name on
+// top (bold), year below — matching SummerRow's stacked header. Translating
+// per-word loses context ("Fall" → 落下 "falling") and whole-phrase engine
+// output reorders per locale (year-first Chinese), so use the hand-written
+// claude.sem.* season names instead: deterministic and consistently
+// season-first in every locale. Unknown semester types (no key) fall back
+// to whole-phrase engine translation with the calendar's translateAs hint.
+const SEM_NAME_KEY = { fall: "claude.sem.fall", spring: "claude.sem.spring", sumA: "claude.sem.sum1", sumB: "claude.sem.sum2", incoming: "claude.sem.incoming" };
+function StackedSemLabel({ sem }) {
+  const cal   = usePort(ICalendar);
+  const { t } = useLanguage();
+  const st    = cal.getSemesterTypes().find(s => s.id === sem.semTypeId);
+  const year  = sem.label.match(/\d{4}/)?.[0] ?? "";
+  const as    = st?.translateAs ? `${st.translateAs} ${year}` : undefined;
+  const key   = SEM_NAME_KEY[sem.semTypeId];
+  const translated = useTranslatedText(key ? null : sem.label, { as }); // hook must run unconditionally
+  const parts = key
+    ? [...t(key).split(" "), ...(year ? [year] : [])]
+    : (translated ?? sem.label).split(" ");
+  return parts.map((part, i) => (
+    <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>
+      {scaleLatinRuns(part, { tight: true })}
+    </span>
+  ));
+}
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
 
@@ -162,9 +189,7 @@ export default function SemRow({ sem }) {
         {isPhone ? (
           <div style={{ width: 34, flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}>
             {statusDot}
-            {sem.label.split(" ").map((part, i) => (
-              <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}><TText>{part}</TText></span>
-            ))}
+            <StackedSemLabel sem={sem} />
           </div>
         ) : (
           <div style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0 }}>
@@ -215,9 +240,7 @@ export default function SemRow({ sem }) {
           style={{ width: 34, flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}
         >
           {statusDot}
-          {sem.label.split(" ").map((part, i) => (
-            <span key={i} style={{ fontSize: 7, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? "var(--text-2)" : "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}><TText tight>{part}</TText></span>
-          ))}
+          <StackedSemLabel sem={sem} />
           {shElPhone}
         </div>
       ) : (

@@ -56,6 +56,7 @@ export const strings = {
   "sem.incoming.title.show":   "\u663e\u793a\u8f6c\u5165\u5b66\u5206\u8be6\u60c5",
   "sem.incoming.title.hide":   "\u9690\u85cf\u8f6c\u5165\u5b66\u5206\u8be6\u60c5",
   "sem.cont.label":            "\u5ef6\u7eed\u4e2d",
+  "sem.summer.abbr":        "夏季",
   "sem.cont.abbr":             "\u7eed.",
   "sem.intern.petition":       "\u5b9e\u4e60\u5728\u79cb\u6625\u5b66\u671f\u9700\u63d0\u4ea4\u7533\u8bf7",
   "sem.term.remove":           "\u79fb\u9664 {type}",

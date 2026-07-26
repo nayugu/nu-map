@@ -58,6 +58,7 @@ export const strings = {
   "sem.incoming.title.show":"編入単位の詳細を表示",
   "sem.incoming.title.hide":"編入単位の詳細を隠す",
   "sem.cont.label":         "継続",
+  "sem.summer.abbr":        "夏",
   "sem.cont.abbr":          "継続",
   "sem.term.remove":        "{type} を削除",
   "sem.work.company.placeholder": "会社",

@@ -57,6 +57,7 @@ export const strings = {
   "sem.incoming.title.show":"आगामी क्रेडिट विवरण दिखाएँ",
   "sem.incoming.title.hide":"आगामी क्रेडिट विवरण छुपाएँ",
   "sem.cont.label":         "जारी",
+  "sem.summer.abbr":        "ग्रीष्म",
   "sem.cont.abbr":          "जारी",
   "sem.term.remove":        "{type} हटाएँ",
   "sem.work.company.placeholder": "कंपनी",
