@@ -4,16 +4,36 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="./logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <title>NU Map | Northeastern Course Planner</title>
-    <meta name="description" content="Plan your Northeastern University courses semester by semester. Visualize prerequisites, track degree requirements, and map your path to graduation." />
-    <meta name="keywords" content="Northeastern University, NU Map, course planner, course map, prerequisite map, degree planner, NEU" />
-    <meta property="og:title" content="NU Map | Northeastern Course Planner" />
-    <meta property="og:description" content="Plan your Northeastern University courses semester by semester. Visualize prerequisites, track degree requirements, and map your path to graduation." />
+    <title>NU Map | Student-Built Northeastern Course Planner</title>
+    <!-- "Student-built / not affiliated" is stated up front in every crawlable
+         field (title + all three descriptions + JSON-LD below) so search
+         engines and AI summarizers — many of which don't run JS and never
+         see the in-app disclaimer modal — can't infer this is an official
+         Northeastern tool. -->
+    <meta name="description" content="NU Map is a student-built course planner for Northeastern University students — not affiliated with or endorsed by Northeastern University. Plan courses semester by semester, visualize prerequisites, and track degree requirements." />
+    <meta name="keywords" content="Northeastern University, NU Map, course planner, course map, prerequisite map, degree planner, NEU, student-built" />
+    <meta property="og:title" content="NU Map | Student-Built Northeastern Course Planner" />
+    <meta property="og:description" content="A student-built course planner for Northeastern University students (not affiliated with Northeastern University). Plan courses semester by semester, visualize prerequisites, and track degree requirements." />
     <meta property="og:url" content="https://numap.app" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="NU Map | Northeastern Course Planner" />
-    <meta name="twitter:description" content="Plan your Northeastern University courses semester by semester. Visualize prerequisites, track degree requirements, and map your path to graduation." />
+    <meta name="twitter:title" content="NU Map | Student-Built Northeastern Course Planner" />
+    <meta name="twitter:description" content="A student-built course planner for Northeastern University students (not affiliated with Northeastern University). Plan courses semester by semester, visualize prerequisites, and track degree requirements." />
+    <!-- Structured data: search engines read this directly; the disclaimer
+         field states non-affiliation in a machine-readable form. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "NU Map",
+      "url": "https://numap.app",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "description": "A student-built course planner for Northeastern University students. Plan courses semester by semester, visualize prerequisites, and track graduation requirements.",
+      "disclaimer": "NU Map is an independent, student-built tool. It is not affiliated with, endorsed by, or officially connected to Northeastern University.",
+      "isAccessibleForFree": true
+    }
+    </script>
     <!-- Inter is loaded non-blocking so a blocked/slow network (e.g. GFW) never
          delays first render.  The page appears immediately with the system font
          stack; once Inter is fetched the browser swaps in seamlessly. -->
@@ -86,6 +106,19 @@
     <script type="module" crossorigin src="./assets/index-6VECFtbJ.js"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Crawlers/AI summarizers that don't execute JS see an empty React
+           root; this gives them real, disclaimer-first page text. Replaced
+           by the app on mount, so users never see it. -->
+      <noscript>
+        <h1>NU Map — Student-Built Northeastern Course Planner</h1>
+        <p>
+          NU Map is a <strong>student-built</strong> course planner for
+          Northeastern University students. It is <strong>not affiliated with, endorsed by,
+          or officially connected to Northeastern University</strong>. Plan your courses
+          semester by semester, visualize prerequisites, and track graduation requirements.
+        </p>
+      </noscript>
+    </div>
   </body>
 </html>
