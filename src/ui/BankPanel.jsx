@@ -9,7 +9,7 @@ import { subjectColor } from "../core/courseModel.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
-import { useTranslatedText } from "../context/TranslationContext.jsx";
+import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import CourseCard  from "./CourseCard.jsx";
 import GradPanel   from "./GradPanel.jsx";
 
@@ -30,7 +30,7 @@ function CourseSearchRow({ c, isSelected, onPick }) {
       onMouseLeave={e => e.currentTarget.style.background = isSelected ? "var(--bg-surface-2)" : ""}
     >
       <div style={{ fontWeight: 600 }}>{c.subject} {c.number}</div>
-      <div style={{ fontSize: 10, color: "var(--text-5)" }}>{title}</div>
+      <div style={{ fontSize: 10, color: "var(--text-5)" }}>{scaleLatinRuns(title)}</div>
     </div>
   );
 }

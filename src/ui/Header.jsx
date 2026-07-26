@@ -12,7 +12,7 @@ import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
-import { useTranslation, useTranslatedText, TText } from "../context/TranslationContext.jsx";
+import { useTranslation, useTranslatedText, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { ClaudeDot, ClaudeSettings, ClaudeConnectModal, ClaudeProposalCard, ClaudeOAuthModal } from "./ClaudePanel.jsx";
 import dataMeta from "../core/dataMeta.json";
 import YearStepper    from "./YearStepper.jsx";
@@ -1321,7 +1321,7 @@ function MajorLabelText({ label, isPhone }) {
   const translated = useTranslatedText(label);
   return (
     <span style={{ display: "block", fontSize: isPhone ? 8 : 9, color: "var(--text-5)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-      {translated}
+      {scaleLatinRuns(translated)}
     </span>
   );
 }

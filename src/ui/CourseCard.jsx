@@ -10,7 +10,7 @@ import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
-import { useTranslatedText } from "../context/TranslationContext.jsx";
+import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 
 // Vibrance-preserving relevance fade, hue-pure in both themes and
 // gentler than the nominal k in both (fading reads stronger than the
@@ -355,7 +355,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         fontSize: 10, color: "var(--text-3)", lineHeight: "calc(1.25 * var(--lh-scale, 1))",
         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginBottom: 2,
       }}>
-        {title || <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
+        {title ? scaleLatinRuns(title) : <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
       </div>
 
       {/* Badges */}

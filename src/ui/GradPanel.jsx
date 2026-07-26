@@ -18,7 +18,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
-import { useTranslatedText }    from "../context/TranslationContext.jsx";
+import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
 import {
   buildPlacedKeySet,
   allocateMajorWithElectives,
@@ -250,7 +250,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
 
 function XomGroupHeader({ title, style }) {
   const text = useTranslatedText(title);
-  return <span style={style}>{text}</span>;
+  return <span style={style}>{scaleLatinRuns(text)}</span>;
 }
 
 function ReqNode({ r, depth = 0, dimmed = false }) {
@@ -306,7 +306,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
               fontWeight: 400, userSelect: "none",
               overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
             }}>
-              {courseTitle}
+              {scaleLatinRuns(courseTitle)}
             </span>
           )}
         </div>
@@ -376,7 +376,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
       <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
         style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
         <CheckBox sat={r.sat} dimmedCheck={dimmed} />
-        <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>{heading}</span>
+        <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>{scaleLatinRuns(heading)}</span>
         {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>}
       </div>
       {open && has && <div style={{ marginTop: 3 }}>
@@ -417,7 +417,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
         <CheckBox sat={sec.sat} />
         <span style={{ flex: 1, fontSize: ph ? 9 : 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {secTitle}
+          {scaleLatinRuns(secTitle)}
         </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)", marginRight: 2 }}>
           {hasSplit ? (
@@ -601,7 +601,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
             )}
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
-          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{minorName}</div>
+          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{scaleLatinRuns(minorName)}</div>
         </div>
         {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>}
       </div>
@@ -649,8 +649,8 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
             )}
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
-          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{name}</div>
-          {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)", fontSize: isPhone ? 7 : 9, marginTop: 1 }}>{subtitle}</div>}
+          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{scaleLatinRuns(name)}</div>
+          {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)", fontSize: isPhone ? 7 : 9, marginTop: 1 }}>{scaleLatinRuns(subtitle)}</div>}
         </div>
         {!isPhone && progress.requiredSH > 0 && (
           <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>
