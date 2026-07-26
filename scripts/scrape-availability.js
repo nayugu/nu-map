@@ -352,6 +352,11 @@ function serializeDetail(agg) {
 // generically below; this map only has to cover the named spellings.
 const NAMED_ENTITIES = {
   amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", nbsp: " ",
+  // Latin-1 punctuation — appears when mojibake bytes get HTML-escaped
+  // (observed: "ZoÃ&laquo;" = double-encoded "Zoë"); decode first, then
+  // fixMojibake repairs the byte damage.
+  laquo: "«", raquo: "»", middot: "·", deg: "°", acute: "´", uml: "¨",
+  cedil: "¸", macr: "¯", ordf: "ª", ordm: "º", sup1: "¹", sup2: "²", sup3: "³",
   aacute: "á", agrave: "à", acirc: "â", atilde: "ã", auml: "ä", aring: "å", aelig: "æ",
   ccedil: "ç", eacute: "é", egrave: "è", ecirc: "ê", euml: "ë",
   iacute: "í", igrave: "ì", icirc: "î", iuml: "ï", ntilde: "ñ",
@@ -372,9 +377,22 @@ function decodeEntities(s) {
     .replace(/&([A-Za-z]+);/g,    (m, name) => NAMED_ENTITIES[name] ?? m);
 }
 
+/**
+ * Repair UTF-8 read as Latin-1 ("ZoÃ«" → "Zoë") — Banner double-encodes the
+ * occasional name. Only fires on the telltale Ã/Â + continuation-byte pair,
+ * and keeps the original if reinterpreting produces replacement chars.
+ */
+function fixMojibake(s) {
+  if (!/[\u00C2\u00C3][\u0080-\u00FF]/.test(s)) return s;
+  try {
+    const repaired = Buffer.from(s, "latin1").toString("utf8");
+    return repaired.includes("�") ? s : repaired;
+  } catch { return s; }
+}
+
 /** Banner's "O&#39;Kelly, Peggy" → display form "Peggy O'Kelly". */
 function flipName(displayName) {
-  const name = decodeEntities(displayName || "").trim();
+  const name = fixMojibake(decodeEntities(displayName || "")).trim();
   const i = name.indexOf(",");
   if (i === -1) return name;
   const last  = name.slice(0, i).trim();
