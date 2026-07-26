@@ -494,39 +494,41 @@ function WeekdayStrip({ dow, color }) {
   );
 }
 
-// Primary instructors per completed term — its own column beside the
-// availability history. Per-semester on purpose: fall, spring, and summer
-// staffing regularly differ, so a single merged list would mislead.
+// Primary instructors — its own column beside the availability history, one
+// row per SEMESTER TYPE (Spring / Summer A / Summer B / Fall, matching the
+// grid's chronological order). Each name carries the professor's average
+// share of enrolment across every recorded term of that type, so "who
+// usually teaches the fall run?" has a direct, honest answer.
 function CourseInstructors({ selCourse, compact = false }) {
   const cal   = usePort(ICalendar);
   const { t } = useLanguage();
-  const birth = selCourse.birthTermCode ?? null;
-  const rows = Object.entries(selCourse.offering?.prof ?? {})
-    .filter(([code]) => birth === null || Number(code) >= birth)
-    .sort((a, b) => Number(b[0]) - Number(a[0]))    // newest term first
-    .slice(0, compact ? 4 : 6)
-    .map(([code, names]) => ({
-      code,
-      typeId: cal.decodeTermCode(code),
-      yr:     cal.getTermCodeYear?.(code),
-      names:  names.map(([n]) => n),                // already enrolment-ordered
-    }))
-    .filter(r => r.typeId && r.yr != null);
+  const prof = selCourse.offering?.prof ?? {};
+  const monthKey = s => (s.months?.length ? Math.min(...s.months.map(Number)) : 99);
+  const rows = [...cal.getSemesterTypes()]
+    .sort((a, b) => monthKey(a) - monthKey(b))
+    .filter(st => prof[st.id]?.length)
+    .map(st => ({ st, entries: prof[st.id] }));
   if (rows.length === 0) return null;
 
   return (
-    <div style={{ flexShrink: 0, width: compact ? "auto" : 170 }}>
+    <div style={{ flexShrink: 0, width: compact ? "auto" : 180 }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
         {t("info.prof.title")}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        {rows.map(r => (
-          <div key={r.code}>
+        {rows.map(({ st, entries }) => (
+          <div key={st.id}>
             <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
-              <SemLabel typeId={r.typeId} year={r.yr} />
+              <TText as={st.translateAs}>{st.altLabel ?? st.label}</TText>
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-2)", lineHeight: 1.45 }}>
-              {r.names.join(" · ")}
+            <div style={{ fontSize: 10, color: "var(--text-2)", lineHeight: 1.5 }}>
+              {entries.map(([name, pct], i) => (
+                <span key={name} style={{ whiteSpace: "nowrap" }}>
+                  {name}
+                  <span style={{ color: "var(--text-5)", fontSize: 9 }}> {pct}%</span>
+                  {i < entries.length - 1 && <span style={{ color: "var(--text-5)" }}> · </span>}
+                </span>
+              ))}
             </div>
           </div>
         ))}

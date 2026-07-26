@@ -16,7 +16,7 @@
  *       dow: [80, 0, 80, 60, 20],              // % of sections meeting each weekday [M,T,W,Th,F]
  *       pat: [["MWR",60],["TF",20]],           // [day-pattern, % of sections], top 6, most common first
  *       lab: false,                            // any section requires a linked lab/co-section
- *       prof: { "202610": [["Gregory Aloupis", 88]] } // primary instructors per term [name, enrolled], top 4
+ *       prof: { "fall": [["Gregory Aloupis", 54]] } // primary instructors per SEMESTER TYPE [name, avg % of enrolment], top 4
  *     }
  *   }
  *
@@ -61,7 +61,12 @@ for (const [courseId, byTerm] of Object.entries(details)) {
   let totalWt = 0;                                    // total enrolled across all patterns
   let lab = false;
 
-  const prof = {};                                    // termCode → [[name, enrolled], …]
+  // Primary instructors aggregated per SEMESTER TYPE (fall/spring/sumA/sumB):
+  // each professor's average enrolment share across every recorded term of
+  // that type, computed from the FULL per-term lists BEFORE any capping — so
+  // the percentages are true shares even for a 70-section writing course.
+  const SUFFIX_TYPE = { "10": "fall", "30": "spring", "40": "sumA", "60": "sumB", "32": "spring", "52": "sumA" };
+  const profAgg = {};                                 // typeId → Map(name → weight)
 
   for (const [termCode, d] of Object.entries(byTerm)) {
     if (d.cap > 0) {
@@ -69,11 +74,18 @@ for (const [courseId, byTerm] of Object.entries(details)) {
       cap[termCode]  = d.cap;
       secs[termCode] = d.sections || 1;
     }
-    // Primary instructors per term (see scrape-availability --prof). Stored per
-    // term so the UI can show "who taught it, semester by semester"; capped to
-    // the top 4 by enrolment — beyond that it's lab-style staffing noise.
     if (d.prof?.length) {
-      prof[termCode] = d.prof.slice(0, 4).map(([name, , e]) => [name, e]);
+      const typeId = SUFFIX_TYPE[String(termCode).slice(-2)];
+      if (typeId) {
+        // Weight by enrolment; a term with no enrolment data falls back to
+        // section counts so it still contributes instead of disappearing.
+        const termTotalE = d.prof.reduce((s, [, , e]) => s + (e || 0), 0);
+        const m = (profAgg[typeId] ??= new Map());
+        for (const [name, n, e] of d.prof) {
+          const w = termTotalE > 0 ? (e || 0) : (n || 0);
+          m.set(name, (m.get(name) ?? 0) + w);
+        }
+      }
     }
     for (const f of d.formats ?? [])  formats.add(f);
     for (const c of d.campuses ?? []) campuses.add(c);
@@ -120,8 +132,18 @@ for (const [courseId, byTerm] of Object.entries(details)) {
     ...(dow ? { dow } : {}),
     ...(pat ? { pat } : {}),
     ...(lab ? { lab: true } : {}),
-    ...(Object.keys(prof).length ? { prof } : {}),
   };
+
+  const prof = {};                                    // typeId → [[name, pct], …] top 4
+  for (const [typeId, m] of Object.entries(profAgg)) {
+    const total = [...m.values()].reduce((s, v) => s + v, 0);
+    if (!total) continue;
+    prof[typeId] = [...m.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4)
+      .map(([name, w]) => [name, Math.round((w / total) * 100)]);
+  }
+  if (Object.keys(prof).length) summary[courseId].prof = prof;
 }
 
 const json  = JSON.stringify(summary);

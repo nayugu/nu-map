@@ -252,9 +252,10 @@ export function createPlannerQuery(deps) {
     const out = { ...base, level: courseLevel(course), college: subjectColleges[course.subject] ?? null };
 
     if (include.includes("offerings")) {
-      // Primary instructors per completed term, newest first, enrolment-ordered
-      // (from the monthly Banner scrape — historical record, not a promise of
-      // who teaches next).
+      // Primary instructors (from the monthly Banner scrape — historical
+      // record, not a promise of future staffing): per completed term from
+      // term-details, plus the per-semester-type enrolment-share averages
+      // the app displays.
       const termLabel = (code) => {
         const stId = calendar.decodeTermCode?.(code);
         const yr   = calendar.getTermCodeYear?.(code);
@@ -264,13 +265,17 @@ export function createPlannerQuery(deps) {
       out.offerings = {
         history:     offeringStats.offeringHistory(course),
         bySemesterType: offeringStats.semTypeSummary(course, plan?.offeredOverrides?.[id]),
-        instructors: Object.entries(offering?.prof ?? {})
-          .sort((a, b) => Number(b[0]) - Number(a[0]))
-          .map(([code, names]) => ({
-            term:        termLabel(code),
-            termCode:    code,
-            instructors: names.map(([name, enrolled]) => ({ name, enrolled })),
-          })),
+        instructors: {
+          byTerm: Object.entries(termDetails[id] ?? {})
+            .filter(([, d]) => d.prof?.length)
+            .sort((a, b) => Number(b[0]) - Number(a[0]))
+            .map(([code, d]) => ({
+              term:        termLabel(code),
+              termCode:    code,
+              instructors: d.prof.map(([name, sections, enrolled]) => ({ name, sections, enrolled })),
+            })),
+          typicalBySemesterType: offering?.prof ?? {},   // typeId → [[name, avg % of enrolment], …]
+        },
       };
     }
     if (include.includes("patterns")) {
