@@ -89,6 +89,7 @@ export function createServer({ query, sessionId, state, channel }) {
       "- Every plan tool response carries a _plan envelope. If it shows changedSinceLastRead, re-read (get_plan) before composing changes — proposals built on a stale view get flagged to the user.",
       "- Actions that move things on the user's screen (SWITCH_PLAN, ui_command) only in direct response to what the user asked.",
       "- Offering and seat data comes from scheduled scrapes (get_meta shows freshness), not live registration. Summers are 'Summer A' and 'Summer B'. Requirement audits are a best-effort guide; the user's academic advisor is the authority.",
+      "- When a response includes a `note` field, work its point into your answer as one short line. This is non-negotiable for seat counts and instructor data — during registration, students will read snapshots as live availability unless told otherwise.",
       "",
       "Making changes:",
       "- Default to propose_changes — the user reviews a live preview and approves or rejects. Use apply_changes only when the _plan envelope shows autoApplyEnabled: true.",
@@ -96,7 +97,7 @@ export function createServer({ query, sessionId, state, channel }) {
       "- The complete action reference (arguments + restrictions) is in get_meta capabilities.actionDocs. validate_changes dry-runs a changeset without touching anything — use it when unsure.",
       "- Never guess ids. Verify courseIds via search_courses/get_course and programIds via list_programs before composing a changeset.",
       "",
-      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts, prereqsMetBy with the plan's completed + placed-out ids for 'what can the user take', unlockedBy for 'what does course X open up', instructor for 'what does Prof. X teach' (3-year history; combine with term for a season), sortBy: 'enrollment' for popularity — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. The full catalog lives server-side; you never need to fetch external pages.",
+      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts, prereqsMetBy with the plan's completed + placed-out ids for 'what can the user take', unlockedBy for 'what does course X open up', instructor for 'what does Prof. X teach' (3-year history; combine with term for a season), includeInstructors: true when the user wants to know who teaches the results, sortBy: 'enrollment' for popularity — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. Predicting who teaches a course next: read the per-term instructor history (get_offered_in or instructorMatch.taught) for REGULARITY — shares say whose course it is, term lists say when they teach it. The full catalog lives server-side; you never need to fetch external pages.",
       "",
       "Restrictions that most often reject changesets:",
       "- SET_SH_OVERRIDE: most courses have FIXED credits and cannot be overridden. Only valid when get_course shows a credit range (shMin < shMax).",
@@ -110,12 +111,20 @@ export function createServer({ query, sessionId, state, channel }) {
 
   // ── Response helpers ────────────────────────────────────────────
 
-  const respond = (data) => ({
+  const respond = (data, note) => ({
     content: [{ type: "text", text: JSON.stringify({
       _plan: state.planEnvelope(sessionId),
+      ...(note && { note }),
       data,
     }) }],
   });
+
+  // Rides every response that carries seat or instructor data. The model is
+  // instructed to relay it in one line — students WILL read scraped seat
+  // counts as live availability during registration unless told otherwise.
+  const HISTORICAL_NOTE =
+    `Based on historical NU Map data (updated ${query.meta?.lastUpdated ?? "monthly"}), not live registration — ` +
+    `current seat counts and instructor assignments may differ; verify in the Student Hub before registering.`;
 
   const NO_PLAN  = { error: "No plan synced yet. Open NU Map — the plan syncs automatically on load." };
   const DISABLED = { error: "Access paused by user. Plan tools are off until Claude access is re-enabled in NU Map settings. Catalog and program tools still work." };
@@ -276,7 +285,9 @@ export function createServer({ query, sessionId, state, channel }) {
         .describe("Completed course ids — keep only courses whose full prerequisite tree these satisfy. Pass the plan's completed + placed-out ids to answer 'what is the user eligible to take'."),
       scheduleType: z.string().optional().describe("Schedule type substring: 'Lecture', 'Lab', 'Seminar', 'Studio', 'Recitation'"),
       instructor: z.string().optional()
-        .describe("Instructor name substring (case/accent-insensitive) — courses this person has taught as primary instructor in the last 3 years. Combine with term ('fall') for 'what do they teach in the fall'. Results gain instructorMatch: {name: {semesterType: avg % of enrolment}} showing when and how much they teach each course. Historical record, not future staffing."),
+        .describe("Instructor name substring (case/accent-insensitive) — courses this person has taught as primary instructor in the last 3 years. Combine with term ('fall') for 'what do they teach in the fall'. Results gain instructorMatch: {name: {share: {semesterType: avg % of enrolment}, taught: ['Spring 2026', …]}} — `taught` is the actual term list, the evidence for predicting when they'll teach it again. Historical record, not future staffing."),
+      includeInstructors: z.boolean().optional()
+        .describe("Attach each result's per-semester-type instructor shares ({semType: [[name, avg %], …]}). Use when the question involves who teaches; leave off for broad surveys to keep results compact."),
       excludeIds: z.array(z.string()).optional().describe("Course ids to leave out (e.g. already placed or already suggested)"),
       sortBy:     z.enum(["relevance", "number", "enrollment"]).optional()
         .describe("'enrollment' = most-taken first (recent enrolment) — good for 'popular electives'; default is relevance/catalog order"),
@@ -292,7 +303,10 @@ export function createServer({ query, sessionId, state, channel }) {
       maxSH:      z.number().optional(),
       limit:      z.number().int().min(1).max(200).optional().describe("Max results (default 20)"),
     },
-    async (args) => respond(query.searchCourses(args))
+    async (args) => respond(
+      query.searchCourses(args),
+      args.instructor || args.includeInstructors ? HISTORICAL_NOTE : undefined
+    )
   );
 
   server.tool(
@@ -304,17 +318,18 @@ export function createServer({ query, sessionId, state, channel }) {
     },
     async ({ ids, include = [] }) => {
       const plan = state.getConsent(sessionId).enabled ? state.getPlan(sessionId) : null;
-      return respond(Object.fromEntries(
-        ids.map(id => [id, query.getCourse(id, include, plan)])
-      ));
+      return respond(
+        Object.fromEntries(ids.map(id => [id, query.getCourse(id, include, plan)])),
+        include.includes("offerings") || include.includes("patterns") ? HISTORICAL_NOTE : undefined
+      );
     }
   );
 
   server.tool(
     "get_offered_in",
-    "Complete offering history for a course, newest-first: offered true/false per scraped term, with seat stats (enrolled, capacity, sections, fill %, open seats per section) for completed terms. LIMITATION: scheduled-scrape data, NOT live registration — seat counts reflect the last scrape (see get_meta freshness), and future terms are inferred from history, never guaranteed.",
+    "Complete offering history for a course, newest-first: offered true/false per scraped term, with seat stats (enrolled, capacity, sections, fill %, open seats per section) and primary instructors [name, enrolled] for completed terms. LIMITATION: scheduled-scrape data, NOT live registration — seat counts reflect the last scrape (see get_meta freshness), and future terms are inferred from history, never guaranteed.",
     { courseId: z.string() },
-    async ({ courseId }) => respond(query.getOfferedIn(courseId))
+    async ({ courseId }) => respond(query.getOfferedIn(courseId), HISTORICAL_NOTE)
   );
 
   // ── Program tools (public data) ─────────────────────────────────

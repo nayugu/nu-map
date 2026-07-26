@@ -47,6 +47,14 @@ export function createPlannerQuery(deps) {
 
   const canonId = (id) => String(id ?? "").toUpperCase().replace(/\s+/g, "");
 
+  /** "202630" → "Spring 2026" via the calendar's display names. */
+  const termLabel = (code) => {
+    const stId = calendar.decodeTermCode?.(code);
+    const yr   = calendar.getTermCodeYear?.(code);
+    const st   = calendar.getSemesterTypes().find(s => s.id === stId);
+    return st && yr != null ? `${st.altLabel ?? st.label} ${yr}` : code;
+  };
+
   // ── Course level / trimming ─────────────────────────────────────
 
   function courseLevel(course) {
@@ -141,7 +149,7 @@ export function createPlannerQuery(deps) {
       query, anyOf, subject, attributes, minSH, maxSH, term,
       level, college, campus, format, meetsOn,
       minNumber, maxNumber, noPrereqs, unlockedBy, prereqsMetBy,
-      scheduleType, excludeIds, instructor, sortBy, limit = 20,
+      scheduleType, excludeIds, instructor, includeInstructors, sortBy, limit = 20,
     } = opts;
 
     let results = courses;
@@ -252,15 +260,25 @@ export function createPlannerQuery(deps) {
 
     return results.slice(0, limit).map(c => {
       const out = trimCourse(c);
-      // When searching BY instructor, ride the matched person's average
-      // enrolment share per semester type along with each result — the
-      // "which of these do they actually teach, when, and how often"
-      // answer, without a get_course round-trip per course.
+      // Opt-in: attach the per-semester-type instructor shares to every
+      // result ("find X and tell me who teaches them") — off by default
+      // so broad surveys stay compact.
+      if (includeInstructors && c.offering?.prof) out.instructors = c.offering.prof;
+      // When searching BY instructor, ride the matched person's data along:
+      // `share` = their average % of enrolment per semester type (whose
+      // course is it), `taught` = the actual terms they taught it, newest
+      // first (the when-to-catch-them evidence — regularity beats shares
+      // for predicting the future).
       if (instructorQ) {
-        const matched = {};   // name → { semTypeId: avg % of enrolment }
+        const matched = {};   // name → { share: {semType: pct}, taught: [labels] }
         for (const [t, list] of Object.entries(c.offering?.prof ?? {})) {
           for (const [name, pct] of list) {
-            if (fold(name).includes(instructorQ)) (matched[name] ??= {})[t] = pct;
+            if (fold(name).includes(instructorQ)) ((matched[name] ??= { share: {}, taught: [] }).share[t] = pct);
+          }
+        }
+        for (const [code, d] of Object.entries(termDetails[c.id] ?? {}).sort((a, b) => Number(b[0]) - Number(a[0]))) {
+          for (const [name] of d.prof ?? []) {
+            if (fold(name).includes(instructorQ) && matched[name]) matched[name].taught.push(termLabel(code));
           }
         }
         if (Object.keys(matched).length) out.instructorMatch = matched;
@@ -288,12 +306,6 @@ export function createPlannerQuery(deps) {
       // record, not a promise of future staffing): per completed term from
       // term-details, plus the per-semester-type enrolment-share averages
       // the app displays.
-      const termLabel = (code) => {
-        const stId = calendar.decodeTermCode?.(code);
-        const yr   = calendar.getTermCodeYear?.(code);
-        const st   = calendar.getSemesterTypes().find(s => s.id === stId);
-        return st && yr != null ? `${st.altLabel ?? st.label} ${yr}` : code;
-      };
       out.offerings = {
         history:     offeringStats.offeringHistory(course),
         bySemesterType: offeringStats.semTypeSummary(course, plan?.offeredOverrides?.[id]),
@@ -329,15 +341,22 @@ export function createPlannerQuery(deps) {
   }
 
   function getOfferedIn(courseId) {
-    const course = courseMap[canonId(courseId)];
+    const id = canonId(courseId);
+    const course = courseMap[id];
     if (!course) return [];
     const labelOf = Object.fromEntries(
       calendar.getSemesterTypes().map(st => [st.id, st.label])
     );
-    return offeringStats.offeringHistory(course).map(e => ({
-      ...e,
-      label: `${labelOf[e.semTypeId] ?? e.semTypeId} ${e.year}`,
-    }));
+    return offeringStats.offeringHistory(course).map(e => {
+      // The complete history includes WHO: primary instructors per term
+      // [name, enrolled], for completed terms the scrape has covered.
+      const prof = termDetails[id]?.[e.termCode]?.prof;
+      return {
+        ...e,
+        label: `${labelOf[e.semTypeId] ?? e.semTypeId} ${e.year}`,
+        ...(prof && { instructors: prof.map(([name, , enrolled]) => [name, enrolled]) }),
+      };
+    });
   }
 
   function listPrograms({ type, level, college, year, query, campus } = {}) {
