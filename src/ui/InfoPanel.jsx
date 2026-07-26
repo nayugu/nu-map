@@ -496,6 +496,10 @@ function WeekdayStrip({ dow, color }) {
   );
 }
 
+// Hand-written semester-name translations shared with the Claude proposal
+// cards — every locale already has these exactly right.
+const SEM_NAME_KEY = { fall: "claude.sem.fall", spring: "claude.sem.spring", sumA: "claude.sem.sum1", sumB: "claude.sem.sum2" };
+
 // Primary instructors — its own column beside the availability history, one
 // row per SEMESTER TYPE (Spring / Summer A / Summer B / Fall, matching the
 // grid's chronological order). Each name carries the professor's average
@@ -527,7 +531,11 @@ function CourseInstructors({ selCourse, compact = false }) {
           return (
             <div key={st.id}>
               <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
-                <TText as={st.translateAs}>{st.altLabel ?? st.label}</TText>
+                {/* Reuse the hand-written semester-name translations (claude.sem.*)
+                    rather than the auto-translation engine. */}
+                {SEM_NAME_KEY[st.id]
+                  ? t(SEM_NAME_KEY[st.id])
+                  : <TText as={st.translateAs}>{st.altLabel ?? st.label}</TText>}
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 {entries.map(([name, pct]) => {

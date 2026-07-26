@@ -347,12 +347,22 @@ function serializeDetail(agg) {
 
 // ── Instructors ──────────────────────────────────────────────────
 
-/** Banner's "Aloupis, Gregory" → display form "Gregory Aloupis". */
+/** Decode the HTML entities Banner embeds in names ("O&#39;Kelly" → "O'Kelly"). */
+function decodeEntities(s) {
+  return String(s)
+    .replace(/&#(\d+);/g,        (_, n) => String.fromCodePoint(parseInt(n, 10)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
+}
+
+/** Banner's "O&#39;Kelly, Peggy" → display form "Peggy O'Kelly". */
 function flipName(displayName) {
-  const i = (displayName || "").indexOf(",");
-  if (i === -1) return (displayName || "").trim();
-  const last  = displayName.slice(0, i).trim();
-  const first = displayName.slice(i + 1).trim();
+  const name = decodeEntities(displayName || "").trim();
+  const i = name.indexOf(",");
+  if (i === -1) return name;
+  const last  = name.slice(0, i).trim();
+  const first = name.slice(i + 1).trim();
   return first ? `${first} ${last}` : last;
 }
 
