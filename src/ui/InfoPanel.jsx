@@ -511,27 +511,45 @@ function CourseInstructors({ selCourse, compact = false }) {
   if (rows.length === 0) return null;
 
   return (
-    <div style={{ flexShrink: 0, width: compact ? "auto" : 180 }}>
+    <div style={{ flexShrink: 0, width: compact ? "auto" : 190 }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 6 }}>
         {t("info.prof.title")}
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        {rows.map(({ st, entries }) => (
-          <div key={st.id}>
-            <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
-              <TText as={st.translateAs}>{st.altLabel ?? st.label}</TText>
+      <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+        {rows.map(({ st, entries }) => {
+          // Chip fill mirrors the WeekdayStrip: the course colour at an
+          // opacity scaled to the row's biggest share through a steep curve,
+          // so the usual instructor visibly dominates and one-offs recede.
+          const peak = Math.max(1, ...entries.map(([, p]) => p));
+          return (
+            <div key={st.id}>
+              <div style={{ fontSize: 8.5, fontWeight: 700, color: "var(--text-5)", letterSpacing: "0.03em", marginBottom: 2 }}>
+                <TText as={st.translateAs}>{st.altLabel ?? st.label}</TText>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+                {entries.map(([name, pct]) => {
+                  const frac = pct / peak;
+                  const op   = 0.10 + 0.72 * Math.pow(frac, 1.8);
+                  return (
+                    <span key={name} title={`${name}: ${pct}%`} style={{
+                      position: "relative", overflow: "hidden", borderRadius: 4,
+                      padding: "2px 6px", display: "inline-flex", alignItems: "baseline", gap: 4,
+                      border: "1px solid var(--border-1)",
+                    }}>
+                      <span style={{ position: "absolute", inset: 0, background: selCourse.color || "var(--text-3)", opacity: op }} />
+                      <span style={{ position: "relative", fontSize: 9.5, fontWeight: frac >= 0.6 ? 700 : 600, color: "var(--text-1)" }}>
+                        {name}
+                      </span>
+                      <span style={{ position: "relative", fontSize: 8, fontWeight: 600, color: "var(--text-2)", opacity: 0.8 }}>
+                        {pct}%
+                      </span>
+                    </span>
+                  );
+                })}
+              </div>
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-2)", lineHeight: 1.5 }}>
-              {entries.map(([name, pct], i) => (
-                <span key={name} style={{ whiteSpace: "nowrap" }}>
-                  {name}
-                  <span style={{ color: "var(--text-5)", fontSize: 9 }}> {pct}%</span>
-                  {i < entries.length - 1 && <span style={{ color: "var(--text-5)" }}> · </span>}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
