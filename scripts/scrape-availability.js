@@ -128,6 +128,23 @@ function updateJar(res) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+/**
+ * fetch with backoff retries for transient network refusals. Banner rate-
+ * limits sustained request volume (observed: connection refusals after ~7k
+ * rapid instructor lookups) — waiting out the window recovers it.
+ */
+async function fetchRetry(url, opts, tries = 4) {
+  for (let i = 0; ; i++) {
+    try { return await fetch(url, opts); }
+    catch (err) {
+      if (i >= tries - 1) throw err;
+      const wait = [5_000, 30_000, 90_000][i] ?? 90_000;
+      console.warn(`    network refusal — backing off ${wait / 1000}s (attempt ${i + 2}/${tries})`);
+      await sleep(wait);
+    }
+  }
+}
+
 async function getTermList(max = 30) {
   const url = `${BASE}/classSearch/getTerms?searchTerm=&offset=1&max=${max}`;
   const res = await fetch(url);
@@ -351,14 +368,19 @@ function flipName(displayName) {
  * fetched once ever and then carried forward from the previous file.
  */
 async function fetchTermProfessors(termCode, detail) {
-  await activateTerm(termCode);
+  await fetchRetry(`${BASE}/term/search?mode=search`, {
+    method:  "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", "Cookie": cookieHeader() },
+    body:    `term=${termCode}&studyPath=&studyPathText=&startDatepicker=&endDatepicker=`,
+  });
   await sleep(DELAY_MS);
   let calls = 0;
+  let consecutiveFailures = 0;
   for (const agg of detail.values()) {
     const tally = new Map(); // name → { n: sections, e: enrolled }
     for (const [crn, enr] of agg.crns ?? []) {
       try {
-        const res = await fetch(
+        const res = await fetchRetry(
           `${BASE}/searchResults/getFacultyMeetingTimes?term=${termCode}&courseReferenceNumber=${crn}`,
           { headers: { "Cookie": cookieHeader() } }
         );
@@ -376,7 +398,17 @@ async function fetchTermProfessors(termCode, detail) {
           slot.e += enr;
           tally.set(name, slot);
         }
-      } catch { /* one section failing must not kill the term */ }
+        consecutiveFailures = 0;
+      } catch {
+        // One section failing must not kill the term — but a long streak
+        // means Banner has stopped talking to us: leave NO partial data
+        // (a term with prof marks is treated as complete forever after).
+        consecutiveFailures += 1;
+        if (consecutiveFailures >= 25) {
+          for (const a of detail.values()) delete a.prof;
+          throw new Error(`aborted after ${consecutiveFailures} consecutive failures (${calls} calls in) — no partial data kept`);
+        }
+      }
       calls += 1;
       if (calls % 1000 === 0) process.stdout.write(`    …${calls} sections\n`);
       await sleep(PROF_DELAY_MS);
@@ -627,6 +659,8 @@ async function main() {
     } catch (err) {
       console.warn(`  instructor fetch FAILED: ${err.message}`);
     }
+    // Cooldown between terms — sustained volume is what trips Banner's limiter.
+    await sleep(30_000);
   }
 
   const termDetails = {};
