@@ -1,39 +1,23 @@
 # NU Map
 
-An unofficial, browser-based degree planner for Northeastern University. Drag courses onto a semester grid, validate graduation requirements live, and export a PDF. No backend, no login.
+An unofficial, browser-based degree planner for Northeastern University. Drag courses onto a semester grid, check graduation requirements against your plan, and export a PDF. No backend, no login — plans live in your browser.
 
-> Not affiliated with or endorsed by Northeastern University. Always verify your plan with an advisor and DegreeWorks.
+> Not affiliated with or endorsed by Northeastern University. Course data is collected from public sources on a schedule and may be outdated or incomplete. Always verify your plan with your academic advisor and DegreeWorks.
 
-**Live:** https://numap.app/  
-**Mirror:** https://nayugu.github.io/nu-map/  
-**Documentation:** https://numap.app/documentation/
+**Live:** https://numap.app/
+**Mirror:** https://nayugu.github.io/nu-map/
 
 ---
 
 ## Features
 
 - Drag-and-drop semester planning with co-op and internship blocks, touch/mobile support, and current-semester tracking
-- Live prereq/coreq validation (SVG overlay lines)
+- Prereq/coreq checking as you place courses
 - Graduation requirements panel — majors, concentrations, minors, NUPath
-- Course info panel with interactive prereq chips
-- Multiple named plans — create, switch, and delete independent degree plans
-- Import/export plans as JSON — share between devices or send to an advisor
-- PDF export, dark/light themes, auto-save, Cmd+Z undo
-
----
-
-## Architecture
-
-Nu-map uses a **hexagonal architecture** — all institution-specific logic lives in one place (`src/adapters/northeastern/`) and the rest of the app has zero NU-specific imports. Swapping the adapter is the only change needed to fork for a new university.
-
-```
-Adapters (NU-specific)  →  Ports (contracts)  →  Core + UI (institution-agnostic)
-src/adapters/northeastern/   src/ports/I*.js       src/core/, src/ui/
-```
-
-Eight ports cover everything: `IInstitution`, `ICalendar`, `ICreditSystem`, `IAttributeSystem`, `ISpecialTerms`, `IMajorRequirements`, `ICourseCatalog`, `ILocalization`. UI components read adapters via `usePort()`. Core functions receive adapter config as explicit parameters.
-
-For the full dependency graph, invariants, and forking guide, see the **[architecture docs](https://numap.app/documentation/architecture/)**.
+- Course details: offering history by semester, seat statistics from past terms, typical meeting patterns, and which instructors have taught each semester (last 3 years)
+- Multiple named plans; import/export as JSON; PDF export
+- 8 interface languages, dark/light themes, auto-save, Cmd+Z undo
+- An optional AI integration (Claude) exists behind explicit opt-in in settings; it is off by default and nothing in the app requires it
 
 ---
 
@@ -41,58 +25,66 @@ For the full dependency graph, invariants, and forking guide, see the **[archite
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173 + catalog check server on :3333
+npm run dev      # http://localhost:5173
 npm run build    # output → dist/
 ```
 
-For a full code walkthrough — every module, state shape, and interaction — see the **[developer documentation](https://numap.app/documentation/)**.
+---
+
+## Architecture
+
+Institution-specific logic lives in adapters (`src/adapters/northeastern/`); the rest of the app has no NU-specific imports.
+
+```
+Adapters (NU-specific)       →  Ports (contracts)  →  Core + UI (institution-agnostic)
+src/adapters/northeastern/      src/ports/I*.js       src/core/, src/ui/
+```
+
+UI components read adapters via `usePort()`; core functions receive adapter config as explicit parameters. Forking for another university means writing a new adapter set against the same ports.
+
+---
+
+## Data pipeline
+
+Data refreshes automatically via GitHub Actions:
+
+| Workflow | Cadence | Covers |
+|---|---|---|
+| `update-courses.yml` | Monthly | Full catalog scrape (titles, descriptions, credits, prereqs, NUPath), Banner term availability and enrollment, instructors, manual patches |
+| `update-majors.yml` / `update-grad-majors.yml` | Every two months | Undergraduate / graduate program requirements |
+
+`catalog-rotate.yml` and `update-nupath.yml` are superseded by the monthly scrape and kept for manual cross-checks only.
+
+Manual commands for local data work:
+
+```bash
+npm run data:scrape:write   # catalog scrape → all-courses.json
+npm run data:patch:write    # re-apply YAML corrections from data/patches/
+npm run data:validate       # validate patches (dry run: data:patch)
+```
+
+Data corrections belong in the scrape scripts or `data/patches/` — anything else is overwritten by the next scheduled run. See [`data/patches/CONTRIBUTING.md`](data/patches/CONTRIBUTING.md) for the patch format.
 
 ---
 
 ## Dev portal
 
-**Remote** (`https://numap.app/dev.html`) — read-only view of what's currently deployed. Use it to check the change log, browse patches and data sources, or preview the live site. Nothing you do here affects the repo.
-
-**Local** (`http://localhost:5173/dev.html`, after `npm run dev`) — the full portal. Run the catalog check, apply fixes, and review diffs. Changes stay on your machine until you explicitly push from the Work tab.
-
----
-
-## Data commands
-
-```bash
-# Annual refresh (~April, before fall registration)
-npm run data:fetch:write    # pull fresh course data from SearchNEU
-npm run data:patch:write    # re-apply local YAML corrections
-npm run build
-
-# Scrape titles/credits/prereqs from catalog.northeastern.edu
-npm run data:scrape:write   # merge latest scrape into all-courses.json
-npm run build
-
-# Manual patch workflow
-npm run data:validate       # validate all patches in data/patches/
-npm run data:patch          # preview what would change (dry run)
-```
-
-All data updates are manual — there is no automated scraper. Run Catalog Check or NUPath Update from the local dev portal, then push via the Work tab. Rotation state (for manual use of `data:scrape:rotate`) is in `data/scrape-state.json`. Each run is logged in `public/change-log.json` (capped at 600 entries, ~4.5 years of history).
-
-See [`data/patches/CONTRIBUTING.md`](data/patches/CONTRIBUTING.md) for the manual patch format.
+- **Remote** (`https://numap.app/northeastern/dev.html`) — read-only view of the deployed data: change log, patches, data sources.
+- **Local** (`http://localhost:5173/northeastern/dev.html`) — run catalog checks and review diffs; changes stay on your machine until pushed.
 
 ---
 
 ## Testing
 
 ```bash
-npm run test:unit   # 34 unit tests — merge logic, diffCourse, change-log format
-npm run test:live   # live CS 2100 scrape against catalog.northeastern.edu
-npm run test        # both
+npm test            # scrape/merge logic, major-file integrity, live catalog check
 ```
 
 ---
 
 ## Deployment
 
-Push to `main` → GitHub Actions builds and deploys to GitHub Pages (`gh-pages` branch, mirror at `nayugu.github.io/nu-map`) and Cloudflare Pages auto-deploys to `numap.app`.
+Push to `main` → GitHub Actions publishes `dist/` to the `gh-pages` branch (mirror), and Cloudflare Pages deploys `numap.app`.
 
 ---
 
@@ -100,10 +92,11 @@ Push to `main` → GitHub Actions builds and deploys to GitHub Pages (`gh-pages`
 
 | Source | Provides | Cadence |
 |---|---|---|
-| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, prereqs/coreqs, scheduleType | Manual — `npm run data:scrape:write` |
-| [tableau.northeastern.edu](https://tableau.northeastern.edu) | NUPath attribute designations (authoritative) | Manual — `npm run data:nupath` |
-| [ninest/nu-courses](https://github.com/ninest/nu-courses) (SearchNEU) | Sections, term availability | Manual — `npm run data:fetch:write` |
-| [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) | Major/minor requirement JSON | Ad hoc |
+| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, prereqs/coreqs, NUPath | Monthly (automated) |
+| [nubanner.neu.edu](https://nubanner.neu.edu) (Banner SSB) | Term availability, enrollment, instructors | Monthly (automated) |
+| [tableau.northeastern.edu](https://tableau.northeastern.edu) | NUPath designations (manual cross-check) | Manual |
+| [ninest/nu-courses](https://github.com/ninest/nu-courses) (SearchNEU) | Original sections/terms baseline | Manual |
+| [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) | Major/minor requirement JSON | Every two months (automated) |
 
 ---
 
@@ -113,4 +106,4 @@ Push to `main` → GitHub Actions builds and deploys to GitHub Pages (`gh-pages`
 |---|---|
 | **Course catalog** | [ninest/nu-courses](https://github.com/ninest/nu-courses) by [@ninest](https://github.com/ninest) |
 | **Graduation requirements** | [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) by [@denniwang](https://github.com/denniwang) and [Sandbox](https://github.com/sandboxnu) |
-| **Built with** | [Claude Sonnet 4.6](https://www.anthropic.com/claude) (Anthropic) |
+| **Built with** | [Claude](https://www.anthropic.com/claude) (Anthropic) |
