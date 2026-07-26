@@ -173,6 +173,25 @@ export function createServer({ query, sessionId, state, channel }) {
     };
   };
 
+  // ── Prompts ─────────────────────────────────────────────────────
+  // ONE entry point, deliberately: a palette of task prompts would read as
+  // "this is everything NU Map does" and shrink it. /numap is a trigger,
+  // not a menu — it engages the full toolkit and says so, both to the
+  // model and to the user reading the injected message.
+
+  const promptText = (text) => ({ messages: [{ role: "user", content: { type: "text", text } }] });
+
+  server.registerPrompt("numap", {
+    title:       "Use NU Map",
+    description: "Bring NU Map into the conversation — the full Northeastern catalog, instructors, offering history, programs and degree audits, and (once connected) your own plan",
+    argsSchema:  { request: z.string().optional().describe("What you want, in your own words — e.g. 'review my plan', 'what can I take in the fall?', 'courses about robotics', 'who teaches CS 3000?'") },
+  }, ({ request }) => promptText(
+    (request
+      ? `Use NU Map to help with this: ${request}\n\n`
+      : "I want to work with NU Map. Briefly check what's available (is my plan connected, or catalog only?), tell me in a few lines what you can help with, and ask what I'd like to do.\n\n") +
+    "Note: NU Map's full toolkit is available here — searching the catalog by topic, level, schedule, NUPath, instructor, or eligibility; course details with offering history, seat statistics, and who typically teaches each semester; program requirements and degree audits; and, when my plan is connected, reading it, checking prerequisites against it, and proposing changes I approve in the app. Pick whichever tools fit; don't limit yourself to what I mentioned."
+  ));
+
   // ── Resources ───────────────────────────────────────────────────
 
   server.resource(
