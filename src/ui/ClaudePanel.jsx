@@ -337,12 +337,15 @@ export function ClaudeProposalCard() {
             color: "var(--text-4)", borderRadius: 5 }}>
           {t("claude.card.reject")}
         </button>
+        {/* Approve (one proposal, reviewed) is the recommended action →
+            filled. Approve all is the bulk shortcut → outlined, one visual
+            tier down, so scanning the row reads "review first". */}
         <button
           onClick={() => confirmMCPProposal(true)}
           title={t("claude.card.approve.title")}
           style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 12px",
-            background: "var(--bg-surface-2)", border: `1px solid ${CLAUDE_ORANGE}`,
-            color: CLAUDE_ORANGE, borderRadius: 5 }}>
+            background: CLAUDE_ORANGE, border: `1px solid ${CLAUDE_ORANGE}`,
+            color: "#fff", borderRadius: 5 }}>
           {t("claude.card.approve")}
         </button>
         {mcpProposals.length >= 2 && (
@@ -351,8 +354,8 @@ export function ClaudeProposalCard() {
             title={t("claude.card.approveAll.title")}
             style={{ fontSize: 10, fontWeight: 700, cursor: "pointer", padding: "4px 10px",
               whiteSpace: "nowrap",
-              background: CLAUDE_ORANGE, border: `1px solid ${CLAUDE_ORANGE}`,
-              color: "#fff", borderRadius: 5 }}>
+              background: "var(--bg-surface-2)", border: `1px solid ${CLAUDE_ORANGE}`,
+              color: CLAUDE_ORANGE, borderRadius: 5 }}>
             {t("claude.card.approveAll", { n: mcpProposals.length })}
           </button>
         )}
