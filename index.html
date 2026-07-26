@@ -36,7 +36,8 @@
          the size-adjusted glyphs from fonts-cjk.css.
          LanguageContext keeps the document lang in sync with the locale;
          components with explicit letterSpacing are unaffected. */
-      :root:lang(zh), :root:lang(ja) { letter-spacing: 0.02em; --lh-scale: 1.16; }
+      :root:lang(zh) { letter-spacing: 0.045em; --lh-scale: 1.16; }
+      :root:lang(ja) { letter-spacing: 0.02em;  --lh-scale: 1.16; }
       /* Korean: Hangul is enlarged more (size-adjust 122% in fonts-cjk.css);
          match the leading. No tracking — Korean already word-spaces. */
       :root:lang(ko) { --lh-scale: 1.22; }
