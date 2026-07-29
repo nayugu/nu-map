@@ -6,3 +6,4 @@ public/ort/
 *.py
 .env.local
 .env*.local
+test-results/
