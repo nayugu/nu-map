@@ -56,8 +56,9 @@ Facts that follow from this:
   scrape commits straight to main; one March branch died 469 commits behind).
 - Never enable required-PR branch protection on main: the scheduled data
   workflows push to it directly and would break.
-- Ideas and tasks live in per-person lists (`ideas-nathan.md`,
-  `ideas-matthew.md`) — only edit your own, so they never conflict.
+- Ideas and tasks live in per-person lists under `notes/` (`ideas-nathan.md`,
+  `ideas-matthew.md`) — only edit your own, so they never conflict. The repo
+  is public: keep notes whiteboard-safe.
 
 ## Conventions
 
