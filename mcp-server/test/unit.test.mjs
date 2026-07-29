@@ -168,12 +168,12 @@ test("seatStats derives fill/open/perSec exactly as the gauge does", () => {
 
 // ── courseNorm ──────────────────────────────────────────────────────
 
-test("deriveTerms applies the ≥50% rule post-birth only", () => {
+test("deriveTerms applies the ≥2/3 rule post-birth only", () => {
   const hist = { 202210: false, 202310: false, 202410: true, 202510: true };
   const birth = computeBirthTermCode(hist);
   assert.equal(birth, 202410);
-  assert.deepEqual(deriveTerms(hist, birth), ["fall"]);   // 2/2 post-birth
-  assert.deepEqual(deriveTerms(hist, null), ["fall"]);    // 2/4 = 50% still passes
+  assert.deepEqual(deriveTerms(hist, birth), ["fall"]);   // 2/2 post-birth = 100%
+  assert.deepEqual(deriveTerms(hist, null), []);          // 2/4 = 50% is below the 2/3 bar
 });
 
 test("normalizeCourse: credit ranges, CPS flag, id shape", () => {
