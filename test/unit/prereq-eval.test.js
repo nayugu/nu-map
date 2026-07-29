@@ -85,3 +85,37 @@ test("evalPrereqTree › case-insensitive subject match › satisfied", () => {
   const tree = [ref("cs", "1000")];
   assert.equal(evalPrereqTree(tree, { CS1000: "fall" }, semIndex, 1), "satisfied");
 });
+
+// "order" is same-OR-later: a prereq placed strictly after the course is just as
+// out-of-order as one placed alongside it. The same-semester case is covered
+// above; this pins the later-semester half of the rule.
+test("evalPrereqTree › prereq placed in a strictly later semester › order", () => {
+  const tree = [ref("CS", "1000")];
+  // course at fall (ti=0), prereq at summer (index 2) → placed, but too late.
+  assert.equal(evalPrereqTree(tree, { CS1000: "summer" }, semIndex, 0), "order");
+});
+
+// ── Adversarial: malformed scraped trees must never throw, and stray tokens
+// must never rescue a genuinely missing prerequisite. (A parser that swallowed
+// violations here would silently tell a student a course is takeable.)
+test("evalPrereqTree › unbalanced open paren around a missing operand › missing, no throw", () => {
+  // "(" opens but never closes; CS2000 absent → the And still resolves to missing.
+  const tree = ["(", ref("CS", "1000"), "And", ref("CS", "2000")];
+  assert.equal(evalPrereqTree(tree, { CS1000: "fall" }, semIndex, 2), "missing");
+});
+
+test("evalPrereqTree › trailing dangling operator after a mid-tree missing › stays missing", () => {
+  // CS1000 satisfied, CS2000 missing, then a dangling "Or" with no operand.
+  // (satisfied And missing) = missing; the phantom "Or <nothing>" must not rescue it.
+  const tree = [ref("CS", "1000"), "And", ref("CS", "2000"), "Or"];
+  assert.equal(evalPrereqTree(tree, { CS1000: "fall" }, semIndex, 2), "missing");
+});
+
+test("evalPrereqTree › nested empty sub-expression › neutral (satisfied)", () => {
+  // An empty group is a phantom operand — neutral, so a lone empty array is a no-op.
+  assert.equal(evalPrereqTree([[]], {}, semIndex, 2), "satisfied");
+});
+
+test("evalPrereqTree › only stray tokens (no real refs) › does not throw", () => {
+  assert.doesNotThrow(() => evalPrereqTree([")", "And", "Or", "("], {}, semIndex, 1));
+});

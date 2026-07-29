@@ -31,8 +31,21 @@ end in `.test.js`; name tests `subject › condition › expected`.
 
 ## The layers, concretely
 
-**unit/** — `prereqEval` (incl. the dangling-operator regression guard), and the
-rotate-mode catalog merge/diff logic mirrored from `scrape-catalog.js`.
+**unit/** — the pure logic where a silent bug would mislead a student about
+their degree or corrupt a saved plan:
+- `prereq-eval` — the 3-valued verdict (satisfied/order/missing), precedence,
+  the dangling-operator regression guard, and adversarial malformed trees.
+- `substitutions` — `applySubstitutions` composed with prereq + grad checks:
+  a substitute satisfies its target, wrong-order still fires, credits count
+  once, removal reverts, one substitution fills at most one requirement.
+- `grad-requirements` — every Major2 type (COURSE/AND/OR/XOM/RANGE/SECTION)
+  and the allocation rule that a course counts once (shared cross-count,
+  coreq absorption, general electives).
+- `sem-grid` — the timeline structure + the co-op/summer `termSpans` spill rule.
+- `plan-share` — the share-link codec round-trips every non-default field
+  (empties are dropped by design), URL-safe, v1 passthrough.
+- `scrape-catalog-merge` — rotate-mode catalog merge/diff logic mirrored from
+  `scrape-catalog.js`.
 
 **contract/** — `courseNorm.normalizeCourse` / `mergeHistoryAndOffering`, the one
 transform the browser app, the Node MCP server, and the Cloudflare worker all
@@ -41,7 +54,8 @@ captured raw record in `fixtures/banner/`.
 
 **invariant/** — properties over `public/northeastern/catalog-courses.json`,
 `src/locales/*`, and the MCP action surface:
-- `locale-completeness` — no orphan keys; full coverage vs English (baselined).
+- `locale-completeness` — no orphan keys; full coverage vs English (baselined);
+  plus content rules (CLAUDE stays untranslated; summer terms are A/B, not 1/2).
 - `catalog-prereq-resolution` — every prereq/coreq reference resolves (baselined).
 - `mcp-actions` — `SUPPORTED_ACTIONS` ↔ `ACTION_DOCS` parity; action set locked.
 - `major-integrity` — no new impossible-to-satisfy requirement sections.

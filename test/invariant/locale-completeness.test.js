@@ -51,3 +51,31 @@ test("locales › no NEW untranslated keys beyond the recorded baseline", async 
       `\`npm run test:baseline:update\`:\n  ${regressions.join("\n  ")}`
   );
 });
+
+// ── Content conventions (CLAUDE.md house rules) ──────────────────────
+// These are string-value invariants, independent of coverage: even a fully
+// translated locale must keep the brand name and the summer-term naming.
+test("locales › the CLAUDE section header stays untranslated in every locale", async () => {
+  const KEY = "header.settings.claude.section";
+  for (const { code, strings } of await loadLocales()) {
+    if (KEY in strings) {
+      assert.equal(strings[KEY], "CLAUDE", `${code}: "${KEY}" must stay "CLAUDE" (brand, never translated)`);
+    }
+  }
+});
+
+test("locales › summer terms are named A/B, never numbered 1/2", async () => {
+  const locales = await loadLocales();
+  for (const { code, strings } of locales) {
+    const a = strings["claude.sem.sum1"];
+    const b = strings["claude.sem.sum2"];
+    if (a === undefined || b === undefined) continue;
+    assert.notEqual(a, b, `${code}: Summer A/B labels must differ`);
+    // Forbid any digit — catches "Summer 1"/"Summer 2" in any language.
+    assert.doesNotMatch(a, /\d/, `${code}: summer A label "${a}" must not be numbered`);
+    assert.doesNotMatch(b, /\d/, `${code}: summer B label "${b}" must not be numbered`);
+  }
+  const en = locales.find((l) => l.code === "en").strings;
+  assert.equal(en["claude.sem.sum1"], "Summer A");
+  assert.equal(en["claude.sem.sum2"], "Summer B");
+});
