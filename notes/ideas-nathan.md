@@ -6,3 +6,4 @@
 - Ability to compare courses side by side
 - Search courses by semester offered and professor
 - Add parsing of courses that can be taken multiple times, and enable them to be added up to their limit. 
+- Clicking a professor in the info panel opens the course bank panel and adds that prof as a tag
