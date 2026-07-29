@@ -63,7 +63,7 @@ npm run data:patch:write    # re-apply YAML corrections from data/patches/
 npm run data:validate       # validate patches (dry run: data:patch)
 ```
 
-Data corrections belong in the scrape scripts or `data/patches/` — anything else is overwritten by the next scheduled run. See [`data/patches/CONTRIBUTING.md`](data/patches/CONTRIBUTING.md) for the patch format.
+Data corrections belong in the scrape scripts or `data/northeastern/patches/` — anything else is overwritten by the next scheduled run. See [`data/northeastern/patches/CONTRIBUTING.md`](data/northeastern/patches/CONTRIBUTING.md) for the patch format.
 
 ---
 
@@ -96,7 +96,6 @@ Push to `main` → GitHub Actions publishes `dist/` to the `gh-pages` branch (mi
 | [nubanner.neu.edu](https://nubanner.neu.edu) (Banner SSB) | Term availability, enrollment, instructors | Monthly (automated) |
 | [tableau.northeastern.edu](https://tableau.northeastern.edu) | NUPath designations (manual cross-check) | Manual |
 | [catalog.northeastern.edu](https://catalog.northeastern.edu/) (program pages) | Major/minor/grad requirement JSON | Every two months (automated) |
-| [ninest/nu-courses](https://github.com/ninest/nu-courses) (SearchNEU) | Original sections/terms baseline | Manual |
 
 ---
 
@@ -104,6 +103,6 @@ Push to `main` → GitHub Actions publishes `dist/` to the `gh-pages` branch (mi
 
 | | |
 |---|---|
-| **Course catalog** | [ninest/nu-courses](https://github.com/ninest/nu-courses) by [@ninest](https://github.com/ninest) |
+| **Original course data & prereq schema** | [ninest/nu-courses](https://github.com/ninest/nu-courses) by [@ninest](https://github.com/ninest) — seeded the initial course snapshot, since superseded by our own catalog + Banner scrapers |
 | **Major2 schema & original requirements data** | [sandboxnu/graduatenu](https://github.com/sandboxnu/graduatenu) by [@denniwang](https://github.com/denniwang) and [Sandbox](https://github.com/sandboxnu) |
 | **Built with** | [Claude](https://www.anthropic.com/claude) (Anthropic) |
