@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Major Requirements — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="dev-portal/trigger/majors">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">dev-portal</a><span class="sep"> / </span><a href="../">Trigger tab</a><span class="sep"> / </span><strong>Major Requirements</strong>
+    </div>
+
+    <h1>Major Requirements <span class="badge blue">scrape-majors.js</span></h1>
+    <p class="lead">Scrapes undergraduate degree requirements from <code>catalog.northeastern.edu</code> and writes <code>parsed.initial.json</code> files in the Major2 schema. This is nu-map's own scraper — a ground-up replacement for the stale <code>external/graduatenu</code> submodule data (since removed) that was missing writing requirements for ~45% of combined/joint programs.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Script</div><div class="nb-value"><code>scripts/scrape-majors.js</code></div></div>
+      <div class="nb-group"><div class="nb-label">Output</div><div class="nb-value"><code>src/data/majors/{year}/{college}/{slug}/parsed.initial.json</code></div></div>
+      <div class="nb-group"><div class="nb-label">Rate limit</div><div class="nb-value">600 ms between requests (override: <code>MAJORS_DELAY_MS=300</code>)</div></div>
+      <div class="nb-group"><div class="nb-label">Duration</div><div class="nb-value">~45 minutes for all programs. Run <code>--dry-run</code> (first 5 programs) for a sanity check.</div></div>
+    </div>
+
+    <h2>What it scrapes</h2>
+    <p>Starting from <code>catalog.northeastern.edu/azindex/</code>, it discovers all undergraduate program pages, then visits each to extract the requirement tree. The output structure matches the Major2 schema used by the graduation requirement evaluator:</p>
+    <ul>
+      <li><strong>SECTION</strong> nodes: named requirement groups (e.g. "Core Requirements", "NUpath Requirements")</li>
+      <li><strong>COURSE</strong> nodes: specific courses</li>
+      <li><strong>OR / AND</strong> nodes: choice or conjunction of courses</li>
+      <li><strong>XOM</strong> nodes: "X of many" — choose at least N credits from a list</li>
+      <li><strong>RANGE</strong> nodes: all courses in a subject range (e.g. CS 3000–3999)</li>
+    </ul>
+
+    <h2>Output path structure</h2>
+    <pre><code>src/data/majors/
+  2026/
+    khoury/
+      computer_science_bscs_(boston)/
+        parsed.initial.json
+      computer_science_and_mathematics_bscs/
+        parsed.initial.json
+    engineering/
+      electrical_engineering_bsee/
+        parsed.initial.json
+    ...</code></pre>
+    <p>The path slug is derived from the program title: lowercased, commas removed, spaces replaced with underscores. The year tag defaults to the current calendar year but can be overridden with <code>--year 2025</code>.</p>
+
+    <h2>When to run</h2>
+    <p>The scraped files in <code>src/data/majors/</code> are the sole source of requirement data — the old <code>external/graduatenu</code> submodule (~1,400 major files scraped by the GraduateNU team) has been removed. Run the Major Requirements adapter when:</p>
+    <ul>
+      <li>A new catalog year is published (Jan or May)</li>
+      <li>A program's requirements have changed and the scraped data is stale</li>
+    </ul>
+
+    <h2>Change log entry</h2>
+    <p>A successful <code>--write</code> run appends to <code>change-log.json</code>:</p>
+    <pre><code>{
+  "type": "majors",
+  "subject": "🎓 Major Requirements",
+  "timestamp": "2026-05-19T10:00:00.000Z",
+  "done": 312,
+  "written": 298,
+  "skipped": 10,
+  "failed": 4
+}</code></pre>
+    <p><code>done</code> = programs attempted. <code>written</code> = files written. <code>skipped</code> = already up to date. <code>failed</code> = parse or fetch errors (check stdout for details).</p>
+
+    <h2>Usage</h2>
+    <pre><code>node scripts/scrape-majors.js               <span class="cmt"># preview (no writes)</span>
+node scripts/scrape-majors.js --dry-run     <span class="cmt"># first 5 programs only (fast sanity check)</span>
+node scripts/scrape-majors.js --write       <span class="cmt"># write all output files (~45 min)</span>
+node scripts/scrape-majors.js --url &lt;url&gt;  <span class="cmt"># single program URL</span>
+node scripts/scrape-majors.js --year 2025  <span class="cmt"># override year tag in output path</span></code></pre>
+
+    <p>Via the Trigger tab: <strong>▷ Preview</strong> streams the dry-run output. <strong>⚡ Run locally</strong> writes all files and logs a <code>manual-trigger</code> entry. Expect the SSE stream to run for ~45 minutes on a full write.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>
