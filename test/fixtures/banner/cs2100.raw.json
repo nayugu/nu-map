@@ -1,0 +1,16 @@
+{
+  "subject": "cs",
+  "courseNumber": "2100",
+  "name": "Program Design and Implementation 1",
+  "creditHours": 4,
+  "scheduleType": "Lecture",
+  "nuPath": ["AD", "ND"],
+  "description": "  Builds on prior introductory programming experience.  ",
+  "prerequisites": [{ "subject": "CS", "number": "2000" }],
+  "corequisites": [{ "subject": "CS", "number": "2101" }],
+  "sections": [
+    { "crn": "10001", "term": "202410" },
+    { "crn": "10002", "term": "202510" },
+    { "crn": "10003", "term": "202530" }
+  ]
+}

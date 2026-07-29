@@ -24,6 +24,20 @@
 
 ---
 
+## Testing & Integrity
+
+Test suite lives in `test/` (unit / contract / invariant / live) — see `test/README.md`.
+`npm test` runs the deterministic layers; `npm run test:all` adds MCP + live.
+
+| Done | Task | Notes |
+|------|------|-------|
+| [ ] | Translate 3 keys missing from all non-en locales | `info.offered.nodata`, `header.io.share.locale.title`, `translation.toggle.hint.api` — surfaced by `test/invariant/locale-completeness`; currently baselined |
+| [ ] | Translate `bank.empty.search` for `zh` | Only remaining zh gap; baselined |
+| [ ] | Backfill unit tests for remaining core modules | `planModel`, `semGrid`, `gradRequirements`, `specialTermUtils` |
+| [ ] | Add MCP tool-surface introspection test in `mcp-server/test` | Assert `createServer` registers the expected 17 tools + annotation coverage (needs the SDK) |
+
+---
+
 ## UI & UX (Backlog)
 
 | Done | Task | Notes |

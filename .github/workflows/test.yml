@@ -1,0 +1,68 @@
+name: tests
+
+# Each layer is its own job so a red check localizes the break to a layer
+# before you open the logs. The three "pure" jobs need no npm install — the
+# unit/contract/invariant suites import only src/ + Node builtins (committed
+# data, no runtime deps), and keeping it that way is enforced here by omitting
+# the install step. The live job (real network) runs only on a schedule.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1" # Mondays 07:00 UTC — live scrape smoke test
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: npm run test:unit
+
+  contract:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: npm run test:contract
+
+  invariant:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: npm run test:invariant
+
+  mcp:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: npm --prefix mcp-server ci
+      - run: npm run test:mcp
+
+  live:
+    # Non-deterministic (hits catalog.northeastern.edu). Scheduled + manual only,
+    # never gating a PR. Catches NEU markup changes that break the scrape parser.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: npm ci
+      - run: npm run test:live

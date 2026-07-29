@@ -33,12 +33,12 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
 import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { impossibleSectionTitles } from './lib/major-integrity.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
-const BASELINE = resolve(__dirname, 'major-integrity-baseline.json');
+export const BASELINE = resolve(__dirname, 'major-integrity-baseline.json');
 
 /** Return sorted `"<relpath> :: <title>"` flags for sections impossible under allocation. */
 export function findImpossibleSections() {
@@ -104,4 +104,7 @@ function main() {
   console.log(`✅  No new impossible sections. (${baseline.size} known, tracked in baseline.)`);
 }
 
-main();
+// Run only when invoked as a CLI, not when imported by a test.
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
