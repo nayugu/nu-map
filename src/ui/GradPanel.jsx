@@ -466,50 +466,102 @@ function SectionBlock({ sec, defaultOpen = true }) {
 
 // ── NUPath grid ──────────────────────────────────────────────────
 
-function NuPathGrid({ covered }) {
-  const { isPhone, attributeSystem } = useContext(GradCtx);
+function NuPathGrid({ covered, sources = {} }) {
+  const { isPhone, attributeSystem, setSelectedId, setShowPanel } = useContext(GradCtx);
+  const { t } = useLanguage();
+  const [activeKey, setActiveKey] = useState(null);
+
+  // Native-tooltip text for hover: which class(es) satisfy this attribute.
+  const tipFor = key => {
+    const label = attributeSystem.getLabel(key);
+    const src = sources[key] ?? [];
+    if (!covered.has(key)) return `${label} — ${t("grad.nupath.unsatisfied")}`;
+    if (!src.length)       return `${label} — ${t("grad.nupath.granted")}`;
+    return `${label} — ${t("grad.nupath.satisfiedBy", { courses: src.map(s => s.code).join(", ") })}`;
+  };
+
+  const active    = activeKey;
+  const activeSrc = active ? (sources[active] ?? []) : [];
+
   return (
-    <div style={{
-      display: "grid",
-      // Phone: 3 equal columns → 5 rows, cells naturally wider than tall.
-      // Desktop: auto-fit as before.
-      gridTemplateColumns: isPhone
-        ? "repeat(3, 1fr)"
-        : "repeat(auto-fit, minmax(130px, 1fr))",
-      width: "100%",
-      boxSizing: "border-box",
-      gap: isPhone ? 2 : 3,
-      marginBottom: 6,
-    }}>
-      {attributeSystem.getGridCodes().map(key => {
-        const sat = covered.has(key);
-        return (
-          <div key={key} style={{
-            display: "flex", alignItems: "center", justifyContent: isPhone ? "center" : "flex-start",
-            gap: isPhone ? 0 : 4,
-            // Natural height with modest vertical padding — wider than tall.
-            padding: isPhone ? "4px 2px" : "3px 5px",
-            borderRadius: isPhone ? 3 : 4,
-            fontSize: 9,
-            background: "var(--bg-surface)",
-            border: `1px solid ${sat ? "var(--nupath-sat-border)" : "var(--border-2)"}`,
-            color: sat ? "var(--nupath-sat-text)" : "var(--text-5)",
-            fontWeight: sat ? 700 : 400,
-          }}>
-            <span style={{
-              flexShrink: 0, fontWeight: 800,
-              fontSize: isPhone ? 8.5 : 9,
-              lineHeight: 1,
-              color: sat ? "var(--nupath-sat-text)" : "var(--text-4)",
-            }}>{key}</span>
-            {!isPhone && (
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {attributeSystem.getLabel(key)}
+    <div style={{ marginBottom: 6 }}>
+      <div style={{
+        display: "grid",
+        // Phone: 3 equal columns → 5 rows, cells naturally wider than tall.
+        // Desktop: auto-fit as before.
+        gridTemplateColumns: isPhone
+          ? "repeat(3, 1fr)"
+          : "repeat(auto-fit, minmax(130px, 1fr))",
+        width: "100%",
+        boxSizing: "border-box",
+        gap: isPhone ? 2 : 3,
+      }}>
+        {attributeSystem.getGridCodes().map(key => {
+          const sat = covered.has(key);
+          const isActive = active === key;
+          return (
+            <div key={key}
+              title={tipFor(key)}
+              onClick={(e) => { e.stopPropagation(); setActiveKey(k => k === key ? null : key); }}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: isPhone ? "center" : "flex-start",
+                gap: isPhone ? 0 : 4, cursor: "pointer",
+                // Natural height with modest vertical padding — wider than tall.
+                padding: isPhone ? "4px 2px" : "3px 5px",
+                borderRadius: isPhone ? 3 : 4,
+                fontSize: 9,
+                background: "var(--bg-surface)",
+                border: `1px solid ${isActive ? "var(--active)" : sat ? "var(--nupath-sat-border)" : "var(--border-2)"}`,
+                color: sat ? "var(--nupath-sat-text)" : "var(--text-5)",
+                fontWeight: sat ? 700 : 400,
+              }}>
+              <span style={{
+                flexShrink: 0, fontWeight: 800,
+                fontSize: isPhone ? 8.5 : 9,
+                lineHeight: 1,
+                color: sat ? "var(--nupath-sat-text)" : "var(--text-4)",
+              }}>{key}</span>
+              {!isPhone && (
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {attributeSystem.getLabel(key)}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Click-to-reveal detail: which class satisfies the selected attribute. */}
+      {active && (
+        <div style={{
+          marginTop: 5, padding: "5px 7px", borderRadius: 4,
+          background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+          fontSize: 9, color: "var(--text-4)", lineHeight: 1.5,
+        }}>
+          <span style={{ fontWeight: 700, color: "var(--text-3)" }}>{active}</span>
+          <span style={{ color: "var(--text-5)" }}> · {attributeSystem.getLabel(active)}</span>
+          <div style={{ marginTop: 3 }}>
+            {!covered.has(active) ? (
+              t("grad.nupath.unsatisfied")
+            ) : !activeSrc.length ? (
+              t("grad.nupath.granted")
+            ) : (
+              <span style={{ display: "inline-flex", flexWrap: "wrap", gap: 4, alignItems: "center" }}>
+                {t("grad.nupath.satisfiedByLabel")}
+                {activeSrc.map(s => (
+                  <button key={s.id}
+                    onClick={(e) => { e.stopPropagation(); setSelectedId(s.id); setShowPanel(true); }}
+                    style={{
+                      cursor: "pointer", fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 99,
+                      background: "var(--bg-bank)", border: "1px solid var(--nupath-sat-border)",
+                      color: "var(--nupath-sat-text)",
+                    }}>{s.code}</button>
+                ))}
               </span>
             )}
           </div>
-        );
-      })}
+        </div>
+      )}
     </div>
   );
 }
@@ -868,6 +920,17 @@ export default function GradPanel({ wideCatalog = false }) {
   }, [major]);
 
   const npCovered  = useMemo(() => attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [])), [attributeSystem, placements, courseMap, specialTermPl, specialTerms]);
+  // Which placed classes satisfy each NUPath code → { [code]: [{id, code}] }.
+  // Drives the grid's hover tooltip / click-to-reveal ("which class satisfies it").
+  const npSources  = useMemo(() => {
+    const m = {};
+    for (const id of Object.keys(placements)) {
+      const c = courseMap[id];
+      if (!c?.attributes) continue;
+      for (const a of c.attributes) (m[a] = m[a] || []).push({ id: c.id, code: c.code });
+    }
+    return m;
+  }, [placements, courseMap]);
   const plannedSH  = totalSHPlaced - totalSHDone;
   const requiredSH = major?.totalCreditsRequired ?? 0;
 
@@ -1162,7 +1225,7 @@ export default function GradPanel({ wideCatalog = false }) {
             </span>
             <span style={{ fontSize: 9, color: "var(--text-5)" }}>{showNP ? "▼" : "▶"}</span>
           </div>
-          {showNP && <NuPathGrid covered={npCovered} />}
+          {showNP && <NuPathGrid covered={npCovered} sources={npSources} />}
         </div>
         )}
 

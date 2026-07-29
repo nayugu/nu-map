@@ -8,6 +8,8 @@ import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
+import { IAttributeSystem } from "../ports/IAttributeSystem.js";
+import { useRelevance }   from "../context/RelevanceContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import CourseCard  from "./CourseCard.jsx";
@@ -139,6 +141,7 @@ export default function BankPanel() {
     bankSearch, setBankSearch,
     bankSort,
     bankTab, setBankTab,
+    bankFilters, setBankFilters,
     bankWidth,
     wideCatalog, setWideCatalog, wideWidth, setWideWidth,
     showSubjectKeys, setShowSubjectKeys,
@@ -156,14 +159,113 @@ export default function BankPanel() {
     claudePreview,
   } = usePlanner();
 
+  const attributeSystem = usePort(IAttributeSystem);
+  const { hasProgram, courseRole } = useRelevance();
+  const [profQuery, setProfQuery] = useState(""); // professor finder text (UI-only)
+
   const q = bankSearch.trim().toLowerCase();
+
+  // Diacritic- and case-insensitive fold — mirrors the MCP search adapter so
+  // "garcia" finds "García" (plannerQueryAdapter.searchCourses).
+  const fold = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const courseLevel = c => {
+    const n = parseInt(String(c.number).match(/\d+/)?.[0] ?? "", 10);
+    return Number.isFinite(n) && n >= 5000 ? "grad" : "undergrad";
+  };
+
+  // Unique instructor names across the catalog (offering history) → prof
+  // autocomplete suggestions + legitimacy check.
+  const professors = useMemo(() => {
+    const set = new Set();
+    for (const c of courses) {
+      const prof = c.offering?.prof;
+      if (!prof) continue;
+      for (const list of Object.values(prof)) for (const [name] of list) set.add(name);
+    }
+    return [...set];
+  }, [courses]);
+
+  // Facet filters. terms/nupath AND within a category; level matches by
+  // membership; the two program toggles OR within their group (a course can
+  // count as a required course, an elective option, or both).
+  const fTerms   = bankFilters.terms;
+  const fLevel   = bankFilters.level;
+  const fNupath  = bankFilters.nupath;
+  // Professor filter is a set of tags (OR: taught by any of them). The search
+  // box only finds professors — it never filters on its own.
+  const fProfs   = bankFilters.profs;
+  const wantReq  = bankFilters.programReq  && hasProgram;
+  const wantElec = bankFilters.programElec && hasProgram;
+  const anyFilter = fTerms.length > 0 || fLevel.length > 0 || fNupath.length > 0 || fProfs.length > 0 || wantReq || wantElec;
+
+  const taughtBy = (c, name) => {
+    const prof = c.offering?.prof;
+    return !!prof && Object.values(prof).some(list => list.some(([n]) => n === name));
+  };
+
+  const passesFilters = c => {
+    if (fTerms.length && !fTerms.every(term =>
+      term === "summer"
+        ? (c.terms?.includes("sumA") || c.terms?.includes("sumB"))
+        : c.terms?.includes(term)
+    )) return false;
+    if (fLevel.length && !fLevel.includes(courseLevel(c))) return false;
+    if (fNupath.length && !fNupath.every(a => c.attributes?.includes(a))) return false;
+    if (fProfs.length && !fProfs.some(name => taughtBy(c, name))) return false;
+    if (wantReq || wantElec) {
+      // Dynamic: categorize exactly as the Graduation panel would if the course
+      // were slotted in now (or its current allocation, if already placed).
+      const roles = courseRole(c);
+      const isReq  = !!roles && roles.some(r => r.kind === "required");
+      const isElec = !!roles && roles.some(r => r.kind === "elective");
+      if (!((wantReq && isReq) || (wantElec && isElec))) return false;
+    }
+    return true;
+  };
+
+  const activeFilterCount =
+    fTerms.length + fNupath.length + fProfs.length + (fLevel.length ? 1 : 0) + (wantReq ? 1 : 0) + (wantElec ? 1 : 0);
+  const toggleTerm = term => setBankFilters(f => ({
+    ...f, terms: f.terms.includes(term) ? f.terms.filter(x => x !== term) : [...f.terms, term],
+  }));
+  const toggleLevel = lvl => setBankFilters(f => ({
+    ...f, level: f.level.includes(lvl) ? f.level.filter(x => x !== lvl) : [...f.level, lvl],
+  }));
+  const toggleNupath = code => setBankFilters(f => ({
+    ...f, nupath: f.nupath.includes(code) ? f.nupath.filter(x => x !== code) : [...f.nupath, code],
+  }));
+  const addProf    = name => setBankFilters(f => (f.profs.includes(name) ? f : { ...f, profs: [...f.profs, name] }));
+  const removeProf = name => setBankFilters(f => ({ ...f, profs: f.profs.filter(x => x !== name) }));
+  const toggleProgramReq  = () => setBankFilters(f => ({ ...f, programReq:  !f.programReq  }));
+  const toggleProgramElec = () => setBankFilters(f => ({ ...f, programElec: !f.programElec }));
+  const clearFilters  = () => setBankFilters({ terms: [], level: [], nupath: [], profs: [], programReq: false, programElec: false });
+
+  // Suggestions for the professor finder — top matches for the typed query,
+  // excluding already-tagged names. `profQuery` is UI-only (not a filter).
+  const profQ = fold(profQuery.trim());
+  const profSug = (() => {
+    if (!profQ) return [];
+    const starts = [], includes = [];
+    for (const name of professors) {
+      if (fProfs.includes(name)) continue;
+      const f = fold(name);
+      if (f.startsWith(profQ)) starts.push(name);
+      else if (f.includes(profQ)) includes.push(name);
+    }
+    starts.sort((a, b) => a.localeCompare(b));
+    includes.sort((a, b) => a.localeCompare(b));
+    return [...starts, ...includes].slice(0, 8);
+  })();
 
   const bankCourses = useMemo(() => {
     const tokens = q.split(/\s+/).filter(Boolean);
-    let list = q ? [...courses] : courses.filter(c => bankCourseIds.has(c.id));
+    // A text query OR any active filter searches the whole catalog; otherwise
+    // the view is the user's bank (grouped by subject below).
+    let list = (q || anyFilter) ? [...courses] : courses.filter(c => bankCourseIds.has(c.id));
     // Phone has no starring, so never apply the starred filter there even if
     // bankTab was set to "starred" (carried over from desktop or via a command).
-    if (bankTab === "starred" && !isPhone && !q) list = list.filter(c => starredIds.has(c.id));
+    if (bankTab === "starred" && !isPhone && !q && !anyFilter) list = list.filter(c => starredIds.has(c.id));
+    if (anyFilter) list = list.filter(passesFilters);
 
     const tieSort =
       bankSort === "za"  ? (a, b) => b.code.localeCompare(a.code) :
@@ -198,14 +300,15 @@ export default function BankPanel() {
     if (bankSort === "sh↑") return [...list].sort((a, b) => a.sh - b.sh || a.code.localeCompare(b.code));
     return list;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courses, bankCourseIds.size, bankTab, starredIds, q, bankSort, placedIds.size]);
+  }, [courses, bankCourseIds.size, bankTab, starredIds, q, bankSort, placedIds.size, bankFilters, courseRole, hasProgram]);
 
   const bankBySubject = useMemo(() => {
-    if (q || bankTab === "starred") return null;
+    if (q || (bankTab === "starred" && !anyFilter)) return null;
     const m = {};
     bankCourses.forEach(c => { (m[c.subject] = m[c.subject] || []).push(c); });
-    return m;
-  }, [bankCourses, q, bankTab]);
+    // Fall through to the flat branch (and its empty-state) when nothing matches.
+    return Object.keys(m).length ? m : null;
+  }, [bankCourses, q, bankTab, anyFilter]);
 
   const [sideMode, setSideMode] = useState("bank"); // "bank" | "grad"
 
@@ -240,6 +343,10 @@ export default function BankPanel() {
     return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
   }, []);
 
+  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [termInfoOpen, setTermInfoOpen] = useState(false);
+  const [programInfoOpen, setProgramInfoOpen] = useState(false);
+  const [profOpen, setProfOpen] = useState(false);
   const [collapsePlacedOut, setCollapsePlacedOut] = useState(true);
   const [hoveredPlacedOutId, setHoveredPlacedOutId] = useState(null);
   const [collapseSubstitutions, setCollapseSubstitutions] = useState(true);
@@ -395,8 +502,171 @@ export default function BankPanel() {
             )}
           </div>
 
-                    {/* Sort */}
-          <div style={{ display: "flex", gap: 3, padding: "3px 8px 7px" }}>
+          {/* Filters — same section as the search box (no divider above) */}
+          <div>
+            <div
+              onClick={() => setFiltersOpen(v => !v)}
+              style={{ display: "flex", alignItems: "center", gap: 5, padding: "6px 8px", cursor: "pointer", userSelect: "none" }}
+            >
+              <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, letterSpacing: "0.05em", color: activeFilterCount ? "var(--active)" : "var(--text-5)" }}>
+                {t("bank.filter.title")}
+              </span>
+              <span style={{ fontSize: isPhone ? 7 : 9, color: activeFilterCount ? "var(--active)" : "var(--text-5)" }}>{filtersOpen ? "▼" : "▶"}</span>
+              {activeFilterCount > 0 && (
+                <span style={{ background: "var(--active)", color: "var(--bg-surface)", borderRadius: 99, padding: "0px 5px", fontSize: 8, fontWeight: 700 }}>
+                  {activeFilterCount}
+                </span>
+              )}
+              <span style={{ flex: 1 }} />
+              {activeFilterCount > 0 && (
+                <button onClick={e => { e.stopPropagation(); clearFilters(); }}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-4)", fontSize: 9, textDecoration: "underline", padding: 0 }}>
+                  {t("bank.filter.clear")}
+                </button>
+              )}
+            </div>
+
+            {filtersOpen && (() => {
+              const chip = (active, onClick, label, title) => (
+                <button key={label} onClick={onClick} title={title}
+                  style={{
+                    fontSize: isPhone ? 6 : 9, padding: isPhone ? "2px 5px" : "3px 7px", borderRadius: 99, cursor: "pointer",
+                    background: active ? "var(--bg-surface)" : "transparent",
+                    border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
+                    color: active ? "var(--active)" : "var(--text-4)",
+                    fontWeight: active ? 700 : 400, whiteSpace: "nowrap",
+                  }}>{label}</button>
+              );
+              const lbl = { fontSize: isPhone ? 6 : 8, color: "var(--text-4)", letterSpacing: "0.04em", margin: "6px 0 3px" };
+              return (
+                <div style={{ padding: "0 8px 6px" }}>
+                  <div style={{ ...lbl, display: "flex", alignItems: "center", gap: 4 }}>
+                    <span>{t("bank.filter.term")}</span>
+                    <button
+                      onClick={() => setTermInfoOpen(v => !v)}
+                      title={t("bank.filter.term.info")}
+                      style={{
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                        width: 12, height: 12, borderRadius: 99, cursor: "pointer", padding: 0, lineHeight: 1,
+                        fontSize: 8, fontWeight: 700,
+                        background: termInfoOpen ? "var(--active)" : "transparent",
+                        border: `1px solid ${termInfoOpen ? "var(--active)" : "var(--border-2)"}`,
+                        color: termInfoOpen ? "var(--bg-surface)" : "var(--text-4)",
+                      }}>i</button>
+                  </div>
+                  {termInfoOpen && (
+                    <div style={{ margin: "0 0 4px", padding: "5px 7px", borderRadius: 4, background: "var(--bg-surface)", border: "1px solid var(--border-2)", fontSize: 8.5, color: "var(--text-4)", lineHeight: 1.5 }}>
+                      {t("bank.filter.term.explain")}
+                    </div>
+                  )}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                    {chip(fTerms.includes("fall"),   () => toggleTerm("fall"),   t("bank.filter.fall"))}
+                    {chip(fTerms.includes("spring"), () => toggleTerm("spring"), t("bank.filter.spring"))}
+                    {chip(fTerms.includes("summer"), () => toggleTerm("summer"), t("bank.filter.summer"))}
+                  </div>
+
+                  <div style={lbl}>{t("bank.filter.level")}</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                    {chip(fLevel.includes("undergrad"), () => toggleLevel("undergrad"), t("bank.filter.undergrad"))}
+                    {chip(fLevel.includes("grad"),      () => toggleLevel("grad"),      t("bank.filter.grad"))}
+                  </div>
+
+                  <div style={lbl}>{t("bank.filter.nupath")}</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                    {attributeSystem.getGridCodes().map(code =>
+                      chip(fNupath.includes(code), () => toggleNupath(code), code, attributeSystem.getLabel(code))
+                    )}
+                  </div>
+
+                  <div style={lbl}>{t("bank.filter.prof")}</div>
+                  {/* Selected professors, as removable tags — these are the filter. */}
+                  {fProfs.length > 0 && (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 4 }}>
+                      {fProfs.map(name => (
+                        <span key={name} style={{
+                          display: "inline-flex", alignItems: "center", gap: 4,
+                          fontSize: isPhone ? 6 : 9, padding: isPhone ? "2px 4px 2px 6px" : "3px 5px 3px 7px",
+                          borderRadius: 99, background: "var(--bg-surface)",
+                          border: "1px solid var(--active)", color: "var(--active)", fontWeight: 700,
+                        }}>
+                          {name}
+                          <button onClick={() => removeProf(name)} title={t("bank.filter.prof.remove")}
+                            style={{ background: "none", border: "none", color: "var(--active)", cursor: "pointer", fontSize: isPhone ? 8 : 10, lineHeight: 1, padding: 0 }}>
+                            ✕
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div style={{ position: "relative" }}>
+                    <input
+                      value={profQuery}
+                      onChange={e => { setProfQuery(e.target.value); setProfOpen(true); }}
+                      onFocus={() => setProfOpen(true)}
+                      onBlur={() => setTimeout(() => setProfOpen(false), 150)}
+                      placeholder={t("bank.filter.prof.placeholder")}
+                      style={{
+                        width: "100%", boxSizing: "border-box",
+                        background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+                        borderRadius: 5, color: "var(--text-2)", fontSize: isPhone ? 8 : 10,
+                        padding: "5px 24px 5px 8px", outline: "none",
+                      }}
+                    />
+                    {profQuery && (
+                      <button onClick={() => { setProfQuery(""); setProfOpen(false); }}
+                        style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0 }}>
+                        ✕
+                      </button>
+                    )}
+                    {profOpen && profSug.length > 0 && (
+                      <div style={{
+                        position: "absolute", top: "100%", left: 0, right: 0, zIndex: 30, marginTop: 2,
+                        background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 5,
+                        maxHeight: 168, overflowY: "auto", boxShadow: "0 4px 14px rgba(0,0,0,0.28)",
+                      }}>
+                        {profSug.map(name => (
+                          <button key={name}
+                            onMouseDown={e => { e.preventDefault(); addProf(name); setProfQuery(""); setProfOpen(false); }}
+                            style={{
+                              display: "block", width: "100%", textAlign: "left", padding: "5px 8px",
+                              background: "transparent", border: "none", borderBottom: "1px solid var(--border-1)",
+                              color: "var(--text-2)", fontSize: isPhone ? 8 : 10, cursor: "pointer",
+                            }}>{name}</button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {hasProgram && (
+                    <>
+                      <div style={{ ...lbl, display: "flex", alignItems: "center", gap: 4 }}>
+                        <span>{t("bank.filter.program")}</span>
+                        <button
+                          onClick={() => setProgramInfoOpen(v => !v)}
+                          title={t("bank.filter.program.info")}
+                          style={{
+                            display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 12, height: 12, borderRadius: 99, cursor: "pointer", padding: 0, lineHeight: 1,
+                            fontSize: 8, fontWeight: 700,
+                            background: programInfoOpen ? "var(--active)" : "transparent",
+                            border: `1px solid ${programInfoOpen ? "var(--active)" : "var(--border-2)"}`,
+                            color: programInfoOpen ? "var(--bg-surface)" : "var(--text-4)",
+                          }}>i</button>
+                      </div>
+                      {programInfoOpen && (
+                        <div style={{ margin: "0 0 4px", padding: "5px 7px", borderRadius: 4, background: "var(--bg-surface)", border: "1px solid var(--border-2)", fontSize: 8.5, color: "var(--text-4)", lineHeight: 1.5, whiteSpace: "pre-line" }}>
+                          {t("bank.filter.program.explain")}
+                        </div>
+                      )}
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                        {chip(wantReq,  toggleProgramReq,  t("bank.filter.program.required"))}
+                        {chip(wantElec, toggleProgramElec, t("bank.filter.program.elective"))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
         {/* Placed Out section — undergrad only */}
@@ -691,9 +961,9 @@ export default function BankPanel() {
           <div style={{ padding: "4px 6px 6px", display: "flex", flexDirection: "column", gap: 3 }}>
             {bankCourses.length === 0 ? (
               <div style={{ padding: "18px 8px", fontSize: 10, color: "var(--text-6)", textAlign: "center", lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
-                {bankTab === "starred" && !isPhone ? (
+                {bankTab === "starred" && !isPhone && !anyFilter ? (
                   <><div style={{ fontSize: 20, marginBottom: 6 }}>☆</div>{t("bank.empty.saved")}<br /><span style={{ fontSize: 9 }}>{t("bank.empty.saved.hint")}</span></>
-                ) : t("bank.empty.search")}
+                ) : anyFilter ? t("bank.filter.empty") : t("bank.empty.search")}
               </div>
             ) : bankCourses.map(c => {
               return (

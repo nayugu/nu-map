@@ -7,3 +7,4 @@ public/ort/
 .env.local
 .env*.local
 test-results/
+.vscode/settings.json
