@@ -25,6 +25,16 @@ export default function DisclaimerModal() {
   const disclaimers  = localization.getDisclaimers();
   const sources      = adapter.getAllSources();
 
+  // Creators — Nathan (left), Matthew (right). Drop photos at public/creator-<name>.jpg
+  // to replace the initials fallback. Names/tagline stay untranslated (proper nouns).
+  // Tagline is hard-capped at 20 chars (LinkedIn headlines run long).
+  const TAGLINE_MAX = 20;
+  const cap = s => (s.length > TAGLINE_MAX ? s.slice(0, TAGLINE_MAX - 1).trimEnd() + "…" : s);
+  const creators = [
+    { name: "Nathan",  tagline: "CS + Math (HMS)",    initial: "N", img: `${import.meta.env.BASE_URL}creator-nathan.jpg`,  url: "https://www.linkedin.com/in/nayugu/" },
+    { name: "Matthew", tagline: "CS + IE (Robotics)", initial: "M", img: `${import.meta.env.BASE_URL}creator-matthew.jpg`, url: "https://www.linkedin.com/in/iammg/" },
+  ];
+
   return (
     <div
       onClick={dismiss}
@@ -127,6 +137,63 @@ export default function DisclaimerModal() {
               {label}
             </a>
           ))}
+        </div>
+
+        {/* Made by — creators + LinkedIn */}
+        <div style={{
+          background: "var(--badge-bg)", border: "1px solid var(--border-1)",
+          borderRadius: 8, padding: "10px 12px", marginBottom: 12,
+        }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 7, letterSpacing: "0.04em" }}>
+            <TText>MADE BY</TText>
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {creators.map(c => (
+              <a
+                key={c.name}
+                href={c.url}
+                target="_blank" rel="noreferrer"
+                title={`${c.name} on LinkedIn`}
+                style={{
+                  display: "flex", flex: 1, minWidth: 0, alignItems: "center", gap: 9,
+                  padding: "8px 10px", borderRadius: 8, boxSizing: "border-box",
+                  background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = "#0A66C2"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; }}
+              >
+                {/* Avatar (photo, initials fallback) + LinkedIn badge */}
+                <div style={{ position: "relative", width: 34, height: 34, flexShrink: 0 }}>
+                  <div style={{
+                    width: 34, height: 34, borderRadius: "50%",
+                    background: "var(--link-bg)", color: "var(--link-1)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 15, fontWeight: 800,
+                  }}>{c.initial}</div>
+                  <img
+                    src={c.img} alt=""
+                    onError={e => { e.currentTarget.style.display = "none"; }}
+                    style={{ position: "absolute", inset: 0, width: 34, height: 34, borderRadius: "50%", objectFit: "cover" }}
+                  />
+                  <span style={{
+                    position: "absolute", right: -3, bottom: -3, width: 15, height: 15,
+                    borderRadius: 4, background: "#fff", overflow: "hidden",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    boxShadow: "0 0 0 1.5px var(--bg-surface-2)",
+                  }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="#0A66C2" aria-hidden="true">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+                    </svg>
+                  </span>
+                </div>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-1)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</div>
+                  <div style={{ fontSize: 10, color: "var(--text-3)", marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={c.tagline}>{cap(c.tagline)}</div>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Footer */}
