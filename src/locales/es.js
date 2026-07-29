@@ -294,6 +294,8 @@ export const strings = {
   "claude.modal.error": "Código no reconocido (o caducado — los códigos duran 10 minutos). Pide a Claude uno nuevo.",
   "claude.modal.reset": "Restablecer conexión",
   "claude.modal.reset.hint": "¿Algo atascado o fuera de sincronía? Restablecer da a este plan una identidad nueva: todo Claude conectado antes pierde el acceso, el servidor borra sus datos y vuelves a conectar desde el paso 1.",
+  "claude.modal.code.reset": "¿Reconectando o atascado con un registro antiguo? Elimínalo primero y empieza desde el paso 1:",
+  "claude.modal.reset.code": "Para restablecer por completo también en Claude Code / VS Code, elimina el servidor en una terminal y vuelve a añadirlo desde el paso 1:",
   "claude.modal.close": "Cerrar",
   "claude.card.title": "Claude sugiere un cambio",
   "claude.card.queue": "{k} de {n}",

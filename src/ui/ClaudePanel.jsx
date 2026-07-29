@@ -642,6 +642,10 @@ export function ClaudeConnectModal({ open, onClose }) {
             color: "var(--error)", borderRadius: 5, padding: "4px 12px" }}>
           {t("claude.modal.reset")}
         </button>
+        {/* Claude Code keeps its own registration: a COMPLETE reset also
+            removes the server entry there, then re-adds from step 1. */}
+        <div style={small}>{t("claude.modal.reset.code")}</div>
+        <CopyRow what="rm" text="claude mcp remove -s user nu-map" />
       </div>
     </div>
   );
@@ -703,6 +707,10 @@ export function ClaudeConnectModal({ open, onClose }) {
               </span>
             ) : t("claude.modal.code.3"),
           ]} />
+          {/* Escape hatch, upfront: a stale registration from an earlier
+              connect (or a reset) must be removed before re-adding. */}
+          <div style={{ ...small, marginTop: 7 }}>{t("claude.modal.code.reset")}</div>
+          <div style={{ marginTop: 4 }}><CopyRow what="rm" text="claude mcp remove -s user nu-map" /></div>
         </div>
 
         {/* Each Claude app holds its own credential: reconnecting this

@@ -239,6 +239,8 @@ export const strings = {
   "claude.modal.error":      "Code not recognized (or expired — codes last 10 minutes). Ask Claude for a new one.",
   "claude.modal.reset": "Reset connection",
   "claude.modal.reset.hint": "Something stuck or out of sync? Reset gives this plan a fresh identity: every previously connected Claude loses access, the server deletes its data, and you reconnect from step 1.",
+  "claude.modal.code.reset": "Reconnecting, or stuck on an old registration? Remove it first, then start from step 1:",
+  "claude.modal.reset.code": "To fully reset on the Claude Code / VS Code side too, remove the server entry in a terminal, then re-add it from step 1:",
   "claude.modal.close":      "Close",
   "claude.card.title":       "Claude suggests a change",
   "claude.card.queue":       "{k} of {n}",

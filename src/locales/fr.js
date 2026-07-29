@@ -293,6 +293,8 @@ export const strings = {
   "claude.modal.error": "Code non reconnu (ou expiré — les codes durent 10 minutes). Demandez-en un nouveau à Claude.",
   "claude.modal.reset": "Réinitialiser la connexion",
   "claude.modal.reset.hint": "Quelque chose est bloqué ou désynchronisé ? La réinitialisation donne à ce plan une nouvelle identité : tout Claude connecté auparavant perd l'accès, le serveur supprime ses données et vous reconnectez depuis l'étape 1.",
+  "claude.modal.code.reset": "Vous vous reconnectez ou un ancien enregistrement bloque ? Supprimez-le d’abord, puis reprenez à l’étape 1 :",
+  "claude.modal.reset.code": "Pour une réinitialisation complète côté Claude Code / VS Code, supprimez le serveur dans un terminal, puis ajoutez-le à nouveau depuis l’étape 1 :",
   "claude.modal.close": "Fermer",
   "claude.card.title": "Claude suggère une modification",
   "claude.card.queue": "{k} sur {n}",

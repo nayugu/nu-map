@@ -292,6 +292,8 @@ export const strings = {
   "claude.modal.error": "لم يتم التعرف على الرمز (أو انتهت صلاحيته — تدوم الرموز 10 دقائق). اطلب من Claude رمزًا جديدًا.",
   "claude.modal.reset": "إعادة ضبط الاتصال",
   "claude.modal.reset.hint": "هل علق شيء أو اختل التزامن؟ إعادة الضبط تمنح هذه الخطة هوية جديدة: يفقد كل Claude متصل سابقًا الوصول، ويحذف الخادم بياناته، وتعيد الاتصال من الخطوة 1.",
+  "claude.modal.code.reset": "تعيد الاتصال أو عالق بتسجيل قديم؟ احذفه أولًا ثم ابدأ من الخطوة 1:",
+  "claude.modal.reset.code": "لإعادة التعيين بالكامل من جهة Claude Code / VS Code أيضًا، احذف الخادم من الطرفية ثم أضِفه مجددًا من الخطوة 1:",
   "claude.modal.close": "إغلاق",
   "claude.card.title": "يقترح Claude تغييرًا",
   "claude.card.queue": "{k} من {n}",

@@ -293,6 +293,8 @@ export const strings = {
   "claude.modal.error": "코드를 인식할 수 없습니다(또는 만료 — 코드는 10분간 유효). Claude에게 새 코드를 요청하세요.",
   "claude.modal.reset": "연결 초기화",
   "claude.modal.reset.hint": "뭔가 막혔거나 어긋났나요? 초기화하면 이 계획에 새 식별자가 부여됩니다. 이전에 연결된 모든 Claude가 접근을 잃고, 서버 데이터가 삭제되며, 1단계부터 다시 연결합니다.",
+  "claude.modal.code.reset": "다시 연결하거나 이전 등록이 남아 있나요? 먼저 제거한 뒤 1단계부터 다시 시작하세요:",
+  "claude.modal.reset.code": "Claude Code / VS Code 쪽까지 완전히 초기화하려면 터미널에서 서버를 제거한 뒤 1단계부터 다시 추가하세요:",
   "claude.modal.close": "닫기",
   "claude.card.title": "Claude의 변경 제안",
   "claude.card.queue": "{n}개 중 {k}",

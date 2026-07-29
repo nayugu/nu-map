@@ -292,6 +292,8 @@ export const strings = {
   "claude.modal.error": "无法识别配对码（或已过期 — 配对码有效期 10 分钟）。请让 Claude 重新生成。",
   "claude.modal.reset": "重置连接",
   "claude.modal.reset.hint": "卡住或状态不同步？重置会给此计划一个全新身份：之前连接的所有 Claude 都会失去访问权限，服务器删除其数据，然后从第 1 步重新连接。",
+  "claude.modal.code.reset": "重新连接或旧注册卡住了？请先删除它，再从第 1 步开始：",
+  "claude.modal.reset.code": "若要在 Claude Code / VS Code 一侧也彻底重置，请在终端中删除该服务器，然后从第 1 步重新添加：",
   "claude.modal.close": "关闭",
   "claude.card.title": "Claude 的变更建议",
   "claude.card.queue": "第 {k} 个，共 {n} 个",

@@ -294,6 +294,8 @@ export const strings = {
   "claude.modal.error": "コードを認識できません（または期限切れ — コードの有効期間は 10 分）。Claude に新しいコードを頼んでください。",
   "claude.modal.reset": "接続をリセット",
   "claude.modal.reset.hint": "何かが詰まったり同期がずれたりしたら、リセットでこのプランに新しい識別子を発行します。以前接続していた Claude はすべてアクセスを失い、サーバーのデータは削除され、ステップ 1 からやり直します。",
+  "claude.modal.code.reset": "再接続する場合や古い登録が残っている場合は、先に削除してから手順 1 をやり直してください：",
+  "claude.modal.reset.code": "Claude Code / VS Code 側も完全にリセットするには、ターミナルでサーバーを削除し、手順 1 から追加し直してください：",
   "claude.modal.close": "閉じる",
   "claude.card.title": "Claude の変更提案",
   "claude.card.queue": "{n} 件中 {k} 件目",
