@@ -1,0 +1,38 @@
+{
+  "es": [
+    "header.io.share.locale.title",
+    "info.offered.nodata",
+    "translation.toggle.hint.api"
+  ],
+  "fr": [
+    "header.io.share.locale.title",
+    "info.offered.nodata",
+    "translation.toggle.hint.api"
+  ],
+  "ar": [
+    "header.io.share.locale.title",
+    "info.offered.nodata",
+    "translation.toggle.hint.api"
+  ],
+  "hi": [
+    "header.io.share.locale.title",
+    "info.offered.nodata",
+    "translation.toggle.hint.api"
+  ],
+  "ja": [
+    "header.io.share.locale.title",
+    "info.offered.nodata",
+    "translation.toggle.hint.api"
+  ],
+  "ko": [
+    "header.io.share.locale.title",
+    "info.offered.nodata",
+    "translation.toggle.hint.api"
+  ],
+  "zh": [
+    "bank.empty.search",
+    "header.io.share.locale.title",
+    "info.offered.nodata",
+    "translation.toggle.hint.api"
+  ]
+}
