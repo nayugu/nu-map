@@ -5,6 +5,27 @@ import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirement
 import { resolveTermByDuration, termSpans } from "./specialTermUtils.js";
 
 
+/**
+ * Apply course substitutions to a placements map.
+ *
+ * A substitution `{ from, to }` means "placing `from` also satisfies `to`": we
+ * add a virtual entry placing `to` in the same semester as `from`, so prereq
+ * trees and requirement checks see `to` as present. Credits are always taken
+ * from the real `placements` only — the virtual entry exists purely for
+ * satisfaction and is never counted toward total SH. Returns `placements`
+ * unchanged (same reference) when there are no substitutions.
+ *
+ * Pure: does not mutate `placements`.
+ */
+export function applySubstitutions(placements, substitutions = []) {
+  if (!substitutions.length) return placements;
+  const ep = { ...placements };
+  for (const { from, to } of substitutions) {
+    if (placements[from]) ep[to] = placements[from];
+  }
+  return ep;
+}
+
 /** Convert a CSS hex colour to "r,g,b" string (for use in rgba()). */
 export function hexRgb(hex) {
   const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -191,13 +212,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   } = gradInfo;
 
   // effectivePlacements: add virtual entries for substitution targets
-  const effectivePlacements = substitutions.length === 0 ? placements : (() => {
-    const ep = { ...placements };
-    for (const { from, to } of substitutions) {
-      if (placements[from]) ep[to] = placements[from];
-    }
-    return ep;
-  })();
+  const effectivePlacements = applySubstitutions(placements, substitutions);
 
   // ── Load major + minors (async) ───────────────────────────────
   // Graduate plans resolve their programs through loadGradMajor (different data
