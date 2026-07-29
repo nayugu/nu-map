@@ -31,8 +31,8 @@ export default function DisclaimerModal() {
   const TAGLINE_MAX = 20;
   const cap = s => (s.length > TAGLINE_MAX ? s.slice(0, TAGLINE_MAX - 1).trimEnd() + "…" : s);
   const creators = [
-    { name: "Nathan",  tagline: "CS + Math (HMS)",    initial: "N", img: `${import.meta.env.BASE_URL}creator-nathan.jpg`,  url: "https://www.linkedin.com/in/nayugu/" },
-    { name: "Matthew", tagline: "CS + IE (Robotics)", initial: "M", img: `${import.meta.env.BASE_URL}creator-matthew.jpg`, url: "https://www.linkedin.com/in/iammg/" },
+    { name: "Nathan",  role: "Creator",     tagline: "CS + Math (HMS)",    initial: "N", img: `${import.meta.env.BASE_URL}creator-nathan.jpg`,  url: "https://www.linkedin.com/in/nayugu/" },
+    { name: "Matthew", role: "Contributor", tagline: "CS + IE (Robotics)", initial: "M", img: `${import.meta.env.BASE_URL}creator-matthew.jpg`, url: "https://www.linkedin.com/in/iammg/" },
   ];
 
   return (
@@ -144,25 +144,25 @@ export default function DisclaimerModal() {
           background: "var(--badge-bg)", border: "1px solid var(--border-1)",
           borderRadius: 8, padding: "10px 12px", marginBottom: 12,
         }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 7, letterSpacing: "0.04em" }}>
-            <TText>MADE BY</TText>
-          </div>
           <div style={{ display: "flex", gap: 8 }}>
             {creators.map(c => (
-              <a
-                key={c.name}
-                href={c.url}
-                target="_blank" rel="noreferrer"
-                title={`${c.name} on LinkedIn`}
-                style={{
-                  display: "flex", flex: 1, minWidth: 0, alignItems: "center", gap: 9,
-                  padding: "8px 10px", borderRadius: 8, boxSizing: "border-box",
-                  background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = "#0A66C2"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; }}
-              >
+              <div key={c.name} style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--link-1)", marginBottom: 6, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                  <TText>{c.role}</TText>
+                </div>
+                <a
+                  href={c.url}
+                  target="_blank" rel="noreferrer"
+                  title={`${c.name} on LinkedIn`}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 9, boxSizing: "border-box",
+                    padding: "8px 10px", borderRadius: 8,
+                    background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+                    textDecoration: "none",
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#0A66C2"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; }}
+                >
                 {/* Avatar (photo, initials fallback) + LinkedIn badge */}
                 <div style={{ position: "relative", width: 34, height: 34, flexShrink: 0 }}>
                   <div style={{
@@ -191,7 +191,8 @@ export default function DisclaimerModal() {
                   <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-1)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</div>
                   <div style={{ fontSize: 10, color: "var(--text-3)", marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={c.tagline}>{cap(c.tagline)}</div>
                 </div>
-              </a>
+                </a>
+              </div>
             ))}
           </div>
         </div>
