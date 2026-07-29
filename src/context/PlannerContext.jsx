@@ -302,6 +302,15 @@ export function PlannerProvider({ children }) {
   const [bankSearch,      setBankSearch]      = useState("");
   const [bankSort,        setBankSort]        = useState("az");
   const [bankTab,         setBankTab]         = useState("all");
+  // Search facet filters. Multi-valued facets AND within a category
+  // (terms/nupath); single-valued facets match by membership (level).
+  //   terms   — ["fall","spring","summer"]  (summer = sumA || sumB)
+  //   level   — ["undergrad","grad"]        (course is one level → OR/membership)
+  //   nupath  — NUPath attribute codes      (["FQ","ND",...])
+  //   profs    — selected instructor-name tags (OR: taught by any of them)
+  //   programReq  — counts as a required course in a selected program
+  //   programElec — counts as an elective/choose-from option in one
+  const [bankFilters,     setBankFilters]     = useState({ terms: [], level: [], nupath: [], profs: [], programReq: false, programElec: false });
   const [bankWidth,       setBankWidth]       = useState(() => window.innerWidth < 600 ? 88 : Math.min(300, Math.max(200, window.innerWidth * 0.21)));
   const [showSubjectKeys, setShowSubjectKeys] = useState(false);
   const [wideCatalog, setWideCatalog] = useState(() => { try { const v = localStorage.getItem("wide-catalog"); return v === "true"; } catch { return false; } });
@@ -1811,6 +1820,7 @@ export function PlannerProvider({ children }) {
     setBankSearch("");
     setBankTab("all");
     setBankSort("az");
+    setBankFilters({ terms: [], level: [], nupath: [], profs: [], programReq: false, programElec: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePlanId]);
 
@@ -2419,7 +2429,7 @@ export function PlannerProvider({ children }) {
     selectedId, dragInfo, hoveredSem, hoveredZone, hoveredCardId,
     showPanel, lines, scrollTick, showViolLines,
     // Bank state
-    bankSearch, bankSort, bankTab, bankWidth, showSubjectKeys,
+    bankSearch, bankSort, bankTab, bankFilters, bankWidth, showSubjectKeys,
     wideCatalog, setWideCatalog, wideWidth, setWideWidth,
     starredIds: pv ? new Set(pv.starredIds ?? []) : starredIds,
     bankCourseIds,
@@ -2502,7 +2512,7 @@ export function PlannerProvider({ children }) {
     setSelectedId, setShowPanel, setDragInfo,
     setHoveredSem, setHoveredZone, setHoveredCardId,
     setShowViolLines,
-    setBankSearch, setBankSort, setBankTab, setBankWidth, setShowSubjectKeys,
+    setBankSearch, setBankSort, setBankTab, setBankFilters, setBankWidth, setShowSubjectKeys,
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
     showCohortSetup, setShowCohortSetup,

@@ -13,10 +13,37 @@ import {
   buildPlacedKeySet,
   allocateMajorWithElectives,
   allocateSections,
+  courseKey,
 } from "../core/gradRequirements.js";
+import {
+  collectEligibleSpec,
+  mergeSplitSpecs,
+  courseEligible,
+  countsAsElectiveOnly,
+} from "../core/programEligibility.js";
 
 const EMPTY = new Set();
-const RelevanceContext = createContext({ active: false, majorKeys: EMPTY, minorKeys: EMPTY });
+const RelevanceContext = createContext({
+  active: false, majorKeys: EMPTY, minorKeys: EMPTY,
+  hasProgram: false, courseRole: () => null,
+});
+
+// Allocate a single program against a placed-key set, returning the set of keys
+// it consumes into real requirements (not General Electives). Mirrors the
+// major/minor allocation in RelevanceProvider (and the Graduation panel).
+function allocateProgram(p, placedSet, courseMap) {
+  if (p.isMinor) {
+    const sections = (p.data.requirementSections ?? []).filter(
+      s => s.title !== "Required General Electives"
+    );
+    const used = new Set();
+    allocateSections(sections, placedSet, used, courseMap);
+    return used;
+  }
+  const { allocatedSet } = allocateMajorWithElectives(p.data, placedSet, courseMap);
+  if (p.concSection) allocateSections([p.concSection], placedSet, allocatedSet, courseMap);
+  return allocatedSet;
+}
 
 export const useRelevance = () => useContext(RelevanceContext);
 
@@ -85,7 +112,67 @@ export function RelevanceProvider({ children }) {
     }
 
     const active = !!(majorData || major2Data || minor1Data || minor2Data);
-    return { active, majorKeys, minorKeys };
+
+    // Candidate-facing specs: which catalog courses *could* count toward any
+    // selected program (major/2nd major/concentration/minors), split into
+    // required vs elective. Powers the Course Bank program filters.
+    const splits = [majorData, major2Data, minor1Data, minor2Data].map(collectEligibleSpec);
+    if (conc && majorData?.concentrations) {
+      const concSection = majorData.concentrations.concentrationOptions?.find(c => c.title === conc);
+      if (concSection) splits.push(collectEligibleSpec({ requirementSections: [concSection] }));
+    }
+    const { required, elective } = mergeSplitSpecs(...splits);
+    const hasProgram = active;
+
+    // ── Search-time attribution ──────────────────────────────────────
+    // For a searched course, report what it WOULD count as if slotted into the
+    // plan right now (or what it already counts as, if it's placed) — using the
+    // exact same allocation as the Graduation panel. Owner is generic
+    // ("major1"/"minor1"), kind is required vs elective; unallocated but
+    // eligible → a free elective.
+    // Only number a label ("Major 1") when there's more than one of that type;
+    // with a single major/minor it's just "Major"/"Minor".
+    const majorCount = (majorData ? 1 : 0) + (major2Data ? 1 : 0);
+    const minorCount = (minor1Data ? 1 : 0) + (minor2Data ? 1 : 0);
+    const progs = [];
+    if (majorData) {
+      const concSection = (conc && majorData.concentrations)
+        ? majorData.concentrations.concentrationOptions?.find(c => c.title === conc) : null;
+      progs.push({ type: "major", n: 1, numbered: majorCount > 1, data: majorData, concSection, isMinor: false, split: collectEligibleSpec(majorData) });
+    }
+    if (major2Data) progs.push({ type: "major", n: 2, numbered: true, data: major2Data, isMinor: false, split: collectEligibleSpec(major2Data) });
+    if (minor1Data) progs.push({ type: "minor", n: 1, numbered: minorCount > 1, data: minor1Data, isMinor: true, split: collectEligibleSpec(minor1Data) });
+    if (minor2Data) progs.push({ type: "minor", n: 2, numbered: true, data: minor2Data, isMinor: true, split: collectEligibleSpec(minor2Data) });
+
+    const baseAlloc = progs.map(p => allocateProgram(p, placedSet, courseMap));
+    // Collect EVERY program the key is allocated to — a course can double-dip
+    // across programs (count toward a major and a minor), and be required for
+    // one but an elective for another.
+    const attribute = (key, allocs) => {
+      const roles = [];
+      for (let i = 0; i < progs.length; i++) {
+        if (!allocs[i].has(key)) continue;
+        const c = courseMap[key];
+        const kind = c && courseEligible(c, progs[i].split.required) ? "required" : "elective";
+        roles.push({ type: progs[i].type, n: progs[i].n, numbered: progs[i].numbered, kind });
+      }
+      return roles;
+    };
+    const courseRole = (crs) => {
+      if (!crs || !progs.length) return null;
+      const key = courseKey(crs.subject, crs.number);
+      if (!(courseEligible(crs, required) || countsAsElectiveOnly(crs, required, elective))) return null;
+      // Already placed → its real allocation (don't re-add; no double-count).
+      // Otherwise → simulate slotting it in now.
+      const allocs = placedSet.has(key)
+        ? baseAlloc
+        : (() => { const t = new Set(placedSet); t.add(key); return progs.map(p => allocateProgram(p, t, courseMap)); })();
+      const roles = attribute(key, allocs);
+      // Eligible but consumed by no requirement → it'd be a free elective.
+      return roles.length ? roles : [{ type: "free" }];
+    };
+
+    return { active, majorKeys, minorKeys, hasProgram, courseRole };
   }, [majorData, major2Data, minor1Data, minor2Data, conc, placedSet, courseMap]);
 
   return <RelevanceContext.Provider value={value}>{children}</RelevanceContext.Provider>;

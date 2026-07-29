@@ -49,11 +49,15 @@ export default function DisclaimerModal() {
         style={{
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 12, maxWidth: 440, width: "100%",
-          maxHeight: "80vh", overflowY: "auto",
-          padding: "16px 14px 14px", boxShadow: "var(--shadow-modal)",
+          maxHeight: "80vh", overflow: "hidden",
+          display: "flex", flexDirection: "column",
+          boxShadow: "var(--shadow-modal)",
           color: "var(--text-2)", fontFamily: "'Inter', system-ui, sans-serif",
         }}
       >
+        {/* Inner scroll area — inset from the rounded corners (outer is
+            overflow:hidden) so the scrollbar never pokes past the rounding. */}
+        <div style={{ overflowY: "auto", minHeight: 0, padding: "16px 14px 14px" }}>
         {/* Title */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
           <div>
@@ -214,6 +218,7 @@ export default function DisclaimerModal() {
               Claude
             </a>
           </span>
+        </div>
         </div>
       </div>
     </div>

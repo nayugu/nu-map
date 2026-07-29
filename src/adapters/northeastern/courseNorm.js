@@ -31,7 +31,8 @@ export function computeBirthTermCode(termHistory) {
  * Only entries on or after birthTermCode are considered — earlier entries are
  * pre-existence noise (Banner returning false before the course was created).
  * When post-birth history has only true entries, all decoded semTypes are included.
- * When it has mixed entries, a semType is included only if offered in ≥ 50%.
+ * When it has mixed entries, a semType is included only if offered in at least
+ * two-thirds (≥ 2⁄3) of that season's terms on record — a proportion, not a count.
  * @param {Record<string,boolean>} termHistory
  * @param {number|null} birthTermCode
  */
@@ -48,7 +49,7 @@ export function deriveTerms(termHistory, birthTermCode = null) {
   const semTypeIds = [...new Set(entries.map(([code]) => calendar.decodeTermCode(code)).filter(Boolean))];
   return semTypeIds.filter(id => {
     const ofType = entries.filter(([code]) => calendar.decodeTermCode(code) === id);
-    return ofType.filter(([, v]) => v).length / ofType.length >= 0.5;
+    return ofType.filter(([, v]) => v).length / ofType.length >= 2 / 3;
   });
 }
 
