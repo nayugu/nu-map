@@ -43,6 +43,22 @@ Facts that follow from this:
 - Hexagonal rules: UI imports ports only (`src/ports/`), adapters import core only.
   The Claude UI motif is orange `#fb923c`; previews are dashed-orange ghosts.
 
+## Team workflow (two humans + pipeline bots)
+
+- Start by syncing with `origin/main`: `git pull` (or at least `git fetch` +
+  `git diff HEAD origin/main` to see what changed). Pull again before editing
+  shared docs (TODO.md, IDEAS.md). With `pull.rebase` set, pull refuses while
+  you have uncommitted changes — commit or stash first.
+- Code changes go branch → PR → squash-merge: `git switch -c fix/short-name`,
+  push, open a PR, partner skims, merge. The repo is squash-only and
+  auto-deletes merged branches. Trivial docs edits may go straight to main.
+- No long-lived or personal branches — they drift fast here (the monthly
+  scrape commits straight to main; one March branch died 469 commits behind).
+- Never enable required-PR branch protection on main: the scheduled data
+  workflows push to it directly and would break.
+- IDEAS.md = shared idea scratchpad (tag entries with initials); TODO.md =
+  agreed tasks.
+
 ## Conventions
 
 - Conventional commits (`type: description`), no Co-Authored-By trailers.
