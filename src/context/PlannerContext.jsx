@@ -14,7 +14,7 @@ import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
-import { getSemSH, getOrderedCourses, getConnections } from "../core/planModel.js";
+import { getSemSH, getOrderedCourses, getConnections, applySubstitutions } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -557,15 +557,10 @@ export function PlannerProvider({ children }) {
   // effectivePlacements: real placements + virtual entries for substitution targets.
   // When CS3500 → CS4400 substitution exists and CS3500 is placed in fall2024,
   // CS4400 is added as if placed in fall2024. Credits use only real `placements`.
-  const effectivePlacements = useMemo(() => {
-    if (!pvSubstitutions.length) return pvPlacements;
-    const result = { ...pvPlacements };
-    for (const { from, to } of pvSubstitutions) {
-      const fromSemId = pvPlacements[from];
-      if (fromSemId) result[to] = fromSemId;
-    }
-    return result;
-  }, [pvPlacements, pvSubstitutions]);
+  const effectivePlacements = useMemo(
+    () => applySubstitutions(pvPlacements, pvSubstitutions),
+    [pvPlacements, pvSubstitutions]
+  );
 
   // ── Effect: SVG lines ─────────────────────────────────────────
   useEffect(() => {
