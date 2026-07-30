@@ -608,7 +608,7 @@ export default function BankPanel() {
                       style={{
                         width: "100%", boxSizing: "border-box",
                         background: "var(--bg-surface)", border: "1px solid var(--border-2)",
-                        borderRadius: 5, color: "var(--text-2)", fontSize: isPhone ? 8 : 10,
+                        borderRadius: 5, color: "var(--text-2)", fontSize: isPhone ? 5 : 10,
                         padding: "5px 24px 5px 8px", outline: "none",
                       }}
                     />
