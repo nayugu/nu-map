@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMajorRequirements — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+</head>
+<body data-page="src/ports/IMajorRequirements">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">ports/</a><span class="sep"> / </span><strong>IMajorRequirements.js</strong>
+    </div>
+
+    <h1>IMajorRequirements <span class="badge blue">program loading &amp; audit</span></h1>
+    <p class="lead">The adapter that knows where to find major/minor definitions and how to audit them against a plan. Exposes option lists for the search dropdowns, raw JSON loaders for GradPanel, and (once implemented) a full audit pipeline. All program-list and loading logic lives here — not in the UI.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Port key</div><div class="nb-value"><code>"majorRequirements"</code></div></div>
+      <div class="nb-group"><div class="nb-label">Consumed by</div><div class="nb-value">GradPanel (option dropdowns + <code>loadMajor()</code>/<code>loadMinor()</code>), future AI assistant audit path</div></div>
+      <div class="nb-group"><div class="nb-label">Vite constraint</div><div class="nb-value"><code>import.meta.glob()</code> requires string literals — glob patterns stay in the loader files, not here</div></div>
+    </div>
+
+    <h2>Contract — methods</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Method</th><th>Returns</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>getMajorOptions()</code></td><td>ProgramOption[]</td><td>Flat list of all available major options. Used when searching without grouping.</td></tr>
+        <tr><td><code>getMinorOptions()</code></td><td>ProgramOption[]</td><td>Flat list of all available minor/certificate options.</td></tr>
+        <tr><td><code>getMajorOptionGroups()</code></td><td>Map&lt;string, ProgramOption[]&gt;</td><td>Majors grouped for the search dropdown. Keys are group labels (e.g. <code>"2025 — Khoury College"</code>); values are option arrays.</td></tr>
+        <tr><td><code>getMinorOptionGroups()</code></td><td>Map&lt;string, ProgramOption[]&gt;</td><td>Same as <code>getMajorOptionGroups()</code> but for minors.</td></tr>
+        <tr><td><code>loadMajor(path)</code></td><td>Promise&lt;object&gt;</td><td>Fetch the raw program definition JSON for a given option id/path. The returned shape is adapter-specific; GradPanel passes it through <code>gradRequirements.js</code>.</td></tr>
+        <tr><td><code>loadMinor(path)</code></td><td>Promise&lt;object&gt;</td><td>Same as <code>loadMajor()</code> but for a minor.</td></tr>
+        <tr><td><code>auditMajor(id, plan, courseMap)</code></td><td>Promise&lt;Program&gt;</td><td>Load a major by id and audit its requirements against the given plan. Returns the Program with the requirement tree fully populated. <strong>Not yet implemented in the NU adapter</strong> — currently throws.</td></tr>
+        <tr><td><code>auditMinor(id, plan, courseMap)</code></td><td>Promise&lt;Program&gt;</td><td>Same as <code>auditMajor()</code> but for a minor. <strong>Not yet implemented in the NU adapter.</strong></td></tr>
+        <tr><td><code>getSources()</code></td><td>SourceInfo[]</td><td>External data sources. See <a href="../IAttributable/">IAttributable</a>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout info"><div class="ci">ℹ</div><div class="callout-body"><strong>auditMajor / auditMinor are Stage 2:</strong> GradPanel currently calls <code>loadMajor()</code> and then runs <code>gradRequirements.js</code> directly (client-side). The <code>auditMajor()</code>/<code>auditMinor()</code> methods exist in the port interface for future server-side or AI-driven auditing but throw <code>Error("not yet implemented")</code> in the NU adapter.</div></div>
+
+    <h2>Typedefs</h2>
+
+    <h3>ProgramOption</h3>
+    <p>One entry in the major or minor search dropdown.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Stable unique key passed back to <code>auditMajor()</code>/<code>loadMajor()</code>. Can be a file path, slug, UUID, or any stable string.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Display name shown in the dropdown and panel header, e.g. <code>"Computer Science"</code>.</td></tr>
+        <tr><td><code>[location]</code></td><td>string</td><td>Secondary qualifier shown next to the label, e.g. <code>"Boston"</code>, <code>"Silicon Valley"</code>. Omit if not applicable.</td></tr>
+        <tr><td><code>[type]</code></td><td>string</td><td>Program category: <code>"major"</code> | <code>"concentration"</code> | <code>"minor"</code> | <code>"certificate"</code>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>PlanSnapshot</h3>
+    <p>The minimum plan state the audit functions need. Adapters must not require full PlannerContext state.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>placements</code></td><td>Object&lt;string, string&gt;</td><td><code>{ courseId → semId }</code> for all placed courses.</td></tr>
+        <tr><td><code>placedOut</code></td><td>Set&lt;string&gt;</td><td>Course IDs placed out (no credit, but count as completed for prereqs).</td></tr>
+        <tr><td><code>substitutions</code></td><td>Array&lt;{from, to}&gt;</td><td>Course substitutions: placing <code>from</code> also satisfies requirements of <code>to</code>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Requirement</h3>
+    <p>One node in the requirement tree returned by <code>auditMajor()</code>/<code>auditMinor()</code>. Trees can be nested arbitrarily.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>name</code></td><td>string</td><td>Display name for this requirement block, e.g. <code>"Fundamentals"</code>, <code>"Capstone"</code>.</td></tr>
+        <tr><td><code>satisfied</code></td><td>boolean</td><td>True if the current plan fully satisfies this block.</td></tr>
+        <tr><td><code>[creditsNeeded]</code></td><td>number</td><td>Total credits required for this block. Omit for flag-only requirements.</td></tr>
+        <tr><td><code>[creditsDone]</code></td><td>number</td><td>Credits in the plan that count toward this block.</td></tr>
+        <tr><td><code>[children]</code></td><td>Requirement[]</td><td>Nested sub-requirements (group node). Mutually exclusive with <code>courses</code>.</td></tr>
+        <tr><td><code>[courses]</code></td><td>CourseRef[]</td><td>Courses eligible to satisfy this requirement (leaf node).</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Program</h3>
+    <p>A fully audited program with its requirement tree populated.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td>Same id as the ProgramOption used to load this.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td>Display name.</td></tr>
+        <tr><td><code>requirements</code></td><td>Requirement[]</td><td>Top-level requirement blocks with satisfaction computed.</td></tr>
+        <tr><td><code>totalCredits</code></td><td>number</td><td>Total credit hours required to complete this program.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Northeastern reference implementation</h2>
+    <p>The NU adapter wraps <code>majorLoader.js</code> / <code>minorLoader.js</code> which own the <code>import.meta.glob()</code> calls (a Vite build-time constraint requiring string literals at the call site). Two adapter-internal helper functions do the name parsing:</p>
+    <ul>
+      <li><code>fmtLabel(folderName)</code> — strips the campus location tag and title-cases the result: <code>"computer_science_(boston)"</code> → <code>"Computer Science"</code>. Short all-lowercase words (≤3 chars) like <code>"bs"</code>, <code>"cs"</code> are uppercased as acronyms.</li>
+      <li><code>fmtLocation(folderName)</code> — extracts the location tag: <code>"computer_science_(boston)"</code> → <code>"Boston"</code>. Returns <code>""</code> if no tag.</li>
+    </ul>
+    <p>These helpers are passed as a parameter to <code>getMajorOptions(majorRequirements)</code> inside the loader — they are not part of the port interface.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Input folder name</th><th>fmtLabel result</th><th>fmtLocation result</th></tr></thead>
+      <tbody>
+        <tr><td><code>computer_science_(boston)</code></td><td>Computer Science</td><td>Boston</td></tr>
+        <tr><td><code>electrical_engineering_(oakland)</code></td><td>Electrical Engineering</td><td>Oakland</td></tr>
+        <tr><td><code>mathematics</code></td><td>Mathematics</td><td><em>(empty string)</em></td></tr>
+        <tr><td><code>bs-cs</code></td><td>BS CS</td><td><em>(empty string)</em></td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Generic default</h2>
+    <p>Delegates to the same loader files with identity functions for <code>fmtLabel</code> (no transformation) and <code>fmtLocation</code> (always returns <code>""</code>). This works for any folder naming convention that doesn't need custom parsing.</p>
+
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body">The generic default works fine if your major data uses clean folder names with no embedded metadata. Only override if your folder names have location tags, special characters, or other institution-specific patterns that need stripping before display.</div></div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+</body>
+</html>
