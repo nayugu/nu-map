@@ -1,0 +1,769 @@
+// ═══════════════════════════════════════════════════════════════════
+// STATS PANEL — full-screen "plan insights" overlay.
+//
+// Opened from the 📊 header button; rendered OUTSIDE the scaled planner
+// container (App.jsx) so position:fixed measures against the viewport.
+//
+// Design rule: everything here is DEFINITE — derived only from what the
+// user has placed in the plan (planned + already-taken, incl. incoming
+// credit). No forecasts (no "typical instructor", seat availability, or
+// historical weekday patterns).
+//
+// Sections: Overview · Composition (by level / by department) · Credit
+// Load · Experience. Charts are hand-rolled div/SVG (no dependency).
+// ═══════════════════════════════════════════════════════════════════
+import { useState, useMemo, useEffect, useRef } from "react";
+import { usePlanner } from "../context/PlannerContext.jsx";
+import { usePort } from "../context/InstitutionContext.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
+import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
+import { ICreditSystem }      from "../ports/ICreditSystem.js";
+import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
+import { IMajorRequirements } from "../ports/IMajorRequirements.js";
+import { subjectColor } from "../core/courseModel.js";
+import { getSemSH } from "../core/planModel.js";
+import { computeGrantedAttrs, resolveTermByDuration } from "../core/specialTermUtils.js";
+import {
+  levelDistribution, mergeLoadTimeline, longestPrereqChains, courseTier,
+} from "../core/planStats.js";
+import { SemLabel } from "./SemLabel.jsx";
+import CompanyLogo from "./CompanyLogo.jsx";
+
+// Palette (light/dark safe; drawn from SUBJECT_PALETTE hues).
+const UG_COLOR   = "#58a6ff";
+const GRAD_COLOR = "#a78bfa";
+const COOP_COLOR = "#34d399";
+const SUMMER_COLOR = "#67e8f9";
+const TIER_PALETTE = ["#ffd47e", "#ffb27d", "#ff9b59", "#ff9365", "#ff6b6b", "#fb7185", "#f472b6", "#e879f9"];
+const tierColor = (tier) => TIER_PALETTE[Math.min(TIER_PALETTE.length - 1, Math.max(0, tier / 1000 - 1))];
+const isGradTier = (n) => (courseTier(n) ?? 0) >= 5000;
+
+const yearOf = (sem) => (String(sem?.id ?? "").match(/\d{4}/) || [""])[0];
+const faviconUrl = (domain) =>
+  `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
+// Deterministic, distinct colour per company (stable across terms).
+const companyColor = (w) => subjectColor(String(w.company || w.companyDomain || w.id || "?").toUpperCase());
+
+// CSS effects injected once with the panel: a rotating glow band (grad-
+// courses tile + each work experience) and a soft pulse (grad class chips).
+const GLOW_CSS = `
+@keyframes numap-spin { to { transform: rotate(360deg); } }
+@keyframes numap-glow {
+  0%,100% { box-shadow: 0 0 3px var(--glow), 0 0 1px var(--glow); }
+  50%     { box-shadow: 0 0 9px var(--glow), 0 0 3px var(--glow); }
+}`;
+
+// Container width via ResizeObserver — lets the load chart fit exactly.
+function useContainerWidth() {
+  const ref = useRef(null);
+  const [w, setW] = useState(0);
+  useEffect(() => {
+    if (!ref.current) return;
+    const ro = new ResizeObserver(entries => setW(entries[0].contentRect.width));
+    ro.observe(ref.current);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, w];
+}
+
+// ── Small presentational primitives ─────────────────────────────────
+
+function Section({ title, hint, children }) {
+  return (
+    <div style={{
+      background: "var(--bg-surface)", border: "1px solid var(--border-1)",
+      borderRadius: 10, padding: "14px 16px", marginBottom: 12,
+    }}>
+      <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.06em",
+        textTransform: "uppercase", color: "var(--text-3)", marginBottom: hint ? 3 : 10 }}>{title}</div>
+      {hint && <div style={{ fontSize: 9.5, color: "var(--text-5)", marginBottom: 11, lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>{hint}</div>}
+      {children}
+    </div>
+  );
+}
+
+function StatTile({ label, value, sub, color }) {
+  return (
+    <div style={{ flex: "1 1 90px", minWidth: 90, background: "var(--bg-surface-2)",
+      border: "1px solid var(--border-1)", borderRadius: 8, padding: "10px 12px" }}>
+      <div style={{ fontSize: 20, fontWeight: 800, color: color ?? "var(--text-1)", lineHeight: 1.1 }}>{value}</div>
+      <div style={{ fontSize: 9.5, color: "var(--text-4)", marginTop: 3, fontWeight: 600 }}>{label}</div>
+      {sub && <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 1 }}>{sub}</div>}
+    </div>
+  );
+}
+
+// Headline tile wrapped in a slowly-rotating glow band — used to make a
+// couple of numbers feel special (grad courses, work terms).
+function GlowTile({ label, value, sub, color }) {
+  return (
+    <div style={{ position: "relative", flex: "1 1 90px", minWidth: 90, borderRadius: 8, padding: 1.5, overflow: "hidden" }}>
+      <div style={{ position: "absolute", inset: "-60%",
+        background: `conic-gradient(from 0deg, transparent 0deg, ${color} 55deg, transparent 135deg, transparent 235deg, ${color} 305deg, transparent 360deg)`,
+        animation: "numap-spin 5s linear infinite" }} />
+      <div style={{ position: "relative", background: "var(--bg-surface-2)", borderRadius: 6.5, padding: "10px 12px" }}>
+        <div style={{ fontSize: 20, fontWeight: 800, color, lineHeight: 1.1, textShadow: `0 0 10px ${color}66` }}>{value}</div>
+        <div style={{ fontSize: 9.5, color: "var(--text-4)", marginTop: 3, fontWeight: 600 }}>{label}</div>
+        {sub && <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 1 }}>{sub}</div>}
+      </div>
+    </div>
+  );
+}
+
+// Rotating glow band around arbitrary content (used per work experience).
+function GlowBox({ color, radius = 8, children }) {
+  return (
+    <div style={{ position: "relative", borderRadius: radius, padding: 1.5, overflow: "hidden" }}>
+      <div style={{ position: "absolute", inset: "-60%",
+        background: `conic-gradient(from 0deg, transparent 0deg, ${color} 55deg, transparent 135deg, transparent 235deg, ${color} 305deg, transparent 360deg)`,
+        animation: "numap-spin 5s linear infinite" }} />
+      <div style={{ position: "relative", background: "var(--bg-surface-2)", borderRadius: radius - 1.5, height: "100%" }}>{children}</div>
+    </div>
+  );
+}
+
+// Stacked proportion bar. Each segment's label (a tier like "2000" or a dept
+// like "CS") sits ABOVE the bar, centred over its segment and coloured to
+// match it; the segment's credit total is written INSIDE the bar in black.
+// Both are shown only when the segment is physically wide enough (measured px
+// vs. rough glyph width), so by default only the larger segments are labelled.
+function StackBar({ segments, unit }) {
+  const [ref, w] = useContainerWidth();
+  const total = segments.reduce((s, x) => s + x.value, 0) || 1;
+  return (
+    <div ref={ref} style={{ marginBottom: 12 }}>
+      {/* labels above, aligned to each segment, in the segment's colour */}
+      <div style={{ display: "flex", marginBottom: 3 }}>
+        {segments.map((s, i) => {
+          const segPx = (s.value / total) * (w || 0);
+          const name = s.name ?? `${s.value}`;
+          return (
+            <div key={i} style={{ width: `${(s.value / total) * 100}%`, textAlign: "center", overflow: "hidden" }}>
+              {segPx >= name.length * 6.5 + 6 && (
+                <span style={{ fontSize: 9.5, fontWeight: 800, color: s.color, whiteSpace: "nowrap" }}>{name}</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {/* the bar — credit total inside each segment, in black */}
+      <div style={{ display: "flex", height: 20, borderRadius: 6, overflow: "hidden", background: "var(--bg-surface-2)" }}>
+        {segments.map((s, i) => {
+          const segPx = (s.value / total) * (w || 0);
+          const full = `${s.value} ${unit}`;
+          const label = segPx >= full.length * 5.7 + 8 ? full
+            : segPx >= `${s.value}`.length * 7 + 6 ? `${s.value}` : "";
+          return (
+            <div key={i} title={s.title} style={{ width: `${(s.value / total) * 100}%`, background: s.color,
+              display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
+              borderRight: i < segments.length - 1 ? "1px solid var(--bg-surface)" : "none" }}>
+              {label && <span style={{ fontSize: 9, fontWeight: 800, color: "#000", whiteSpace: "nowrap" }}>{label}</span>}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// CORS-readable favicon proxy (wsrv.nl serves Access-Control-Allow-Origin:*),
+// so the logo can be drawn to a canvas and read pixel-by-pixel. The Google
+// favicon service itself doesn't send CORS headers, which taints the canvas.
+const colorSrcUrl = (domain) =>
+  `https://wsrv.nl/?url=${encodeURIComponent(`www.google.com/s2/favicons?domain=${domain}&sz=64`)}&w=32&h=32&output=png`;
+
+// Dominant (most-frequent) colour of a company logo, ignoring near-black /
+// near-white pixels — a systematic per-company accent. Falls back to a stable
+// hash colour if the image can't be read.
+function useDominantColor(domain, fallback) {
+  const [color, setColor] = useState(fallback);
+  useEffect(() => {
+    setColor(fallback);
+    if (!domain) return;
+    let cancelled = false;
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const S = 24;
+        const cv = document.createElement("canvas");
+        cv.width = S; cv.height = S;
+        const ctx = cv.getContext("2d", { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0, S, S);
+        const { data } = ctx.getImageData(0, 0, S, S);
+        const buckets = new Map();
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+          if (a < 128) continue;
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          if (max > 232 && min > 210) continue;   // near-white
+          if (max < 28) continue;                  // near-black
+          const key = `${r >> 4},${g >> 4},${b >> 4}`;
+          const e = buckets.get(key) || { n: 0, r: 0, g: 0, b: 0 };
+          e.n += 1; e.r += r; e.g += g; e.b += b;
+          buckets.set(key, e);
+        }
+        let top = null;
+        for (const e of buckets.values()) if (!top || e.n > top.n) top = e;
+        if (top && !cancelled)
+          setColor(`rgb(${Math.round(top.r / top.n)},${Math.round(top.g / top.n)},${Math.round(top.b / top.n)})`);
+      } catch { /* tainted canvas — keep fallback */ }
+    };
+    img.src = colorSrcUrl(domain);
+    return () => { cancelled = true; };
+  }, [domain, fallback]);
+  return color;
+}
+
+// A clickable course pill (opens the course info panel). Coloured by its
+// department; grad-level courses pulse with a glow in that same dept colour.
+function ClassChip({ id, cmap, onOpen, faded }) {
+  const c = cmap[id];
+  const grad = isGradTier(c?.number);
+  const deptColor = subjectColor(c?.subject ?? "");
+  return (
+    <button onClick={() => onOpen(id)} title={c?.title ?? id}
+      style={{
+        fontSize: 9.5, fontWeight: 700, padding: "3px 7px", borderRadius: 5, cursor: "pointer",
+        background: "var(--bg-surface-2)", color: "var(--text-2)", whiteSpace: "nowrap", lineHeight: 1.3,
+        border: `1px ${faded ? "dashed" : "solid"} ${deptColor}`, opacity: faded ? 0.4 : 1,
+        ...(grad && !faded ? { "--glow": deptColor, animation: "numap-glow 2.6s ease-in-out infinite" } : {}),
+      }}
+      onMouseEnter={e => { e.currentTarget.style.background = deptColor; e.currentTarget.style.color = "#0b0f14"; }}
+      onMouseLeave={e => { e.currentTarget.style.background = "var(--bg-surface-2)"; e.currentTarget.style.color = "var(--text-2)"; }}>
+      {c?.code ?? id}
+    </button>
+  );
+}
+
+// Header + wrapped clickable chips for one group (a level tier or a dept).
+function CourseGroup({ title, sub, ids, cmap, onOpen }) {
+  return (
+    <div style={{ marginBottom: 11 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
+        <span style={{ fontSize: 11, fontWeight: 800, color: "var(--text-2)" }}>{title}</span>
+        <span style={{ fontSize: 10.5, color: "var(--text-4)", flexShrink: 0, marginLeft: 8 }}>{sub}</span>
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+        {ids.map(id => <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} />)}
+      </div>
+    </div>
+  );
+}
+
+// One work experience, wrapped in a glow band whose colour is taken from
+// the company logo's dominant colour (falling back to a stable hash).
+function WorkCard({ w }) {
+  const color = useDominantColor(w.companyDomain, companyColor(w));
+  return (
+    <GlowBox color={color} radius={8}>
+      <div style={{ padding: "9px 10px", minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+          {w.companyDomain
+            ? <CompanyLogo key={w.companyDomain} domain={w.companyDomain} size={26} />
+            : <div style={{ width: 26, height: 26, flexShrink: 0, borderRadius: 6,
+                background: "var(--bg-surface)", border: "1px solid var(--border-1)",
+                display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>💼</div>}
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", overflow: "hidden",
+            textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{w.company || w.typeLabel}</div>
+        </div>
+        <div style={{ fontSize: 9.5, color: "var(--text-3)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {w.subline || w.typeLabel}
+        </div>
+        <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 2 }}>
+          {w.semTypeId && w.year ? <SemLabel typeId={w.semTypeId} year={w.year} /> : null}
+          {w.durLabel ? ` · ${w.durLabel}` : ""}
+        </div>
+      </div>
+    </GlowBox>
+  );
+}
+
+// ── Credit-load line chart ───────────────────────────────────────────
+// Plots EVERY term from entry to graduation (summers merged). A term with
+// classes is a point (y = credits); the first and last such terms get an
+// enlarged "milestone" dot. Terms with no classes — empty terms or co-op /
+// work terms (both read as a break) — carry no dot: the line runs dotted +
+// faint across them, and co-op columns (or a Summer A / B half) are shaded
+// with the company logo. Width tracks the container.
+function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
+  const [ref, cw] = useContainerWidth();
+
+  const H = 190, padL = 30, padR = 14, padT = 20, padB = 30;
+  const W = Math.max(280, cw || 280);
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const m = rows.length;
+  const colW = m > 0 ? plotW / m : plotW;
+  const xFor = (k) => padL + (k + 0.5) * colW;
+
+  const shVals = rows.filter(r => r.sh > 0).map(r => r.sh);
+  const yMin = Math.min(12, ...(shVals.length ? shVals : [12]));
+  let yMax = Math.max(22, ...(shVals.length ? shVals : [22]));
+  if (yMax <= yMin) yMax = yMin + 1;
+  const yFor = (v) => padT + plotH * (1 - (v - yMin) / (yMax - yMin));
+
+  // First / last term that actually has classes — the study span the line
+  // spans and where the milestone dots sit.
+  const creditIdx = rows.map((r, i) => (r.sh > 0 ? i : -1)).filter(i => i >= 0);
+  const firstC = creditIdx[0], lastC = creditIdx[creditIdx.length - 1];
+
+  // Line y for a term: its credits, or a straight interpolation between the
+  // nearest credit-bearing terms (so breaks read as a straight dotted run).
+  const lineVal = (k) => {
+    const r = rows[k];
+    if (r.sh > 0) return r.sh;
+    let l = k - 1; while (l >= 0 && !(rows[l].sh > 0)) l -= 1;
+    let rr = k + 1; while (rr < m && !(rows[rr].sh > 0)) rr += 1;
+    if (l >= 0 && rr < m) return rows[l].sh + (rows[rr].sh - rows[l].sh) * ((k - l) / (rr - l));
+    if (l >= 0) return rows[l].sh;
+    if (rr < m) return rows[rr].sh;
+    return (yMin + yMax) / 2;
+  };
+  const pts = rows.map((r, k) => ({ x: xFor(k), y: yFor(lineVal(k)), r, sh: r.sh }));
+
+  const ticks = [];
+  const tickStep = yMax - yMin <= 12 ? 4 : 6;
+  for (let v = yMin; v <= yMax + 0.01; v += tickStep) ticks.push(Math.round(v));
+  if (ticks[ticks.length - 1] !== yMax) ticks.push(yMax);
+  const labelEvery = colW < 34 ? 2 : 1;
+
+  return (
+    <div ref={ref} style={{ width: "100%" }}>
+      {m > 0 && (
+        <svg width={W} height={H} style={{ display: "block" }}>
+          {semesterMax > fullTimeMin && (
+            <rect x={padL} width={plotW} y={yFor(Math.min(yMax, semesterMax))}
+              height={Math.max(0, yFor(Math.max(yMin, fullTimeMin)) - yFor(Math.min(yMax, semesterMax)))}
+              fill={UG_COLOR} opacity="0.06" />
+          )}
+          {ticks.map((v, i) => (
+            <g key={i}>
+              <line x1={padL} y1={yFor(v)} x2={padL + plotW} y2={yFor(v)} stroke="var(--border-1)" opacity="0.6" />
+              <text x={padL - 6} y={yFor(v) + 3} textAnchor="end" fontSize="8" fill="var(--text-5)">{v}</text>
+            </g>
+          ))}
+          {/* co-op shaded columns / summer halves + logo */}
+          {rows.map((r, k) => {
+            if (!r.hasWork) return null;
+            const n = r.slots.length;
+            const occ = [];
+            r.slots.forEach((s, i) => {
+              if (!s.occupied) return;
+              occ.push([padL + (k + i / n) * colW, padL + (k + (i + 1) / n) * colW]);
+            });
+            if (!occ.length) return null;
+            const logoX = (Math.min(...occ.map(o => o[0])) + Math.max(...occ.map(o => o[1]))) / 2;
+            const domain = r.work?.companyDomain;
+            return (
+              <g key={`coop-${r.id}`}>
+                {occ.map(([x0, x1], i) => (
+                  <rect key={i} x={x0} y={padT} width={Math.max(0, x1 - x0)} height={plotH} fill={COOP_COLOR} opacity="0.14" />
+                ))}
+                {domain
+                  ? <image href={faviconUrl(domain)} xlinkHref={faviconUrl(domain)} x={logoX - 9} y={padT + 6} width="18" height="18" />
+                  : <text x={logoX} y={padT + 20} textAnchor="middle" fontSize="13">💼</text>}
+              </g>
+            );
+          })}
+          {/* connecting segments across the study span (dotted over breaks) */}
+          {firstC != null && pts.slice(firstC, lastC).map((p, i) => {
+            const k = firstC + i;
+            const q = pts[k + 1];
+            const dotted = p.sh === 0 || q.sh === 0;
+            return (
+              <line key={`seg-${k}`} x1={p.x} y1={p.y} x2={q.x} y2={q.y}
+                stroke={UG_COLOR} strokeWidth={dotted ? 1.5 : 2.5}
+                strokeDasharray={dotted ? "3 3" : ""} opacity={dotted ? 0.45 : 1} strokeLinecap="round" />
+            );
+          })}
+          {/* points — only terms with classes; milestone dot at first + last */}
+          {pts.map((p, k) => {
+            if (!(p.sh > 0)) return null;
+            const milestone = k === firstC || k === lastC;
+            const col = p.r.type === "summer" ? SUMMER_COLOR : UG_COLOR;
+            return (
+              <g key={`pt-${k}`}>
+                {milestone && <circle cx={p.x} cy={p.y} r="8" fill={col} opacity="0.18" />}
+                <circle cx={p.x} cy={p.y} r={milestone ? 5 : 3.5} fill={col} stroke="var(--bg-surface)" strokeWidth={milestone ? 2 : 1.5} />
+                <text x={p.x} y={p.y - (milestone ? 9 : 7)} textAnchor="middle" fontSize="8.5" fontWeight="700" fill="var(--text-3)">{p.sh}</text>
+              </g>
+            );
+          })}
+          {/* x labels — every term */}
+          {rows.map((r, k) => (k % labelEvery === 0) && (
+            <text key={`xl-${r.id}`} x={xFor(k)} y={H - 9} textAnchor="middle" fontSize="8" fill="var(--text-5)">
+              {shortSem(r)}{String(yearOf(r.repSem)).slice(2)}
+            </text>
+          ))}
+        </svg>
+      )}
+    </div>
+  );
+}
+
+// ── Main panel ───────────────────────────────────────────────────────
+
+export default function StatsPanel() {
+  const {
+    showStats, setShowStats, setSelectedId, setShowPanel,
+    placements, courseMap, effectiveCourseMap, SEMESTERS, SEM_INDEX,
+    specialTermPl, specialTermStartMap, specialTermContMap, totalSHPlaced, bonusSH,
+    major, studentType, isPhone,
+  } = usePlanner();
+
+  const attributeSystem = usePort(IAttributeSystem);
+  const creditSystem    = usePort(ICreditSystem);
+  const specialTerms    = usePort(ISpecialTerms);
+  const majorReq        = usePort(IMajorRequirements);
+  const { t } = useLanguage();
+
+  const [compView, setCompView] = useState("total"); // "total" (by level) | "dept"
+
+  const unit = creditSystem.getUnitName();
+  const cmap = effectiveCourseMap ?? courseMap;
+  const placedIds = useMemo(
+    () => Object.keys(placements).filter(id => cmap[id] && !placements[id]?.startsWith?.("__overflow:")),
+    [placements, cmap]
+  );
+
+  const openCourse = (id) => { setSelectedId(id); setShowPanel(true); setShowStats(false); };
+
+  // Required-credit total for the degree-progress bar (async catalog fetch).
+  const [requiredSH, setRequiredSH] = useState(0);
+  useEffect(() => {
+    if (!showStats || !major) { setRequiredSH(0); return; }
+    let cancelled = false;
+    const p = studentType === "graduate" ? majorReq.loadGradMajor(major) : majorReq.loadMajor(major);
+    p.then(json => { if (!cancelled) setRequiredSH(json?.totalCreditsRequired ?? 0); })
+     .catch(() => { if (!cancelled) setRequiredSH(0); });
+    return () => { cancelled = true; };
+  }, [showStats, major, studentType, majorReq]);
+
+  // Incoming credit (AP / IB / transfer bonus + courses in the incoming row).
+  const incomingSH = useMemo(() => {
+    let s = bonusSH ?? 0;
+    for (const id of Object.keys(placements))
+      if (placements[id] === "incoming" && cmap[id]) s += cmap[id].sh ?? 0;
+    return s;
+  }, [bonusSH, placements, cmap]);
+
+  const nupath = useMemo(() => {
+    const granted = computeGrantedAttrs(specialTermPl ?? {}, specialTerms.getTypes());
+    const covered = attributeSystem.getCoverage(placements, cmap, granted);
+    const grid = attributeSystem.getGridCodes();
+    return { covered: grid.filter(c => covered.has(c)).length, total: grid.length };
+  }, [placements, cmap, specialTermPl, attributeSystem, specialTerms]);
+
+  // Transfer / incoming-credit courses — faded in chains, excluded from depth.
+  const incomingSet = useMemo(
+    () => new Set(Object.keys(placements).filter(id => placements[id] === "incoming")),
+    [placements]
+  );
+
+  // Semester ordinal per placed course — enforces prereq-chain ordering.
+  const order = useMemo(() => {
+    const o = {};
+    for (const id of placedIds) o[id] = SEM_INDEX[placements[id]];
+    return o;
+  }, [placedIds, placements, SEM_INDEX]);
+
+  const levels = useMemo(() => levelDistribution(placedIds, cmap), [placedIds, cmap]);
+  const chains = useMemo(
+    () => longestPrereqChains(placedIds, cmap, { excludeFromDepth: incomingSet, order }),
+    [placedIds, cmap, incomingSet, order]
+  );
+
+  const bySubjThenNum = (a, b) => {
+    const A = cmap[a], B = cmap[b];
+    return (A?.subject ?? "").localeCompare(B?.subject ?? "") || (A?.number ?? "").localeCompare(B?.number ?? "");
+  };
+  const byNum = (a, b) => (cmap[a]?.number ?? "").localeCompare(cmap[b]?.number ?? "");
+
+  // Group placed courses by level tier (dept-clustered within) and by dept.
+  const byTier = useMemo(() => {
+    const g = new Map();
+    for (const id of placedIds) {
+      const tier = courseTier(cmap[id]?.number);
+      if (tier == null) continue;
+      if (!g.has(tier)) g.set(tier, []);
+      g.get(tier).push(id);
+    }
+    return [...g.entries()].sort((a, b) => a[0] - b[0]).map(([tier, ids]) => ({
+      tier, ids: ids.sort(bySubjThenNum), sh: ids.reduce((s, id) => s + (cmap[id]?.sh ?? 0), 0),
+    }));
+  }, [placedIds, cmap]);
+
+  const byDept = useMemo(() => {
+    const g = new Map();
+    for (const id of placedIds) {
+      const subj = cmap[id]?.subject;
+      if (!subj) continue;
+      if (!g.has(subj)) g.set(subj, []);
+      g.get(subj).push(id);
+    }
+    return [...g.entries()].map(([subject, ids]) => ({
+      subject, ids: ids.sort(byNum), count: ids.length,
+      sh: ids.reduce((s, id) => s + (cmap[id]?.sh ?? 0), 0),
+    })).sort((a, b) => b.sh - a.sh || a.subject.localeCompare(b.subject));
+  }, [placedIds, cmap]);
+
+  // Credit-load timeline: summers as one bucket, per-half co-op occupancy
+  // (Summer A / B) from the start + continuation maps so spanning co-ops
+  // shade the terms they actually run through.
+  const timeline = useMemo(() => {
+    const buckets = mergeLoadTimeline(SEMESTERS);
+    const instOf = (semId) => specialTermStartMap[semId] || specialTermContMap[semId] || null;
+    let realCount = 0, realSum = 0;
+    const rows = buckets.map(b => {
+      const sh = b.semIds.reduce((s, id) => s + getSemSH(id, placements, cmap), 0);
+      const slots = b.semIds.map(id => {
+        const inst = instOf(id);
+        return { semId: id, occupied: !!inst, work: inst ? specialTermPl[inst] : null };
+      });
+      const hasWork = slots.some(s => s.occupied);
+      const work = slots.find(s => s.occupied)?.work ?? null;
+      if (b.type !== "summer" && sh > 0) { realCount += 1; realSum += sh; }
+      return { ...b, sh, slots, hasWork, work, isPureCoop: hasWork && sh === 0 };
+    });
+    return { rows, avg: realCount ? realSum / realCount : 0 };
+  }, [SEMESTERS, placements, cmap, specialTermPl, specialTermStartMap, specialTermContMap]);
+
+  const work = useMemo(() => {
+    const types = specialTerms.getTypes();
+    let months = 0;
+    const items = Object.entries(specialTermPl ?? {}).map(([id, w]) => {
+      const type = types.find(x => x.id === w.typeId);
+      const dur = type ? resolveTermByDuration(type.durations, w.duration) : null;
+      months += dur?.duration ?? 0;
+      const sem = SEMESTERS.find(s => s.id === w.semId);
+      return {
+        id, ...w,
+        typeLabel: type?.label ?? w.typeId,
+        durLabel: dur ? (dur.label ?? `${dur.duration} mo`) : "",
+        semTypeId: sem?.semTypeId, year: yearOf(sem),
+        order: SEM_INDEX[w.semId] ?? 0,
+      };
+    }).sort((a, b) => b.order - a.order);
+    return { items, months, companies: new Set(items.filter(i => i.company).map(i => i.company)).size };
+  }, [specialTermPl, specialTerms, SEMESTERS, SEM_INDEX]);
+
+  if (!showStats) return null;
+
+  const empty = placedIds.length === 0;
+  const shMaxRef = creditSystem.getSemesterMax(studentType);
+  const shMin = creditSystem.getFullTimeMin(studentType);
+  const remaining = requiredSH > 0 ? Math.max(0, requiredSH - totalSHPlaced) : null;
+  const shortSem = (row) => row.type === "summer"
+    ? t("stats.sem.short.summer")
+    : t(`stats.sem.short.${row.type}`) || row.type;
+
+  const toggleBtn = (id, label) => {
+    const active = compView === id;
+    return (
+      <button key={id} onClick={() => setCompView(id)} style={{
+        flex: "1 1 auto", fontSize: 10, fontWeight: active ? 700 : 500, padding: "4px 8px",
+        borderRadius: 5, cursor: "pointer",
+        background: active ? "var(--active-bg)" : "transparent",
+        border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
+        color: active ? "var(--active)" : "var(--text-4)",
+      }}>{label}</button>
+    );
+  };
+
+  return (
+    <div
+      onClick={() => setShowStats(false)}
+      style={{
+        position: "fixed", inset: 0, zIndex: 9000,
+        background: "rgba(0,0,0,0.55)", display: "flex",
+        alignItems: "flex-start", justifyContent: "center",
+        padding: isPhone ? "0" : "40px 20px", overflowY: "auto",
+        fontFamily: "'Inter', system-ui, sans-serif",
+      }}
+    >
+      <style>{GLOW_CSS}</style>
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          width: "100%", maxWidth: 720, background: "var(--bg-app)",
+          border: "1px solid var(--border-2)", borderRadius: isPhone ? 0 : 14,
+          boxShadow: "var(--shadow-modal)", minHeight: isPhone ? "100dvh" : undefined,
+          color: "var(--text-1)",
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          position: "sticky", top: 0, zIndex: 1, background: "var(--bg-app)",
+          borderBottom: "1px solid var(--border-1)", borderRadius: isPhone ? 0 : "14px 14px 0 0",
+          padding: "13px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", display: "inline-flex", alignItems: "center", gap: 7 }}>
+            <svg width="15" height="15" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" style={{ color: "var(--active)" }}>
+              <rect x="0.5" y="6.5" width="2.6" height="5" rx="0.6" />
+              <rect x="4.7" y="3.5" width="2.6" height="8" rx="0.6" />
+              <rect x="8.9" y="1" width="2.6" height="10.5" rx="0.6" />
+            </svg>
+            {t("stats.title")}
+          </span>
+          <button onClick={() => setShowStats(false)} style={{
+            background: "none", border: "none", cursor: "pointer",
+            color: "var(--text-4)", fontSize: 16, lineHeight: 1, padding: 4,
+          }} title={t("stats.close")}>✕</button>
+        </div>
+
+        <div style={{ padding: 12 }}>
+          {empty ? (
+            <div style={{ padding: "40px 20px", textAlign: "center", color: "var(--text-5)", fontSize: 12 }}>
+              {t("stats.empty")}
+            </div>
+          ) : (
+            <>
+              {/* ── 1 · OVERVIEW ── */}
+              <Section title={t("stats.section.overview")} hint={t("stats.overview.hint")}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+                  <StatTile label={t("stats.tile.planned")} value={totalSHPlaced}
+                    sub={incomingSH > 0 ? t("stats.tile.inclIncoming", { n: incomingSH, unit }) : unit} color={UG_COLOR} />
+                  <StatTile label={t("stats.tile.courses")} value={placedIds.length} sub={t("stats.tile.coursesSub")} />
+                  {remaining != null && <StatTile label={t("stats.tile.remaining")} value={remaining} sub={unit} />}
+                </div>
+
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)" }}>{t("stats.nupath")}</span>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: nupath.covered >= nupath.total ? COOP_COLOR : "var(--text-2)" }}>
+                      {nupath.covered}/{nupath.total}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: 3 }}>
+                    {Array.from({ length: nupath.total }).map((_, i) => (
+                      <div key={i} style={{ flex: 1, height: 7, borderRadius: 3,
+                        background: i < nupath.covered ? COOP_COLOR : "var(--bg-surface-2)" }} />
+                    ))}
+                  </div>
+                </div>
+              </Section>
+
+              {/* ── 2 · COMPOSITION ── */}
+              <Section title={t("stats.section.composition")}>
+                <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
+                  {toggleBtn("total", t("stats.comp.total"))}
+                  {toggleBtn("dept", t("stats.comp.dept"))}
+                </div>
+
+                {compView === "total" ? (
+                  <>
+                    <StackBar unit={unit} segments={byTier.map(g => ({
+                      value: g.sh, color: tierColor(g.tier), name: `${g.tier}`,
+                      title: `${t("stats.level.tier", { tier: g.tier })}: ${g.sh} ${unit}`,
+                    }))} />
+                    {byTier.map((g, i) => {
+                      const prev = byTier[i - 1];
+                      const cutoff = prev && prev.tier < 5000 && g.tier >= 5000;
+                      return (
+                        <div key={g.tier}>
+                          {cutoff && (
+                            <div style={{ display: "flex", alignItems: "center", gap: 6, margin: "2px 0 9px" }}>
+                              <div style={{ flex: 1, height: 1, background: GRAD_COLOR, opacity: 0.5 }} />
+                              <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.08em", color: GRAD_COLOR, textTransform: "uppercase" }}>{t("stats.level.gradline")}</span>
+                              <div style={{ flex: 1, height: 1, background: GRAD_COLOR, opacity: 0.5 }} />
+                            </div>
+                          )}
+                          <CourseGroup
+                            title={t("stats.level.tier", { tier: g.tier })}
+                            sub={t("stats.dept.value", { sh: g.sh, unit, n: g.ids.length })}
+                            ids={g.ids} cmap={cmap} onOpen={openCourse}
+                          />
+                        </div>
+                      );
+                    })}
+                    <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                      <StatTile label={t("stats.level.undergrad")} value={levels.undergrad.count} sub={`${levels.undergrad.sh} ${unit}`} color={UG_COLOR} />
+                      <GlowTile label={t("stats.level.grad")} value={levels.grad.count} sub={`${levels.grad.sh} ${unit}`} color={GRAD_COLOR} />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <StackBar unit={unit} segments={byDept.map(g => ({
+                      value: g.sh, color: subjectColor(g.subject), name: g.subject,
+                      title: `${g.subject}: ${g.sh} ${unit}`,
+                    }))} />
+                    {byDept.map(g => (
+                      <CourseGroup key={g.subject}
+                        title={g.subject}
+                        sub={t("stats.dept.value", { sh: g.sh, unit, n: g.count })}
+                        ids={g.ids} cmap={cmap} onOpen={openCourse}
+                      />
+                    ))}
+                  </>
+                )}
+              </Section>
+
+              {/* ── 3 · CREDIT LOAD ── */}
+              <Section title={t("stats.section.load")} hint={t("stats.load.hint")}>
+                <LoadChart rows={timeline.rows} fullTimeMin={shMin} semesterMax={shMaxRef} shortSem={shortSem} />
+                <div style={{ display: "flex", gap: 14, marginTop: 8, flexWrap: "wrap" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 9, color: "var(--text-5)" }}>
+                    <span style={{ width: 16, height: 2, background: UG_COLOR, display: "inline-block" }} />{t("stats.load.legend.line")}
+                  </span>
+                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 9, color: "var(--text-5)" }}>
+                    <span style={{ width: 16, height: 10, background: COOP_COLOR, opacity: 0.3, display: "inline-block", borderRadius: 2 }} />{t("stats.load.legend.coop")}
+                  </span>
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                  <StatTile label={t("stats.load.avg")} value={timeline.avg.toFixed(1)} sub={`${unit} / ${t("stats.load.term")}`} />
+                </div>
+              </Section>
+
+              {/* ── 4 · EXPERIENCE & DEPTH ── */}
+              <Section title={t("stats.section.experience")}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-4)", marginBottom: 8 }}>{t("stats.work.title")}</div>
+                {work.items.length === 0 ? (
+                  <div style={{ fontSize: 10, color: "var(--text-5)", marginBottom: 12 }}>{t("stats.work.none")}</div>
+                ) : (
+                  <>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+                      <StatTile label={t("stats.work.terms")} value={work.items.length} />
+                      <StatTile label={t("stats.work.months")} value={work.months} sub={t("stats.work.monthsSub")} />
+                      <StatTile label={t("stats.work.companies")} value={work.companies} />
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
+                      {work.items.map(w => <WorkCard key={w.id} w={w} />)}
+                    </div>
+                  </>
+                )}
+
+                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-4)", margin: "14px 0 4px" }}>{t("stats.chains.title")}</div>
+                {chains.length === 0 ? (
+                  <div style={{ fontSize: 10, color: "var(--text-5)" }}>{t("stats.chains.none")}</div>
+                ) : (
+                  <>
+                  <div style={{ fontSize: 8.5, color: "var(--text-5)", marginBottom: 7, lineHeight: "calc(1.45 * var(--lh-scale, 1))" }}>{t("stats.chains.note")}</div>
+                  {chains.map((ch, i) => (
+                    <div key={i} style={{ marginBottom: 8 }}>
+                      {/* "Trace on grid" (showPrereqTree) hidden with the prereq-tree
+                          depth feature — the multi-hop tree read as confusing. */}
+                      <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 3 }}>{t("stats.chains.depth", { n: ch.len })}</div>
+                      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 3 }}>
+                        {ch.path.map((id, j) => (
+                          <span key={id} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+                            <ClassChip id={id} cmap={cmap} onOpen={openCourse} faded={incomingSet.has(id)} />
+                            {j < ch.path.length - 1 && <span style={{ color: "var(--text-5)", fontSize: 10 }}>→</span>}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  </>
+                )}
+              </Section>
+
+              <div style={{ fontSize: 8.5, color: "var(--text-6)", textAlign: "center", padding: "4px 0 8px" }}>
+                {t("stats.footer")}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

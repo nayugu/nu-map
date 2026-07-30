@@ -59,9 +59,59 @@ export function getOrderedCourses(semId, placements, semOrders, courseMap) {
   return [...ordered, ...extra];
 }
 
-/** All edges touching a given course id. */
+/** All edges touching a given course id (1-degree neighbourhood). */
 export function getConnections(id, edges) {
   return edges.filter(e => e.from === id || e.to === id);
+}
+
+/**
+ * Prereq-tree traversal: all edges within a bounded number of hops of `id`,
+ * expanded independently upstream and downstream so the two directions can be
+ * capped separately.
+ *
+ *   • upstream   — prerequisites (and coreqs) leading *into* a course: follow
+ *                  edges backward (node === e.to, step to e.from). `upDepth` caps it.
+ *   • downstream — courses that *depend on* it: follow edges forward
+ *                  (node === e.from, step to e.to). `downDepth` caps it.
+ *
+ * Depths are hop counts; pass `Infinity` for "the whole chain". With both = 1
+ * this reproduces getConnections. Edges are returned by reference (same objects
+ * as `edges`), de-duplicated, so callers can test membership by identity.
+ *
+ * Pass an edge list already restricted to the courses you want to walk through
+ * (e.g. placed courses only) — traversal will not hop past a node that has no
+ * edge in the list.
+ */
+export function getConnectionsToDepth(id, edges, upDepth = Infinity, downDepth = Infinity) {
+  const succs = new Map(); // node → edges where node === e.from (downstream)
+  const preds = new Map(); // node → edges where node === e.to   (upstream)
+  for (const e of edges) {
+    if (!succs.has(e.from)) succs.set(e.from, []);
+    if (!preds.has(e.to))   preds.set(e.to, []);
+    succs.get(e.from).push(e);
+    preds.get(e.to).push(e);
+  }
+
+  const out = new Set();
+  const walk = (adj, step, depth) => {
+    if (depth <= 0) return;
+    const visited = new Set([id]);
+    let frontier = [id];
+    for (let d = 0; d < depth && frontier.length; d++) {
+      const next = [];
+      for (const node of frontier) {
+        for (const e of adj.get(node) ?? []) {
+          out.add(e);
+          const other = step(e);
+          if (!visited.has(other)) { visited.add(other); next.push(other); }
+        }
+      }
+      frontier = next;
+    }
+  };
+  walk(preds, e => e.from, upDepth);   // prerequisites, upstream
+  walk(succs, e => e.to,   downDepth); // dependents, downstream
+  return [...out];
 }
 
 // ── PDF export ───────────────────────────────────────────────────

@@ -46,13 +46,14 @@ export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
     placements, courseMap, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
-    resetAll, setShowDisclaimer,
+    resetAll, setShowDisclaimer, setShowStats,
     showSettings, setShowSettings,
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd, semOrd,
     setEntSem, setEntYear, setGradSem, setGradYear,
     coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap, semOrders,
     showViolLines, setShowViolLines,
+    prereqDepth, setPrereqDepth, unlockDepth, setUnlockDepth,
     manualZoom, setManualZoom, isPhone, isMobile,
     collapseOtherCredits, setCollapseOtherCredits,
     showContLogo, setShowContLogo,
@@ -796,6 +797,16 @@ export default function Header() {
               padding: "10px 12px", minWidth: 190, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
             }}>
+              {/* Stats — lives here on phone (no room in the header row) */}
+              {isPhone && (
+                <button className="hdr-btn-dd" onClick={() => { setShowQuickSet(false); setShowStats(true); }}
+                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                    background: "var(--bg-surface)", padding: "5px 8px", borderRadius: 5,
+                    border: "1px solid var(--border-2)", color: "var(--text-3)",
+                    display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  <StatChartIcon />{t("stats.button")}
+                </button>
+              )}
               {/* Language picker + course translation toggle — moved to the top */}
               {locales.length > 1 && (
                 <div style={{ borderBottom: "1px solid var(--border-1)", paddingBottom: 12, marginBottom: 4 }}>
@@ -888,6 +899,40 @@ export default function Header() {
                   color: showViolLines ? "var(--error)" : "var(--text-4)" }}>
                 {showViolLines ? t("header.settings.violations.on") : t("header.settings.violations.off")}
               </button>
+
+              {/* Prereq-tree depth — how far the selection highlight expands.
+                  Hidden for now: the multi-hop tree read as confusing. Drop the
+                  `false &&` to bring the depth control back (see PlannerContext). */}
+              {false && (
+              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.depth")}</div>
+                {[
+                  { label: t("header.settings.depth.prereq"), value: prereqDepth, set: setPrereqDepth },
+                  { label: t("header.settings.depth.unlock"), value: unlockDepth, set: setUnlockDepth },
+                ].map(({ label, value, set }) => (
+                  <div key={label} style={{ marginBottom: 5 }}>
+                    <div style={{ fontSize: 8.5, color: "var(--text-5)", marginBottom: 3 }}>{label}</div>
+                    <div style={{ display: "flex", gap: 3 }}>
+                      {[1, 2, 3, Infinity].map(d => {
+                        const active = value === d;
+                        return (
+                          <button key={d} onClick={() => set(d)} style={{
+                            flex: "1 1 auto", fontSize: 9, padding: "3px 4px", borderRadius: 4, cursor: "pointer",
+                            background: active ? "var(--active-bg)" : "transparent",
+                            border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
+                            color: active ? "var(--active)" : "var(--text-4)",
+                            fontWeight: active ? 700 : 400,
+                          }}>{d === Infinity ? t("header.settings.depth.max") : d}</button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+                <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 2, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
+                  {t("header.settings.depth.hint")}
+                </div>
+              </div>
+              )}
 
               {/* Collapse other credits toggle */}
               <button className="hdr-btn-dd" onClick={() => setCollapseOtherCredits(v => !v)}
@@ -1167,6 +1212,15 @@ export default function Header() {
           )}
         </div>}
 
+        {/* Stats button — plan insights overlay. On phone it lives inside the
+            ⚙ settings dropdown instead of the (cramped) header row. */}
+        {!isPhone && <button
+          className="hdr-btn"
+          onClick={e => { e.stopPropagation(); setShowStats(true); }}
+          title={t("stats.button.title")}
+          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, height: 22, padding: "0 8px", whiteSpace: "nowrap" }}
+        >{isMobile ? <StatChartIcon /> : <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}><StatChartIcon />{t("stats.button")}</span>}</button>}
+
         {/* About button */}
         <button
           className="hdr-btn"
@@ -1254,6 +1308,18 @@ export default function Header() {
 // availability popover all translate semester names identically. Resolves the semester's type via
 // the grid's own `semTypeId` (the documented field for type comparisons) rather than parsing id
 // prefixes — no hardcoded semester ids. Falls back to the raw label for non-standard entries.
+// Clean monochrome bar-chart glyph for the Stats button (inherits text colour).
+function StatChartIcon({ size = 11 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"
+      style={{ display: "inline-block", verticalAlign: "-1px", flexShrink: 0 }}>
+      <rect x="0.5" y="6.5" width="2.6" height="5" rx="0.6" />
+      <rect x="4.7" y="3.5" width="2.6" height="8" rx="0.6" />
+      <rect x="8.9" y="1" width="2.6" height="10.5" rx="0.6" />
+    </svg>
+  );
+}
+
 function SemToastLabel({ semId, SEMESTERS }) {
   if (!semId) return null;
   const sem = SEMESTERS.find(s => s.id === semId);

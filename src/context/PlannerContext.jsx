@@ -14,7 +14,7 @@ import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
-import { getSemSH, getOrderedCourses, getConnections, applySubstitutions } from "../core/planModel.js";
+import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -297,6 +297,16 @@ export function PlannerProvider({ children }) {
   const [lines,         setLines]         = useState([]);
   const [scrollTick,    setScrollTick]    = useState(0);
   const [showViolLines, setShowViolLines] = useState(true);
+  // Prereq-tree depth: how many hops the selection highlight expands, capped
+  // independently upstream (prerequisites) and downstream (dependents).
+  // Infinity = follow the whole chain. See getConnectionsToDepth.
+  // NOTE: the depth UI (Header settings + Stats "Trace on grid") is currently
+  // hidden — the multi-hop tree read as confusing — so these stay at 1, which
+  // makes connectionEdges reproduce the original 1-degree behaviour exactly.
+  // To bring the feature back: default these to Infinity and un-hide the two
+  // `{false && …}` blocks in Header.jsx and StatsPanel.jsx.
+  const [prereqDepth,   setPrereqDepth]   = useState(1); // upstream hops
+  const [unlockDepth,   setUnlockDepth]   = useState(1); // downstream hops
 
   // ── Bank state ───────────────────────────────────────────────
   const [bankSearch,      setBankSearch]      = useState("");
@@ -323,6 +333,7 @@ export function PlannerProvider({ children }) {
 
   // ── Settings / modal state ───────────────────────────────────
   const [showDisclaimer,   setShowDisclaimer]   = useState(false);
+  const [showStats,        setShowStats]        = useState(false);
   const [showNewPlanModal,    setShowNewPlanModal]    = useState(false);
   const [newPlanInitialType,  setNewPlanInitialType]  = useState(null);
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
@@ -571,6 +582,20 @@ export function PlannerProvider({ children }) {
     [pvPlacements, pvSubstitutions]
   );
 
+  // Edges of the selected course's prereq tree, expanded to the configured
+  // depth (prereqDepth upstream / unlockDepth downstream) over placed courses
+  // only — the grid can't draw a line to a card that isn't there, and hopping
+  // through an unplaced course would bridge two courses that aren't actually
+  // adjacent on the board. Shared by the highlight (connectedIds) and the SVG
+  // lines effect; edges are the same objects as allEdges so identity holds.
+  const connectionEdges = useMemo(() => {
+    if (!selectedId) return [];
+    const placedEdges = allEdges.filter(e =>
+      placements[e.from] && placements[e.to] &&
+      placements[e.from] !== "incoming" && placements[e.to] !== "incoming");
+    return getConnectionsToDepth(selectedId, placedEdges, prereqDepth, unlockDepth);
+  }, [selectedId, allEdges, placements, prereqDepth, unlockDepth]);
+
   // ── Effect: SVG lines ─────────────────────────────────────────
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
@@ -590,7 +615,7 @@ export function PlannerProvider({ children }) {
 
       // ── Selection-driven lines ───────────────────────────────────
       if (selectedId) {
-        getConnections(selectedId, allEdges).forEach(rel => {
+        connectionEdges.forEach(rel => {
           if (!placements[rel.from] || !placements[rel.to]) return;
           // Disable prereq/error lines for courses in 'incoming' semester
           if (placements[rel.from] === "incoming" || placements[rel.to] === "incoming") return;
@@ -632,9 +657,10 @@ export function PlannerProvider({ children }) {
 
       // ── Always-on violation lines ────────────────────────────────
       if (showViolLines) {
+        const drawn = new Set(connectionEdges); // edges the selection block already drew
         allEdges.forEach(rel => {
           // skip edges already drawn by selection logic above
-          if (selectedId && (rel.from === selectedId || rel.to === selectedId)) return;
+          if (drawn.has(rel)) return;
           if (!placements[rel.from] || !placements[rel.to]) return;
           // Disable prereq/error lines for courses in 'incoming' semester
           if (placements[rel.from] === "incoming" || placements[rel.to] === "incoming") return;
@@ -686,7 +712,7 @@ export function PlannerProvider({ children }) {
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut]);
+  }, [selectedId, connectionEdges, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut]);
 
   // ── MCP action applier ───────────────────────────────────────────
   // Applies a batch of IPlannerAction actions dispatched by Claude via APPLY events.
@@ -1137,12 +1163,33 @@ export function PlannerProvider({ children }) {
   const connectedIds = useMemo(() => {
     const m = {};
     if (!selectedId) return m;
-    getConnections(selectedId, allEdges).forEach(r => {
-      const other = r.from === selectedId ? r.to : r.from;
-      m[other] = r.type;
-    });
+    // Grid: every course in the placed prereq tree gets highlighted, not just
+    // direct neighbours — so mark both endpoints of each tree edge (the selected
+    // course itself is skipped; it carries its own selected styling).
+    for (const r of connectionEdges) {
+      if (r.from !== selectedId && !(r.from in m)) m[r.from] = r.type;
+      if (r.to   !== selectedId && !(r.to   in m)) m[r.to]   = r.type;
+    }
+    // Plus the 1-degree neighbourhood over ALL edges, so a direct prereq/coreq
+    // sitting unplaced in the Course Bank still lights up (and isn't dimmed).
+    // Bounded to one hop for unplaced courses — no catalog-wide expansion.
+    for (const r of allEdges) {
+      if (r.from === selectedId && !(r.to   in m)) m[r.to]   = r.type;
+      if (r.to   === selectedId && !(r.from in m)) m[r.from] = r.type;
+    }
     return m;
-  }, [selectedId, allEdges]);
+  }, [selectedId, connectionEdges, allEdges]);
+
+  // Trace a course's full prerequisite tree on the grid: select it and force
+  // both depths to Max so the whole chain lights up regardless of the current
+  // depth setting. Used by the Stats panel's "longest prereq chains" list.
+  const showPrereqTree = (courseId) => {
+    setPrereqDepth(Infinity);
+    setUnlockDepth(Infinity);
+    setSelectedId(courseId);
+    setShowPanel(true);
+    setShowStats(false);
+  };
 
   const getSemStatus = semId => {
     if (isGraduated && semId === gradSemId) return "completed";
@@ -2428,13 +2475,14 @@ export function PlannerProvider({ children }) {
     // UI state
     selectedId, dragInfo, hoveredSem, hoveredZone, hoveredCardId,
     showPanel, lines, scrollTick, showViolLines,
+    prereqDepth, setPrereqDepth, unlockDepth, setUnlockDepth, showPrereqTree,
     // Bank state
     bankSearch, bankSort, bankTab, bankFilters, bankWidth, showSubjectKeys,
     wideCatalog, setWideCatalog, wideWidth, setWideWidth,
     starredIds: pv ? new Set(pv.starredIds ?? []) : starredIds,
     bankCourseIds,
     // Settings
-    showDisclaimer, showSettings,
+    showDisclaimer, showSettings, showStats, setShowStats,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     showContLogo, setShowContLogo: updateShowContLogo,
     showUnlocks, setShowUnlocks: updateShowUnlocks,
