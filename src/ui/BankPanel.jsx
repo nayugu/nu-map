@@ -228,8 +228,12 @@ export default function BankPanel() {
   const toggleTerm = term => setBankFilters(f => ({
     ...f, terms: f.terms.includes(term) ? f.terms.filter(x => x !== term) : [...f.terms, term],
   }));
+  // Level is single-select (XOR): every course is either undergrad or grad, so
+  // selecting both would be a no-op filter. Picking one switches to it; clicking
+  // the active one clears the filter. Kept as a 0-or-1 array so the length-based
+  // count/anyFilter/passesFilters logic stays unchanged.
   const toggleLevel = lvl => setBankFilters(f => ({
-    ...f, level: f.level.includes(lvl) ? f.level.filter(x => x !== lvl) : [...f.level, lvl],
+    ...f, level: f.level.includes(lvl) ? [] : [lvl],
   }));
   const toggleNupath = code => setBankFilters(f => ({
     ...f, nupath: f.nupath.includes(code) ? f.nupath.filter(x => x !== code) : [...f.nupath, code],
