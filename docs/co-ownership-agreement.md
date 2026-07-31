@@ -11,10 +11,10 @@ under the AGPL and under commercial licences alike. Past and future work. Each
 grant is in consideration of the other, so no payment between us is needed. It
 survives either of us stopping work, or falling out.
 
-**3.** Of what a commercial licence pays out, **Matthew gets ______%** and Nathan
-gets the rest. Nathan pays for the domains and infrastructure, which is why his
-share is larger. Either of us can propose a different number any time; it changes
-if we both agree.
+**3.** Of what a commercial licence pays out, **Nathan gets 65% and Matthew gets
+35%**. Nathan's share is larger because he pays for the domains and
+infrastructure and carries the ongoing upkeep. Either of us can propose a
+different number any time; it changes if we both agree.
 
 **4.** Either of us can sign a commercial licence alone, and tells the other
 after. Neither of us grants an exclusive licence, assigns our copyright, or moves
