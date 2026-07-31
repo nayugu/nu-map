@@ -28,6 +28,41 @@ function mmLocale(bcp47) {
   return LOCALE_MAP[bcp47] ?? bcp47;
 }
 
+// MyMemory hard-rejects queries over 500 chars ("QUERY LENGTH LIMIT
+// EXCEEDED"), so anything longer — course descriptions — is split into
+// sentence-boundary chunks, translated separately, and rejoined.
+export const MYMEMORY_MAX_CHARS = 500;
+
+/**
+ * Split text into chunks of at most `max` chars, preferring sentence
+ * boundaries, then word boundaries, then a hard cut.  Exported for tests.
+ *
+ * @param {string} text
+ * @param {number} [max=MYMEMORY_MAX_CHARS]
+ * @returns {string[]}
+ */
+export function chunkForMyMemory(text, max = MYMEMORY_MAX_CHARS) {
+  if (text.length <= max) return [text];
+  const chunks = [];
+  let rest = text.trim();
+  while (rest.length > max) {
+    const window = rest.slice(0, max);
+    // Longest prefix ending in a sentence terminator followed by space.
+    const m = window.match(/[\s\S]*[.!?;:][)"'\]]?(?=\s)/);
+    let cut = m ? m[0].length : -1;
+    if (cut < max * 0.5) {
+      // No usable sentence break in the back half — fall back to the last
+      // word boundary, then to a hard cut.
+      const sp = window.lastIndexOf(" ");
+      cut = sp > max * 0.5 ? sp : max;
+    }
+    chunks.push(rest.slice(0, cut).trim());
+    rest = rest.slice(cut).trim();
+  }
+  if (rest) chunks.push(rest);
+  return chunks;
+}
+
 // Shared across all engine instances so a re-mount doesn't reset the cap.
 const MAX_CONCURRENT  = 4;
 const FETCH_TIMEOUT_MS = 8_000;
@@ -77,7 +112,7 @@ export class MyMemoryEngine {
     const results = await Promise.all(
       texts.map((text, i) => {
         if (!text) return Promise.resolve("");
-        return this.#fetch(text, sl, tl).then(translated => {
+        return this.#fetchText(text, sl, tl).then(translated => {
           if (onToken) {
             const snapshot = texts.map((_, j) => j === i ? translated : undefined);
             onToken(snapshot);
@@ -88,6 +123,17 @@ export class MyMemoryEngine {
     );
 
     return results;
+  }
+
+  // Translate one text, chunking around MyMemory's 500-char query limit.
+  // Chunks go through the same limiter as everything else; CJK targets
+  // join without spaces (their sentences don't use them).
+  async #fetchText(text, sl, tl) {
+    const chunks = chunkForMyMemory(text);
+    if (chunks.length === 1) return this.#fetch(text, sl, tl);
+    const parts  = await Promise.all(chunks.map(c => this.#fetch(c, sl, tl)));
+    const joiner = /^(zh|ja|ko)/.test(tl) ? "" : " ";
+    return parts.join(joiner);
   }
 
   #fetch(text, sl, tl) {

@@ -1,9 +1,14 @@
 // ═══════════════════════════════════════════════════════════════════
 // ADAPTER: CascadeEngine
 //
-// Chains translation engines in priority order.  Each batch runs on
-// the first live engine; on failure it falls through to the next
-// (e.g. mainland China where translate.googleapis.com is blocked).
+// Chains translation engines in priority order.  Each STRING runs
+// through the chain independently: on failure it falls through to the
+// next engine (e.g. mainland China where translate.googleapis.com is
+// blocked), and a string that fails every engine resolves as "" —
+// which TranslationContext treats as a failed translation (source
+// text shown, nothing cached, retried next call).  Per-item fallback
+// matters because items differ wildly in difficulty: a 2000-char
+// course description must not sink the title it was batched with.
 //
 // AbortError is re-thrown immediately instead of falling through: an
 // abort means the caller cancelled (locale switched back, component
@@ -56,13 +61,39 @@ export class CascadeEngine {
   }
 
   async translate(texts, targetLocale, sourceLocale = "en", onToken = null) {
+    const results  = new Array(texts.length);
+    // Streaming snapshot: only successes appear (undefined = pending or
+    // failed) so callers never render a failure placeholder mid-stream.
+    const partials = new Array(texts.length);
+
+    await Promise.all(texts.map(async (text, i) => {
+      if (!text) { results[i] = ""; return; }
+      try {
+        results[i]  = await this.#translateOne(text, targetLocale, sourceLocale);
+        partials[i] = results[i];
+        onToken?.([...partials]);
+      } catch (err) {
+        if (err?.name === "AbortError") throw err;
+        // Failed on every engine: resolve as "" instead of rejecting the
+        // batch — the other items' translations still count.
+        results[i] = "";
+      }
+    }));
+
+    return results;
+  }
+
+  async #translateOne(text, targetLocale, sourceLocale) {
     let lastErr = null;
     for (const engine of this.#engines) {
       if (this.#isSkipped(engine)) continue;
       try {
-        const results = await engine.translate(texts, targetLocale, sourceLocale, onToken);
+        const [out] = await engine.translate([text], targetLocale, sourceLocale, null);
+        // Empty output for non-empty input = failure regardless of engine
+        // (ChromeAI resolves instead of throwing) — try the next one.
+        if (out == null || out.trim() === "") throw new Error(`${engine.name} returned empty result`);
         failCounts.set(engine.name, 0);
-        return results;
+        return out;
       } catch (err) {
         if (err?.name === "AbortError") throw err;
         failCounts.set(engine.name, (failCounts.get(engine.name) ?? 0) + 1);

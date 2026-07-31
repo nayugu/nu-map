@@ -66,8 +66,16 @@ import { glossaryLookup }         from "../locales/glossary.js";
 
 const TranslationContext = createContext(null);
 
-const TOGGLE_KEY   = "nu-map-course-translation";
+// v2: only ever written by an explicit user action (checkbox/cancel).
+// The old unversioned key was persisted by the auto-toggle effect on
+// every visit — "0" simply meant "last session ended in English", not
+// "the user opted out" — so its value is meaningless as a preference
+// and must not be honored (it froze translation off for anyone whose
+// last pre-v2 session was in the catalog language).
+const TOGGLE_KEY   = "nu-map-course-translation-v2";
 const LS_PREFIX    = "nu-map-xlat:v1:";
+
+try { localStorage.removeItem("nu-map-course-translation"); } catch { /* SSR/blocked storage */ }
 
 // ── localStorage helpers ───────────────────────────────────────────
 
