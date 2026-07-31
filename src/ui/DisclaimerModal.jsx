@@ -9,7 +9,7 @@ import { useLanguage }      from "../context/LanguageContext.jsx";
 import { TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 
 export default function DisclaimerModal() {
-  const { showDisclaimer, setShowDisclaimer } = usePlanner();
+  const { showDisclaimer, setShowDisclaimer, setShowTour } = usePlanner();
   const institution  = usePort(IInstitution);
   const localization = usePort(ILocalization);
   const { t }        = useLanguage();
@@ -121,6 +121,19 @@ export default function DisclaimerModal() {
             </div>
           ))}
         </div>
+
+        {/* Replay the feature tour */}
+        <button
+          onClick={() => { setShowDisclaimer(false); setShowTour(true); }}
+          style={{
+            width: "100%", boxSizing: "border-box", marginBottom: 8,
+            padding: "8px 0", borderRadius: 7, cursor: "pointer",
+            background: "var(--link-bg)", border: "1px solid var(--link-1)",
+            fontSize: 11, fontWeight: 700, color: "var(--link-1)",
+          }}
+        >
+          {t("tour.replay")}
+        </button>
 
         {/* GitHub + privacy policy links */}
         <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>

@@ -26,6 +26,7 @@ import {
   allocateSections,
 } from "../core/gradRequirements.js";
 import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
+import { rankOptions } from "../core/searchRank.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
@@ -108,7 +109,7 @@ function CheckBox({ sat, dimmedCheck = false }) {
 
 // ── Searchable combobox (matches course-bank search style) ───────────────
 
-function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
+export function SearchCombo({ value, onChange, groups, placeholder = "Search…", size = 10 }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
   const [rect,  setRect]  = useState(null);
@@ -147,12 +148,9 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
   }, [groups]);
 
   const q        = query.trim().toLowerCase();
-  const filtered = q
-    ? allOptions.filter(o =>
-        o.label.toLowerCase().includes(q) ||
-        o.grp.toLowerCase().includes(q)  ||
-        (o.folder ?? "").toLowerCase().includes(q)).slice(0, 60)
-    : [];                        // never render all ~1500 items unfiltered
+  // Rank by closeness (exact/prefix first) with light typo tolerance, instead of
+  // an unordered substring filter. Empty query renders nothing (never all ~1500).
+  const filtered = rankOptions(allOptions, query);
 
   const sel = value ? allOptions.find(o => o.path === value) : null;
   // Always show the selected label when not editing, otherwise show the query
@@ -176,7 +174,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           onBlur={handleBlur}
           placeholder={placeholder}
           style={{
-            flex: 1, fontSize: 10, padding: "4px 6px", minWidth: 0,
+            flex: 1, fontSize: size, padding: `${Math.round(size / 2.2)}px ${Math.round(size / 1.5)}px`, minWidth: 0,
             background: "var(--bg-surface-2)", color: "var(--text-2)",
             border: "1px solid var(--border-2)", borderRadius: 4, outline: "none",
           }}
@@ -185,7 +183,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           <button
             onMouseDown={e => { e.preventDefault(); select(""); }}
             onTouchStart={e => { e.preventDefault(); select(""); }}
-            style={{ background: "transparent", border: "none", color: "var(--text-4)", fontSize: 11, cursor: "pointer", padding: "0 2px", flexShrink: 0 }}
+            style={{ background: "transparent", border: "none", color: "var(--text-4)", fontSize: size + 1, cursor: "pointer", padding: "0 2px", flexShrink: 0 }}
           >✕</button>
         )}
       </div>
@@ -215,20 +213,20 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
           WebkitOverflowScrolling: "touch",
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
-          fontFamily: "'InterTight', 'Inter', system-ui, sans-serif", fontSize: 12,
+          fontFamily: "'InterTight', 'Inter', system-ui, sans-serif", fontSize: size + 2,
         }}>
           <div
             onMouseDown={() => select("")}
             onTouchStart={e => { e.preventDefault(); select(""); }}
             style={{
-              padding: "6px 10px", fontSize: 11, cursor: "pointer",
+              padding: `${Math.round(size * 0.6)}px ${size}px`, fontSize: size + 1, cursor: "pointer",
               color: "var(--text-5)", borderBottom: "1px solid var(--border-1)",
             }}
           >— None —</div>
           {!q ? (
-            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)", fontStyle: "italic" }}>{t("bank.search.empty.typing")}</div>
+            <div style={{ padding: `${Math.round(size * 0.7)}px ${size}px`, fontSize: size + 1, color: "var(--text-5)", fontStyle: "italic" }}>{t("bank.search.empty.typing")}</div>
           ) : filtered.length === 0 ? (
-            <div style={{ padding: "7px 10px", fontSize: 11, color: "var(--text-5)" }}>{t("bank.search.empty.none")}</div>
+            <div style={{ padding: `${Math.round(size * 0.7)}px ${size}px`, fontSize: size + 1, color: "var(--text-5)" }}>{t("bank.search.empty.none")}</div>
           ) : (
             filtered.map(o => (
               <div
@@ -236,7 +234,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
                 onMouseDown={() => select(o.path)}
                 onTouchStart={e => { e.preventDefault(); select(o.path); }}
                 style={{
-                  padding: "5px 10px", fontSize: 11, cursor: "pointer",
+                  padding: `${Math.round(size * 0.5)}px ${size}px`, fontSize: size + 1, cursor: "pointer",
                   background: o.path === value ? "var(--bg-surface-2)" : undefined,
                   color: o.path === value ? "var(--text-1)" : "var(--text-2)",
                 }}
@@ -246,7 +244,7 @@ function SearchCombo({ value, onChange, groups, placeholder = "Search…" }) {
                 <div style={{ fontWeight: 600 }}>
                   {o.label}{o.location ? ` (${o.location})` : ""}
                 </div>
-                <div style={{ fontSize: 10, color: "var(--text-5)" }}>{o.grp}</div>
+                <div style={{ fontSize: size, color: "var(--text-5)" }}>{o.grp}</div>
               </div>
             ))
           )}

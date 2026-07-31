@@ -362,14 +362,15 @@ export function PlannerProvider({ children }) {
   const [showNewPlanModal,    setShowNewPlanModal]    = useState(false);
   const [newPlanInitialType,  setNewPlanInitialType]  = useState(null);
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
+    // Pure read — the "seen" flag is written on completion (finishOnboarding),
+    // not here, so a reload mid-setup re-shows it rather than stranding the user.
+    // Append ?onboarding to the URL to force it during development.
     try {
-      // DEV: always show on reload for testing
-      // return true;
-      if (localStorage.getItem(key("seen-cohort-setup"))) return false;
-      localStorage.setItem(key("seen-cohort-setup"), "1");
-      return true;
+      if (new URLSearchParams(window.location.search).has("onboarding")) return true;
+      return !localStorage.getItem(key("seen-cohort-setup"));
     } catch { return false; }
   });
+  const [showTour, setShowTour] = useState(false);
   // Default entry/grad sem: first and last non-optional semester types
   const _primarySems = calendar.getSemesterTypes().filter(t => !t.optional);
   const _defEntSem   = _primarySems[0]?.id           ?? "fall";
@@ -2138,6 +2139,32 @@ export function PlannerProvider({ children }) {
     if (d.locale && locales.some(l => l.code === d.locale)) setLocale(d.locale);
   };
 
+  // Commit the onboarding panel's choices to the live plan, then open the tour.
+  //   setup = { studentType, entSem, entYear, gradSem, gradYear, major, major2, conc, minor1, minor2 }
+  const finishOnboarding = (setup = {}) => {
+    const {
+      studentType: st = "undergrad",
+      entSem, entYear, gradSem, gradYear,
+      major: mj = "", major2: mj2 = "", conc: cc = "", minor1: mn1 = "", minor2: mn2 = "",
+    } = setup;
+
+    // Apply to the live current plan; the auto-save effect persists it.
+    setStudentTypeRaw(st);            try { localStorage.setItem(key("student-type"), st);      } catch {}
+    if (entSem)  { setPlanEntSem(entSem);    try { localStorage.setItem(key("ent-sem"),  entSem);  } catch {} }
+    if (entYear) { setPlanEntYear(entYear);  try { localStorage.setItem(key("ent-year"), entYear); } catch {} }
+    if (gradSem) { setPlanGradSem(gradSem);  try { localStorage.setItem(key("grad-sem"), gradSem); } catch {} }
+    if (gradYear){ setPlanGradYear(gradYear); try { localStorage.setItem(key("grad-year"),gradYear);} catch {} }
+    setMajor(mj); setMajor2(mj2); setConc(cc); setMinor1(mn1); setMinor2(mn2);
+    setPlans(prev => prev.map(p => p.id === activePlanId ? { ...p, studentType: st } : p));
+
+    try { localStorage.setItem(key("seen-cohort-setup"), "1"); } catch {}
+    setShowCohortSetup(false);
+    // Auto-run the feature tour once, right after first-run setup. Compute the
+    // flag defensively so a storage failure still shows the tour on first run.
+    let seenTour = false; try { seenTour = !!localStorage.getItem(key("seen-tour")); } catch {}
+    if (!seenTour) setShowTour(true);
+  };
+
   // On mount: detect a shared plan in the URL hash and offer to load it as a new plan.
   useEffect(() => {
     const encoded = getHashPlanParam();
@@ -2656,7 +2683,8 @@ export function PlannerProvider({ children }) {
     },
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
-    showCohortSetup, setShowCohortSetup,
+    showCohortSetup, setShowCohortSetup, finishOnboarding,
+    showTour, setShowTour,
     setPersistEnabled,
     setOfferedOverrides,
     setShOverride: (id, value) => setShOverrides(prev => {
