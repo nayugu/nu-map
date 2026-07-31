@@ -31,7 +31,7 @@ const DONE = STEPS.length; // step index of the celebratory completion screen
 const HOLD_MS = 1200;      // pause on the last frame before a video loops (clips are 6–12s)
 
 export default function FeatureTour() {
-  const { showTour, setShowTour, setShowDisclaimer } = usePlanner();
+  const { showTour, setShowTour, setShowDisclaimer, isPhone } = usePlanner();
   const institution = usePort(IInstitution);
   const { t, locales } = useLanguage();
   const [step, setStep] = useState(0);
@@ -70,6 +70,10 @@ export default function FeatureTour() {
     fontSize: 15, fontWeight: 700, padding: "10px 24px", borderRadius: 9, cursor: "pointer",
     background: "var(--link-bg)", border: "1px solid var(--link-1)", color: "var(--link-1)",
   };
+  // On a phone the buttons own a full line, so they split it evenly and trade
+  // side padding for room — long labels (fr "Suivant", hi "आगे") still fit.
+  const phoneFlex = isPhone ? { flex: "1 1 0", minWidth: 0, textAlign: "center" } : null;
+  const phonePad  = (pad) => (isPhone ? "10px 8px" : pad);
 
   return (
     <div
@@ -162,9 +166,18 @@ export default function FeatureTour() {
               </div>
             </div>
 
-            {/* Dots + nav */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 10 }}>
-              <div style={{ display: "flex", gap: 8, flex: 1 }}>
+            {/* Dots + nav — one row on desktop. On phones the three buttons
+                move to their own line ABOVE the dots (column-reverse) and
+                share the width evenly; side by side with the dots they ran
+                past the right edge, taking Next off screen. */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 12, marginTop: 10,
+              ...(isPhone && { flexDirection: "column-reverse", alignItems: "stretch" }),
+            }}>
+              <div style={{
+                display: "flex", gap: 8, flex: 1,
+                ...(isPhone && { justifyContent: "center" }),
+              }}>
                 {STEPS.map((_, i) => (
                   <button key={i} onClick={() => setStep(i)} aria-label={t("tour.step.aria", { n: i + 1 })} style={{
                     width: 9, height: 9, borderRadius: "50%", padding: 0, cursor: "pointer",
@@ -172,31 +185,35 @@ export default function FeatureTour() {
                   }} />
                 ))}
               </div>
-              {/* Skip reads bold on step 1 only — that's where a returning user
-                  is most likely looking for the way out; it recedes after. */}
-              <button onClick={close} style={{
-                background: "transparent", border: "1px solid var(--border-2)",
-                color: "var(--text-3)", fontSize: 15, fontWeight: step === 0 ? 700 : 500,
-                padding: "10px 24px", borderRadius: 9, cursor: "pointer",
-              }}>{t("onboard.skip")}</button>
-              {step > 0 && (
-                <button onClick={() => setStep(step - 1)} style={{
-                  fontSize: 15, fontWeight: 600, padding: "10px 20px", borderRadius: 9, cursor: "pointer",
-                  background: "transparent", border: "1px solid var(--border-2)", color: "var(--text-3)",
-                }}>{t("onboard.back")}</button>
-              )}
-              <button
-                onClick={() => {
-                  setStep(step + 1);
-                  // Reaching the completion screen (last → Done) is the only
-                  // path to DONE, so fire the confetti here — deterministic,
-                  // never on open/replay.
-                  if (last) requestAnimationFrame(() => fireConfetti(cardRef.current));
-                }}
-                style={navBtn}
-              >
-                {last ? t("tour.done") : t("onboard.next")}
-              </button>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                {/* Skip reads bold on step 1 only — that's where a returning user
+                    is most likely looking for the way out; it recedes after. */}
+                <button onClick={close} style={{
+                  background: "transparent", border: "1px solid var(--border-2)",
+                  color: "var(--text-3)", fontSize: 15, fontWeight: step === 0 ? 700 : 500,
+                  padding: phonePad("10px 24px"), borderRadius: 9, cursor: "pointer",
+                  ...phoneFlex,
+                }}>{t("onboard.skip")}</button>
+                {step > 0 && (
+                  <button onClick={() => setStep(step - 1)} style={{
+                    fontSize: 15, fontWeight: 600, padding: phonePad("10px 20px"), borderRadius: 9, cursor: "pointer",
+                    background: "transparent", border: "1px solid var(--border-2)", color: "var(--text-3)",
+                    ...phoneFlex,
+                  }}>{t("onboard.back")}</button>
+                )}
+                <button
+                  onClick={() => {
+                    setStep(step + 1);
+                    // Reaching the completion screen (last → Done) is the only
+                    // path to DONE, so fire the confetti here — deterministic,
+                    // never on open/replay.
+                    if (last) requestAnimationFrame(() => fireConfetti(cardRef.current));
+                  }}
+                  style={{ ...navBtn, padding: phonePad(navBtn.padding), ...phoneFlex }}
+                >
+                  {last ? t("tour.done") : t("onboard.next")}
+                </button>
+              </div>
             </div>
           </>
         )}
