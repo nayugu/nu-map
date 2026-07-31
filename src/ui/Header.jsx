@@ -2,7 +2,7 @@
 // HEADER  — sticky timeline header: title, SH counters, controls,
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
@@ -133,20 +133,24 @@ export default function Header() {
   // fallback once even a minimal name (48px) can't fit.
   const group2Ref   = useRef(null);
   const shBadgesRef = useRef(null);
-  const [planNameMax, setPlanNameMax] = useState(70);
+  const [planFree, setPlanFree] = useState(70);
   useEffect(() => {
     if (!isPhone || typeof ResizeObserver === "undefined") return;
     const compute = () => {
       const row = headerRowRef.current, g2 = group2Ref.current, b = shBadgesRef.current;
       if (!row || !g2 || !b) return;
-      const free = row.clientWidth - g2.offsetWidth - b.offsetWidth - 14; // flex gaps + safety
-      setPlanNameMax(Math.max(36, Math.floor(free)));
+      setPlanFree(Math.floor(row.clientWidth - g2.offsetWidth - b.offsetWidth - 14)); // flex gaps + safety
     };
     compute();
     const ro = new ResizeObserver(compute);
     [headerRowRef.current, group2Ref.current, shBadgesRef.current].forEach(el => el && ro.observe(el));
     return () => ro.disconnect();
   }, [isPhone]);
+  const planNameMax = Math.max(36, planFree);
+  // Below ~44px a truncated name is noise — collapse to the same bare "/"
+  // the desktop fold uses. (planFree doesn't depend on the button's own
+  // width, so this can't oscillate.)
+  const planSlash = isPhone && planFree < 44;
 
   // Phone: the header buttons sit in a tight row, so a dropdown anchored to a
   // button's edge (right: 0 / left: 0) can spill off-screen. On phone we instead
@@ -645,7 +649,15 @@ export default function Header() {
               border: `1px ${claudePreview?.changed?.has?.("planName") ? "dashed #fb923c" : `solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`}`,
               borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 5px" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
             {isPhone
-              ? <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾</span>
+              ? (planSlash
+                  ? "/"
+                  : <>
+                      <PlanNameFade
+                        text={(plans.find(p => p.id === activePlanId)?.name) || "Plan"}
+                        rtl={(locales.find(l => l.code === locale)?.dir ?? "ltr") === "rtl"}
+                      />
+                      <span style={{ flexShrink: 0, marginLeft: 3 }}>▾</span>
+                    </>)
               : iconOnly ? "/" : `/ ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
           </button>
 
@@ -1481,6 +1493,29 @@ function LanguagePicker({ locale, locales, setLocale }) {
         </div>
       )}
     </div>
+  );
+}
+
+/** Phone plan name that fades out over its last couple of characters when
+    clipped — the fade fully resolves ~2px before the button edge so no glyph
+    ever touches the border. The mask is applied ONLY when the text actually
+    overflows; a permanent mask would eat the tail of names that fit. Names
+    that fit render untouched (no ellipsis, no fade). */
+function PlanNameFade({ text, rtl }) {
+  const ref = useRef(null);
+  const [clipped, setClipped] = useState(false);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const c = el.scrollWidth > el.clientWidth + 1;
+    if (c !== clipped) setClipped(c);
+  });
+  const fade = `linear-gradient(to ${rtl ? "left" : "right"}, black calc(100% - 13px), transparent calc(100% - 2px))`;
+  return (
+    <span ref={ref} style={{
+      overflow: "hidden", whiteSpace: "nowrap", minWidth: 0,
+      ...(clipped ? { WebkitMaskImage: fade, maskImage: fade } : {}),
+    }}>{text}</span>
   );
 }
 
