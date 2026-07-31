@@ -108,7 +108,7 @@ NU Map is **dual-licensed**.
 
 Note that the AGPL already permits commercial use *with* source disclosure — the paid license buys relief from disclosure, not permission to earn revenue. The full terms are in [`LICENSING.md`](LICENSING.md); contributor terms are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-The **"NU Map" name, logo, and domains are not licensed**. Forks are welcome — the architecture is built for them — but must ship under their own name. Open an issue and we'll help.
+The **"NU Map" name, logo, and domains are not licensed**. Forks are welcome — the architecture is built for them — but must ship under their own name.
 
 ---
 
