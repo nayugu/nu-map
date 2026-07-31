@@ -28,10 +28,25 @@
 // ═══════════════════════════════════════════════════════════════════
 import { normalizeCourse, mergeHistoryAndOffering } from "./courseNorm.js";
 
+// Verified RateMyHusky link directory, populated by fetchAll() and read by the
+// URL builders below. Module-level so the singleton adapter can expose
+// synchronous courseUrl-style helpers to the UI after the one load.
+//   profs   — instructor name → professor-page slug
+//   courses — Set of course codes that actually have a RateMyHusky page
+let ratemyhuskyProfs = {};
+let ratemyhuskyCourses = new Set();
+
 const LOCAL_URL    = `${import.meta.env.BASE_URL}northeastern/catalog-courses.json`;
 const HISTORY_URL  = `${import.meta.env.BASE_URL}northeastern/term-history.json`;
 const OFFERING_URL = `${import.meta.env.BASE_URL}northeastern/offering-summary.json`;
 const COLLEGES_URL = `${import.meta.env.BASE_URL}northeastern/subject-colleges.json`;
+// Verified RateMyHusky professor slugs (instructor name → page slug), built
+// monthly by scripts/scrape-ratemyhusky.js from RateMyHusky's sitemap. Only a
+// link directory — no ratings content — used to point instructor links at a
+// real page instead of a guessed slug that could 404. Optional: absent file
+// just means professor links fall back to the RateMyHusky browse page.
+const RATEMYHUSKY_URL = `${import.meta.env.BASE_URL}northeastern/ratemyhusky.json`;
+const RATEMYHUSKY_BASE = "https://ratemyhusky.com";
 // Supplemental nuPath source — catalog scraper sometimes drops nuPath on full re-scrapes.
 // all-courses.json (SearchNEU) is used only to back-fill nuPath when catalog-courses has none.
 const ALL_COURSES_URL = `${import.meta.env.BASE_URL}northeastern/all-courses.json`;
@@ -60,6 +75,7 @@ export default {
     const collegesPromise = tryFetch(COLLEGES_URL);
     const historyPromise  = tryFetch(HISTORY_URL);
     const offeringPromise = tryFetch(OFFERING_URL);
+    const rmhPromise      = tryFetch(RATEMYHUSKY_URL);
 
     // Catalog is required — fetch it first so we can gate the supplemental download.
     let catalogJson;
@@ -78,12 +94,22 @@ export default {
       ? Promise.resolve(null)
       : tryFetch(ALL_COURSES_URL);
 
-    const [allCoursesResult, collegesResult, historyResult, offeringResult] = await Promise.allSettled([
+    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult] = await Promise.allSettled([
       suppPromise,
       collegesPromise,
       historyPromise,
       offeringPromise,
+      rmhPromise,
     ]);
+
+    // Cache the verified RateMyHusky slug map for the URL builders below.
+    // Optional asset — a failed/absent fetch just leaves the map empty and
+    // professor links fall back to the RateMyHusky browse page.
+    ratemyhuskyProfs = (rmhResult.status === "fulfilled" && rmhResult.value && typeof rmhResult.value.profs === "object")
+      ? rmhResult.value.profs : {};
+    ratemyhuskyCourses = new Set(
+      (rmhResult.status === "fulfilled" && Array.isArray(rmhResult.value?.courses)) ? rmhResult.value.courses : []
+    );
 
     // Back-fill nuPath from all-courses.json if the supplemental fetch ran.
     const nuPathSupp = {};
@@ -118,6 +144,32 @@ export default {
     return `https://catalog.northeastern.edu/course-descriptions/${course.subject.toLowerCase()}/`;
   },
 
+  /**
+   * RateMyHusky course page (TRACE + RateMyProfessor + Reddit reviews), or null
+   * when RateMyHusky has no page for this course. RateMyHusky's SPA serves a
+   * 200 shell for ANY code, so we can't tell coverage from the URL — instead we
+   * check the verified course-code set (scraped from /api/courses-catalog) and
+   * return null for the ~half of the catalog it doesn't cover, so the UI omits
+   * the link rather than linking to an empty page. Third-party, student-run
+   * aggregator; we only link out.
+   */
+  courseRatingsUrl(course) {
+    const code = `${course.subject}${course.number}`;
+    return ratemyhuskyCourses.has(code) ? `${RATEMYHUSKY_BASE}/courses/${code}` : null;
+  },
+
+  /**
+   * RateMyHusky professor page for an instructor name, or null when we have no
+   * verified page with reviews. ratemyhusky.json only maps names to pages that
+   * actually have reviews, so a non-null result never lands on an empty or
+   * missing profile; the UI renders the name as plain text when this is null.
+   * Names come straight from course.offering.prof, matching the map's keys.
+   */
+  profRatingsUrl(name) {
+    const slug = ratemyhuskyProfs[name];
+    return slug ? `${RATEMYHUSKY_BASE}/professors/${slug}` : null;
+  },
+
   getSources() {
     return [
       {
@@ -131,6 +183,12 @@ export default {
         label:   "nubanner.neu.edu",
         url:     "https://nubanner.neu.edu/StudentRegistrationSsb",
         usedFor: "term availability history",
+      },
+      {
+        id:      "ratemyhusky",
+        label:   "ratemyhusky.com",
+        url:     "https://ratemyhusky.com",
+        usedFor: "course & instructor rating links (TRACE / RateMyProfessor)",
       },
     ];
   },

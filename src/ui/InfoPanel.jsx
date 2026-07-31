@@ -176,6 +176,10 @@ function CourseInfo({ selCourse, navTo }) {
   const { title, desc, isTranslating } = useCourseTranslation(selCourse);
 
   const catalogUrl = courseCatalog?.courseUrl?.(selCourse) ?? null;
+  // null when RateMyHusky has no page for this course (the adapter checks its
+  // verified course-code set), so the link is shown only where it leads to real
+  // reviews rather than an empty page.
+  const ratingsUrl = courseCatalog?.courseRatingsUrl?.(selCourse) ?? null;
   const [codeHover, setCodeHover] = useState(false);
   // Hovered header badges (desktop only — hover never fires on touch). Each
   // holds the badge's on-screen rect so its hover card can anchor to it.
@@ -332,6 +336,17 @@ function CourseInfo({ selCourse, navTo }) {
             onMouseEnter={e => { e.currentTarget.style.color = "var(--text-3)"; e.currentTarget.style.textDecoration = "underline"; }}
             onMouseLeave={e => { e.currentTarget.style.color = "var(--text-5)"; e.currentTarget.style.textDecoration = "none"; }}>
             {t("info.catalog.link")}
+          </a>
+        )}
+        {/* Course ratings/reviews (TRACE + RateMyProfessor) — sits directly to
+            the right of the catalog link. Reliable by construction, so always shown. */}
+        {ratingsUrl && (
+          <a href={ratingsUrl} target="_blank" rel="noopener noreferrer"
+            title={t("info.ratemyhusky.title")}
+            style={{ fontSize: 9, color: "var(--text-5)", textDecoration: "none", marginLeft: 2 }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--text-3)"; e.currentTarget.style.textDecoration = "underline"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--text-5)"; e.currentTarget.style.textDecoration = "none"; }}>
+            {t("info.ratemyhusky.link")}
           </a>
         )}
       </div>
@@ -614,8 +629,8 @@ const SEM_NAME_KEY = { fall: "claude.sem.fall", spring: "claude.sem.spring", sum
 // usually teaches the fall run?" has a direct, honest answer.
 function CourseInstructors({ selCourse, compact = false }) {
   const cal   = usePort(ICalendar);
+  const courseCatalog = usePort(ICourseCatalog);
   const { t } = useLanguage();
-  const { focusProfInBank } = usePlanner();
   const prof = selCourse.offering?.prof ?? {};
   const monthKey = s => (s.months?.length ? Math.min(...s.months.map(Number)) : 99);
   const rows = [...cal.getSemesterTypes()]
@@ -648,6 +663,7 @@ function CourseInstructors({ selCourse, compact = false }) {
               <div style={{ display: "flex", flexDirection: "column", gap: 1, paddingLeft: 6 }}>
                 {entries.map(([name, pct]) => {
                   const frac = pct / peak;
+                  const rmhUrl = courseCatalog?.profRatingsUrl?.(name) ?? null;
                   return (
                     <div key={name} title={`${name}: ${pct}%`} style={{
                       display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8,
@@ -657,20 +673,28 @@ function CourseInstructors({ selCourse, compact = false }) {
                       opacity: 0.40 + 0.60 * Math.pow(frac, 1.4),
                       lineHeight: "calc(1.35 * var(--lh-scale, 1))",
                     }}>
-                      {/* Clickable: tags the professor in the bank's filter
-                          (one-way add — removal lives on the chip's ✕). Same
-                          dotted-underline hover cue as the draggable code. */}
-                      <span
-                        title={t("info.prof.filter").replace("{name}", name)}
-                        onClick={e => { e.stopPropagation(); focusProfInBank(name); }}
-                        onMouseEnter={e => { e.currentTarget.style.textDecorationLine = "underline"; }}
-                        onMouseLeave={e => { e.currentTarget.style.textDecorationLine = "none"; }}
-                        style={{
-                          cursor: "pointer",
-                          textDecorationLine: "none", textDecorationStyle: "dotted",
-                          textDecorationColor: "var(--text-6)", textUnderlineOffset: 3,
-                        }}
-                      >{name}</span>
+                      {/* When RateMyHusky has a reviewed page, the name opens it
+                          (TRACE + RateMyProfessor) in a new tab with the same
+                          dotted-underline hover cue as the draggable code; colour
+                          is inherited so it reads as text, not a blue link.
+                          Otherwise the name is plain text — no dead-end link. */}
+                      {rmhUrl ? (
+                        <a
+                          href={rmhUrl}
+                          target="_blank" rel="noopener noreferrer"
+                          title={t("info.prof.ratemyhusky").replace("{name}", name)}
+                          onClick={e => e.stopPropagation()}
+                          onMouseEnter={e => { e.currentTarget.style.textDecorationLine = "underline"; }}
+                          onMouseLeave={e => { e.currentTarget.style.textDecorationLine = "none"; }}
+                          style={{
+                            cursor: "pointer", color: "inherit",
+                            textDecorationLine: "none", textDecorationStyle: "dotted",
+                            textDecorationColor: "var(--text-6)", textUnderlineOffset: 3,
+                          }}
+                        >{name}</a>
+                      ) : (
+                        <span>{name}</span>
+                      )}
                       <span style={{ fontSize: 8, fontWeight: 600, color: "var(--text-3)", flexShrink: 0 }}>{pct}%</span>
                     </div>
                   );

@@ -59,6 +59,7 @@ export const strings = {
   "bank.filter.prof":             "\u6559\u6388",
   "bank.filter.prof.placeholder": "\u4f8b\u5982 Dumbledore",
   "bank.filter.prof.remove":      "\u79fb\u9664",
+  "bank.filter.prof.view":        "在 RateMyHusky 上查看 {name}",
   "bank.filter.program":          "\u8ba1\u5165\u9879\u76ee",
   "bank.filter.program.required": "\u5fc5\u4fee\u8bfe",
   "bank.filter.program.elective": "\u9009\u4fee",
@@ -269,7 +270,7 @@ export const strings = {
   "info.offered.schedule":        "常规上课日",
   "info.prof.title":              "授课教师",
   "info.prof.share":              "% = 平均授课学生占比",
-  "info.prof.filter":             "查看 {name} 讲授的课程",
+  "info.prof.ratemyhusky":        "在 RateMyHusky 上查看 {name}",
   "info.repeat.unlimited":        "可无限次重复修读",
   "info.repeat.limited":          "最多可修读 {n} 次",
   "info.repeat.planned":          "已规划于",
@@ -293,6 +294,8 @@ export const strings = {
   "info.offered.pop.other":       "\u5176\u4ed6",
   "info.drag.title":              "\u62d6\u62fd\u653e\u7f6e",
   "info.catalog.link":            "\u8bfe\u7a0b\u76ee\u5f55 \u2197",
+  "info.ratemyhusky.link":        "RateMyHusky ↗",
+  "info.ratemyhusky.title":       "在 RateMyHusky 上查看该课程的评分与评价",
 
 
   // ── Translation ──────────────────────────────────────────────────────────────────

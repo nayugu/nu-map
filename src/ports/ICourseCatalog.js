@@ -153,6 +153,19 @@ export const ICourseCatalog = "courseCatalog";
  *   Used in InfoPanel to render the external link icon next to the course title.
  *   Example (NU): course => `https://catalog.northeastern.edu/course-descriptions/${course.subject.toLowerCase()}/`
  *
+ * @property {(course: Course) => string|null} [courseRatingsUrl]
+ *   Optional. URL to a third-party course ratings/reviews page (e.g. TRACE /
+ *   RateMyProfessor aggregator), or null when no page exists for this course.
+ *   Rendered next to the catalog link in InfoPanel (shown only when non-null).
+ *   Omit entirely if the institution has no such resource.
+ *
+ * @property {(name: string) => string|null} [profRatingsUrl]
+ *   Optional. URL to a third-party ratings page for an instructor, keyed by the
+ *   instructor name as it appears in course.offering.prof. Used by the InfoPanel
+ *   instructor list and the bank's professor filter chips. Implementations
+ *   should return a resource that always resolves (e.g. a browse page) when no
+ *   exact match exists, so the link never dead-ends.
+ *
  * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
  *   External data sources this adapter draws from.  See IAttributable.
  */

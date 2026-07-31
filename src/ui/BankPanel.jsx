@@ -10,6 +10,7 @@ import { takesUsed } from "../core/repeatInstances.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAttributeSystem } from "../ports/IAttributeSystem.js";
+import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { useRelevance }   from "../context/RelevanceContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -158,10 +159,10 @@ export default function BankPanel() {
     substitutions, addSubstitution, removeSubstitution,
     studentType,
     claudePreview,
-    bankProfFocus,
   } = usePlanner();
 
   const attributeSystem = usePort(IAttributeSystem);
+  const courseCatalog   = usePort(ICourseCatalog);
   const { hasProgram, courseRole } = useRelevance();
   const [profQuery, setProfQuery] = useState(""); // professor finder text (UI-only)
 
@@ -359,22 +360,6 @@ export default function BankPanel() {
     }
   }, [claudePreview?.proposalId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // InfoPanel instructor-name click: the tag is already added to bankFilters
-  // by the context — here we switch to bank mode and, if the filter section
-  // happens to be open, scroll the chip into view and flash it. The section's
-  // open/closed state is the user's; never force it.
-  const [flashProf, setFlashProf] = useState(null);
-  useEffect(() => {
-    if (!bankProfFocus) return;
-    setSideMode("bank");
-    setFlashProf(bankProfFocus.name);
-    const scroll = setTimeout(() => {
-      document.querySelector(`[data-prof-chip="${CSS.escape(bankProfFocus.name)}"]`)
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 350);
-    const clear = setTimeout(() => setFlashProf(null), 1600);
-    return () => { clearTimeout(scroll); clearTimeout(clear); };
-  }, [bankProfFocus?.ts]); // eslint-disable-line react-hooks/exhaustive-deps
   const wideResizing = useRef(null);
   useEffect(() => {
     const onMove = e => {
@@ -624,21 +609,32 @@ export default function BankPanel() {
                   </div>
 
                   <div style={lbl}>{t("bank.filter.prof")}</div>
-                  {/* Selected professors, as removable tags — these are the filter. */}
+                  {/* Selected professors, as filter tags. The name links out to
+                      the instructor's RateMyHusky page (TRACE + RateMyProfessor);
+                      only the ✕ removes the filter. */}
                   {fProfs.length > 0 && (
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 4 }}>
                       {fProfs.map(name => {
-                        // Inverted colours while the InfoPanel-click flash is on.
-                        const flashing = flashProf === name;
+                        const rmhUrl = courseCatalog?.profRatingsUrl?.(name) ?? null;
                         return (
                           <span key={name} data-prof-chip={name} style={{
                             display: "inline-flex", alignItems: "center", gap: 4,
                             fontSize: isPhone ? 6 : 9, padding: isPhone ? "2px 4px 2px 6px" : "3px 5px 3px 7px",
-                            borderRadius: 99, background: flashing ? "var(--active)" : "var(--bg-surface)",
-                            border: "1px solid var(--active)", color: flashing ? "var(--bg-surface)" : "var(--active)", fontWeight: 700,
-                            transition: "background 0.35s, color 0.35s",
+                            borderRadius: 99, background: "var(--bg-surface)",
+                            border: "1px solid var(--active)", color: "var(--active)", fontWeight: 700,
                           }}>
-                            {name}
+                            {rmhUrl ? (
+                              <a href={rmhUrl}
+                                target="_blank" rel="noopener noreferrer"
+                                title={t("bank.filter.prof.view").replace("{name}", name)}
+                                style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}
+                                onMouseEnter={e => { e.currentTarget.style.textDecoration = "underline"; }}
+                                onMouseLeave={e => { e.currentTarget.style.textDecoration = "none"; }}>
+                                {name}
+                              </a>
+                            ) : (
+                              <span>{name}</span>
+                            )}
                             <button onClick={() => removeProf(name)} title={t("bank.filter.prof.remove")}
                               style={{ background: "none", border: "none", color: "inherit", cursor: "pointer", fontSize: isPhone ? 8 : 10, lineHeight: 1, padding: 0 }}>
                               ✕
