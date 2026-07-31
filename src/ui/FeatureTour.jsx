@@ -33,7 +33,7 @@ const HOLD_MS = 1200;      // pause on the last frame before a video loops (clip
 export default function FeatureTour() {
   const { showTour, setShowTour, setShowDisclaimer } = usePlanner();
   const institution = usePort(IInstitution);
-  const { t } = useLanguage();
+  const { t, locales } = useLanguage();
   const [step, setStep] = useState(0);
   const cardRef  = useRef(null);
   const holdRef  = useRef(null);  // pending video loop-hold timer
@@ -151,12 +151,14 @@ export default function FeatureTour() {
               <div id="tour-title" style={{ fontSize: 22, fontWeight: 800, color: "var(--text-1)", marginBottom: 7 }}>
                 {t(`${cur.t}.title`)}
               </div>
+              {/* `n` = live locale count, so the language step never claims a
+                  stale number when a locale file is added or removed. */}
               <div style={{
                 fontSize: 17, color: "var(--text-3)", minHeight: 52,
                 lineHeight: "calc(1.6 * var(--lh-scale, 1))",
                 fontFamily: "'InterTight', 'Inter', system-ui, sans-serif", letterSpacing: "0.01em",
               }}>
-                {t(`${cur.t}.body`)}
+                {t(`${cur.t}.body`, { n: locales.length })}
               </div>
             </div>
 
@@ -170,9 +172,11 @@ export default function FeatureTour() {
                   }} />
                 ))}
               </div>
+              {/* Skip reads bold on step 1 only — that's where a returning user
+                  is most likely looking for the way out; it recedes after. */}
               <button onClick={close} style={{
                 background: "transparent", border: "1px solid var(--border-2)",
-                color: "var(--text-3)", fontSize: 15, fontWeight: 500,
+                color: "var(--text-3)", fontSize: 15, fontWeight: step === 0 ? 700 : 500,
                 padding: "10px 24px", borderRadius: 9, cursor: "pointer",
               }}>{t("onboard.skip")}</button>
               {step > 0 && (

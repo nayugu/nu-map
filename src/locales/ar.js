@@ -214,7 +214,7 @@ export const strings = {
   "tour.step.6.title":  "الخطط والتصدير والمشاركة",
   "tour.step.6.body":   "أنشئ عدة خطط، ثم شاركها أو نزّلها من Input/Output — بما في ذلك تصدير PDF.",
   "tour.step.7.title":  "لغتك",
-  "tour.step.7.body":   "بدِّل NU Map إلى أي من 8 لغات من الإعدادات.",
+  "tour.step.7.body":   "بدِّل NU Map إلى أي من {n} لغات من الإعدادات.",
   "tour.done":          "تم",
   "tour.wrap.title":    "كل شيء جاهز",
   "tour.wrap.body":     "مخططك جاهز — ابدأ ببناء جدولك.",

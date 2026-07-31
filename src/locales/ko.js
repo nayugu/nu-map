@@ -215,7 +215,7 @@ export const strings = {
   "tour.step.6.title":  "계획, 내보내기, 공유",
   "tour.step.6.body":   "여러 계획을 만들고 Input/Output에서 공유하거나 내려받으세요 — PDF 내보내기 포함.",
   "tour.step.7.title":  "언어 설정",
-  "tour.step.7.body":   "설정에서 NU Map을 8개 언어 중 하나로 전환하세요.",
+  "tour.step.7.body":   "설정에서 NU Map을 {n}개 언어 중 하나로 전환하세요.",
   "tour.done":          "완료",
   "tour.wrap.title":    "모두 준비됐어요",
   "tour.wrap.body":     "플래너가 준비되었습니다 — 시간표를 짜기 시작하세요.",

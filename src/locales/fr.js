@@ -215,7 +215,7 @@ export const strings = {
   "tour.step.6.title":  "Plans, export et partage",
   "tour.step.6.body":   "Créez plusieurs plans, puis partagez-les ou téléchargez-les depuis Input/Output — y compris un export PDF.",
   "tour.step.7.title":  "Votre langue",
-  "tour.step.7.body":   "Basculez NU Map dans l’une des 8 langues depuis les Paramètres.",
+  "tour.step.7.body":   "Basculez NU Map dans l’une des {n} langues depuis les Paramètres.",
   "tour.done":          "Terminé",
   "tour.wrap.title":    "Tout est prêt",
   "tour.wrap.body":     "Votre planificateur est prêt — commencez à bâtir votre emploi du temps.",
