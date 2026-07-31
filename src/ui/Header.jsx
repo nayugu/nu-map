@@ -61,7 +61,7 @@ export default function Header() {
     coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap, semOrders,
     showViolLines, setShowViolLines,
     prereqDepth, setPrereqDepth, unlockDepth, setUnlockDepth,
-    manualZoom, setManualZoom, isPhone, isMobile,
+    manualZoom, setManualZoom, isPhone, isMobile, bankWidth,
     collapseOtherCredits, setCollapseOtherCredits,
     showContLogo, setShowContLogo,
     showUnlocks, setShowUnlocks,
@@ -158,9 +158,11 @@ export default function Header() {
       setPhonePopTop(Math.round(headerRowRef.current.getBoundingClientRect().bottom) + 6);
     }
   };
+  // The sheet spans only the planner side — centred within (100vw − bank
+  // sidebar), never reaching behind the bank/grad panel on the right.
   const phonePopFixed = isPhone ? {
-    position: "fixed", top: phonePopTop, left: "50%", right: "auto",
-    transform: "translateX(-50%)", width: "calc(100vw - 16px)", maxWidth: 360,
+    position: "fixed", top: phonePopTop, left: `calc((100vw - ${bankWidth}px) / 2)`, right: "auto",
+    transform: "translateX(-50%)", width: `calc(100vw - ${bankWidth}px - 16px)`, maxWidth: 360,
     maxHeight: `calc(100dvh - ${phonePopTop + 12}px)`, overflowY: "auto", zIndex: 9500,
   } : null;
 
