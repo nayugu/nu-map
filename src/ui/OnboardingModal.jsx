@@ -272,8 +272,9 @@ export default function OnboardingModal() {
         {/* ── Footer nav ── */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 22 }}>
           <button onClick={skip} style={{
-            background: "transparent", border: "none", color: "var(--text-5)",
-            fontSize: 15, cursor: "pointer", padding: "10px 2px",
+            background: "transparent", border: "1px solid var(--border-2)",
+            color: "var(--text-3)", fontSize: 16, fontWeight: 500,
+            padding: "11px 26px", borderRadius: 9, cursor: "pointer",
           }}>{t("onboard.skip")}</button>
           <div style={{ flex: 1 }} />
           {step > 0 && (
