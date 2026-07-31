@@ -52,6 +52,9 @@ Facts that follow from this:
 - Code changes go branch → PR → squash-merge: `git switch -c fix/short-name`,
   push, open a PR, partner skims, merge. The repo is squash-only and
   auto-deletes merged branches. Trivial docs edits may go straight to main.
+- Pair-programming sessions (both humans reviewing live) may skip the PR:
+  rebase the feature branch onto origin/main, fast-forward merge to main,
+  push, and delete the branch — same review, less ceremony.
 - No long-lived or personal branches — they drift fast here (the monthly
   scrape commits straight to main; one March branch died 469 commits behind).
 - Never enable required-PR branch protection on main: the scheduled data
@@ -63,6 +66,10 @@ Facts that follow from this:
 ## Conventions
 
 - Conventional commits (`type: description`), no Co-Authored-By trailers.
+  Keep the subject concise; for features/fixes add a body of bullet points
+  explaining how the change works — what was added or fixed and the
+  mechanism behind it — detailed enough to follow the design without
+  reading the diff.
 - Localization: every user-facing string exists in all 8 locales
   (`src/locales/`), hand-written translations. "CLAUDE" stays untranslated.
   Summer terms are "Summer A" / "Summer B", never "Summer 1/2".
