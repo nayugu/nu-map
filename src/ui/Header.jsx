@@ -140,7 +140,7 @@ export default function Header() {
       const row = headerRowRef.current, g2 = group2Ref.current, b = shBadgesRef.current;
       if (!row || !g2 || !b) return;
       const free = row.clientWidth - g2.offsetWidth - b.offsetWidth - 14; // flex gaps + safety
-      setPlanNameMax(Math.max(48, Math.floor(free)));
+      setPlanNameMax(Math.max(36, Math.floor(free)));
     };
     compute();
     const ro = new ResizeObserver(compute);
@@ -625,7 +625,9 @@ export default function Header() {
             {t("header.credits.done", { n: totalSHDone, unit: unitName })}
           </span>
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
-            {t("header.credits.placed", { n: totalSHPlaced, unit: unitName })}
+            {/* Phone: bare "{n} SH" — the word "placed" ate the very space the
+                plan name needs (real plans read "166 SH placed"). */}
+            {isPhone ? `${totalSHPlaced} ${unitName}` : t("header.credits.placed", { n: totalSHPlaced, unit: unitName })}
           </span>
           </div>
 
