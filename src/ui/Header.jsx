@@ -153,11 +153,13 @@ export default function Header() {
     [headerRowRef.current, group2Ref.current, shBadgesRef.current].forEach(el => el && ro.observe(el));
     return () => ro.disconnect();
   }, [isPhone]);
-  const planNameMax = Math.max(36, planFree);
-  // Below ~44px a truncated name is noise — collapse to the same bare "/"
-  // the desktop fold uses. (planFree doesn't depend on the button's own
-  // width, so this can't oscillate.)
-  const planSlash = isPhone && planFree < 44;
+  const planNameMax = Math.max(24, planFree);
+  // The name takes every pixel available — the clipped-fade keeps even a
+  // very narrow name looking intentional. Only when there isn't room for
+  // ~2 faded characters plus the ▾ does the button collapse to the bare
+  // "/" (the true minimum, for when the right side grows more tabs).
+  // (planFree doesn't depend on the button's own width, so no oscillation.)
+  const planSlash = isPhone && planFree < 26;
 
   // Phone: the header buttons sit in a tight row, so a dropdown anchored to a
   // button's edge (right: 0 / left: 0) can spill off-screen. On phone we instead
