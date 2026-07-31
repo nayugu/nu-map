@@ -214,6 +214,8 @@ export const strings = {
   "tour.step.5.body":   "Abre un curso para ver sus atributos, requisitos previos, descripción, profesores anteriores y disponibilidad reciente.",
   "tour.step.6.title":  "Planes, exportar y compartir",
   "tour.step.6.body":   "Crea varios planes y compártelos o descárgalos desde Input/Output, incluida una exportación en PDF.",
+  "tour.step.7.title":  "Tu idioma",
+  "tour.step.7.body":   "Cambia NU Map a cualquiera de los 8 idiomas desde Ajustes.",
   "tour.done":          "Listo",
   "tour.wrap.title":    "Todo listo",
   "tour.wrap.body":     "Tu planificador está listo: empieza a armar tu horario.",

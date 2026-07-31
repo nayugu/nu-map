@@ -25,6 +25,7 @@ const STEPS = [
   { img: "04-prereqs.png",      t: "tour.step.4" },
   { img: "05-class.png",        t: "tour.step.5" },
   { img: "06-plans.mp4",        t: "tour.step.6" },
+  { img: "07-language.mp4",     t: "tour.step.7" },
 ];
 const DONE = STEPS.length; // step index of the celebratory completion screen
 const HOLD_MS = 1200;      // pause on the last frame before a video loops (clips are 6–12s)
@@ -179,8 +180,9 @@ export default function FeatureTour() {
                 ))}
               </div>
               <button onClick={close} style={{
-                background: "transparent", border: "none", color: "var(--text-5)",
-                fontSize: 13, cursor: "pointer", padding: "8px 4px",
+                background: "transparent", border: "1px solid var(--border-2)",
+                color: "var(--text-3)", fontSize: 15, fontWeight: 500,
+                padding: "10px 24px", borderRadius: 9, cursor: "pointer",
               }}>{t("onboard.skip")}</button>
               {step > 0 && (
                 <button onClick={() => setStep(step - 1)} style={{

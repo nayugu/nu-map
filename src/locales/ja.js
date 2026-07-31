@@ -215,6 +215,8 @@ export const strings = {
   "tour.step.5.body":   "科目を開くと、属性・前提科目・説明・過去の担当教員・近年の開講状況が分かります。",
   "tour.step.6.title":  "プラン・書き出し・共有",
   "tour.step.6.body":   "複数のプランを作成し、Input/Output から共有・ダウンロード（PDF 書き出しを含む）できます。",
+  "tour.step.7.title":  "あなたの言語",
+  "tour.step.7.body":   "設定から NU Map を 8 言語のいずれかに切り替えられます。",
   "tour.done":          "完了",
   "tour.wrap.title":    "準備完了",
   "tour.wrap.body":     "プランナーの準備ができました——スケジュールを組み始めましょう。",

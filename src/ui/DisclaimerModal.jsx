@@ -122,19 +122,6 @@ export default function DisclaimerModal() {
           ))}
         </div>
 
-        {/* Replay the feature tour */}
-        <button
-          onClick={() => { setShowDisclaimer(false); setShowTour(true); }}
-          style={{
-            width: "100%", boxSizing: "border-box", marginBottom: 8,
-            padding: "8px 0", borderRadius: 7, cursor: "pointer",
-            background: "var(--link-bg)", border: "1px solid var(--link-1)",
-            fontSize: 11, fontWeight: 700, color: "var(--link-1)",
-          }}
-        >
-          {t("tour.replay")}
-        </button>
-
         {/* GitHub + privacy policy links */}
         <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
           {[["https://github.com/nayugu/nu-map", "/github"], [`${import.meta.env.BASE_URL}privacy.html`, "/privacy"]].map(([href, label]) => (
@@ -226,6 +213,15 @@ export default function DisclaimerModal() {
               color: "var(--link-1)", cursor: "pointer",
             }}
           >{t("modal.dismiss")}</button>
+          {/* Replay the feature tour — a real button, but secondary to "let me plan" */}
+          <button
+            onClick={() => { setShowDisclaimer(false); setShowTour(true); }}
+            style={{
+              width: "100%", fontSize: 11, fontWeight: 600, padding: "7px 16px", borderRadius: 6,
+              background: "transparent", border: "1px solid var(--border-2)",
+              color: "var(--text-3)", cursor: "pointer",
+            }}
+          >{t("tour.replay")}</button>
           <span style={{ fontSize: 10, color: "var(--text-6)" }}>
             Built with{" "}
             <a href="https://www.anthropic.com/claude" target="_blank" rel="noreferrer"
