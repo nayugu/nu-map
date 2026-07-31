@@ -40,6 +40,20 @@ export function getSemSH(semId, placements, courseMap) {
 }
 
 /**
+ * Semester hours that count toward the term's *course load*.
+ *
+ * A term occupied by a co-op / work term (its id appears in the start or
+ * continuation map) is a work term, not a study term: any courses parked there
+ * stay in the plan and are recoverable when the co-op is removed, but they do
+ * NOT count toward this term's load. Everywhere else this is identical to
+ * getSemSH. startMap / contMap are the per-semester special-term maps.
+ */
+export function getSemStudySH(semId, placements, courseMap, startMap = {}, contMap = {}) {
+  if (startMap[semId] || contMap[semId]) return 0;
+  return getSemSH(semId, placements, courseMap);
+}
+
+/**
  * Return the course IDs in a semester in display order.
  * Respects semOrders overrides; de-duplicates; appends any unordered extras.
  */

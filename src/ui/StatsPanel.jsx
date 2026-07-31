@@ -21,7 +21,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { subjectColor } from "../core/courseModel.js";
-import { getSemSH } from "../core/planModel.js";
+import { getSemStudySH } from "../core/planModel.js";
 import { computeGrantedAttrs, resolveTermByDuration } from "../core/specialTermUtils.js";
 import {
   levelDistribution, mergeLoadTimeline, longestPrereqChains, courseTier,
@@ -43,6 +43,21 @@ const faviconUrl = (domain) =>
   `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
 // Deterministic, distinct colour per company (stable across terms).
 const companyColor = (w) => subjectColor(String(w.company || w.companyDomain || w.id || "?").toUpperCase());
+
+// Clean monochrome office-building mark — the neutral fallback when a work
+// term has no company logo (replaces the old briefcase emoji). Line-drawn,
+// inherits currentColor, reads the same in light and dark.
+function BuildingIcon({ size = 16, color = "var(--text-4)" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color}
+      strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 21h18" />
+      <path d="M6 21V5.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1V21" />
+      <path d="M14 21V10a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1v11" />
+      <path d="M9 8.6h1.6M9 12h1.6M9 15.4h1.6" strokeWidth="1.5" />
+    </svg>
+  );
+}
 
 // CSS effects injected once with the panel: a rotating glow band (grad-
 // courses tile + each work experience) and a soft pulse (grad class chips).
@@ -74,9 +89,9 @@ function Section({ title, hint, children }) {
       background: "var(--bg-surface)", border: "1px solid var(--border-1)",
       borderRadius: 10, padding: "14px 16px", marginBottom: 12,
     }}>
-      <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.06em",
+      <div style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: "0.06em",
         textTransform: "uppercase", color: "var(--text-3)", marginBottom: hint ? 3 : 10 }}>{title}</div>
-      {hint && <div style={{ fontSize: 9.5, color: "var(--text-5)", marginBottom: 11, lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>{hint}</div>}
+      {hint && <div style={{ fontSize: 11, color: "var(--text-5)", marginBottom: 11, lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>{hint}</div>}
       {children}
     </div>
   );
@@ -86,9 +101,9 @@ function StatTile({ label, value, sub, color }) {
   return (
     <div style={{ flex: "1 1 90px", minWidth: 90, background: "var(--bg-surface-2)",
       border: "1px solid var(--border-1)", borderRadius: 8, padding: "10px 12px" }}>
-      <div style={{ fontSize: 20, fontWeight: 800, color: color ?? "var(--text-1)", lineHeight: 1.1 }}>{value}</div>
-      <div style={{ fontSize: 9.5, color: "var(--text-4)", marginTop: 3, fontWeight: 600 }}>{label}</div>
-      {sub && <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 1 }}>{sub}</div>}
+      <div style={{ fontSize: 22, fontWeight: 800, color: color ?? "var(--text-1)", lineHeight: 1.1 }}>{value}</div>
+      <div style={{ fontSize: 11, color: "var(--text-4)", marginTop: 3, fontWeight: 600 }}>{label}</div>
+      {sub && <div style={{ fontSize: 10, color: "var(--text-5)", marginTop: 1 }}>{sub}</div>}
     </div>
   );
 }
@@ -102,9 +117,9 @@ function GlowTile({ label, value, sub, color }) {
         background: `conic-gradient(from 0deg, transparent 0deg, ${color} 55deg, transparent 135deg, transparent 235deg, ${color} 305deg, transparent 360deg)`,
         animation: "numap-spin 5s linear infinite" }} />
       <div style={{ position: "relative", background: "var(--bg-surface-2)", borderRadius: 6.5, padding: "10px 12px" }}>
-        <div style={{ fontSize: 20, fontWeight: 800, color, lineHeight: 1.1, textShadow: `0 0 10px ${color}66` }}>{value}</div>
-        <div style={{ fontSize: 9.5, color: "var(--text-4)", marginTop: 3, fontWeight: 600 }}>{label}</div>
-        {sub && <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 1 }}>{sub}</div>}
+        <div style={{ fontSize: 22, fontWeight: 800, color, lineHeight: 1.1, textShadow: `0 0 10px ${color}66` }}>{value}</div>
+        <div style={{ fontSize: 11, color: "var(--text-4)", marginTop: 3, fontWeight: 600 }}>{label}</div>
+        {sub && <div style={{ fontSize: 10, color: "var(--text-5)", marginTop: 1 }}>{sub}</div>}
       </div>
     </div>
   );
@@ -140,7 +155,7 @@ function StackBar({ segments, unit }) {
           return (
             <div key={i} style={{ width: `${(s.value / total) * 100}%`, textAlign: "center", overflow: "hidden" }}>
               {segPx >= name.length * 6.5 + 6 && (
-                <span style={{ fontSize: 9.5, fontWeight: 800, color: s.color, whiteSpace: "nowrap" }}>{name}</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: s.color, whiteSpace: "nowrap" }}>{name}</span>
               )}
             </div>
           );
@@ -157,7 +172,7 @@ function StackBar({ segments, unit }) {
             <div key={i} title={s.title} style={{ width: `${(s.value / total) * 100}%`, background: s.color,
               display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
               borderRight: i < segments.length - 1 ? "1px solid var(--bg-surface)" : "none" }}>
-              {label && <span style={{ fontSize: 9, fontWeight: 800, color: "#000", whiteSpace: "nowrap" }}>{label}</span>}
+              {label && <span style={{ fontSize: 10.5, fontWeight: 800, color: "#000", whiteSpace: "nowrap" }}>{label}</span>}
             </div>
           );
         })}
@@ -224,7 +239,7 @@ function ClassChip({ id, cmap, onOpen, faded }) {
   return (
     <button onClick={() => onOpen(id)} title={c?.title ?? id}
       style={{
-        fontSize: 9.5, fontWeight: 700, padding: "3px 7px", borderRadius: 5, cursor: "pointer",
+        fontSize: 11, fontWeight: 700, padding: "3px 7px", borderRadius: 5, cursor: "pointer",
         background: "var(--bg-surface-2)", color: "var(--text-2)", whiteSpace: "nowrap", lineHeight: 1.3,
         border: `1px ${faded ? "dashed" : "solid"} ${deptColor}`, opacity: faded ? 0.4 : 1,
         ...(grad && !faded ? { "--glow": deptColor, animation: "numap-glow 2.6s ease-in-out infinite" } : {}),
@@ -241,8 +256,8 @@ function CourseGroup({ title, sub, ids, cmap, onOpen }) {
   return (
     <div style={{ marginBottom: 11 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-        <span style={{ fontSize: 11, fontWeight: 800, color: "var(--text-2)" }}>{title}</span>
-        <span style={{ fontSize: 10.5, color: "var(--text-4)", flexShrink: 0, marginLeft: 8 }}>{sub}</span>
+        <span style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-2)" }}>{title}</span>
+        <span style={{ fontSize: 12, color: "var(--text-4)", flexShrink: 0, marginLeft: 8 }}>{sub}</span>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
         {ids.map(id => <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} />)}
@@ -263,14 +278,16 @@ function WorkCard({ w }) {
             ? <CompanyLogo key={w.companyDomain} domain={w.companyDomain} size={26} />
             : <div style={{ width: 26, height: 26, flexShrink: 0, borderRadius: 6,
                 background: "var(--bg-surface)", border: "1px solid var(--border-1)",
-                display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>💼</div>}
-          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-1)", overflow: "hidden",
+                display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <BuildingIcon size={15} color="var(--text-4)" />
+              </div>}
+          <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-1)", overflow: "hidden",
             textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{w.company || w.typeLabel}</div>
         </div>
-        <div style={{ fontSize: 9.5, color: "var(--text-3)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <div style={{ fontSize: 11, color: "var(--text-3)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {w.subline || w.typeLabel}
         </div>
-        <div style={{ fontSize: 8.5, color: "var(--text-5)", marginTop: 2 }}>
+        <div style={{ fontSize: 10, color: "var(--text-5)", marginTop: 2 }}>
           {w.semTypeId && w.year ? <SemLabel typeId={w.semTypeId} year={w.year} /> : null}
           {w.durLabel ? ` · ${w.durLabel}` : ""}
         </div>
@@ -327,6 +344,27 @@ function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
   if (ticks[ticks.length - 1] !== yMax) ticks.push(yMax);
   const labelEvery = colW < 34 ? 2 : 1;
 
+  // Group consecutive work terms that belong to the same instance into one
+  // "run" (a 6-month co-op spans two term columns but is a single stint), so
+  // the chart shades the whole span and draws exactly one centred logo.
+  const coopRuns = [];
+  rows.forEach((r, k) => {
+    if (!r.hasWork) return;
+    const n = r.slots.length;
+    const spans = [];
+    r.slots.forEach((s, i) => {
+      if (s.occupied) spans.push([padL + (k + i / n) * colW, padL + (k + (i + 1) / n) * colW]);
+    });
+    if (!spans.length) return;
+    const prev = coopRuns[coopRuns.length - 1];
+    if (prev && prev.endK === k - 1 && r.workId != null && prev.workId === r.workId) {
+      prev.spans.push(...spans);
+      prev.endK = k;
+    } else {
+      coopRuns.push({ workId: r.workId, domain: r.work?.companyDomain, spans, endK: k });
+    }
+  });
+
   return (
     <div ref={ref} style={{ width: "100%" }}>
       {m > 0 && (
@@ -339,29 +377,32 @@ function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
           {ticks.map((v, i) => (
             <g key={i}>
               <line x1={padL} y1={yFor(v)} x2={padL + plotW} y2={yFor(v)} stroke="var(--border-1)" opacity="0.6" />
-              <text x={padL - 6} y={yFor(v) + 3} textAnchor="end" fontSize="8" fill="var(--text-5)">{v}</text>
+              <text x={padL - 6} y={yFor(v) + 3} textAnchor="end" fontSize="9.5" fill="var(--text-5)">{v}</text>
             </g>
           ))}
-          {/* co-op shaded columns / summer halves + logo */}
-          {rows.map((r, k) => {
-            if (!r.hasWork) return null;
-            const n = r.slots.length;
-            const occ = [];
-            r.slots.forEach((s, i) => {
-              if (!s.occupied) return;
-              occ.push([padL + (k + i / n) * colW, padL + (k + (i + 1) / n) * colW]);
-            });
-            if (!occ.length) return null;
-            const logoX = (Math.min(...occ.map(o => o[0])) + Math.max(...occ.map(o => o[1]))) / 2;
-            const domain = r.work?.companyDomain;
+          {/* co-op shaded columns / summer halves + ONE centred logo per stint.
+              Consecutive terms of the same instance (a 6-month co-op's start +
+              continuation) merge into a single block so the logo sits centred
+              across the whole span instead of repeating / splitting per term. */}
+          {coopRuns.map((run, ri) => {
+            const x0 = Math.min(...run.spans.map(s => s[0]));
+            const x1 = Math.max(...run.spans.map(s => s[1]));
+            const logoX = (x0 + x1) / 2;
+            const domain = run.domain;
             return (
-              <g key={`coop-${r.id}`}>
-                {occ.map(([x0, x1], i) => (
-                  <rect key={i} x={x0} y={padT} width={Math.max(0, x1 - x0)} height={plotH} fill={COOP_COLOR} opacity="0.14" />
+              <g key={`coop-${ri}`}>
+                {run.spans.map(([a, b], i) => (
+                  <rect key={i} x={a} y={padT} width={Math.max(0, b - a)} height={plotH} fill={COOP_COLOR} opacity="0.14" />
                 ))}
                 {domain
                   ? <image href={faviconUrl(domain)} xlinkHref={faviconUrl(domain)} x={logoX - 9} y={padT + 6} width="18" height="18" />
-                  : <text x={logoX} y={padT + 20} textAnchor="middle" fontSize="13">💼</text>}
+                  : <svg x={logoX - 9} y={padT + 6} width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="var(--text-4)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 21h18" />
+                      <path d="M6 21V5.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1V21" />
+                      <path d="M14 21V10a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1v11" />
+                      <path d="M9 8.6h1.6M9 12h1.6M9 15.4h1.6" strokeWidth="1.5" />
+                    </svg>}
               </g>
             );
           })}
@@ -385,13 +426,13 @@ function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
               <g key={`pt-${k}`}>
                 {milestone && <circle cx={p.x} cy={p.y} r="8" fill={col} opacity="0.18" />}
                 <circle cx={p.x} cy={p.y} r={milestone ? 5 : 3.5} fill={col} stroke="var(--bg-surface)" strokeWidth={milestone ? 2 : 1.5} />
-                <text x={p.x} y={p.y - (milestone ? 9 : 7)} textAnchor="middle" fontSize="8.5" fontWeight="700" fill="var(--text-3)">{p.sh}</text>
+                <text x={p.x} y={p.y - (milestone ? 9 : 7)} textAnchor="middle" fontSize="10" fontWeight="700" fill="var(--text-3)">{p.sh}</text>
               </g>
             );
           })}
           {/* x labels — every term */}
           {rows.map((r, k) => (k % labelEvery === 0) && (
-            <text key={`xl-${r.id}`} x={xFor(k)} y={H - 9} textAnchor="middle" fontSize="8" fill="var(--text-5)">
+            <text key={`xl-${r.id}`} x={xFor(k)} y={H - 9} textAnchor="middle" fontSize="9.5" fill="var(--text-5)">
               {shortSem(r)}{String(yearOf(r.repSem)).slice(2)}
             </text>
           ))}
@@ -427,17 +468,6 @@ export default function StatsPanel() {
   );
 
   const openCourse = (id) => { setSelectedId(id); setShowPanel(true); setShowStats(false); };
-
-  // Required-credit total for the degree-progress bar (async catalog fetch).
-  const [requiredSH, setRequiredSH] = useState(0);
-  useEffect(() => {
-    if (!showStats || !major) { setRequiredSH(0); return; }
-    let cancelled = false;
-    const p = studentType === "graduate" ? majorReq.loadGradMajor(major) : majorReq.loadMajor(major);
-    p.then(json => { if (!cancelled) setRequiredSH(json?.totalCreditsRequired ?? 0); })
-     .catch(() => { if (!cancelled) setRequiredSH(0); });
-    return () => { cancelled = true; };
-  }, [showStats, major, studentType, majorReq]);
 
   // Incoming credit (AP / IB / transfer bonus + courses in the incoming row).
   const incomingSH = useMemo(() => {
@@ -515,15 +545,21 @@ export default function StatsPanel() {
     const instOf = (semId) => specialTermStartMap[semId] || specialTermContMap[semId] || null;
     let realCount = 0, realSum = 0;
     const rows = buckets.map(b => {
-      const sh = b.semIds.reduce((s, id) => s + getSemSH(id, placements, cmap), 0);
+      // Co-op-occupied terms read as work terms — their parked courses don't
+      // count toward the plotted load (they stay in the plan, recoverable).
+      const sh = b.semIds.reduce((s, id) => s + getSemStudySH(id, placements, cmap, specialTermStartMap, specialTermContMap), 0);
       const slots = b.semIds.map(id => {
         const inst = instOf(id);
-        return { semId: id, occupied: !!inst, work: inst ? specialTermPl[inst] : null };
+        return { semId: id, occupied: !!inst, instId: inst || null, work: inst ? specialTermPl[inst] : null };
       });
       const hasWork = slots.some(s => s.occupied);
-      const work = slots.find(s => s.occupied)?.work ?? null;
+      const firstOcc = slots.find(s => s.occupied);
+      const work   = firstOcc?.work ?? null;
+      // instId groups the terms of one multi-term co-op (a 6-month co-op's
+      // start + continuation share it) so the chart draws a single logo.
+      const workId = firstOcc?.instId ?? null;
       if (b.type !== "summer" && sh > 0) { realCount += 1; realSum += sh; }
-      return { ...b, sh, slots, hasWork, work, isPureCoop: hasWork && sh === 0 };
+      return { ...b, sh, slots, hasWork, work, workId, isPureCoop: hasWork && sh === 0 };
     });
     return { rows, avg: realCount ? realSum / realCount : 0 };
   }, [SEMESTERS, placements, cmap, specialTermPl, specialTermStartMap, specialTermContMap]);
@@ -552,7 +588,6 @@ export default function StatsPanel() {
   const empty = placedIds.length === 0;
   const shMaxRef = creditSystem.getSemesterMax(studentType);
   const shMin = creditSystem.getFullTimeMin(studentType);
-  const remaining = requiredSH > 0 ? Math.max(0, requiredSH - totalSHPlaced) : null;
   const shortSem = (row) => row.type === "summer"
     ? t("stats.sem.short.summer")
     : t(`stats.sem.short.${row.type}`) || row.type;
@@ -561,7 +596,7 @@ export default function StatsPanel() {
     const active = compView === id;
     return (
       <button key={id} onClick={() => setCompView(id)} style={{
-        flex: "1 1 auto", fontSize: 10, fontWeight: active ? 700 : 500, padding: "4px 8px",
+        flex: "1 1 auto", fontSize: 11.5, fontWeight: active ? 700 : 500, padding: "4px 8px",
         borderRadius: 5, cursor: "pointer",
         background: active ? "var(--active-bg)" : "transparent",
         border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
@@ -597,7 +632,7 @@ export default function StatsPanel() {
           borderBottom: "1px solid var(--border-1)", borderRadius: isPhone ? 0 : "14px 14px 0 0",
           padding: "13px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
-          <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", display: "inline-flex", alignItems: "center", gap: 7 }}>
+          <span style={{ fontSize: 15.5, fontWeight: 800, letterSpacing: "-0.01em", display: "inline-flex", alignItems: "center", gap: 7 }}>
             <svg width="15" height="15" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" style={{ color: "var(--active)" }}>
               <rect x="0.5" y="6.5" width="2.6" height="5" rx="0.6" />
               <rect x="4.7" y="3.5" width="2.6" height="8" rx="0.6" />
@@ -607,13 +642,13 @@ export default function StatsPanel() {
           </span>
           <button onClick={() => setShowStats(false)} style={{
             background: "none", border: "none", cursor: "pointer",
-            color: "var(--text-4)", fontSize: 16, lineHeight: 1, padding: 4,
+            color: "var(--text-4)", fontSize: 17, lineHeight: 1, padding: 4,
           }} title={t("stats.close")}>✕</button>
         </div>
 
         <div style={{ padding: 12 }}>
           {empty ? (
-            <div style={{ padding: "40px 20px", textAlign: "center", color: "var(--text-5)", fontSize: 12 }}>
+            <div style={{ padding: "40px 20px", textAlign: "center", color: "var(--text-5)", fontSize: 13 }}>
               {t("stats.empty")}
             </div>
           ) : (
@@ -624,13 +659,12 @@ export default function StatsPanel() {
                   <StatTile label={t("stats.tile.planned")} value={totalSHPlaced}
                     sub={incomingSH > 0 ? t("stats.tile.inclIncoming", { n: incomingSH, unit }) : unit} color={UG_COLOR} />
                   <StatTile label={t("stats.tile.courses")} value={placedIds.length} sub={t("stats.tile.coursesSub")} />
-                  {remaining != null && <StatTile label={t("stats.tile.remaining")} value={remaining} sub={unit} />}
                 </div>
 
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                    <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)" }}>{t("stats.nupath")}</span>
-                    <span style={{ fontSize: 11, fontWeight: 800, color: nupath.covered >= nupath.total ? COOP_COLOR : "var(--text-2)" }}>
+                    <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-3)" }}>{t("stats.nupath")}</span>
+                    <span style={{ fontSize: 12.5, fontWeight: 800, color: nupath.covered >= nupath.total ? COOP_COLOR : "var(--text-2)" }}>
                       {nupath.covered}/{nupath.total}
                     </span>
                   </div>
@@ -664,7 +698,7 @@ export default function StatsPanel() {
                           {cutoff && (
                             <div style={{ display: "flex", alignItems: "center", gap: 6, margin: "2px 0 9px" }}>
                               <div style={{ flex: 1, height: 1, background: GRAD_COLOR, opacity: 0.5 }} />
-                              <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.08em", color: GRAD_COLOR, textTransform: "uppercase" }}>{t("stats.level.gradline")}</span>
+                              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: GRAD_COLOR, textTransform: "uppercase" }}>{t("stats.level.gradline")}</span>
                               <div style={{ flex: 1, height: 1, background: GRAD_COLOR, opacity: 0.5 }} />
                             </div>
                           )}
@@ -702,10 +736,10 @@ export default function StatsPanel() {
               <Section title={t("stats.section.load")} hint={t("stats.load.hint")}>
                 <LoadChart rows={timeline.rows} fullTimeMin={shMin} semesterMax={shMaxRef} shortSem={shortSem} />
                 <div style={{ display: "flex", gap: 14, marginTop: 8, flexWrap: "wrap" }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 9, color: "var(--text-5)" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10.5, color: "var(--text-5)" }}>
                     <span style={{ width: 16, height: 2, background: UG_COLOR, display: "inline-block" }} />{t("stats.load.legend.line")}
                   </span>
-                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 9, color: "var(--text-5)" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10.5, color: "var(--text-5)" }}>
                     <span style={{ width: 16, height: 10, background: COOP_COLOR, opacity: 0.3, display: "inline-block", borderRadius: 2 }} />{t("stats.load.legend.coop")}
                   </span>
                 </div>
@@ -716,15 +750,19 @@ export default function StatsPanel() {
 
               {/* ── 4 · EXPERIENCE & DEPTH ── */}
               <Section title={t("stats.section.experience")}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-4)", marginBottom: 8 }}>{t("stats.work.title")}</div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-4)", marginBottom: 8 }}>{t("stats.work.title")}</div>
                 {work.items.length === 0 ? (
-                  <div style={{ fontSize: 10, color: "var(--text-5)", marginBottom: 12 }}>{t("stats.work.none")}</div>
+                  <div style={{ fontSize: 11.5, color: "var(--text-5)", marginBottom: 12 }}>{t("stats.work.none")}</div>
                 ) : (
                   <>
-                    <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
-                      <StatTile label={t("stats.work.terms")} value={work.items.length} />
-                      <StatTile label={t("stats.work.months")} value={work.months} sub={t("stats.work.monthsSub")} />
-                      <StatTile label={t("stats.work.companies")} value={work.companies} />
+                    {/* Compact one-line summary (replaces the three big tiles). */}
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "2px 10px",
+                      fontSize: 12, color: "var(--text-4)", marginBottom: 12 }}>
+                      <span><b style={{ color: "var(--text-2)", fontWeight: 800 }}>{work.items.length}</b> {t("stats.work.terms")}</span>
+                      <span style={{ color: "var(--text-6)" }}>·</span>
+                      <span><b style={{ color: "var(--text-2)", fontWeight: 800 }}>{work.months}</b> {t("stats.work.months")}</span>
+                      <span style={{ color: "var(--text-6)" }}>·</span>
+                      <span><b style={{ color: "var(--text-2)", fontWeight: 800 }}>{work.companies}</b> {t("stats.work.companies")}</span>
                     </div>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
                       {work.items.map(w => <WorkCard key={w.id} w={w} />)}
@@ -732,22 +770,22 @@ export default function StatsPanel() {
                   </>
                 )}
 
-                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-4)", margin: "14px 0 4px" }}>{t("stats.chains.title")}</div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-4)", margin: "14px 0 4px" }}>{t("stats.chains.title")}</div>
                 {chains.length === 0 ? (
-                  <div style={{ fontSize: 10, color: "var(--text-5)" }}>{t("stats.chains.none")}</div>
+                  <div style={{ fontSize: 11.5, color: "var(--text-5)" }}>{t("stats.chains.none")}</div>
                 ) : (
                   <>
-                  <div style={{ fontSize: 8.5, color: "var(--text-5)", marginBottom: 7, lineHeight: "calc(1.45 * var(--lh-scale, 1))" }}>{t("stats.chains.note")}</div>
+                  <div style={{ fontSize: 10, color: "var(--text-5)", marginBottom: 7, lineHeight: "calc(1.45 * var(--lh-scale, 1))" }}>{t("stats.chains.note")}</div>
                   {chains.map((ch, i) => (
                     <div key={i} style={{ marginBottom: 8 }}>
                       {/* "Trace on grid" (showPrereqTree) hidden with the prereq-tree
                           depth feature — the multi-hop tree read as confusing. */}
-                      <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 3 }}>{t("stats.chains.depth", { n: ch.len })}</div>
+                      <div style={{ fontSize: 10.5, color: "var(--text-5)", marginBottom: 3 }}>{t("stats.chains.depth", { n: ch.len })}</div>
                       <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 3 }}>
                         {ch.path.map((id, j) => (
                           <span key={id} style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
                             <ClassChip id={id} cmap={cmap} onOpen={openCourse} faded={incomingSet.has(id)} />
-                            {j < ch.path.length - 1 && <span style={{ color: "var(--text-5)", fontSize: 10 }}>→</span>}
+                            {j < ch.path.length - 1 && <span style={{ color: "var(--text-5)", fontSize: 11.5 }}>→</span>}
                           </span>
                         ))}
                       </div>
@@ -757,7 +795,7 @@ export default function StatsPanel() {
                 )}
               </Section>
 
-              <div style={{ fontSize: 8.5, color: "var(--text-6)", textAlign: "center", padding: "4px 0 8px" }}>
+              <div style={{ fontSize: 10, color: "var(--text-6)", textAlign: "center", padding: "4px 0 8px" }}>
                 {t("stats.footer")}
               </div>
             </>

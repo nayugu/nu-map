@@ -19,6 +19,13 @@ import YearStepper    from "./YearStepper.jsx";
 import { SemLabel }   from "./SemLabel.jsx";
 import NewPlanModal   from "./NewPlanModal.jsx";
 
+// Measured header-row width (logical px) below which the labeled buttons fold
+// to icon-only. Above it, labeled buttons wrap into two stacked groups
+// automatically via flex-wrap. One breakpoint for every device — phones (always
+// narrower than this) land on icons-on-the-right, matching desktop's folded
+// look, and app/browser zoom drives the transition the same everywhere.
+const HEADER_FOLD_BP = 560;
+
 // Touch scroll-lock for header dropdown panels: consume touchmove at the
 // panel's scroll bounds so the gesture never chains into the planner's
 // scroll container behind it. Native non-passive listener — React's
@@ -94,6 +101,44 @@ export default function Header() {
   const [selectedIds, setSelectedIds] = useState(new Set());
   const lastClickedIdx = useRef(-1);
   const { showNewPlanModal, setShowNewPlanModal } = usePlanner();
+
+  // ── Responsive header: measure the *rendered* width, not window.innerWidth ──
+  // The app container is transform:scale(uiScale) on tablet/desktop, so app zoom
+  // (and browser zoom) shrink the header's logical width without changing
+  // innerWidth. A ResizeObserver on the button row is the one signal that
+  // captures every case — phone, iPad, Mac, and every zoom level alike.
+  // Above HEADER_COMPACT_BP the two button groups wrap into two stacked rows
+  // (pure flex-wrap, no threshold); below it every button folds to icon-only
+  // on a single compact row.
+  const headerRowRef = useRef(null);
+  const [headerRowW, setHeaderRowW] = useState(() => (isMobile ? 400 : 1200));
+  useEffect(() => {
+    const el = headerRowRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(entries => {
+      const w = entries[0]?.contentRect?.width;
+      if (w) setHeaderRowW(w);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const iconOnly = headerRowW < HEADER_FOLD_BP;
+
+  // Phone: the header buttons sit in a tight row, so a dropdown anchored to a
+  // button's edge (right: 0 / left: 0) can spill off-screen. On phone we instead
+  // pin every button popover as a viewport-centred sheet just below the header.
+  // phonePopTop tracks the header's bottom edge so the sheet clears it.
+  const [phonePopTop, setPhonePopTop] = useState(96);
+  const openPhonePop = () => {
+    if (isPhone && headerRowRef.current) {
+      setPhonePopTop(Math.round(headerRowRef.current.getBoundingClientRect().bottom) + 6);
+    }
+  };
+  const phonePopFixed = isPhone ? {
+    position: "fixed", top: phonePopTop, left: "50%", right: "auto",
+    transform: "translateX(-50%)", width: "calc(100vw - 16px)", maxWidth: 360,
+    maxHeight: `calc(100dvh - ${phonePopTop + 12}px)`, overflowY: "auto", zIndex: 9500,
+  } : null;
 
   useEffect(() => {
     if (!showPlanMenu) { setPlanSearch(""); setSelectMode(false); setSelectedIds(new Set()); lastClickedIdx.current = -1; return; }
@@ -538,8 +583,15 @@ export default function Header() {
           )} */}
         </div>
 
-        {/* Row 2: SH badges left · buttons right — never wraps */}
-        <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", minWidth: 0 }}>
+        {/* Row 2: Group 1 (SH badges + plan/major) · Group 2 (controls).
+            Wraps into two stacked rows when narrow; folds to icon-only below
+            HEADER_FOLD_BP(_PHONE). Width is measured via headerRowRef, so
+            app/browser zoom drives it the same on phone, iPad, and Mac. */}
+        <div ref={headerRowRef} style={{ display: "flex", gap: 4, rowGap: 6, alignItems: "center", flexWrap: "wrap", minWidth: 0 }}>
+          {/* ── Group 1: completed-SH badge · placed-SH badge · plan/major name.
+               marginRight:auto pushes Group 2 to the far right on a single line;
+               when the row is too narrow, Group 2 wraps beneath as a whole. ── */}
+          <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", minWidth: 0, marginRight: "auto" }}>
           {/* SH badges — left side */}
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--bg-surface)", border: "1px solid var(--success-border)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
             {t("header.credits.done", { n: totalSHDone, unit: unitName })}
@@ -563,7 +615,7 @@ export default function Header() {
               borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 5px" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
             {isPhone
               ? <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾</span>
-              : isMobile ? "/" : `/ ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
+              : iconOnly ? "/" : `/ ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
           </button>
 
           {showPlanMenu && (
@@ -684,21 +736,25 @@ export default function Header() {
           )}
         </div>
 
-        {/* Spacer */}
-          <div style={{ flex: 1, minWidth: isPhone ? 16 : 0 }} />
+          </div>{/* ── end Group 1 ── */}
+
+          {/* ── Group 2: Claude dot · I/O · settings · cohort · stats · about.
+               A nowrap unit so these controls wrap together beneath Group 1
+               when narrow, then fold to icon-only via `iconOnly`. ── */}
+          <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", flexShrink: 0 }}>
 
         {/* Claude liveness dot — invisible unless the user has linked Claude */}
         <ClaudeDot />
 
         {/* Input/Output Dropdown */}
         <div style={{ position: "relative", flexShrink: 0 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowIO(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); setShowIO(v => !v); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color: showIO ? "var(--text-2)" : "var(--text-4)",
               background: showIO ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px solid ${showIO ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { width: 22, height: 20, padding: 0, justifyContent: "center" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
-            {isMobile ? "⇅" : `⇅ ${t("header.io.button")}`}
+              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(iconOnly ? { width: isPhone ? 22 : 26, height: isPhone ? 20 : 22, padding: 0, justifyContent: "center" } : { height: isPhone ? 20 : 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
+            {iconOnly ? "⇅" : `⇅ ${t("header.io.button")}`}
           </button>
           {showIO && (
             <div onClick={e => e.stopPropagation()} style={{
@@ -706,6 +762,7 @@ export default function Header() {
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
+              ...(phonePopFixed || {}),
             }}>
               <div style={{ display: "flex", gap: 4 }}>
                 <button className="hdr-btn-dd"
@@ -779,13 +836,13 @@ export default function Header() {
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative", flexShrink: 0 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowQuickSet(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); setShowQuickSet(v => !v); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border:    `1px solid ${showQuickSet ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { width: 22, height: 20, padding: 0, justifyContent: "center" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
-            {isMobile ? "⚙" : `⚙ ${t("header.settings.button")}`}
+              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(iconOnly ? { width: isPhone ? 22 : 26, height: isPhone ? 20 : 22, padding: 0, justifyContent: "center" } : { height: isPhone ? 20 : 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
+            {iconOnly ? "⚙" : `⚙ ${t("header.settings.button")}`}
           </button>
 
           {showQuickSet && (
@@ -796,17 +853,8 @@ export default function Header() {
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "10px 12px", minWidth: 190, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
+              ...(phonePopFixed || {}),
             }}>
-              {/* Stats — lives here on phone (no room in the header row) */}
-              {isPhone && (
-                <button className="hdr-btn-dd" onClick={() => { setShowQuickSet(false); setShowStats(true); }}
-                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                    background: "var(--bg-surface)", padding: "5px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-3)",
-                    display: "inline-flex", alignItems: "center", gap: 6 }}>
-                  <StatChartIcon />{t("stats.button")}
-                </button>
-              )}
               {/* Language picker + course translation toggle — moved to the top */}
               {locales.length > 1 && (
                 <div style={{ borderBottom: "1px solid var(--border-1)", paddingBottom: 12, marginBottom: 4 }}>
@@ -1021,29 +1069,8 @@ export default function Header() {
                 </div>
               </div>
               )}
-              {isPhone && (
-                <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5, textTransform: "uppercase" }}>{t("header.cohort.title")}</div>
-                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>{t("header.cohort.entry")}</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 6 }}>
-                    {["fall","spring"].map(s => {
-                      const wouldBe = semOrd(s, planEntYear);
-                      const blocked = wouldBe >= gradOrd;
-                      return (<button key={s} onClick={() => { if (!blocked) setEntSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>);
-                    })}
-                    <YearStepper year={planEntYear} min={2010} max={maxEntYear} canInc={entOrd + 2 < gradOrd && planEntYear < maxEntYear} onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }} onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < maxEntYear) setEntYear(planEntYear + 1); }} />
-                  </div>
-                  <div style={{ fontSize: 9, color: "var(--text-4)", marginBottom: 3 }}>{t("header.cohort.graduation")}</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-                    {["fall","spring"].map(s => {
-                      const wouldBe = semOrd(s, planGradYear);
-                      const blocked = wouldBe <= entOrd;
-                      return (<button key={s} onClick={() => { if (!blocked) setGradSem(s); }} style={{ flex: 1, fontSize: 9, padding: "3px 0", borderRadius: 4, cursor: blocked ? "not-allowed" : "pointer", background: planGradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent", border: `1px solid ${planGradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`, color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)", fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1 }}>{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>);
-                    })}
-                    <YearStepper year={planGradYear} min={2010} max={2040} canDec={gradOrd - 2 > entOrd} onDec={() => { if (gradOrd - 2 > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }} onInc={() => { if (planGradYear < 2040) setGradYear(planGradYear + 1); }} />
-                  </div>
-                </div>
-              )}
+              {/* Cohort dates moved out of Settings — the 🎓 button now shows on
+                  every device (including phone) with its own date-picker popover. */}
 
               {/* Claude — optional integration; a single quiet entry until linked */}
               {aiAssistantAvailable && (
@@ -1093,20 +1120,21 @@ export default function Header() {
           )}
         </div>
 
-        {/* Cohort date picker — hidden on phone, available via Settings above */}
-        {!isPhone && <div style={{ position: "relative" }}>
+        {/* Cohort date picker — on every device; its popover is the date picker */}
+        <div style={{ position: "relative" }}>
           <button
             className="hdr-btn"
-            onClick={e => { e.stopPropagation(); setShowSettings(v => !v); }}
+            onClick={e => { e.stopPropagation(); openPhonePop(); setShowSettings(v => !v); }}
             title={t("header.cohort.button.title")}
             style={{
-              fontSize: 10, cursor: "pointer", whiteSpace: "nowrap",
+              fontSize: isPhone ? 8 : 10, cursor: "pointer", whiteSpace: "nowrap",
             color: cohortPreviewChanged ? "#fb923c" : showSettings ? "var(--text-2)" : "var(--text-4)",
             background: showSettings ? "var(--bg-surface)" : "var(--bg-surface-2)",
             border: cohortPreviewChanged ? "2px dashed #fb923c" : `1px solid ${showSettings ? "var(--active)" : "var(--border-2)"}`,
-              borderRadius: 5, padding: "0 8px", height: 22, display: "inline-flex", alignItems: "center", lineHeight: 1, whiteSpace: "nowrap",
+              borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, whiteSpace: "nowrap",
+              ...(iconOnly ? { width: isPhone ? 22 : 26, height: isPhone ? 20 : 22, padding: 0, justifyContent: "center" } : { height: isPhone ? 20 : 22, padding: "0 8px" }),
             }}
-          >{isMobile ? "🎓" : `🎓 ${t("header.cohort.button")}`}</button>
+          >{iconOnly ? "🎓" : `🎓 ${t("header.cohort.button")}`}</button>
 
           {showSettings && (
             // Viewport cap + scrolling comes from .hdr-pop (index.html) — a
@@ -1117,6 +1145,7 @@ export default function Header() {
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "14px 16px", minWidth: 270, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 12,
+              ...(phonePopFixed || {}),
             }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>{t("header.cohort.title")}</div>
 
@@ -1210,25 +1239,25 @@ export default function Header() {
 
             </div>
           )}
-        </div>}
+        </div>
 
-        {/* Stats button — plan insights overlay. On phone it lives inside the
-            ⚙ settings dropdown instead of the (cramped) header row. */}
-        {!isPhone && <button
+        {/* Stats button — plan insights overlay. Present on every device. */}
+        <button
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowStats(true); }}
           title={t("stats.button.title")}
-          style={{ fontSize: 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, height: 22, padding: "0 8px", whiteSpace: "nowrap" }}
-        >{isMobile ? <StatChartIcon /> : <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}><StatChartIcon />{t("stats.button")}</span>}</button>}
+          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, whiteSpace: "nowrap", ...(iconOnly ? { width: isPhone ? 22 : 26, height: isPhone ? 20 : 22, padding: 0, justifyContent: "center" } : { height: isPhone ? 20 : 22, padding: "0 8px" }) }}
+        >{iconOnly ? <StatChartIcon /> : <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}><StatChartIcon />{t("stats.button")}</span>}</button>
 
         {/* About button */}
         <button
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowDisclaimer(true); }}
           title={t("header.about.title")}
-          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { width: 22, height: 20, padding: 0, justifyContent: "center" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}
-        >{isMobile ? "ⓘ" : `ⓘ ${t("header.about.button")}`}</button>
+          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(iconOnly ? { width: isPhone ? 22 : 26, height: isPhone ? 20 : 22, padding: 0, justifyContent: "center" } : { height: isPhone ? 20 : 22, padding: "0 8px", whiteSpace: "nowrap" }) }}
+        >{iconOnly ? "ⓘ" : `ⓘ ${t("header.about.button")}`}</button>
 
+          </div>{/* ── end Group 2 ── */}
         </div>{/* end controls row */}
       </div>{/* end header */}
 

@@ -5,7 +5,7 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect } from "react";
 import { TYPE_BG } from "../core/constants.js";
-import { getSemSH, getOrderedCourses } from "../core/planModel.js";
+import { getSemStudySH, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
@@ -49,7 +49,9 @@ export default function SummerRow({ semA, semB }) {
   const sems     = [semA, semB].filter(Boolean);
   const combinedDone   = sems.every(s => getSemStatus(s.id) === "completed");
   const combinedActive = sems.some(s => getSemStatus(s.id) === "inprogress");
-  const combinedSH     = sems.reduce((sum, s) => sum + getSemSH(s.id, placements, effectiveCourseMap), 0);
+  // Per-half: a co-op occupying Summer A/B excludes that half's courses from the
+  // combined load (they stay in the plan, recoverable) — see getSemStudySH.
+  const combinedSH     = sems.reduce((sum, s) => sum + getSemStudySH(s.id, placements, effectiveCourseMap, specialTermStartMap, specialTermContMap), 0);
   const tb         = TYPE_BG.summer;
   const rowBg      = tb.bg;
   const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;

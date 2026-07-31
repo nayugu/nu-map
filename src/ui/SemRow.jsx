@@ -5,7 +5,7 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect } from "react";
 import { TYPE_BG } from "../core/constants.js";
-import { hexRgb, getSemSH, getOrderedCourses } from "../core/planModel.js";
+import { hexRgb, getSemStudySH, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
@@ -93,7 +93,10 @@ export default function SemRow({ sem }) {
     .findIndex(([eid]) => eid === id) + 1;
   const courseIds  = getOrderedCourses(sem.id, placements, semOrders, courseMap);
   const crs        = courseIds.map(id => effectiveCourseMap[id] ?? courseMap[id]).filter(Boolean);
-  const sh         = getSemSH(sem.id, placements, effectiveCourseMap);
+  // Co-op terms are work terms: parked courses stay (recoverable) but don't
+  // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
+  // the term (via the start/continuation maps).
+  const sh         = getSemStudySH(sem.id, placements, effectiveCourseMap, specialTermStartMap, specialTermContMap);
   const main4      = crs.filter(c => c.sh >= 3);
   const others     = crs.filter(c => c.sh <= 2);
   const isGrad      = studentType === "graduate";
