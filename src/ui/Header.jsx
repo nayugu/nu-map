@@ -94,6 +94,13 @@ export default function Header() {
   const [showClaudeConnect, setShowClaudeConnect] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
+
+  // Header dropdowns are XOR — opening any tab closes whichever other one is
+  // open, so at most one header popover is visible at a time.
+  const toggleHeaderPop = (isOpen, setOpen) => {
+    setShowPlanMenu(false); setShowIO(false); setShowQuickSet(false); setShowSettings(false);
+    if (!isOpen) setOpen(true);
+  };
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [shareLinkLocale, setShareLinkLocale] = useState(locale);
   const [planSearch, setPlanSearch] = useState("");
@@ -639,7 +646,7 @@ export default function Header() {
         
         {/* Plan switcher dropdown */}
         <div style={{ position: "relative", minWidth: 0, flexShrink: 1 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowPlanMenu(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); toggleHeaderPop(showPlanMenu, setShowPlanMenu); }}
             data-claude-focus="planName"
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? planNameMax : 160,
               overflow: "hidden",
@@ -791,7 +798,7 @@ export default function Header() {
 
         {/* Input/Output Dropdown */}
         <div style={{ position: "relative", flexShrink: 0 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); setShowIO(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); toggleHeaderPop(showIO, setShowIO); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color: showIO ? "var(--text-2)" : "var(--text-4)",
               background: showIO ? "var(--bg-surface)" : "var(--bg-surface-2)",
@@ -879,7 +886,7 @@ export default function Header() {
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative", flexShrink: 0 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); setShowQuickSet(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); toggleHeaderPop(showQuickSet, setShowQuickSet); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
@@ -1167,7 +1174,7 @@ export default function Header() {
         <div style={{ position: "relative" }}>
           <button
             className="hdr-btn"
-            onClick={e => { e.stopPropagation(); openPhonePop(); setShowSettings(v => !v); }}
+            onClick={e => { e.stopPropagation(); openPhonePop(); toggleHeaderPop(showSettings, setShowSettings); }}
             title={t("header.cohort.button.title")}
             style={{
               fontSize: isPhone ? 8 : 10, cursor: "pointer", whiteSpace: "nowrap",
