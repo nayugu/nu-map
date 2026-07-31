@@ -176,6 +176,9 @@ function CourseInfo({ selCourse, navTo }) {
 
   const catalogUrl = courseCatalog?.courseUrl?.(selCourse) ?? null;
   const [codeHover, setCodeHover] = useState(false);
+  // Hovered NUPath badge (desktop only — hover never fires on touch). Holds
+  // the badge's on-screen rect so the full-name popover can anchor to it.
+  const [npHover, setNpHover] = useState(null); // { code, rect }
 
   const dir     = locales.find(l => l.code === locale)?.dir ?? "ltr";
   const isNonEn = locale !== catalogLocale;
@@ -219,11 +222,16 @@ function CourseInfo({ selCourse, navTo }) {
           </span>
         )}
         {selCourse.attributes?.map(np => (
-          <span key={np} title={attributeSystem.getLabel(np)}
-            style={{ fontSize: 9, color: "var(--nupath-text)", background: "var(--nupath-bg)", border: "1px solid var(--nupath-border)", borderRadius: 3, padding: "1px 5px", cursor: "default" }}>
+          <span key={np}
+            onMouseEnter={e => setNpHover({ code: np, rect: e.currentTarget.getBoundingClientRect() })}
+            onMouseLeave={() => setNpHover(null)}
+            style={{ fontSize: 9, color: "var(--nupath-text)", background: "var(--nupath-bg)", border: "1px solid var(--nupath-border)", borderRadius: 3, padding: "1px 5px", cursor: "help" }}>
             {np}
           </span>
         ))}
+        {npHover && (
+          <NuPathPopover label={attributeSystem.getLabel(npHover.code)} rect={npHover.rect} />
+        )}
         {catalogUrl && (
           <a href={catalogUrl} target="_blank" rel="noopener noreferrer"
             style={{ fontSize: 9, color: "var(--text-5)", textDecoration: "none", marginLeft: 2 }}
@@ -1134,6 +1142,46 @@ function SchedulePopover({ pat, color, rect }) {
           );
         })}
       </div>
+    </div>,
+    document.body
+  );
+}
+
+// Instant full-name card for a hovered NUPath badge (desktop only — same
+// hover-anchored portal pattern as OfferingPopover/SchedulePopover, and
+// portalled to document.body for the same transform:scale reason). Replaces
+// the native `title` tooltip, whose ~1s delay made the names feel hidden.
+function NuPathPopover({ label, rect }) {
+  const ref = useRef(null);
+  const [placed, setPlaced] = useState(null);   // measured-and-clamped position
+  const GAP  = 7;    // clearance between the badge and the popover
+  const EDGE = 8;    // min clearance from any viewport edge
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const w = el.offsetWidth, h = el.offsetHeight;
+    let left = rect.left + rect.width / 2 - w / 2;                   // centred over the badge
+    left = Math.min(Math.max(EDGE, left), window.innerWidth - w - EDGE);
+    let top = rect.top - GAP - h;                                    // above the badge…
+    if (top < EDGE) top = rect.bottom + GAP;                         // …or below if it'd clip the top
+    top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
+    setPlaced({ top: Math.round(top), left: Math.round(left) });
+  }, [rect]);
+
+  return createPortal(
+    <div ref={ref} style={{
+      position: "fixed",
+      left: placed ? placed.left : Math.round(rect.left),
+      top:  placed ? placed.top  : Math.round(rect.top),
+      zIndex: 9000, padding: "7px 11px", whiteSpace: "nowrap",
+      background: "var(--bg-surface)", border: "1px solid var(--border-card)",
+      borderRadius: 7, boxShadow: "var(--shadow-modal)", pointerEvents: "none",
+      fontFamily: "'Inter', system-ui, sans-serif",
+      fontSize: 13.5, color: "var(--text-2)",
+      visibility: placed ? "visible" : "hidden",
+    }}>
+      <bdi>{label}</bdi>
     </div>,
     document.body
   );
