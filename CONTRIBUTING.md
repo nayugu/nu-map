@@ -77,11 +77,11 @@ permanent record of authorship.
 > therefore be executed by one author and would nonetheless give rise to an
 > obligation to the other.
 >
-> Matthew's contributions predate clause 3 and he has consented in person to it
-> applying to them. That isn't quite enough on its own: a non-exclusive licence
-> given for nothing is revocable at will, and a paying licensee needs to know
-> neither of us can withdraw the rights it relies on.
+> Matthew's contributions predate clause 3. Clause 3 alone was never quite enough
+> for them: a non-exclusive licence given for nothing is revocable at will, and a
+> paying licensee needs to know neither of us can withdraw the rights it relies on.
 >
-> The fix is one page — [`docs/co-ownership-agreement.md`](docs/co-ownership-agreement.md).
-> **Sign it and the last gate is closed.** Until then, no licence under Option B
-> is granted. Clause 3 above still governs third-party contributions.
+> **That is settled.** Both authors have signed
+> [`docs/co-ownership-agreement.md`](docs/co-ownership-agreement.md), which grants
+> each the other identical irrevocable rights and fixes the division of proceeds.
+> Clause 3 above continues to govern third-party contributions.

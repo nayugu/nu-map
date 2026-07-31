@@ -383,18 +383,17 @@ of the University's own trademarks in "Northeastern".
 prospectively. Every version of the Work heretofore published remains available
 under Option A in perpetuity and that availability cannot be withdrawn.
 
-9.4. **Joint authorship — OPEN; the sole remaining condition precedent to Option
-B.** Matthew Gu has consented in person to the contributor grant at
-`CONTRIBUTING.md` clause 3 applying to his existing contributions, but a
-non-exclusive licence granted without consideration is generally revocable at
-will, and withdrawal would expose any executed commercial licence to an
-infringement claim over that author's contributions. A paying licensee requires
-an *irrevocable* grant. That is supplied by
+9.4. **Joint authorship — RESOLVED.** A non-exclusive licence granted without
+consideration is generally revocable at will, and withdrawal would have exposed
+any executed commercial licence to an infringement claim over the withdrawing
+author's contributions. A paying licensee requires an *irrevocable* grant. That is
+supplied by
 [`docs/co-ownership-agreement.md`](docs/co-ownership-agreement.md), where each
 author grants the other identical rights — the mutual exchange being the
 consideration — and which also fixes the division of proceeds and permits either
-author to sign alone. **No license under Option B is to be executed until that
-page is signed.**
+author to sign alone. **Both authors have signed**, each in their own commit
+(`c6813b1c3` and `40a45546c`), so the grant is in place and Option B may be
+executed.
 
 ---
 

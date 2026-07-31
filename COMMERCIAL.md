@@ -8,14 +8,6 @@ license identified as Option B in `LICENSING.md` §2.3. Defined terms used here
 have the meanings given in `LICENSING.md` §1, and additionally those given in §2
 below.
 
-> **Status: not yet executable.** These terms are settled and published so that a
-> prospective licensee can see them, but the Licensor cannot yet execute a license
-> under Option B. One matter remains outstanding: the agreement between the joint
-> authors recorded at `LICENSING.md` §9.4, which must be concluded before any
-> grant is made. Inquiries are welcome now and will be answered candidly as to
-> timing. Nothing on this page affects Option A, which is available immediately
-> and at no cost.
-
 ---
 
 ### Plain-language summary (non-binding)
