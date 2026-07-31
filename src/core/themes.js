@@ -31,11 +31,15 @@ const dark = {
   '--text-6':            '#555d66',   // separator
 
   // ── Status: success / done ───────────────────────────────────────
-  '--success':              '#4ade80',
+  // Emerald (the palette's CET/ENVR green), not lime: #4ade80 read neon
+  // against #0d1117 — ticks, bars and counts all run on this token.
+  '--success':              '#34d399',
   '--success-bg':           '#0d2a17',
   '--success-border':       '#1a4a25',
   '--success-deep':         '#2a7a3a',
-  '--success-bar-partial':  '#4aab6a',   // in-progress section bar (lighter muted green, slightly more saturated)
+  '--success-bar':          '#34d399',   // progress-bar fill (light desaturates fills only)
+  '--planned-bar':          '#58a6ff',   // planned progress-bar fill (BNSC blue)
+  '--success-bar-partial':  '#3f9e79',   // in-progress section bar (muted emerald, reads under the sat bar)
 
   // ── Status: active / current ─────────────────────────────────────
   '--active':            '#58a6ff',
@@ -76,11 +80,11 @@ const dark = {
   // ── Badges / chips ───────────────────────────────────────────────
   '--badge-bg':          '#0d1117',
   '--badge-border':      '#21262d',
-  '--nupath-text':       '#4ade80',
+  '--nupath-text':       '#34d399',
   '--nupath-bg':         '#0d1f14',
   '--nupath-border':     '#166534',
   '--nupath-sat-text':   '#7eba96',
-  '--nupath-sat-border': '#22c55e',
+  '--nupath-sat-border': '#10b981',
 
   // ── Links / modal accents ─────────────────────────────────────────
   '--link-1':            '#58a6ff',
@@ -136,11 +140,18 @@ const light = {
   '--text-6':            '#a3a3a3',
 
   // ── Status: success / done ────────────────────────────────────────
-  '--success':              '#16a34a',   // medium green — lighter & readable on white
+  // Same emerald as dark (the palette's CET/ENVR green) for text/ticks;
+  // BAR FILLS alone drop one saturation notch — equally vibrant on white,
+  // no fluorescence (see --success-bar / --planned-bar).
+  '--success':              '#34d399',
   '--success-bg':           '#bbf7d0',   // bright lime tint
   '--success-border':       '#4ade80',   // vivid lime accent
   '--success-deep':         '#14532d',   // deepest for left-bar / done row
-  '--success-bar-partial':  '#9dd4ac',   // in-progress section bar (light sage, slightly more saturated)
+  // Bar fills: saturation PINNED, lightness raised (the design language's
+  // lighten rule) — candy-bright tints of the exact status hues.
+  '--success-bar':          '#71e0bb',   // emerald tint, full chroma
+  '--planned-bar':          '#85bcff',   // BNSC-blue tint, full chroma
+  '--success-bar-partial':  '#98e1c9',   // in-progress section bar (lighter emerald tint, reads under the sat bar)
 
   // ── Status: active / current ──────────────────────────────────────
   '--active':            '#2563eb',   // vivid blue
@@ -183,14 +194,15 @@ const light = {
   // ── Badges / chips ────────────────────────────────────────────────
   '--badge-bg':          '#faf9f8',
   '--badge-border':      '#eeeeee',
-  '--nupath-text':       '#15803d',
+  '--nupath-text':       '#34d399',
   '--nupath-bg':         '#f0fdf4',
   '--nupath-border':     '#86efac',
   '--nupath-sat-text':   '#4a8f63',
-  '--nupath-sat-border': '#86efac',
+  '--nupath-sat-border': '#10b981',
 
   // ── Links / modal accents ──────────────────────────────────────────
-  '--link-1':            '#2563eb',
+  // BNSC blue — same planning colour as dark (bars use --planned-bar).
+  '--link-1':            '#58a6ff',
   '--link-2':            '#7c3aed',
   '--link-bg':           '#dbeafe',
   '--link-border':       '#7aaff8',

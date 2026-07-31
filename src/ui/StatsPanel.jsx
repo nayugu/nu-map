@@ -36,7 +36,6 @@ const COOP_COLOR = "#34d399";
 const SUMMER_COLOR = "#67e8f9";
 const TIER_PALETTE = ["#ffd47e", "#ffb27d", "#ff9b59", "#ff9365", "#ff6b6b", "#fb7185", "#f472b6", "#e879f9"];
 const tierColor = (tier) => TIER_PALETTE[Math.min(TIER_PALETTE.length - 1, Math.max(0, tier / 1000 - 1))];
-const isGradTier = (n) => (courseTier(n) ?? 0) >= 5000;
 
 const yearOf = (sem) => (String(sem?.id ?? "").match(/\d{4}/) || [""])[0];
 const faviconUrl = (domain) =>
@@ -234,18 +233,23 @@ function useDominantColor(domain, fallback) {
 // department; grad-level courses pulse with a glow in that same dept colour.
 function ClassChip({ id, cmap, onOpen, faded }) {
   const c = cmap[id];
-  const grad = isGradTier(c?.number);
   const deptColor = subjectColor(c?.subject ?? "");
+  // Same visual language as a course card: coloured course code on grey card
+  // chrome (the previous full-saturation coloured borders read neon in dark
+  // mode). Hover matches the card hover tint.
   return (
     <button onClick={() => onOpen(id)} title={c?.title ?? id}
       style={{
-        fontSize: 11, fontWeight: 700, padding: "3px 7px", borderRadius: 5, cursor: "pointer",
-        background: "var(--bg-surface-2)", color: "var(--text-2)", whiteSpace: "nowrap", lineHeight: 1.3,
-        border: `1px ${faded ? "dashed" : "solid"} ${deptColor}`, opacity: faded ? 0.4 : 1,
-        ...(grad && !faded ? { "--glow": deptColor, animation: "numap-glow 2.6s ease-in-out infinite" } : {}),
+        fontSize: 11, fontWeight: 800, padding: "3px 7px", borderRadius: 5, cursor: "pointer",
+        background: "var(--card-bg)", color: deptColor, whiteSpace: "nowrap", lineHeight: 1.3,
+        border: `1px ${faded ? "dashed" : "solid"} var(--border-card)`, opacity: faded ? 0.4 : 1,
+        transition: "background 0.12s, color 0.12s, border-color 0.12s",
       }}
-      onMouseEnter={e => { e.currentTarget.style.background = deptColor; e.currentTarget.style.color = "#0b0f14"; }}
-      onMouseLeave={e => { e.currentTarget.style.background = "var(--bg-surface-2)"; e.currentTarget.style.color = "var(--text-2)"; }}>
+      // Hover inverts: subject-colour fill, near-black code. The palette is
+      // uniformly bright (vivid pastel register), so dark text keeps strong
+      // contrast on every subject colour in BOTH themes; white wouldn't.
+      onMouseEnter={e => { e.currentTarget.style.background = deptColor; e.currentTarget.style.color = "#0b0f14"; e.currentTarget.style.borderColor = deptColor; }}
+      onMouseLeave={e => { e.currentTarget.style.background = "var(--card-bg)"; e.currentTarget.style.color = deptColor; e.currentTarget.style.borderColor = "var(--border-card)"; }}>
       {c?.code ?? id}
     </button>
   );

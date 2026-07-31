@@ -33,7 +33,7 @@ const GradCtx = createContext(null);
 
 // ── Shared atoms ─────────────────────────────────────────────────
 
-function ProgressBar({ frac, color = "var(--success)" }) {
+function ProgressBar({ frac, color = "var(--success-bar)" }) {
   return (
     <div style={{ height: 4, borderRadius: 2, background: "var(--border-2)", overflow: "hidden" }}>
       <div style={{
@@ -53,10 +53,10 @@ function CreditBar({ completedSH, plannedSH, requiredSH, showLabel = true, style
   return (
     <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)", overflow: "visible", margin: "14px 0 4px", ...style }}>
       {plannedSH > 0 && (
-        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalFrac * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />
+        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalFrac * 100)}%`, height: "100%", background: "var(--planned-bar)", borderRadius: 3 }} />
       )}
       {completedSH > 0 && (
-        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, completedSH / maxSH * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3 }} />
+        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, completedSH / maxSH * 100)}%`, height: "100%", background: "var(--success-bar)", borderRadius: 3 }} />
       )}
       {requiredSH > 0 && (
         <div style={{ position: "absolute", left: `${Math.min(99.5, reqFrac * 100)}%`, top: -3, height: 12, width: 2, background: "var(--text-3)", borderRadius: 1, transform: "translateX(-50%)" }}>
@@ -85,13 +85,23 @@ function CheckBox({ sat, dimmedCheck = false }) {
       </svg>
     </span>
   );
+  // Both themes: transparent box, fat emerald SVG check (the ✓ glyph maxes
+  // out too thin). The rim is state-dependent: UNFULFILLED keeps the full
+  // rim (it's a call to action); once resolved — checked here, or slashed
+  // via dimmedCheck when an alternative was picked — the chrome recedes to
+  // the same 40% strength as crossed-out alternatives (row opacity 0.4).
   return (
     <span style={{ ...base,
-      background: sat ? "var(--success-bg)"   : "var(--bg-surface-2)",
-      border: `1px solid ${sat ? "var(--success-border)" : "var(--border-2)"}`,
+      background: "transparent",
+      border: `1px solid ${sat ? "color-mix(in srgb, var(--border-2) 40%, transparent)" : "var(--border-2)"}`,
       color: sat ? "var(--success)" : "var(--text-5)",
     }}>
-      {sat ? "✓" : ""}
+      {sat && (
+        <svg width={sz - 4} height={sz - 4} viewBox="0 0 12 12" style={{ display: "block" }}>
+          <path d="M2 6.5 L4.8 9.2 L10 3.2" fill="none" stroke="var(--success)"
+            strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
     </span>
   );
 }
@@ -440,7 +450,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
       <div style={{ marginTop: 3 }}>
         {hasSplit
           ? <CreditBar completedSH={sec.completedSH} plannedSH={sec.plannedSH} requiredSH={sec.requiredSH} showLabel={false} style={{ margin: 0 }} />
-          : <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--success-bar-partial)"} />
+          : <ProgressBar frac={frac} color={sec.sat ? "var(--success-bar)" : "var(--success-bar-partial)"} />
         }
       </div>
       {/* Requirements */}
@@ -511,16 +521,18 @@ function NuPathGrid({ covered, sources = {} }) {
                 padding: isPhone ? "4px 2px" : "3px 5px",
                 borderRadius: isPhone ? 3 : 4,
                 fontSize: 9,
+                // Grey chrome; the emerald text alone carries "satisfied"
+                // (matches the Stats chips: colour in the type, not the frame).
                 background: "var(--bg-surface)",
-                border: `1px solid ${isActive ? "var(--active)" : sat ? "var(--nupath-sat-border)" : "var(--border-2)"}`,
-                color: sat ? "var(--nupath-sat-text)" : "var(--text-5)",
+                border: `1px solid ${isActive ? "var(--active)" : "var(--border-2)"}`,
+                color: sat ? "var(--success)" : "var(--text-5)",
                 fontWeight: sat ? 700 : 400,
               }}>
               <span style={{
                 flexShrink: 0, fontWeight: 800,
                 fontSize: isPhone ? 8.5 : 9,
                 lineHeight: 1,
-                color: sat ? "var(--nupath-sat-text)" : "var(--text-4)",
+                color: sat ? "var(--success)" : "var(--text-4)",
               }}>{key}</span>
               {!isPhone && (
                 <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -677,8 +689,8 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
             <span>{Math.round(totalSat / totalReq * 100)}%</span>
           </div>
           <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
-            {plannedSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalSat / totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />}
-            {doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, doneSat / totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />}
+            {plannedSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalSat / totalReq * 100)}%`, height: "100%", background: "var(--planned-bar)", borderRadius: 3 }} />}
+            {doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, doneSat / totalReq * 100)}%`, height: "100%", background: "var(--success-bar)", borderRadius: 3, transition: "width 0.2s" }} />}
           </div>
         </div>
       )}
@@ -727,8 +739,8 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
             <span> / {progress.totalReq}</span>
           </div>
           <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
-            {(progress.totalSat - progress.doneSat) > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.totalSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />}
-            {progress.doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.doneSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />}
+            {(progress.totalSat - progress.doneSat) > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.totalSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--planned-bar)", borderRadius: 3 }} />}
+            {progress.doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.doneSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--success-bar)", borderRadius: 3, transition: "width 0.2s" }} />}
           </div>
         </div>
       )}
