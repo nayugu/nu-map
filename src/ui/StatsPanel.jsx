@@ -408,19 +408,23 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
       <div ref={wrapRef} style={{
         overflow: "auto", maxHeight: 480, cursor: "grab",
         overscrollBehavior: "contain", userSelect: "none",
-        border: "1px solid var(--border-1)", borderRadius: 8, padding: "8px 10px",
+        border: "1px solid var(--border-1)", borderRadius: 8,
         background: "var(--bg-surface-2)",
       }}>
         <div ref={gridRef} style={{
           zoom,
           display: "grid", columnGap: 8,
-          gridTemplateColumns: `70px repeat(${byDept.length}, minmax(92px, 1fr))`,
-          minWidth: byDept.length * 100 + 78,
+          gridTemplateColumns: `78px repeat(${byDept.length}, minmax(92px, 1fr))`,
+          minWidth: byDept.length * 100 + 86,
+          paddingRight: 10, paddingBottom: 10,
         }}>
-          {/* header row: the per-department aggregates */}
-          <div />
+          {/* header row: the per-department aggregates — FROZEN (sticky top),
+              like the tier gutter (sticky left), so the axes stay readable
+              while panning the sparse canvas. The corner pins both ways. */}
+          <div style={{ position: "sticky", top: 0, left: 0, zIndex: 3, background: "var(--bg-surface-2)" }} />
           {byDept.map(g => (
-            <div key={g.subject} style={{ padding: "0 0 7px 2px" }}>
+            <div key={g.subject} style={{ position: "sticky", top: 0, zIndex: 2,
+              background: "var(--bg-surface-2)", padding: "8px 0 7px 2px" }}>
               <div style={{ fontSize: 13, fontWeight: 800, color: subjectColor(g.subject) }}>{g.subject}</div>
               <div style={{ fontSize: 10.5, color: "var(--text-4)", fontVariantNumeric: "tabular-nums", marginTop: 1 }}>
                 {g.sh} {unit} · {g.count}
@@ -432,7 +436,8 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
             const tt = tierTotals.get(tier);
             return (
               <Fragment key={tier}>
-                <div style={{ borderTop: rule(tier), padding: "5px 0" }}>
+                <div style={{ position: "sticky", left: 0, zIndex: 1,
+                  background: "var(--bg-surface-2)", borderTop: rule(tier), padding: "5px 0 5px 10px" }}>
                   <div style={{ fontSize: 10.5, fontWeight: 700, fontVariantNumeric: "tabular-nums",
                     color: tier >= 5000 ? GRAD_COLOR : "var(--text-4)" }}>{tier}</div>
                   {tt && (
