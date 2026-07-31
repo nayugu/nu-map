@@ -26,7 +26,7 @@ NU Map off AGPL-3.0 without the other agreeing.
 
 **Nathan Gu** Nathan Gu  Date July 31, 2026
 
-**Matthew Gu** ________________________  Date ____________
+**Matthew Gu** Matthew Gu  Date July 31, 2026
 
 *Not written by a lawyer. Fill in §3, both sign, then remove the status banner
 from `COMMERCIAL.md`.*
