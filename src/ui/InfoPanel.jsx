@@ -446,7 +446,7 @@ function DescriptionWithLinks({ text, courseMap, placements, navTo, onDragStart 
             data-drag-type={!isPlaced ? "course" : undefined}
             onDragStart={!isPlaced ? (e => onDragStart(e, p.id, "course", null)) : undefined}
             onClick={e => { e.stopPropagation(); navTo(p.id); }}
-            title={isPlaced ? `${p.c.title} (already placed) — click to view` : `${p.c.title} — drag to place or click to view`}
+            title={isPlaced ? `${p.c.title} (already placed). Click to view.` : `${p.c.title}. Drag to place or click to view.`}
             style={{
               cursor: isPlaced ? "pointer" : "grab",
               color: "var(--text-2)", fontWeight: 600,
@@ -497,7 +497,7 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
         onClick={e => { e.stopPropagation(); navTo(id); }}
         onMouseEnter={() => setHov(true)}
         onMouseLeave={() => setHov(false)}
-        title={c ? `${c.title}${item.concurrent ? " (may be taken concurrently)" : ""} — click to view, drag to place` : id}
+        title={c ? `${c.title}${item.concurrent ? " (may be taken concurrently)" : ""}. Click to view, drag to place.` : id}
         style={{
           display: "inline-block", fontSize: 9, fontWeight: 600,
           color: "var(--text-2)", background: "var(--bg-surface-2)",
@@ -538,7 +538,7 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
           const coreq   = isCoreq(rel.type);
           return (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
-              <span title={other ? `${other.title} — click to view` : undefined}
+              <span title={other ? `${other.title}. Click to view.` : undefined}
                 onClick={other ? (e => { e.stopPropagation(); navTo(otherId); }) : undefined}
                 onMouseEnter={other ? (e => { e.currentTarget.style.textDecoration = "underline"; }) : undefined}
                 onMouseLeave={other ? (e => { e.currentTarget.style.textDecoration = "none"; }) : undefined}
@@ -887,8 +887,8 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
         const labelDim      = ovr === false || (ovr === undefined && prob !== null && prob <= 0.5);
         const latestPastYr  = latestPastYearByType[id] ?? null;
         const probHint      = prob === null ? "No history" : `${Math.round(probPct * 100)}% historically`;
-        const ovrHint       = ovr === true ? " — forced on" : ovr === false ? " — forced off" : "";
-        const ctrlTip       = `${label}: ${probHint}${ovrHint} — click to cycle override`;
+        const ovrHint       = ovr === true ? " (forced on)" : ovr === false ? " (forced off)" : "";
+        const ctrlTip       = `${label}: ${probHint}${ovrHint}. Click to cycle override.`;
 
         return (
           <div key={id}

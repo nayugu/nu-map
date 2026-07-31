@@ -82,7 +82,7 @@ export function getMinorOptions(majorRequirements) {
 export function getMinorOptionGroups(majorRequirements) {
   const map = new Map();
   for (const opt of getMinorOptions(majorRequirements)) {
-    const key = `${opt.year} — ${opt.collegeLabel}`;
+    const key = `${opt.year} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
   }

@@ -104,7 +104,7 @@ export function getMajorOptions(majorRequirements) {
 export function getMajorOptionGroups(majorRequirements) {
   const map = new Map();
   for (const opt of getMajorOptions(majorRequirements)) {
-    const key = `${opt.year} — ${opt.collegeLabel}`;
+    const key = `${opt.year} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
   }
@@ -211,7 +211,7 @@ export function getGradMajorOptions(majorRequirements) {
 export function getGradMajorOptionGroups(majorRequirements) {
   const map = new Map();
   for (const opt of getGradMajorOptions(majorRequirements)) {
-    const key = `${opt.year} — ${opt.collegeLabel}`;
+    const key = `${opt.year} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
   }

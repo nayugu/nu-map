@@ -208,7 +208,7 @@ function describeAction(a, courseMap, semesters, t) {
     case "ADD_WORK_TERM":       return t("claude.act.workterm.add", {
                                   type: a.typeId === "coop" ? "co-op" : a.typeId,
                                   n: a.duration, sem: sem(a.semId),
-                                }) + (a.company ? ` — ${a.company}` : "");
+                                }) + (a.company ? ` (${a.company})` : "");
     case "REMOVE_WORK_TERM":    return t("claude.act.workterm.remove");
     case "MOVE_WORK_TERM":      return t("claude.act.workterm.move", { sem: sem(a.toSemId) });
     case "UPDATE_WORK_TERM":    return t("claude.act.workterm.update");

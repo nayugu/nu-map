@@ -186,7 +186,7 @@ const APPLIERS = {
   MOVE_COURSE: (plan, a, courseMap) => {
     const err = badCourse(courseMap, a.courseId) ?? badSem(a.toSemId);
     if (err) return err;
-    if (plan.placements[a.courseId] === undefined) return `${a.courseId} is not placed — use ADD_COURSE`;
+    if (plan.placements[a.courseId] === undefined) return `${a.courseId} is not placed; use ADD_COURSE`;
     plan.placements[a.courseId] = a.toSemId;
   },
 
@@ -270,7 +270,7 @@ const APPLIERS = {
     if (err) return err;
     if (a.value == null) { delete plan.shOverrides[a.courseId]; return; }
     const c = courseMap?.[a.courseId];
-    if (c && !c.shMax) return `${a.courseId} has fixed credits (${c.sh} SH) — credit overrides only apply to variable-credit courses`;
+    if (c && !c.shMax) return `${a.courseId} has fixed credits (${c.sh} SH); credit overrides only apply to variable-credit courses`;
     if (typeof a.value !== "number") return "value must be a number (or null to reset)";
     if (c && (a.value < (c.shMin ?? c.sh) || a.value > c.shMax))
       return `${a.courseId} allows ${c.shMin ?? c.sh}–${c.shMax} SH, got: ${a.value}`;

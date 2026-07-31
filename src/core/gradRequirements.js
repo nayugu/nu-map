@@ -73,7 +73,7 @@ export function checkReq(req, placedSet, courseMap) {
     case 'COURSE': {
       const key = courseKey(req.subject, req.classId);
       const sat = placedSet.has(key);
-      const desc = req.description ? ` — ${req.description}` : '';
+      const desc = req.description ? `: ${req.description}` : '';
       return {
         type: 'COURSE', key, sat,
         label: `${req.subject} ${req.classId}${desc}`,
@@ -543,7 +543,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
       }
       const allocatedCourses = sat ? new Set([key, ...coreqKeys.filter(k => placedSet.has(k))]) : new Set();
-      const desc = node.description ? ` — ${node.description}` : '';
+      const desc = node.description ? `: ${node.description}` : '';
       return {
         type: 'COURSE',
         key,
@@ -627,7 +627,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         const satSh = sat ? allotted : 0;
         const allocatedCourses = sat ? new Set([key]) : new Set();
         if (sat) used.add(key);
-        const desc = child.description ? ` — ${child.description}` : '';
+        const desc = child.description ? `: ${child.description}` : '';
         return {
           type: 'XOM',
           sat,

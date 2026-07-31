@@ -372,10 +372,10 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   }
 
   const reqHtml = [
-    renderProgram(major,  doneKeys, major2 ? "Major 1 Requirements — " : "Major Requirements — ", major?.name ?? "",  true),
-    major2 ? renderProgram(major2, doneKeys, "Major 2 Requirements — ", major2?.name ?? "", true) : "",
-    renderProgram(minor1, doneKeys, "Minor 1 Requirements — ", minor1?.name ?? "", false),
-    renderProgram(minor2, doneKeys, "Minor 2 Requirements — ", minor2?.name ?? "", false),
+    renderProgram(major,  doneKeys, major2 ? "Major 1 Requirements: " : "Major Requirements: ", major?.name ?? "",  true),
+    major2 ? renderProgram(major2, doneKeys, "Major 2 Requirements: ", major2?.name ?? "", true) : "",
+    renderProgram(minor1, doneKeys, "Minor 1 Requirements: ", minor1?.name ?? "", false),
+    renderProgram(minor2, doneKeys, "Minor 2 Requirements: ", minor2?.name ?? "", false),
   ].join("");
 
   // ── NUPath grid HTML ──────────────────────────────────────────
@@ -754,7 +754,7 @@ ${[...placedOut].map(id => {
 </div>` : ""}
 
 ${substitutions.length > 0 ? `
-<div class="section-title">Substitutions <span class="prog-name">(course A placed, satisfies course B — credits count once)</span></div>
+<div class="section-title">Substitutions <span class="prog-name">(course A placed, satisfies course B; credits count once)</span></div>
 <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:8px">
 ${substitutions.map(({ from, to }) => {
   const fc = courseMap[from];
@@ -784,7 +784,7 @@ ${appendixHtml.join('\n')}
   const blob = new Blob([html], { type: "text/html" });
   const url  = URL.createObjectURL(blob);
   const w    = window.open(url, "_blank");
-  if (!w) { URL.revokeObjectURL(url); alert("Pop-up blocked — please allow pop-ups for this site and try again."); return; }
+  if (!w) { URL.revokeObjectURL(url); alert("Pop-up blocked. Please allow pop-ups for this site and try again."); return; }
   w.focus();
   // Close this tab automatically once the print dialog is dismissed.
   w.onafterprint = () => { w.close(); URL.revokeObjectURL(url); };

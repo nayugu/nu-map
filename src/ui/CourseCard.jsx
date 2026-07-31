@@ -453,8 +453,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           const hist    = course.termHistory ?? {};
           const entries = Object.entries(hist).filter(([c]) => calendar.decodeTermCode(c) === semOffType);
           const tip = entries.length > 0
-            ? `${course.code}: offered in ${entries.filter(([,v]) => v).length}/${entries.length} past ${semOffType} terms — override in panel`
-            : `${course.code} may not be offered in ${semOffType} — override in panel`;
+            ? `${course.code}: offered in ${entries.filter(([,v]) => v).length}/${entries.length} past ${semOffType} terms (override in panel)`
+            : `${course.code} may not be offered in ${semOffType} (override in panel)`;
           return (
             <span title={tip}
               style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", borderRadius: 3, padding: "1px 4px" }}>

@@ -222,7 +222,7 @@ export function SearchCombo({ value, onChange, groups, placeholder = "Search…"
               padding: `${Math.round(size * 0.6)}px ${size}px`, fontSize: size + 1, cursor: "pointer",
               color: "var(--text-5)", borderBottom: "1px solid var(--border-1)",
             }}
-          >— None —</div>
+          >(None)</div>
           {!q ? (
             <div style={{ padding: `${Math.round(size * 0.7)}px ${size}px`, fontSize: size + 1, color: "var(--text-5)", fontStyle: "italic" }}>{t("bank.search.empty.typing")}</div>
           ) : filtered.length === 0 ? (
@@ -279,7 +279,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
   if (r.type === "COURSE") {
     const course       = courseMap?.[r.key];
     const isSelected   = selectedId === r.key;
-    const displayLabel = r.label.split(' — ')[0];
+    const displayLabel = r.label.split(': ')[0];
     return (
       <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
         <div
@@ -484,9 +484,9 @@ function NuPathGrid({ covered, sources = {} }) {
   const tipFor = key => {
     const label = attributeSystem.getLabel(key);
     const src = sources[key] ?? [];
-    if (!covered.has(key)) return `${label} — ${t("grad.nupath.unsatisfied")}`;
-    if (!src.length)       return `${label} — ${t("grad.nupath.granted")}`;
-    return `${label} — ${t("grad.nupath.satisfiedBy", { courses: src.map(s => s.code).join(", ") })}`;
+    if (!covered.has(key)) return `${label}: ${t("grad.nupath.unsatisfied")}`;
+    if (!src.length)       return `${label}: ${t("grad.nupath.granted")}`;
+    return `${label}: ${t("grad.nupath.satisfiedBy", { courses: src.map(s => s.code).join(", ") })}`;
   };
 
   const active    = activeKey;

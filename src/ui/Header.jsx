@@ -566,7 +566,7 @@ export default function Header() {
                 feedback ↗
               </a>
               {isMaintenanceDay && (
-                <span title="Catalog data is being refreshed today — some major requirements may update shortly" style={{
+                <span title="Catalog data is being refreshed today; some major requirements may update shortly" style={{
                   fontSize: 9, fontWeight: 700, letterSpacing: "0.04em",
                   color: "var(--warn-badge-text)", background: "var(--warn-bg)",
                   border: "1px solid var(--warn-bg)",
