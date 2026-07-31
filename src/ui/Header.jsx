@@ -1396,12 +1396,15 @@ export default function Header() {
 // prefixes — no hardcoded semester ids. Falls back to the raw label for non-standard entries.
 // Clean monochrome bar-chart glyph for the Stats button (inherits text colour).
 function StatChartIcon({ size = 11 }) {
+  // Solid bars out-weighed the stroked glyphs beside it (⚙ ⇅) — slimmer
+  // bars at 0.72 opacity so the mark reads as light as its neighbours in
+  // both themes (opacity blends toward whichever surface is behind it).
   return (
     <svg width={size} height={size} viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"
-      style={{ display: "inline-block", verticalAlign: "-1px", flexShrink: 0 }}>
-      <rect x="0.5" y="6.5" width="2.6" height="5" rx="0.6" />
-      <rect x="4.7" y="3.5" width="2.6" height="8" rx="0.6" />
-      <rect x="8.9" y="1" width="2.6" height="10.5" rx="0.6" />
+      style={{ display: "inline-block", verticalAlign: "-1px", flexShrink: 0, opacity: 0.72 }}>
+      <rect x="0.8" y="6.5" width="2.1" height="5" rx="0.6" />
+      <rect x="4.95" y="3.5" width="2.1" height="8" rx="0.6" />
+      <rect x="9.1" y="1" width="2.1" height="10.5" rx="0.6" />
     </svg>
   );
 }
