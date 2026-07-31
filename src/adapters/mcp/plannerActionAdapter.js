@@ -34,6 +34,23 @@ export function semSortKey(semId) {
   return p.year * 12 + (MONTH_OF[p.semType] ?? 0);
 }
 
+/**
+ * Chronological cohort window [entry, graduation] — the calendar-agnostic
+ * counterpart of the UI's SEM_INDEX membership test. Placements parked
+ * OUTSIDE the plan's timeline (left behind when the cohort shrank) are kept
+ * in state but must never count: not as completed history, not as prereq
+ * satisfaction, and they aren't validated. "incoming" is always inside.
+ */
+export function inCohortWindow(plan, semId) {
+  if (semId === "incoming") return true;
+  if (plan?.entYear == null || plan?.gradYear == null) return true; // no cohort info — don't filter
+  const pre = s => (s === "spring" ? "spr" : (s ?? "fall"));
+  const k = semSortKey(semId);
+  if (!parseSemId(semId)) return false; // "__overflow:*" and other parked shapes
+  return k >= semSortKey(`${pre(plan.entSem)}${plan.entYear}`)
+      && k <= semSortKey(`${pre(plan.gradSem)}${plan.gradYear}`);
+}
+
 /** Build { semId → chronological index } for prereq ordering. */
 export function buildSemIndex(plan) {
   const ids = new Set(
@@ -54,7 +71,8 @@ export function buildSemIndex(plan) {
 export function completedCourseIds(plan) {
   const cur = plan.currentSemId ? semSortKey(plan.currentSemId) : Infinity;
   return Object.entries(plan.placements ?? {})
-    .filter(([, semId]) => semId === "incoming" || semSortKey(semId) < cur)
+    .filter(([, semId]) => (semId === "incoming" || semSortKey(semId) < cur)
+      && inCohortWindow(plan, semId)) // parked off-timeline ≠ completed history
     .map(([courseId]) => courseId);
 }
 
@@ -62,8 +80,13 @@ export function completedCourseIds(plan) {
 
 export function checkViolations(plan, courseMap) {
   const violations = [];
-  const { placements = {}, placedOut = [] } = plan;
-  const semIndex     = buildSemIndex(plan);
+  const { placedOut = [] } = plan;
+  // Timeline-scoped view: parked placements are neither validated nor able
+  // to satisfy someone else's prereq/coreq — same as the UI.
+  const placements = Object.fromEntries(
+    Object.entries(plan.placements ?? {}).filter(([, sid]) => inCohortWindow(plan, sid))
+  );
+  const semIndex     = buildSemIndex({ ...plan, placements });
   const placedOutSet = new Set(placedOut);
 
   for (const [courseId, semId] of Object.entries(placements)) {

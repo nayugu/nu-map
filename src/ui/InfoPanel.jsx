@@ -166,7 +166,7 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements, SEMESTERS, cardRefs } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, cardRefs } = usePlanner();
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
   const calendar        = usePort(ICalendar);
@@ -189,7 +189,8 @@ function CourseInfo({ selCourse, navTo }) {
   // times), in board order. Rendered as jump chips when there's more than one.
   const semOrder = Object.fromEntries(SEMESTERS.map((s, i) => [s.id, i]));
   const takes = Object.entries(placements)
-    .filter(([pid]) => baseId(pid) === baseId(selCourse.id))
+    // timeline only — takes parked outside the cohort range don't list
+    .filter(([pid, sid]) => baseId(pid) === baseId(selCourse.id) && SEM_INDEX[sid] !== undefined)
     .map(([pid, sid]) => ({ pid, sem: SEMESTERS.find(s => s.id === sid) }))
     .sort((a, b) => (semOrder[a.sem?.id] ?? 99) - (semOrder[b.sem?.id] ?? 99));
 

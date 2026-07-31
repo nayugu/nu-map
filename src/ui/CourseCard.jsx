@@ -54,7 +54,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     selectedId, setSelectedId, setShowPanel,
     connectedIds, prereqViolations, coreqViolations,
     dragInfo, hoveredCardId, setHoveredCardId,
-    getSemStatus, offeredOverrides, SEMESTERS,
+    getSemStatus, offeredOverrides, SEMESTERS, SEM_INDEX,
     starredIds, toggleStar,
     onDragStart, onDropOnCard, cardRefs,
     isPhone, shOverrides, setShOverride,
@@ -84,7 +84,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // every appearance reads as one course. multiTake = one of several placed
   // takes (gets a ↻ glyph — an intentional duplicate, not a data bug).
   const isSibling  = !isSel && selectedId != null && baseId(selectedId) === baseId(course.id);
-  const takeCount  = inSem && course.repeatable ? takesUsed(baseId(course.id), placements, placedOut) : 0;
+  const takeCount  = inSem && course.repeatable ? takesUsed(baseId(course.id), placements, placedOut, SEM_INDEX) : 0;
   const multiTake  = takeCount > 1;
   // More takes than the catalog allows: permitted (trust the user), warned.
   const overTakes  = multiTake && course.repeatMax != null && takeCount > course.repeatMax;

@@ -6,7 +6,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
-import { exportReport, getOrderedCourses } from "../core/planModel.js";
+import { exportReport, getOrderedCourses, filterInTimeline } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
@@ -211,7 +211,7 @@ export default function Header() {
     const concLabel  = conc   || "";
     const minor1Path = minor1 || "";
     const minor2Path = minor2 || "";
-    const npCovered  = attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms.getTypes()));
+    const npCovered  = attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms.getTypes(), SEM_INDEX));
     // Build set of course keys that are placed in already-completed semesters
     const doneKeys = new Set();
     for (const [id, semId] of Object.entries(placements)) {
@@ -293,8 +293,9 @@ export default function Header() {
     // Determine current semester index for "completed" marking
     const currentIdx = SEM_INDEX[currentSemId] ?? 0;
 
-    // Collect all placed course IDs for the appendix
-    const allPlacedIds = Object.keys(placements);
+    // Collect placed course IDs for the appendix — timeline only (parked
+    // entries aren't part of the plan being exported)
+    const allPlacedIds = Object.keys(filterInTimeline(placements, SEM_INDEX));
 
     // Iterate through semesters in order
     for (const sem of SEMESTERS) {

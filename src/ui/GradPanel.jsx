@@ -17,6 +17,7 @@ import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
+import { filterInTimeline } from "../core/planModel.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
 import {
@@ -783,7 +784,7 @@ export default function GradPanel({ wideCatalog = false }) {
   });
   const {
     placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
-    specialTermPl,
+    specialTermPl, SEM_INDEX,
     major: majorPath, setMajor: setMajorPath,
     major2: major2Path, setMajor2: setMajor2Path,
     conc: selConc, setConc: setSelConc,
@@ -895,16 +896,18 @@ export default function GradPanel({ wideCatalog = false }) {
       .finally(() => setFetching2(false));
   }, [major2Path, isGrad]);
 
+  // Timeline-scoped: courses parked outside the cohort range never satisfy
+  // requirements (they stay in state, uncounted, until the cohort widens).
   const placedSet = useMemo(
-    () => buildPlacedKeySet(effectivePlacements, placedOut, courseMap),
-    [effectivePlacements, placedOut, courseMap]
+    () => buildPlacedKeySet(filterInTimeline(effectivePlacements, SEM_INDEX), placedOut, courseMap),
+    [effectivePlacements, placedOut, courseMap, SEM_INDEX]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
   // Used for GE display so substituted courses don't appear twice with doubled SH.
   const realPlacedSet = useMemo(
-    () => buildPlacedKeySet(placements, placedOut, courseMap),
-    [placements, placedOut, courseMap]
+    () => buildPlacedKeySet(filterInTimeline(placements, SEM_INDEX), placedOut, courseMap),
+    [placements, placedOut, courseMap, SEM_INDEX]
   );
 
   const doneSet = useMemo(() => {
@@ -919,18 +922,18 @@ export default function GradPanel({ wideCatalog = false }) {
     return new Map([["Concentrations", opts]]);
   }, [major]);
 
-  const npCovered  = useMemo(() => attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [])), [attributeSystem, placements, courseMap, specialTermPl, specialTerms]);
+  const npCovered  = useMemo(() => attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)), [attributeSystem, placements, courseMap, specialTermPl, specialTerms, SEM_INDEX]);
   // Which placed classes satisfy each NUPath code → { [code]: [{id, code}] }.
   // Drives the grid's hover tooltip / click-to-reveal ("which class satisfies it").
   const npSources  = useMemo(() => {
     const m = {};
-    for (const id of Object.keys(placements)) {
+    for (const id of Object.keys(filterInTimeline(placements, SEM_INDEX))) {
       const c = courseMap[id];
       if (!c?.attributes) continue;
       for (const a of c.attributes) (m[a] = m[a] || []).push({ id: c.id, code: c.code });
     }
     return m;
-  }, [placements, courseMap]);
+  }, [placements, courseMap, SEM_INDEX]);
   const plannedSH  = totalSHPlaced - totalSHDone;
   const requiredSH = major?.totalCreditsRequired ?? 0;
 

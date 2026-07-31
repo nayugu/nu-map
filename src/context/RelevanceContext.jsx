@@ -9,6 +9,7 @@ import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { usePlanner }         from "./PlannerContext.jsx";
 import { usePort }            from "./InstitutionContext.jsx";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
+import { filterInTimeline }   from "../core/planModel.js";
 import {
   buildPlacedKeySet,
   allocateMajorWithElectives,
@@ -65,7 +66,7 @@ function useProgram(loader, path) {
 
 export function RelevanceProvider({ children }) {
   const {
-    effectivePlacements, placedOut, courseMap,
+    effectivePlacements, placedOut, courseMap, SEM_INDEX,
     major, major2, conc, minor1, minor2, studentType,
   } = usePlanner();
   const majorRequirements = usePort(IMajorRequirements);
@@ -82,9 +83,11 @@ export function RelevanceProvider({ children }) {
   const minor1Data = useProgram(loadMinor, minor1);
   const minor2Data = useProgram(loadMinor, minor2);
 
+  // Timeline-scoped: parked courses must not consume requirement slots (a
+  // genuine candidate would otherwise read as "free elective").
   const placedSet = useMemo(
-    () => buildPlacedKeySet(effectivePlacements, placedOut, courseMap),
-    [effectivePlacements, placedOut, courseMap]
+    () => buildPlacedKeySet(filterInTimeline(effectivePlacements, SEM_INDEX), placedOut, courseMap),
+    [effectivePlacements, placedOut, courseMap, SEM_INDEX]
   );
 
   const value = useMemo(() => {

@@ -14,7 +14,7 @@ import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
-import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions } from "../core/planModel.js";
+import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId } from "../core/repeatInstances.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
@@ -1105,9 +1105,15 @@ export function PlannerProvider({ children }) {
   // When graduated and the live semester has drifted past the plan boundary, treat it as
   // one past the last plan semester so all plan semesters render as completed.
   const currentSemIdx = SEM_INDEX[pv?.currentSemId ?? currentSemId] ?? (isGraduated ? SEMESTERS.length : 1);
+  // Only takes INSIDE the timeline count as placed. Entries parked outside
+  // it (the cohort shrank) stay in state — so they come back when it widens —
+  // but they return to the bank and never join any calculation.
   const placedIds = useMemo(
-    () => new Set([...Object.keys(placements), ...placedOut]),
-    [placements, placedOut]
+    () => new Set([
+      ...Object.keys(placements).filter(id => inTimeline(placements[id], SEM_INDEX)),
+      ...placedOut,
+    ]),
+    [placements, placedOut, SEM_INDEX]
   );
 
   // ── Unified special-term derived maps ────────────────────────
@@ -1184,7 +1190,9 @@ export function PlannerProvider({ children }) {
     courses.forEach(c => {
       if (!pvPlacements[c.id] && !pvPlacedOut.has(c.id)) return; // not taken at all
       if (pvPlacements[c.id] === "incoming") return;
-      if (typeof pvPlacements[c.id] === "string" && pvPlacements[c.id].startsWith("__overflow:")) return;
+      // Parked outside the timeline (incl. "__overflow:*") → no violation
+      // checks; ti would be undefined and flag every prereq as out of order.
+      if (pvPlacements[c.id] && !inTimeline(pvPlacements[c.id], SEM_INDEX)) return;
       if (pvPlacedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[pvPlacements[c.id]];
@@ -1202,7 +1210,8 @@ export function PlannerProvider({ children }) {
       // Checking `from` as well would falsely warn e.g. CS 2100 for not being
       // co-placed with every course that lists CS 2100 as its coreq.
       const placed = to, partner = from;
-      const isHidden = id => typeof placements[id] === "string" && placements[id].startsWith("__overflow:");
+      // Parked outside the timeline (incl. "__overflow:*") = off-plan.
+      const isHidden = id => placements[id] !== undefined && !inTimeline(placements[id], SEM_INDEX);
       const placedTaken = placements[placed] !== undefined || placedOut.has(placed);
       const partnerTaken = placements[partner] !== undefined || placedOut.has(partner);
       if (!placedTaken) return;
@@ -1284,9 +1293,9 @@ export function PlannerProvider({ children }) {
   // matching the old courses-array filter.
   const totalSHPlaced = useMemo(
     () => pvBonusSH + Object.entries(pvPlacements)
-      .filter(([id, sid]) => !sid.startsWith?.("__overflow:") && !pvPlacedOut.has(id))
+      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id))
       .reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
-    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap]
+    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX]
   );
 
   const totalSHDone = useMemo(
@@ -1790,9 +1799,9 @@ export function PlannerProvider({ children }) {
     // (limit reached → it disappears, exactly like a placed one-shot course).
     () => new Set(courses.filter(c =>
       !placedIds.has(c.id) ||
-      (c.repeatable && takesUsed(c.id, placements, placedOut) < (c.repeatMax ?? Infinity))
+      (c.repeatable && takesUsed(c.id, placements, placedOut, SEM_INDEX) < (c.repeatMax ?? Infinity))
     ).map(c => c.id)),
-    [courses, placedIds, placements, placedOut]
+    [courses, placedIds, placements, placedOut, SEM_INDEX]
   );
 
   // ── Reset ────────────────────────────────────────────────────

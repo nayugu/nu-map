@@ -30,13 +30,18 @@ export function resolveTermByDuration(durations, duration) {
  *
  * @param {Object}   specialTermPl - { [id]: { typeId, semId, ... } }
  * @param {Object[]} types         - specialTerms.types array from ISpecialTerms adapter
+ * @param {Object}   [semIndex]    - SEM_INDEX (semId → ordinal). When given, only
+ *                                   terms INSIDE the plan's timeline grant — a
+ *                                   co-op parked outside the cohort range must
+ *                                   not grant EX (it stays in state, uncounted).
  * @returns {Set<string>}
  */
-export function computeGrantedAttrs(specialTermPl, types) {
+export function computeGrantedAttrs(specialTermPl, types, semIndex) {
   const granted   = new Set();
   const typeById  = Object.fromEntries((types ?? []).map(t => [t.id, t]));
   for (const data of Object.values(specialTermPl)) {
     if (!data?.semId) continue;
+    if (semIndex && semIndex[data.semId] === undefined) continue;
     const type = typeById[data.typeId];
     if (type?.attributeGrants) type.attributeGrants.forEach(a => granted.add(a));
   }

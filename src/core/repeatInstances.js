@@ -24,10 +24,17 @@ export function isInstanceId(id) {
   return String(id).includes("#");
 }
 
-/** How many takes of `base` the plan holds (placements plus placed-out). */
-export function takesUsed(base, placements, placedOut) {
+/** How many takes of `base` the plan holds (placements plus placed-out).
+    Pass `semIndex` (SEM_INDEX) to count only takes INSIDE the plan's
+    timeline — the display rule; id-assignment (resolveAddId) stays
+    unscoped so parked takes keep their ids reserved. */
+export function takesUsed(base, placements, placedOut, semIndex) {
   let n = 0;
-  for (const id of Object.keys(placements ?? {})) if (baseId(id) === base) n++;
+  for (const [id, sid] of Object.entries(placements ?? {})) {
+    if (baseId(id) !== base) continue;
+    if (semIndex && semIndex[sid] === undefined) continue; // parked off-timeline
+    n++;
+  }
   if (placedOut) for (const id of placedOut) if (baseId(id) === base) n++;
   return n;
 }

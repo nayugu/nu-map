@@ -21,7 +21,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { subjectColor } from "../core/courseModel.js";
-import { getSemStudySH } from "../core/planModel.js";
+import { getSemStudySH, inTimeline, filterInTimeline } from "../core/planModel.js";
 import { computeGrantedAttrs, resolveTermByDuration } from "../core/specialTermUtils.js";
 import {
   levelDistribution, mergeLoadTimeline, longestPrereqChains, courseTier,
@@ -462,9 +462,11 @@ export default function StatsPanel() {
 
   const unit = creditSystem.getUnitName();
   const cmap = effectiveCourseMap ?? courseMap;
+  // Timeline-scoped: entries parked outside the cohort range (incl.
+  // "__overflow:*") are kept in state but count toward NO statistic.
   const placedIds = useMemo(
-    () => Object.keys(placements).filter(id => cmap[id] && !placements[id]?.startsWith?.("__overflow:")),
-    [placements, cmap]
+    () => Object.keys(placements).filter(id => cmap[id] && inTimeline(placements[id], SEM_INDEX)),
+    [placements, cmap, SEM_INDEX]
   );
 
   const openCourse = (id) => { setSelectedId(id); setShowPanel(true); setShowStats(false); };
@@ -478,11 +480,11 @@ export default function StatsPanel() {
   }, [bonusSH, placements, cmap]);
 
   const nupath = useMemo(() => {
-    const granted = computeGrantedAttrs(specialTermPl ?? {}, specialTerms.getTypes());
-    const covered = attributeSystem.getCoverage(placements, cmap, granted);
+    const granted = computeGrantedAttrs(specialTermPl ?? {}, specialTerms.getTypes(), SEM_INDEX);
+    const covered = attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), cmap, granted);
     const grid = attributeSystem.getGridCodes();
     return { covered: grid.filter(c => covered.has(c)).length, total: grid.length };
-  }, [placements, cmap, specialTermPl, attributeSystem, specialTerms]);
+  }, [placements, cmap, specialTermPl, attributeSystem, specialTerms, SEM_INDEX]);
 
   // Transfer / incoming-credit courses — faded in chains, excluded from depth.
   const incomingSet = useMemo(
@@ -567,7 +569,11 @@ export default function StatsPanel() {
   const work = useMemo(() => {
     const types = specialTerms.getTypes();
     let months = 0;
-    const items = Object.entries(specialTermPl ?? {}).map(([id, w]) => {
+    // Timeline-scoped: a co-op parked outside the cohort range must not
+    // count toward work terms, months, or companies.
+    const items = Object.entries(specialTermPl ?? {})
+      .filter(([, w]) => inTimeline(w.semId, SEM_INDEX))
+      .map(([id, w]) => {
       const type = types.find(x => x.id === w.typeId);
       const dur = type ? resolveTermByDuration(type.durations, w.duration) : null;
       months += dur?.duration ?? 0;

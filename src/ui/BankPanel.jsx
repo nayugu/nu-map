@@ -138,7 +138,7 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
 export default function BankPanel() {
   const {
     courses, bankCourseIds, subjects, courseMap,
-    placements,
+    placements, SEM_INDEX,
     bankSearch, setBankSearch,
     bankSort,
     bankTab, setBankTab,
@@ -169,7 +169,7 @@ export default function BankPanel() {
   // take is planned (the card stays in the bank until its limit is reached).
   const repeatChip = (c) => {
     if (!c.repeatable) return null;
-    const used = takesUsed(c.id, placements, placedOut);
+    const used = takesUsed(c.id, placements, placedOut, SEM_INDEX);
     if (!used) return null;
     const max = c.repeatMax ?? "∞";
     // Over the catalog's limit: allowed (trust the user), shown in error red, like an over-max semester.
