@@ -1505,26 +1505,44 @@ function LanguagePicker({ locale, locales, setLocale }) {
   );
 }
 
-/** Phone plan name that fades out over its last couple of characters when
-    clipped — the fade fully resolves ~2px before the button edge so no glyph
-    ever touches the border. The mask is applied ONLY when the text actually
-    overflows; a permanent mask would eat the tail of names that fit. Names
-    that fit render untouched (no ellipsis, no fade). */
+/** Phone plan name that fades out PER CHARACTER when clipped: the last three
+    visible characters step down in opacity (whole glyphs — no gradient slicing
+    through a stroke, matching the instructor-list opacity language), and
+    everything past them is fully invisible, so no glyph ever touches the
+    button border. Names that fit render untouched. All characters stay in the
+    DOM (only opacity changes), so the measurement is stable across passes. */
 function PlanNameFade({ text, rtl }) {
   const ref = useRef(null);
-  const [clipped, setClipped] = useState(false);
+  const [fadeFrom, setFadeFrom] = useState(-1);   // index of first faded char; -1 = fits
+  const STEPS = [0.6, 0.32, 0.12];                 // opacity of the last 3 visible chars
+
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const c = el.scrollWidth > el.clientWidth + 1;
-    if (c !== clipped) setClipped(c);
+    let next = -1;
+    if (el.scrollWidth > el.clientWidth + 1) {
+      // Last character that fits entirely, with 2px clearance from the edge.
+      const box = el.getBoundingClientRect();
+      let lastFit = -1;
+      for (let i = 0; i < el.children.length; i++) {
+        const r = el.children[i].getBoundingClientRect();
+        const fits = rtl ? r.left >= box.left + 2 : r.right <= box.right - 2;
+        if (fits) lastFit = i; else break;
+      }
+      next = Math.max(0, lastFit - (STEPS.length - 1));
+    }
+    if (next !== fadeFrom) setFadeFrom(next);
   });
-  const fade = `linear-gradient(to ${rtl ? "left" : "right"}, black calc(100% - 13px), transparent calc(100% - 2px))`;
+
   return (
-    <span ref={ref} style={{
-      overflow: "hidden", whiteSpace: "nowrap", minWidth: 0,
-      ...(clipped ? { WebkitMaskImage: fade, maskImage: fade } : {}),
-    }}>{text}</span>
+    <span ref={ref} style={{ overflow: "hidden", whiteSpace: "nowrap", minWidth: 0 }}>
+      {[...text].map((ch, i) => {
+        const step = fadeFrom === -1 ? -1 : i - fadeFrom;
+        return (
+          <span key={i} style={step >= 0 ? { opacity: STEPS[step] ?? 0 } : undefined}>{ch}</span>
+        );
+      })}
+    </span>
   );
 }
 
