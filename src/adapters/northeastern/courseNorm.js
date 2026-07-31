@@ -8,6 +8,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { subjectColor } from "../../core/courseModel.js";
 import calendar from "./calendar.js";
+import { parseRepeatability } from "./repeatability.js";
 
 /**
  * Earliest term code (numeric) where the course was ever confirmed offered.
@@ -102,6 +103,13 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     ? raw.creditsMax : null;
   const shMin = shMax !== null ? (sh ?? 4) : null;
 
+  // Repeatability: prefer the fields the scraper writes (the canonical path);
+  // until a scrape that includes them ships, derive them from the description
+  // text the scraper already captured — same parser, same result.
+  const rep = raw.repeatable !== undefined
+    ? { max: raw.repeatMax ?? null, maxSH: raw.repeatMaxSH ?? null }
+    : parseRepeatability(raw.description);
+
   return {
     id, subject, number,
     code:         `${subject} ${number}`,
@@ -110,6 +118,9 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     sh:           sh ?? 4,
     shMin,
     shMax,
+    repeatable:   !!rep,
+    repeatMax:    rep?.max   ?? null,
+    repeatMaxSH:  rep?.maxSH ?? null,
     scheduleType: raw.scheduleType || "",
     prereqs:      raw.prereqs ?? raw.prerequisites ?? [],
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],

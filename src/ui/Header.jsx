@@ -2,11 +2,11 @@
 // HEADER  — sticky timeline header: title, SH counters, controls,
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
-import { exportReport, getOrderedCourses } from "../core/planModel.js";
+import { exportReport, getOrderedCourses, filterInTimeline } from "../core/planModel.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
@@ -61,7 +61,7 @@ export default function Header() {
     coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap, semOrders,
     showViolLines, setShowViolLines,
     prereqDepth, setPrereqDepth, unlockDepth, setUnlockDepth,
-    manualZoom, setManualZoom, isPhone, isMobile,
+    manualZoom, setManualZoom, isPhone, isMobile, bankWidth,
     collapseOtherCredits, setCollapseOtherCredits,
     showContLogo, setShowContLogo,
     showUnlocks, setShowUnlocks,
@@ -94,6 +94,13 @@ export default function Header() {
   const [showClaudeConnect, setShowClaudeConnect] = useState(false);
   const [showPlanMenu, setShowPlanMenu] = useState(false);
   const [showIO, setShowIO] = useState(false);
+
+  // Header dropdowns are XOR — opening any tab closes whichever other one is
+  // open, so at most one header popover is visible at a time.
+  const toggleHeaderPop = (isOpen, setOpen) => {
+    setShowPlanMenu(false); setShowIO(false); setShowQuickSet(false); setShowSettings(false);
+    if (!isOpen) setOpen(true);
+  };
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [shareLinkLocale, setShareLinkLocale] = useState(locale);
   const [planSearch, setPlanSearch] = useState("");
@@ -124,6 +131,36 @@ export default function Header() {
   }, []);
   const iconOnly = headerRowW < HEADER_FOLD_BP;
 
+  // Phone: give the plan-name button exactly the width its fixed neighbours
+  // leave over (SH badges on the left, Group 2 controls on the right — whose
+  // width varies live: Claude dot appears when linked, buttons fold to
+  // icon-only). Flex-wrap decides line breaks from CONTENT width, not
+  // shrunk width, so without this cap a long name forces Group 2 to wrap
+  // under even though the name could truncate. The wrap remains the
+  // fallback once even a minimal name (48px) can't fit.
+  const group2Ref   = useRef(null);
+  const shBadgesRef = useRef(null);
+  const [planFree, setPlanFree] = useState(70);
+  useEffect(() => {
+    if (!isPhone || typeof ResizeObserver === "undefined") return;
+    const compute = () => {
+      const row = headerRowRef.current, g2 = group2Ref.current, b = shBadgesRef.current;
+      if (!row || !g2 || !b) return;
+      setPlanFree(Math.floor(row.clientWidth - g2.offsetWidth - b.offsetWidth - 14)); // flex gaps + safety
+    };
+    compute();
+    const ro = new ResizeObserver(compute);
+    [headerRowRef.current, group2Ref.current, shBadgesRef.current].forEach(el => el && ro.observe(el));
+    return () => ro.disconnect();
+  }, [isPhone]);
+  const planNameMax = Math.max(24, planFree);
+  // The name takes every pixel available — the clipped-fade keeps even a
+  // very narrow name looking intentional. Only when there isn't room for
+  // ~2 faded characters plus the ▾ does the button collapse to the bare
+  // "/" (the true minimum, for when the right side grows more tabs).
+  // (planFree doesn't depend on the button's own width, so no oscillation.)
+  const planSlash = isPhone && planFree < 26;
+
   // Phone: the header buttons sit in a tight row, so a dropdown anchored to a
   // button's edge (right: 0 / left: 0) can spill off-screen. On phone we instead
   // pin every button popover as a viewport-centred sheet just below the header.
@@ -134,9 +171,11 @@ export default function Header() {
       setPhonePopTop(Math.round(headerRowRef.current.getBoundingClientRect().bottom) + 6);
     }
   };
+  // The sheet spans only the planner side — centred within (100vw − bank
+  // sidebar), never reaching behind the bank/grad panel on the right.
   const phonePopFixed = isPhone ? {
-    position: "fixed", top: phonePopTop, left: "50%", right: "auto",
-    transform: "translateX(-50%)", width: "calc(100vw - 16px)", maxWidth: 360,
+    position: "fixed", top: phonePopTop, left: `calc((100vw - ${bankWidth}px) / 2)`, right: "auto",
+    transform: "translateX(-50%)", width: `calc(100vw - ${bankWidth}px - 16px)`, maxWidth: 360,
     maxHeight: `calc(100dvh - ${phonePopTop + 12}px)`, overflowY: "auto", zIndex: 9500,
   } : null;
 
@@ -172,7 +211,7 @@ export default function Header() {
     const concLabel  = conc   || "";
     const minor1Path = minor1 || "";
     const minor2Path = minor2 || "";
-    const npCovered  = attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms.getTypes()));
+    const npCovered  = attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms.getTypes(), SEM_INDEX));
     // Build set of course keys that are placed in already-completed semesters
     const doneKeys = new Set();
     for (const [id, semId] of Object.entries(placements)) {
@@ -254,8 +293,9 @@ export default function Header() {
     // Determine current semester index for "completed" marking
     const currentIdx = SEM_INDEX[currentSemId] ?? 0;
 
-    // Collect all placed course IDs for the appendix
-    const allPlacedIds = Object.keys(placements);
+    // Collect placed course IDs for the appendix — timeline only (parked
+    // entries aren't part of the plan being exported)
+    const allPlacedIds = Object.keys(filterInTimeline(placements, SEM_INDEX));
 
     // Iterate through semesters in order
     for (const sem of SEMESTERS) {
@@ -592,30 +632,47 @@ export default function Header() {
                marginRight:auto pushes Group 2 to the far right on a single line;
                when the row is too narrow, Group 2 wraps beneath as a whole. ── */}
           <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", minWidth: 0, marginRight: "auto" }}>
-          {/* SH badges — left side */}
+          {/* SH badges — left side (wrapped so the phone plan-name cap can
+              measure their live width — the numbers and locale change it) */}
+          <div ref={shBadgesRef} style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--bg-surface)", border: "1px solid var(--success-border)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
             {t("header.credits.done", { n: totalSHDone, unit: unitName })}
           </span>
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
-            {t("header.credits.placed", { n: totalSHPlaced, unit: unitName })}
+            {/* Phone: bare "{n} SH" — the word "placed" ate the very space the
+                plan name needs (real plans read "166 SH placed"). */}
+            {isPhone ? `${totalSHPlaced} ${unitName}` : t("header.credits.placed", { n: totalSHPlaced, unit: unitName })}
           </span>
+          </div>
 
           {/* Buttons — right side, icon-only on mobile/tablet */}
         
         {/* Plan switcher dropdown */}
         <div style={{ position: "relative", minWidth: 0, flexShrink: 1 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowPlanMenu(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); toggleHeaderPop(showPlanMenu, setShowPlanMenu); }}
             data-claude-focus="planName"
-            style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? 70 : 160,
+            style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? planNameMax : 160,
               overflow: "hidden",
               // A pending RENAME_PLAN proposal marks the plan button orange.
               color: claudePreview?.changed?.has?.("planName") ? "#fb923c" : showPlanMenu ? "var(--text-2)" : "var(--text-4)",
               background: showPlanMenu ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px ${claudePreview?.changed?.has?.("planName") ? "dashed #fb923c" : `solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`}`,
               borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 5px" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
-            {isPhone
-              ? <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾</span>
-              : iconOnly ? "/" : `/ ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
+            {(() => {
+              // Same clipped-name treatment on every device: the per-character
+              // fade lives between a pinned "/" (desktop prefix) and "▾".
+              const planName = (plans.find(p => p.id === activePlanId)?.name) || "Plan";
+              const hdrRtl = (locales.find(l => l.code === locale)?.dir ?? "ltr") === "rtl";
+              if (isPhone && planSlash) return "/";
+              if (!isPhone && iconOnly) return "/";
+              return (
+                <>
+                  {!isPhone && <span style={{ flexShrink: 0, marginRight: 4 }}>/</span>}
+                  <PlanNameFade text={planName} rtl={hdrRtl} />
+                  <span style={{ flexShrink: 0, marginLeft: isPhone ? 3 : 4 }}>▾</span>
+                </>
+              );
+            })()}
           </button>
 
           {showPlanMenu && (
@@ -741,14 +798,14 @@ export default function Header() {
           {/* ── Group 2: Claude dot · I/O · settings · cohort · stats · about.
                A nowrap unit so these controls wrap together beneath Group 1
                when narrow, then fold to icon-only via `iconOnly`. ── */}
-          <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", flexShrink: 0 }}>
+          <div ref={group2Ref} style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", flexShrink: 0 }}>
 
         {/* Claude liveness dot — invisible unless the user has linked Claude */}
         <ClaudeDot />
 
         {/* Input/Output Dropdown */}
         <div style={{ position: "relative", flexShrink: 0 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); setShowIO(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); toggleHeaderPop(showIO, setShowIO); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color: showIO ? "var(--text-2)" : "var(--text-4)",
               background: showIO ? "var(--bg-surface)" : "var(--bg-surface-2)",
@@ -836,7 +893,7 @@ export default function Header() {
 
         {/* ⚙ Settings dropdown — infrequent controls */}
         <div style={{ position: "relative", flexShrink: 0 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); setShowQuickSet(v => !v); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); toggleHeaderPop(showQuickSet, setShowQuickSet); }}
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer",
               color:      showQuickSet ? "var(--text-2)" : "var(--text-4)",
               background: showQuickSet ? "var(--bg-surface)" : "var(--bg-surface-2)",
@@ -901,8 +958,10 @@ export default function Header() {
                                 onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
                               >{t("translation.cancel")}</button>
                             )}
-                            {/* Clear cache button — visible when model is fully cached and not downloading */}
-                            {engineTier === "wasm" && modelCached && !modelProgress && (
+                            {/* Clear cache button — for the WASM engine once the model is
+                                cached; for API/native engines it clears locally-cached
+                                translations (the escape hatch if a bad response was cached) */}
+                            {engineTier && !modelProgress && (engineTier !== "wasm" || modelCached) && (
                               <button
                                 onMouseDown={e => e.preventDefault()}
                                 onClick={clearModelCache}
@@ -1124,7 +1183,7 @@ export default function Header() {
         <div style={{ position: "relative" }}>
           <button
             className="hdr-btn"
-            onClick={e => { e.stopPropagation(); openPhonePop(); setShowSettings(v => !v); }}
+            onClick={e => { e.stopPropagation(); openPhonePop(); toggleHeaderPop(showSettings, setShowSettings); }}
             title={t("header.cohort.button.title")}
             style={{
               fontSize: isPhone ? 8 : 10, cursor: "pointer", whiteSpace: "nowrap",
@@ -1339,12 +1398,15 @@ export default function Header() {
 // prefixes — no hardcoded semester ids. Falls back to the raw label for non-standard entries.
 // Clean monochrome bar-chart glyph for the Stats button (inherits text colour).
 function StatChartIcon({ size = 11 }) {
+  // Solid bars out-weighed the stroked glyphs beside it (⚙ ⇅) — slimmer
+  // bars at 0.72 opacity so the mark reads as light as its neighbours in
+  // both themes (opacity blends toward whichever surface is behind it).
   return (
     <svg width={size} height={size} viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"
-      style={{ display: "inline-block", verticalAlign: "-1px", flexShrink: 0 }}>
-      <rect x="0.5" y="6.5" width="2.6" height="5" rx="0.6" />
-      <rect x="4.7" y="3.5" width="2.6" height="8" rx="0.6" />
-      <rect x="8.9" y="1" width="2.6" height="10.5" rx="0.6" />
+      style={{ display: "inline-block", verticalAlign: "-1px", flexShrink: 0, opacity: 0.72 }}>
+      <rect x="0.8" y="6.5" width="2.1" height="5" rx="0.6" />
+      <rect x="4.95" y="3.5" width="2.1" height="8" rx="0.6" />
+      <rect x="9.1" y="1" width="2.1" height="10.5" rx="0.6" />
     </svg>
   );
 }
@@ -1450,6 +1512,47 @@ function LanguagePicker({ locale, locales, setLocale }) {
         </div>
       )}
     </div>
+  );
+}
+
+/** Phone plan name that fades out PER CHARACTER when clipped: the last three
+    visible characters step down in opacity (whole glyphs — no gradient slicing
+    through a stroke, matching the instructor-list opacity language), and
+    everything past them is fully invisible, so no glyph ever touches the
+    button border. Names that fit render untouched. All characters stay in the
+    DOM (only opacity changes), so the measurement is stable across passes. */
+function PlanNameFade({ text, rtl }) {
+  const ref = useRef(null);
+  const [fadeFrom, setFadeFrom] = useState(-1);   // index of first faded char; -1 = fits
+  const STEPS = [0.6, 0.32, 0.12];                 // opacity of the last 3 visible chars
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let next = -1;
+    if (el.scrollWidth > el.clientWidth + 1) {
+      // Last character that fits entirely, with 2px clearance from the edge.
+      const box = el.getBoundingClientRect();
+      let lastFit = -1;
+      for (let i = 0; i < el.children.length; i++) {
+        const r = el.children[i].getBoundingClientRect();
+        const fits = rtl ? r.left >= box.left + 2 : r.right <= box.right - 2;
+        if (fits) lastFit = i; else break;
+      }
+      next = Math.max(0, lastFit - (STEPS.length - 1));
+    }
+    if (next !== fadeFrom) setFadeFrom(next);
+  });
+
+  return (
+    <span ref={ref} style={{ overflow: "hidden", whiteSpace: "nowrap", minWidth: 0 }}>
+      {[...text].map((ch, i) => {
+        const step = fadeFrom === -1 ? -1 : i - fadeFrom;
+        return (
+          <span key={i} style={step >= 0 ? { opacity: STEPS[step] ?? 0 } : undefined}>{ch}</span>
+        );
+      })}
+    </span>
   );
 }
 

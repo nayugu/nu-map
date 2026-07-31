@@ -144,6 +144,12 @@ export const strings = {
   "info.offered.schedule":        "TYPICALLY MEETS",
   "info.prof.title":              "INSTRUCTORS",
   "info.prof.share":              "% = avg. share of students taught",
+  "info.prof.filter":             "Show courses taught by {name}",
+  "info.repeat.unlimited":        "Can be repeated without limit",
+  "info.repeat.limited":          "Can be taken up to {n} times",
+  "info.repeat.planned":          "PLANNED IN",
+  "info.repeat.cycle":            "Click to cycle through them",
+  "bank.repeat.title":            "Planned {used} of {max} times",
   "info.offered.pending":         "Offered — seat data not yet available (final numbers arrive after the term ends)",
   "info.offered.async":           "Online / no set meeting time",
   "info.offered.weekdays":        "M,T,W,Th,F",
@@ -406,7 +412,6 @@ export const strings = {
   // ── Translation ────────────────────────────────────────────────
   "translation.toggle":             "Translate course content",
   "translation.toggle.hint.native": "Powered by Chrome AI — instant",
-  "translation.toggle.hint.api":    "Online · results cached locally",
   "translation.toggle.hint.wasm":   "~890 MB one-time download, then offline",
   "translation.toggle.hint.cached": "Model cached — works offline",
   "translation.english.note":       "Course content in English",
@@ -447,6 +452,7 @@ export const strings = {
   "stats.tile.coursesSub":        "planned + taken",
   "stats.tile.remaining":         "Credits left",
   "stats.nupath":                 "NUPath planned",
+  "stats.comp.sky":               "Skyline Chart",
   "stats.comp.total":             "By level",
   "stats.comp.dept":              "By department",
 

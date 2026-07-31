@@ -21,9 +21,9 @@ import {
   allocateSections,
 } from "../../core/gradRequirements.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
-import { getSemSH, getOrderedCourses } from "../../core/planModel.js";
+import { getSemSH, getOrderedCourses, filterInTimeline } from "../../core/planModel.js";
 import { computeGrantedAttrs, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
-import { applyChangeset, completedCourseIds, semSortKey } from "./plannerActionAdapter.js";
+import { applyChangeset, completedCourseIds } from "./plannerActionAdapter.js";
 
 /**
  * @param {object} deps
@@ -67,6 +67,11 @@ export function createPlannerQuery(deps) {
     return {
       id: c.id, code: c.code, title: c.title,
       sh: c.sh, ...(c.shMax != null && { shMin: c.shMin, shMax: c.shMax }),
+      ...(c.repeatable && {
+        repeatable: true,
+        ...(c.repeatMax   != null && { repeatMax:   c.repeatMax }),
+        ...(c.repeatMaxSH != null && { repeatMaxSH: c.repeatMaxSH }),
+      }),
       attributes: c.attributes, scheduleType: c.scheduleType,
       level: courseLevel(c),
       college: subjectColleges[c.subject] ?? null,
@@ -115,11 +120,10 @@ export function createPlannerQuery(deps) {
         if (idx === curIdx) return "inprogress";
         return "future";
       }
-      // Semester outside the cohort window — compare chronologically.
+      // Outside the cohort window — aligned with the UI's getSemStatus:
+      // parked placements are kept in state but never count as history.
       if (semId === "incoming") return "completed";
-      const cur = plan.currentSemId ? semSortKey(plan.currentSemId) : Infinity;
-      return semSortKey(semId) < cur ? "completed"
-           : semSortKey(semId) === cur ? "inprogress" : "future";
+      return "future";
     };
   }
 
@@ -430,8 +434,10 @@ export function createPlannerQuery(deps) {
     const eff          = effectivePlacements(plan);
     const status       = semStatusOf(plan);
 
-    const placedSet     = buildPlacedKeySet(eff, placedOutSet, courseMap);
-    const realPlacedSet = buildPlacedKeySet(placements, placedOutSet, courseMap);
+    // Timeline-scoped: parked placements never satisfy requirements.
+    const { SEM_INDEX: semIdx } = deriveSemMaps(cohortSemesters(plan));
+    const placedSet     = buildPlacedKeySet(filterInTimeline(eff, semIdx), placedOutSet, courseMap);
+    const realPlacedSet = buildPlacedKeySet(filterInTimeline(placements, semIdx), placedOutSet, courseMap);
     const donePlacements = Object.fromEntries(
       Object.entries(eff).filter(([, semId]) => status(semId) === "completed")
     );
@@ -519,15 +525,17 @@ export function createPlannerQuery(deps) {
   }
 
   function getNUPathCoverage(plan) {
-    const placements = plan.placements ?? {};
-    const granted = computeGrantedAttrs(plan.workExperience ?? {}, specialTerms.getTypes());
+    // Timeline-scoped: parked courses/co-ops neither cover nor grant.
+    const { SEM_INDEX: semIdx } = deriveSemMaps(cohortSemesters(plan));
+    const placements = filterInTimeline(plan.placements ?? {}, semIdx);
+    const granted = computeGrantedAttrs(plan.workExperience ?? {}, specialTerms.getTypes(), semIdx);
     const covered = attributeSystem.getCoverage(placements, courseMap, granted);
     const labels  = Object.fromEntries(attributeSystem.getAttributes().map(a => [a.code, a.label]));
     const grantsByCode = {};
     for (const [instanceId, wt] of Object.entries(plan.workExperience ?? {})) {
       const type = specialTerms.getTypes().find(t => t.id === wt.typeId);
       for (const code of type?.attributeGrants ?? []) {
-        if (wt.semId) (grantsByCode[code] ??= []).push(instanceId);
+        if (wt.semId && semIdx[wt.semId] !== undefined) (grantsByCode[code] ??= []).push(instanceId);
       }
     }
     return attributeSystem.getGridCodes().map(code => ({

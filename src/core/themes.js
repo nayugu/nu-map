@@ -31,11 +31,19 @@ const dark = {
   '--text-6':            '#555d66',   // separator
 
   // ── Status: success / done ───────────────────────────────────────
-  '--success':              '#4ade80',
+  // Emerald (the palette's CET/ENVR green), not lime: #4ade80 read neon
+  // against #0d1117. Hue 150 — the SAME green as --success-bar, so ticks,
+  // counts and bars are one colour (at 158 the ticks read bluer than the
+  // bars they sit next to).
+  '--success':              '#36d385',
   '--success-bg':           '#0d2a17',
   '--success-border':       '#1a4a25',
   '--success-deep':         '#2a7a3a',
-  '--success-bar-partial':  '#4aab6a',   // in-progress section bar (lighter muted green, slightly more saturated)
+  '--success-mark':         '#36d385',   // GLYPH marks (grad-panel ticks) — always the vivid step
+  '--success-bar':          '#36d385',   // progress-bar fill (hue nudged greener than the emerald text — 160°→150°)
+  '--planned':              '#58a6ff',   // PLANNED-vs-done accent (BNSC blue) — text/counts
+  '--planned-bar':          '#58a6ff',   // planned progress-bar fill (BNSC blue)
+  '--success-bar-partial':  '#3f9e6b',   // in-progress section bar (muted green, reads under the sat bar)
 
   // ── Status: active / current ─────────────────────────────────────
   '--active':            '#58a6ff',
@@ -76,11 +84,11 @@ const dark = {
   // ── Badges / chips ───────────────────────────────────────────────
   '--badge-bg':          '#0d1117',
   '--badge-border':      '#21262d',
-  '--nupath-text':       '#4ade80',
+  '--nupath-text':       '#36d385',
   '--nupath-bg':         '#0d1f14',
   '--nupath-border':     '#166534',
   '--nupath-sat-text':   '#7eba96',
-  '--nupath-sat-border': '#22c55e',
+  '--nupath-sat-border': '#10b981',
 
   // ── Links / modal accents ─────────────────────────────────────────
   '--link-1':            '#58a6ff',
@@ -136,11 +144,25 @@ const light = {
   '--text-6':            '#a3a3a3',
 
   // ── Status: success / done ────────────────────────────────────────
-  '--success':              '#16a34a',   // medium green — lighter & readable on white
+  // Same green FAMILY and HUE (150) as dark and as --success-bar, stepped
+  // darker for white: the vivid step scores 1.9:1 on white — unreadable.
+  // 3.8:1 here, better than the #16a34a it replaces. The vivid step still
+  // shows on BAR FILLS (--success-bar).
+  '--success':              '#05964e',
   '--success-bg':           '#bbf7d0',   // bright lime tint
   '--success-border':       '#4ade80',   // vivid lime accent
   '--success-deep':         '#14532d',   // deepest for left-bar / done row
-  '--success-bar-partial':  '#9dd4ac',   // in-progress section bar (light sage, slightly more saturated)
+  // Bar fills: saturation PINNED, lightness raised (the design language's
+  // lighten rule) — candy-bright tints of the status hues, green nudged
+  // 160°→150° so the bar doesn't read blue-ish.
+  // Marks are graphical, not text: the tick keeps the VIVID step in light
+  // mode too (its grey rim carries the shape, and the row's text/count
+  // states the same thing), while --success stays readable for text.
+  '--success-mark':         '#36d385',
+  '--success-bar':          '#71e0a8',   // green tint, full chroma
+  '--planned':              '#1f74d6',   // PLANNED accent — BNSC-blue hue (212°), AA on white
+  '--planned-bar':          '#85bcff',   // BNSC-blue tint, full chroma
+  '--success-bar-partial':  '#98e1bd',   // in-progress section bar (lighter green tint, reads under the sat bar)
 
   // ── Status: active / current ──────────────────────────────────────
   '--active':            '#2563eb',   // vivid blue
@@ -183,13 +205,16 @@ const light = {
   // ── Badges / chips ────────────────────────────────────────────────
   '--badge-bg':          '#faf9f8',
   '--badge-border':      '#eeeeee',
-  '--nupath-text':       '#15803d',
+  // Same hue, stepped darker still — this is 9px badge text on a pale
+  // green fill, so it needs full AA (~4.9:1 on --nupath-bg).
+  '--nupath-text':       '#047f45',
   '--nupath-bg':         '#f0fdf4',
   '--nupath-border':     '#86efac',
   '--nupath-sat-text':   '#4a8f63',
-  '--nupath-sat-border': '#86efac',
+  '--nupath-sat-border': '#10b981',
 
   // ── Links / modal accents ──────────────────────────────────────────
+  // Links/modals are NOT planning — planning has its own --planned token.
   '--link-1':            '#2563eb',
   '--link-2':            '#7c3aed',
   '--link-bg':           '#dbeafe',

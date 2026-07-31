@@ -32,6 +32,26 @@ export function hexRgb(hex) {
   return r ? `${parseInt(r[1], 16)},${parseInt(r[2], 16)},${parseInt(r[3], 16)}` : "180,180,180";
 }
 
+// ── Timeline scope ───────────────────────────────────────────────
+// Calculations must only count placements whose semester is INSIDE the
+// plan's timeline (the cohort SEMESTERS range, incl. "incoming"). Entries
+// parked outside it — e.g. left at their original semId after the user
+// shortens the cohort — are deliberately KEPT in state so they return when
+// the cohort widens, but they must never influence credits, requirement
+// audits, stats, violations, or NUPath coverage. SEM_INDEX is built over
+// exactly the SEMESTERS array, so membership is the canonical test (it
+// also subsumes the old `"__overflow:*"` string checks).
+
+/** True when semId is inside the plan's timeline. */
+export const inTimeline = (semId, semIndex) => semIndex[semId] !== undefined;
+
+/** Placements narrowed to the timeline — the calculation-facing view. */
+export function filterInTimeline(placements, semIndex) {
+  return Object.fromEntries(
+    Object.entries(placements ?? {}).filter(([, sid]) => semIndex[sid] !== undefined)
+  );
+}
+
 /** Total semester hours placed in a given semester. */
 export function getSemSH(semId, placements, courseMap) {
   return Object.entries(placements)
@@ -335,8 +355,9 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   // ── Requirements sections HTML ────────────────────────────────
   // placedSet includes virtual substitution targets (needed for requirement satisfaction).
   // realPlacedSet excludes them so GE only lists courses the student actually placed.
-  const placedSet     = buildPlacedKeySet(effectivePlacements, placedOut, courseMap);
-  const realPlacedSet = buildPlacedKeySet(placements, placedOut, courseMap);
+  // Both are timeline-scoped: entries parked outside the cohort range don't audit.
+  const placedSet     = buildPlacedKeySet(filterInTimeline(effectivePlacements, dynSemIdx), placedOut, courseMap);
+  const realPlacedSet = buildPlacedKeySet(filterInTimeline(placements, dynSemIdx), placedOut, courseMap);
 
   function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true) {
     if (!prog) return "";
@@ -450,13 +471,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     </div>`;
   }).join("\n");
 
-  // Build appendix of course descriptions
+  // Build appendix of course descriptions (timeline only — parked entries
+  // aren't part of the plan being exported)
+  const appendixIds = Object.keys(filterInTimeline(placements, dynSemIdx));
   const appendixHtml = [];
-  if (Object.keys(placements).length > 0) {
+  if (appendixIds.length > 0) {
     appendixHtml.push('<div class="page-break"></div>');
     appendixHtml.push('<div class="appendix-section">');
     appendixHtml.push('<h2>Course Descriptions</h2>');
-    for (const id of Object.keys(placements)) {
+    for (const id of appendixIds) {
       const c = courseMap[id];
       if (!c) continue;
       const desc = c.desc?.trim() || c.description?.trim() || 'No description available.';

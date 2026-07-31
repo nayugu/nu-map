@@ -17,6 +17,7 @@ import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
+import { filterInTimeline } from "../core/planModel.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
 import {
@@ -33,7 +34,7 @@ const GradCtx = createContext(null);
 
 // ── Shared atoms ─────────────────────────────────────────────────
 
-function ProgressBar({ frac, color = "var(--success)" }) {
+function ProgressBar({ frac, color = "var(--success-bar)" }) {
   return (
     <div style={{ height: 4, borderRadius: 2, background: "var(--border-2)", overflow: "hidden" }}>
       <div style={{
@@ -53,10 +54,10 @@ function CreditBar({ completedSH, plannedSH, requiredSH, showLabel = true, style
   return (
     <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)", overflow: "visible", margin: "14px 0 4px", ...style }}>
       {plannedSH > 0 && (
-        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalFrac * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />
+        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalFrac * 100)}%`, height: "100%", background: "var(--planned-bar)", borderRadius: 3 }} />
       )}
       {completedSH > 0 && (
-        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, completedSH / maxSH * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3 }} />
+        <div style={{ position: "absolute", left: 0, width: `${Math.min(100, completedSH / maxSH * 100)}%`, height: "100%", background: "var(--success-bar)", borderRadius: 3 }} />
       )}
       {requiredSH > 0 && (
         <div style={{ position: "absolute", left: `${Math.min(99.5, reqFrac * 100)}%`, top: -3, height: 12, width: 2, background: "var(--text-3)", borderRadius: 1, transform: "translateX(-50%)" }}>
@@ -85,13 +86,23 @@ function CheckBox({ sat, dimmedCheck = false }) {
       </svg>
     </span>
   );
+  // Both themes: transparent box, fat emerald SVG check (the ✓ glyph maxes
+  // out too thin). The rim is state-dependent: UNFULFILLED keeps the full
+  // rim (it's a call to action); once resolved — checked here, or slashed
+  // via dimmedCheck when an alternative was picked — the chrome recedes to
+  // the same 40% strength as crossed-out alternatives (row opacity 0.4).
   return (
     <span style={{ ...base,
-      background: sat ? "var(--success-bg)"   : "var(--bg-surface-2)",
-      border: `1px solid ${sat ? "var(--success-border)" : "var(--border-2)"}`,
-      color: sat ? "var(--success)" : "var(--text-5)",
+      background: "transparent",
+      border: `1px solid ${sat ? "color-mix(in srgb, var(--border-2) 40%, transparent)" : "var(--border-2)"}`,
+      color: sat ? "var(--success-mark)" : "var(--text-5)",
     }}>
-      {sat ? "✓" : ""}
+      {sat && (
+        <svg width={sz - 4} height={sz - 4} viewBox="0 0 12 12" style={{ display: "block" }}>
+          <path d="M2 6.5 L4.8 9.2 L10 3.2" fill="none" stroke="var(--success-mark)"
+            strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
     </span>
   );
 }
@@ -425,7 +436,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
           {hasSplit ? (
             <>
               <span style={{ color: "var(--success)" }}>{sec.completedSH}</span>
-              {sec.plannedSH > 0 && <span style={{ color: "var(--link-1)" }}>+{sec.plannedSH}</span>}
+              {sec.plannedSH > 0 && <span style={{ color: "var(--planned)" }}>+{sec.plannedSH}</span>}
               <span>/{sec.requiredSH} SH</span>
             </>
           ) : isGeneralElectives ? `${sec.placedSH}/${sec.requiredSH} SH`
@@ -437,7 +448,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
       <div style={{ marginTop: 3 }}>
         {hasSplit
           ? <CreditBar completedSH={sec.completedSH} plannedSH={sec.plannedSH} requiredSH={sec.requiredSH} showLabel={false} style={{ margin: 0 }} />
-          : <ProgressBar frac={frac} color={sec.sat ? "var(--success)" : "var(--success-bar-partial)"} />
+          : <ProgressBar frac={frac} color={sec.sat ? "var(--success-bar)" : "var(--success-bar-partial)"} />
         }
       </div>
       {/* Requirements */}
@@ -508,16 +519,18 @@ function NuPathGrid({ covered, sources = {} }) {
                 padding: isPhone ? "4px 2px" : "3px 5px",
                 borderRadius: isPhone ? 3 : 4,
                 fontSize: 9,
+                // Grey chrome; the emerald text alone carries "satisfied"
+                // (matches the Stats chips: colour in the type, not the frame).
                 background: "var(--bg-surface)",
-                border: `1px solid ${isActive ? "var(--active)" : sat ? "var(--nupath-sat-border)" : "var(--border-2)"}`,
-                color: sat ? "var(--nupath-sat-text)" : "var(--text-5)",
+                border: `1px solid ${isActive ? "var(--active)" : "var(--border-2)"}`,
+                color: sat ? "var(--success)" : "var(--text-5)",
                 fontWeight: sat ? 700 : 400,
               }}>
               <span style={{
                 flexShrink: 0, fontWeight: 800,
                 fontSize: isPhone ? 8.5 : 9,
                 lineHeight: 1,
-                color: sat ? "var(--nupath-sat-text)" : "var(--text-4)",
+                color: sat ? "var(--success)" : "var(--text-4)",
               }}>{key}</span>
               {!isPhone && (
                 <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -668,14 +681,14 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: isPhone ? 8.5 : 10, color: "var(--text-5)", marginBottom: 4, letterSpacing: 0, whiteSpace: "nowrap" }}>
             <span>
               <span style={{ color: "var(--success)" }}>{doneSat}</span>
-              {plannedSat > 0 && <span style={{ color: "var(--link-1)" }}>+{plannedSat}</span>}
+              {plannedSat > 0 && <span style={{ color: "var(--planned)" }}>+{plannedSat}</span>}
               <span>/{totalReq}</span>
             </span>
             <span>{Math.round(totalSat / totalReq * 100)}%</span>
           </div>
           <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
-            {plannedSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalSat / totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />}
-            {doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, doneSat / totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />}
+            {plannedSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, totalSat / totalReq * 100)}%`, height: "100%", background: "var(--planned-bar)", borderRadius: 3 }} />}
+            {doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, doneSat / totalReq * 100)}%`, height: "100%", background: "var(--success-bar)", borderRadius: 3, transition: "width 0.2s" }} />}
           </div>
         </div>
       )}
@@ -720,12 +733,12 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
           {/* Numeric stat line — same treatment as MinorBlock's above. */}
           <div style={{ fontSize: isPhone ? 8.5 : 10, color: "var(--text-5)", marginBottom: 4, letterSpacing: 0, whiteSpace: "nowrap" }}>
             <span style={{ color: "var(--success)" }}>{progress.doneSat}</span>
-            {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--link-1)" }}>+{progress.totalSat - progress.doneSat}</span>}
+            {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--planned)" }}>+{progress.totalSat - progress.doneSat}</span>}
             <span> / {progress.totalReq}</span>
           </div>
           <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
-            {(progress.totalSat - progress.doneSat) > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.totalSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--link-1)", borderRadius: 3, opacity: 0.45 }} />}
-            {progress.doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.doneSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--success)", borderRadius: 3, transition: "width 0.2s" }} />}
+            {(progress.totalSat - progress.doneSat) > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.totalSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--planned-bar)", borderRadius: 3 }} />}
+            {progress.doneSat > 0 && <div style={{ position: "absolute", left: 0, width: `${Math.min(100, progress.doneSat / progress.totalReq * 100)}%`, height: "100%", background: "var(--success-bar)", borderRadius: 3, transition: "width 0.2s" }} />}
           </div>
         </div>
       )}
@@ -781,7 +794,7 @@ export default function GradPanel({ wideCatalog = false }) {
   });
   const {
     placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
-    specialTermPl,
+    specialTermPl, SEM_INDEX,
     major: majorPath, setMajor: setMajorPath,
     major2: major2Path, setMajor2: setMajor2Path,
     conc: selConc, setConc: setSelConc,
@@ -893,16 +906,18 @@ export default function GradPanel({ wideCatalog = false }) {
       .finally(() => setFetching2(false));
   }, [major2Path, isGrad]);
 
+  // Timeline-scoped: courses parked outside the cohort range never satisfy
+  // requirements (they stay in state, uncounted, until the cohort widens).
   const placedSet = useMemo(
-    () => buildPlacedKeySet(effectivePlacements, placedOut, courseMap),
-    [effectivePlacements, placedOut, courseMap]
+    () => buildPlacedKeySet(filterInTimeline(effectivePlacements, SEM_INDEX), placedOut, courseMap),
+    [effectivePlacements, placedOut, courseMap, SEM_INDEX]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
   // Used for GE display so substituted courses don't appear twice with doubled SH.
   const realPlacedSet = useMemo(
-    () => buildPlacedKeySet(placements, placedOut, courseMap),
-    [placements, placedOut, courseMap]
+    () => buildPlacedKeySet(filterInTimeline(placements, SEM_INDEX), placedOut, courseMap),
+    [placements, placedOut, courseMap, SEM_INDEX]
   );
 
   const doneSet = useMemo(() => {
@@ -917,18 +932,18 @@ export default function GradPanel({ wideCatalog = false }) {
     return new Map([["Concentrations", opts]]);
   }, [major]);
 
-  const npCovered  = useMemo(() => attributeSystem.getCoverage(placements, courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [])), [attributeSystem, placements, courseMap, specialTermPl, specialTerms]);
+  const npCovered  = useMemo(() => attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)), [attributeSystem, placements, courseMap, specialTermPl, specialTerms, SEM_INDEX]);
   // Which placed classes satisfy each NUPath code → { [code]: [{id, code}] }.
   // Drives the grid's hover tooltip / click-to-reveal ("which class satisfies it").
   const npSources  = useMemo(() => {
     const m = {};
-    for (const id of Object.keys(placements)) {
+    for (const id of Object.keys(filterInTimeline(placements, SEM_INDEX))) {
       const c = courseMap[id];
       if (!c?.attributes) continue;
       for (const a of c.attributes) (m[a] = m[a] || []).push({ id: c.id, code: c.code });
     }
     return m;
-  }, [placements, courseMap]);
+  }, [placements, courseMap, SEM_INDEX]);
   const plannedSH  = totalSHPlaced - totalSHDone;
   const requiredSH = major?.totalCreditsRequired ?? 0;
 

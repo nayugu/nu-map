@@ -6,7 +6,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 // ── Logic under test (mirror of scrape-catalog.js) ──────────────────
-const DIFF_FIELDS = ["title", "credits", "scheduleType", "description", "nuPath", "prereqs", "coreqs"];
+const DIFF_FIELDS = ["title", "credits", "creditsMax", "scheduleType", "description", "nuPath", "prereqs", "coreqs", "repeatable", "repeatMax", "repeatMaxSH"];
 
 function diffCourse(prev, next) {
   const changes = [];
@@ -48,6 +48,10 @@ function mergeSubject(existing, freshCourses, subjectCode) {
         nuPath: cat.nuPath?.length ? cat.nuPath : prev.nuPath,
         prereqs: cat.prereqs?.length ? cat.prereqs : prev.prereqs,
         coreqs: cat.coreqs?.length ? cat.coreqs : prev.coreqs,
+        // Repeatability rides the description — mirrors scrape-catalog.js:
+        // a catalog description makes its parse authoritative; `undefined`
+        // spreads clear stale fields (dropped by JSON.stringify on write).
+        ...(cat.description ? { repeatable: cat.repeatable, repeatMax: cat.repeatMax, repeatMaxSH: cat.repeatMaxSH } : {}),
       };
       const changes = diffCourse(prev, merged);
       if (changes.length > 0) modifiedCourses.push({ code: key, changes });
@@ -152,4 +156,41 @@ test("mergeSubject › unchanged course › counted, not flagged", () => {
   const { modifiedCourses, unchangedCount } = mergeSubject([baseCS2100, otherCourse], [{ ...baseCS2100, sections: [] }], "CS");
   assert.equal(modifiedCourses.length, 0);
   assert.equal(unchangedCount, 1);
+});
+
+test("mergeSubject › repeatability appears in catalog › fields set and flagged", () => {
+  const fresh = {
+    ...baseCS2100, sections: [],
+    description: baseCS2100.description + " May be repeated twice for a maximum of 12 semester hours.",
+    repeatable: true, repeatMax: 3, repeatMaxSH: 12,
+  };
+  const { updated, modifiedCourses } = mergeSubject([baseCS2100, otherCourse], [fresh], "CS");
+  const cs = updated.find((c) => c.subject === "CS" && c.number === "2100");
+  assert.equal(cs.repeatable, true);
+  assert.equal(cs.repeatMax, 3);
+  assert.equal(cs.repeatMaxSH, 12);
+  assert.deepEqual(cs.sections, baseCS2100.sections); // enrollment data still survives
+  const fields = modifiedCourses[0].changes.map((ch) => ch.field);
+  assert.ok(fields.includes("repeatable") && fields.includes("repeatMax") && fields.includes("repeatMaxSH"));
+});
+
+test("mergeSubject › repeat sentence removed from catalog › stale fields cleared", () => {
+  const prev = { ...baseCS2100, repeatable: true, repeatMax: 3, repeatMaxSH: 12 };
+  const fresh = { ...baseCS2100, sections: [] }; // description present, no repeat fields
+  const { updated, modifiedCourses } = mergeSubject([prev, otherCourse], [fresh], "CS");
+  const cs = updated.find((c) => c.subject === "CS" && c.number === "2100");
+  // undefined-spread clearing: JSON round-trip (as on write) must drop the keys
+  const written = JSON.parse(JSON.stringify(cs));
+  assert.ok(!("repeatable" in written) && !("repeatMax" in written) && !("repeatMaxSH" in written));
+  const fields = modifiedCourses[0].changes.map((ch) => ch.field);
+  assert.ok(fields.includes("repeatable"));
+});
+
+test("mergeSubject › catalog has no description › previous repeat fields preserved", () => {
+  const prev = { ...baseCS2100, repeatable: true, repeatMax: 3 };
+  const fresh = { ...baseCS2100, sections: [], description: "" };
+  const { updated } = mergeSubject([prev, otherCourse], [fresh], "CS");
+  const cs = updated.find((c) => c.subject === "CS" && c.number === "2100");
+  assert.equal(cs.repeatable, true);
+  assert.equal(cs.repeatMax, 3);
 });

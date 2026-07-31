@@ -192,7 +192,9 @@ function semLabelOf(semId, semesters, t) {
 }
 
 function describeAction(a, courseMap, semesters, t) {
-  const code = (id) => courseMap?.[id]?.code ?? id;
+  // Instance ids ("MUS1990#2" — extra takes of a repeatable course) label as
+  // their base course.
+  const code = (id) => courseMap?.[id]?.code ?? courseMap?.[String(id).split("#")[0]]?.code ?? id;
   const sem  = (id) => semLabelOf(id, semesters, t);
   const semWord = (id) => t(SEM_TYPE_KEY[id] ?? id);
   switch (a.type) {

@@ -6,7 +6,7 @@ import { usePort, useInstitution } from "../context/InstitutionContext.jsx";
 import { IInstitution }     from "../ports/IInstitution.js";
 import { ILocalization }    from "../ports/ILocalization.js";
 import { useLanguage }      from "../context/LanguageContext.jsx";
-import { TText }            from "../context/TranslationContext.jsx";
+import { TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 
 export default function DisclaimerModal() {
   const { showDisclaimer, setShowDisclaimer, setShowTour } = usePlanner();
@@ -62,7 +62,9 @@ export default function DisclaimerModal() {
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
           <div>
             <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-1)" }}>{institution.appName}</div>
-            <div style={{ fontSize: 10, color: "var(--text-3)" }}><TText>{t("modal.subtitle")}</TText></div>
+            {/* t() already returns the hand-written translation — wrapping it
+                in TText would machine-translate the translated string again. */}
+            <div style={{ fontSize: 10, color: "var(--text-3)" }}>{scaleLatinRuns(t("modal.subtitle"))}</div>
           </div>
         </div>
 

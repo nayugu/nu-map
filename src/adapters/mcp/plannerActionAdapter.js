@@ -15,6 +15,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { evalPrereqTree } from "../../core/prereqEval.js";
+import { baseId, resolveAddId } from "../../core/repeatInstances.js";
 
 // ── Semester ordering ─────────────────────────────────────────────
 
@@ -31,6 +32,23 @@ export function semSortKey(semId) {
   const p = parseSemId(semId);
   if (!p) return 0;
   return p.year * 12 + (MONTH_OF[p.semType] ?? 0);
+}
+
+/**
+ * Chronological cohort window [entry, graduation] — the calendar-agnostic
+ * counterpart of the UI's SEM_INDEX membership test. Placements parked
+ * OUTSIDE the plan's timeline (left behind when the cohort shrank) are kept
+ * in state but must never count: not as completed history, not as prereq
+ * satisfaction, and they aren't validated. "incoming" is always inside.
+ */
+export function inCohortWindow(plan, semId) {
+  if (semId === "incoming") return true;
+  if (plan?.entYear == null || plan?.gradYear == null) return true; // no cohort info — don't filter
+  const pre = s => (s === "spring" ? "spr" : (s ?? "fall"));
+  const k = semSortKey(semId);
+  if (!parseSemId(semId)) return false; // "__overflow:*" and other parked shapes
+  return k >= semSortKey(`${pre(plan.entSem)}${plan.entYear}`)
+      && k <= semSortKey(`${pre(plan.gradSem)}${plan.gradYear}`);
 }
 
 /** Build { semId → chronological index } for prereq ordering. */
@@ -53,7 +71,8 @@ export function buildSemIndex(plan) {
 export function completedCourseIds(plan) {
   const cur = plan.currentSemId ? semSortKey(plan.currentSemId) : Infinity;
   return Object.entries(plan.placements ?? {})
-    .filter(([, semId]) => semId === "incoming" || semSortKey(semId) < cur)
+    .filter(([, semId]) => (semId === "incoming" || semSortKey(semId) < cur)
+      && inCohortWindow(plan, semId)) // parked off-timeline ≠ completed history
     .map(([courseId]) => courseId);
 }
 
@@ -61,8 +80,13 @@ export function completedCourseIds(plan) {
 
 export function checkViolations(plan, courseMap) {
   const violations = [];
-  const { placements = {}, placedOut = [] } = plan;
-  const semIndex     = buildSemIndex(plan);
+  const { placedOut = [] } = plan;
+  // Timeline-scoped view: parked placements are neither validated nor able
+  // to satisfy someone else's prereq/coreq — same as the UI.
+  const placements = Object.fromEntries(
+    Object.entries(plan.placements ?? {}).filter(([, sid]) => inCohortWindow(plan, sid))
+  );
+  const semIndex     = buildSemIndex({ ...plan, placements });
   const placedOutSet = new Set(placedOut);
 
   for (const [courseId, semId] of Object.entries(placements)) {
@@ -128,7 +152,9 @@ const SEM_ID_RE = /^(incoming|(fall|spring|spr|sumA|sumB)\d{4})$/;
 
 const badCourse = (courseMap, id, field = "courseId") =>
   !id || typeof id !== "string" ? `${field} is required`
-  : courseMap && !courseMap[id] ? `Unknown course: ${id}`
+  // Repeat instances ("MUS1990#2" — later takes of a repeatable course)
+  // validate through their base course.
+  : courseMap && !courseMap[id] && !courseMap[baseId(id)] ? `Unknown course: ${id}`
   : null;
 const badSem = (semId) =>
   !semId || typeof semId !== "string" || !SEM_ID_RE.test(semId)
@@ -139,9 +165,17 @@ const APPLIERS = {
   ADD_COURSE: (plan, a, courseMap) => {
     const err = badCourse(courseMap, a.courseId) ?? badSem(a.semId);
     if (err) return err;
-    plan.placements[a.courseId] = a.semId;
-    plan.placedOut = asArray(plan.placedOut).filter(id => id !== a.courseId);
-    plan.palette   = asArray(plan.palette).filter(id => id !== a.courseId);
+    // Repeatable course already placed → this ADD is ANOTHER take under a
+    // fresh instance id ("ID#2", "ID#3"…). The browser applier runs the same
+    // resolveAddId over the same placements snapshot, so both sides assign
+    // identical ids. Takes beyond the catalog's repeat limit are allowed —
+    // NU Map trusts the user — and the UI flags them with the warn treatment.
+    // A placed non-repeatable course keeps the relocate-on-add semantics.
+    const course = courseMap?.[a.courseId];
+    const addId = course ? resolveAddId(course, plan.placements, new Set(asArray(plan.placedOut))).id : a.courseId;
+    plan.placements[addId] = a.semId;
+    plan.placedOut = asArray(plan.placedOut).filter(id => id !== addId);
+    plan.palette   = asArray(plan.palette).filter(id => id !== addId);
   },
   REMOVE_COURSE: (plan, a, courseMap) => {
     const err = badCourse(courseMap, a.courseId);
@@ -303,9 +337,9 @@ export const SUPPORTED_ACTIONS = Object.keys(APPLIERS);
  * classic failure: using ADD_SUBSTITUTION when ADD_PLACED_OUT was meant).
  */
 export const ACTION_DOCS = {
-  ADD_COURSE:           { args: "{courseId, semId}", use: "Place a course in a semester (semId like 'fall2026', 'spr2027', 'sumA2027', or 'incoming' for transfer/AP credit)." },
-  REMOVE_COURSE:        { args: "{courseId}", use: "Remove a placed course from the plan entirely." },
-  MOVE_COURSE:          { args: "{courseId, toSemId}", use: "Move an already-placed course to a different semester. Rejected if the course is not currently placed — use ADD_COURSE instead." },
+  ADD_COURSE:           { args: "{courseId, semId}", use: "Place a course in a semester (semId like 'fall2026', 'spr2027', 'sumA2027', or 'incoming' for transfer/AP credit). If a REPEATABLE course (see get_course repeatable/repeatMax) is already placed, this adds ANOTHER take stored under an instance id like 'MUS1990#2'. Takes beyond repeatMax are allowed but flagged as over-limit in the app — warn the user before proposing one. Re-adding a placed non-repeatable course relocates it." },
+  REMOVE_COURSE:        { args: "{courseId}", use: "Remove a placed course from the plan entirely. Extra takes of a repeatable course are removed by their instance id ('MUS1990#2' — see the plan's placements keys)." },
+  MOVE_COURSE:          { args: "{courseId, toSemId}", use: "Move an already-placed course to a different semester (instance ids like 'MUS1990#2' move a specific take). Rejected if the course is not currently placed — use ADD_COURSE instead." },
   ADD_PLACED_OUT:       { args: "{courseId}", use: "Mark a course as placed out: it satisfies prerequisites but earns NO credit (e.g. waived via placement exam). NOT a substitution." },
   REMOVE_PLACED_OUT:    { args: "{courseId}", use: "Remove placed-out status." },
   ADD_SUBSTITUTION:     { args: "{fromId, toId}", use: "Course equivalence: placing fromId also satisfies requirements that ask for toId. Both remain real courses; credits count once. NOT for waivers — use ADD_PLACED_OUT for those." },

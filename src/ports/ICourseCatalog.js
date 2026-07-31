@@ -46,6 +46,14 @@ export const ICourseCatalog = "courseCatalog";
  * @property {number|null}  shMax        - Maximum credits for a variable-credit course.
  *                                         null for fixed-credit courses.
  *
+ * Repeatability (parsed from the catalog's "May be repeated …" sentence)
+ * @property {boolean}      repeatable   - Course may be taken more than once for credit.
+ * @property {number|null}  repeatMax    - Max TOTAL completions, first take included
+ *                                         ("may be repeated once" → 2). null when
+ *                                         repeatable without a stated limit.
+ * @property {number|null}  repeatMaxSH  - Stated ceiling on total credit hours earned
+ *                                         across completions, if any.
+ *
  * Scheduling
  * @property {Record<string,boolean>} termHistory
  *                                       - Historical offering data keyed by raw term code

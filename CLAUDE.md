@@ -49,9 +49,17 @@ Facts that follow from this:
   `git diff HEAD origin/main` to see what changed). Pull again before editing
   shared docs (TODO.md, IDEAS.md). With `pull.rebase` set, pull refuses while
   you have uncommitted changes — commit or stash first.
-- Code changes go branch → PR → squash-merge: `git switch -c fix/short-name`,
-  push, open a PR, partner skims, merge. The repo is squash-only and
-  auto-deletes merged branches. Trivial docs edits may go straight to main.
+- Code changes go branch → PR → **merge commit**: `git switch -c fix/short-name`,
+  push, open a PR, partner skims, merge. Never squash-merge — squashing
+  collapses the branch's commits into one, so the individual history is lost
+  the moment the branch ref is deleted. A merge commit keeps every commit AND
+  marks which branch they came from, so deleting the branch afterwards is
+  safe (GitHub: Settings → General → Pull Requests). Trivial docs edits may
+  go straight to main.
+- Pair-programming sessions (both humans reviewing live) may skip the PR:
+  rebase the feature branch onto origin/main, fast-forward merge to main,
+  push, then delete the branch — every commit is already in main by its own
+  SHA, so only the label goes away.
 - No long-lived or personal branches — they drift fast here (the monthly
   scrape commits straight to main; one March branch died 469 commits behind).
 - Never enable required-PR branch protection on main: the scheduled data
@@ -63,6 +71,10 @@ Facts that follow from this:
 ## Conventions
 
 - Conventional commits (`type: description`), no Co-Authored-By trailers.
+  Keep the subject concise; for features/fixes add a body of bullet points
+  explaining how the change works — what was added or fixed and the
+  mechanism behind it — detailed enough to follow the design without
+  reading the diff.
 - Localization: every user-facing string exists in all 8 locales
   (`src/locales/`), hand-written translations. "CLAUDE" stays untranslated.
   Summer terms are "Summer A" / "Summer B", never "Summer 1/2".

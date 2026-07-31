@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
+import { takesUsed } from "../core/repeatInstances.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAttributeSystem } from "../ports/IAttributeSystem.js";
@@ -137,7 +138,7 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
 export default function BankPanel() {
   const {
     courses, bankCourseIds, subjects, courseMap,
-    placements,
+    placements, SEM_INDEX,
     bankSearch, setBankSearch,
     bankSort,
     bankTab, setBankTab,
@@ -157,11 +158,34 @@ export default function BankPanel() {
     substitutions, addSubstitution, removeSubstitution,
     studentType,
     claudePreview,
+    bankProfFocus,
   } = usePlanner();
 
   const attributeSystem = usePort(IAttributeSystem);
   const { hasProgram, courseRole } = useRelevance();
   const [profQuery, setProfQuery] = useState(""); // professor finder text (UI-only)
+
+  // Repeatable-course takes counter — shown on a bank card once at least one
+  // take is planned (the card stays in the bank until its limit is reached).
+  const repeatChip = (c) => {
+    if (!c.repeatable) return null;
+    const used = takesUsed(c.id, placements, placedOut, SEM_INDEX);
+    if (!used) return null;
+    const max = c.repeatMax ?? "∞";
+    // Over the catalog's limit: allowed (trust the user), shown in error red, like an over-max semester.
+    const over = c.repeatMax != null && used > c.repeatMax;
+    return (
+      <span
+        title={t("bank.repeat.title").replace("{used}", String(used)).replace("{max}", String(max))}
+        style={{
+          position: "absolute", bottom: 2, right: 2, zIndex: 2, lineHeight: 1,
+          fontSize: isPhone ? 6 : 8, fontWeight: 700,
+          color: over ? "var(--error)" : "var(--active)", background: "var(--bg-surface)",
+          border: `1px solid ${over ? "var(--error)" : "var(--active)"}`, borderRadius: 99, padding: "2px 4px",
+        }}
+      >↻ {used}/{max}{over ? " ⚠" : ""}</span>
+    );
+  };
 
   const q = bankSearch.trim().toLowerCase();
 
@@ -334,6 +358,23 @@ export default function BankPanel() {
       if (f.starred) setBankTab("starred");
     }
   }, [claudePreview?.proposalId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // InfoPanel instructor-name click: the tag is already added to bankFilters
+  // by the context — here we switch to bank mode and, if the filter section
+  // happens to be open, scroll the chip into view and flash it. The section's
+  // open/closed state is the user's; never force it.
+  const [flashProf, setFlashProf] = useState(null);
+  useEffect(() => {
+    if (!bankProfFocus) return;
+    setSideMode("bank");
+    setFlashProf(bankProfFocus.name);
+    const scroll = setTimeout(() => {
+      document.querySelector(`[data-prof-chip="${CSS.escape(bankProfFocus.name)}"]`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 350);
+    const clear = setTimeout(() => setFlashProf(null), 1600);
+    return () => { clearTimeout(scroll); clearTimeout(clear); };
+  }, [bankProfFocus?.ts]); // eslint-disable-line react-hooks/exhaustive-deps
   const wideResizing = useRef(null);
   useEffect(() => {
     const onMove = e => {
@@ -586,20 +627,25 @@ export default function BankPanel() {
                   {/* Selected professors, as removable tags — these are the filter. */}
                   {fProfs.length > 0 && (
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 4 }}>
-                      {fProfs.map(name => (
-                        <span key={name} style={{
-                          display: "inline-flex", alignItems: "center", gap: 4,
-                          fontSize: isPhone ? 6 : 9, padding: isPhone ? "2px 4px 2px 6px" : "3px 5px 3px 7px",
-                          borderRadius: 99, background: "var(--bg-surface)",
-                          border: "1px solid var(--active)", color: "var(--active)", fontWeight: 700,
-                        }}>
-                          {name}
-                          <button onClick={() => removeProf(name)} title={t("bank.filter.prof.remove")}
-                            style={{ background: "none", border: "none", color: "var(--active)", cursor: "pointer", fontSize: isPhone ? 8 : 10, lineHeight: 1, padding: 0 }}>
-                            ✕
-                          </button>
-                        </span>
-                      ))}
+                      {fProfs.map(name => {
+                        // Inverted colours while the InfoPanel-click flash is on.
+                        const flashing = flashProf === name;
+                        return (
+                          <span key={name} data-prof-chip={name} style={{
+                            display: "inline-flex", alignItems: "center", gap: 4,
+                            fontSize: isPhone ? 6 : 9, padding: isPhone ? "2px 4px 2px 6px" : "3px 5px 3px 7px",
+                            borderRadius: 99, background: flashing ? "var(--active)" : "var(--bg-surface)",
+                            border: "1px solid var(--active)", color: flashing ? "var(--bg-surface)" : "var(--active)", fontWeight: 700,
+                            transition: "background 0.35s, color 0.35s",
+                          }}>
+                            {name}
+                            <button onClick={() => removeProf(name)} title={t("bank.filter.prof.remove")}
+                              style={{ background: "none", border: "none", color: "inherit", cursor: "pointer", fontSize: isPhone ? 8 : 10, lineHeight: 1, padding: 0 }}>
+                              ✕
+                            </button>
+                          </span>
+                        );
+                      })}
                     </div>
                   )}
                   <div style={{ position: "relative" }}>
@@ -955,7 +1001,12 @@ export default function BankPanel() {
                 </div>
                 {!isCol && (
                   <div style={{ padding: "2px 6px 6px", display: "flex", flexDirection: "column", gap: 3 }}>
-                    {sortedCrs.map(c => <CourseCard key={c.id} course={c} inSem={false} semId={null} noSubject />)}
+                    {sortedCrs.map(c => (
+                      <div key={c.id} style={{ position: "relative" }}>
+                        <CourseCard course={c} inSem={false} semId={null} noSubject />
+                        {repeatChip(c)}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -971,8 +1022,11 @@ export default function BankPanel() {
               </div>
             ) : bankCourses.map(c => {
               return (
-                <div key={c.id} style={{ position: "relative", opacity: placedIds.has(c.id) ? 0.55 : 1 }}>
+                // Dim only courses that can't be (re-)added — a repeatable
+                // course with takes left keeps full opacity via bankCourseIds.
+                <div key={c.id} style={{ position: "relative", opacity: placedIds.has(c.id) && !bankCourseIds.has(c.id) ? 0.55 : 1 }}>
                   <CourseCard course={c} inSem={false} semId={null} />
+                  {repeatChip(c)}
                   {studentType !== "graduate" && !isPhone && (
                   <button
                     onClick={() => {

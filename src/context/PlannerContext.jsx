@@ -14,7 +14,8 @@ import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
-import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions } from "../core/planModel.js";
+import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
+import { baseId, isInstanceId, takesUsed, resolveAddId } from "../core/repeatInstances.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -133,7 +134,7 @@ export function PlannerProvider({ children }) {
   const [loadPct,  setLoadPct]  = useState(5);
 
   // ── Derived from courses ─────────────────────────────────────
-  const courseMap = useMemo(() => Object.fromEntries(courses.map(c => [c.id, c])), [courses]);
+  const catalogCourseMap = useMemo(() => Object.fromEntries(courses.map(c => [c.id, c])), [courses]);
   const allEdges  = useMemo(() => courses.flatMap(c => extractEdges(c.id, c.prereqs, c.coreqs)), [courses]);
   const subjects  = useMemo(() => [...new Set(courses.map(c => c.subject))].sort(), [courses]);
 
@@ -220,6 +221,25 @@ export function PlannerProvider({ children }) {
     () => (pv ? new Set(pv.placedOut ?? []) : placedOut),
     [pv, placedOut]
   );
+
+  // Repeat instances: a placement key "BASE#n" (an additional take of a
+  // repeatable course — see src/core/repeatInstances.js) resolves to a clone
+  // of its base course, so every id-keyed consumer (cards, drag, SH sums,
+  // ordering, share links, undo) works without knowing about repeats. Clones
+  // are materialized for real AND previewed placements so Claude previews of
+  // extra takes render like everything else.
+  const courseMap = useMemo(() => {
+    let clones = null;
+    const materialize = (id) => {
+      if (catalogCourseMap[id] || !isInstanceId(id)) return;
+      const base = catalogCourseMap[baseId(id)];
+      if (base) (clones ??= {})[id] = { ...base, id, isRepeatInstance: true };
+    };
+    Object.keys(placements).forEach(materialize);
+    Object.keys(pvPlacements).forEach(materialize);
+    pvPlacedOut.forEach(materialize);
+    return clones ? { ...catalogCourseMap, ...clones } : catalogCourseMap;
+  }, [catalogCourseMap, placements, pvPlacements, pvPlacedOut]);
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
@@ -321,6 +341,11 @@ export function PlannerProvider({ children }) {
   //   programReq  — counts as a required course in a selected program
   //   programElec — counts as an elective/choose-from option in one
   const [bankFilters,     setBankFilters]     = useState({ terms: [], level: [], nupath: [], profs: [], programReq: false, programElec: false });
+  // One-shot signal from the InfoPanel: an instructor name was clicked, so the
+  // BankPanel should switch to bank mode and flash that professor's tag (only
+  // if the filter section is already open — its state is never forced).
+  // `ts` makes repeat clicks on the same name re-fire the consuming effect.
+  const [bankProfFocus,   setBankProfFocus]   = useState(null); // { name, ts }
   const [bankWidth,       setBankWidth]       = useState(() => window.innerWidth < 600 ? 88 : Math.min(300, Math.max(200, window.innerWidth * 0.21)));
   const [showSubjectKeys, setShowSubjectKeys] = useState(false);
   const [wideCatalog, setWideCatalog] = useState(() => { try { const v = localStorage.getItem("wide-catalog"); return v === "true"; } catch { return false; } });
@@ -414,7 +439,7 @@ export function PlannerProvider({ children }) {
   const undoStack     = useRef([]);
   const redoStack     = useRef([]);
   // Stale-closure escape hatches for keyboard handler
-  const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {} });
+  const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {}, placedOut: new Set() });
   const buildPlanContextRef = useRef(() => ({})); // sync-payload builder, refreshed each render
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
@@ -497,7 +522,7 @@ export function PlannerProvider({ children }) {
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    stateRef.current    = { placements, specialTermPl, semOrders };
+    stateRef.current    = { placements, specialTermPl, semOrders, placedOut };
     allEdgesRef.current = allEdges;
     onDropRef.current          = onDrop;
     onDropBankRef.current      = onDropBank;
@@ -591,10 +616,30 @@ export function PlannerProvider({ children }) {
   // lines effect; edges are the same objects as allEdges so identity holds.
   const connectionEdges = useMemo(() => {
     if (!selectedId) return [];
-    const placedEdges = allEdges.filter(e =>
-      placements[e.from] && placements[e.to] &&
-      placements[e.from] !== "incoming" && placements[e.to] !== "incoming");
-    return getConnectionsToDepth(selectedId, placedEdges, prereqDepth, unlockDepth);
+    // Edges are keyed by BASE course ids; repeat instances ("BASE#n") have
+    // none of their own. A course counts as on-the-board when ANY of its
+    // takes is placed; remember one concrete take per base so lines can
+    // anchor to a real card.
+    const takeOf = {};
+    for (const [pid, sid] of Object.entries(placements)) {
+      if (sid === "incoming") continue;
+      takeOf[baseId(pid)] ??= pid;
+    }
+    const placedEdges = allEdges.filter(e => takeOf[e.from] && takeOf[e.to]);
+    const selBase = baseId(selectedId);
+    const edges = getConnectionsToDepth(selBase, placedEdges, prereqDepth, unlockDepth);
+    // Re-anchor endpoints onto concrete cards — the take the user actually
+    // clicked, and for other courses whose plain id isn't placed, the take
+    // that is. Untouched edges keep their allEdges identity (the SVG-lines
+    // effect de-dups against it).
+    const anchor = (id) =>
+      id === selBase ? selectedId
+      : (placements[id] && placements[id] !== "incoming") ? id
+      : takeOf[id];
+    return edges.map(e => {
+      const f = anchor(e.from), t = anchor(e.to);
+      return f === e.from && t === e.to ? e : { ...e, from: f, to: t };
+    });
   }, [selectedId, allEdges, placements, prereqDepth, unlockDepth]);
 
   // ── Effect: SVG lines ─────────────────────────────────────────
@@ -733,13 +778,26 @@ export function PlannerProvider({ children }) {
     const shOvUpdates = {};
     const ooUpdates = {};
 
+    // Live placed-out view for repeat-limit checks — evolves with the batch
+    // so instance-id assignment stays byte-identical to the MCP-side dry run
+    // (plannerActionAdapter mutates its plan.placedOut the same way).
+    const poLive = new Set(stateRef.current.placedOut);
+
     for (const action of actions) {
       switch (action.type) {
-        case "ADD_COURSE":
-          newPl[action.courseId] = action.semId;
-          poDels.push(action.courseId);
-          palDels.push(action.courseId); // placing removes from the scratch pad, like drag-drop
+        case "ADD_COURSE": {
+          // Repeatable + already placed → this ADD is another take under a
+          // fresh instance id (same resolveAddId as the MCP-side validator,
+          // so both sides assign identical ids). Non-repeatable keeps the
+          // documented relocate-on-add semantics. Over-limit takes are
+          // allowed (trust the user) and flagged by the UI.
+          const course = courseMap[action.courseId];
+          const addId = course ? resolveAddId(course, newPl, poLive).id : action.courseId;
+          newPl[addId] = action.semId;
+          poDels.push(addId); poLive.delete(addId);
+          palDels.push(addId); // placing removes from the scratch pad, like drag-drop
           break;
+        }
         case "REMOVE_COURSE":
           delete newPl[action.courseId];
           break;
@@ -747,11 +805,11 @@ export function PlannerProvider({ children }) {
           newPl[action.courseId] = action.toSemId;
           break;
         case "ADD_PLACED_OUT":
-          poAdds.push(action.courseId);
+          poAdds.push(action.courseId); poLive.add(action.courseId);
           delete newPl[action.courseId];
           break;
         case "REMOVE_PLACED_OUT":
-          poDels.push(action.courseId);
+          poDels.push(action.courseId); poLive.delete(action.courseId);
           break;
         case "ADD_SUBSTITUTION":
           subAdds.push({ from: action.fromId, to: action.toId });
@@ -1048,9 +1106,15 @@ export function PlannerProvider({ children }) {
   // When graduated and the live semester has drifted past the plan boundary, treat it as
   // one past the last plan semester so all plan semesters render as completed.
   const currentSemIdx = SEM_INDEX[pv?.currentSemId ?? currentSemId] ?? (isGraduated ? SEMESTERS.length : 1);
+  // Only takes INSIDE the timeline count as placed. Entries parked outside
+  // it (the cohort shrank) stay in state — so they come back when it widens —
+  // but they return to the bank and never join any calculation.
   const placedIds = useMemo(
-    () => new Set([...Object.keys(placements), ...placedOut]),
-    [placements, placedOut]
+    () => new Set([
+      ...Object.keys(placements).filter(id => inTimeline(placements[id], SEM_INDEX)),
+      ...placedOut,
+    ]),
+    [placements, placedOut, SEM_INDEX]
   );
 
   // ── Unified special-term derived maps ────────────────────────
@@ -1127,7 +1191,9 @@ export function PlannerProvider({ children }) {
     courses.forEach(c => {
       if (!pvPlacements[c.id] && !pvPlacedOut.has(c.id)) return; // not taken at all
       if (pvPlacements[c.id] === "incoming") return;
-      if (typeof pvPlacements[c.id] === "string" && pvPlacements[c.id].startsWith("__overflow:")) return;
+      // Parked outside the timeline (incl. "__overflow:*") → no violation
+      // checks; ti would be undefined and flag every prereq as out of order.
+      if (pvPlacements[c.id] && !inTimeline(pvPlacements[c.id], SEM_INDEX)) return;
       if (pvPlacedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[pvPlacements[c.id]];
@@ -1145,7 +1211,8 @@ export function PlannerProvider({ children }) {
       // Checking `from` as well would falsely warn e.g. CS 2100 for not being
       // co-placed with every course that lists CS 2100 as its coreq.
       const placed = to, partner = from;
-      const isHidden = id => typeof placements[id] === "string" && placements[id].startsWith("__overflow:");
+      // Parked outside the timeline (incl. "__overflow:*") = off-plan.
+      const isHidden = id => placements[id] !== undefined && !inTimeline(placements[id], SEM_INDEX);
       const placedTaken = placements[placed] !== undefined || placedOut.has(placed);
       const partnerTaken = placements[partner] !== undefined || placedOut.has(partner);
       if (!placedTaken) return;
@@ -1222,21 +1289,23 @@ export function PlannerProvider({ children }) {
   }, [currentSemId, gradSemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
+  // Iterate placement keys (not the catalog array) so repeat instances
+  // ("BASE#n") each contribute their credits; unknown ids resolve to 0,
+  // matching the old courses-array filter.
   const totalSHPlaced = useMemo(
-    () => pvBonusSH + courses
-      .filter(c => pvPlacements[c.id] && !pvPlacements[c.id].startsWith?.("__overflow:") && !pvPlacedOut.has(c.id))
-      .reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [pvBonusSH, courses, pvPlacements, pvPlacedOut, effectiveCourseMap]
+    () => pvBonusSH + Object.entries(pvPlacements)
+      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id))
+      .reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
+    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX]
   );
 
   const totalSHDone = useMemo(
-    () => pvBonusSH + courses.filter(c => {
-      const sid = pvPlacements[c.id];
-      if (!sid || pvPlacedOut.has(c.id)) return false;
+    () => pvBonusSH + Object.entries(pvPlacements).filter(([id, sid]) => {
+      if (pvPlacedOut.has(id)) return false;
       const sidx = SEM_INDEX[sid] ?? 99;
       return isGraduated ? sidx <= currentSemIdx : sidx < currentSemIdx;
-    }).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [pvBonusSH, courses, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
+    }).reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
+    [pvBonusSH, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
   );
 
   // ── Star toggle ───────────────────────────────────────────────
@@ -1318,18 +1387,29 @@ export function PlannerProvider({ children }) {
         return next;
       });
     } else {
-      const fromSem = placements[id];
+      // Repeatable courses: a drag with no source semester (bank, InfoPanel)
+      // of an already-placed repeatable course adds ANOTHER take under a
+      // fresh instance id; grid drags (fromSem set) keep move semantics.
+      // The repeat limit is never enforced (NU Map trusts the user) — takes
+      // beyond it just render with the warn treatment.
+      let dropId = id;
+      if (dragInfo.fromSem == null && placements[id] != null) {
+        const course = courseMap[baseId(id)];
+        if (course?.repeatable) dropId = resolveAddId(course, placements, placedOut).id;
+      }
+      const fromSem = placements[dropId];
       if (fromSem === semId) { setDragInfo(null); return; }
       // Always move ALL coreq partners together with the dragged course
+      // (repeat instances have no edges of their own, so extra takes move alone)
       const coreqPartners = [...new Set(
         allEdges
-          .filter(edge => edge.type === "corequisite" && (edge.from === id || edge.to === id))
-          .map(edge => edge.from === id ? edge.to : edge.from)
-          .filter(cid => cid !== id)
+          .filter(edge => edge.type === "corequisite" && (edge.from === dropId || edge.to === dropId))
+          .map(edge => edge.from === dropId ? edge.to : edge.from)
+          .filter(cid => cid !== dropId)
       )];
-      const allMoving = [id, ...coreqPartners];
+      const allMoving = [dropId, ...coreqPartners];
       setPlacements(p => {
-        const n = { ...p, [id]: semId };
+        const n = { ...p, [dropId]: semId };
         coreqPartners.forEach(cid => { n[cid] = semId; });
         return n;
       });
@@ -1345,7 +1425,7 @@ export function PlannerProvider({ children }) {
         });
         const baseOrder = next[semId] || getOrderedCourses(semId, placements, prev, courseMap);
         const withoutDropped = baseOrder.filter(cid => !allMoving.includes(cid));
-        next[semId] = [...withoutDropped, id, ...coreqPartners];
+        next[semId] = [...withoutDropped, dropId, ...coreqPartners];
         return next;
       });
       // Remove from palette if it was there
@@ -1716,8 +1796,13 @@ export function PlannerProvider({ children }) {
 
   // ── Bank helpers ─────────────────────────────────────────────
   const bankCourseIds = useMemo(
-    () => new Set(courses.filter(c => !placedIds.has(c.id)).map(c => c.id)),
-    [courses, placedIds]
+    // A repeatable course stays in the bank while it has unused takes left
+    // (limit reached → it disappears, exactly like a placed one-shot course).
+    () => new Set(courses.filter(c =>
+      !placedIds.has(c.id) ||
+      (c.repeatable && takesUsed(c.id, placements, placedOut, SEM_INDEX) < (c.repeatMax ?? Infinity))
+    ).map(c => c.id)),
+    [courses, placedIds, placements, placedOut, SEM_INDEX]
   );
 
   // ── Reset ────────────────────────────────────────────────────
@@ -2588,6 +2673,14 @@ export function PlannerProvider({ children }) {
     setHoveredSem, setHoveredZone, setHoveredCardId,
     setShowViolLines,
     setBankSearch, setBankSort, setBankTab, setBankFilters, setBankWidth, setShowSubjectKeys,
+    // Instructor-name click in the InfoPanel: tag the professor in the bank
+    // filters (one-way, no duplicates — removal stays on the chip's ✕) and
+    // ask the BankPanel to reveal + flash the chip.
+    bankProfFocus,
+    focusProfInBank: (name) => {
+      setBankFilters(f => (f.profs.includes(name) ? f : { ...f, profs: [...f.profs, name] }));
+      setBankProfFocus({ name, ts: Date.now() });
+    },
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
     showCohortSetup, setShowCohortSetup, finishOnboarding,

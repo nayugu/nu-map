@@ -11,6 +11,7 @@ import { ICalendar }                from "../ports/ICalendar.js";
 import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
+import { baseId } from "../core/repeatInstances.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTranslation, useCourseTranslation, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { SemLabel } from "./SemLabel.jsx";
@@ -165,7 +166,7 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, cardRefs } = usePlanner();
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
   const calendar        = usePort(ICalendar);
@@ -176,9 +177,22 @@ function CourseInfo({ selCourse, navTo }) {
 
   const catalogUrl = courseCatalog?.courseUrl?.(selCourse) ?? null;
   const [codeHover, setCodeHover] = useState(false);
+  // Hovered header badges (desktop only — hover never fires on touch). Each
+  // holds the badge's on-screen rect so its hover card can anchor to it.
+  const [npHover, setNpHover]   = useState(null); // NUPath: { code, rect }
+  const [repHover, setRepHover] = useState(null); // ↻ repeat badge: rect
 
   const dir     = locales.find(l => l.code === locale)?.dir ?? "ltr";
   const isNonEn = locale !== catalogLocale;
+
+  // All placed takes of this course (a repeatable course can appear several
+  // times), in board order. Rendered as jump chips when there's more than one.
+  const semOrder = Object.fromEntries(SEMESTERS.map((s, i) => [s.id, i]));
+  const takes = Object.entries(placements)
+    // timeline only — takes parked outside the cohort range don't list
+    .filter(([pid, sid]) => baseId(pid) === baseId(selCourse.id) && SEM_INDEX[sid] !== undefined)
+    .map(([pid, sid]) => ({ pid, sem: SEMESTERS.find(s => s.id === sid) }))
+    .sort((a, b) => (semOrder[a.sem?.id] ?? 99) - (semOrder[b.sem?.id] ?? 99));
 
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -218,12 +232,100 @@ function CourseInfo({ selCourse, navTo }) {
             <TText>{selCourse.scheduleType}</TText>
           </span>
         )}
+        {selCourse.repeatable && (() => {
+          const overTakes = selCourse.repeatMax != null && takes.length > selCourse.repeatMax;
+          return (
+            <span
+              onMouseEnter={e => setRepHover(e.currentTarget.getBoundingClientRect())}
+              onMouseLeave={() => setRepHover(null)}
+              onClick={takes.length > 1 ? (e) => {
+                // Cycle: select the next take and bring its card into view.
+                e.stopPropagation();
+                const i = takes.findIndex(tk => tk.pid === selCourse.id);
+                const next = takes[(i + 1) % takes.length];
+                navTo(next.pid);
+                cardRefs.current?.[next.pid]?.scrollIntoView({ behavior: "smooth", block: "center" });
+              } : undefined}
+              style={{
+                fontSize: 9,
+                color: overTakes ? "var(--error)" : "var(--text-3)",
+                background: "var(--bg-surface)",
+                border: `1px solid ${overTakes ? "var(--error)" : "var(--border-2)"}`,
+                borderRadius: 3, padding: "1px 6px",
+                cursor: takes.length > 1 ? "pointer" : "help",
+              }}
+            >
+              ↻ {selCourse.repeatMax ? `×${selCourse.repeatMax}` : "∞"}{overTakes ? " ⚠" : ""}
+            </span>
+          );
+        })()}
+        {repHover && (() => {
+          const max = selCourse.repeatMax;
+          const overTakes = max != null && takes.length > max;
+          return (
+            <HoverCard rect={repHover}>
+              <bdi>
+                {/* scaleLatinRuns: digits inside CJK text need the same
+                    size-adjust the course title gets (fonts-cjk.css). */}
+                {scaleLatinRuns(
+                  (max
+                    ? t("info.repeat.limited").replace("{n}", String(max))
+                    : t("info.repeat.unlimited"))
+                  + (selCourse.repeatMaxSH ? ` · ≤ ${selCourse.repeatMaxSH} ${creditSystem.getUnitName()}` : "")
+                )}
+              </bdi>
+              {takes.length > 1 && (
+                <>
+                  <div style={{ marginTop: 11, fontSize: 8.5, fontWeight: 700, letterSpacing: "0.05em", color: "var(--text-5)" }}>
+                    {t("info.repeat.planned")}
+                  </div>
+                  {/* One take per line — scales to many takes;                       catalog limit render in error red (allowed, flagged). */}
+                  <div style={{ marginTop: 3, display: "flex", flexDirection: "column", gap: 2, fontSize: 10.5 }}>
+                    {takes.map(({ pid, sem }, i) => {
+                      const active = pid === selCourse.id;
+                      const over   = max != null && i >= max;
+                      return (
+                        <div key={pid} style={{ display: "flex", alignItems: "baseline", gap: 7 }}>
+                          <span style={{ fontSize: 8.5, color: "var(--text-6)", fontVariantNumeric: "tabular-nums", minWidth: 10, textAlign: "right" }}>{i + 1}</span>
+                          <span style={{
+                            fontWeight: active ? 700 : 400,
+                            color: over ? "var(--error)" : active ? "var(--text-2)" : "var(--text-4)",
+                          }}>
+                            {sem
+                              ? (sem.type === "special"
+                                  ? <TText>{sem.label}</TText>
+                                  : <SemLabel typeId={sem.semTypeId} year={(sem.id.match(/\d{4}/) ?? [""])[0]} />)
+                              : pid}
+                            {over ? " ⚠" : ""}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {overTakes && (
+                    <div style={{ marginTop: 4, fontSize: 9.5, fontWeight: 700, color: "var(--error)" }}>
+                      {scaleLatinRuns(t("bank.repeat.title").replace("{used}", String(takes.length)).replace("{max}", String(max)))}
+                    </div>
+                  )}
+                  <div style={{ marginTop: 10, fontSize: 9, fontStyle: "italic", color: "var(--text-5)" }}>
+                    {t("info.repeat.cycle")}
+                  </div>
+                </>
+              )}
+            </HoverCard>
+          );
+        })()}
         {selCourse.attributes?.map(np => (
-          <span key={np} title={attributeSystem.getLabel(np)}
-            style={{ fontSize: 9, color: "var(--nupath-text)", background: "var(--nupath-bg)", border: "1px solid var(--nupath-border)", borderRadius: 3, padding: "1px 5px", cursor: "default" }}>
+          <span key={np}
+            onMouseEnter={e => setNpHover({ code: np, rect: e.currentTarget.getBoundingClientRect() })}
+            onMouseLeave={() => setNpHover(null)}
+            style={{ fontSize: 9, color: "var(--nupath-text)", background: "var(--nupath-bg)", border: "1px solid var(--nupath-border)", borderRadius: 3, padding: "1px 5px", cursor: "help" }}>
             {np}
           </span>
         ))}
+        {npHover && (
+          <HoverCard rect={npHover.rect}><bdi>{attributeSystem.getLabel(npHover.code)}</bdi></HoverCard>
+        )}
         {catalogUrl && (
           <a href={catalogUrl} target="_blank" rel="noopener noreferrer"
             style={{ fontSize: 9, color: "var(--text-5)", textDecoration: "none", marginLeft: 2 }}
@@ -233,6 +335,7 @@ function CourseInfo({ selCourse, navTo }) {
           </a>
         )}
       </div>
+
 
       {/* Non-English: nudge to enable translation, or show download progress */}
       {isNonEn && !courseTranslationEnabled && (
@@ -512,6 +615,7 @@ const SEM_NAME_KEY = { fall: "claude.sem.fall", spring: "claude.sem.spring", sum
 function CourseInstructors({ selCourse, compact = false }) {
   const cal   = usePort(ICalendar);
   const { t } = useLanguage();
+  const { focusProfInBank } = usePlanner();
   const prof = selCourse.offering?.prof ?? {};
   const monthKey = s => (s.months?.length ? Math.min(...s.months.map(Number)) : 99);
   const rows = [...cal.getSemesterTypes()]
@@ -553,7 +657,20 @@ function CourseInstructors({ selCourse, compact = false }) {
                       opacity: 0.40 + 0.60 * Math.pow(frac, 1.4),
                       lineHeight: "calc(1.35 * var(--lh-scale, 1))",
                     }}>
-                      <span>{name}</span>
+                      {/* Clickable: tags the professor in the bank's filter
+                          (one-way add — removal lives on the chip's ✕). Same
+                          dotted-underline hover cue as the draggable code. */}
+                      <span
+                        title={t("info.prof.filter").replace("{name}", name)}
+                        onClick={e => { e.stopPropagation(); focusProfInBank(name); }}
+                        onMouseEnter={e => { e.currentTarget.style.textDecorationLine = "underline"; }}
+                        onMouseLeave={e => { e.currentTarget.style.textDecorationLine = "none"; }}
+                        style={{
+                          cursor: "pointer",
+                          textDecorationLine: "none", textDecorationStyle: "dotted",
+                          textDecorationColor: "var(--text-6)", textUnderlineOffset: 3,
+                        }}
+                      >{name}</span>
                       <span style={{ fontSize: 8, fontWeight: 600, color: "var(--text-3)", flexShrink: 0 }}>{pct}%</span>
                     </div>
                   );
@@ -1120,6 +1237,48 @@ function SchedulePopover({ pat, color, rect }) {
           );
         })}
       </div>
+    </div>,
+    document.body
+  );
+}
+
+// Instant hover card for header badges (desktop only — same hover-anchored
+// portal pattern as OfferingPopover/SchedulePopover, and portalled to
+// document.body for the same transform:scale reason). Replaces the native
+// `title` tooltip, whose ~1s delay made the content feel hidden. Shared by
+// the NUPath badges (full attribute name) and the ↻ repeat badge (repeat
+// rule + planned takes).
+function HoverCard({ children, rect }) {
+  const ref = useRef(null);
+  const [placed, setPlaced] = useState(null);   // measured-and-clamped position
+  const GAP  = 7;    // clearance between the badge and the popover
+  const EDGE = 8;    // min clearance from any viewport edge
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const w = el.offsetWidth, h = el.offsetHeight;
+    let left = rect.left + rect.width / 2 - w / 2;                   // centred over the badge
+    left = Math.min(Math.max(EDGE, left), window.innerWidth - w - EDGE);
+    let top = rect.top - GAP - h;                                    // above the badge…
+    if (top < EDGE) top = rect.bottom + GAP;                         // …or below if it'd clip the top
+    top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
+    setPlaced({ top: Math.round(top), left: Math.round(left) });
+  }, [rect]);
+
+  return createPortal(
+    <div ref={ref} style={{
+      position: "fixed",
+      left: placed ? placed.left : Math.round(rect.left),
+      top:  placed ? placed.top  : Math.round(rect.top),
+      zIndex: 9000, padding: "7px 11px", whiteSpace: "nowrap",
+      background: "var(--bg-surface)", border: "1px solid var(--border-card)",
+      borderRadius: 7, boxShadow: "var(--shadow-modal)", pointerEvents: "none",
+      fontFamily: "'Inter', system-ui, sans-serif",
+      fontSize: 13.5, color: "var(--text-2)",
+      visibility: placed ? "visible" : "hidden",
+    }}>
+      {children}
     </div>,
     document.body
   );
