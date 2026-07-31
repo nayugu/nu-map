@@ -657,17 +657,21 @@ export default function Header() {
               background: showPlanMenu ? "var(--bg-surface)" : "var(--bg-surface-2)",
               border: `1px ${claudePreview?.changed?.has?.("planName") ? "dashed #fb923c" : `solid ${showPlanMenu ? "var(--active)" : "var(--border-2)"}`}`,
               borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 5px" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
-            {isPhone
-              ? (planSlash
-                  ? "/"
-                  : <>
-                      <PlanNameFade
-                        text={(plans.find(p => p.id === activePlanId)?.name) || "Plan"}
-                        rtl={(locales.find(l => l.code === locale)?.dir ?? "ltr") === "rtl"}
-                      />
-                      <span style={{ flexShrink: 0, marginLeft: 3 }}>▾</span>
-                    </>)
-              : iconOnly ? "/" : `/ ${(plans.find(p => p.id === activePlanId)?.name) || "Plan"} ▾`}
+            {(() => {
+              // Same clipped-name treatment on every device: the per-character
+              // fade lives between a pinned "/" (desktop prefix) and "▾".
+              const planName = (plans.find(p => p.id === activePlanId)?.name) || "Plan";
+              const hdrRtl = (locales.find(l => l.code === locale)?.dir ?? "ltr") === "rtl";
+              if (isPhone && planSlash) return "/";
+              if (!isPhone && iconOnly) return "/";
+              return (
+                <>
+                  {!isPhone && <span style={{ flexShrink: 0, marginRight: 4 }}>/</span>}
+                  <PlanNameFade text={planName} rtl={hdrRtl} />
+                  <span style={{ flexShrink: 0, marginLeft: isPhone ? 3 : 4 }}>▾</span>
+                </>
+              );
+            })()}
           </button>
 
           {showPlanMenu && (
