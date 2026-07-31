@@ -20,7 +20,7 @@ compatibility_date = "2026-07-01"
 [vars]
 # Matthew's Express connected account. Not a secret — it is an identifier, and
 # holding it does not authorise anything.
-CONNECTED_ACCOUNT_ID = "acct_REPLACE_ME"
+CONNECTED_ACCOUNT_ID = "acct_1TzMYT8gLsKz8gMr"
 
 # The recipient's share, in basis points. 3500 = 35%, per §3 of
 # docs/co-ownership-agreement.md. Changing the split is a config change here
