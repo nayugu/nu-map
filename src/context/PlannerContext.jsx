@@ -354,6 +354,9 @@ export function PlannerProvider({ children }) {
   // ── Settings / modal state ───────────────────────────────────
   const [showDisclaimer,   setShowDisclaimer]   = useState(false);
   const [showStats,        setShowStats]        = useState(false);
+  // Donate modal. Never auto-opens — only the header ♥ pill or the About
+  // modal's /donate button set it, so the app never asks for money unprompted.
+  const [showDonate,       setShowDonate]       = useState(false);
   const [showNewPlanModal,    setShowNewPlanModal]    = useState(false);
   const [newPlanInitialType,  setNewPlanInitialType]  = useState(null);
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
@@ -2590,6 +2593,7 @@ export function PlannerProvider({ children }) {
     bankCourseIds,
     // Settings
     showDisclaimer, showSettings, showStats, setShowStats,
+    showDonate, setShowDonate,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     showContLogo, setShowContLogo: updateShowContLogo,
     showUnlocks, setShowUnlocks: updateShowUnlocks,

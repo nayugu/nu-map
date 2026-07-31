@@ -170,6 +170,15 @@ export const strings = {
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n}개 코스",
+  "header.donate":                "기부",
+  "header.donate.title":          "NU Map의 호스팅 및 개발 지원",
+
+  // ── Donate modal ───────────────────────────────────────────────
+  "donate.title":                 "NU Map 후원하기",
+  "donate.subtitle":              "학생 두 명이 만들고 있습니다.",
+  "donate.qr.hint":               "휴대폰으로 스캔하면 몇 초 만에 완료됩니다. 계정이 필요하지 않습니다.",
+  "donate.fast":                  "기부하기",
+  "donate.close":                 "닫기",
   "header.credits.done":          "{n} {unit} 완료",
   "header.credits.placed":        "{n} {unit} 배치됨",
   "header.settings.theme.light":  "☀ 밝게",

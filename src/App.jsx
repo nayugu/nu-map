@@ -15,6 +15,7 @@ import GraduationRow   from './ui/GraduationRow.jsx';
 import BankPanel       from './ui/BankPanel.jsx';
 import InfoPanel       from './ui/InfoPanel.jsx';
 import DisclaimerModal  from './ui/DisclaimerModal.jsx';
+import DonateModal      from './ui/DonateModal.jsx';
 import OnboardingModal  from './ui/OnboardingModal.jsx';
 import FeatureTour       from './ui/FeatureTour.jsx';
 import StatsPanel       from './ui/StatsPanel.jsx';
@@ -106,6 +107,7 @@ function PlannerApp() {
       </div>
       {/* Rendered outside the scaled container so it's unaffected by zoom */}
       <DisclaimerModal />
+      <DonateModal />
       <OnboardingModal />
       <FeatureTour />
       <StatsPanel />

@@ -170,6 +170,15 @@ export const strings = {
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n} कोर्सेस",
+  "header.donate":                "दान करें",
+  "header.donate.title":          "NU Map की होस्टिंग और विकास में सहयोग करें",
+
+  // ── Donate modal ───────────────────────────────────────────────
+  "donate.title":                 "NU Map को सहयोग दें",
+  "donate.subtitle":              "दो छात्रों ने बनाया है।",
+  "donate.qr.hint":               "फ़ोन से स्कैन करें और सेकंडों में भुगतान करें — किसी खाते की ज़रूरत नहीं।",
+  "donate.fast":                  "दान करें",
+  "donate.close":                 "बंद करें",
   "header.credits.done":          "{n} {unit} ✓",
   "header.credits.placed":        "{n} {unit} रखा गया",
   "header.settings.theme.light":  "☀ हल्का",

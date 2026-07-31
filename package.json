@@ -42,7 +42,8 @@
     "test:mcp": "npm --prefix mcp-server test",
     "test:live": "cd test/live && node --test",
     "test:all": "npm test && npm run test:mcp && npm run test:live",
-    "test:baseline:update": "node test/invariant/regen-baselines.mjs"
+    "test:baseline:update": "node test/invariant/regen-baselines.mjs",
+    "gen:donate-qr": "node scripts/gen-donate-qr.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.2.0",
@@ -54,6 +55,7 @@
     "js-yaml": "^4.1.1",
     "node-html-parser": "^7.1.0",
     "playwright": "^1.61.1",
+    "qrcode": "^1.5.4",
     "vite": "^5.4.11"
   }
 }

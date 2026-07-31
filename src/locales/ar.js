@@ -169,6 +169,15 @@ export const strings = {
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n} مقررًا",
+  "header.donate":                "تبرع",
+  "header.donate.title":          "ادعم استضافة NU Map وتطويرها",
+
+  // ── Donate modal ───────────────────────────────────────────────
+  "donate.title":                 "ادعم NU Map",
+  "donate.subtitle":              "صنعه طالبان.",
+  "donate.qr.hint":               "امسح الرمز بهاتفك وأتمّ الدفع في ثوانٍ، دون إنشاء حساب.",
+  "donate.fast":                  "تبرع",
+  "donate.close":                 "إغلاق",
   "header.credits.done":          "{n} {unit} ✓",
   "header.credits.placed":        "{n} {unit} معادل",
   "header.settings.theme.light":  "☀ فاتح",

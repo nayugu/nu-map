@@ -10,6 +10,7 @@ import { exportReport, getOrderedCourses, filterInTimeline } from "../core/planM
 import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
+import { donateEnabled } from "../core/donate.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -53,7 +54,7 @@ export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
     placements, courseMap, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
-    resetAll, setShowDisclaimer, setShowStats,
+    resetAll, setShowDisclaimer, setShowStats, setShowDonate,
     showSettings, setShowSettings,
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd, semOrd,
@@ -551,6 +552,30 @@ export default function Header() {
               >
                 updated {dataMeta.lastUpdated || __COMMIT_DATE__}
               </span>
+              {/* Donate — an action, so it wears feedback's outlined-pill
+                  treatment rather than BETA/updating's solid status fill. The
+                  heart sets no color of its own so the parent's hover swap
+                  carries it, and inline-flex lets RTL mirror the order.
+                  Opens the modal rather than linking out: the QR in there is
+                  the fast path, since paying belongs on a phone. */}
+              {donateEnabled() && (
+                <button
+                  onClick={() => setShowDonate(true)}
+                  title={t("header.donate.title")}
+                  style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.04em",
+                    color: "var(--text-5)", background: "transparent",
+                    border: "1px solid var(--border-1)", borderRadius: 20,
+                    padding: "1px 7px", whiteSpace: "nowrap", lineHeight: "calc(1.7 * var(--lh-scale, 1))",
+                    marginRight: 6, display: "inline-flex", alignItems: "center", gap: 3,
+                    cursor: "pointer", fontFamily: "inherit",
+                    transition: "color 0.2s, border-color 0.2s" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "var(--text-3)"; e.currentTarget.style.borderColor = "var(--border-2)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "var(--text-5)"; e.currentTarget.style.borderColor = "var(--border-1)"; }}
+                >
+                  <span aria-hidden="true" style={{ fontSize: 8, lineHeight: 1 }}>♥</span>
+                  {t("header.donate")}
+                </button>
+              )}
               <a
                 href="https://forms.gle/CzXE25WRtJnXWE1U9"
                 target="_blank"

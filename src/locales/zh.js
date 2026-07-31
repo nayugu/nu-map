@@ -124,6 +124,15 @@ export const strings = {
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":          "{n} \u95e8\u8bfe\u7a0b",
+  "header.donate":                 "\u6350\u8d60",
+  "header.donate.title":           "\u652f\u6301 NU Map \u7684\u6258\u7ba1\u4e0e\u5f00\u53d1",
+
+  // ── Donate modal ───────────────────────────────────────────────
+  "donate.title":                  "\u652f\u6301 NU Map",
+  "donate.subtitle":               "\u7531\u4e24\u540d\u5b66\u751f\u5f00\u53d1\u3002",
+  "donate.qr.hint":                "\u7528\u624b\u673a\u626b\u7801\uff0c\u51e0\u79d2\u5373\u53ef\u5b8c\u6210\uff0c\u65e0\u9700\u6ce8\u518c\u8d26\u53f7\u3002",
+  "donate.fast":                   "\u6350\u8d60",
+  "donate.close":                  "\u5173\u95ed",
   "header.credits.done":           "{n} {unit} \u2713",
   "header.credits.placed":         "{n} {unit} \u5df2\u6392",
   "header.settings.theme.light":   "\u2600 \u6d45\u8272",

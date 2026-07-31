@@ -170,6 +170,15 @@ export const strings = {
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n} cursos",
+  "header.donate":                "donar",
+  "header.donate.title":          "Apoya el alojamiento y el desarrollo de NU Map",
+
+  // ── Donate modal ───────────────────────────────────────────────
+  "donate.title":                 "Apoya NU Map",
+  "donate.subtitle":              "Creado por dos estudiantes.",
+  "donate.qr.hint":               "Escanea con el móvil y paga en segundos, sin crear cuenta.",
+  "donate.fast":                  "Donar",
+  "donate.close":                 "Cerrar",
   "header.credits.done":          "{n} {unit} ✓",
   "header.credits.placed":        "{n} {unit} convalidados",
   "header.settings.theme.light":  "☀ Claro",
