@@ -24,7 +24,7 @@ NU Map off AGPL-3.0 without the other agreeing.
 
 ---
 
-**Nathan Gu** ________________________  Date ____________
+**Nathan Gu** Nathan Gu  Date July 31, 2026
 
 **Matthew Gu** ________________________  Date ____________
 
