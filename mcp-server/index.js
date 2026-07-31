@@ -1,3 +1,7 @@
+// NU Map — Copyright (C) 2025-2026 Nathan Gu and Matthew Gu
+// SPDX-License-Identifier: AGPL-3.0-only
+// AGPL-3.0-only + attribution term under §7(b); see LICENSING.md and NOTICE.
+//
 // NU Map MCP Server — entry point & composition root.
 //
 // This is where the hexagon gets assembled for Node: the Northeastern
