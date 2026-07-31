@@ -26,6 +26,18 @@ function googleLocale(bcp47) {
 
 const MAX_CONCURRENT  = 6;
 const FETCH_TIMEOUT_MS = 5_000;
+
+// Above this, q moves from the query string into a POST body: course
+// descriptions produce multi-KB GET URLs that some proxies/middleboxes
+// reject even though the endpoint itself accepts them.
+const MAX_GET_CHARS = 1_200;
+
+// Long texts legitimately take longer to translate and download — scale
+// the timeout with size instead of giving a 2000-char description the
+// same 5s a course title gets.
+function timeoutFor(text) {
+  return Math.min(15_000, FETCH_TIMEOUT_MS + text.length * 4);
+}
 let inFlight = 0;
 const queue  = [];
 
@@ -82,10 +94,19 @@ export class GoogleTranslateEngine {
     const ac = new AbortController();
     this.#aborts.push(ac);
 
-    const url =
+    const base =
       `https://translate.googleapis.com/translate_a/single` +
-      `?client=gtx&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}` +
-      `&dt=t&q=${encodeURIComponent(text)}`;
+      `?client=gtx&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}&dt=t`;
+    const useGet = text.length <= MAX_GET_CHARS;
+    const url  = useGet ? `${base}&q=${encodeURIComponent(text)}` : base;
+    const init = useGet
+      ? { signal: ac.signal }
+      : {
+          method:  "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body:    `q=${encodeURIComponent(text)}`,
+          signal:  ac.signal,
+        };
 
     return schedule(async () => {
       // Abort with a TimeoutError (not the default AbortError) so
@@ -93,10 +114,10 @@ export class GoogleTranslateEngine {
       // cancel — timeouts fall through to the next engine, cancels don't.
       const timer = setTimeout(
         () => ac.abort(new DOMException("Google Translate timeout", "TimeoutError")),
-        FETCH_TIMEOUT_MS,
+        timeoutFor(text),
       );
       try {
-        const response = await fetch(url, { signal: ac.signal });
+        const response = await fetch(url, init);
         if (!response.ok) throw new Error(`Google Translate ${response.status}`);
         // If Google serves a CAPTCHA page, response.json() throws — caller catches it.
         const data = await response.json();
