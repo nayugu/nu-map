@@ -410,7 +410,7 @@ export const strings = {
   "stats.tile.coursesSub":        "planificados + cursados",
   "stats.tile.remaining":         "Créditos restantes",
   "stats.nupath":                 "NUPath planificado",
-  "stats.comp.sky":               "Panorama",
+  "stats.comp.sky":               "Gráfico Panorama",
   "stats.comp.total":             "Por nivel",
   "stats.comp.dept":              "Por departamento",
   "stats.dept.title":             "Créditos por departamento",

@@ -408,7 +408,7 @@ export const strings = {
   "stats.tile.coursesSub":        "مخطط + مُنجَز",
   "stats.tile.remaining":         "الساعات المتبقية",
   "stats.nupath":                 "NUPath المخطط",
-  "stats.comp.sky":               "الأفق",
+  "stats.comp.sky":               "مخطط الأفق",
   "stats.comp.total":             "حسب المستوى",
   "stats.comp.dept":              "حسب القسم",
   "stats.dept.title":             "الساعات حسب القسم",

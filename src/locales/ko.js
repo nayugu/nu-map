@@ -409,7 +409,7 @@ export const strings = {
   "stats.tile.coursesSub":        "계획 + 이수",
   "stats.tile.remaining":         "남은 학점",
   "stats.nupath":                 "NUPath 계획",
-  "stats.comp.sky":               "스카이라인",
+  "stats.comp.sky":               "스카이라인 차트",
   "stats.comp.total":             "레벨별",
   "stats.comp.dept":              "학과별",
   "stats.dept.title":             "학과별 학점",

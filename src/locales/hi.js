@@ -409,7 +409,7 @@ export const strings = {
   "stats.tile.coursesSub":        "नियोजित + पूर्ण",
   "stats.tile.remaining":         "शेष क्रेडिट",
   "stats.nupath":                 "NUPath नियोजित",
-  "stats.comp.sky":               "स्काईलाइन",
+  "stats.comp.sky":               "स्काईलाइन चार्ट",
   "stats.comp.total":             "स्तर अनुसार",
   "stats.comp.dept":              "विभाग अनुसार",
   "stats.dept.title":             "विभाग अनुसार क्रेडिट",

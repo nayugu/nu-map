@@ -408,7 +408,7 @@ export const strings = {
   "stats.tile.coursesSub":        "计划 + 已修",
   "stats.tile.remaining":         "剩余学分",
   "stats.nupath":                 "NUPath 计划",
-  "stats.comp.sky":               "天际线",
+  "stats.comp.sky":               "天际线图",
   "stats.comp.total":             "按级别",
   "stats.comp.dept":              "按院系",
   "stats.dept.title":             "各院系学分",

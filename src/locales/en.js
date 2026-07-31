@@ -416,7 +416,7 @@ export const strings = {
   "stats.tile.coursesSub":        "planned + taken",
   "stats.tile.remaining":         "Credits left",
   "stats.nupath":                 "NUPath planned",
-  "stats.comp.sky":               "Skyline",
+  "stats.comp.sky":               "Skyline Chart",
   "stats.comp.total":             "By level",
   "stats.comp.dept":              "By department",
 

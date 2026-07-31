@@ -397,7 +397,7 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
     <div style={{ position: "relative" }}>
       {zoom !== 1 && (
         <button onClick={() => { zoomRef.current = 1; if (gridRef.current) gridRef.current.style.zoom = 1; setZoom(1); }} title="Reset zoom"
-          style={{ position: "absolute", top: -4, right: 0, zIndex: 2,
+          style={{ position: "absolute", top: -4, right: 0, zIndex: 5,
             fontSize: 9.5, fontVariantNumeric: "tabular-nums", lineHeight: 1, padding: "3px 7px",
             background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 99,
             color: "var(--text-4)", cursor: "pointer" }}>
@@ -586,11 +586,19 @@ function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
             const x1 = Math.max(...run.spans.map(s => s[1]));
             const logoX = (x0 + x1) / 2;
             const domain = run.domain;
+            // Back-to-back stints would fuse into one block — a hairline
+            // surface-coloured seam marks the boundary between DIFFERENT
+            // work terms (never the outer edges).
+            const prev = coopRuns[ri - 1];
+            const touchesPrev = prev && Math.abs(x0 - Math.max(...prev.spans.map(s => s[1]))) < 0.5;
             return (
               <g key={`coop-${ri}`}>
                 {run.spans.map(([a, b], i) => (
                   <rect key={i} x={a} y={padT} width={Math.max(0, b - a)} height={plotH} fill={COOP_COLOR} opacity="0.14" />
                 ))}
+                {touchesPrev && (
+                  <line x1={x0} y1={padT} x2={x0} y2={padT + plotH} stroke="var(--bg-surface)" strokeWidth="2" opacity="0.35" />
+                )}
                 {domain
                   ? <image href={faviconUrl(domain)} xlinkHref={faviconUrl(domain)} x={logoX - 9} y={padT + 6} width="18" height="18" />
                   : <svg x={logoX - 9} y={padT + 6} width="18" height="18" viewBox="0 0 24 24" fill="none"

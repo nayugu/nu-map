@@ -409,7 +409,7 @@ export const strings = {
   "stats.tile.coursesSub":        "prévus + suivis",
   "stats.tile.remaining":         "Crédits restants",
   "stats.nupath":                 "NUPath prévu",
-  "stats.comp.sky":               "Panorama",
+  "stats.comp.sky":               "Graphique Panorama",
   "stats.comp.total":             "Par niveau",
   "stats.comp.dept":              "Par département",
   "stats.dept.title":             "Crédits par département",
