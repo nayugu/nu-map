@@ -37,8 +37,7 @@ what each of us agreed to and when.
 **A1 — §3 extended to donations.** As originally signed, §3 covered commercial
 licences only. It now reads "commercial licences and donations alike, net of what
 the payment processor takes," so the 65/35 applies to donation income too.
-*Proposed by Nathan. Agreed by Matthew: pending — his commit to this file closes
-it.*
+*Agreed by both authors in person.*
 
 *Not written by a lawyer. Change the split in §3 or the signing rule in §4 by
 editing this file and both committing to it.*
