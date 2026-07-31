@@ -1,7 +1,8 @@
 // UNIT · src/core/gradRequirements.js — the graduation verdict.
 //
-// The port of graduatenu's major2 validation. Wrongness here is the highest-
-// stakes silent lie in the app: it tells a student whether they graduate. We
+// Major2 requirement satisfaction, specified in docs/major2-validation-spec.md.
+// Wrongness here is the highest-stakes silent lie in the app: it tells a
+// student whether they graduate. We
 // assert the *semantics* of each Requirement2 type and the allocation rule that
 // a course counts once — NOT the shape of the result tree (that would pin
 // implementation and break on harmless refactors). Pure; no I/O.
