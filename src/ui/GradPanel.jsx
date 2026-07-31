@@ -94,11 +94,11 @@ function CheckBox({ sat, dimmedCheck = false }) {
     <span style={{ ...base,
       background: "transparent",
       border: `1px solid ${sat ? "color-mix(in srgb, var(--border-2) 40%, transparent)" : "var(--border-2)"}`,
-      color: sat ? "var(--success)" : "var(--text-5)",
+      color: sat ? "var(--success-mark)" : "var(--text-5)",
     }}>
       {sat && (
         <svg width={sz - 4} height={sz - 4} viewBox="0 0 12 12" style={{ display: "block" }}>
-          <path d="M2 6.5 L4.8 9.2 L10 3.2" fill="none" stroke="var(--success)"
+          <path d="M2 6.5 L4.8 9.2 L10 3.2" fill="none" stroke="var(--success-mark)"
             strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )}
@@ -438,7 +438,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
           {hasSplit ? (
             <>
               <span style={{ color: "var(--success)" }}>{sec.completedSH}</span>
-              {sec.plannedSH > 0 && <span style={{ color: "var(--link-1)" }}>+{sec.plannedSH}</span>}
+              {sec.plannedSH > 0 && <span style={{ color: "var(--planned)" }}>+{sec.plannedSH}</span>}
               <span>/{sec.requiredSH} SH</span>
             </>
           ) : isGeneralElectives ? `${sec.placedSH}/${sec.requiredSH} SH`
@@ -683,7 +683,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: isPhone ? 8.5 : 10, color: "var(--text-5)", marginBottom: 4, letterSpacing: 0, whiteSpace: "nowrap" }}>
             <span>
               <span style={{ color: "var(--success)" }}>{doneSat}</span>
-              {plannedSat > 0 && <span style={{ color: "var(--link-1)" }}>+{plannedSat}</span>}
+              {plannedSat > 0 && <span style={{ color: "var(--planned)" }}>+{plannedSat}</span>}
               <span>/{totalReq}</span>
             </span>
             <span>{Math.round(totalSat / totalReq * 100)}%</span>
@@ -735,7 +735,7 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
           {/* Numeric stat line — same treatment as MinorBlock's above. */}
           <div style={{ fontSize: isPhone ? 8.5 : 10, color: "var(--text-5)", marginBottom: 4, letterSpacing: 0, whiteSpace: "nowrap" }}>
             <span style={{ color: "var(--success)" }}>{progress.doneSat}</span>
-            {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--link-1)" }}>+{progress.totalSat - progress.doneSat}</span>}
+            {(progress.totalSat - progress.doneSat) > 0 && <span style={{ color: "var(--planned)" }}>+{progress.totalSat - progress.doneSat}</span>}
             <span> / {progress.totalReq}</span>
           </div>
           <div style={{ position: "relative", height: 6, borderRadius: 3, background: "var(--border-2)" }}>
