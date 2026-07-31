@@ -1,1 +1,0 @@
-{"clientId":"-7vVZrp3XqwaT3g3","redirectUris":["http://localhost:9999/callback"],"clientName":"oauth-e2e","grantTypes":["authorization_code","refresh_token"],"responseTypes":["code"],"registrationDate":1784761950,"tokenEndpointAuthMethod":"none"}
