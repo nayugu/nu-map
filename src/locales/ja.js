@@ -410,6 +410,7 @@ export const strings = {
   "stats.tile.coursesSub":        "予定＋履修済み",
   "stats.tile.remaining":         "残り単位",
   "stats.nupath":                 "NUPath（予定）",
+  "stats.comp.sky":               "スカイライン",
   "stats.comp.total":             "レベル別",
   "stats.comp.dept":              "学科別",
   "stats.dept.title":             "学科別の単位",

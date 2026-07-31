@@ -12,7 +12,7 @@
 // Sections: Overview · Composition (by level / by department) · Credit
 // Load · Experience. Charts are hand-rolled div/SVG (no dependency).
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useLayoutEffect, useRef, Fragment } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { usePort } from "../context/InstitutionContext.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
@@ -231,7 +231,7 @@ function useDominantColor(domain, fallback) {
 
 // A clickable course pill (opens the course info panel). Coloured by its
 // department; grad-level courses pulse with a glow in that same dept colour.
-function ClassChip({ id, cmap, onOpen, faded }) {
+function ClassChip({ id, cmap, onOpen, faded, fz = 11 }) {
   const c = cmap[id];
   const deptColor = subjectColor(c?.subject ?? "");
   // Same visual language as a course card: coloured course code on grey card
@@ -240,7 +240,7 @@ function ClassChip({ id, cmap, onOpen, faded }) {
   return (
     <button onClick={() => onOpen(id)} title={c?.title ?? id}
       style={{
-        fontSize: 11, fontWeight: 800, padding: "3px 7px", borderRadius: 5, cursor: "pointer",
+        fontSize: fz, fontWeight: 800, padding: "3px 7px", borderRadius: 5, cursor: "pointer",
         background: "var(--card-bg)", color: deptColor, whiteSpace: "nowrap", lineHeight: 1.3,
         border: `1px ${faded ? "dashed" : "solid"} var(--border-card)`, opacity: faded ? 0.4 : 1,
         transition: "background 0.12s, color 0.12s, border-color 0.12s",
@@ -256,7 +256,7 @@ function ClassChip({ id, cmap, onOpen, faded }) {
 }
 
 // Header + wrapped clickable chips for one group (a level tier or a dept).
-function CourseGroup({ title, sub, ids, cmap, onOpen }) {
+function CourseGroup({ title, sub, ids, cmap, onOpen, fadedIds }) {
   return (
     <div style={{ marginBottom: 11 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
@@ -264,7 +264,187 @@ function CourseGroup({ title, sub, ids, cmap, onOpen }) {
         <span style={{ fontSize: 12, color: "var(--text-4)", flexShrink: 0, marginLeft: 8 }}>{sub}</span>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-        {ids.map(id => <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} />)}
+        {ids.map(id => <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} faded={fadedIds?.has(id)} fz={12.5} />)}
+      </div>
+    </div>
+  );
+}
+
+// ── Skyline: dept columns × level bands, every chip a clickable unit ──
+// One figure carries both flat views at once: column order = credit
+// magnitude (byDept arrives SH-sorted), vertical position = level band.
+// Bands run contiguously from the lowest to the highest tier present —
+// an empty band is information (a dept skipped a level). Grad bands
+// (≥5000) rule and label in the grad colour. Incoming-credit chips fade.
+// Because the grid is sparse by nature it carries ZOOM controls (CSS
+// `zoom`, so layout and scrollbars track the scale).
+function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
+  // Canvas-style viewport: pinch zoom (a macOS trackpad pinch reaches the
+  // browser as ctrl+wheel; a touchscreen pinch is two moving touches),
+  // anchored at the cursor/pinch midpoint so the point under your fingers
+  // stays put, plus grab-and-drag panning with the mouse. Native listeners
+  // are NON-PASSIVE (React's synthetic handlers can't preventDefault the
+  // page zoom); plain scrolling and touch drag pan natively.
+  const [zoom, setZoom] = useState(1);
+  const zoomRef = useRef(1);
+  const wrapRef = useRef(null);
+  const pendingScroll = useRef(null);
+  useEffect(() => { zoomRef.current = zoom; }, [zoom]);
+  useLayoutEffect(() => {
+    const el = wrapRef.current;
+    if (el && pendingScroll.current) {
+      el.scrollLeft = pendingScroll.current.left;
+      el.scrollTop  = pendingScroll.current.top;
+      pendingScroll.current = null;
+    }
+  }, [zoom]);
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const clamp = (z) => Math.min(1.6, Math.max(0.55, z));
+    // Zoom keeping the viewport point (vx, vy) fixed: CSS `zoom` scales the
+    // scroll geometry, so re-derive the content point and re-aim the scroll.
+    const applyZoom = (zNext, vx, vy) => {
+      const z0 = zoomRef.current, z1 = clamp(zNext);
+      if (z1 === z0) return;
+      pendingScroll.current = {
+        left: ((el.scrollLeft + vx) / z0) * z1 - vx,
+        top:  ((el.scrollTop  + vy) / z0) * z1 - vy,
+      };
+      setZoom(z1);
+    };
+    const onWheel = (e) => {
+      if (!e.ctrlKey) return;                 // plain wheel/two-finger keeps panning
+      e.preventDefault();
+      const r = el.getBoundingClientRect();
+      applyZoom(zoomRef.current * Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
+    };
+    let pinch = null;                          // { d0, z0 }
+    const dist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    const onTouchStart = (e) => { if (e.touches.length === 2) pinch = { d0: dist(e.touches), z0: zoomRef.current }; };
+    const onTouchMove = (e) => {
+      if (!pinch || e.touches.length !== 2) return;
+      e.preventDefault();
+      const r = el.getBoundingClientRect();
+      const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      const my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      applyZoom(pinch.z0 * (dist(e.touches) / pinch.d0), mx, my);
+    };
+    const onTouchEnd = (e) => { if (e.touches.length < 2) pinch = null; };
+    // Grab-and-drag panning (mouse). Chips stay clickable — drags starting
+    // on a button are left alone.
+    let drag = null;                           // { x, y, sl, st, moved }
+    const onMouseDown = (e) => {
+      if (e.button !== 0 || e.target.closest("button")) return;
+      drag = { x: e.clientX, y: e.clientY, sl: el.scrollLeft, st: el.scrollTop };
+      el.style.cursor = "grabbing";
+      e.preventDefault();
+    };
+    const onMouseMove = (e) => {
+      if (!drag) return;
+      el.scrollLeft = drag.sl - (e.clientX - drag.x);
+      el.scrollTop  = drag.st - (e.clientY - drag.y);
+    };
+    const onMouseUp = () => { drag = null; el.style.cursor = "grab"; };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    el.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
+
+  const cells = new Map();          // `${subject}|${tier}` → ids
+  const tierTotals = new Map();     // tier → { sh, n }  (the numbers ARE the point)
+  const present = [];
+  for (const g of byDept) {
+    for (const id of g.ids) {
+      const tier = courseTier(cmap[id]?.number) ?? 0;
+      present.push(tier);
+      const k = `${g.subject}|${tier}`;
+      if (!cells.has(k)) cells.set(k, []);
+      cells.get(k).push(id);
+      const tt = tierTotals.get(tier) ?? { sh: 0, n: 0 };
+      tt.sh += cmap[id]?.sh ?? 0; tt.n += 1;
+      tierTotals.set(tier, tt);
+    }
+  }
+  if (!byDept.length || !present.length) return null;
+  const lo = Math.min(...present), hi = Math.max(...present);
+  const tiers = [];
+  for (let tr = hi; tr >= lo; tr -= 1000) tiers.push(tr);
+
+  const rule = (tier) => `1px dashed ${tier >= 5000 ? GRAD_COLOR + "66" : "var(--border-1)"}`;
+  return (
+    <div style={{ position: "relative" }}>
+      {zoom !== 1 && (
+        <button onClick={() => setZoom(1)} title="Reset zoom"
+          style={{ position: "absolute", top: -4, right: 0, zIndex: 2,
+            fontSize: 9.5, fontVariantNumeric: "tabular-nums", lineHeight: 1, padding: "3px 7px",
+            background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 99,
+            color: "var(--text-4)", cursor: "pointer" }}>
+          {Math.round(zoom * 100)}%
+        </button>
+      )}
+      {/* The bounded canvas: pan/zoom activates only inside this frame. */}
+      <div ref={wrapRef} style={{
+        overflow: "auto", maxHeight: 480, cursor: "grab",
+        overscrollBehavior: "contain", userSelect: "none",
+        border: "1px solid var(--border-1)", borderRadius: 8, padding: "8px 10px",
+        background: "var(--bg-surface-2)",
+      }}>
+        <div style={{
+          zoom,
+          display: "grid", columnGap: 8,
+          gridTemplateColumns: `70px repeat(${byDept.length}, minmax(92px, 1fr))`,
+          minWidth: byDept.length * 100 + 78,
+        }}>
+          {/* header row: the per-department aggregates */}
+          <div />
+          {byDept.map(g => (
+            <div key={g.subject} style={{ padding: "0 0 7px 2px" }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: subjectColor(g.subject) }}>{g.subject}</div>
+              <div style={{ fontSize: 10.5, color: "var(--text-4)", fontVariantNumeric: "tabular-nums", marginTop: 1 }}>
+                {g.sh} {unit} · {g.count}
+              </div>
+            </div>
+          ))}
+          {/* level bands: the gutter carries each band's aggregate */}
+          {tiers.map(tier => {
+            const tt = tierTotals.get(tier);
+            return (
+              <Fragment key={tier}>
+                <div style={{ borderTop: rule(tier), padding: "5px 0" }}>
+                  <div style={{ fontSize: 10.5, fontWeight: 700, fontVariantNumeric: "tabular-nums",
+                    color: tier >= 5000 ? GRAD_COLOR : "var(--text-4)" }}>{tier}</div>
+                  {tt && (
+                    <div style={{ fontSize: 10, color: "var(--text-5)", fontVariantNumeric: "tabular-nums", marginTop: 1 }}>
+                      {tt.sh} {unit} · {tt.n}
+                    </div>
+                  )}
+                </div>
+                {byDept.map(g => (
+                  <div key={g.subject} style={{ borderTop: rule(tier), padding: "5px 0 9px", minHeight: 14,
+                    display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 3 }}>
+                    {(cells.get(`${g.subject}|${tier}`) ?? []).map(id => (
+                      <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} faded={fadedIds?.has(id)} fz={12.5} />
+                    ))}
+                  </div>
+                ))}
+              </Fragment>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -462,9 +642,21 @@ export default function StatsPanel() {
   const majorReq        = usePort(IMajorRequirements);
   const { t } = useLanguage();
 
-  const [compView, setCompView] = useState("total"); // "total" (by level) | "dept"
 
   const unit = creditSystem.getUnitName();
+  const [compView, setCompView] = useState("dept"); // "dept" | "total" (by level) | "sky"
+  const toggleBtn = (id, label) => {
+    const active = compView === id;
+    return (
+      <button key={id} onClick={() => setCompView(id)} style={{
+        flex: "1 1 auto", fontSize: 11.5, fontWeight: active ? 700 : 500, padding: "4px 8px",
+        borderRadius: 5, cursor: "pointer",
+        background: active ? "var(--active-bg)" : "transparent",
+        border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
+        color: active ? "var(--active)" : "var(--text-4)",
+      }}>{label}</button>
+    );
+  };
   const cmap = effectiveCourseMap ?? courseMap;
   // Timeline-scoped: entries parked outside the cohort range (incl.
   // "__overflow:*") are kept in state but count toward NO statistic.
@@ -602,18 +794,6 @@ export default function StatsPanel() {
     ? t("stats.sem.short.summer")
     : t(`stats.sem.short.${row.type}`) || row.type;
 
-  const toggleBtn = (id, label) => {
-    const active = compView === id;
-    return (
-      <button key={id} onClick={() => setCompView(id)} style={{
-        flex: "1 1 auto", fontSize: 11.5, fontWeight: active ? 700 : 500, padding: "4px 8px",
-        borderRadius: 5, cursor: "pointer",
-        background: active ? "var(--active-bg)" : "transparent",
-        border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
-        color: active ? "var(--active)" : "var(--text-4)",
-      }}>{label}</button>
-    );
-  };
 
   return (
     <div
@@ -622,7 +802,7 @@ export default function StatsPanel() {
         position: "fixed", inset: 0, zIndex: 9000,
         background: "rgba(0,0,0,0.55)", display: "flex",
         alignItems: "flex-start", justifyContent: "center",
-        padding: isPhone ? "0" : "40px 20px", overflowY: "auto",
+        padding: isPhone ? "0" : "40px 20px",
         fontFamily: "'Inter', system-ui, sans-serif",
       }}
     >
@@ -630,9 +810,15 @@ export default function StatsPanel() {
       <div
         onClick={e => e.stopPropagation()}
         style={{
+          // The CARD is the scroller (not the backdrop): the sticky header
+          // pins to the card's own top edge and scrolled content is clipped
+          // by it — nothing can render in the strip above the header.
           width: "100%", maxWidth: 720, background: "var(--bg-app)",
           border: "1px solid var(--border-2)", borderRadius: isPhone ? 0 : 14,
-          boxShadow: "var(--shadow-modal)", minHeight: isPhone ? "100dvh" : undefined,
+          boxShadow: "var(--shadow-modal)",
+          height: isPhone ? "100dvh" : undefined,
+          maxHeight: isPhone ? "100dvh" : "calc(100dvh - 80px)",
+          overflowY: "auto",
           color: "var(--text-1)",
         }}
       >
@@ -687,14 +873,20 @@ export default function StatsPanel() {
                 </div>
               </Section>
 
-              {/* ── 2 · COMPOSITION ── */}
+              {/* ── 2 · COMPOSITION ──
+                  Three modes: the two flat chip inventories (by department —
+                  the default — and by level) plus Skyline (dept columns ×
+                  level bands, zoomable; incoming-credit chips fade). */}
               <Section title={t("stats.section.composition")}>
                 <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
-                  {toggleBtn("total", t("stats.comp.total"))}
                   {toggleBtn("dept", t("stats.comp.dept"))}
+                  {toggleBtn("total", t("stats.comp.total"))}
+                  {toggleBtn("sky", t("stats.comp.sky"))}
                 </div>
 
-                {compView === "total" ? (
+                {compView === "sky" ? (
+                  <Skyline byDept={byDept} cmap={cmap} unit={unit} onOpen={openCourse} fadedIds={incomingSet} />
+                ) : compView === "total" ? (
                   <>
                     <StackBar unit={unit} segments={byTier.map(g => ({
                       value: g.sh, color: tierColor(g.tier), name: `${g.tier}`,
@@ -715,15 +907,11 @@ export default function StatsPanel() {
                           <CourseGroup
                             title={t("stats.level.tier", { tier: g.tier })}
                             sub={t("stats.dept.value", { sh: g.sh, unit, n: g.ids.length })}
-                            ids={g.ids} cmap={cmap} onOpen={openCourse}
+                            ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}
                           />
                         </div>
                       );
                     })}
-                    <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
-                      <StatTile label={t("stats.level.undergrad")} value={levels.undergrad.count} sub={`${levels.undergrad.sh} ${unit}`} color={UG_COLOR} />
-                      <GlowTile label={t("stats.level.grad")} value={levels.grad.count} sub={`${levels.grad.sh} ${unit}`} color={GRAD_COLOR} />
-                    </div>
                   </>
                 ) : (
                   <>
@@ -735,11 +923,15 @@ export default function StatsPanel() {
                       <CourseGroup key={g.subject}
                         title={g.subject}
                         sub={t("stats.dept.value", { sh: g.sh, unit, n: g.count })}
-                        ids={g.ids} cmap={cmap} onOpen={openCourse}
+                        ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}
                       />
                     ))}
                   </>
                 )}
+                <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                  <StatTile label={t("stats.level.undergrad")} value={levels.undergrad.count} sub={`${levels.undergrad.sh} ${unit}`} color={UG_COLOR} />
+                  <GlowTile label={t("stats.level.grad")} value={levels.grad.count} sub={`${levels.grad.sh} ${unit}`} color={GRAD_COLOR} />
+                </div>
               </Section>
 
               {/* ── 3 · CREDIT LOAD ── */}
