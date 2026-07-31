@@ -281,45 +281,52 @@ function CourseGroup({ title, sub, ids, cmap, onOpen, fadedIds }) {
 function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
   // Canvas-style viewport: pinch zoom (a macOS trackpad pinch reaches the
   // browser as ctrl+wheel; a touchscreen pinch is two moving touches),
-  // anchored at the cursor/pinch midpoint so the point under your fingers
-  // stays put, plus grab-and-drag panning with the mouse. Native listeners
-  // are NON-PASSIVE (React's synthetic handlers can't preventDefault the
+  // anchored at the cursor/pinch midpoint, plus grab-and-drag panning.
+  // SMOOTHNESS: gestures fire several events per frame and CSS `zoom`
+  // re-lays-out the grid, so the gesture writes zoom + scroll to the DOM
+  // imperatively, at most once per animation frame — React state (the %
+  // pill) only syncs once the gesture settles. Native listeners are
+  // NON-PASSIVE (React's synthetic handlers can't preventDefault the
   // page zoom); plain scrolling and touch drag pan natively.
   const [zoom, setZoom] = useState(1);
   const zoomRef = useRef(1);
   const wrapRef = useRef(null);
-  const pendingScroll = useRef(null);
+  const gridRef = useRef(null);
   useEffect(() => { zoomRef.current = zoom; }, [zoom]);
-  useLayoutEffect(() => {
-    const el = wrapRef.current;
-    if (el && pendingScroll.current) {
-      el.scrollLeft = pendingScroll.current.left;
-      el.scrollTop  = pendingScroll.current.top;
-      pendingScroll.current = null;
-    }
-  }, [zoom]);
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
     const clamp = (z) => Math.min(1.6, Math.max(0.55, z));
-    // Zoom keeping the viewport point (vx, vy) fixed: CSS `zoom` scales the
-    // scroll geometry, so re-derive the content point and re-aim the scroll.
-    const applyZoom = (zNext, vx, vy) => {
-      const z0 = zoomRef.current, z1 = clamp(zNext);
-      if (z1 === z0) return;
-      pendingScroll.current = {
-        left: ((el.scrollLeft + vx) / z0) * z1 - vx,
-        top:  ((el.scrollTop  + vy) / z0) * z1 - vy,
-      };
-      setZoom(z1);
+    let target = null;                       // { z, vx, vy } — latest within this frame
+    let raf = 0, settle = 0;
+    const flush = () => {
+      raf = 0;
+      if (!target || !gridRef.current) return;
+      const z0 = zoomRef.current, z1 = clamp(target.z);
+      if (z1 !== z0) {
+        // Keep the viewport point (vx, vy) fixed: CSS `zoom` scales the
+        // scroll geometry, so re-derive the content point and re-aim.
+        gridRef.current.style.zoom = z1;
+        el.scrollLeft = ((el.scrollLeft + target.vx) / z0) * z1 - target.vx;
+        el.scrollTop  = ((el.scrollTop  + target.vy) / z0) * z1 - target.vy;
+        zoomRef.current = z1;
+      }
+      target = null;
+      clearTimeout(settle);
+      settle = setTimeout(() => setZoom(zoomRef.current), 140); // sync the % pill
+    };
+    const queueZoom = (z, vx, vy) => {
+      target = { z, vx, vy };
+      if (!raf) raf = requestAnimationFrame(flush);
     };
     const onWheel = (e) => {
-      if (!e.ctrlKey) return;                 // plain wheel/two-finger keeps panning
+      if (!e.ctrlKey) return;                // plain wheel/two-finger keeps panning
       e.preventDefault();
       const r = el.getBoundingClientRect();
-      applyZoom(zoomRef.current * Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
+      const base = target?.z ?? zoomRef.current;
+      queueZoom(base * Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
     };
-    let pinch = null;                          // { d0, z0 }
+    let pinch = null;                        // { d0, z0 }
     const dist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
     const onTouchStart = (e) => { if (e.touches.length === 2) pinch = { d0: dist(e.touches), z0: zoomRef.current }; };
     const onTouchMove = (e) => {
@@ -328,12 +335,12 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
       const r = el.getBoundingClientRect();
       const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
       const my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
-      applyZoom(pinch.z0 * (dist(e.touches) / pinch.d0), mx, my);
+      queueZoom(pinch.z0 * (dist(e.touches) / pinch.d0), mx, my);
     };
     const onTouchEnd = (e) => { if (e.touches.length < 2) pinch = null; };
     // Grab-and-drag panning (mouse). Chips stay clickable — drags starting
     // on a button are left alone.
-    let drag = null;                           // { x, y, sl, st, moved }
+    let drag = null;
     const onMouseDown = (e) => {
       if (e.button !== 0 || e.target.closest("button")) return;
       drag = { x: e.clientX, y: e.clientY, sl: el.scrollLeft, st: el.scrollTop };
@@ -354,6 +361,7 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
     return () => {
+      cancelAnimationFrame(raf); clearTimeout(settle);
       el.removeEventListener("wheel", onWheel);
       el.removeEventListener("touchstart", onTouchStart);
       el.removeEventListener("touchmove", onTouchMove);
@@ -388,7 +396,7 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
   return (
     <div style={{ position: "relative" }}>
       {zoom !== 1 && (
-        <button onClick={() => setZoom(1)} title="Reset zoom"
+        <button onClick={() => { zoomRef.current = 1; if (gridRef.current) gridRef.current.style.zoom = 1; setZoom(1); }} title="Reset zoom"
           style={{ position: "absolute", top: -4, right: 0, zIndex: 2,
             fontSize: 9.5, fontVariantNumeric: "tabular-nums", lineHeight: 1, padding: "3px 7px",
             background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 99,
@@ -403,7 +411,7 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
         border: "1px solid var(--border-1)", borderRadius: 8, padding: "8px 10px",
         background: "var(--bg-surface-2)",
       }}>
-        <div style={{
+        <div ref={gridRef} style={{
           zoom,
           display: "grid", columnGap: 8,
           gridTemplateColumns: `70px repeat(${byDept.length}, minmax(92px, 1fr))`,
