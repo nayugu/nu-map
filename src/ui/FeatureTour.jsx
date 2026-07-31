@@ -36,14 +36,12 @@ export default function FeatureTour() {
   const { t } = useLanguage();
   const [step, setStep] = useState(0);
   const cardRef  = useRef(null);
-  const firedRef = useRef(false);
   const holdRef  = useRef(null);  // pending video loop-hold timer
 
   // Reset, move focus in, and warm the image cache whenever it opens.
   useEffect(() => {
     if (!showTour) return;
     setStep(0);
-    firedRef.current = false;
     requestAnimationFrame(() => cardRef.current?.focus());
     STEPS.forEach(s => { if (!s.img.endsWith(".mp4")) { const im = new Image(); im.src = `${BASE}tour/${s.img}`; } });
     const onKey = (e) => { if (e.key === "Escape") close(); };
@@ -55,18 +53,11 @@ export default function FeatureTour() {
   // Clear any pending video loop-hold timer when the step changes or on unmount.
   useEffect(() => () => { if (holdRef.current) clearTimeout(holdRef.current); }, [step]);
 
-  // Confetti when the completion screen appears (once).
-  useEffect(() => {
-    if (showTour && step === DONE && !firedRef.current) {
-      firedRef.current = true;
-      requestAnimationFrame(() => fireConfetti(cardRef.current));
-    }
-  }, [showTour, step]);
-
   if (!showTour) return null;
 
   const close = () => {
     try { localStorage.setItem(`${institution.storagePrefix}-seen-tour`, "1"); } catch {}
+    setStep(0);           // reset so a replay never reopens on the completion screen
     setShowTour(false);
   };
   const openAbout = () => { close(); setShowDisclaimer(true); };
@@ -190,7 +181,16 @@ export default function FeatureTour() {
                   background: "transparent", border: "1px solid var(--border-2)", color: "var(--text-3)",
                 }}>{t("onboard.back")}</button>
               )}
-              <button onClick={() => setStep(step + 1)} style={navBtn}>
+              <button
+                onClick={() => {
+                  setStep(step + 1);
+                  // Reaching the completion screen (last → Done) is the only
+                  // path to DONE, so fire the confetti here — deterministic,
+                  // never on open/replay.
+                  if (last) requestAnimationFrame(() => fireConfetti(cardRef.current));
+                }}
+                style={navBtn}
+              >
                 {last ? t("tour.done") : t("onboard.next")}
               </button>
             </div>
