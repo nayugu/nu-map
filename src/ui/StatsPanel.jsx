@@ -597,7 +597,7 @@ function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
                   <rect key={i} x={a} y={padT} width={Math.max(0, b - a)} height={plotH} fill={COOP_COLOR} opacity="0.14" />
                 ))}
                 {touchesPrev && (
-                  <line x1={x0} y1={padT} x2={x0} y2={padT + plotH} stroke="var(--bg-surface)" strokeWidth="2" opacity="0.35" />
+                  <line x1={x0} y1={padT} x2={x0} y2={padT + plotH} stroke="var(--bg-surface)" strokeWidth="2" strokeDasharray="6 4" strokeDashoffset="3" opacity="0.7" />
                 )}
                 {domain
                   ? <image href={faviconUrl(domain)} xlinkHref={faviconUrl(domain)} x={logoX - 9} y={padT + 6} width="18" height="18" />
