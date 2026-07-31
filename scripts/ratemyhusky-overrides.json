@@ -1,0 +1,4 @@
+{
+  "_comment": "Manual instructor -> RateMyHusky slug overrides, applied by scrape-ratemyhusky.js AFTER auto-matching (these always win). Use when the sitemap auto-match is wrong or the slug format is unusual. Key = the instructor name exactly as it appears in course.offering.prof. Value = the slug (the part after ratemyhusky.com/professors/), or null to SUPPRESS an entry (drop a wrong auto-match; the app then falls back to the /professors browse page). Find a slug by searching the name on ratemyhusky.com and copying it from the URL. The auto-matcher already handles apostrophes (O'Kelly -> peggy-o-kelly) and accents (Zoe), so only genuine oddballs belong here.",
+  "profs": {}
+}

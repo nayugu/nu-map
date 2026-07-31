@@ -50,6 +50,16 @@ jobs:
       - name: Derive offering summary
         run: node scripts/derive-offering-summary.js --write 2>&1 | tee /tmp/offering-log.txt
 
+      # ── Step 2c: Refresh verified RateMyHusky course/professor links ──────────
+      #   Matches instructor names to real reviewed professor pages (sitemap +
+      #   a search-API recovery pass for reviewed profs the sitemap omits) and
+      #   records the set of courses RateMyHusky actually has — so the app links
+      #   only where a real page exists. ~700 lightweight requests; a couple of
+      #   minutes. Best-effort: a failure must not fail the run — the app just
+      #   keeps last month's map, and any unmatched name renders as plain text.
+      - name: Refresh RateMyHusky links
+        run: node scripts/scrape-ratemyhusky.js --write 2>&1 | tee /tmp/ratemyhusky-log.txt || echo "RateMyHusky refresh skipped (non-fatal)."
+
       # ── Step 3: Apply manual patches ──────────────────────────────────────────
       - name: Apply patches
         run: node scripts/apply-patches.js --write 2>&1 | tee /tmp/patches-log.txt
@@ -72,6 +82,7 @@ jobs:
             public/northeastern/term-history.json \
             public/northeastern/term-details.json \
             public/northeastern/offering-summary.json \
+            public/northeastern/ratemyhusky.json \
             public/northeastern/change-log.json \
             src/core/dataMeta.json \
             public/data-meta.json
