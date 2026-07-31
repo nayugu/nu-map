@@ -67,6 +67,11 @@ export function createPlannerQuery(deps) {
     return {
       id: c.id, code: c.code, title: c.title,
       sh: c.sh, ...(c.shMax != null && { shMin: c.shMin, shMax: c.shMax }),
+      ...(c.repeatable && {
+        repeatable: true,
+        ...(c.repeatMax   != null && { repeatMax:   c.repeatMax }),
+        ...(c.repeatMaxSH != null && { repeatMaxSH: c.repeatMaxSH }),
+      }),
       attributes: c.attributes, scheduleType: c.scheduleType,
       level: courseLevel(c),
       college: subjectColleges[c.subject] ?? null,

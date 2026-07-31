@@ -8,6 +8,7 @@ import { usePort }        from "../context/InstitutionContext.jsx";
 import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
+import { baseId, takesUsed } from "../core/repeatInstances.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -58,6 +59,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     onDragStart, onDropOnCard, cardRefs,
     isPhone, shOverrides, setShOverride,
     claudePreview,
+    placements, placedOut,
   } = usePlanner();
 
   // Claude proposal ghost: this card is added/moved (orange dashed ring),
@@ -77,6 +79,15 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const [editingSh, setEditingSh] = useState(false);
 
   const isSel         = selectedId === course.id;
+  // Repeat-take awareness: sibling = another representation of the SELECTED
+  // course — its other takes on the grid AND its bank row — ringed quietly so
+  // every appearance reads as one course. multiTake = one of several placed
+  // takes (gets a ↻ glyph — an intentional duplicate, not a data bug).
+  const isSibling  = !isSel && selectedId != null && baseId(selectedId) === baseId(course.id);
+  const takeCount  = inSem && course.repeatable ? takesUsed(baseId(course.id), placements, placedOut) : 0;
+  const multiTake  = takeCount > 1;
+  // More takes than the catalog allows: permitted (trust the user), warned.
+  const overTakes  = multiTake && course.repeatMax != null && takeCount > course.repeatMax;
   const relType       = connectedIds[course.id];
   const isConn        = !!relType;
   const isViolated    = prereqViolations.has(course.id);
@@ -129,7 +140,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // Red background tint for ordering violations (prereq placed after the course)
   const orderViolBg = inSem && violationType === "order";
 
-  const dimmed = hasSel && !isSel && !isConn;
+  // Sibling takes are exempt from selection-dimming — they ARE the selected
+  // course, just another take of it.
+  const dimmed = hasSel && !isSel && !isConn && !isSibling;
   const [isMouseHov, setIsMouseHov] = useState(false);
 
   // Relevance fade — courses allocated to the selected major(s) /
@@ -182,6 +195,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     return `${Math.round((rr + m) * 255)},${Math.round((gg + m) * 255)},${Math.round((bb + m) * 255)}`;
   })();
   const selGlow  = `0 0 6px 1px rgba(${_rgb},0.6), 0 0 15px 2px rgba(${_rgb},0.36)`;
+  // Sibling takes glow softer than the selection itself — same hue, no bloom.
+  const sibRing  = `0 0 0 1.5px rgba(${_rgb},0.5)`;
 
   // ── Mobile: bank card — code + star only ────────────────────
   if (isPhone && !inSem) {
@@ -248,7 +263,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           minHeight: 17, minWidth: 0, overflow: "hidden",
           opacity: dimmed ? 0.35 : 1,
           transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
-          boxShadow: isSel ? selGlow : isCardHov ? "var(--shadow-card-hov)" : "none",
+          boxShadow: isSel ? selGlow : isSibling ? sibRing : isCardHov ? "var(--shadow-card-hov)" : "none",
         }}
       >
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: stripeColor, borderRadius: "3px 0 0 3px" }} />
@@ -310,6 +325,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         textDecoration: isClaudeRemoved ? "line-through" : "none",
         transition: "opacity 0.15s, border-color 0.15s, background 0.1s",
         boxShadow: isSel          ? selGlow
+                 : isSibling      ? sibRing
                  : isCardHov      ? "var(--shadow-card-hov)"
                  : isMouseHov     ? "inset 0 -3px 0 rgba(0,0,0,0.14)"
                  : "none",
@@ -348,6 +364,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
       }}>
         <span style={{ overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{course.code}</span>
         {course.isCps && <span style={{ fontWeight: 500, fontSize: 8, color: "var(--text-4)", flexShrink: 0 }}>· CPS</span>}
+        {multiTake && (
+          <span
+            title={t("bank.repeat.title").replace("{used}", String(takeCount)).replace("{max}", String(course.repeatMax ?? "∞"))}
+            style={{ fontWeight: overTakes ? 700 : 500, fontSize: 9, color: overTakes ? "var(--error)" : "var(--text-4)", flexShrink: 0 }}
+          >↻{overTakes ? " ⚠" : ""}</span>
+        )}
       </div>
 
       {/* Title */}

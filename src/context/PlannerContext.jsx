@@ -15,6 +15,7 @@ import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions } from "../core/planModel.js";
+import { baseId, isInstanceId, takesUsed, resolveAddId } from "../core/repeatInstances.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -133,7 +134,7 @@ export function PlannerProvider({ children }) {
   const [loadPct,  setLoadPct]  = useState(5);
 
   // ── Derived from courses ─────────────────────────────────────
-  const courseMap = useMemo(() => Object.fromEntries(courses.map(c => [c.id, c])), [courses]);
+  const catalogCourseMap = useMemo(() => Object.fromEntries(courses.map(c => [c.id, c])), [courses]);
   const allEdges  = useMemo(() => courses.flatMap(c => extractEdges(c.id, c.prereqs, c.coreqs)), [courses]);
   const subjects  = useMemo(() => [...new Set(courses.map(c => c.subject))].sort(), [courses]);
 
@@ -220,6 +221,25 @@ export function PlannerProvider({ children }) {
     () => (pv ? new Set(pv.placedOut ?? []) : placedOut),
     [pv, placedOut]
   );
+
+  // Repeat instances: a placement key "BASE#n" (an additional take of a
+  // repeatable course — see src/core/repeatInstances.js) resolves to a clone
+  // of its base course, so every id-keyed consumer (cards, drag, SH sums,
+  // ordering, share links, undo) works without knowing about repeats. Clones
+  // are materialized for real AND previewed placements so Claude previews of
+  // extra takes render like everything else.
+  const courseMap = useMemo(() => {
+    let clones = null;
+    const materialize = (id) => {
+      if (catalogCourseMap[id] || !isInstanceId(id)) return;
+      const base = catalogCourseMap[baseId(id)];
+      if (base) (clones ??= {})[id] = { ...base, id, isRepeatInstance: true };
+    };
+    Object.keys(placements).forEach(materialize);
+    Object.keys(pvPlacements).forEach(materialize);
+    pvPlacedOut.forEach(materialize);
+    return clones ? { ...catalogCourseMap, ...clones } : catalogCourseMap;
+  }, [catalogCourseMap, placements, pvPlacements, pvPlacedOut]);
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);
@@ -418,7 +438,7 @@ export function PlannerProvider({ children }) {
   const undoStack     = useRef([]);
   const redoStack     = useRef([]);
   // Stale-closure escape hatches for keyboard handler
-  const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {} });
+  const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {}, placedOut: new Set() });
   const buildPlanContextRef = useRef(() => ({})); // sync-payload builder, refreshed each render
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
@@ -501,7 +521,7 @@ export function PlannerProvider({ children }) {
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    stateRef.current    = { placements, specialTermPl, semOrders };
+    stateRef.current    = { placements, specialTermPl, semOrders, placedOut };
     allEdgesRef.current = allEdges;
     onDropRef.current          = onDrop;
     onDropBankRef.current      = onDropBank;
@@ -595,10 +615,30 @@ export function PlannerProvider({ children }) {
   // lines effect; edges are the same objects as allEdges so identity holds.
   const connectionEdges = useMemo(() => {
     if (!selectedId) return [];
-    const placedEdges = allEdges.filter(e =>
-      placements[e.from] && placements[e.to] &&
-      placements[e.from] !== "incoming" && placements[e.to] !== "incoming");
-    return getConnectionsToDepth(selectedId, placedEdges, prereqDepth, unlockDepth);
+    // Edges are keyed by BASE course ids; repeat instances ("BASE#n") have
+    // none of their own. A course counts as on-the-board when ANY of its
+    // takes is placed; remember one concrete take per base so lines can
+    // anchor to a real card.
+    const takeOf = {};
+    for (const [pid, sid] of Object.entries(placements)) {
+      if (sid === "incoming") continue;
+      takeOf[baseId(pid)] ??= pid;
+    }
+    const placedEdges = allEdges.filter(e => takeOf[e.from] && takeOf[e.to]);
+    const selBase = baseId(selectedId);
+    const edges = getConnectionsToDepth(selBase, placedEdges, prereqDepth, unlockDepth);
+    // Re-anchor endpoints onto concrete cards — the take the user actually
+    // clicked, and for other courses whose plain id isn't placed, the take
+    // that is. Untouched edges keep their allEdges identity (the SVG-lines
+    // effect de-dups against it).
+    const anchor = (id) =>
+      id === selBase ? selectedId
+      : (placements[id] && placements[id] !== "incoming") ? id
+      : takeOf[id];
+    return edges.map(e => {
+      const f = anchor(e.from), t = anchor(e.to);
+      return f === e.from && t === e.to ? e : { ...e, from: f, to: t };
+    });
   }, [selectedId, allEdges, placements, prereqDepth, unlockDepth]);
 
   // ── Effect: SVG lines ─────────────────────────────────────────
@@ -737,13 +777,26 @@ export function PlannerProvider({ children }) {
     const shOvUpdates = {};
     const ooUpdates = {};
 
+    // Live placed-out view for repeat-limit checks — evolves with the batch
+    // so instance-id assignment stays byte-identical to the MCP-side dry run
+    // (plannerActionAdapter mutates its plan.placedOut the same way).
+    const poLive = new Set(stateRef.current.placedOut);
+
     for (const action of actions) {
       switch (action.type) {
-        case "ADD_COURSE":
-          newPl[action.courseId] = action.semId;
-          poDels.push(action.courseId);
-          palDels.push(action.courseId); // placing removes from the scratch pad, like drag-drop
+        case "ADD_COURSE": {
+          // Repeatable + already placed → this ADD is another take under a
+          // fresh instance id (same resolveAddId as the MCP-side validator,
+          // so both sides assign identical ids). Non-repeatable keeps the
+          // documented relocate-on-add semantics. Over-limit takes are
+          // allowed (trust the user) and flagged by the UI.
+          const course = courseMap[action.courseId];
+          const addId = course ? resolveAddId(course, newPl, poLive).id : action.courseId;
+          newPl[addId] = action.semId;
+          poDels.push(addId); poLive.delete(addId);
+          palDels.push(addId); // placing removes from the scratch pad, like drag-drop
           break;
+        }
         case "REMOVE_COURSE":
           delete newPl[action.courseId];
           break;
@@ -751,11 +804,11 @@ export function PlannerProvider({ children }) {
           newPl[action.courseId] = action.toSemId;
           break;
         case "ADD_PLACED_OUT":
-          poAdds.push(action.courseId);
+          poAdds.push(action.courseId); poLive.add(action.courseId);
           delete newPl[action.courseId];
           break;
         case "REMOVE_PLACED_OUT":
-          poDels.push(action.courseId);
+          poDels.push(action.courseId); poLive.delete(action.courseId);
           break;
         case "ADD_SUBSTITUTION":
           subAdds.push({ from: action.fromId, to: action.toId });
@@ -1226,21 +1279,23 @@ export function PlannerProvider({ children }) {
   }, [currentSemId, gradSemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Totals (use effectiveCourseMap so SH overrides are reflected) ─────────
+  // Iterate placement keys (not the catalog array) so repeat instances
+  // ("BASE#n") each contribute their credits; unknown ids resolve to 0,
+  // matching the old courses-array filter.
   const totalSHPlaced = useMemo(
-    () => pvBonusSH + courses
-      .filter(c => pvPlacements[c.id] && !pvPlacements[c.id].startsWith?.("__overflow:") && !pvPlacedOut.has(c.id))
-      .reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [pvBonusSH, courses, pvPlacements, pvPlacedOut, effectiveCourseMap]
+    () => pvBonusSH + Object.entries(pvPlacements)
+      .filter(([id, sid]) => !sid.startsWith?.("__overflow:") && !pvPlacedOut.has(id))
+      .reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
+    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap]
   );
 
   const totalSHDone = useMemo(
-    () => pvBonusSH + courses.filter(c => {
-      const sid = pvPlacements[c.id];
-      if (!sid || pvPlacedOut.has(c.id)) return false;
+    () => pvBonusSH + Object.entries(pvPlacements).filter(([id, sid]) => {
+      if (pvPlacedOut.has(id)) return false;
       const sidx = SEM_INDEX[sid] ?? 99;
       return isGraduated ? sidx <= currentSemIdx : sidx < currentSemIdx;
-    }).reduce((s, c) => s + (effectiveCourseMap[c.id]?.sh ?? c.sh), 0),
-    [pvBonusSH, courses, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
+    }).reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
+    [pvBonusSH, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
   );
 
   // ── Star toggle ───────────────────────────────────────────────
@@ -1322,18 +1377,29 @@ export function PlannerProvider({ children }) {
         return next;
       });
     } else {
-      const fromSem = placements[id];
+      // Repeatable courses: a drag with no source semester (bank, InfoPanel)
+      // of an already-placed repeatable course adds ANOTHER take under a
+      // fresh instance id; grid drags (fromSem set) keep move semantics.
+      // The repeat limit is never enforced (NU Map trusts the user) — takes
+      // beyond it just render with the warn treatment.
+      let dropId = id;
+      if (dragInfo.fromSem == null && placements[id] != null) {
+        const course = courseMap[baseId(id)];
+        if (course?.repeatable) dropId = resolveAddId(course, placements, placedOut).id;
+      }
+      const fromSem = placements[dropId];
       if (fromSem === semId) { setDragInfo(null); return; }
       // Always move ALL coreq partners together with the dragged course
+      // (repeat instances have no edges of their own, so extra takes move alone)
       const coreqPartners = [...new Set(
         allEdges
-          .filter(edge => edge.type === "corequisite" && (edge.from === id || edge.to === id))
-          .map(edge => edge.from === id ? edge.to : edge.from)
-          .filter(cid => cid !== id)
+          .filter(edge => edge.type === "corequisite" && (edge.from === dropId || edge.to === dropId))
+          .map(edge => edge.from === dropId ? edge.to : edge.from)
+          .filter(cid => cid !== dropId)
       )];
-      const allMoving = [id, ...coreqPartners];
+      const allMoving = [dropId, ...coreqPartners];
       setPlacements(p => {
-        const n = { ...p, [id]: semId };
+        const n = { ...p, [dropId]: semId };
         coreqPartners.forEach(cid => { n[cid] = semId; });
         return n;
       });
@@ -1349,7 +1415,7 @@ export function PlannerProvider({ children }) {
         });
         const baseOrder = next[semId] || getOrderedCourses(semId, placements, prev, courseMap);
         const withoutDropped = baseOrder.filter(cid => !allMoving.includes(cid));
-        next[semId] = [...withoutDropped, id, ...coreqPartners];
+        next[semId] = [...withoutDropped, dropId, ...coreqPartners];
         return next;
       });
       // Remove from palette if it was there
@@ -1720,8 +1786,13 @@ export function PlannerProvider({ children }) {
 
   // ── Bank helpers ─────────────────────────────────────────────
   const bankCourseIds = useMemo(
-    () => new Set(courses.filter(c => !placedIds.has(c.id)).map(c => c.id)),
-    [courses, placedIds]
+    // A repeatable course stays in the bank while it has unused takes left
+    // (limit reached → it disappears, exactly like a placed one-shot course).
+    () => new Set(courses.filter(c =>
+      !placedIds.has(c.id) ||
+      (c.repeatable && takesUsed(c.id, placements, placedOut) < (c.repeatMax ?? Infinity))
+    ).map(c => c.id)),
+    [courses, placedIds, placements, placedOut]
   );
 
   // ── Reset ────────────────────────────────────────────────────

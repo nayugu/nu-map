@@ -11,6 +11,7 @@ import { ICalendar }                from "../ports/ICalendar.js";
 import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
+import { baseId } from "../core/repeatInstances.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTranslation, useCourseTranslation, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { SemLabel } from "./SemLabel.jsx";
@@ -165,7 +166,7 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, cardRefs } = usePlanner();
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
   const calendar        = usePort(ICalendar);
@@ -176,12 +177,21 @@ function CourseInfo({ selCourse, navTo }) {
 
   const catalogUrl = courseCatalog?.courseUrl?.(selCourse) ?? null;
   const [codeHover, setCodeHover] = useState(false);
-  // Hovered NUPath badge (desktop only — hover never fires on touch). Holds
-  // the badge's on-screen rect so the full-name popover can anchor to it.
-  const [npHover, setNpHover] = useState(null); // { code, rect }
+  // Hovered header badges (desktop only — hover never fires on touch). Each
+  // holds the badge's on-screen rect so its hover card can anchor to it.
+  const [npHover, setNpHover]   = useState(null); // NUPath: { code, rect }
+  const [repHover, setRepHover] = useState(null); // ↻ repeat badge: rect
 
   const dir     = locales.find(l => l.code === locale)?.dir ?? "ltr";
   const isNonEn = locale !== catalogLocale;
+
+  // All placed takes of this course (a repeatable course can appear several
+  // times), in board order. Rendered as jump chips when there's more than one.
+  const semOrder = Object.fromEntries(SEMESTERS.map((s, i) => [s.id, i]));
+  const takes = Object.entries(placements)
+    .filter(([pid]) => baseId(pid) === baseId(selCourse.id))
+    .map(([pid, sid]) => ({ pid, sem: SEMESTERS.find(s => s.id === sid) }))
+    .sort((a, b) => (semOrder[a.sem?.id] ?? 99) - (semOrder[b.sem?.id] ?? 99));
 
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -221,6 +231,89 @@ function CourseInfo({ selCourse, navTo }) {
             <TText>{selCourse.scheduleType}</TText>
           </span>
         )}
+        {selCourse.repeatable && (() => {
+          const overTakes = selCourse.repeatMax != null && takes.length > selCourse.repeatMax;
+          return (
+            <span
+              onMouseEnter={e => setRepHover(e.currentTarget.getBoundingClientRect())}
+              onMouseLeave={() => setRepHover(null)}
+              onClick={takes.length > 1 ? (e) => {
+                // Cycle: select the next take and bring its card into view.
+                e.stopPropagation();
+                const i = takes.findIndex(tk => tk.pid === selCourse.id);
+                const next = takes[(i + 1) % takes.length];
+                navTo(next.pid);
+                cardRefs.current?.[next.pid]?.scrollIntoView({ behavior: "smooth", block: "center" });
+              } : undefined}
+              style={{
+                fontSize: 9,
+                color: overTakes ? "var(--error)" : "var(--text-3)",
+                background: "var(--bg-surface)",
+                border: `1px solid ${overTakes ? "var(--error)" : "var(--border-2)"}`,
+                borderRadius: 3, padding: "1px 6px",
+                cursor: takes.length > 1 ? "pointer" : "help",
+              }}
+            >
+              ↻ {selCourse.repeatMax ? `×${selCourse.repeatMax}` : "∞"}{overTakes ? " ⚠" : ""}
+            </span>
+          );
+        })()}
+        {repHover && (() => {
+          const max = selCourse.repeatMax;
+          const overTakes = max != null && takes.length > max;
+          return (
+            <HoverCard rect={repHover}>
+              <bdi>
+                {/* scaleLatinRuns: digits inside CJK text need the same
+                    size-adjust the course title gets (fonts-cjk.css). */}
+                {scaleLatinRuns(
+                  (max
+                    ? t("info.repeat.limited").replace("{n}", String(max))
+                    : t("info.repeat.unlimited"))
+                  + (selCourse.repeatMaxSH ? ` · ≤ ${selCourse.repeatMaxSH} ${creditSystem.getUnitName()}` : "")
+                )}
+              </bdi>
+              {takes.length > 1 && (
+                <>
+                  <div style={{ marginTop: 11, fontSize: 8.5, fontWeight: 700, letterSpacing: "0.05em", color: "var(--text-5)" }}>
+                    {t("info.repeat.planned")}
+                  </div>
+                  {/* One take per line — scales to many takes;                       catalog limit render in error red (allowed, flagged). */}
+                  <div style={{ marginTop: 3, display: "flex", flexDirection: "column", gap: 2, fontSize: 10.5 }}>
+                    {takes.map(({ pid, sem }, i) => {
+                      const active = pid === selCourse.id;
+                      const over   = max != null && i >= max;
+                      return (
+                        <div key={pid} style={{ display: "flex", alignItems: "baseline", gap: 7 }}>
+                          <span style={{ fontSize: 8.5, color: "var(--text-6)", fontVariantNumeric: "tabular-nums", minWidth: 10, textAlign: "right" }}>{i + 1}</span>
+                          <span style={{
+                            fontWeight: active ? 700 : 400,
+                            color: over ? "var(--error)" : active ? "var(--text-2)" : "var(--text-4)",
+                          }}>
+                            {sem
+                              ? (sem.type === "special"
+                                  ? <TText>{sem.label}</TText>
+                                  : <SemLabel typeId={sem.semTypeId} year={(sem.id.match(/\d{4}/) ?? [""])[0]} />)
+                              : pid}
+                            {over ? " ⚠" : ""}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {overTakes && (
+                    <div style={{ marginTop: 4, fontSize: 9.5, fontWeight: 700, color: "var(--error)" }}>
+                      {scaleLatinRuns(t("bank.repeat.title").replace("{used}", String(takes.length)).replace("{max}", String(max)))}
+                    </div>
+                  )}
+                  <div style={{ marginTop: 10, fontSize: 9, fontStyle: "italic", color: "var(--text-5)" }}>
+                    {t("info.repeat.cycle")}
+                  </div>
+                </>
+              )}
+            </HoverCard>
+          );
+        })()}
         {selCourse.attributes?.map(np => (
           <span key={np}
             onMouseEnter={e => setNpHover({ code: np, rect: e.currentTarget.getBoundingClientRect() })}
@@ -230,7 +323,7 @@ function CourseInfo({ selCourse, navTo }) {
           </span>
         ))}
         {npHover && (
-          <NuPathPopover label={attributeSystem.getLabel(npHover.code)} rect={npHover.rect} />
+          <HoverCard rect={npHover.rect}><bdi>{attributeSystem.getLabel(npHover.code)}</bdi></HoverCard>
         )}
         {catalogUrl && (
           <a href={catalogUrl} target="_blank" rel="noopener noreferrer"
@@ -241,6 +334,7 @@ function CourseInfo({ selCourse, navTo }) {
           </a>
         )}
       </div>
+
 
       {/* Non-English: nudge to enable translation, or show download progress */}
       {isNonEn && !courseTranslationEnabled && (
@@ -1147,11 +1241,13 @@ function SchedulePopover({ pat, color, rect }) {
   );
 }
 
-// Instant full-name card for a hovered NUPath badge (desktop only — same
-// hover-anchored portal pattern as OfferingPopover/SchedulePopover, and
-// portalled to document.body for the same transform:scale reason). Replaces
-// the native `title` tooltip, whose ~1s delay made the names feel hidden.
-function NuPathPopover({ label, rect }) {
+// Instant hover card for header badges (desktop only — same hover-anchored
+// portal pattern as OfferingPopover/SchedulePopover, and portalled to
+// document.body for the same transform:scale reason). Replaces the native
+// `title` tooltip, whose ~1s delay made the content feel hidden. Shared by
+// the NUPath badges (full attribute name) and the ↻ repeat badge (repeat
+// rule + planned takes).
+function HoverCard({ children, rect }) {
   const ref = useRef(null);
   const [placed, setPlaced] = useState(null);   // measured-and-clamped position
   const GAP  = 7;    // clearance between the badge and the popover
@@ -1181,7 +1277,7 @@ function NuPathPopover({ label, rect }) {
       fontSize: 13.5, color: "var(--text-2)",
       visibility: placed ? "visible" : "hidden",
     }}>
-      <bdi>{label}</bdi>
+      {children}
     </div>,
     document.body
   );

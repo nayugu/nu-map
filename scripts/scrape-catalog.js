@@ -28,6 +28,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseHTML } from "node-html-parser";
+import { parseRepeatability } from "../src/adapters/northeastern/repeatability.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -301,6 +302,11 @@ function parseSubjectPage(html, subjectCode) {
       return "Lecture";
     })();
 
+    // ── Repeatability: "May be repeated …" lives inside cb_desc (verified
+    // against live pages — never a separate courseblockextra), so the
+    // description text is its canonical source.
+    const repeat = parseRepeatability(description);
+
     courses.push({
       subject,
       number,
@@ -308,6 +314,11 @@ function parseSubjectPage(html, subjectCode) {
       scheduleType,
       credits,
       ...(creditsMax !== undefined ? { creditsMax } : {}),
+      ...(repeat ? {
+        repeatable: true,
+        ...(repeat.max   != null ? { repeatMax:   repeat.max }   : {}),
+        ...(repeat.maxSH != null ? { repeatMaxSH: repeat.maxSH } : {}),
+      } : {}),
       nuPath,
       sections: [],      // catalog has no section/term data
       description,
@@ -350,7 +361,7 @@ async function getSubjectURLs() {
 }
 
 // ── Field-level diff between two course objects ───────────────────────────────────
-const DIFF_FIELDS = ["title", "credits", "creditsMax", "scheduleType", "description", "nuPath", "prereqs", "coreqs"];
+const DIFF_FIELDS = ["title", "credits", "creditsMax", "scheduleType", "description", "nuPath", "prereqs", "coreqs", "repeatable", "repeatMax", "repeatMaxSH"];
 
 function diffCourse(prev, next) {
   const changes = [];
@@ -464,6 +475,10 @@ async function runRotate() {
         // Only fall back to prev when catalog had no record for this course (cat field is undefined).
         prereqs: Array.isArray(cat.prereqs) ? cat.prereqs : (prev.prereqs ?? []),
         coreqs:  Array.isArray(cat.coreqs)  ? cat.coreqs  : (prev.coreqs  ?? []),
+        // Repeatability rides the description: when the catalog gave us one,
+        // its parse result is authoritative — spreading `undefined` clears
+        // stale fields (JSON.stringify drops the keys on write).
+        ...(cat.description ? { repeatable: cat.repeatable, repeatMax: cat.repeatMax, repeatMaxSH: cat.repeatMaxSH } : {}),
       };
       const changes = diffCourse(prev, merged);
       if (changes.length > 0) {
@@ -608,6 +623,8 @@ async function runSubjects(subjectCodes) {
           nuPath:       cat.nuPath?.length ? cat.nuPath : prev.nuPath,
           prereqs: Array.isArray(cat.prereqs) ? cat.prereqs : (prev.prereqs ?? []),
           coreqs:  Array.isArray(cat.coreqs)  ? cat.coreqs  : (prev.coreqs  ?? []),
+          // Repeatability rides the description (see rotate merge above).
+          ...(cat.description ? { repeatable: cat.repeatable, repeatMax: cat.repeatMax, repeatMaxSH: cat.repeatMaxSH } : {}),
         };
         const changes = diffCourse(prev, merged);
         if (changes.length > 0) modifiedCourses.push({ code: key, changes });
@@ -771,6 +788,8 @@ if (MERGE) {
       nuPath:       cat.nuPath?.length ? cat.nuPath : c.nuPath,
       prereqs:      Array.isArray(cat.prereqs) ? cat.prereqs : c.prereqs,
       coreqs:       Array.isArray(cat.coreqs)  ? cat.coreqs  : c.coreqs,
+      // Repeatability rides the description (see rotate merge above).
+      ...(cat.description ? { repeatable: cat.repeatable, repeatMax: cat.repeatMax, repeatMaxSH: cat.repeatMaxSH } : {}),
     };
   });
 
