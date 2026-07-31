@@ -31,7 +31,10 @@ function applyTheme(tokens) {
   }
   el.textContent = `
     body { background: ${tokens['--bg-app']}; color: ${tokens['--text-1']}; }
-    ::-webkit-scrollbar-track { background: ${tokens['--scrollbar-track']}; }
+    /* Transparent track + inset ends: an opaque track is a square strip
+       that overshoots rounded corners (stats modal, dropdown panels).
+       The floating rounded thumb starts 8px from each end instead. */
+    ::-webkit-scrollbar-track { background: transparent; margin: 8px; }
     ::-webkit-scrollbar-thumb { background: ${tokens['--scrollbar-thumb']}; border-radius: 99px; }
     ::-webkit-scrollbar-thumb:hover { background: ${tokens['--scrollbar-hov']}; }
   `;
