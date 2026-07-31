@@ -18,14 +18,18 @@ import { useLanguage }   from "../context/LanguageContext.jsx";
 import { fireConfetti }  from "./confetti.js";
 
 const BASE = import.meta.env.BASE_URL;
+// `ar` = the asset's own width/height. Phones size the frame by it so the
+// media fills the card edge to edge; the ratios range from 1.01 (04-prereqs)
+// to 1.78 (03-coop, 07-language), which is why one shared ratio won't do.
+// Keep these in sync when an asset is re-recorded.
 const STEPS = [
-  { img: "01-requirements.mp4", t: "tour.step.1" },
-  { img: "02-search.mp4",       t: "tour.step.2" },
-  { img: "03-coop.mp4",         t: "tour.step.3" },
-  { img: "04-prereqs.png",      t: "tour.step.4" },
-  { img: "05-class.png",        t: "tour.step.5" },
-  { img: "06-plans.mp4",        t: "tour.step.6" },
-  { img: "07-language.mp4",     t: "tour.step.7" },
+  { img: "01-requirements.mp4", t: "tour.step.1", ar: 1200 / 966  },
+  { img: "02-search.mp4",       t: "tour.step.2", ar: 1200 / 1058 },
+  { img: "03-coop.mp4",         t: "tour.step.3", ar: 1200 / 676  },
+  { img: "04-prereqs.png",      t: "tour.step.4", ar: 1098 / 1090 },
+  { img: "05-class.png",        t: "tour.step.5", ar: 1598 / 1290 },
+  { img: "06-plans.mp4",        t: "tour.step.6", ar: 1200 / 1158 },
+  { img: "07-language.mp4",     t: "tour.step.7", ar: 1200 / 676  },
 ];
 const DONE = STEPS.length; // step index of the celebratory completion screen
 const HOLD_MS = 1200;      // pause on the last frame before a video loops (clips are 6–12s)
@@ -94,7 +98,7 @@ export default function FeatureTour() {
         style={{
           background: "var(--bg-surface)", border: "1px solid var(--border-2)",
           borderRadius: 16, maxWidth: 860, width: "100%",
-          padding: 22, boxShadow: "var(--shadow-modal)",
+          padding: isPhone ? 14 : 22, boxShadow: "var(--shadow-modal)",
           color: "var(--text-2)", fontFamily: "'Inter', system-ui, sans-serif",
           outline: "none",
         }}
@@ -130,9 +134,14 @@ export default function FeatureTour() {
           </div>
         ) : (
           <>
-            {/* Media — fixed-height frame so the box never resizes between steps */}
+            {/* Media — a fixed-height frame on desktop, so the box never resizes
+                between steps. On a phone the card is only ~300px wide, so a 460px
+                frame letterboxed every clip with dead space above and below;
+                there the frame takes the asset's own aspect ratio instead and the
+                media fills it exactly (the card does resize between steps). */}
             <div style={{
-              height: 460, borderRadius: 10, overflow: "hidden",
+              ...(isPhone ? { width: "100%", aspectRatio: String(cur.ar) } : { height: 460 }),
+              borderRadius: 10, overflow: "hidden",
               background: "var(--bg-app)", border: "1px solid var(--border-1)",
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
@@ -151,14 +160,17 @@ export default function FeatureTour() {
             </div>
 
             {/* Caption */}
-            <div style={{ padding: "16px 6px 6px" }}>
+            <div style={{ padding: isPhone ? "12px 2px 2px" : "16px 6px 6px" }}>
               <div id="tour-title" style={{ fontSize: 22, fontWeight: 800, color: "var(--text-1)", marginBottom: 7 }}>
                 {t(`${cur.t}.title`)}
               </div>
               {/* `n` = live locale count, so the language step never claims a
                   stale number when a locale file is added or removed. */}
               <div style={{
-                fontSize: 17, color: "var(--text-3)", minHeight: 52,
+                // The 52px floor keeps one- and two-line captions from jostling the
+                // nav row on desktop; on a phone every caption wraps past it and the
+                // card resizes per step anyway, so it would only add dead space.
+                fontSize: 17, color: "var(--text-3)", minHeight: isPhone ? 0 : 52,
                 lineHeight: "calc(1.6 * var(--lh-scale, 1))",
                 fontFamily: "'InterTight', 'Inter', system-ui, sans-serif", letterSpacing: "0.01em",
               }}>
