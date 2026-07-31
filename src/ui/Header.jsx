@@ -958,8 +958,10 @@ export default function Header() {
                                 onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-4)"; }}
                               >{t("translation.cancel")}</button>
                             )}
-                            {/* Clear cache button — visible when model is fully cached and not downloading */}
-                            {engineTier === "wasm" && modelCached && !modelProgress && (
+                            {/* Clear cache button — for the WASM engine once the model is
+                                cached; for API/native engines it clears locally-cached
+                                translations (the escape hatch if a bad response was cached) */}
+                            {engineTier && !modelProgress && (engineTier !== "wasm" || modelCached) && (
                               <button
                                 onMouseDown={e => e.preventDefault()}
                                 onClick={clearModelCache}

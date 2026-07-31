@@ -54,7 +54,12 @@ export function LanguageProvider({ children }) {
         localStorage.setItem(storageKey, param);
         return param;
       }
-      return localStorage.getItem(storageKey) ?? defaultLocale;
+      // Validate like the URL param above: a stale code (e.g. a locale
+      // later removed) would render English fallbacks while machine
+      // translation auto-targets a bogus locale.
+      const stored = localStorage.getItem(storageKey);
+      if (stored && LOCALE_STRINGS[stored]) return stored;
+      return LOCALE_STRINGS[defaultLocale] ? defaultLocale : "en";
     } catch { return defaultLocale; }
   });
 

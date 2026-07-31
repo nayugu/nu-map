@@ -21,6 +21,7 @@ const LANG_NAME = {
   en: "English",
   zh: "Simplified Chinese",
   ja: "Japanese",
+  ko: "Korean",
   hi: "Hindi",
   ar: "Arabic",
   fr: "French",
@@ -37,6 +38,7 @@ function sysPrompt(src, tgt) {
 
 export class HFInferenceEngine {
   tier = "api";
+  name = "hf-inference";
 
   /** @type {((loaded: number, total: number) => void) | null} */
   onProgress = null;
@@ -44,7 +46,9 @@ export class HFInferenceEngine {
   /** @type {(() => void) | null} */
   onReady = null;
 
-  #abort = null;
+  // One controller per in-flight stream — a single field would only let
+  // destroy() abort the most recent request.
+  #aborts = [];
 
   async isAvailable() { return true; }
 
@@ -88,15 +92,23 @@ export class HFInferenceEngine {
   }
 
   async #stream(text, systemMsg, onToken) {
-    this.#abort = new AbortController();
+    const ac = new AbortController();
+    this.#aborts.push(ac);
+    try {
+      return await this.#streamWith(ac, text, systemMsg, onToken);
+    } finally {
+      this.#aborts = this.#aborts.filter(a => a !== ac);
+    }
+  }
 
+  async #streamWith(ac, text, systemMsg, onToken) {
     const headers = { "Content-Type": "application/json" };
     if (TOKEN) headers["Authorization"] = `Bearer ${TOKEN}`;
 
     const response = await fetch(API, {
       method: "POST",
       headers,
-      signal: this.#abort.signal,
+      signal: ac.signal,
       body: JSON.stringify({
         model: MODEL,
         messages: [
@@ -150,7 +162,7 @@ export class HFInferenceEngine {
   }
 
   destroy() {
-    this.#abort?.abort();
-    this.#abort = null;
+    this.#aborts.forEach(a => a.abort());
+    this.#aborts = [];
   }
 }

@@ -51,6 +51,7 @@ function schedule(taskFactory) {
 
 export class MyMemoryEngine {
   tier = "api";
+  name = "mymemory";
 
   /** @type {((loaded: number, total: number) => void) | null} */
   onProgress = null;
@@ -100,14 +101,25 @@ export class MyMemoryEngine {
       `&langpair=${encodeURIComponent(sl)}|${encodeURIComponent(tl)}`;
 
     return schedule(async () => {
-      const timer = setTimeout(() => ac.abort(), FETCH_TIMEOUT_MS);
+      // TimeoutError (not AbortError) so CascadeEngine can tell a slow
+      // request apart from a caller cancel.
+      const timer = setTimeout(
+        () => ac.abort(new DOMException("MyMemory timeout", "TimeoutError")),
+        FETCH_TIMEOUT_MS,
+      );
       try {
         const response = await fetch(url, { signal: ac.signal });
         if (!response.ok) throw new Error(`MyMemory ${response.status}`);
         const data = await response.json();
         if (data.quotaFinished) throw new Error("MyMemory daily quota exceeded");
-        if (data.responseStatus !== 200) throw new Error(`MyMemory status ${data.responseStatus}`);
-        return (data.responseData?.translatedText ?? text).trim();
+        // responseStatus arrives as a number on success but a string on
+        // some error paths — coerce before comparing.
+        if (Number(data.responseStatus) !== 200) throw new Error(`MyMemory status ${data.responseStatus}`);
+        const translated = (data.responseData?.translatedText ?? "").trim();
+        // Empty result for non-empty input = failed translation; throw so
+        // the caller falls back instead of blanking the text.
+        if (!translated && text.trim()) throw new Error("MyMemory returned empty result");
+        return translated;
       } finally {
         clearTimeout(timer);
         this.#aborts = this.#aborts.filter(a => a !== ac);

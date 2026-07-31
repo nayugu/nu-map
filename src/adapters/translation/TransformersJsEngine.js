@@ -12,6 +12,7 @@
 
 export class TransformersJsEngine {
   tier = "wasm";
+  name = "transformers-js";
 
   /** @type {((loaded: number, total: number) => void) | null} */
   onProgress = null;

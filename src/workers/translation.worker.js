@@ -60,6 +60,7 @@ const NLLB_LANG = {
   en: "eng_Latn",
   zh: "zho_Hans",
   ja: "jpn_Jpan",
+  ko: "kor_Hang",
   hi: "hin_Deva",
   ar: "ara_Arab",
   fr: "fra_Latn",

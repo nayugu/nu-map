@@ -34,6 +34,11 @@
  *
  * @property {EngineTier} tier
  *
+ * @property {string} name
+ *   Stable identifier ("google", "mymemory", "chrome-ai", …) used by
+ *   CascadeEngine's failure registry.  Must survive minification —
+ *   never derive it from constructor.name.
+ *
  * @property {(targetLocale: string, sourceLocale: string) => Promise<boolean>} isAvailable
  *   Returns true if this engine can translate from sourceLocale to targetLocale.
  *   May be async (e.g. Chrome AI checks model availability over IPC).
@@ -47,5 +52,11 @@
  *   Translate an array of strings from sourceLocale to targetLocale.
  *   Returns a parallel array of translated strings.
  *   onProgress fires during model loading only (not per-string).
- *   Empty strings pass through as-is.
+ *   Empty source strings pass through as-is; an empty RESULT for a
+ *   non-empty source is a failure and must throw, never resolve —
+ *   TranslationContext additionally refuses to cache or render empty
+ *   results as a safety net.
+ *   Rejections with err.name === "AbortError" mean the caller
+ *   cancelled; anything else (incl. TimeoutError) is an engine failure
+ *   that CascadeEngine may retry on the next engine in the chain.
  */

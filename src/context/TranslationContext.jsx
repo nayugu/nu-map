@@ -9,15 +9,28 @@
 //
 // Engine priority
 // ───────────────
+// A single CascadeEngine chains the engines and falls through on
+// failure (per-engine failure thresholds live in CascadeEngine):
 //   1. ChromeAIEngine      — browser-native, instant, no download
+//                            (included only when the pair is instantly
+//                            available — download states are skipped)
 //   2. GoogleTranslateEngine — unofficial translate.googleapis.com endpoint,
 //                              no API key, CORS-enabled, near-instant
+//   3. MyMemoryEngine      — last resort; reachable from mainland China
+//
+// The cascade is rebuilt whenever the language pair changes or the
+// course-translation toggle flips — Chrome AI availability is per
+// language pair, so an engine chosen for es must not be reused for ar.
 //
 // Caching
 // ───────
 // Translations are cached in two layers:
 //   • in-memory Map (cacheRef) — zero-latency within a session
 //   • localStorage ("nu-map-xlat:v1:…") — persists across sessions
+// Empty/whitespace-only results are treated as failed translations:
+// never cached, never rendered — the source text is shown instead.
+// (Reads also skip empty entries, self-healing caches poisoned before
+// this guard existed.)
 //
 // The WASM/TransformersJsEngine path is preserved but commented out
 // below in case it is needed as an offline fallback in the future.
@@ -45,6 +58,8 @@ import {
 import { useLanguage }          from "./LanguageContext.jsx";
 import { ChromeAIEngine }  from "../adapters/translation/ChromeAIEngine.js";
 import { CascadeEngine }   from "../adapters/translation/CascadeEngine.js";
+import { GoogleTranslateEngine } from "../adapters/translation/GoogleTranslateEngine.js";
+import { MyMemoryEngine }        from "../adapters/translation/MyMemoryEngine.js";
 // import { HFInferenceEngine }    from "../adapters/translation/HFInferenceEngine.js";
 // import { TransformersJsEngine } from "../adapters/translation/TransformersJsEngine.js";
 import { glossaryLookup }         from "../locales/glossary.js";
@@ -62,6 +77,9 @@ function lsGet(key) {
 function lsSet(key, val) {
   try { localStorage.setItem(LS_PREFIX + key, val); } catch {}
 }
+function lsRemove(key) {
+  try { localStorage.removeItem(LS_PREFIX + key); } catch {}
+}
 
 // ── Provider ───────────────────────────────────────────────────────
 
@@ -77,46 +95,55 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
   const [modelProgress] = useState(null); // eslint-disable-line no-unused-vars
   const [modelCached]   = useState(null); // eslint-disable-line no-unused-vars
 
-  const [courseTranslationEnabled, setCourseTranslationEnabledState] = useState(() => {
-    try { return localStorage.getItem(TOGGLE_KEY) === "1"; } catch { return false; }
-  });
+  const [courseTranslationEnabled, setCourseTranslationEnabledState] = useState(false);
 
+  // User-driven setter: persists the choice so it survives reloads and
+  // locale switches.
   const setCourseTranslationEnabled = useCallback((val) => {
     setCourseTranslationEnabledState(val);
     try { localStorage.setItem(TOGGLE_KEY, val ? "1" : "0"); } catch {}
   }, []);
 
-  // Auto-enable/disable course translation when the UI language changes.
-  useEffect(() => {
-    if (locale !== catalogLocale) {
-      setCourseTranslationEnabled(true);
-    } else {
-      setCourseTranslationEnabled(false);
-    }
-  }, [locale, catalogLocale, setCourseTranslationEnabled]);
-
-  // Select best available engine when locale diverges from catalog locale.
+  // Default the toggle when the UI language changes: ON when it diverges
+  // from the catalog locale, OFF when it matches — unless the user has
+  // toggled explicitly before (persisted under TOGGLE_KEY), which wins.
   useEffect(() => {
     if (locale === catalogLocale) {
+      setCourseTranslationEnabledState(false);
+      return;
+    }
+    let stored = null;
+    try { stored = localStorage.getItem(TOGGLE_KEY); } catch {}
+    setCourseTranslationEnabledState(stored == null ? true : stored === "1");
+  }, [locale, catalogLocale]);
+
+  // (Re)build the engine cascade whenever translation becomes active or
+  // the language pair changes.  Re-running on locale change matters:
+  // Chrome AI availability is per language pair.  The cancelled flag
+  // keeps a stale async selection from clobbering a newer one (or from
+  // resurrecting an engine after translation was switched off).
+  useEffect(() => {
+    if (locale === catalogLocale || !courseTranslationEnabled) {
       engineRef.current?.destroy?.();
       engineRef.current = null;
       setEngineTier(null);
       return;
     }
-    if (engineRef.current) return;
 
+    let cancelled = false;
     (async () => {
-      let engine;
+      const chain  = [new GoogleTranslateEngine(), new MyMemoryEngine()];
       const chrome = new ChromeAIEngine();
-      if (await chrome.isAvailable(locale, catalogLocale)) {
-        engine = chrome;
-      } else {
-        engine = new CascadeEngine();
-      }
+      if (await chrome.isAvailable(locale, catalogLocale)) chain.unshift(chrome);
+      const engine = new CascadeEngine(chain);
+      if (cancelled) { engine.destroy(); return; }
+      engineRef.current?.destroy?.();
       engineRef.current = engine;
       setEngineTier(engine.tier);
     })();
-  }, [locale, catalogLocale]);
+
+    return () => { cancelled = true; };
+  }, [locale, catalogLocale, courseTranslationEnabled]);
 
   // Core translate — checks memory cache, then localStorage, then engine.
   // onToken(partialResults) is called after each streamed token so callers
@@ -138,10 +165,21 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
         results[i] = override;
         return;
       }
+      // Empty cached values are failed translations from before the
+      // write-path guard existed — skip them (and purge from
+      // localStorage) so the string gets retried instead of rendering
+      // blank forever.
       const mem = cacheRef.current.get(key);
-      if (mem != null) { results[i] = mem; return; }
+      if (mem != null && mem.trim() !== "") { results[i] = mem; return; }
       const stored = lsGet(key);
-      if (stored != null) { cacheRef.current.set(key, stored); results[i] = stored; return; }
+      if (stored != null) {
+        if (stored.trim() !== "") {
+          cacheRef.current.set(key, stored);
+          results[i] = stored;
+          return;
+        }
+        lsRemove(key);
+      }
       uncached.push({ i, text, key });
     });
 
@@ -165,7 +203,13 @@ export function TranslationProvider({ catalogLocale = "en", children }) {
       );
 
       uncached.forEach(({ i, key }, j) => {
-        const val = translated[j] ?? texts[i];
+        const val = translated[j];
+        // An empty/whitespace result is a failed translation — show the
+        // source text and leave the cache alone so a later call retries.
+        if (val == null || val.trim() === "") {
+          results[i] = texts[i];
+          return;
+        }
         cacheRef.current.set(key, val);
         lsSet(key, val);
         results[i] = val;
@@ -254,11 +298,13 @@ export function useCourseTranslation(course) {
     const toTranslate = [course.title, ...(hasDesc ? [course.desc] : [])];
 
     translate(toTranslate, locale, (partials) => {
-      // Called after each token — update UI with whatever has arrived so far.
+      // Called after each token — update UI with whatever has arrived so
+      // far, falling back to the source text for items still pending
+      // (never render "" in place of a title/description).
       if (cancelled) return;
       setTranslated({
-        title: partials[0] ?? "",
-        desc:  hasDesc ? (partials[1] ?? "") : course.desc,
+        title: partials[0] ?? course.title,
+        desc:  hasDesc ? (partials[1] ?? course.desc) : course.desc,
       });
     })
       .then(results => {
@@ -267,7 +313,11 @@ export function useCourseTranslation(course) {
         setIsTranslating(false);
       })
       .catch(() => {
-        if (!cancelled) setIsTranslating(false);
+        if (cancelled) return;
+        // Drop any partial snapshot so the UI shows the source text
+        // instead of whatever half-translated state the batch died in.
+        setTranslated(null);
+        setIsTranslating(false);
       });
 
     return () => { cancelled = true; };
@@ -275,8 +325,9 @@ export function useCourseTranslation(course) {
 
   const active = courseTranslationEnabled && locale !== catalogLocale;
   return {
-    title:         translated?.title ?? course?.title ?? "",
-    desc:          translated?.desc  ?? course?.desc  ?? "",
+    // || (not ??): an empty translation must never shadow the source text.
+    title:         translated?.title || course?.title || "",
+    desc:          translated?.desc  || course?.desc  || "",
     // Only dim while waiting for the very first token; once streaming starts
     // the text updates live and the dim would obscure the typewriter effect.
     isTranslating: active && isTranslating && !translated,
@@ -371,5 +422,6 @@ export function useTranslatedText(text, options = {}) {
     return () => { cancelled = true; };
   }, [source, locale, catalogLocale, engineTier, courseTranslationEnabled, translate]);
 
-  return translated ?? text ?? "";
+  // || (not ??): an empty translation must never shadow the source text.
+  return translated || text || "";
 }
