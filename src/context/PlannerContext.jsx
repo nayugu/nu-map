@@ -18,7 +18,8 @@ import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions,
 import { baseId, isInstanceId, takesUsed, resolveAddId } from "../core/repeatInstances.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
-import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
+import { decodePlan, buildStaticUrl, getHashPlanParam } from "../core/planShare.js";
+import { encodePlanStatic, decodePlanStatic, getStaticHashParam } from "../core/planCodec.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
@@ -445,6 +446,10 @@ export function PlannerProvider({ children }) {
   const ghostRef        = useRef(null);  // floating ghost element during touch drag
   const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
   const isFirstRender = useRef(true);
+  // Set for one render to suppress the auto-save that would otherwise fire on an
+  // activePlanId switch and overwrite a freshly-imported plan with stale live
+  // state before its restore has applied.
+  const skipAutoSaveRef = useRef(false);
   const touchDragFromRef    = useRef(null);
   const touchDragTypeRef    = useRef(null);
   const touchDragTypeIdRef  = useRef(null);
@@ -2029,6 +2034,10 @@ export function PlannerProvider({ children }) {
       isFirstRender.current = false;
       return;
     }
+    if (skipAutoSaveRef.current) { // just imported a shared plan — let its restore load first
+      skipAutoSaveRef.current = false;
+      return;
+    }
     saveCurrentPlanToSlot();
   }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear]); // eslint-disable-line react-hooks/exhaustive-deps
   
@@ -2105,34 +2114,69 @@ export function PlannerProvider({ children }) {
     reader.readAsText(file);
   };
 
-  const copyPlanLink = async (targetLocale) => {
-    const planName = plans.find(p => p.id === activePlanId)?.name || "Plan";
-    const data = {
-      ...captureCurrentPlan(),
+  // Self-contained static link: the plan is bit-packed into the URL itself
+  // (#p=…) — nothing is stored on any server, so a link/QR is fully local,
+  // private, and works forever. Synchronous (no compression stream, no network).
+  //
+  // Only the ACADEMIC content of the plan is shared, to keep the QR small: the
+  // plan name and pure display state (semOrders / collapsedSubs /
+  // offeredOverrides / currentSemId) are intentionally dropped — the recipient
+  // gets the same courses, programs, co-ops and credits, just their own view of
+  // it. Used by both the copy button and the QR code.
+  const buildPlanStaticLink = (targetLocale) => {
+    const c = captureCurrentPlan();
+    return buildStaticUrl(encodePlanStatic({
+      entSem: c.entSem, entYear: c.entYear, gradSem: c.gradSem, gradYear: c.gradYear,
+      placements: c.placements, specialTermPl: c.specialTermPl,
+      major: c.major, major2: c.major2, conc: c.conc, minor1: c.minor1, minor2: c.minor2,
+      studentType: c.studentType, placedOut: c.placedOut,
+      shOverrides: c.shOverrides, bonusSH: c.bonusSH,
       substitutions,
-      planName,
       locale: targetLocale,
-    };
-    const encoded = await encodePlan(data);
-    const url = buildShareUrl(encoded);
-    await navigator.clipboard.writeText(url);
+    }));
   };
 
-  // Create a new plan slot pre-populated with shared data, then switch to it.
+  const copyPlanLink = async (targetLocale) => {
+    await navigator.clipboard.writeText(buildPlanStaticLink(targetLocale));
+  };
+
+  // Import a scanned/opened shared plan. ALWAYS creates a brand-new plan slot and
+  // switches to it (never edits the plan the user already has open), so scanning
+  // a QR reliably lands on the shared plan.
+  //
+  // Plan-specific data (placements, programs, co-ops, cohort, credits) becomes
+  // the new plan. Substitutions and placed-out courses are student-level facts
+  // shared across every plan, so they're MERGED into the universal store (union,
+  // de-duplicated) rather than replacing it — the scan adds to what's there.
   const importSharedPlan = (d) => {
-    saveCurrentPlanToSlot();
+    saveCurrentPlanToSlot();                 // persist whatever plan is open first
     const id = `plan_${Date.now()}`;
     const base = d.planName || "Plan";
     const name = base.startsWith('/') ? '/' + base : '/ ' + base;
-    // Pre-write so the activePlanId useEffect finds data and calls restorePlan.
-    try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
+
+    const mergedPlacedOut = new Set([...placedOut, ...(Array.isArray(d.placedOut) ? d.placedOut : [])]);
+    const mergedSubs = [...substitutions];
+    for (const s of (Array.isArray(d.substitutions) ? d.substitutions : [])) {
+      if (!mergedSubs.some(x => x.from === s.from && x.to === s.to)) mergedSubs.push(s);
+    }
+
+    // The new plan's per-plan blob carries the merged place-outs so its restore
+    // stays consistent with the universal set (restorePlan reloads placedOut).
+    const blob = { ...d, placedOut: [...mergedPlacedOut] };
+    try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(blob)); } catch {}
+
+    skipAutoSaveRef.current = true;          // don't clobber `blob` before restore runs
     setPlans(prev => [...prev, { id, name, studentType: d.studentType ?? "undergrad" }]);
+    setPlacedOut(mergedPlacedOut);
+    setSubstitutions(mergedSubs);
     setActivePlanId(id);
-    // restorePlan doesn't handle substitutions, so set them directly.
-    setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
-    // Apply the sender's chosen locale if it's one we support.
     if (d.locale && locales.some(l => l.code === d.locale)) setLocale(d.locale);
   };
+
+  // The hashchange listener below is registered once, but must import with the
+  // CURRENT state (not the mount-time closure), so route through a live ref.
+  const importRef = useRef(importSharedPlan);
+  importRef.current = importSharedPlan;
 
   // Commit the onboarding panel's choices to the live plan, then open the tour.
   //   setup = { studentType, entSem, entYear, gradSem, gradYear, major, major2, conc, minor1, minor2 }
@@ -2160,18 +2204,35 @@ export function PlannerProvider({ children }) {
     if (!seenTour) setShowTour(true);
   };
 
-  // On mount: detect a shared plan in the URL hash and offer to load it as a new plan.
+  // Load a shared plan from the URL hash into a new plan slot. Two formats: #p=
+  // (compact self-contained, current) and #plan= (older gzip+JSON links).
+  //
+  // Runs on mount AND on `hashchange`: on a phone, scanning a QR while the app is
+  // already open (a live tab or an installed PWA) updates the hash WITHOUT
+  // remounting React, so a mount-only handler silently ignored the scan and left
+  // the user on their existing plan. The listener catches that case too.
   useEffect(() => {
-    const encoded = getHashPlanParam();
-    if (!encoded) return;
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-    decodePlan(encoded)
-      .then(d => {
-        if (d.version !== 1 && d.version !== 2) { alert("Unrecognized shared plan format."); return; }
-        // if (!window.confirm("Load the shared plan? It will open as a new plan alongside your existing ones.")) return;
-        importSharedPlan(d);
-      })
-      .catch(() => alert("Could not decode the shared plan link."));
+    const load = () => {
+      const staticParam = getStaticHashParam();
+      if (staticParam) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+        try { importRef.current(decodePlanStatic(staticParam)); }
+        catch { alert("Could not decode the shared plan link."); }
+        return;
+      }
+      const encoded = getHashPlanParam();
+      if (!encoded) return;
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      decodePlan(encoded)
+        .then(d => {
+          if (d.version !== 1 && d.version !== 2) { alert("Unrecognized shared plan format."); return; }
+          importRef.current(d);
+        })
+        .catch(() => alert("Could not decode the shared plan link."));
+    };
+    load();
+    window.addEventListener('hashchange', load);
+    return () => window.removeEventListener('hashchange', load);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Cohort setters that also persist to localStorage ─────────
@@ -2681,7 +2742,7 @@ export function PlannerProvider({ children }) {
     }),
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
+    resetAll, exportPlanJSON, importPlanJSON, copyPlanLink, buildPlanStaticLink,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,

@@ -134,8 +134,26 @@ export async function decodePlan(encoded) {
   return raw; // version 1: return as-is
 }
 
+// A shared link must resolve on a real host: window.location.origin is
+// localhost in dev and the pages.dev / github.io mirrors in preview builds, so a
+// QR scanned from a phone would 404. Anchor to the canonical origin declared in
+// index.html (always https://numap.app) and fall back to the live origin.
+function _shareOrigin() {
+  try {
+    const href = document.querySelector('link[rel="canonical"]')?.href;
+    if (href) return new URL(href).origin;
+  } catch { /* no DOM (SSR/tests) — fall through */ }
+  return window.location.origin;
+}
+
 export function buildShareUrl(encoded) {
-  return `${window.location.origin}${window.location.pathname}#plan=${encoded}`;
+  return `${_shareOrigin()}/#plan=${encoded}`;
+}
+
+// The compact static-link format (#p=): the whole plan lives in the URL itself,
+// nothing is stored on any server. Built by src/core/planCodec.js.
+export function buildStaticUrl(encoded) {
+  return `${_shareOrigin()}/#p=${encoded}`;
 }
 
 export function getHashPlanParam() {

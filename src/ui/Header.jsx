@@ -2,7 +2,7 @@
 // HEADER  — sticky timeline header: title, SH counters, controls,
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
@@ -10,6 +10,7 @@ import { exportReport, getOrderedCourses, filterInTimeline } from "../core/planM
 import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
+import { generateQr } from "../core/qrEncode.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -49,6 +50,139 @@ function usePopupTouchLock(ref, open) {
   }, [ref, open]);
 }
 
+const QR_DARK = "#0f172a"; // slate-900 — softer than pure black, still high-contrast
+
+// One rounded finder "eye": outer ring + centre pip, both with rounded corners.
+function QrEye({ x, y }) {
+  return (
+    <g>
+      <rect x={x + 0.5} y={y + 0.5} width={6} height={6} rx={2} ry={2}
+        fill="none" stroke={QR_DARK} strokeWidth={1} />
+      <rect x={x + 2} y={y + 2} width={3} height={3} rx={1} ry={1} fill={QR_DARK} />
+    </g>
+  );
+}
+
+// Renders a QR matrix with rounded finder eyes. Only the sparse, High-EC case
+// (a small plan) uses circular "dots" and a centre logo — there the extra error
+// correction absorbs the gaps a dot leaves and the covered logo modules. Denser
+// codes (the common case) use fully-tiling rounded squares instead: dots at Low
+// EC drop enough module area that scanners fail, so reliability wins over style.
+function QrArt({ qr }) {
+  const { size, modules, ecl } = qr;
+  const fancy = ecl === "H"; // dots + logo only when the EC budget can afford it
+  const logoR = fancy ? Math.max(2, Math.floor(size * 0.11)) : 0; // half-extent in modules
+  const c = (size - 1) / 2;
+
+  const inFinder = (x, y) =>
+    (x < 7 && y < 7) || (x >= size - 7 && y < 7) || (x < 7 && y >= size - 7);
+  const underLogo = (x, y) => fancy && Math.abs(x - c) <= logoR && Math.abs(y - c) <= logoR;
+
+  const cells = [];
+  for (let y = 0; y < size; y++)
+    for (let x = 0; x < size; x++)
+      if (modules[y][x] && !inFinder(x, y) && !underLogo(x, y))
+        cells.push(
+          fancy
+            ? <circle key={`${x}-${y}`} cx={x + 0.5} cy={y + 0.5} r={0.5} fill={QR_DARK} />
+            : <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} rx={0.28} ry={0.28} fill={QR_DARK} />,
+        );
+
+  const logoSize = (logoR * 2 + 1) - 0.6;
+  return (
+    <svg viewBox={`-4 -4 ${size + 8} ${size + 8}`} width="100%" height="100%"
+      shapeRendering={fancy ? "auto" : "geometricPrecision"} aria-hidden="true">
+      {cells}
+      <QrEye x={0} y={0} />
+      <QrEye x={size - 7} y={0} />
+      <QrEye x={0} y={size - 7} />
+      {fancy && (
+        <g>
+          <rect x={c + 0.5 - logoSize / 2} y={c + 0.5 - logoSize / 2} width={logoSize} height={logoSize}
+            rx={1.4} ry={1.4} fill="#fff" />
+          <image href="/logo.png" x={c + 0.5 - (logoSize - 1) / 2} y={c + 0.5 - (logoSize - 1) / 2}
+            width={logoSize - 1} height={logoSize - 1} preserveAspectRatio="xMidYMid meet" />
+        </g>
+      )}
+    </svg>
+  );
+}
+
+// Full-screen enlarged QR — the dropdown preview is necessarily small, so a
+// dense (big-plan) code reads as noise there; shown large (~360px), the exact
+// same modules become an ordinary, comfortably scannable QR. Forced white card
+// so it scans in any theme; click anywhere to dismiss.
+function QrModal({ qr, scanLabel, closeLabel, onClose }) {
+  return (
+    <div onClick={onClose} role="dialog" aria-modal="true"
+      style={{ position: "fixed", inset: 0, zIndex: 300, background: "rgba(2,6,23,0.66)",
+        display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <div onClick={e => e.stopPropagation()}
+        style={{ background: "#fff", borderRadius: 18, padding: 22, boxShadow: "var(--shadow-modal)",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 14, maxWidth: "92vw" }}>
+        <div style={{ width: "min(78vw, 360px)", height: "min(78vw, 360px)" }}>
+          <QrArt qr={qr} />
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#334155" }}>{scanLabel}</div>
+        <button onClick={onClose}
+          style={{ fontSize: 11, fontWeight: 700, cursor: "pointer", border: "1px solid #cbd5e1",
+            background: "#f8fafc", color: "#334155", borderRadius: 7, padding: "6px 18px" }}>
+          {closeLabel}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// A self-contained box holding a scannable QR code of the plan's static share
+// link. Bordered to match the buttons above it, sized to a fixed square (never
+// full-width), kept on white so it scans regardless of theme, and clickable to
+// blow the code up to a comfortably scannable size.
+function QrShareBox({ url, label, tooLargeLabel, enlargeLabel, scanLabel, closeLabel }) {
+  const [expanded, setExpanded] = useState(false);
+  const qr = useMemo(() => {
+    if (!url) return undefined; // still building the link
+    try { return generateQr(url); } catch { return null; }
+  }, [url]);
+  const ready = qr && qr !== undefined;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, marginTop: 1 }}>
+      <style>{"@keyframes qrPulse { 0%,100% { opacity: 0.25 } 50% { opacity: 1 } }"}</style>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", textTransform: "uppercase", letterSpacing: 0.4 }}>
+        {label}
+      </div>
+      <div
+        onClick={ready ? () => setExpanded(true) : undefined}
+        title={ready ? enlargeLabel : undefined}
+        style={{ border: "1px solid var(--border-2)", borderRadius: 8, padding: 8, background: "#fff",
+          width: 136, height: 136, display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: ready ? "zoom-in" : "default" }}>
+        {qr === undefined ? (
+          <div style={{ display: "flex", gap: 3 }}>
+            {[0, 1, 2].map(i => (
+              <span key={i} style={{ width: 5, height: 5, borderRadius: "50%", background: "#cbd5e1",
+                animation: "qrPulse 1s ease-in-out infinite", animationDelay: `${i * 0.15}s` }} />
+            ))}
+          </div>
+        ) : qr === null ? (
+          <div style={{ fontSize: 9, fontWeight: 600, color: "#6b7280", textAlign: "center", padding: 4 }}>
+            {tooLargeLabel}
+          </div>
+        ) : (
+          <QrArt qr={qr} />
+        )}
+      </div>
+      {ready && (
+        <div style={{ fontSize: 8, fontWeight: 600, color: "var(--text-4)", opacity: 0.75 }}>⤢ {enlargeLabel}</div>
+      )}
+      {expanded && ready && (
+        <QrModal qr={qr} scanLabel={scanLabel} closeLabel={closeLabel} onClose={() => setExpanded(false)} />
+      )}
+    </div>
+  );
+}
+
 export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
@@ -68,7 +202,7 @@ export default function Header() {
     semTrackingMode, setSemTrackingMode,
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
-    exportPlanJSON, importPlanJSON, copyPlanLink,
+    exportPlanJSON, importPlanJSON, copyPlanLink, buildPlanStaticLink,
     aiAssistantAvailable, claudePreview,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
@@ -103,6 +237,13 @@ export default function Header() {
   };
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [shareLinkLocale, setShareLinkLocale] = useState(locale);
+  // Self-contained static URL for the QR code — rebuilt (synchronously; it's
+  // just bit-packing, no network) whenever the Input/Output dropdown opens or
+  // the recipient language changes.
+  const qrUrl = useMemo(
+    () => (showIO ? buildPlanStaticLink(shareLinkLocale) : null),
+    [showIO, shareLinkLocale], // eslint-disable-line react-hooks/exhaustive-deps
+  );
   const [planSearch, setPlanSearch] = useState("");
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -880,6 +1021,12 @@ export default function Header() {
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                   {t("header.io.import.json")}
               </button>
+              <QrShareBox url={qrUrl}
+                label={t("header.io.qr") ?? "Scan to open"}
+                tooLargeLabel={t("header.io.qr.toolarge") ?? "Plan too large for a QR code"}
+                enlargeLabel={t("header.io.qr.enlarge") ?? "tap to enlarge"}
+                scanLabel={t("header.io.qr.scan") ?? "Scan to open this plan"}
+                closeLabel={t("header.io.qr.close") ?? "Close"} />
             </div>
           )}
         </div>
