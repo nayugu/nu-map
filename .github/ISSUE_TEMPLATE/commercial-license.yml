@@ -1,0 +1,86 @@
+name: Commercial licensing inquiry
+description: Ask about using NU Map in a closed-source or commercial product
+title: "[licensing] "
+labels: ["licensing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before you file:** NU Map is free under the AGPL, and most uses are
+        already covered at no cost — including running your own copy, forking it
+        for another university, and internal deployments where you publish your
+        source. See [LICENSING.md](../../blob/main/LICENSING.md).
+
+        You need a commercial license only if you're building something
+        **closed-source** on NU Map. If you're not sure, file this anyway and ask
+        — if the AGPL already covers you, we'll say so and there's nothing to pay.
+
+        Pricing is public: [COMMERCIAL.md](../../blob/main/COMMERCIAL.md).
+
+  - type: dropdown
+    id: who
+    attributes:
+      label: Who are you?
+      options:
+        - A school, district, or university
+        - A company
+        - An individual or solo developer
+        - Not sure / other
+    validations:
+      required: true
+
+  - type: textarea
+    id: use
+    attributes:
+      label: What are you building, and how does NU Map fit into it?
+      description: A couple of sentences is plenty. What's the product, and which parts of NU Map would you use?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: closed
+    attributes:
+      label: Will you be publishing the source of your version?
+      description: This is the question that decides whether you need to pay anything at all.
+      options:
+        - "No — it needs to stay closed"
+        - "Yes — happy to publish it (you likely need nothing from us)"
+        - "I don't know yet"
+    validations:
+      required: true
+
+  - type: input
+    id: band
+    attributes:
+      label: Which pricing band do you land in?
+      description: >-
+        Schools: your most recent IPEDS 12-Month Enrollment (E12) unduplicated
+        headcount, all levels — or the national equivalent. Companies and
+        individuals: gross revenue over the trailing twelve months for the product
+        containing NU Map, aggregated across your affiliates. Under $10k is the
+        free Nil Band — this form is also how you self-certify into it, and no
+        contract follows. Leave blank if you'd rather discuss it.
+      placeholder: "e.g. 31,000 students — or — under $10k TTM revenue (Nil Band)"
+
+  - type: input
+    id: contact
+    attributes:
+      label: How should we reach you?
+      description: Email, or say "reply here" to keep it in the issue thread.
+      placeholder: "reply here"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: ack
+    attributes:
+      label: Acknowledgements
+      options:
+        - label: >-
+            I understand a commercial license conveys no rights in Northeastern
+            University's course data, and no support, SLA, or warranty.
+          required: true
+        - label: >-
+            I understand the "NU Map" name and logo are not licensed, and a fork
+            or product must ship under its own name.
+          required: true

@@ -1,0 +1,70 @@
+NU Map - an unofficial degree planner for Northeastern University
+Copyright (C) 2025-2026 Nathan Gu and Matthew Gu
+
+This program is free software: you may redistribute it and/or modify it under
+the terms of the GNU Affero General Public License, version 3 only, as
+published by the Free Software Foundation, as supplemented by the additional
+term imposed under section 7(b) of that License and set out at section 4 of
+LICENSING.md.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along
+with this program, in the file LICENSE. If not, see
+<https://www.gnu.org/licenses/>.
+
+A commercial license, conferring relief from the source-disclosure obligations
+of the Affero License, is available from the copyright holders on the terms set
+out in COMMERCIAL.md.
+
+Upstream source repository: https://github.com/nayugu/nu-map
+
+======================================================================
+ATTRIBUTION NOTICE - PRESERVATION REQUIRED
+Additional term under section 7(b) of the GNU AGPL v3
+======================================================================
+
+The notice set out below must be reproduced verbatim (a) in the NOTICE file of
+any redistribution of this work or of any work derived from it, and (b) in the
+Appropriate Legal Notices displayed by any work containing it, at a prominence
+not materially less than that of the "About & disclaimer" surface of this work
+as originally published. The full terms of this requirement, including the
+consequences of non-compliance, are stated at section 4 of LICENSING.md.
+
+    Based on NU Map by Nathan Gu and Matthew Gu.
+    Source: https://github.com/nayugu/nu-map - AGPL-3.0
+
+Additional attribution of your own may be displayed in conjunction with the
+foregoing notice. The notice may not be removed, rendered illegible, relocated
+to a position at which a user would not reasonably discover it, or presented in
+a manner conveying that this work is an original creation of a party other than
+the copyright holders named above.
+
+No license is granted to the designation "NU Map", to the NU Map logo or
+iconography, or to the domains numap.app and mcp.numap.app. A derivative work
+must be distributed under a distinct name and branding. See section 5 of
+LICENSING.md.
+
+======================================================================
+THIRD-PARTY MATERIAL
+======================================================================
+
+public/coi-serviceworker.js
+    Adapted from https://github.com/gzuidhof/coi-serviceworker, licensed under
+    the MIT License.
+
+Package dependencies
+    Each governed by its own license; refer to package-lock.json.
+
+Course, program, and NUPath data
+    Factual information compiled from publicly accessible Northeastern
+    University sources (catalog.northeastern.edu, nubanner.neu.edu,
+    tableau.northeastern.edu). The scraping software and the selection and
+    arrangement of the compilation are the copyright holders'; the underlying
+    facts are not, and are not licensed by this project.
+
+NU Map is not affiliated with, authorized by, or endorsed by Northeastern
+University. Its output is advisory and is not a substitute for the advice of an
+academic advisor or for the institution's official degree-audit system.

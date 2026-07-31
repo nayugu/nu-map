@@ -2,6 +2,8 @@
   "name": "neu-course-planner",
   "version": "1.0.0",
   "private": true,
+  "license": "AGPL-3.0-only",
+  "author": "Nathan Gu and Matthew Gu",
   "type": "module",
   "scripts": {
     "dev": "node scripts/copy-ort-wasm.js && vite",

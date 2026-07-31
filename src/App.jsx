@@ -1,3 +1,7 @@
+// NU Map — Copyright (C) 2025-2026 Nathan Gu and Matthew Gu
+// SPDX-License-Identifier: AGPL-3.0-only
+// AGPL-3.0-only + attribution term under §7(b); see LICENSING.md and NOTICE.
+//
 // APP  -- composition root (hexagonal architecture)
 import { PlannerProvider, usePlanner } from './context/PlannerContext.jsx';
 import { RelevanceProvider }           from './context/RelevanceContext.jsx';

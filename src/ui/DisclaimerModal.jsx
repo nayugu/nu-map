@@ -222,6 +222,24 @@ export default function DisclaimerModal() {
               color: "var(--text-3)", cursor: "pointer",
             }}
           >{t("tour.replay")}</button>
+          {/* Appropriate Legal Notices (AGPL §13 source offer + §7(b) attribution).
+              Untranslated on purpose: proper names and an SPDX identifier. */}
+          <span style={{
+            fontSize: 9, color: "var(--text-6)", textAlign: "center",
+            lineHeight: "calc(1.5 * var(--lh-scale, 1))",
+          }}>
+            © 2025–2026 Nathan Gu &amp; Matthew Gu ·{" "}
+            <a href="https://github.com/nayugu/nu-map/blob/main/LICENSE"
+              target="_blank" rel="noreferrer"
+              style={{ color: "var(--text-5)", textDecoration: "none" }}>
+              AGPL-3.0
+            </a>{" · "}
+            <a href="https://github.com/nayugu/nu-map/blob/main/COMMERCIAL.md"
+              target="_blank" rel="noreferrer"
+              style={{ color: "var(--text-5)", textDecoration: "none" }}>
+              commercial licensing
+            </a>
+          </span>
           <span style={{ fontSize: 10, color: "var(--text-6)" }}>
             Built with{" "}
             <a href="https://www.anthropic.com/claude" target="_blank" rel="noreferrer"
