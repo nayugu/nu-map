@@ -46,7 +46,7 @@ export const strings = {
   "bank.search.empty.typing":     "検索語を入力…",
   "bank.search.empty.none":       "結果がありません",
   "bank.colors.button":           "色分け",
-  "bank.filter.title":            "フィルター",
+  "bank.filter.title":            "🔍 フィルター",
   "bank.filter.term":             "通常の開講時期",
   "bank.filter.term.info":        "「通常の開講時期」とは？",
   "bank.filter.term.explain":     "その学期が「通常」と表示されるのは、科目がカタログに初めて登場して以降の記録上、その学期の少なくとも3分の2で開講されている場合です。絶対数ではなく割合で、過去の開講パターンを反映した目安であり保証ではありません。必ず公式の授業スケジュールで確認してください。",

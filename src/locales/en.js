@@ -46,7 +46,7 @@ export const strings = {
   "bank.search.empty.typing":     "Type to search\u2026",
   "bank.search.empty.none":       "No results",
   "bank.colors.button":           "colors",
-  "bank.filter.title":            "Filters",
+  "bank.filter.title":            "🔍 FILTERS",
   "bank.filter.term":             "TYPICALLY OFFERED",
   "bank.filter.term.info":        "What does “typically offered” mean?",
   "bank.filter.term.explain":     "A season is marked typical when the course has been scheduled in it in at least two-thirds of that season's terms on record since it first appeared in the catalog. It's a proportion, not a raw count, and reflects past scheduling patterns: a guide, not a guarantee. Always confirm in the official class schedule.",

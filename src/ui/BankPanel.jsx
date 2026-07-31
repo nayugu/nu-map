@@ -373,7 +373,7 @@ export default function BankPanel() {
     return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
   }, []);
 
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [termInfoOpen, setTermInfoOpen] = useState(false);
   const [programInfoOpen, setProgramInfoOpen] = useState(false);
   const [profOpen, setProfOpen] = useState(false);

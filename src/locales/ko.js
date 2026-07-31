@@ -45,7 +45,7 @@ export const strings = {
   "bank.search.empty.typing":     "검색어를 입력하세요…",
   "bank.search.empty.none":       "결과 없음",
   "bank.colors.button":           "색상",
-  "bank.filter.title":            "필터",
+  "bank.filter.title":            "🔍 필터",
   "bank.filter.term":             "일반 개설 시기",
   "bank.filter.term.info":        "‘일반 개설 시기’란?",
   "bank.filter.term.explain":     "어떤 계절은 해당 코스가 카탈로그에 처음 등장한 이후 기록된 그 계절 학기 중 최소 3분의 2에서 개설되었을 때 일반으로 표시됩니다. 절대 수치가 아니라 비율이며, 과거 개설 패턴을 반영한 참고용으로 보장이 아닙니다. 항상 공식 수업 시간표에서 확인하세요.",

@@ -45,7 +45,7 @@ export const strings = {
   "bank.search.empty.typing":     "Escribe para buscar…",
   "bank.search.empty.none":       "Sin resultados",
   "bank.colors.button":           "colores",
-  "bank.filter.title":            "Filtros",
+  "bank.filter.title":            "🔍 FILTROS",
   "bank.filter.term":             "SE OFRECE NORMALMENTE",
   "bank.filter.term.info":        "¿Qué significa «se ofrece normalmente»?",
   "bank.filter.term.explain":     "Una temporada se marca como habitual cuando el curso se ha programado en ella en al menos dos tercios de los periodos de esa temporada registrados desde que apareció por primera vez en el catálogo. Es una proporción, no un recuento absoluto, y refleja patrones de programación pasados: una guía, no una garantía. Confirma siempre en el horario oficial de clases.",

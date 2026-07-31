@@ -45,7 +45,7 @@ export const strings = {
   "bank.search.empty.typing":     "Tapez pour rechercher…",
   "bank.search.empty.none":       "Aucun résultat",
   "bank.colors.button":           "couleurs",
-  "bank.filter.title":            "Filtres",
+  "bank.filter.title":            "🔍 FILTRES",
   "bank.filter.term":             "HABITUELLEMENT PROPOSÉ",
   "bank.filter.term.info":        "Que signifie « habituellement proposé » ?",
   "bank.filter.term.explain":     "Une saison est marquée comme habituelle lorsque le cours y a été programmé dans au moins deux tiers des sessions de cette saison enregistrées depuis sa première apparition au catalogue. C’est une proportion, pas un décompte absolu, et cela reflète les habitudes de planification passées : un repère, pas une garantie. Vérifiez toujours dans l’emploi du temps officiel des cours.",
