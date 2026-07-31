@@ -144,6 +144,7 @@ export const strings = {
   "info.offered.schedule":        "TYPICALLY MEETS",
   "info.prof.title":              "INSTRUCTORS",
   "info.prof.share":              "% = avg. share of students taught",
+  "info.prof.filter":             "Show courses taught by {name}",
   "info.offered.pending":         "Offered — seat data not yet available (final numbers arrive after the term ends)",
   "info.offered.async":           "Online / no set meeting time",
   "info.offered.weekdays":        "M,T,W,Th,F",

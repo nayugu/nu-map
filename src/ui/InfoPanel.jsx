@@ -512,6 +512,7 @@ const SEM_NAME_KEY = { fall: "claude.sem.fall", spring: "claude.sem.spring", sum
 function CourseInstructors({ selCourse, compact = false }) {
   const cal   = usePort(ICalendar);
   const { t } = useLanguage();
+  const { focusProfInBank } = usePlanner();
   const prof = selCourse.offering?.prof ?? {};
   const monthKey = s => (s.months?.length ? Math.min(...s.months.map(Number)) : 99);
   const rows = [...cal.getSemesterTypes()]
@@ -553,7 +554,20 @@ function CourseInstructors({ selCourse, compact = false }) {
                       opacity: 0.40 + 0.60 * Math.pow(frac, 1.4),
                       lineHeight: "calc(1.35 * var(--lh-scale, 1))",
                     }}>
-                      <span>{name}</span>
+                      {/* Clickable: tags the professor in the bank's filter
+                          (one-way add — removal lives on the chip's ✕). Same
+                          dotted-underline hover cue as the draggable code. */}
+                      <span
+                        title={t("info.prof.filter").replace("{name}", name)}
+                        onClick={e => { e.stopPropagation(); focusProfInBank(name); }}
+                        onMouseEnter={e => { e.currentTarget.style.textDecorationLine = "underline"; }}
+                        onMouseLeave={e => { e.currentTarget.style.textDecorationLine = "none"; }}
+                        style={{
+                          cursor: "pointer",
+                          textDecorationLine: "none", textDecorationStyle: "dotted",
+                          textDecorationColor: "var(--text-6)", textUnderlineOffset: 3,
+                        }}
+                      >{name}</span>
                       <span style={{ fontSize: 8, fontWeight: 600, color: "var(--text-3)", flexShrink: 0 }}>{pct}%</span>
                     </div>
                   );

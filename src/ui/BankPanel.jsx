@@ -157,6 +157,7 @@ export default function BankPanel() {
     substitutions, addSubstitution, removeSubstitution,
     studentType,
     claudePreview,
+    bankProfFocus,
   } = usePlanner();
 
   const attributeSystem = usePort(IAttributeSystem);
@@ -334,6 +335,23 @@ export default function BankPanel() {
       if (f.starred) setBankTab("starred");
     }
   }, [claudePreview?.proposalId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // InfoPanel instructor-name click: the tag is already added to bankFilters
+  // by the context — here we switch to bank mode and, if the filter section
+  // happens to be open, scroll the chip into view and flash it. The section's
+  // open/closed state is the user's; never force it.
+  const [flashProf, setFlashProf] = useState(null);
+  useEffect(() => {
+    if (!bankProfFocus) return;
+    setSideMode("bank");
+    setFlashProf(bankProfFocus.name);
+    const scroll = setTimeout(() => {
+      document.querySelector(`[data-prof-chip="${CSS.escape(bankProfFocus.name)}"]`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 350);
+    const clear = setTimeout(() => setFlashProf(null), 1600);
+    return () => { clearTimeout(scroll); clearTimeout(clear); };
+  }, [bankProfFocus?.ts]); // eslint-disable-line react-hooks/exhaustive-deps
   const wideResizing = useRef(null);
   useEffect(() => {
     const onMove = e => {
@@ -586,20 +604,25 @@ export default function BankPanel() {
                   {/* Selected professors, as removable tags — these are the filter. */}
                   {fProfs.length > 0 && (
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 4 }}>
-                      {fProfs.map(name => (
-                        <span key={name} style={{
-                          display: "inline-flex", alignItems: "center", gap: 4,
-                          fontSize: isPhone ? 6 : 9, padding: isPhone ? "2px 4px 2px 6px" : "3px 5px 3px 7px",
-                          borderRadius: 99, background: "var(--bg-surface)",
-                          border: "1px solid var(--active)", color: "var(--active)", fontWeight: 700,
-                        }}>
-                          {name}
-                          <button onClick={() => removeProf(name)} title={t("bank.filter.prof.remove")}
-                            style={{ background: "none", border: "none", color: "var(--active)", cursor: "pointer", fontSize: isPhone ? 8 : 10, lineHeight: 1, padding: 0 }}>
-                            ✕
-                          </button>
-                        </span>
-                      ))}
+                      {fProfs.map(name => {
+                        // Inverted colours while the InfoPanel-click flash is on.
+                        const flashing = flashProf === name;
+                        return (
+                          <span key={name} data-prof-chip={name} style={{
+                            display: "inline-flex", alignItems: "center", gap: 4,
+                            fontSize: isPhone ? 6 : 9, padding: isPhone ? "2px 4px 2px 6px" : "3px 5px 3px 7px",
+                            borderRadius: 99, background: flashing ? "var(--active)" : "var(--bg-surface)",
+                            border: "1px solid var(--active)", color: flashing ? "var(--bg-surface)" : "var(--active)", fontWeight: 700,
+                            transition: "background 0.35s, color 0.35s",
+                          }}>
+                            {name}
+                            <button onClick={() => removeProf(name)} title={t("bank.filter.prof.remove")}
+                              style={{ background: "none", border: "none", color: "inherit", cursor: "pointer", fontSize: isPhone ? 8 : 10, lineHeight: 1, padding: 0 }}>
+                              ✕
+                            </button>
+                          </span>
+                        );
+                      })}
                     </div>
                   )}
                   <div style={{ position: "relative" }}>

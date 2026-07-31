@@ -321,6 +321,11 @@ export function PlannerProvider({ children }) {
   //   programReq  — counts as a required course in a selected program
   //   programElec — counts as an elective/choose-from option in one
   const [bankFilters,     setBankFilters]     = useState({ terms: [], level: [], nupath: [], profs: [], programReq: false, programElec: false });
+  // One-shot signal from the InfoPanel: an instructor name was clicked, so the
+  // BankPanel should switch to bank mode and flash that professor's tag (only
+  // if the filter section is already open — its state is never forced).
+  // `ts` makes repeat clicks on the same name re-fire the consuming effect.
+  const [bankProfFocus,   setBankProfFocus]   = useState(null); // { name, ts }
   const [bankWidth,       setBankWidth]       = useState(() => window.innerWidth < 600 ? 88 : Math.min(300, Math.max(200, window.innerWidth * 0.21)));
   const [showSubjectKeys, setShowSubjectKeys] = useState(false);
   const [wideCatalog, setWideCatalog] = useState(() => { try { const v = localStorage.getItem("wide-catalog"); return v === "true"; } catch { return false; } });
@@ -2561,6 +2566,14 @@ export function PlannerProvider({ children }) {
     setHoveredSem, setHoveredZone, setHoveredCardId,
     setShowViolLines,
     setBankSearch, setBankSort, setBankTab, setBankFilters, setBankWidth, setShowSubjectKeys,
+    // Instructor-name click in the InfoPanel: tag the professor in the bank
+    // filters (one-way, no duplicates — removal stays on the chip's ✕) and
+    // ask the BankPanel to reveal + flash the chip.
+    bankProfFocus,
+    focusProfInBank: (name) => {
+      setBankFilters(f => (f.profs.includes(name) ? f : { ...f, profs: [...f.profs, name] }));
+      setBankProfFocus({ name, ts: Date.now() });
+    },
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
     showCohortSetup, setShowCohortSetup,

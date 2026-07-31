@@ -228,6 +228,7 @@ export const strings = {
   "info.offered.schedule":        "常规上课日",
   "info.prof.title":              "授课教师",
   "info.prof.share":              "% = 平均授课学生占比",
+  "info.prof.filter":             "查看 {name} 讲授的课程",
   "info.offered.pending":         "已开课 — 暂无座位数据（学期结束后提供最终数据）",
   "info.offered.async":           "在线 / 无固定时间",
   "info.offered.weekdays":        "一,二,三,四,五",

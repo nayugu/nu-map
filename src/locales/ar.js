@@ -142,6 +142,7 @@ export const strings = {
   "info.offered.schedule":        "المواعيد المعتادة",
   "info.prof.title":              "المدرّسون",
   "info.prof.share":              "٪ = متوسط حصة الطلاب الذين يدرّسهم",
+  "info.prof.filter":             "عرض المقررات التي يدرّسها {name}",
   "info.offered.pending":         "معروض — بيانات المقاعد غير متوفرة بعد (تصل الأرقام النهائية بعد انتهاء الفصل)",
   "info.offered.async":           "عبر الإنترنت / بدون وقت محدد",
   "info.offered.weekdays":        "إث,ثل,أر,خم,جم",

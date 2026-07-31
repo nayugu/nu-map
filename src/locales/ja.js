@@ -144,6 +144,7 @@ export const strings = {
   "info.offered.schedule":        "通常の開講曜日",
   "info.prof.title":              "担当教員",
   "info.prof.share":              "% = 担当した学生の平均割合",
+  "info.prof.filter":             "{name}が担当する科目を表示",
   "info.offered.pending":         "開講 — 座席データは未提供（確定値は学期終了後に反映されます）",
   "info.offered.async":           "オンライン / 時間指定なし",
   "info.offered.weekdays":        "月,火,水,木,金",
