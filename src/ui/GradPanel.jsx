@@ -521,16 +521,18 @@ function NuPathGrid({ covered, sources = {} }) {
                 fontSize: 9,
                 // Grey chrome; the emerald text alone carries "satisfied"
                 // (matches the Stats chips: colour in the type, not the frame).
+                // --success-mark, not --success: this grid keeps the vivid
+                // step in BOTH themes, so light mode reads the same mint as dark.
                 background: "var(--bg-surface)",
                 border: `1px solid ${isActive ? "var(--active)" : "var(--border-2)"}`,
-                color: sat ? "var(--success)" : "var(--text-5)",
+                color: sat ? "var(--success-mark)" : "var(--text-5)",
                 fontWeight: sat ? 700 : 400,
               }}>
               <span style={{
                 flexShrink: 0, fontWeight: 800,
                 fontSize: isPhone ? 8.5 : 9,
                 lineHeight: 1,
-                color: sat ? "var(--success)" : "var(--text-4)",
+                color: sat ? "var(--success-mark)" : "var(--text-4)",
               }}>{key}</span>
               {!isPhone && (
                 <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
