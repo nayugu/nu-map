@@ -215,7 +215,7 @@ export const strings = {
   "tour.step.6.title":  "योजनाएँ, निर्यात और साझा",
   "tour.step.6.body":   "कई योजनाएँ बनाएँ, फिर उन्हें Input/Output से साझा करें या डाउनलोड करें — PDF निर्यात सहित।",
   "tour.step.7.title":  "आपकी भाषा",
-  "tour.step.7.body":   "सेटिंग्स से NU Map को 8 भाषाओं में से किसी में भी बदलें।",
+  "tour.step.7.body":   "सेटिंग्स से NU Map को {n} भाषाओं में से किसी में भी बदलें।",
   "tour.done":          "पूर्ण",
   "tour.wrap.title":    "सब तैयार है",
   "tour.wrap.body":     "आपका प्लानर तैयार है — अपना शेड्यूल बनाना शुरू करें।",

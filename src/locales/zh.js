@@ -169,7 +169,7 @@ export const strings = {
   "tour.step.6.title":  "\u8ba1\u5212\u3001\u5bfc\u51fa\u4e0e\u5206\u4eab",
   "tour.step.6.body":   "\u521b\u5efa\u591a\u4e2a\u8ba1\u5212\uff0c\u5e76\u901a\u8fc7 Input/Output \u5206\u4eab\u6216\u4e0b\u8f7d\u2014\u2014\u5305\u62ec\u5bfc\u51fa PDF \u7248\u672c\u3002",
   "tour.step.7.title":  "你的语言",
-  "tour.step.7.body":   "在设置中将 NU Map 切换为 8 种语言中的任意一种。",
+  "tour.step.7.body":   "在设置中将 NU Map 切换为 {n} 种语言中的任意一种。",
   "tour.done":          "\u5b8c\u6210",
   "tour.wrap.title":    "\u4e00\u5207\u5c31\u7eea",
   "tour.wrap.body":     "\u4f60\u7684\u89c4\u5212\u5668\u5df2\u5c31\u7eea\u2014\u2014\u5f00\u59cb\u5b89\u6392\u4f60\u7684\u8bfe\u8868\u5427\u3002",
