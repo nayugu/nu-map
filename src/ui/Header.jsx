@@ -124,6 +124,30 @@ export default function Header() {
   }, []);
   const iconOnly = headerRowW < HEADER_FOLD_BP;
 
+  // Phone: give the plan-name button exactly the width its fixed neighbours
+  // leave over (SH badges on the left, Group 2 controls on the right — whose
+  // width varies live: Claude dot appears when linked, buttons fold to
+  // icon-only). Flex-wrap decides line breaks from CONTENT width, not
+  // shrunk width, so without this cap a long name forces Group 2 to wrap
+  // under even though the name could truncate. The wrap remains the
+  // fallback once even a minimal name (48px) can't fit.
+  const group2Ref   = useRef(null);
+  const shBadgesRef = useRef(null);
+  const [planNameMax, setPlanNameMax] = useState(70);
+  useEffect(() => {
+    if (!isPhone || typeof ResizeObserver === "undefined") return;
+    const compute = () => {
+      const row = headerRowRef.current, g2 = group2Ref.current, b = shBadgesRef.current;
+      if (!row || !g2 || !b) return;
+      const free = row.clientWidth - g2.offsetWidth - b.offsetWidth - 14; // flex gaps + safety
+      setPlanNameMax(Math.max(48, Math.floor(free)));
+    };
+    compute();
+    const ro = new ResizeObserver(compute);
+    [headerRowRef.current, group2Ref.current, shBadgesRef.current].forEach(el => el && ro.observe(el));
+    return () => ro.disconnect();
+  }, [isPhone]);
+
   // Phone: the header buttons sit in a tight row, so a dropdown anchored to a
   // button's edge (right: 0 / left: 0) can spill off-screen. On phone we instead
   // pin every button popover as a viewport-centred sheet just below the header.
@@ -592,13 +616,16 @@ export default function Header() {
                marginRight:auto pushes Group 2 to the far right on a single line;
                when the row is too narrow, Group 2 wraps beneath as a whole. ── */}
           <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", minWidth: 0, marginRight: "auto" }}>
-          {/* SH badges — left side */}
+          {/* SH badges — left side (wrapped so the phone plan-name cap can
+              measure their live width — the numbers and locale change it) */}
+          <div ref={shBadgesRef} style={{ display: "flex", gap: 4, alignItems: "center", flexShrink: 0 }}>
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--success)", background: "var(--bg-surface)", border: "1px solid var(--success-border)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
             {t("header.credits.done", { n: totalSHDone, unit: unitName })}
           </span>
           <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-3)", background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 4, flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 4px" } : { height: 22, padding: "0 7px" }) }}>
             {t("header.credits.placed", { n: totalSHPlaced, unit: unitName })}
           </span>
+          </div>
 
           {/* Buttons — right side, icon-only on mobile/tablet */}
         
@@ -606,7 +633,7 @@ export default function Header() {
         <div style={{ position: "relative", minWidth: 0, flexShrink: 1 }}>
           <button className="hdr-btn" onClick={e => { e.stopPropagation(); setShowPlanMenu(v => !v); }}
             data-claude-focus="planName"
-            style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? 70 : 160,
+            style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? planNameMax : 160,
               overflow: "hidden",
               // A pending RENAME_PLAN proposal marks the plan button orange.
               color: claudePreview?.changed?.has?.("planName") ? "#fb923c" : showPlanMenu ? "var(--text-2)" : "var(--text-4)",
@@ -741,7 +768,7 @@ export default function Header() {
           {/* ── Group 2: Claude dot · I/O · settings · cohort · stats · about.
                A nowrap unit so these controls wrap together beneath Group 1
                when narrow, then fold to icon-only via `iconOnly`. ── */}
-          <div style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", flexShrink: 0 }}>
+          <div ref={group2Ref} style={{ display: "flex", gap: 4, alignItems: "center", flexWrap: "nowrap", flexShrink: 0 }}>
 
         {/* Claude liveness dot — invisible unless the user has linked Claude */}
         <ClaudeDot />
