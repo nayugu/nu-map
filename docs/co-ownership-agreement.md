@@ -11,10 +11,11 @@ under the AGPL and under commercial licences alike. Past and future work. Each
 grant is in consideration of the other, so no payment between us is needed. It
 survives either of us stopping work, or falling out.
 
-**3.** Of what a commercial licence pays out, **Nathan gets 65% and Matthew gets
-35%**. Nathan's share is larger because he pays for the domains and
-infrastructure and carries the ongoing upkeep. Either of us can propose a
-different number any time; it changes if we both agree.
+**3.** Of what NU Map brings in — commercial licences and donations alike, net of
+what the payment processor takes — **Nathan gets 65% and Matthew gets 35%**.
+Nathan's share is larger because he pays for the domains and infrastructure and
+carries the ongoing upkeep. Either of us can propose a different number any time;
+it changes if we both agree.
 
 **4.** Either of us can sign a commercial licence alone, and tells the other
 after. Neither of us grants an exclusive licence, assigns our copyright, or moves
@@ -28,5 +29,16 @@ NU Map off AGPL-3.0 without the other agreeing.
 
 **Matthew Gu** Matthew Gu  Date July 31, 2026
 
-*Not written by a lawyer. Fill in §3, both sign, then remove the status banner
-from `COMMERCIAL.md`.*
+### Amendments
+
+Recorded here rather than by silently rewriting signed terms, so it stays clear
+what each of us agreed to and when.
+
+**A1 — §3 extended to donations.** As originally signed, §3 covered commercial
+licences only. It now reads "commercial licences and donations alike, net of what
+the payment processor takes," so the 65/35 applies to donation income too.
+*Proposed by Nathan. Agreed by Matthew: pending — his commit to this file closes
+it.*
+
+*Not written by a lawyer. Change the split in §3 or the signing rule in §4 by
+editing this file and both committing to it.*
