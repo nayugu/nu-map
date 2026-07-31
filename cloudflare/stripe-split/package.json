@@ -1,0 +1,12 @@
+{
+  "name": "numap-stripe-split",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "description": "Splits NU Map revenue between the authors per §3 of the co-ownership agreement.",
+  "scripts": {
+    "test": "node --test test/split.test.mjs",
+    "deploy": "wrangler deploy"
+  }
+}

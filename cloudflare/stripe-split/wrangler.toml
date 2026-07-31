@@ -1,0 +1,33 @@
+# NU Map — automatic author revenue split (Stripe webhook).
+#
+# Deliberately its own worker, not part of numap-mcp: this is the only code in
+# the project that can move money, so it gets its own credential, its own
+# deploy, and its own blast radius. Nothing here touches plan data.
+#
+# Deploy:
+#   cd cloudflare/stripe-split
+#   npx wrangler secret put STRIPE_SECRET_KEY      # restricted key, see README
+#   npx wrangler secret put STRIPE_WEBHOOK_SECRET  # from the Stripe webhook UI
+#   npx wrangler deploy
+#
+# Then in Stripe → Developers → Webhooks, point an endpoint at the deployed
+# URL + /stripe/webhook and subscribe to charge.succeeded and charge.refunded.
+
+name = "numap-stripe-split"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+
+[vars]
+# Matthew's Express connected account. Not a secret — it is an identifier, and
+# holding it does not authorise anything.
+CONNECTED_ACCOUNT_ID = "acct_REPLACE_ME"
+
+# The recipient's share, in basis points. 3500 = 35%, per §3 of
+# docs/co-ownership-agreement.md. Changing the split is a config change here
+# plus an amendment there — keep the two in step.
+SHARE_BPS = "3500"
+
+# Refuse to transfer more than this in one go (minor units, so 50000 = $500).
+# A sanity bound: donations are small, and a bug that computes a huge share
+# should fail loudly rather than move money.
+MAX_TRANSFER_MINOR = "50000"
