@@ -37,9 +37,9 @@ const dark = {
   '--success-bg':           '#0d2a17',
   '--success-border':       '#1a4a25',
   '--success-deep':         '#2a7a3a',
-  '--success-bar':          '#34d399',   // progress-bar fill (light desaturates fills only)
+  '--success-bar':          '#36d385',   // progress-bar fill (hue nudged greener than the emerald text — 160°→150°)
   '--planned-bar':          '#58a6ff',   // planned progress-bar fill (BNSC blue)
-  '--success-bar-partial':  '#3f9e79',   // in-progress section bar (muted emerald, reads under the sat bar)
+  '--success-bar-partial':  '#3f9e6b',   // in-progress section bar (muted green, reads under the sat bar)
 
   // ── Status: active / current ─────────────────────────────────────
   '--active':            '#58a6ff',
@@ -148,10 +148,11 @@ const light = {
   '--success-border':       '#4ade80',   // vivid lime accent
   '--success-deep':         '#14532d',   // deepest for left-bar / done row
   // Bar fills: saturation PINNED, lightness raised (the design language's
-  // lighten rule) — candy-bright tints of the exact status hues.
-  '--success-bar':          '#71e0bb',   // emerald tint, full chroma
+  // lighten rule) — candy-bright tints of the status hues, green nudged
+  // 160°→150° so the bar doesn't read blue-ish.
+  '--success-bar':          '#71e0a8',   // green tint, full chroma
   '--planned-bar':          '#85bcff',   // BNSC-blue tint, full chroma
-  '--success-bar-partial':  '#98e1c9',   // in-progress section bar (lighter emerald tint, reads under the sat bar)
+  '--success-bar-partial':  '#98e1bd',   // in-progress section bar (lighter green tint, reads under the sat bar)
 
   // ── Status: active / current ──────────────────────────────────────
   '--active':            '#2563eb',   // vivid blue
