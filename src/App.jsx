@@ -15,7 +15,8 @@ import GraduationRow   from './ui/GraduationRow.jsx';
 import BankPanel       from './ui/BankPanel.jsx';
 import InfoPanel       from './ui/InfoPanel.jsx';
 import DisclaimerModal  from './ui/DisclaimerModal.jsx';
-import CohortSetupModal from './ui/CohortSetupModal.jsx';
+import OnboardingModal  from './ui/OnboardingModal.jsx';
+import FeatureTour       from './ui/FeatureTour.jsx';
 import StatsPanel       from './ui/StatsPanel.jsx';
 import PalettePanel     from './ui/PalettePanel.jsx';
 import MigrationBanner  from './ui/MigrationBanner.jsx';
@@ -105,7 +106,8 @@ function PlannerApp() {
       </div>
       {/* Rendered outside the scaled container so it's unaffected by zoom */}
       <DisclaimerModal />
-      <CohortSetupModal />
+      <OnboardingModal />
+      <FeatureTour />
       <StatsPanel />
       <MigrationBanner />
       {/* {import.meta.env.DEV && <DevClockPanel />} */}
