@@ -674,7 +674,7 @@ export default function Header() {
         
         {/* Plan switcher dropdown */}
         <div style={{ position: "relative", minWidth: 0, flexShrink: 1 }}>
-          <button className="hdr-btn" onClick={e => { e.stopPropagation(); toggleHeaderPop(showPlanMenu, setShowPlanMenu); }}
+          <button className="hdr-btn" onClick={e => { e.stopPropagation(); openPhonePop(); toggleHeaderPop(showPlanMenu, setShowPlanMenu); }}
             data-claude-focus="planName"
             style={{ fontSize: isPhone ? 8 : 10, cursor: "pointer", maxWidth: isPhone ? planNameMax : 160,
               overflow: "hidden",
@@ -701,13 +701,14 @@ export default function Header() {
           </button>
 
           {showPlanMenu && (
-            <div onClick={e => e.stopPropagation()} style={{
+            <div onClick={e => e.stopPropagation()} className="hdr-pop" style={{
               position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: isPhone ? 9500 : 100,
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 6,
               padding: "6px 0", minWidth: isPhone ? 130 : 180, maxWidth: isPhone ? "72vw" : undefined,
               boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", transformOrigin: "top left",
               fontSize: isPhone ? 9 : 11,
+              ...(phonePopFixed || {}),
             }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 8, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", padding: "3px 10px 5px", borderBottom: "1px solid var(--border-1)" }}>
                 <span>{t("header.plans.title")}</span>
