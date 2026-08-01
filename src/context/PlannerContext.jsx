@@ -33,6 +33,22 @@ import { applyChangeset as dryRunChangeset } from "../adapters/mcp/plannerAction
 
 const PlannerContext = createContext(null);
 
+// Two bars gate the Stats tab — see the "Stats tab gating" block below.
+// MIN_* is the one-time unlock: what a plan must reach before the tab is ever
+// offered. KEEP_* is the lower bar every plan is measured against afterwards,
+// so the tab tracks whether the plan you're looking at right now has enough in
+// it to chart (below ~two semesters of courses the panel says nothing), while
+// nobody has to re-earn the unlock plan by plan.
+// Only courses worth STATS_MIN_SH or more count: 1-SH labs and recitations
+// ride along with their lecture (PHYS 1151 alone drags in a lab and a
+// recitation), so counting them would let a science student clear the course
+// bar with a third fewer real classes.
+const STATS_MIN_COURSES  = 12;
+const STATS_MIN_TERMS    = 3;
+const STATS_KEEP_COURSES = 6;
+const STATS_KEEP_TERMS   = 2;
+const STATS_MIN_SH       = 3;
+
 export function PlannerProvider({ children }) {
   const { locale, setLocale, locales } = useLanguage();
   const institution    = usePort(IInstitution);
@@ -1305,6 +1321,59 @@ export function PlannerProvider({ children }) {
     }).reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
     [pvBonusSH, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
   );
+
+  // ── Stats tab gating ──────────────────────────────────────────
+  // Stats is the one header tab a newcomer gains nothing from: on an empty (or
+  // single-term) plan every chart is a blank or one lonely bar, so the button
+  // is pure confusion next to genuinely load-bearing tabs. So it's earned, in
+  // two stages:
+  //
+  //   1. UNLOCK (once, ever, across every plan) — STATS_MIN_COURSES courses
+  //      across STATS_MIN_TERMS terms. Persisted, because being made to
+  //      re-clear a 12-course bar in each new plan would read as the feature
+  //      breaking rather than as a gate.
+  //   2. SHOW (live, per plan) — the active plan itself must carry
+  //      STATS_KEEP_COURSES across STATS_KEEP_TERMS. The tab follows the plan
+  //      in front of you: a scratch plan with three courses in it has nothing
+  //      to chart, so the button steps out rather than opening an empty panel.
+  //
+  // Bulk AND spread both matter — the load chart and skyline are about shape
+  // over time, which a single stacked term doesn't have. Co-op/work terms
+  // count toward the spread. Deliberately measured on the committed plan, not
+  // the preview overlay: a Claude proposal the user hasn't accepted shouldn't
+  // move the tab in or out from under them.
+  const statsGate = useMemo(() => {
+    const placed = Object.entries(placements).filter(([id, sid]) =>
+      inTimeline(sid, SEM_INDEX) && !placedOut.has(id)
+      && (effectiveCourseMap[id]?.sh ?? 0) >= STATS_MIN_SH);
+    const terms = new Set(placed.map(([, sid]) => sid));
+    for (const data of Object.values(specialTermPl)) {
+      if (data?.semId && inTimeline(data.semId, SEM_INDEX)) terms.add(data.semId);
+    }
+    return { courses: placed.length, terms: terms.size };
+  }, [placements, specialTermPl, placedOut, effectiveCourseMap, SEM_INDEX]);
+
+  const [statsUnlocked, setStatsUnlocked] = useState(() => {
+    try { return localStorage.getItem(key("stats-unlocked")) === "true"; } catch { return false; }
+  });
+  // Latch, not an event: the unlock can land while the loading screen is still
+  // up (a returning user's plan is restored before the header mounts), so a
+  // false→true transition watched from the header would be missed entirely.
+  // The header consumes this whenever it mounts and acks it — one flash, ever.
+  const [statsJustUnlocked, setStatsJustUnlocked] = useState(false);
+  useEffect(() => {
+    if (statsUnlocked) return;
+    if (statsGate.courses < STATS_MIN_COURSES || statsGate.terms < STATS_MIN_TERMS) return;
+    setStatsUnlocked(true);
+    setStatsJustUnlocked(true);
+    try { localStorage.setItem(key("stats-unlocked"), "true"); } catch {}
+  }, [statsUnlocked, statsGate]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // What the header actually renders on. The unlock bar implies the keep bar,
+  // so the tab is always present for the plan that earned it.
+  const statsVisible = statsUnlocked
+    && statsGate.courses >= STATS_KEEP_COURSES
+    && statsGate.terms   >= STATS_KEEP_TERMS;
 
   // ── Star toggle ───────────────────────────────────────────────
   const toggleStar = id => {
@@ -2593,6 +2662,7 @@ export function PlannerProvider({ children }) {
     bankCourseIds,
     // Settings
     showDisclaimer, showSettings, showStats, setShowStats,
+    statsVisible, statsJustUnlocked, ackStatsUnlockFlash: () => setStatsJustUnlocked(false),
     showDonate, setShowDonate,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     showContLogo, setShowContLogo: updateShowContLogo,

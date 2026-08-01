@@ -55,6 +55,7 @@ export default function Header() {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
     placements, courseMap, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
     resetAll, setShowDisclaimer, setShowStats, setShowDonate,
+    statsVisible, statsJustUnlocked, ackStatsUnlockFlash,
     showSettings, setShowSettings,
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd, semOrd,
@@ -102,6 +103,50 @@ export default function Header() {
     setShowPlanMenu(false); setShowIO(false); setShowQuickSet(false); setShowSettings(false);
     if (!isOpen) setOpen(true);
   };
+  // The Stats button appears the moment the plan clears the gate (see
+  // PlannerContext). Rather than a toast, the button itself goes filled blue
+  // and fades back to a normal header button — same visual vocabulary as the
+  // "Link copied!" flash on the snapshot button, just slower, so the eye
+  // catches the new tab without anything demanding to be dismissed. Driven off
+  // the context latch (not a local false→true watch) because the unlock can
+  // land before this component ever mounts; acking it keeps the flash to one.
+  const [statsFlash, setStatsFlash] = useState(false);
+  const statsFlashTimer = useRef(null);
+  const statsPillFired  = useRef(false);
+  const statsTextTimer  = useRef(null);
+  useEffect(() => () => { clearTimeout(statsFlashTimer.current); clearTimeout(statsTextTimer.current); }, []);
+  useEffect(() => {
+    if (!statsJustUnlocked) return;
+    statsPillFired.current = true;
+    setStatsFlash(true);
+    // Acking flips the latch back, re-running this effect — so the fade timer
+    // lives in a ref rather than in the effect's cleanup, which that re-run
+    // would otherwise cancel, leaving the button stuck blue.
+    ackStatsUnlockFlash();
+    clearTimeout(statsFlashTimer.current);
+    statsFlashTimer.current = setTimeout(() => setStatsFlash(false), 1200);
+  }, [statsJustUnlocked]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Every LATER appearance — an already-unlocked user opening or filling out a
+  // plan that clears the keep bar — gets the quiet version: the label and glyph
+  // tint blue and fade back, leaving the pill alone. The loud filled flash is
+  // reserved for the one-time unlock, so a tab coming back isn't dressed up as
+  // something new. Mount-time visibility is not an appearance (the ref starts
+  // at whatever was already on screen), so a plain page load stays silent.
+  const [statsTextFlash, setStatsTextFlash] = useState(false);
+  const statsWasVisible = useRef(statsVisible);
+  useEffect(() => {
+    const was = statsWasVisible.current;
+    statsWasVisible.current = statsVisible;
+    if (!statsVisible || was) return;
+    // Effects run in declaration order, so the unlock above has already
+    // claimed this appearance by the time we get here — don't double-flash it.
+    if (statsPillFired.current) { statsPillFired.current = false; return; }
+    setStatsTextFlash(true);
+    clearTimeout(statsTextTimer.current);
+    statsTextTimer.current = setTimeout(() => setStatsTextFlash(false), 1200);
+  }, [statsVisible]);
+
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [shareLinkLocale, setShareLinkLocale] = useState(locale);
   const [planSearch, setPlanSearch] = useState("");
@@ -1326,13 +1371,19 @@ export default function Header() {
           )}
         </div>
 
-        {/* Stats button — plan insights overlay. Present on every device. */}
+        {/* Stats button — plan insights overlay. Unlike its neighbours this one
+            is earned, not permanent: on every device it's absent until the user
+            has built a real plan, and thereafter rides along with whichever
+            plan is open (statsVisible, gated in PlannerContext). Flashes blue
+            the first time it's ever unlocked. */}
+        {statsVisible && (
         <button
           className="hdr-btn"
           onClick={e => { e.stopPropagation(); setShowStats(true); }}
           title={t("stats.button.title")}
-          style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, whiteSpace: "nowrap", ...(iconOnly ? { width: isPhone ? 22 : 26, height: isPhone ? 20 : 22, padding: 0, justifyContent: "center" } : { height: isPhone ? 20 : 22, padding: "0 8px" }) }}
+          style={{ fontSize: isPhone ? 8 : 10, color: statsFlash ? "#fff" : statsTextFlash ? "var(--active)" : "var(--text-4)", background: statsFlash ? "var(--active)" : "var(--bg-surface-2)", border: `1px solid ${statsFlash ? "var(--active)" : "var(--border-2)"}`, borderRadius: 5, cursor: "pointer", flexShrink: 0, display: "inline-flex", alignItems: "center", lineHeight: 1, whiteSpace: "nowrap", transition: "background 0.55s ease, color 0.55s ease, border-color 0.55s ease", ...(iconOnly ? { width: isPhone ? 22 : 26, height: isPhone ? 20 : 22, padding: 0, justifyContent: "center" } : { height: isPhone ? 20 : 22, padding: "0 8px" }) }}
         >{iconOnly ? <StatChartIcon /> : <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}><StatChartIcon />{t("stats.button")}</span>}</button>
+        )}
 
         {/* About button */}
         <button
