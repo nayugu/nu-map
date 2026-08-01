@@ -19,4 +19,8 @@ if (!applyMigrationIfPresent()) {
       <App />
     </StrictMode>
   );
+  // Tell the boot-failure recovery in index.html the bundle loaded and ran, so
+  // it won't reload the page. Reaching this line means the module executed —
+  // exactly the failure (a 404'd/HTML-served bundle) that recovery guards against.
+  window.__numapBooted?.();
 }
