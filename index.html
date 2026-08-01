@@ -106,7 +106,40 @@
         document.documentElement.style.colorScheme = theme;
       })();
     </script>
-    <script type="module" crossorigin src="./assets/index-bLoIx3rf.js"></script>
+    <script>
+      // Boot-failure recovery. The app is a single hashed module bundle; if a
+      // stale index.html slips past the cache headers and points at a chunk a
+      // newer deploy deleted, the SPA fallback serves the HTML shell in its
+      // place, the browser refuses to run HTML as a module, and the page sits
+      // frozen. main.jsx calls window.__numapBooted() once the bundle executes;
+      // if that never happens, reload ONCE to pull the current shell. Guarded by
+      // a per-session timestamp so a persistent failure can never reload-loop.
+      (function () {
+        var booted = false;
+        window.__numapBooted = function () {
+          booted = true;
+          try { sessionStorage.removeItem('numap-boot-retry'); } catch (e) {}
+        };
+        function recover() {
+          if (booted) return;
+          var now = Date.now(), last = 0;
+          try { last = parseInt(sessionStorage.getItem('numap-boot-retry') || '0', 10); } catch (e) {}
+          if (now - last < 60000) return; // at most one reload per minute — never loop
+          try { sessionStorage.setItem('numap-boot-retry', String(now)); } catch (e) {}
+          window.location.reload();
+        }
+        // A module script that 404s or is served with a non-JS MIME fires a
+        // resource 'error' (target is the <script>). Runtime exceptions after
+        // the bundle loads have no SCRIPT target, so we never reload on app bugs.
+        window.addEventListener('error', function (e) {
+          var t = e && e.target;
+          if (t && t.tagName === 'SCRIPT') recover();
+        }, true);
+        // Backstop for silent failures (e.g. a blocked module with no error event).
+        setTimeout(recover, 10000);
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-CCPPTAmE.js"></script>
   </head>
   <body>
     <div id="root">
