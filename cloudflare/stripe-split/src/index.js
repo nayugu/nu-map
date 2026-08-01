@@ -138,6 +138,19 @@ async function balanceTransactionFor(env, charge) {
 }
 
 /**
+ * The transfer already created for a charge, if any.
+ *
+ * Every transfer is tagged with `transfer_group = <charge id>`, so the charge id
+ * is enough to find it again without storing any state of our own. Used both to
+ * avoid double-paying and to find what to reverse on a refund.
+ */
+async function transferForCharge(env, chargeId) {
+  const { data } = await stripe(env, "GET",
+    `/transfers?transfer_group=${encodeURIComponent(chargeId)}&limit=1`);
+  return data?.[0] ?? null;
+}
+
+/**
  * Transfer the recipient's share of a settled charge.
  *
  * Returns a short status string for the response body — useful when replaying
@@ -146,6 +159,14 @@ async function balanceTransactionFor(env, charge) {
 async function splitCharge(env, charge) {
   if (!charge?.id) return "ignored: no charge id";
   if (charge.amount === 0) return "ignored: zero-amount charge";
+
+  // Has this charge already been split? The Idempotency-Key below only protects
+  // for 24 hours, but Stripe retries a failing webhook for up to three days — so
+  // a transfer that succeeded just before the worker errored could be repeated
+  // on day two, once the key has been pruned. Checking for the transfer we would
+  // be about to create closes that window permanently. Costs one GET.
+  const prior = await transferForCharge(env, charge.id);
+  if (prior) return `ignored: already split by ${prior.id}`;
 
   // NET, not gross: §3 divides what actually arrives. The balance transaction
   // carries the settled amount and is denominated in the account's settlement
@@ -200,9 +221,7 @@ async function splitCharge(env, charge) {
 async function reverseSplit(env, charge) {
   if (!charge?.id) return "ignored: no charge id";
 
-  const { data } = await stripe(env, "GET",
-    `/transfers?transfer_group=${encodeURIComponent(charge.id)}&limit=1`);
-  const transfer = data?.[0];
+  const transfer = await transferForCharge(env, charge.id);
   if (!transfer) return "ignored: no transfer found for this charge";
 
   const refunded = charge.amount_refunded ?? 0;

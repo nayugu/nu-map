@@ -133,6 +133,27 @@ test("split › is idempotent on the charge id, so a webhook retry cannot pay tw
   assert.equal(t.idem, "numap-split:ch_1");
 });
 
+// Stripe prunes idempotency keys after 24h but retries failing webhooks for up
+// to 3 days, so the key alone does not cover a late retry. This does.
+test("split › a charge already transferred is not transferred again", async () => {
+  const r = await post(ev("charge.succeeded", charge()), {
+    transfers: [{ id: "tr_existing", amount: 340, amount_reversed: 0 }],
+  });
+  assert.equal(r.status, 200);
+  assert.match(r.body.status, /already split by tr_existing/);
+  assert.equal(transferPost(r.calls), undefined, "must not create a second transfer");
+});
+
+test("split › the duplicate check runs before any other work", async () => {
+  const r = await post(ev("charge.succeeded", charge()), {
+    transfers: [{ id: "tr_existing", amount: 340, amount_reversed: 0 }],
+  });
+  assert.equal(
+    r.calls.filter(c => c.path.startsWith("/v1/balance_transactions")).length, 0,
+    "should not even price the split for an already-split charge",
+  );
+});
+
 test("split › a share that rounds below one cent is skipped", async () => {
   // 35% of 1 cent is 0.35, which rounds to 0 — transferring 0 would error.
   const r = await post(ev("charge.succeeded", charge({ amount: 2 })), { net: 1 });
