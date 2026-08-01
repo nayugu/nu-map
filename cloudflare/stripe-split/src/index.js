@@ -43,10 +43,12 @@ const json = (data, status = 200) =>
 // in Node built-ins and this worker needs three endpoints.
 
 async function stripe(env, method, path, { body, idempotencyKey } = {}) {
-  const headers = {
-    Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
-    "Stripe-Version": "2026-06-30.basil",
-  };
+  // No Stripe-Version pin: without one, Stripe uses the account's default, which
+  // is also the version the webhook payload arrives in — so the request and the
+  // event stay consistent with each other for free. A hardcoded version here is
+  // worse than none, because a wrong string fails every call outright, and the
+  // handful of fields this worker reads have been stable for years.
+  const headers = { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` };
   if (body) headers["Content-Type"] = "application/x-www-form-urlencoded";
   if (idempotencyKey) headers["Idempotency-Key"] = idempotencyKey;
 
@@ -111,6 +113,31 @@ async function verifySignature(rawBody, header, secret) {
 // ── The split itself ────────────────────────────────────────────────
 
 /**
+ * The balance transaction for a charge — the record carrying the settled NET.
+ *
+ * `charge.succeeded` fires BEFORE Stripe attaches the balance transaction, so
+ * `charge.balance_transaction` is routinely null on the event payload. Treating
+ * that as "nothing to do" silently skips every donation, so fall back to
+ * looking the record up by source, which finds it even when the id is not yet
+ * on the charge object.
+ *
+ * If it genuinely does not exist yet, throw rather than skip: a non-2xx makes
+ * Stripe retry with backoff, and the idempotency key on the transfer makes that
+ * retry safe. Skipping would lose the payment permanently.
+ */
+async function balanceTransactionFor(env, charge) {
+  if (charge.balance_transaction) {
+    return stripe(env, "GET", `/balance_transactions/${charge.balance_transaction}`);
+  }
+  const { data } = await stripe(env, "GET",
+    `/balance_transactions?source=${encodeURIComponent(charge.id)}&limit=1`);
+  if (!data?.[0]) {
+    throw new Error(`no balance transaction for ${charge.id} yet — retrying`);
+  }
+  return data[0];
+}
+
+/**
  * Transfer the recipient's share of a settled charge.
  *
  * Returns a short status string for the response body — useful when replaying
@@ -119,12 +146,11 @@ async function verifySignature(rawBody, header, secret) {
 async function splitCharge(env, charge) {
   if (!charge?.id) return "ignored: no charge id";
   if (charge.amount === 0) return "ignored: zero-amount charge";
-  if (!charge.balance_transaction) return "ignored: charge has no balance transaction yet";
 
   // NET, not gross: §3 divides what actually arrives. The balance transaction
   // carries the settled amount and is denominated in the account's settlement
   // currency, which is also the currency the transfer must use.
-  const bt = await stripe(env, "GET", `/balance_transactions/${charge.balance_transaction}`);
+  const bt = await balanceTransactionFor(env, charge);
   const net = bt.net;
   if (!Number.isFinite(net) || net <= 0) return `ignored: net is ${net}`;
 

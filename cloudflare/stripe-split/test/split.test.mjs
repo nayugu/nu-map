@@ -35,6 +35,8 @@ function installFakeStripe() {
       body, idem: init.headers?.["Idempotency-Key"],
     });
     const ok = (o) => new Response(JSON.stringify(o), { status: 200 });
+    // Lookup by source, used when the event payload has no balance_transaction.
+    if (u.pathname === "/v1/balance_transactions") return ok({ data: balanceTx ? [balanceTx] : [] });
     if (u.pathname.startsWith("/v1/balance_transactions/")) return ok(balanceTx);
     if (u.pathname === "/v1/transfers" && init.method === "POST") return ok({ id: "tr_1", amount: Number(body.amount) });
     if (u.pathname === "/v1/transfers") return ok({ data: transfersList });
@@ -54,7 +56,8 @@ async function sign(payload, secret, t = Math.floor(Date.now() / 1000)) {
 async function post(event, { secret = SECRET, t, sigOverride, env = ENV, mutate, net, transfers } = {}) {
   installFakeStripe();
   // Set after installing the fake, which resets these to their defaults.
-  if (net !== undefined) balanceTx = { net, currency: "usd" };
+  if (net === null) balanceTx = null;
+  else if (net !== undefined) balanceTx = { net, currency: "usd" };
   if (transfers !== undefined) transfersList = transfers;
   const raw = JSON.stringify(event);
   const sig = sigOverride ?? await sign(raw, secret, t);
@@ -144,10 +147,24 @@ test("split › a negative net (fees exceeded the charge) is skipped", async () 
   assert.equal(transferPost(r.calls), undefined);
 });
 
-test("split › a charge with no settled balance transaction is skipped, not crashed", async () => {
+// Stripe fires charge.succeeded before attaching the balance transaction, so
+// this is the NORMAL case for a live donation, not an edge case. Skipping it
+// would silently drop every payment.
+test("split › a null balance_transaction is looked up by source, not skipped", async () => {
   const r = await post(ev("charge.succeeded", charge({ balance_transaction: null })));
   assert.equal(r.status, 200);
-  assert.match(r.body.status, /no balance transaction/);
+  assert.equal(transferPost(r.calls).body.amount, "340", "must still transfer 35% of net");
+  assert.ok(
+    r.calls.some(c => c.path.startsWith("/v1/balance_transactions?source=ch_1")),
+    "must look the balance transaction up by source",
+  );
+});
+
+test("split › a balance transaction that truly does not exist yet retries rather than skipping", async () => {
+  const r = await post(ev("charge.succeeded", charge({ balance_transaction: null })), { net: null });
+  assert.equal(r.status, 500, "non-2xx so Stripe retries with backoff");
+  assert.match(r.body.error, /retrying/);
+  assert.equal(transferPost(r.calls), undefined);
 });
 
 test("split › a zero-amount charge is skipped", async () => {

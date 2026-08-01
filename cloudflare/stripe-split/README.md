@@ -26,22 +26,34 @@ this one can only move money to the one account named in `wrangler.toml`.
 **2. Set the connected account** in `wrangler.toml` → `CONNECTED_ACCOUNT_ID`
 (`acct_…`, from the recipient's connected account page).
 
-**3. Deploy.**
+**3. Deploy**, to get a URL to point Stripe at.
 
 ```sh
 cd cloudflare/stripe-split
-npx wrangler secret put STRIPE_SECRET_KEY       # the restricted key
-npx wrangler secret put STRIPE_WEBHOOK_SECRET   # after step 4, then redeploy
+npx wrangler secret put STRIPE_SECRET_KEY   # paste the rk_… AT THE PROMPT
 npx wrangler deploy
 ```
 
-**4. Register the webhook.** Stripe → Developers → Webhooks → *Add endpoint*:
+⚠ The secret's **name** is the literal `STRIPE_SECRET_KEY`. Running
+`wrangler secret put rk_live_…` stores the key *as the name*, and names are not
+encrypted — they show in the dashboard and in `wrangler secret list`. If that
+happens, delete the entry and roll the key; it is burned.
 
-- URL: the deployed worker URL + `/stripe/webhook`
+**4. Register the webhook.** Stripe → Developers → Webhooks → *Add destination*:
+
+- Scope: **Your account** (not connected accounts)
+- Payload style: **Snapshot** — thin payloads omit `data.object` and nothing works
 - Events: **`charge.succeeded`** and **`charge.refunded`**
+- URL: the deployed worker URL + `/stripe/webhook`
 
-Copy the signing secret it shows you into `STRIPE_WEBHOOK_SECRET`, then deploy
-again.
+Then store the signing secret it shows you:
+
+```sh
+npx wrangler secret put STRIPE_WEBHOOK_SECRET   # paste the whsec_… at the prompt
+```
+
+Secrets take effect immediately — no redeploy needed. Check with
+`npx wrangler secret list`: you should see those two names and no key material.
 
 **5. Set the recipient's payout schedule to monthly.** Transfers between Stripe
 balances are free, but each payout to their bank costs 0.25% + $0.25, and Stripe
@@ -74,6 +86,19 @@ a retry is safe, and silence is not.
 originating charge, so they settle when the charge does. Without it, transfers
 fail with "insufficient available balance" because donation money has not
 cleared.
+
+**`charge.balance_transaction` is null on the event.** Stripe fires
+`charge.succeeded` *before* attaching the balance transaction, so the id is
+routinely absent from the payload — the normal case for a live donation, not an
+edge case. The worker falls back to `/v1/balance_transactions?source=…`, which
+finds the record anyway, and throws (rather than skipping) if it genuinely is
+not there yet, so Stripe retries. Treating null as "nothing to do" silently
+skips every payment, which is what the first version of this worker did.
+
+**No API version is pinned.** Stripe then uses the account's default, which is
+also the version the webhook payload arrives in, so the request and the event
+stay consistent. A hardcoded version is worse than none: a wrong string fails
+every call outright, and the few fields read here have been stable for years.
 
 **Refunds.** The platform is liable for refunds under the Connect agreement, so
 a refund after a transfer would otherwise leave the platform absorbing the whole
