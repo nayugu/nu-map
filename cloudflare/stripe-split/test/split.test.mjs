@@ -188,6 +188,22 @@ test("split › a balance transaction that truly does not exist yet retries rath
   assert.equal(transferPost(r.calls), undefined);
 });
 
+test("split › polls for the balance transaction rather than failing the first delivery", async () => {
+  // The record appears a beat after charge.succeeded fires, so the first lookup
+  // misses on every real donation. Failing immediately would mark every
+  // delivery failed and eventually get the endpoint disabled.
+  const r = await post(ev("charge.succeeded", charge({ balance_transaction: null })), { net: null });
+  const lookups = r.calls.filter(c => c.path.startsWith("/v1/balance_transactions?source="));
+  assert.ok(lookups.length >= 5, `expected repeated lookups, got ${lookups.length}`);
+});
+
+test("split › stops polling as soon as the balance transaction appears", async () => {
+  const r = await post(ev("charge.succeeded", charge({ balance_transaction: null })));
+  const lookups = r.calls.filter(c => c.path.startsWith("/v1/balance_transactions?source="));
+  assert.equal(lookups.length, 1, "must not keep polling once found");
+  assert.equal(transferPost(r.calls).body.amount, "340");
+});
+
 test("split › a zero-amount charge is skipped", async () => {
   const r = await post(ev("charge.succeeded", charge({ amount: 0 })));
   assert.match(r.body.status, /zero-amount/);

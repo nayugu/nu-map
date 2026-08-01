@@ -129,12 +129,24 @@ async function balanceTransactionFor(env, charge) {
   if (charge.balance_transaction) {
     return stripe(env, "GET", `/balance_transactions/${charge.balance_transaction}`);
   }
-  const { data } = await stripe(env, "GET",
-    `/balance_transactions?source=${encodeURIComponent(charge.id)}&limit=1`);
-  if (!data?.[0]) {
-    throw new Error(`no balance transaction for ${charge.id} yet — retrying`);
+
+  // The record appears a beat after the event fires, not at the same instant, so
+  // the first lookup reliably misses. Wait it out rather than failing: throwing
+  // does get the delivery retried, but it would mark EVERY donation as failed,
+  // and Stripe disables endpoints with a sustained failure rate. Roughly 6.5s
+  // total, comfortably inside Stripe's delivery timeout.
+  const backoffMs = [400, 800, 1500, 1800, 2000];
+  for (let attempt = 0; ; attempt++) {
+    const { data } = await stripe(env, "GET",
+      `/balance_transactions?source=${encodeURIComponent(charge.id)}&limit=1`);
+    if (data?.[0]) return data[0];
+    if (attempt >= backoffMs.length) break;
+    await new Promise(resolve => setTimeout(resolve, backoffMs[attempt]));
   }
-  return data[0];
+
+  // Still nothing: now a retry is the right answer. The idempotency key and the
+  // duplicate check both make that safe.
+  throw new Error(`no balance transaction for ${charge.id} yet — retrying`);
 }
 
 /**
