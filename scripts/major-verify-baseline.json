@@ -1,8 +1,8 @@
 {
   "generatedAt": "2026-08-02",
   "totals": {
-    "verified": 868,
-    "partial": 141,
+    "verified": 871,
+    "partial": 138,
     "review": 8,
     "unverified": 0
   },
@@ -363,7 +363,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 1,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -498,7 +498,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -929,7 +929,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -942,7 +942,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -980,7 +980,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -1028,7 +1028,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -1053,7 +1053,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -1488,7 +1488,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -1501,7 +1501,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -1876,7 +1876,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 2,
         "planUnexplainedInSubject": 2,
         "impossibleSections": 0
@@ -1889,7 +1889,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 2,
         "planUnexplainedInSubject": 2,
         "impossibleSections": 0
@@ -1941,7 +1941,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -2058,7 +2058,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -2136,7 +2136,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -2434,7 +2434,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 6,
         "planUnexplainedInSubject": 6,
         "impossibleSections": 0
@@ -2551,7 +2551,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -2982,7 +2982,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3347,7 +3347,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -3535,7 +3535,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3548,7 +3548,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3710,7 +3710,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3723,7 +3723,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3736,7 +3736,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3749,7 +3749,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 1,
         "planUnexplainedInSubject": 1,
         "impossibleSections": 0
@@ -3762,7 +3762,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3775,7 +3775,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3788,7 +3788,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 2,
         "planUnexplainedInSubject": 1,
         "impossibleSections": 0
@@ -3801,7 +3801,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -3814,7 +3814,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -4665,7 +4665,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 6,
         "planUnexplainedInSubject": 6,
         "impossibleSections": 0
@@ -5096,7 +5096,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 1,
         "planUnexplainedInSubject": 1,
         "impossibleSections": 0
@@ -5630,7 +5630,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -5643,7 +5643,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -5863,7 +5863,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 1,
         "planUnexplainedInSubject": 1,
         "impossibleSections": 0
@@ -6639,7 +6639,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -6895,7 +6895,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -6971,7 +6971,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -7175,7 +7175,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 2,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7211,7 +7211,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 2,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7223,7 +7223,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 2,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7235,7 +7235,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7247,7 +7247,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7271,7 +7271,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7367,7 +7367,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7439,7 +7439,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7451,7 +7451,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 2,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -7668,7 +7668,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7692,7 +7692,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7764,7 +7764,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -7788,7 +7788,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -8090,7 +8090,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -8522,7 +8522,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -8534,7 +8534,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -9111,7 +9111,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -9219,7 +9219,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -9407,13 +9407,13 @@
       }
     },
     "grad-majors/2026/health-sciences/counseling_psychology_phd_(boston)": {
-      "level": "partial",
+      "level": "verified",
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 5,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -9509,7 +9509,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -9824,7 +9824,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
@@ -9940,13 +9940,13 @@
       }
     },
     "grad-majors/2026/health-sciences/school_psychology_phd_(boston)": {
-      "level": "partial",
+      "level": "verified",
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 5,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10018,7 +10018,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10042,7 +10042,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10066,7 +10066,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10102,7 +10102,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 3,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10126,7 +10126,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10144,13 +10144,13 @@
       }
     },
     "grad-majors/2026/law/poverty_law_and_economic_justice_graduate_certificate_(boston)": {
-      "level": "partial",
+      "level": "verified",
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 4,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10186,7 +10186,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10906,7 +10906,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 4,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -10918,7 +10918,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 4,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -11254,7 +11254,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 7,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -11518,7 +11518,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }
@@ -12172,7 +12172,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       }

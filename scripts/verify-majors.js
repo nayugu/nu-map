@@ -29,7 +29,13 @@ import { impossibleSectionTitles } from './lib/major-integrity.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
 const TREES     = [join(ROOT, 'src/data/majors'), join(ROOT, 'src/data/grad-majors')];
-const COURSES   = join(ROOT, 'public/northeastern/all-courses.json');
+// catalog-courses.json, NOT all-courses.json. The finding this feeds says a
+// requirement "can't be ticked off in the planner", so it must be checked
+// against the file the planner actually loads (per CLAUDE.md: the browser app,
+// the Node MCP server and the Cloudflare worker all read catalog-courses.json;
+// all-courses.json is only the scrape intermediate). Reading the intermediate
+// meant reporting CS 4991 as untickable while the app could tick it fine.
+const COURSES   = join(ROOT, 'public/northeastern/catalog-courses.json');
 const BASELINE  = join(ROOT, 'scripts/major-verify-baseline.json');
 const POLICY    = join(ROOT, 'scripts/major-verify-policy.json');
 const REPORT    = join(ROOT, 'docs/verification-report.md');

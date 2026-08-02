@@ -13,7 +13,7 @@
     "verification": {
       "level": "verified",
       "kind": "minor",
-      "score": 0.96,
+      "score": 0.98,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/health-humanities-society-minor/",
       "sourcesAvailable": [
@@ -25,7 +25,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       },
@@ -37,20 +37,6 @@
           "detail": [
             {
               "key": "noTotal"
-            }
-          ],
-          "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "HLTH 5280"
-              }
             }
           ],
           "overflow": 0

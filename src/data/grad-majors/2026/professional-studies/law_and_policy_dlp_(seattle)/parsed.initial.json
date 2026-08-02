@@ -13,7 +13,7 @@
     "verification": {
       "level": "partial",
       "kind": "grad",
-      "score": 0.7,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/doctoral-degree-programs/law-and-policy-dlp-sea/",
       "sourcesAvailable": [
@@ -25,7 +25,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 4,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       },
@@ -37,38 +37,6 @@
           "detail": [
             {
               "key": "noTotal"
-            }
-          ],
-          "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "medium",
-          "message": "4 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "LWP 6402"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "LWP 6420"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "LWP 6423"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "LWP 6500"
-              }
             }
           ],
           "overflow": 0

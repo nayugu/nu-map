@@ -1,7 +1,7 @@
 {
   "name": "School Psychology, PhD (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
@@ -11,9 +11,9 @@
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/school-psychology-phd/",
     "planOfStudyCourses": [],
     "verification": {
-      "level": "partial",
+      "level": "verified",
       "kind": "grad",
-      "score": 0.85,
+      "score": 1,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/school-psychology-phd/",
       "sourcesAvailable": [
@@ -26,50 +26,11 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 5,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       },
-      "discrepancies": [
-        {
-          "check": "unknown-course",
-          "severity": "medium",
-          "message": "5 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "CAEP 7741"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "CAEP 7742"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "CAEP 7743"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "CAEP 7744"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "CAEP 7798"
-              }
-            }
-          ],
-          "overflow": 0
-        }
-      ]
+      "discrepancies": []
     }
   },
   "totalCreditsRequired": 97,

@@ -35,7 +35,7 @@
     "verification": {
       "level": "partial",
       "kind": "major",
-      "score": 0.83,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/public-health-cultural-anthropology-ba/",
       "sourcesAvailable": [
@@ -49,7 +49,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 1,
         "planUnexplainedInSubject": 1,
         "impossibleSections": 0
@@ -64,20 +64,6 @@
               "key": "planMissingCourse",
               "params": {
                 "course": "HSCI 2000"
-              }
-            }
-          ],
-          "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "HLTH 5280"
               }
             }
           ],

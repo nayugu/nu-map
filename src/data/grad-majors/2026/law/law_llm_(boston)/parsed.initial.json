@@ -13,7 +13,7 @@
     "verification": {
       "level": "partial",
       "kind": "grad",
-      "score": 0.83,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/law/law-llm/",
       "sourcesAvailable": [
@@ -25,7 +25,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 3,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       },
@@ -37,32 +37,6 @@
           "detail": [
             {
               "key": "noTotal"
-            }
-          ],
-          "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "3 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "LAW 7335"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "LAW 7369"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "LAW 7525"
-              }
             }
           ],
           "overflow": 0

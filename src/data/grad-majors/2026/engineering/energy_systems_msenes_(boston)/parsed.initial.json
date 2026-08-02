@@ -13,7 +13,7 @@
     "verification": {
       "level": "verified",
       "kind": "grad",
-      "score": 0.98,
+      "score": 1,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/energy-systems-msenes/",
       "sourcesAvailable": [
@@ -26,26 +26,11 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       },
-      "discrepancies": [
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "FINA 6309"
-              }
-            }
-          ],
-          "overflow": 0
-        }
-      ]
+      "discrepancies": []
     }
   },
   "totalCreditsRequired": 32,

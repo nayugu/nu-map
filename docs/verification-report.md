@@ -8,7 +8,7 @@ Generated 2026-08-02 by `npm run data:verify`.
 > the per-page PDF is the same render as the HTML. These checks confirm we
 > parsed the catalog faithfully. They cannot confirm the catalog is right.
 
-**1017 programs** — 868 verified · 141 partial · 8 review · 0 unverified
+**1017 programs** — 871 verified · 138 partial · 8 review · 0 unverified
 
 ## Findings by root cause
 
@@ -47,22 +47,6 @@ the catalog page states no total credit requirement
 - Business Administration and Criminal Justice, BS — `majors/2026/business/business_administration_and_criminal_justice_bs`
 - …and 103 more
 
-### `unknown-course` · 72 program(s) · info
-
-1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner
-
-- Design and Public Health, BS (Boston) — `majors/2026/arts-media-design/design_and_public_health_bs_(boston)`
-- Game Design and Music with Concentration in Music Technology, BS (Boston) — `majors/2026/arts-media-design/game_design_and_music_with_concentration_in_music_technology_bs_(boston)`
-- Music and Business Administration with Concentration in Music Industry, BS (Boston) — `majors/2026/arts-media-design/music_and_business_administration_with_concentration_in_music_industry_bs_(boston)`
-- Music and Communication Studies with Concentration in Music Industry, BS (Boston) — `majors/2026/arts-media-design/music_and_communication_studies_with_concentration_in_music_industry_bs_(boston)`
-- Music Industry, Minor — `majors/2026/arts-media-design/music_industry_minor`
-- Music Technology, Minor — `majors/2026/arts-media-design/music_technology_minor`
-- Music with Concentration in Music Technology, BS (Boston) — `majors/2026/arts-media-design/music_with_concentration_in_music_technology_bs_(boston)`
-- Business Administration and Public Health, BS (Boston) — `majors/2026/business/business_administration_and_public_health_bs_(boston)`
-- Business Administration and Public Health, BS (Oakland) — `majors/2026/business/business_administration_and_public_health_bs_(oakland)`
-- Computer Science and Design, BS (Boston) — `majors/2026/computer-information-science/computer_science_and_design_bs_(boston)`
-- …and 62 more
-
 ### `no-sample-plan` · 9 program(s) · medium
 
 this program publishes no sample four-year plan, so our strongest check could not run
@@ -84,3 +68,9 @@ the credit total was taken from the sample four-year plan, not from a stated req
 - Media and Screen Studies, BA (Boston) — `majors/2026/arts-media-design/media_and_screen_studies_ba_(boston)`
 - Creative Collaboration and Multidisciplinary Design, MS (Boston) — `grad-majors/2026/arts-media-design/creative_collaboration_and_multidisciplinary_design_ms_(boston)`
 - Interdisciplinary Design and Media, PhD (Boston) — `grad-majors/2026/arts-media-design/interdisciplinary_design_and_media_phd_(boston)`
+
+### `unknown-course` · 1 program(s) · info
+
+3 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner
+
+- Education, MEd (Boston) — `grad-majors/2026/professional-studies/education_med_(boston)`

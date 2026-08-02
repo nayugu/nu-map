@@ -102,7 +102,7 @@ const pretty = k => String(k).replace(/^([A-Z]+)(\d.*)$/, '$1 $2');
  */
 export const DETAIL_EN = {
   planMissingCourse: p => `${p.course} — the catalog's four-year plan includes it, but no requirement here asks for it`,
-  unknownCourse:     p => `${p.course} — required by this program, but we have no record of the course`,
+  unknownCourse:     p => `${p.course} — missing from our course list, so this requirement can't be ticked off`,
   unreadSection:     p => `"${p.section}" — this section is on the catalog page but not shown here`,
   duplicateSection:  p => `"${p.title}" appears more than once`,
   duplicateConc:     p => `"${p.title}" is listed twice — only the first can be chosen`,

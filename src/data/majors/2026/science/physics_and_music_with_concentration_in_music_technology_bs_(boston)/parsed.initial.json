@@ -59,7 +59,7 @@
     "verification": {
       "level": "review",
       "kind": "major",
-      "score": 0.58,
+      "score": 0.6,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/physics/physics-music-bs/",
       "sourcesAvailable": [
@@ -73,7 +73,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 6,
         "planUnexplainedInSubject": 6,
         "impossibleSections": 0
@@ -118,20 +118,6 @@
               "key": "planMissingCourse",
               "params": {
                 "course": "PHYS 4652"
-              }
-            }
-          ],
-          "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "MUST 5973"
               }
             }
           ],

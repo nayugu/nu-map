@@ -44,7 +44,7 @@
     "verification": {
       "level": "partial",
       "kind": "major",
-      "score": 0.83,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-design-bs-oak/",
       "sourcesAvailable": [
@@ -58,7 +58,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 2,
         "planUnexplainedInSubject": 2,
         "impossibleSections": 0
@@ -79,20 +79,6 @@
               "key": "planMissingCourse",
               "params": {
                 "course": "ARTG 2263"
-              }
-            }
-          ],
-          "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "CS 4991"
               }
             }
           ],

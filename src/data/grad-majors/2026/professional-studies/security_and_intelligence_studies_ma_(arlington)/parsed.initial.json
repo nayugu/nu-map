@@ -13,7 +13,7 @@
     "verification": {
       "level": "partial",
       "kind": "grad",
-      "score": 0.7,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/security-intelligence-studies-ma-arl/",
       "sourcesAvailable": [
@@ -25,7 +25,7 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 1,
-        "unknownCourses": 7,
+        "unknownCourses": 0,
         "planUnexplained": 0,
         "impossibleSections": 0
       },
@@ -40,50 +40,6 @@
             }
           ],
           "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "medium",
-          "message": "7 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "PJM 5000"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "PJM 5005"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "PJM 5015"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "PJM 5025"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "PJM 5135"
-              }
-            },
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "PJM 5205"
-              }
-            }
-          ],
-          "overflow": 1
         }
       ]
     }
