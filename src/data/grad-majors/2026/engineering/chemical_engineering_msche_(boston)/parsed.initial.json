@@ -2,8 +2,10 @@
   "name": "Chemical Engineering, MSChE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -74,6 +76,7 @@
       {
         "type": "SECTION",
         "title": "Biosystems Concentration",
+        "label": "Biosystems",
         "requirements": [
           {
             "type": "OR",
@@ -333,6 +336,7 @@
       {
         "type": "SECTION",
         "title": "General Principles and Applications Concentration",
+        "label": "General Principles and Applications",
         "requirements": [
           {
             "type": "COURSE",
@@ -601,6 +605,7 @@
       {
         "type": "SECTION",
         "title": "Sustainability Concentration",
+        "label": "Sustainability",
         "requirements": [
           {
             "type": "OR",

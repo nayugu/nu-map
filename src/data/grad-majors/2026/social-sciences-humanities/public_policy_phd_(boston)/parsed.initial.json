@@ -2,15 +2,17 @@
   "name": "Public Policy, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 12,
+    "tablesConsumed": 12
   },
   "totalCreditsRequired": 55,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -38,7 +40,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research and Statistical Methods (Core Requirements)",
+      "title": "Research and Statistical Methods",
       "requirements": [
         {
           "type": "COURSE",
@@ -60,7 +62,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Advanced Methods (Core Requirements)",
+      "title": "Advanced Methods",
       "requirements": [
         {
           "type": "OR",
@@ -99,7 +101,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Exam Prep (Exam and Dissertation)",
+      "title": "Exam Prep",
       "requirements": [
         {
           "type": "OR",
@@ -116,7 +118,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation (Exam and Dissertation)",
+      "title": "Dissertation",
       "requirements": [
         {
           "type": "OR",
@@ -138,7 +140,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Exam and Dissertation)",
+      "title": "Dissertation Continuation",
       "requirements": [
         {
           "type": "OR",
@@ -155,7 +157,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -183,7 +185,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research and Statistical Methods (Core Requirements)",
+      "title": "Research and Statistical Methods (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -201,11 +203,12 @@
           "classId": 7400
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Advanced Methods (Core Requirements)",
+      "title": "Advanced Methods (2)",
       "requirements": [
         {
           "type": "OR",
@@ -232,7 +235,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Experiential Research Residency",
+      "title": "Experiential Research Residency (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -240,11 +243,12 @@
           "classId": 9980
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Exam Prep (Exam and Dissertation)",
+      "title": "Exam Prep (2)",
       "requirements": [
         {
           "type": "OR",
@@ -257,11 +261,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation (Exam and Dissertation)",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -283,7 +288,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Exam and Dissertation)",
+      "title": "Dissertation Continuation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -296,7 +301,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ],
   "concentrations": {
@@ -541,7 +547,8 @@
       },
       {
         "type": "SECTION",
-        "title": "Health Policy and Management Concentration",
+        "title": "Health Policy and Management Concentration (2)",
+        "label": "Health Policy and Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -622,7 +629,8 @@
       },
       {
         "type": "SECTION",
-        "title": "Sustainability and Resilience Concentration",
+        "title": "Sustainability and Resilience Concentration (2)",
+        "label": "Sustainability and Resilience",
         "requirements": [
           {
             "type": "COURSE",
@@ -690,7 +698,8 @@
       },
       {
         "type": "SECTION",
-        "title": "Urban and Regional Policy Concentration",
+        "title": "Urban and Regional Policy Concentration (2)",
+        "label": "Urban and Regional Policy",
         "requirements": [
           {
             "type": "COURSE",

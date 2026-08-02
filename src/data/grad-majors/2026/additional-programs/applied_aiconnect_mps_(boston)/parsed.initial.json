@@ -2,8 +2,10 @@
   "name": "Applied AI—Connect, MPS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 43,
   "yearVersion": 2026,
@@ -139,6 +141,7 @@
       {
         "type": "SECTION",
         "title": "AI for 3D Imaging Concentration",
+        "label": "AI for 3D Imaging",
         "requirements": [
           {
             "type": "COURSE",
@@ -201,6 +204,7 @@
       {
         "type": "SECTION",
         "title": "Conversational AI and Chatbots Concentration",
+        "label": "Conversational AI and Chatbots",
         "requirements": [
           {
             "type": "COURSE",
@@ -264,6 +268,7 @@
       {
         "type": "SECTION",
         "title": "Machine Learning for Cybersecurity Concentration",
+        "label": "Machine Learning for Cybersecurity",
         "requirements": [
           {
             "type": "COURSE",

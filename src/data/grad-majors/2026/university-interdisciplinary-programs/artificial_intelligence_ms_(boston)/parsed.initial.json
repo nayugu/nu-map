@@ -2,8 +2,10 @@
   "name": "Artificial Intelligence, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -62,6 +64,7 @@
       {
         "type": "SECTION",
         "title": "Computer Vision Concentration",
+        "label": "Computer Vision",
         "requirements": [
           {
             "type": "XOM",
@@ -141,6 +144,7 @@
       {
         "type": "SECTION",
         "title": "Continuous Process Engineering Concentration",
+        "label": "Continuous Process Engineering",
         "requirements": [
           {
             "type": "XOM",
@@ -255,6 +259,7 @@
       {
         "type": "SECTION",
         "title": "Energy Systems Concentration",
+        "label": "Energy Systems",
         "requirements": [
           {
             "type": "XOM",
@@ -318,6 +323,7 @@
       {
         "type": "SECTION",
         "title": "Machine Learning Concentration",
+        "label": "Machine Learning",
         "requirements": [
           {
             "type": "COURSE",
@@ -392,6 +398,7 @@
       {
         "type": "SECTION",
         "title": "Robotics and Agent-Based Systems Concentration",
+        "label": "Robotics and Agent-Based Systems",
         "requirements": [
           {
             "type": "COURSE",

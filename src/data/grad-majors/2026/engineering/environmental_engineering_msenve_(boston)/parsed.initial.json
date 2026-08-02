@@ -2,8 +2,10 @@
   "name": "Environmental Engineering, MSEnvE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -58,7 +60,37 @@
     },
     {
       "type": "SECTION",
-      "title": "Course Lists",
+      "title": "Project Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives List",
       "requirements": [
         {
           "type": "OR",
@@ -127,6 +159,103 @@
               "type": "COURSE",
               "subject": "CIVE",
               "classId": 7392
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Other Electives List",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5363
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5670
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7100
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7151
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7260
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 7204
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5190
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7280
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7290
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 7241
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 7343
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 7344
             }
           ]
         }

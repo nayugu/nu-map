@@ -2,8 +2,10 @@
   "name": "Applied Machine Intelligence, MPS (Portland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -123,38 +125,143 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentrations",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "ALY",
-          "classId": 6040
-        },
-        {
-          "type": "COURSE",
-          "subject": "CED",
-          "classId": 6230
-        },
-        {
-          "type": "COURSE",
-          "subject": "EAI",
-          "classId": 6080
-        },
-        {
-          "type": "COURSE",
-          "subject": "EAI",
-          "classId": 6120
-        },
-        {
-          "type": "COURSE",
-          "subject": "ITC",
-          "classId": 6015
-        }
-      ],
-      "minRequirementCount": 5
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "AI for Business Ventures",
+        "label": "AI for Business Ventures",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6040
+          },
+          {
+            "type": "COURSE",
+            "subject": "CED",
+            "classId": 6230
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6080
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6015
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "AI for Finance",
+        "label": "AI for Finance",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6040
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6050
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6080
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "FIN",
+            "classId": 6101
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "AI for Healthcare",
+        "label": "AI for Healthcare",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6040
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6060
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6080
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6120
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "AI for Human Resources",
+        "label": "AI for Human Resources",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6040
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6070
+          },
+          {
+            "type": "COURSE",
+            "subject": "EAI",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6025
+          }
+        ],
+        "minRequirementCount": 5
+      }
+    ]
+  }
 }

@@ -2,8 +2,10 @@
   "name": "Organizational Leadership, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -47,21 +49,10 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "Electives",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "LDR",
-          "classId": 6190
-        },
-        {
-          "type": "COURSE",
-          "subject": "LDR",
-          "classId": 6195
-        },
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
+          "type": "OR",
           "courses": [
             {
               "type": "COURSE",
@@ -75,13 +66,63 @@
             },
             {
               "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6042
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6070
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6074
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6900
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
               "subject": "LDR",
               "classId": 6150
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6190
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6983
             }
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 1
     }
   ],
   "concentrations": {
@@ -89,10 +130,22 @@
     "concentrationOptions": [
       {
         "type": "SECTION",
-        "title": "Concentration or Electives",
+        "title": "Coaching",
+        "label": "Coaching",
         "requirements": [
           {
-            "type": "OR",
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6190
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6195
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
             "courses": [
               {
                 "type": "COURSE",
@@ -106,8 +159,85 @@
               },
               {
                 "type": "COURSE",
-                "subject": "CMN",
-                "classId": 6096
+                "subject": "LDR",
+                "classId": 6150
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Health Management",
+        "label": "Health Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HMG",
+            "classId": 6110
+          },
+          {
+            "type": "COURSE",
+            "subject": "HMG",
+            "classId": 6130
+          },
+          {
+            "type": "COURSE",
+            "subject": "HMG",
+            "classId": 6140
+          },
+          {
+            "type": "COURSE",
+            "subject": "HMG",
+            "classId": 6160
+          },
+          {
+            "type": "COURSE",
+            "subject": "HMG",
+            "classId": 6170
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Human Resources Management",
+        "label": "Human Resources Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6015
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6025
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6005
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6010
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6020
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6030
               },
               {
                 "type": "COURSE",
@@ -117,52 +247,281 @@
               {
                 "type": "COURSE",
                 "subject": "HRM",
-                "classId": 6070
+                "classId": 6047
               },
               {
                 "type": "COURSE",
                 "subject": "HRM",
-                "classId": 6074
+                "classId": 6060
               },
               {
                 "type": "COURSE",
-                "subject": "INT",
-                "classId": 6900
+                "subject": "HRM",
+                "classId": 6070
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Leading and Managing Technical Projects",
+        "label": "Leading and Managing Technical Projects",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 5900
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6205
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6210
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6215
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6810
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Organizational Communication",
+        "label": "Organizational Communication",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6000
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6020
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6050
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6090
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6110
+          },
+          {
+            "type": "COURSE",
+            "subject": "INT",
+            "classId": 6000
+          }
+        ],
+        "minRequirementCount": 6
+      },
+      {
+        "type": "SECTION",
+        "title": "Project Management",
+        "label": "Project Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 5900
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6005
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6015
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6025
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "INT",
+                    "classId": 6940
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "INT",
+                    "classId": 6943
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6075
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6125
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6140
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6145
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6175
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6180
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6205
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6210
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6215
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6710
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PJM",
+                    "classId": 6983
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Sales Management",
+        "label": "Sales Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "SMT",
+            "classId": 6010
+          },
+          {
+            "type": "COURSE",
+            "subject": "SMT",
+            "classId": 6020
+          },
+          {
+            "type": "COURSE",
+            "subject": "SMT",
+            "classId": 6060
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 6,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6040
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6045
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6060
+              },
+              {
+                "type": "COURSE",
+                "subject": "EAI",
+                "classId": 6020
               },
               {
                 "type": "COURSE",
                 "subject": "LDR",
-                "classId": 6101
+                "classId": 6110
               },
               {
                 "type": "COURSE",
                 "subject": "LDR",
-                "classId": 6140
+                "classId": 6135
               },
               {
                 "type": "COURSE",
-                "subject": "LDR",
-                "classId": 6145
+                "subject": "PJM",
+                "classId": 5900
               },
               {
                 "type": "COURSE",
-                "subject": "LDR",
-                "classId": 6150
+                "subject": "PJM",
+                "classId": 6210
               },
               {
                 "type": "COURSE",
-                "subject": "LDR",
-                "classId": 6190
+                "subject": "PJM",
+                "classId": 6185
               },
               {
                 "type": "COURSE",
-                "subject": "LDR",
+                "subject": "SMT",
                 "classId": 6983
               }
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 5
       }
     ]
   }

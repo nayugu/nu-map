@@ -2,8 +2,10 @@
   "name": "Digital Media, MPS (Vancouver)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -120,7 +122,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Concentrations",
+      "title": "Digital Media Management",
       "requirements": [
         {
           "type": "COURSE",
@@ -149,6 +151,55 @@
         }
       ],
       "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6285
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 15,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6040
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6045
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6065
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6290
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6525
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6550
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
     }
   ]
 }

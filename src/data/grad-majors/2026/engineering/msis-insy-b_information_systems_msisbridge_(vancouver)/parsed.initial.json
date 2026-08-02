@@ -2,8 +2,10 @@
   "name": "MSIS-INSY-B : Information Systems, MSIS—Bridge (Vancouver)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 40,
   "yearVersion": 2026,
@@ -49,12 +51,24 @@
     },
     {
       "type": "SECTION",
-      "title": "Project or Thesis Options",
+      "title": "Project Option",
       "requirements": [
         {
           "type": "COURSE",
           "subject": "INFO",
           "classId": 7976
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7990
         }
       ],
       "minRequirementCount": 1

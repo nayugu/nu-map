@@ -2,8 +2,10 @@
   "name": "Architectural Engineering, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -47,7 +49,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Electives",
+      "title": "Architecture Electives",
       "requirements": [
         {
           "type": "OR",
@@ -101,6 +103,119 @@
               "type": "COURSE",
               "subject": "LARC",
               "classId": 2240
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Engineering Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2320
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2321
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2324
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3425
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5281
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5363
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5520
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5522
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5524
+            },
+            {
+              "type": "COURSE",
+              "subject": "SBSY",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "SBSY",
+              "classId": 5200
+            },
+            {
+              "type": "COURSE",
+              "subject": "SBSY",
+              "classId": 5250
+            },
+            {
+              "type": "COURSE",
+              "subject": "SBSY",
+              "classId": 5300
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 2341
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4542
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5275
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 3300
             }
           ]
         }

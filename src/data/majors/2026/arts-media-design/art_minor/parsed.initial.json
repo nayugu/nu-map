@@ -2,15 +2,17 @@
   "name": "Art, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Required Courses (Requirements for Non–Art + Design Majors)",
+      "title": "Required Courses",
       "requirements": [
         {
           "type": "COURSE",
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Elective Courses (Requirements for Non–Art + Design Majors)",
+      "title": "Elective Courses",
       "requirements": [
         {
           "type": "XOM",
@@ -265,7 +267,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Courses (Requirements for Art + Design Majors)",
+      "title": "Required Courses (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -283,7 +285,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Elective Courses (Requirements for Art + Design Majors)",
+      "title": "Elective Courses (2)",
       "requirements": [
         {
           "type": "XOM",

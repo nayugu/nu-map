@@ -2,8 +2,10 @@
   "name": "Applied Quantitative Methods and Social Analysis, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -55,6 +57,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Computational Social Science",
+        "label": "Computational Social Science",
         "requirements": [
           {
             "type": "COURSE",
@@ -107,6 +110,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Data Analytics in the Social Sciences",
+        "label": "Data Analytics in the Social Sciences",
         "requirements": [
           {
             "type": "OR",
@@ -139,6 +143,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Information Ethics for Social Analysis",
+        "label": "Information Ethics for Social Analysis",
         "requirements": [
           {
             "type": "COURSE",
@@ -176,6 +181,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Machine Learning and Econometrics",
+        "label": "Machine Learning and Econometrics",
         "requirements": [
           {
             "type": "COURSE",
@@ -198,6 +204,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Network Analysis in the Social Sciences",
+        "label": "Network Analysis in the Social Sciences",
         "requirements": [
           {
             "type": "COURSE",
@@ -230,6 +237,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Statistical Methods in the Social Sciences",
+        "label": "Statistical Methods in the Social Sciences",
         "requirements": [
           {
             "type": "COURSE",

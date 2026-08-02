@@ -2,8 +2,10 @@
   "name": "Global Studies and International Relations, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -295,7 +297,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "Global Health and Development",
       "requirements": [
         {
           "type": "XOM",
@@ -330,6 +332,140 @@
               "type": "COURSE",
               "subject": "GST",
               "classId": 6710
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Conflict Resolution",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6324
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6326
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6327
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6360
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6740
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Diplomacy",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6600
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6540
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6550
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6560
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6590
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6740
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "International Economics and Consulting",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6102
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6220
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6430
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6580
             }
           ]
         }

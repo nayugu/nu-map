@@ -2,8 +2,10 @@
   "name": "School Psychology, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 97,
   "yearVersion": 2026,
@@ -262,7 +264,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

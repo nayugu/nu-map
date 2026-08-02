@@ -2,8 +2,10 @@
   "name": "Statistics, MS—Connect (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 39,
   "yearVersion": 2026,
@@ -118,6 +120,7 @@
       {
         "type": "SECTION",
         "title": "Biostatistics Concentration",
+        "label": "Biostatistics—Bouvé College of Health Sciences",
         "requirements": [
           {
             "type": "XOM",
@@ -161,6 +164,7 @@
       {
         "type": "SECTION",
         "title": "Statistical Machine Learning Concentration",
+        "label": "Statistical Machine Learning—Khoury College of Computer Sciences",
         "requirements": [
           {
             "type": "COURSE",
@@ -188,6 +192,7 @@
       {
         "type": "SECTION",
         "title": "Statistical Theory and Modeling Concentration",
+        "label": "Statistical Theory and Modeling—College of Science",
         "requirements": [
           {
             "type": "XOM",

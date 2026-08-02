@@ -2,8 +2,10 @@
   "name": "Urban Informatics, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 33,
   "yearVersion": 2026,
@@ -97,6 +99,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Climate and Resilience",
+        "label": "Climate and Resilience",
         "requirements": [
           {
             "type": "XOM",
@@ -192,6 +195,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Communities and Economic Development",
+        "label": "Communities and Economic Development",
         "requirements": [
           {
             "type": "XOM",
@@ -297,6 +301,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Transportation and Infrastructure",
+        "label": "Transportation and Infrastructure",
         "requirements": [
           {
             "type": "OR",
@@ -362,6 +367,80 @@
                     "classId": 7673
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "PPUA",
+            "classId": 6410
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PPUA",
+            "classId": 5266
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 6101
+              },
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 6406
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7334
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5246
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5261
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6212
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6216
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6966
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 7673
               }
             ]
           },

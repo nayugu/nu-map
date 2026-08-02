@@ -2,8 +2,10 @@
   "name": "Civil and Environmental Engineering, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 50,
   "yearVersion": 2026,
@@ -44,7 +46,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Core Requirements",
+      "title": "Core Requirements (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -52,11 +54,12 @@
           "classId": 7001
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

@@ -2,8 +2,10 @@
   "name": "Law, LLM (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 12,
+    "tablesConsumed": 12
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Foundational Courses",
+      "title": "Foundational Courses (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -45,7 +47,8 @@
           "classId": 6315
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "shared": true
     }
   ],
   "concentrations": {
@@ -182,6 +185,7 @@
       {
         "type": "SECTION",
         "title": "Health Policy and Law Concentration",
+        "label": "Health Policy and Law",
         "requirements": [
           {
             "type": "COURSE",
@@ -235,6 +239,7 @@
       {
         "type": "SECTION",
         "title": "Human Rights and Economic Development Concentration",
+        "label": "Human Rights and Economic Development",
         "requirements": [
           {
             "type": "OR",
@@ -383,6 +388,7 @@
       {
         "type": "SECTION",
         "title": "Intellectual Property and Innovation Concentration",
+        "label": "Intellectual Property and Innovation",
         "requirements": [
           {
             "type": "OR",
@@ -500,7 +506,8 @@
       },
       {
         "type": "SECTION",
-        "title": "Business and Commercial Law Concentration",
+        "title": "Business and Commercial Law Concentration (2)",
+        "label": "Business and Commercial Law",
         "requirements": [
           {
             "type": "OR",
@@ -628,7 +635,8 @@
       },
       {
         "type": "SECTION",
-        "title": "Health Policy and Law Concentration",
+        "title": "Health Policy and Law Concentration (2)",
+        "label": "Health Policy and Law",
         "requirements": [
           {
             "type": "COURSE",
@@ -681,7 +689,8 @@
       },
       {
         "type": "SECTION",
-        "title": "Human Rights and Economic Development Concentration",
+        "title": "Human Rights and Economic Development Concentration (2)",
+        "label": "Human Rights and Economic Development",
         "requirements": [
           {
             "type": "OR",
@@ -829,7 +838,8 @@
       },
       {
         "type": "SECTION",
-        "title": "Intellectual Property and Innovation Concentration",
+        "title": "Intellectual Property and Innovation Concentration (2)",
+        "label": "Intellectual Property and Innovation",
         "requirements": [
           {
             "type": "OR",

@@ -2,10 +2,12 @@
   "name": "Master of Architecture—Three-Year Program—Advanced Degree Entrance (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 10,
+    "tablesConsumed": 10
   },
-  "totalCreditsRequired": 96,
+  "totalCreditsRequired": 80,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Building, Design, and Environment (Foundation Courses)",
+      "title": "Building, Design, and Environment",
       "requirements": [
         {
           "type": "COURSE",
@@ -49,7 +51,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Building, Design, and Environment (Core Requirements)",
+      "title": "Building, Design, and Environment (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -159,6 +161,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Data Visualization",
+        "label": "Data Visualization",
         "requirements": [
           {
             "type": "AND",
@@ -206,6 +209,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Experience Design",
+        "label": "Experience Design",
         "requirements": [
           {
             "type": "COURSE",
@@ -243,6 +247,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Extended Realities",
+        "label": "Extended Realities",
         "requirements": [
           {
             "type": "COURSE",
@@ -276,6 +281,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Sustainable Building Systems",
+        "label": "Sustainable Building Systems",
         "requirements": [
           {
             "type": "COURSE",
@@ -313,6 +319,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Sustainable Urban Environments",
+        "label": "Sustainable Urban Environments",
         "requirements": [
           {
             "type": "COURSE",
@@ -361,6 +368,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Urban Analytics",
+        "label": "Urban Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -383,6 +391,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Urban Studies",
+        "label": "Urban Studies",
         "requirements": [
           {
             "type": "COURSE",

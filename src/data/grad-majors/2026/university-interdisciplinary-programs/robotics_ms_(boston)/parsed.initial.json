@@ -2,8 +2,10 @@
   "name": "Robotics, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -338,6 +340,7 @@
       {
         "type": "SECTION",
         "title": "Biomedical and Rehabilitation Robotics Concentration",
+        "label": "Biomedical and Rehabilitation Robotics",
         "requirements": [
           {
             "type": "OR",
@@ -455,6 +458,7 @@
       {
         "type": "SECTION",
         "title": "Computer Science Concentration",
+        "label": "Computer Science",
         "requirements": [
           {
             "type": "XOM",
@@ -498,6 +502,7 @@
       {
         "type": "SECTION",
         "title": "Electrical and Computer Engineering Concentration",
+        "label": "Electrical and Computer Engineering",
         "requirements": [
           {
             "type": "XOM",
@@ -576,6 +581,7 @@
       {
         "type": "SECTION",
         "title": "Mechanical Engineering Concentration",
+        "label": "Mechanical Engineering",
         "requirements": [
           {
             "type": "XOM",

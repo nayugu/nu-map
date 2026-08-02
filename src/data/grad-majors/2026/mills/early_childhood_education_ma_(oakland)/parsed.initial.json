@@ -2,8 +2,10 @@
   "name": "Early Childhood Education, MA (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -83,6 +85,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Administrative Services",
+        "label": "Administrative Services",
         "requirements": [
           {
             "type": "COURSE",
@@ -135,6 +138,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Early Childhood Special Education",
+        "label": "Early Childhood Special Education",
         "requirements": [
           {
             "type": "COURSE",
@@ -202,6 +206,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Multiple Subject Education",
+        "label": "Multiple Subject Education",
         "requirements": [
           {
             "type": "COURSE",

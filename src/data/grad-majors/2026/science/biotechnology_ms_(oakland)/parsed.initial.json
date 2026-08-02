@@ -2,8 +2,10 @@
   "name": "Biotechnology, MS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8
   },
   "totalCreditsRequired": 34,
   "yearVersion": 2026,
@@ -388,6 +390,7 @@
       {
         "type": "SECTION",
         "title": "Agricultural Biotechnology Concentration",
+        "label": "Agricultural Biotechnology",
         "requirements": [
           {
             "type": "COURSE",
@@ -421,6 +424,7 @@
       {
         "type": "SECTION",
         "title": "Biodefense Concentration",
+        "label": "Biodefense",
         "requirements": [
           {
             "type": "COURSE",
@@ -450,6 +454,129 @@
                 "type": "COURSE",
                 "subject": "PHTH",
                 "classId": 5212
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Biopharmaceutical Technologies and Analytics",
+        "label": "Biopharmaceutical Technologies and Analytics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5640
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5700
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 6320
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5910
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5930
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5850
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5225
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5550
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Biotechnology Operations",
+        "label": "Biotechnology Operations",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6320
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 6290
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5225
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5228
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 6300
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 6340
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5330
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5560
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5635
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5340
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5500
               }
             ]
           }

@@ -2,10 +2,12 @@
   "name": "Computer Science, BSCS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
-  "totalCreditsRequired": 135,
+  "totalCreditsRequired": 134,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -747,71 +749,391 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Requirement",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CS",
-          "classId": 4100
-        },
-        {
-          "type": "COURSE",
-          "subject": "DS",
-          "classId": 4400
-        },
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 4120
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 4150
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 4180
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 4220
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 4610
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 4100
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 4420
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 4440
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 3,
-      "shared": true
     }
   ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Artificial Intelligence",
+        "label": "Artificial Intelligence",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CS",
+            "classId": 4100
+          },
+          {
+            "type": "COURSE",
+            "subject": "DS",
+            "classId": 4400
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4120
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4150
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4180
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4220
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4610
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4100
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 4420
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 4440
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Foundations",
+        "label": "Foundations",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 2800
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4820
+                  }
+                ]
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4805
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4810
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 3950
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4950
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4950
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4805
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4810
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4820
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4830
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4770
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Human-Centered Computing",
+        "label": "Human-Centered Computing",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CS",
+            "classId": 2484
+          },
+          {
+            "type": "COURSE",
+            "subject": "CS",
+            "classId": 3484
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4097
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4350
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4520
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4550
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 4200
+              },
+              {
+                "type": "COURSE",
+                "subject": "HINF",
+                "classId": 5300
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Software",
+        "label": "Software",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CS",
+            "classId": 2800
+          },
+          {
+            "type": "COURSE",
+            "subject": "CS",
+            "classId": 4400
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4700
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4730
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 3520
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4410
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4520
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4550
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4700
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4730
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4820
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4830
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Systems",
+        "label": "Systems",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4700
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4730
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 3740
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4740
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 3520
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4300
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4360
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4610
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4700
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4730
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 3740
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4740
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4760
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  },
   "generalElectiveSH": 28
 }

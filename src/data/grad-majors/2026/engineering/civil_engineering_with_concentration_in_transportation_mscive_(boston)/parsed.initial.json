@@ -2,8 +2,10 @@
   "name": "Civil Engineering with Concentration in Transportation, MSCivE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -29,6 +31,36 @@
         }
       ],
       "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Report Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -69,7 +101,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "Restricted Electives List",
       "requirements": [
         {
           "type": "OR",
@@ -123,6 +155,58 @@
               "type": "COURSE",
               "subject": "IE",
               "classId": 7280
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Other Electives List",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DAMG",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7275
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7290
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 7343
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7230
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7245
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5263
             }
           ]
         }

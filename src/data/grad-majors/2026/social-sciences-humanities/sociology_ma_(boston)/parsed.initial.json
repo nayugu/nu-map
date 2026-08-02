@@ -2,8 +2,10 @@
   "name": "Sociology, MA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 30,
   "yearVersion": 2026,
@@ -68,6 +70,153 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Foundations (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 7200
+        }
+      ],
+      "minRequirementCount": 1,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6300
+        }
+      ],
+      "minRequirementCount": 1,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistical Methods (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6500
+        }
+      ],
+      "minRequirementCount": 1,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced Methods",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5301
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5302
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5304
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5602
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6302
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6406
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7300
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7400
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7500
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7600
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5262
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5263
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6509
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (2)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 14,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "SOCL",
+              "idRangeStart": 5000,
+              "idRangeEnd": 7990,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

@@ -2,8 +2,10 @@
   "name": "Professional Studies, DPS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 45,
   "yearVersion": 2026,
@@ -107,6 +109,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Organizational Leadership",
+        "label": "Organizational Leadership",
         "requirements": [
           {
             "type": "COURSE",
@@ -134,6 +137,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Project Management",
+        "label": "Project Management",
         "requirements": [
           {
             "type": "COURSE",

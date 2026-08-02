@@ -2,8 +2,10 @@
   "name": "Bioengineering, MSBioE—Connect (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8
   },
   "totalCreditsRequired": 41,
   "yearVersion": 2026,
@@ -56,6 +58,36 @@
     },
     {
       "type": "SECTION",
+      "title": "Project Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 7945
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOE",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
       "title": "Optional Co-Op Experience",
       "requirements": [
         {
@@ -93,7 +125,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "Electives",
       "requirements": [
         {
           "type": "OR",

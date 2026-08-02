@@ -2,8 +2,10 @@
   "name": "Engineering Management, MSEM (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 10,
+    "tablesConsumed": 10
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -34,6 +36,36 @@
         }
       ],
       "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Project Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 7945
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option1",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "EMGT",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -71,6 +103,356 @@
         }
       ],
       "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Course List",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CSYE",
+              "classId": 7280
+            },
+            {
+              "type": "COURSE",
+              "subject": "DAMG",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6305
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6600
+            },
+            {
+              "type": "COURSE",
+              "subject": "EMGT",
+              "classId": 6700
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGR",
+              "classId": 6010
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENSY",
+              "classId": 5000
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 5010
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 5020
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 5030
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5137
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5374
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5390
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5400
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5500
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 5617
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 5618
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6600
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6962
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7200
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7215
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7270
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7275
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7280
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7285
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7290
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7315
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7374
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7615
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 7245
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 7285
+            },
+            {
+              "type": "COURSE",
+              "subject": "INFO",
+              "classId": 7385
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 6962
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7230
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7240
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7245
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7270
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7310
+            },
+            {
+              "type": "COURSE",
+              "subject": "OR",
+              "classId": 7374
+            },
+            {
+              "type": "COURSE",
+              "subject": "TELE",
+              "classId": 5330
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives Outside the College of Engineering",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 9,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DA",
+              "classId": 5020
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6218
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6241
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6250
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENTR",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "INNO",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6211
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6213
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6221
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6223
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 6224
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -171,6 +553,7 @@
       {
         "type": "SECTION",
         "title": "Digital Product Management Concentration",
+        "label": "Digital Product Management",
         "requirements": [
           {
             "type": "COURSE",

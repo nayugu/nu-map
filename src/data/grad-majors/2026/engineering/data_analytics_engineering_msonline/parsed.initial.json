@@ -2,8 +2,10 @@
   "name": "Data Analytics Engineering, MS—Online",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,

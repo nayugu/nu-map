@@ -2,8 +2,10 @@
   "name": "Human Resources Management, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -119,7 +121,59 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Courses (Program Credit/GPA Requirements)",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6010
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6070
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6025
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6050
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -141,7 +195,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Electives",
+      "title": "Electives (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -171,63 +225,373 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HRM",
+          "classId": 6035
+        }
+      ],
+      "minRequirementCount": 1,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (3)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 13,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6010
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6070
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6045
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6065
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6001
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Course (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HRM",
+          "classId": 6070
+        }
+      ],
+      "minRequirementCount": 1,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (4)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6085
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6095
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6072
+            },
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6074
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6145
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (3)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6135
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (5)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6095
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6115
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6150
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (4)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6020
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6910
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (6)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 7,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6080
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6090
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6096
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6100
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6001
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Courses (5)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 5900
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6005
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6015
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6025
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (7)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6940
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6943
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6075
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6125
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6175
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6180
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6710
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
-  ],
-  "concentrations": {
-    "minOptions": 1,
-    "concentrationOptions": [
-      {
-        "type": "SECTION",
-        "title": "Concentration or Electives",
-        "requirements": [
-          {
-            "type": "OR",
-            "courses": [
-              {
-                "type": "COURSE",
-                "subject": "ALY",
-                "classId": 6010
-              },
-              {
-                "type": "COURSE",
-                "subject": "ALY",
-                "classId": 6070
-              },
-              {
-                "type": "COURSE",
-                "subject": "CMN",
-                "classId": 6025
-              },
-              {
-                "type": "COURSE",
-                "subject": "CMN",
-                "classId": 6050
-              },
-              {
-                "type": "COURSE",
-                "subject": "CMN",
-                "classId": 6060
-              },
-              {
-                "type": "COURSE",
-                "subject": "CMN",
-                "classId": 6096
-              },
-              {
-                "type": "COURSE",
-                "subject": "CMN",
-                "classId": 6110
-              },
-              {
-                "type": "COURSE",
-                "subject": "LDR",
-                "classId": 6101
-              }
-            ]
-          }
-        ],
-        "minRequirementCount": 1
-      }
-    ]
-  }
+  ]
 }

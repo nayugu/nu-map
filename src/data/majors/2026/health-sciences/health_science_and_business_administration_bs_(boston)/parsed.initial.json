@@ -2,10 +2,12 @@
   "name": "Health Science and Business Administration, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
-  "totalCreditsRequired": 133,
+  "totalCreditsRequired": 131,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -407,12 +409,56 @@
     },
     {
       "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BUSN",
+              "classId": 1102
+            },
+            {
+              "type": "COURSE",
+              "subject": "HSCI",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
       "title": "Integrative Requirement",
       "requirements": [
         {
           "type": "COURSE",
           "subject": "MGMT",
           "classId": 3340
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirement (2)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BUSN",
+              "classId": 1103
+            },
+            {
+              "type": "COURSE",
+              "subject": "HSCI",
+              "classId": 2000
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

@@ -2,10 +2,12 @@
   "name": "Cybersecurity, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
-  "totalCreditsRequired": 135,
+  "totalCreditsRequired": 134,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -372,72 +374,265 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Cyber Operations Required Courses",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CY",
-          "classId": 4760
-        },
-        {
-          "type": "COURSE",
-          "subject": "CY",
-          "classId": 5210
-        },
-        {
-          "type": "COURSE",
-          "subject": "CY",
-          "classId": 5240
-        }
-      ],
-      "minRequirementCount": 3
-    },
-    {
-      "type": "SECTION",
-      "title": "Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 4530
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 4500
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5200
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 3324
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 4534
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
   ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Cyber Operations",
+        "label": "Cyber Operations",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CY",
+            "classId": 4760
+          },
+          {
+            "type": "COURSE",
+            "subject": "CY",
+            "classId": 5210
+          },
+          {
+            "type": "COURSE",
+            "subject": "CY",
+            "classId": 5240
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4530
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4500
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 3324
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 4534
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Option",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4170
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5240
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 2551
+              },
+              {
+                "type": "COURSE",
+                "subject": "CRIM",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "CRIM",
+                "classId": 4040
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 2800
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4400
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4500
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 4530
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4700
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 4730
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4100
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4770
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4775
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 4760
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "CY",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 4300
+              },
+              {
+                "type": "COURSE",
+                "subject": "DS",
+                "classId": 4400
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 3324
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 4534
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 4535
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "LPSC",
+                "classId": 1101
+              },
+              {
+                "type": "COURSE",
+                "subject": "LPSC",
+                "classId": 2301
+              },
+              {
+                "type": "COURSE",
+                "subject": "LPSC",
+                "classId": 3303
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 3527
+              },
+              {
+                "type": "COURSE",
+                "subject": "MISM",
+                "classId": 2301
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 2390
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 3307
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 3324
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 3406
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 3420
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 3423
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      }
+    ]
+  },
   "generalElectiveSH": 24
 }

@@ -1,0 +1,140 @@
+{
+  "name": "Creative Writing, Minor",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Creative Writing Foundation",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 1801
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 1850
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 2400
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Creative Writing Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 1801
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 1850
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRWT",
+              "classId": 2400
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CRWT",
+                  "classId": 2700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 2700
+                }
+              ]
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CRWT",
+                  "classId": 3376
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 3376
+                }
+              ]
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CRWT",
+                  "classId": 3377
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 3377
+                }
+              ]
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CRWT",
+                  "classId": 3378
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 3378
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

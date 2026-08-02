@@ -2,15 +2,17 @@
   "name": "Pharmaceutics and Drug Delivery, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 31,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -93,7 +95,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Qualifying Examination (Research and Dissertation)",
+      "title": "Qualifying Examination",
       "requirements": [
         {
           "type": "COURSE",
@@ -105,7 +107,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Proposal Preparation (Research and Dissertation)",
+      "title": "Proposal Preparation",
       "requirements": [
         {
           "type": "COURSE",
@@ -117,7 +119,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation (Research and Dissertation)",
+      "title": "Dissertation",
       "requirements": [
         {
           "type": "OR",
@@ -139,7 +141,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Colloquium (Research and Dissertation)",
+      "title": "Colloquium",
       "requirements": [
         {
           "type": "COURSE",
@@ -164,7 +166,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -172,11 +174,12 @@
           "classId": 6300
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Colloquium (Core Requirements)",
+      "title": "Colloquium (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -189,7 +192,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Qualifying Examination (Research and Dissertation)",
+      "title": "Qualifying Examination (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -197,11 +200,12 @@
           "classId": 8940
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Proposal Preparation (Research and Dissertation)",
+      "title": "Proposal Preparation (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -209,11 +213,12 @@
           "classId": 9681
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation (Research and Dissertation)",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

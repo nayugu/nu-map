@@ -2,8 +2,10 @@
   "name": "Complex Network Analysis, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 33,
   "yearVersion": 2026,
@@ -92,6 +94,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Complex Biological Networks",
+        "label": "Complex Biological Networks",
         "requirements": [
           {
             "type": "COURSE",
@@ -181,6 +184,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Complex Social Systems",
+        "label": "Complex Social Systems",
         "requirements": [
           {
             "type": "COURSE",
@@ -290,6 +294,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Economic and Technological Networks",
+        "label": "Economic and Technological Networks",
         "requirements": [
           {
             "type": "COURSE",
@@ -374,6 +379,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Population Health Dynamics",
+        "label": "Population Health Dynamics",
         "requirements": [
           {
             "type": "COURSE",

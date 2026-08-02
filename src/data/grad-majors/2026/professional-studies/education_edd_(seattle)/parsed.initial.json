@@ -2,8 +2,10 @@
   "name": "Education, EdD (Seattle)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -158,6 +160,7 @@
       {
         "type": "SECTION",
         "title": "Higher Education Administration Concentration",
+        "label": "Higher Education Administration",
         "requirements": [
           {
             "type": "COURSE",
@@ -185,6 +188,7 @@
       {
         "type": "SECTION",
         "title": "Innovative Teaching and Learning Concentration",
+        "label": "Innovative Teaching and Learning",
         "requirements": [
           {
             "type": "COURSE",
@@ -212,6 +216,7 @@
       {
         "type": "SECTION",
         "title": "Transformative School Leadership Concentration",
+        "label": "Transformative School Leadership",
         "requirements": [
           {
             "type": "COURSE",
@@ -239,6 +244,7 @@
       {
         "type": "SECTION",
         "title": "Workplace Learning Concentration",
+        "label": "Workplace Learning",
         "requirements": [
           {
             "type": "COURSE",

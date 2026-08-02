@@ -2,15 +2,17 @@
   "name": "Pharmaceutical Sciences, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 135,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "SEMESTER 1 (Pharmaceutical Sciences Major Requirements)",
+      "title": "SEMESTER 1",
       "requirements": [
         {
           "type": "COURSE",
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 2 (Pharmaceutical Sciences Major Requirements)",
+      "title": "SEMESTER 2",
       "requirements": [
         {
           "type": "COURSE",
@@ -39,7 +41,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 3 (Pharmaceutical Sciences Major Requirements)",
+      "title": "SEMESTER 3",
       "requirements": [
         {
           "type": "COURSE",
@@ -51,7 +53,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 4 (Pharmaceutical Sciences Major Requirements)",
+      "title": "SEMESTER 4",
       "requirements": [
         {
           "type": "COURSE",
@@ -117,7 +119,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 8 (Pharmaceutical Sciences Major Requirements)",
+      "title": "SEMESTER 8",
       "requirements": [
         {
           "type": "COURSE",
@@ -156,7 +158,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 1 (Supporting Courses)",
+      "title": "SEMESTER 1 (2)",
       "requirements": [
         {
           "type": "AND",
@@ -198,7 +200,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 2 (Supporting Courses)",
+      "title": "SEMESTER 2 (2)",
       "requirements": [
         {
           "type": "AND",
@@ -245,7 +247,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 3 (Supporting Courses)",
+      "title": "SEMESTER 3 (2)",
       "requirements": [
         {
           "type": "AND",
@@ -297,7 +299,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 4 (Supporting Courses)",
+      "title": "SEMESTER 4 (2)",
       "requirements": [
         {
           "type": "AND",
@@ -349,7 +351,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 1 (Writing Requirement)",
+      "title": "SEMESTER 1 (3)",
       "requirements": [
         {
           "type": "COURSE",
@@ -361,7 +363,7 @@
     },
     {
       "type": "SECTION",
-      "title": "SEMESTER 8 (Writing Requirement)",
+      "title": "SEMESTER 8 (2)",
       "requirements": [
         {
           "type": "COURSE",

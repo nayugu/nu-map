@@ -1,6 +1,24 @@
 {
   "runs": [
     {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-02T17:50:00.118Z",
+      "done": 485,
+      "written": 485,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-02T17:49:57.912Z",
+      "done": 532,
+      "written": 532,
+      "skipped": 126,
+      "failed": 0
+    },
+    {
       "type": "nupath-auto-update",
       "subject": "🤖 NUpath Auto-Update",
       "timestamp": "2026-08-02T16:03:27.932Z",

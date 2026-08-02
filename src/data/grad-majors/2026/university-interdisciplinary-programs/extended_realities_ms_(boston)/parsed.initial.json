@@ -2,10 +2,12 @@
   "name": "Extended Realities, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 12,
+    "tablesConsumed": 12
   },
-  "totalCreditsRequired": 35,
+  "totalCreditsRequired": 34,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -67,6 +69,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Artificial Intelligence",
+        "label": "Artificial Intelligence",
         "requirements": [
           {
             "type": "COURSE",
@@ -104,6 +107,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Entrepreneurship",
+        "label": "Entrepreneurship—",
         "requirements": [
           {
             "type": "COURSE",
@@ -182,6 +186,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Human Computer Interaction",
+        "label": "Human Computer Interaction",
         "requirements": [
           {
             "type": "COURSE",
@@ -230,6 +235,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Human Movement Science",
+        "label": "Human Movement Science",
         "requirements": [
           {
             "type": "COURSE",
@@ -288,6 +294,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Information Ethics",
+        "label": "Information Ethics",
         "requirements": [
           {
             "type": "XOM",
@@ -347,6 +354,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Marketing",
+        "label": "Marketing",
         "requirements": [
           {
             "type": "COURSE",
@@ -420,6 +428,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Public History",
+        "label": "Public History",
         "requirements": [
           {
             "type": "COURSE",
@@ -458,6 +467,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Wireless Networking",
+        "label": "Wireless Networking",
         "requirements": [
           {
             "type": "OR",
@@ -501,6 +511,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in XR and Design",
+        "label": "XR and Design",
         "requirements": [
           {
             "type": "AND",
@@ -579,6 +590,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in XR and Games",
+        "label": "XR and Games",
         "requirements": [
           {
             "type": "COURSE",
@@ -652,6 +664,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in XR and Media",
+        "label": "XR and Media",
         "requirements": [
           {
             "type": "COURSE",

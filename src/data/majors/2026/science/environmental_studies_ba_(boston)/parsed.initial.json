@@ -2,8 +2,10 @@
   "name": "Environmental Studies, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8
   },
   "totalCreditsRequired": 128,
   "yearVersion": 2026,
@@ -251,191 +253,736 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Required Courses",
-      "requirements": [
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTF",
-              "classId": 1220
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTF",
-              "classId": 1221
-            }
-          ]
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARTG",
-          "classId": 2242
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1240
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTF",
-                  "classId": 1241
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "MSCR",
-              "classId": 1230
-            }
-          ]
-        },
-        {
-          "type": "COURSE",
-          "subject": "MSCR",
-          "classId": 3446
-        },
-        {
-          "type": "COURSE",
-          "subject": "COMM",
-          "classId": 3500
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 3650
-            },
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 3700
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 6
-    },
-    {
-      "type": "SECTION",
-      "title": "Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 2250
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 2252
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 3444
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2380
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2381
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3480
-            },
-            {
-              "type": "COURSE",
-              "subject": "CIVE",
-              "classId": 5280
-            },
-            {
-              "type": "COURSE",
-              "subject": "COMM",
-              "classId": 2555
-            },
-            {
-              "type": "COURSE",
-              "subject": "COMM",
-              "classId": 3532
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 4970
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5000
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5450
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5563
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5610
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5750
-            },
-            {
-              "type": "COURSE",
-              "subject": "GAME",
-              "classId": 2755
-            },
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 3650
-            },
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 3700
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Communication and Visualization: Environmental Problems and Solutions",
+        "label": "Communication and Visualization: Environmental Problems and Solutions",
+        "requirements": [
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTF",
+                "classId": 1220
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTF",
+                "classId": 1221
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 2242
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTF",
+                    "classId": 1240
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTF",
+                    "classId": 1241
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 1230
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "MSCR",
+            "classId": 3446
+          },
+          {
+            "type": "COURSE",
+            "subject": "COMM",
+            "classId": 3500
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 3650
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 3700
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 2250
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 2252
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3444
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2380
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2381
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3480
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5280
+              },
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 2555
+              },
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 3532
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4970
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5450
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5563
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5610
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5750
+              },
+              {
+                "type": "COURSE",
+                "subject": "GAME",
+                "classId": 2755
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 3650
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 3700
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 7
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Environmental and Human Health",
+        "label": "Environmental and Human Health",
+        "requirements": [
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 2302
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 2303
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "EEMB",
+            "classId": 3466
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 1260
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 1270
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHTH",
+            "classId": 4202
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 3500
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 3460
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ENVR",
+                    "classId": 3800
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ENVR",
+                    "classId": 3801
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4505
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4970
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5450
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5750
+              },
+              {
+                "type": "COURSE",
+                "subject": "INTL",
+                "classId": 5100
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "PHTH",
+                    "classId": 2350
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PHTH",
+                    "classId": 2351
+                  }
+                ]
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "PHTH",
+                    "classId": 4120
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "PHTH",
+                    "classId": 5120
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 2395
+              },
+              {
+                "type": "COURSE",
+                "subject": "SOCL",
+                "classId": 2485
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Environmental Ethics and Social Justice",
+        "label": "Environmental Ethics and Social Justice",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "COMM",
+            "classId": 3500
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHIL",
+            "classId": 1180
+          },
+          {
+            "type": "COURSE",
+            "subject": "POLS",
+            "classId": 2395
+          },
+          {
+            "type": "COURSE",
+            "subject": "SOCL",
+            "classId": 2485
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BUSN",
+                "classId": 3110
+              },
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 3532
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 4000
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ENVR",
+                    "classId": 3800
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ENVR",
+                    "classId": 3801
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4504
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4970
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5350
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5450
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5800
+              },
+              {
+                "type": "COURSE",
+                "subject": "HUSV",
+                "classId": 3570
+              },
+              {
+                "type": "COURSE",
+                "subject": "INTL",
+                "classId": 5100
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHIL",
+                "classId": 2001
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5268
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5270
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5390
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Environmental Law, Governance, and Management",
+        "label": "Environmental Law, Governance, and Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LPSC",
+            "classId": 1101
+          },
+          {
+            "type": "COURSE",
+            "subject": "LPSC",
+            "classId": 2301
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 2395
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5268
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5220
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 3460
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 3475
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 4000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4505
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4970
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5220
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5450
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5700
+              },
+              {
+                "type": "COURSE",
+                "subject": "LPSC",
+                "classId": 3303
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 2395
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 3307
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5264
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5267
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5268
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in the Green Economy: Business, Entrepreneurship, and Environmental Sustainability",
+        "label": "The Green Economy: Business, Entrepreneurship, and Environmental Sustainability",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BUSN",
+            "classId": 1101
+          },
+          {
+            "type": "COURSE",
+            "subject": "FINA",
+            "classId": 2720
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5220
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BUSN",
+                "classId": 3110
+              },
+              {
+                "type": "COURSE",
+                "subject": "INNO",
+                "classId": 2206
+              },
+              {
+                "type": "COURSE",
+                "subject": "INNO",
+                "classId": 3520
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BUSN",
+                "classId": 3110
+              },
+              {
+                "type": "COURSE",
+                "subject": "CIVE",
+                "classId": 5275
+              },
+              {
+                "type": "COURSE",
+                "subject": "ECON",
+                "classId": 3423
+              },
+              {
+                "type": "COURSE",
+                "subject": "INNO",
+                "classId": 2301
+              },
+              {
+                "type": "COURSE",
+                "subject": "INNO",
+                "classId": 3520
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ENVR",
+                    "classId": 3800
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ENVR",
+                    "classId": 3801
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 4970
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5220
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5350
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5610
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5800
+              },
+              {
+                "type": "COURSE",
+                "subject": "HUSV",
+                "classId": 3570
+              },
+              {
+                "type": "COURSE",
+                "subject": "MGMT",
+                "classId": 3530
+              },
+              {
+                "type": "COURSE",
+                "subject": "MKTG",
+                "classId": 2301
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      }
+    ]
+  }
 }

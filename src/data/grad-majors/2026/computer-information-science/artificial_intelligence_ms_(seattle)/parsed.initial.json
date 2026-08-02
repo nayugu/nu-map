@@ -2,8 +2,10 @@
   "name": "Artificial Intelligence, MS (Seattle)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -63,7 +65,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Options",
+      "title": "Specialization Options",
       "requirements": [
         {
           "type": "XOM",
@@ -335,6 +337,60 @@
                   "classId": 7290
                 }
               ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 7990
+        },
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 8674
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 7180
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 8674
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 7337
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 5010
             }
           ]
         }

@@ -2,15 +2,17 @@
   "name": "Bioengineering, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Core (Core Requirements)",
+      "title": "Required Core",
       "requirements": [
         {
           "type": "COURSE",
@@ -781,7 +783,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -794,11 +796,12 @@
           "classId": 7391
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Required Core (Core Requirements)",
+      "title": "Required Core (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -811,11 +814,12 @@
           "classId": 7000
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Electives Course List",
+      "title": "Electives Course List (2)",
       "requirements": [
         {
           "type": "OR",
@@ -1397,7 +1401,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

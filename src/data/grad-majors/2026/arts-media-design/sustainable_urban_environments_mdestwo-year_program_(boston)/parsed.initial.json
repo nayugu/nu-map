@@ -2,10 +2,12 @@
   "name": "Sustainable Urban Environments, MDes—Two-Year Program (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
-  "totalCreditsRequired": 72,
+  "totalCreditsRequired": 64,
   "yearVersion": 2026,
   "requirementSections": [
     {

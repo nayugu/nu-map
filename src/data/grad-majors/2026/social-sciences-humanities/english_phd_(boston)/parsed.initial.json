@@ -2,15 +2,17 @@
   "name": "English, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 48,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Proseminar (Core Requirements)",
+      "title": "Proseminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -126,7 +128,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation",
       "requirements": [
         {
           "type": "OR",
@@ -143,7 +145,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research (Dissertation)",
+      "title": "Research",
       "requirements": [
         {
           "type": "OR",
@@ -182,7 +184,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation",
       "requirements": [
         {
           "type": "OR",
@@ -199,7 +201,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Proseminar (Core Requirements)",
+      "title": "Proseminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -207,11 +209,12 @@
           "classId": 5103
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -224,11 +227,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Research (Dissertation)",
+      "title": "Research (2)",
       "requirements": [
         {
           "type": "OR",
@@ -241,11 +245,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -267,7 +272,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -280,7 +285,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

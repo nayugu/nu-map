@@ -2,8 +2,10 @@
   "name": "Statistics, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 31,
   "yearVersion": 2026,
@@ -80,6 +82,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Biostatistics (Bouvé College of Health Sciences)",
+        "label": "Biostatistics",
         "requirements": [
           {
             "type": "XOM",
@@ -123,6 +126,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Statistical Machine Learning (Khoury College of Computer Sciences)",
+        "label": "Statistical Machine Learning",
         "requirements": [
           {
             "type": "COURSE",
@@ -150,6 +154,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Statistical Theory and Modeling (College of Science)",
+        "label": "Statistical Theory and Modeling",
         "requirements": [
           {
             "type": "XOM",

@@ -2,8 +2,10 @@
   "name": "Insurance Analytics and Management, MPS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -163,6 +165,7 @@
       {
         "type": "SECTION",
         "title": "Advanced Insurance Management Concentration",
+        "label": "Advanced Insurance Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -195,6 +198,7 @@
       {
         "type": "SECTION",
         "title": "Customer Engagement Concentration",
+        "label": "Customer Engagement",
         "requirements": [
           {
             "type": "COURSE",
@@ -227,6 +231,7 @@
       {
         "type": "SECTION",
         "title": "Decision Support Concentration",
+        "label": "Decision Support",
         "requirements": [
           {
             "type": "COURSE",

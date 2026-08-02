@@ -2,8 +2,10 @@
   "name": "Advanced and Intelligent Manufacturing, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -78,6 +80,65 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Project Option",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7945
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7945
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7945
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7945
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7990
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7990
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

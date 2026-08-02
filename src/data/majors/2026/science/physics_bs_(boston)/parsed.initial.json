@@ -2,8 +2,10 @@
   "name": "Physics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 133,
   "yearVersion": 2026,
@@ -451,44 +453,48 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Astrophysics Core",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "PHYS",
-          "classId": 1111
-        },
-        {
-          "type": "COURSE",
-          "subject": "PHYS",
-          "classId": 3111
-        },
-        {
-          "type": "COURSE",
-          "subject": "PHYS",
-          "classId": 4111
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5117
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5118
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 4,
-      "shared": true
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 0,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Astrophysics Concentration (Optional)",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PHYS",
+            "classId": 1111
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHYS",
+            "classId": 3111
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHYS",
+            "classId": 4111
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5117
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5118
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

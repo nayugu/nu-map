@@ -2,8 +2,10 @@
   "name": "Health Informatics, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 33,
   "yearVersion": 2026,
@@ -42,6 +44,7 @@
       {
         "type": "SECTION",
         "title": "Health Informatics (Without Concentration)",
+        "label": "Health Informatics (Without Concentration)",
         "requirements": [
           {
             "type": "XOM",
@@ -268,6 +271,7 @@
       {
         "type": "SECTION",
         "title": "Health Informatics Analytics Concentration",
+        "label": "Health Informatics with Health Informatics Analytics Concentration",
         "requirements": [
           {
             "type": "XOM",
@@ -432,6 +436,7 @@
       {
         "type": "SECTION",
         "title": "Personal Health Informatics Concentration",
+        "label": "Health Informatics with Personal Health Informatics Concentration",
         "requirements": [
           {
             "type": "COURSE",

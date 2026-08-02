@@ -2,8 +2,10 @@
   "name": "Robotics, MS (Seattle)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -298,6 +300,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Computer Science",
+        "label": "Computer Science",
         "requirements": [
           {
             "type": "XOM",
@@ -341,6 +344,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Electrical and Computer Engineering",
+        "label": "Electrical and Computer Engineering",
         "requirements": [
           {
             "type": "XOM",
@@ -419,6 +423,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Mechanical Engineering",
+        "label": "Mechanical Engineering",
         "requirements": [
           {
             "type": "XOM",

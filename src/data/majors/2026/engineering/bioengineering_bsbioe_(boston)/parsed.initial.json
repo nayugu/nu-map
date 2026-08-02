@@ -2,8 +2,10 @@
   "name": "Bioengineering, BSBioE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
   "totalCreditsRequired": 135,
   "yearVersion": 2026,
@@ -74,7 +76,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Supplemental Credit (Engineering)",
+      "title": "Supplemental Credit",
       "requirements": [
         {
           "type": "XOM",
@@ -250,7 +252,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Supplemental Credit (Supporting Courses: Mathematics/Science)",
+      "title": "Supplemental Credit (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -343,123 +345,506 @@
         }
       ],
       "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Required Courses",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5630
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5640
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5650
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5660
-            },
-            {
-              "type": "COURSE",
-              "subject": "ME",
-              "classId": 5665
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Elective Courses",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 4991
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5060
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5115
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5520
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5440
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOE",
-              "classId": 5770
-            },
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "BIOE",
-                  "classId": 5820
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CHME",
-                  "classId": 5631
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 5105
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 5632
-            },
-            {
-              "type": "COURSE",
-              "subject": "ME",
-              "classId": 4508
-            },
-            {
-              "type": "COURSE",
-              "subject": "ME",
-              "classId": 4555
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
   ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Biomechanics and Mechanobiology",
+        "label": "Biomechanics and Mechanobiology",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5630
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5640
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5650
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5660
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5665
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 4991
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5060
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5520
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5440
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5770
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 5820
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHME",
+                    "classId": 5631
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5105
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5632
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 4508
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 4555
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Biomedical Devices and Bioimaging",
+        "label": "Biomedical Devices and Bioimaging",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOE",
+            "classId": 5800
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 5235
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 5648
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5250
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5810
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 4991
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5060
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5510
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5520
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5770
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 5820
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHME",
+                    "classId": 5631
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5850
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5632
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 2530
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 2750
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 3468
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 2340
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 2341
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 4508
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Molecular, Cell, and Tissue Engineering",
+        "label": "Molecular, Cell, and Tissue Engineering",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5410
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5411
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOE",
+            "classId": 5420
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOE",
+            "classId": 5430
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 3410
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 4991
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5060
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5411
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5440
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5450
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5510
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5650
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5660
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5710
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5711
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5720
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5770
+              },
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 5820
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHME",
+                    "classId": 5631
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5160
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5515
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5632
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Systems, Synthetic, and Computational Bioengineering",
+        "label": "Systems, Synthetic, and Computational Bioengineering",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5710
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5720
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5750
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 3410
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 4991
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5060
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5440
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5510
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5640
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5711
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5760
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5770
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5860
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5870
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5880
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5630
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
+      }
+    ]
+  },
   "generalElectiveSH": 28
 }

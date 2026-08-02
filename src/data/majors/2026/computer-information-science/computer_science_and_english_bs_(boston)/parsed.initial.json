@@ -2,10 +2,12 @@
   "name": "Computer Science and English, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8
   },
-  "totalCreditsRequired": 130,
+  "totalCreditsRequired": 137,
   "yearVersion": 2026,
   "requirementSections": [
     {

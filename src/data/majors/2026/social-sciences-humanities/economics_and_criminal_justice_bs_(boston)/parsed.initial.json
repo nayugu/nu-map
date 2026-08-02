@@ -2,10 +2,12 @@
   "name": "Economics and Criminal Justice, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 12,
+    "tablesConsumed": 12
   },
-  "totalCreditsRequired": 131,
+  "totalCreditsRequired": 128,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -312,6 +314,199 @@
         }
       ],
       "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Calculus",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1231
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1241
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1245
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1251
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1340
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1341
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Digital Skills",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 1100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 1101
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2001
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "MISM",
+              "classId": 2510
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Data Analyses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3700
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 1500
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 5601
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 3424
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 1240
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 4949
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 4692
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 4997
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 1111
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 3308
+        }
+      ],
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

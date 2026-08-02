@@ -2,8 +2,10 @@
   "name": "Legal Design, Graduate Certificate (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -30,6 +32,64 @@
               "type": "COURSE",
               "subject": "LAW",
               "classId": 7703
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required LAW Courses (2)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7369
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7501
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7614
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7620
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7624
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7669
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7692
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7700
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7705
             }
           ]
         }

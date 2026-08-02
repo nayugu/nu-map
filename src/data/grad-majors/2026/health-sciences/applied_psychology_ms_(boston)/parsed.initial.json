@@ -2,8 +2,10 @@
   "name": "Applied Psychology, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 30,
   "yearVersion": 2026,
@@ -47,6 +49,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Child, Adolescent, and Family Psychology",
+        "label": "Child, Adolescent, and Family Psychology",
         "requirements": [
           {
             "type": "XOM",
@@ -90,6 +93,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Prevention Science",
+        "label": "Prevention Science",
         "requirements": [
           {
             "type": "XOM",
@@ -114,6 +118,90 @@
                 "type": "COURSE",
                 "subject": "CAEP",
                 "classId": 6242
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6342
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6346
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 5540
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 6204
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "s Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 20,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 5150
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 5878
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 5879
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6100
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6110
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6218
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6220
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6222
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6242
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6247
               },
               {
                 "type": "COURSE",

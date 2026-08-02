@@ -2,8 +2,10 @@
   "name": "Sports Leadership, MSLD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -176,8 +178,67 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "Analytics",
       "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6010
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6015
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6070
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6020
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6030
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6040
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6110
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "eSports",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6040
+        },
         {
           "type": "COURSE",
           "subject": "LDR",
@@ -186,12 +247,7 @@
         {
           "type": "COURSE",
           "subject": "LDR",
-          "classId": 6435
-        },
-        {
-          "type": "COURSE",
-          "subject": "LDR",
-          "classId": 6440
+          "classId": 6480
         },
         {
           "type": "COURSE",
@@ -200,16 +256,97 @@
         },
         {
           "type": "COURSE",
-          "subject": "LDR",
-          "classId": 6443
+          "subject": "DGM",
+          "classId": 6400
         },
         {
           "type": "COURSE",
-          "subject": "LDR",
-          "classId": 6460
+          "subject": "DGM",
+          "classId": 6516
         }
       ],
       "minRequirementCount": 6
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Professional Sports Administration",
+        "label": "Professional Sports Administration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6323
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6435
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6440
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6445
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6443
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6460
+          }
+        ],
+        "minRequirementCount": 6
+      },
+      {
+        "type": "SECTION",
+        "title": "Collegiate Athletics Administration",
+        "label": "eSports",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6427
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6442
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6455
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6465
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6470
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6615
+          }
+        ],
+        "minRequirementCount": 6
+      }
+    ]
+  }
 }

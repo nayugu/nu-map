@@ -2,15 +2,17 @@
   "name": "Economics, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 48,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Quantitative (Core Requirements)",
+      "title": "Quantitative",
       "requirements": [
         {
           "type": "COURSE",
@@ -32,7 +34,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Theory (Core Requirements)",
+      "title": "Theory",
       "requirements": [
         {
           "type": "COURSE",
@@ -59,7 +61,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Field (Core Requirements)",
+      "title": "Field",
       "requirements": [
         {
           "type": "COURSE",
@@ -155,7 +157,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Quantitative (Core Requirements)",
+      "title": "Quantitative (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -163,11 +165,12 @@
           "classId": 7740
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Theory (Core Requirements)",
+      "title": "Theory (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -180,11 +183,12 @@
           "classId": 7720
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Field (Core Requirements)",
+      "title": "Field (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -207,11 +211,12 @@
           "classId": 7772
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Elective",
+      "title": "Elective (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -232,7 +237,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",

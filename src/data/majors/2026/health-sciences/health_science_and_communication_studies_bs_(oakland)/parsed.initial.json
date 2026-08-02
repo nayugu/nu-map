@@ -2,10 +2,12 @@
   "name": "Health Science and Communication Studies, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
-  "totalCreditsRequired": 134,
+  "totalCreditsRequired": 131,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -34,6 +36,158 @@
         }
       ],
       "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Foundation Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1225
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1231
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1255
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Cluster Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1131
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2303
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2304
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2501
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2551
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing-Intensive",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3201
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3230
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3304
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3320
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3415
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3445
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3500
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3501
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3530
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3532
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4535
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4605
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4631
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

@@ -2,8 +2,10 @@
   "name": "Interdisciplinary Design and Media, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 48,
   "yearVersion": 2026,
@@ -37,7 +39,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research Methods Elective (Required Coursework)",
+      "title": "Research Methods Elective",
       "requirements": [
         {
           "type": "XOM",
@@ -125,7 +127,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation (Required Coursework)",
+      "title": "Dissertation",
       "requirements": [
         {
           "type": "OR",
@@ -147,7 +149,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Coursework",
+      "title": "Required Coursework (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -170,11 +172,12 @@
           "classId": 7901
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Research Methods Elective (Required Coursework)",
+      "title": "Research Methods Elective (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -258,11 +261,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation (Required Coursework)",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

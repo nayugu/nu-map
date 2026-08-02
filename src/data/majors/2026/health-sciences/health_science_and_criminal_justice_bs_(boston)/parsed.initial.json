@@ -2,10 +2,12 @@
   "name": "Health Science and Criminal Justice, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
-  "totalCreditsRequired": 134,
+  "totalCreditsRequired": 132,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -74,6 +76,73 @@
         }
       ],
       "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Science Requirement",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1112
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1114
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1161
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1162
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1163
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1241
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 1101
+        }
+      ],
+      "minRequirementCount": 5
     },
     {
       "type": "SECTION",

@@ -2,8 +2,10 @@
   "name": "Civil Engineering with Concentration in Structures, MSCivE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -27,7 +29,37 @@
     },
     {
       "type": "SECTION",
-      "title": "Course Lists",
+      "title": "Project Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives List",
       "requirements": [
         {
           "type": "OR",
@@ -96,6 +128,133 @@
               "type": "COURSE",
               "subject": "CIVE",
               "classId": 7388
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Other Electives List",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5275
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5520
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5524
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5525
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7150
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7151
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7301
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7311
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 7241
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 7342
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 7343
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATL",
+              "classId": 7365
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5650
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5654
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5655
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5657
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5658
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5659
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 7238
+            },
+            {
+              "type": "COURSE",
+              "subject": "SBSY",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "SBSY",
+              "classId": 5200
             }
           ]
         }

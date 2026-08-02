@@ -2,15 +2,17 @@
   "name": "Foundation Year",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Application",
+      "title": "Core Courses",
       "requirements": [
         {
           "type": "COURSE",
@@ -55,6 +57,157 @@
         }
       ],
       "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Liberal Arts Course Track",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHL",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "POL",
+              "classId": 1120
+            },
+            {
+              "type": "COURSE",
+              "subject": "POL",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "POL",
+              "classId": 1300
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSY",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOC",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOC",
+              "classId": 1230
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOC",
+              "classId": 2240
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Science Course Track",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIO",
+                  "classId": 1100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIO",
+                  "classId": 1101
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIO",
+                  "classId": 1200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIO",
+                  "classId": 1201
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CHM",
+                  "classId": 1100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHM",
+                  "classId": 1101
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CHM",
+                  "classId": 1200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHM",
+                  "classId": 1201
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Business Course Track",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECN",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECN",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "FIN",
+              "classId": 1200
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ]
 }

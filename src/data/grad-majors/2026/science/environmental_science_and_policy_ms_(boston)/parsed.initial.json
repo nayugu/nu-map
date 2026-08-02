@@ -2,8 +2,10 @@
   "name": "Environmental Science and Policy, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 36,
   "yearVersion": 2026,
@@ -137,6 +139,60 @@
               "type": "COURSE",
               "subject": "PPUA",
               "classId": 7237
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "College of Social Sciences and Humanities Elective List",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5302
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTL",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "LPSC",
+              "classId": 7311
+            },
+            {
+              "type": "COURSE",
+              "subject": "LPSC",
+              "classId": 7312
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5214
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5230
+            },
+            {
+              "type": "RANGE",
+              "subject": "PPUA",
+              "idRangeStart": 5100,
+              "idRangeEnd": 7346,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 7267
             }
           ]
         }

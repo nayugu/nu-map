@@ -2,15 +2,17 @@
   "name": "Sociology, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 60,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Foundations (Core Requirements)",
+      "title": "Foundations",
       "requirements": [
         {
           "type": "COURSE",
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Proseminars (Core Requirements)",
+      "title": "Proseminars",
       "requirements": [
         {
           "type": "COURSE",
@@ -54,7 +56,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research Methods (Core Requirements)",
+      "title": "Research Methods",
       "requirements": [
         {
           "type": "COURSE",
@@ -71,7 +73,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Advanced Methods (Core Requirements)",
+      "title": "Advanced Methods",
       "requirements": [
         {
           "type": "XOM",
@@ -179,7 +181,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation",
       "requirements": [
         {
           "type": "OR",
@@ -196,7 +198,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research (Dissertation)",
+      "title": "Research",
       "requirements": [
         {
           "type": "OR",
@@ -235,7 +237,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation",
       "requirements": [
         {
           "type": "OR",
@@ -252,7 +254,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Foundations (Core Requirements)",
+      "title": "Foundations (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -265,11 +267,12 @@
           "classId": 7201
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Proseminars (Core Requirements)",
+      "title": "Proseminars (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -292,11 +295,12 @@
           "classId": 7004
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Research Methods (Core Requirements)",
+      "title": "Research Methods (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -309,11 +313,12 @@
           "classId": 6500
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Advanced Methods (Core Requirements)",
+      "title": "Advanced Methods (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -362,11 +367,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Electives",
+      "title": "Electives (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -417,11 +423,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -434,11 +441,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Research (Dissertation)",
+      "title": "Research (2)",
       "requirements": [
         {
           "type": "OR",
@@ -451,11 +459,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -477,7 +486,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -490,7 +499,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

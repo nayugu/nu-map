@@ -2,8 +2,10 @@
   "name": "Master of Architecture—Two-Year Program (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
   "totalCreditsRequired": 60,
   "yearVersion": 2026,
@@ -110,6 +112,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Data Visualization",
+        "label": "Data Visualization",
         "requirements": [
           {
             "type": "AND",
@@ -157,6 +160,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Experience Design",
+        "label": "Experience Design",
         "requirements": [
           {
             "type": "COURSE",
@@ -194,6 +198,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Extended Realities",
+        "label": "Extended Realities",
         "requirements": [
           {
             "type": "COURSE",
@@ -227,6 +232,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Sustainable Building Systems",
+        "label": "Sustainable Building Systems",
         "requirements": [
           {
             "type": "COURSE",
@@ -264,6 +270,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Sustainable Urban Environments",
+        "label": "Sustainable Urban Environments",
         "requirements": [
           {
             "type": "COURSE",
@@ -317,6 +324,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Urban Analytics",
+        "label": "Urban Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -339,6 +347,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Urban Studies",
+        "label": "Urban Studies",
         "requirements": [
           {
             "type": "COURSE",

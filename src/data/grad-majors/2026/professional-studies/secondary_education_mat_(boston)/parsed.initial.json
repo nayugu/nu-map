@@ -2,8 +2,10 @@
   "name": "Secondary Education, MAT (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -150,7 +152,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "MAT+ in Special Education",
       "requirements": [
         {
           "type": "COURSE",
@@ -171,6 +173,39 @@
           "type": "COURSE",
           "subject": "EDU",
           "classId": 6569
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6874
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "MAT+ in English as a Second Language (ESL)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6310
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6426
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6517
         },
         {
           "type": "COURSE",

@@ -2,8 +2,10 @@
   "name": "Biomedical Engineering, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,

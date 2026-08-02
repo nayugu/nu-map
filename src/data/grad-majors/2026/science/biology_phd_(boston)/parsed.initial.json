@@ -2,8 +2,10 @@
   "name": "Biology, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 30,
   "yearVersion": 2026,
@@ -56,7 +58,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -83,6 +85,7 @@
       {
         "type": "SECTION",
         "title": "Cell and Molecular Biology Concentration",
+        "label": "Cell and Molecular Biology Concentration",
         "requirements": [
           {
             "type": "COURSE",
@@ -108,6 +111,7 @@
       {
         "type": "SECTION",
         "title": "Molecular Microbiology Concentration",
+        "label": "Molecular Microbiology Concentration",
         "requirements": [
           {
             "type": "COURSE",
@@ -134,6 +138,43 @@
           }
         ],
         "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 6303
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 6405
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "BIOL",
+                "idRangeStart": 5103,
+                "idRangeEnd": 9984,
+                "exceptions": []
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2
       }
     ]
   }

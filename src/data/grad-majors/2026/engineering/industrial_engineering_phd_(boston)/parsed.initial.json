@@ -2,15 +2,17 @@
   "name": "Industrial Engineering, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 40,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Recommended Courses (Core Requirements)",
+      "title": "Recommended Courses",
       "requirements": [
         {
           "type": "OR",
@@ -54,7 +56,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Recommended Courses (General Requirements)",
+      "title": "Recommended Courses (2)",
       "requirements": [
         {
           "type": "OR",

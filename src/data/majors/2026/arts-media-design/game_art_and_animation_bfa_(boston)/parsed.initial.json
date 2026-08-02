@@ -2,10 +2,12 @@
   "name": "Game Art and Animation, BFA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
-  "totalCreditsRequired": 132,
+  "totalCreditsRequired": 130,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -334,6 +336,219 @@
         }
       ],
       "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 1850
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2010
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2650
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2750
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2755
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2950
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3300
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3400
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3700
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3800
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4000
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4155
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4460
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3460
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3471
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3480
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4565
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4660
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4661
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2501
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 4901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2252
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2262
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2263
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3250
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTS",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTS",
+              "classId": 2341
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTS",
+              "classId": 3449
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2001
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 1101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

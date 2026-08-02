@@ -2,8 +2,10 @@
   "name": "Information Systems, MSIS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -29,6 +31,58 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Project Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7945
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Concentration in Medical Software Engineering",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CSYE",
+          "classId": 7280
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7405
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7410
+        }
+      ],
+      "minRequirementCount": 3
     },
     {
       "type": "SECTION",
@@ -67,32 +121,5 @@
       ],
       "minRequirementCount": 2
     }
-  ],
-  "concentrations": {
-    "minOptions": 1,
-    "concentrationOptions": [
-      {
-        "type": "SECTION",
-        "title": "Optional Concentration in Medical Software Engineering",
-        "requirements": [
-          {
-            "type": "COURSE",
-            "subject": "CSYE",
-            "classId": 7280
-          },
-          {
-            "type": "COURSE",
-            "subject": "INFO",
-            "classId": 7405
-          },
-          {
-            "type": "COURSE",
-            "subject": "INFO",
-            "classId": 7410
-          }
-        ],
-        "minRequirementCount": 3
-      }
-    ]
-  }
+  ]
 }

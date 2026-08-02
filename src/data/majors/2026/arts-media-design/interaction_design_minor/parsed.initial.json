@@ -2,15 +2,17 @@
   "name": "Interaction Design, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Required Courses (Requirements for Non–Art and Design Majors)",
+      "title": "Required Courses",
       "requirements": [
         {
           "type": "AND",
@@ -134,7 +136,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Courses (Requirements for Art and Design Majors)",
+      "title": "Required Courses (2)",
       "requirements": [
         {
           "type": "AND",

@@ -2,8 +2,10 @@
   "name": "Mechanical Engineering, BSME (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 140,
   "yearVersion": 2026,
@@ -174,7 +176,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Supplemental Credit (Engineering Requirements)",
+      "title": "Supplemental Credit",
       "requirements": [
         {
           "type": "XOM",
@@ -362,7 +364,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Supplemental Credit (Supporting Courses: Mathematics/Science)",
+      "title": "Supplemental Credit (2)",
       "requirements": [
         {
           "type": "XOM",

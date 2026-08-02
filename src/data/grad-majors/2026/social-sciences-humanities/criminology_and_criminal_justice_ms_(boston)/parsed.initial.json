@@ -2,8 +2,10 @@
   "name": "Criminology and Criminal Justice, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -132,6 +134,54 @@
     },
     {
       "type": "SECTION",
+      "title": "Required",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CY",
+          "classId": 5001
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 6262
+            },
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5010
+            },
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5200
+            },
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5240
+            },
+            {
+              "type": "COURSE",
+              "subject": "CY",
+              "classId": 5250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
       "title": "Optional Co-op Experience",
       "requirements": [
         {
@@ -159,58 +209,5 @@
       "minRequirementCount": 1,
       "shared": true
     }
-  ],
-  "concentrations": {
-    "minOptions": 1,
-    "concentrationOptions": [
-      {
-        "type": "SECTION",
-        "title": "Optional Concentration in Cybersecurity",
-        "requirements": [
-          {
-            "type": "COURSE",
-            "subject": "CY",
-            "classId": 5001
-          },
-          {
-            "type": "XOM",
-            "numCreditsMin": 8,
-            "courses": [
-              {
-                "type": "COURSE",
-                "subject": "CRIM",
-                "classId": 6262
-              },
-              {
-                "type": "COURSE",
-                "subject": "CY",
-                "classId": 5010
-              },
-              {
-                "type": "COURSE",
-                "subject": "CY",
-                "classId": 5200
-              },
-              {
-                "type": "COURSE",
-                "subject": "CY",
-                "classId": 5210
-              },
-              {
-                "type": "COURSE",
-                "subject": "CY",
-                "classId": 5240
-              },
-              {
-                "type": "COURSE",
-                "subject": "CY",
-                "classId": 5250
-              }
-            ]
-          }
-        ],
-        "minRequirementCount": 2
-      }
-    ]
-  }
+  ]
 }

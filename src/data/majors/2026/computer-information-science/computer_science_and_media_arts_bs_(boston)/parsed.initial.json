@@ -2,10 +2,12 @@
   "name": "Computer Science and Media Arts, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
-  "totalCreditsRequired": 135,
+  "totalCreditsRequired": 133,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -326,6 +328,183 @@
               ]
             }
           ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Media Arts Required",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 2100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3000
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Media Arts Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 31,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2000
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2360
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2361
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2370
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2371
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2380
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2381
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3460
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4565
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4660
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4661
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3470
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3471
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3472
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3473
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3490
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4570
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4575
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3480
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3485
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2212
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Media Arts Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 4530
         }
       ],
       "minRequirementCount": 1

@@ -2,8 +2,10 @@
   "name": "Analytics, MPS (Vancouver)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -71,7 +73,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "Applied Machine Intelligence",
       "requirements": [
         {
           "type": "COURSE",
@@ -100,6 +102,72 @@
         }
       ],
       "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Evidence-Based Management",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6040
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6060
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6130
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6005
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistical Modeling",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6020
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6030
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6040
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6140
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
     },
     {
       "type": "SECTION",

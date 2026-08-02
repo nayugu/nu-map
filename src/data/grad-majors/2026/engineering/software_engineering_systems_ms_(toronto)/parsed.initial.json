@@ -2,8 +2,10 @@
   "name": "Software Engineering Systems, MS (Toronto)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -250,6 +252,43 @@
               "type": "COURSE",
               "subject": "INFO",
               "classId": 7500
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 6000
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6955
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENCP",
+              "classId": 6965
             }
           ]
         }

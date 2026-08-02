@@ -2,8 +2,10 @@
   "name": "Single Subject Education, MA (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -114,33 +116,67 @@
         }
       ],
       "minRequirementCount": 14
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EDUT",
-          "classId": 6118
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDUT",
-          "classId": 6119
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDUT",
-          "classId": 6120
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDUT",
-          "classId": 6130
-        }
-      ],
-      "minRequirementCount": 4
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Single Subject (Humanities) Focus Area",
+        "label": "Single Subject (Humanities)",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6118
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6119
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6130
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Single Subject (Math/Science) Focus Area",
+        "label": "Single Subject (Math/Science)",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6121
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6122
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6123
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDUT",
+            "classId": 6133
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

@@ -2,8 +2,10 @@
   "name": "Healthcare Leadership, DMSc (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 11,
+    "tablesConsumed": 11
   },
   "totalCreditsRequired": 36,
   "yearVersion": 2026,
@@ -89,6 +91,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in AI Applications",
+        "label": "AI Applications",
         "requirements": [
           {
             "type": "XOM",
@@ -122,6 +125,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Business Management",
+        "label": "Business Management",
         "requirements": [
           {
             "type": "XOM",
@@ -210,6 +214,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Exercise Science",
+        "label": "Exercise Science",
         "requirements": [
           {
             "type": "COURSE",
@@ -248,6 +253,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Extreme Medicine",
+        "label": "Extreme Medicine",
         "requirements": [
           {
             "type": "AND",
@@ -351,6 +357,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Health Informatics",
+        "label": "Health Informatics",
         "requirements": [
           {
             "type": "COURSE",
@@ -394,6 +401,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Health Informatics Research",
+        "label": "Health Informatics Research",
         "requirements": [
           {
             "type": "COURSE",
@@ -432,6 +440,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Health Law",
+        "label": "Health Law",
         "requirements": [
           {
             "type": "COURSE",
@@ -480,6 +489,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Interdisciplinary Healthcare Leadership",
+        "label": "Interdisciplinary Healthcare Leadership",
         "requirements": [
           {
             "type": "OR",
@@ -802,6 +812,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Patient Safety",
+        "label": "Patient Safety",
         "requirements": [
           {
             "type": "COURSE",
@@ -829,6 +840,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Public Health",
+        "label": "Public Health",
         "requirements": [
           {
             "type": "COURSE",

@@ -2,8 +2,10 @@
   "name": "Information Systems, MSIS—Bridge (Toronto)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 40,
   "yearVersion": 2026,
@@ -42,7 +44,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Options",
+      "title": "Project Option",
       "requirements": [
         {
           "type": "COURSE",
@@ -51,6 +53,24 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",

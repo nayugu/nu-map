@@ -2,15 +2,17 @@
   "name": "Business Administration and Psychology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
-  "totalCreditsRequired": 130,
+  "totalCreditsRequired": 128,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Required Courses (Business Requirements)",
+      "title": "Required Courses",
       "requirements": [
         {
           "type": "COURSE",
@@ -134,7 +136,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Courses (Psychology Requirements)",
+      "title": "Required Courses (2)",
       "requirements": [
         {
           "type": "COURSE",

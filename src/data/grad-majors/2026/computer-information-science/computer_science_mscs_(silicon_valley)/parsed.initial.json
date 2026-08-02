@@ -2,8 +2,10 @@
   "name": "Computer Science, MSCS (Silicon Valley)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/2/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -192,6 +194,13 @@
               "type": "COURSE",
               "subject": "CS",
               "classId": 5097
+            },
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 5100,
+              "idRangeEnd": 7980,
+              "exceptions": []
             },
             {
               "type": "COURSE",

@@ -2,10 +2,12 @@
   "name": "Business Administration, MBA—Part-Time (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 17,
+    "tablesConsumed": 17
   },
-  "totalCreditsRequired": 0,
+  "totalCreditsRequired": 50,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -85,6 +87,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Analytics",
+        "label": "Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -158,6 +161,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Brand Management",
+        "label": "Brand Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -206,6 +210,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Business Management for Healthcare",
+        "label": "Business Management for Healthcare",
         "requirements": [
           {
             "type": "COURSE",
@@ -289,6 +294,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Corporate Finance",
+        "label": "Corporate Finance",
         "requirements": [
           {
             "type": "COURSE",
@@ -352,6 +358,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Corporate Innovation",
+        "label": "Corporate Innovation",
         "requirements": [
           {
             "type": "XOM",
@@ -410,6 +417,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Corporate Renewal",
+        "label": "Corporate Renewal",
         "requirements": [
           {
             "type": "XOM",
@@ -458,6 +466,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Entrepreneurship",
+        "label": "Entrepreneurship",
         "requirements": [
           {
             "type": "XOM",
@@ -536,6 +545,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in International Business",
+        "label": "International Business",
         "requirements": [
           {
             "type": "COURSE",
@@ -594,6 +604,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Investments",
+        "label": "Investments",
         "requirements": [
           {
             "type": "COURSE",
@@ -647,6 +658,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Leading People and Organizations",
+        "label": "Leading People and Organizations",
         "requirements": [
           {
             "type": "XOM",
@@ -700,6 +712,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Marketing",
+        "label": "Marketing",
         "requirements": [
           {
             "type": "XOM",
@@ -768,6 +781,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Marketing Analytics",
+        "label": "Marketing Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -806,6 +820,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Mutual Fund Management",
+        "label": "Mutual Fund Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -839,6 +854,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Operation and Supply Chain Management",
+        "label": "Operation and Supply Chain Management",
         "requirements": [
           {
             "type": "XOM",
@@ -887,6 +903,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Sustainability and Business",
+        "label": "Sustainability and Business",
         "requirements": [
           {
             "type": "XOM",

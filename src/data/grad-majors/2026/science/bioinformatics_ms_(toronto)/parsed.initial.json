@@ -2,8 +2,10 @@
   "name": "Bioinformatics, MS (Toronto)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -102,6 +104,123 @@
         }
       ],
       "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives List",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5145
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5225
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5227
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5330
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5340
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5500
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5560
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5635
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5700
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5810
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5850
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6100
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 7245
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5550
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5620
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ],
   "concentrations": {
@@ -110,6 +229,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Bioinformatics Enterprise",
+        "label": "Bioinformatics Enterprise",
         "requirements": [
           {
             "type": "COURSE",
@@ -132,6 +252,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Biotechnology",
+        "label": "Biotechnology",
         "requirements": [
           {
             "type": "COURSE",
@@ -154,6 +275,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Omics",
+        "label": "Omics",
         "requirements": [
           {
             "type": "COURSE",

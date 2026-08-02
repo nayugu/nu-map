@@ -2,8 +2,10 @@
   "name": "Information Systems, MSIS (Vancouver)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -32,12 +34,24 @@
     },
     {
       "type": "SECTION",
-      "title": "Project or Thesis Option",
+      "title": "Project Option",
       "requirements": [
         {
           "type": "COURSE",
           "subject": "INFO",
           "classId": 7976
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INFO",
+          "classId": 7990
         }
       ],
       "minRequirementCount": 1

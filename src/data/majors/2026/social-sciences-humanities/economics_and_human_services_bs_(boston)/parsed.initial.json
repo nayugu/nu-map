@@ -2,10 +2,12 @@
   "name": "Economics and Human Services, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
-  "totalCreditsRequired": 132,
+  "totalCreditsRequired": 128,
   "yearVersion": 2026,
   "requirementSections": [
     {

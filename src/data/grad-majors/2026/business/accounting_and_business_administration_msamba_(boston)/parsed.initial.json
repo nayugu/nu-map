@@ -2,8 +2,10 @@
   "name": "Accounting and Business Administration, MSAMBA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 68,
   "yearVersion": 2026,
@@ -132,6 +134,33 @@
     },
     {
       "type": "SECTION",
+      "title": "Required (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BUSN",
+          "classId": 6365
+        },
+        {
+          "type": "COURSE",
+          "subject": "MGSC",
+          "classId": 6201
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6210
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6212
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
       "title": "Corporate Residency Requirement",
       "requirements": [
         {
@@ -142,37 +171,5 @@
       ],
       "minRequirementCount": 1
     }
-  ],
-  "concentrations": {
-    "minOptions": 1,
-    "concentrationOptions": [
-      {
-        "type": "SECTION",
-        "title": "Analytics Concentration Requirements",
-        "requirements": [
-          {
-            "type": "COURSE",
-            "subject": "BUSN",
-            "classId": 6365
-          },
-          {
-            "type": "COURSE",
-            "subject": "MGSC",
-            "classId": 6201
-          },
-          {
-            "type": "COURSE",
-            "subject": "MISM",
-            "classId": 6210
-          },
-          {
-            "type": "COURSE",
-            "subject": "MISM",
-            "classId": 6212
-          }
-        ],
-        "minRequirementCount": 4
-      }
-    ]
-  }
+  ]
 }

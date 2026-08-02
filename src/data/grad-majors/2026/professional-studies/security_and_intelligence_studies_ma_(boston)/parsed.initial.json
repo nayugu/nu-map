@@ -2,8 +2,10 @@
   "name": "Security and Intelligence Studies, MA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -44,38 +46,110 @@
         }
       ],
       "minRequirementCount": 6
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CJS",
-          "classId": 6430
-        },
-        {
-          "type": "COURSE",
-          "subject": "HLS",
-          "classId": 6080
-        },
-        {
-          "type": "COURSE",
-          "subject": "HLS",
-          "classId": 6150
-        },
-        {
-          "type": "COURSE",
-          "subject": "SIA",
-          "classId": 6150
-        },
-        {
-          "type": "COURSE",
-          "subject": "SIA",
-          "classId": 6160
-        }
-      ],
-      "minRequirementCount": 5
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Corporate Security Management",
+        "label": "Corporate Security Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CJS",
+            "classId": 6430
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6080
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6160
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Homeland Security and Emergency Management",
+        "label": "Homeland Security and Emergency Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6040
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6060
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6080
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "HLS",
+            "classId": 6160
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Strategic Intelligence and Analysis",
+        "label": "Strategic Intelligence and Analysis",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6010
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6020
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6030
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6050
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6170
+          }
+        ],
+        "minRequirementCount": 5
+      }
+    ]
+  }
 }

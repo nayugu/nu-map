@@ -2,8 +2,10 @@
   "name": "Science Writing, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -99,6 +101,67 @@
               "type": "COURSE",
               "subject": "PSYC",
               "classId": 1101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate/Advanced Science Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2301,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHEM",
+              "idRangeStart": 2311,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 2400,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ENVR",
+              "idRangeStart": 2310,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 2280,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 2303,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PSYC",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5999,
+              "exceptions": []
             }
           ]
         }

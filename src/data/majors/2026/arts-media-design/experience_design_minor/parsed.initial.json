@@ -2,8 +2,10 @@
   "name": "Experience Design, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -52,7 +54,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Electives (Requirements for Non–Art and Design Majors)",
+      "title": "Electives",
       "requirements": [
         {
           "type": "XOM",
@@ -198,7 +200,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Electives (Requirements for Art and Design Majors)",
+      "title": "Electives (2)",
       "requirements": [
         {
           "type": "XOM",

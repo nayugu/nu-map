@@ -2,8 +2,10 @@
   "name": "Education, EdD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -150,33 +152,123 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7204
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7250
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7253
-        },
-        {
-          "type": "COURSE",
-          "subject": "EDU",
-          "classId": 7258
-        }
-      ],
-      "minRequirementCount": 4
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Higher Education Administration",
+        "label": "Higher Education Administration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7204
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7250
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7253
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7258
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Innovative Teaching and Learning",
+        "label": "Innovative Teaching and Learning",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7217
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7311
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7315
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7316
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Transformative School Leadership",
+        "label": "Transformative School Leadership",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7217
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7311
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7312
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7313
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Workplace Learning",
+        "label": "Workplace Learning",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7501
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7502
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7503
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 7504
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

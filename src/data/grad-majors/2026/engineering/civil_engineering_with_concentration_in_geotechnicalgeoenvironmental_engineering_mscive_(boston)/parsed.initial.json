@@ -2,8 +2,10 @@
   "name": "Civil Engineering with Concentration in Geotechnical/Geoenvironmental Engineering, MSCivE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -24,6 +26,143 @@
         }
       ],
       "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Project Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives List",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5271
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 5300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 5301
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5524
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5536
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7230
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7240
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7250
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7251
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7260
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7311
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7312
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7313
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7330
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7331
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6200
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7290
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 5657
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

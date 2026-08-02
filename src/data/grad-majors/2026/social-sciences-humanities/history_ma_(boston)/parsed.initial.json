@@ -2,8 +2,10 @@
   "name": "History, MA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -47,6 +49,72 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Methods",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HIST",
+          "classId": 5102
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Seminar",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 7301,
+              "idRangeEnd": 7325,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 6103,
+              "idRangeEnd": 6295,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 7205,
+              "idRangeEnd": 7218,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "HIST",
+              "idRangeStart": 7220,
+              "idRangeEnd": 7297,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ],
   "concentrations": {
@@ -55,6 +123,7 @@
       {
         "type": "SECTION",
         "title": "Public History Concentration",
+        "label": "Public History",
         "requirements": [
           {
             "type": "COURSE",
@@ -125,58 +194,6 @@
           }
         ],
         "minRequirementCount": 6
-      },
-      {
-        "type": "SECTION",
-        "title": "World History Concentration",
-        "requirements": [
-          {
-            "type": "COURSE",
-            "subject": "HIST",
-            "classId": 5102
-          },
-          {
-            "type": "XOM",
-            "numCreditsMin": 4,
-            "courses": [
-              {
-                "type": "RANGE",
-                "subject": "HIST",
-                "idRangeStart": 7301,
-                "idRangeEnd": 7325,
-                "exceptions": []
-              }
-            ]
-          },
-          {
-            "type": "XOM",
-            "numCreditsMin": 20,
-            "courses": [
-              {
-                "type": "RANGE",
-                "subject": "HIST",
-                "idRangeStart": 6103,
-                "idRangeEnd": 6295,
-                "exceptions": []
-              },
-              {
-                "type": "RANGE",
-                "subject": "HIST",
-                "idRangeStart": 7205,
-                "idRangeEnd": 7218,
-                "exceptions": []
-              },
-              {
-                "type": "RANGE",
-                "subject": "HIST",
-                "idRangeStart": 7220,
-                "idRangeEnd": 7297,
-                "exceptions": []
-              }
-            ]
-          }
-        ],
-        "minRequirementCount": 3
       }
     ]
   }

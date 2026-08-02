@@ -2,8 +2,10 @@
   "name": "Project Management, MS (Miami)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -44,6 +46,130 @@
         }
       ],
       "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Project Management Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6075
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6125
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6175
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6180
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6185
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6205
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6215
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6710
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6000
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6005
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6090
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6095
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6940
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6943
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ],
   "concentrations": {
@@ -51,79 +177,8 @@
     "concentrationOptions": [
       {
         "type": "SECTION",
-        "title": "Concentration or Electives Option",
-        "requirements": [
-          {
-            "type": "OR",
-            "courses": [
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6075
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6125
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6140
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6145
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6175
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6180
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6185
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6205
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6210
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6215
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6710
-              },
-              {
-                "type": "COURSE",
-                "subject": "PJM",
-                "classId": 6983
-              }
-            ]
-          }
-        ],
-        "minRequirementCount": 1
-      },
-      {
-        "type": "SECTION",
         "title": "Leading and Managing Technical Projects Concentration",
+        "label": "Leading and Managing Technical Projects",
         "requirements": [
           {
             "type": "COURSE",
@@ -156,6 +211,7 @@
       {
         "type": "SECTION",
         "title": "Project Business Analysis Concentration",
+        "label": "Project Business Analysis",
         "requirements": [
           {
             "type": "COURSE",

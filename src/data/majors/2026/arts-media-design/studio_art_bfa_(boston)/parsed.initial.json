@@ -2,10 +2,12 @@
   "name": "Studio Art, BFA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
-  "totalCreditsRequired": 138,
+  "totalCreditsRequired": 136,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -39,6 +41,154 @@
         }
       ],
       "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Art and Design History Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 1310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2501
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 3901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 4901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2211
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2212
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2311
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2312
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2313
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 3211
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 4000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 5600
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 1110
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 1220
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2336
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3392
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3600
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3920
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 1113
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

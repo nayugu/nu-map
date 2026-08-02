@@ -2,8 +2,10 @@
   "name": "Population Health, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 10,
+    "tablesConsumed": 10
   },
   "totalCreditsRequired": 33,
   "yearVersion": 2026,
@@ -32,7 +34,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Population Health (Core Requirements)",
+      "title": "Population Health",
       "requirements": [
         {
           "type": "COURSE",
@@ -49,7 +51,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Epidemiology (Core Requirements)",
+      "title": "Epidemiology",
       "requirements": [
         {
           "type": "COURSE",
@@ -66,7 +68,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research Ethics (Core Requirements)",
+      "title": "Research Ethics",
       "requirements": [
         {
           "type": "OR",
@@ -88,7 +90,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research and Analysis (Core Requirements)",
+      "title": "Research and Analysis",
       "requirements": [
         {
           "type": "COURSE",
@@ -105,7 +107,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Options",
+      "title": "Social and Environmental Determinants of Health Option",
       "requirements": [
         {
           "type": "COURSE",
@@ -124,6 +126,23 @@
         }
       ],
       "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Health Services and Policy Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 5110
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 5234
+        }
+      ],
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -266,7 +285,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Population Health (Core Requirements)",
+      "title": "Population Health (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -279,11 +298,12 @@
           "classId": 6410
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Epidemiology (Core Requirements)",
+      "title": "Epidemiology (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -291,11 +311,12 @@
           "classId": 6202
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Research Ethics (Core Requirements)",
+      "title": "Research Ethics (2)",
       "requirements": [
         {
           "type": "OR",
@@ -317,7 +338,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research and Analysis (Core Requirements)",
+      "title": "Research and Analysis (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -325,11 +346,12 @@
           "classId": 6210
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Options",
+      "title": "Social and Environmental Determinants of Health Option (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -347,11 +369,30 @@
           "classId": 6800
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Electives",
+      "title": "Health Services and Policy Option (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 5110
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHTH",
+          "classId": 5234
+        }
+      ],
+      "minRequirementCount": 2,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (2)",
       "requirements": [
         {
           "type": "OR",
@@ -458,7 +499,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

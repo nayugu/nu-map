@@ -2,8 +2,10 @@
   "name": "Digital Media, MPS—Connect (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 10,
+    "tablesConsumed": 10
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -172,7 +174,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "3D Animation",
       "requirements": [
         {
           "type": "COURSE",
@@ -201,6 +203,239 @@
         }
       ],
       "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Digital Media Management",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6230
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6279
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6280
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6285
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6290
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Digital Video",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6435
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6440
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6520
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6540
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6545
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Game Design",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6308
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6403
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6405
+        },
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6410
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Interactive Design",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6461
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Track",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6217
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6317
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6463
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6471
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Usability and Development Track",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6268
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6308
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6451
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6525
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DGM",
+          "classId": 6285
+        }
+      ],
+      "minRequirementCount": 1,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6040
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6045
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6065
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6075
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6290
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6525
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6550
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ]
 }

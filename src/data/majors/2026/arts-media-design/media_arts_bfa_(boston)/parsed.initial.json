@@ -2,10 +2,12 @@
   "name": "Media Arts, BFA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
-  "totalCreditsRequired": 133,
+  "totalCreditsRequired": 130,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -283,82 +285,387 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Animation Requirements",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "ARTD",
-          "classId": 2100
-        },
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 2370
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 2371
-            }
-          ]
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARTD",
-          "classId": 3000
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARTD",
-          "classId": 3470
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARTD",
-          "classId": 4570
-        }
-      ],
-      "minRequirementCount": 5,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Animation Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3471
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3472
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3473
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 4575
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Animation",
+        "label": "Animation",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARTD",
+            "classId": 2100
+          },
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2370
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2371
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTD",
+            "classId": 3000
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTD",
+            "classId": 3470
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTD",
+            "classId": 4570
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3471
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3472
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3473
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4575
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 6
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Photography",
+        "label": "Photography",
+        "requirements": [
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2360
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2361
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTD",
+            "classId": 3460
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTD",
+            "classId": 4565
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4660
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4661
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Video Arts",
+        "label": "Video Arts",
+        "requirements": [
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2380
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2381
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTD",
+            "classId": 3480
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 20,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3485
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2212
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 2160
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 3389
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 3446
+              },
+              {
+                "type": "COURSE",
+                "subject": "THTR",
+                "classId": 2345
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 28,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2100
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3460
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3470
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3471
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3472
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3473
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3480
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3485
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3490
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4565
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4570
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4575
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4660
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4661
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 2500
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 2501
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 3901
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 4901
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 1100
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2211
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2311
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2312
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2313
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 3000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 3211
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 4000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 5600
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTS",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTS",
+                "classId": 2341
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTS",
+                "classId": 3449
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

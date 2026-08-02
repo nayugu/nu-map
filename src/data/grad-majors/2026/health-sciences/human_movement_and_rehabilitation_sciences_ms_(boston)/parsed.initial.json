@@ -2,8 +2,10 @@
   "name": "Human Movement and Rehabilitation Sciences, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -79,6 +81,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in AI Applications",
+        "label": "AI Applications",
         "requirements": [
           {
             "type": "COURSE",
@@ -112,6 +115,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Exercise Science",
+        "label": "Exercise Science",
         "requirements": [
           {
             "type": "XOM",
@@ -151,6 +155,165 @@
                 "type": "COURSE",
                 "subject": "EXSC",
                 "classId": 6400
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5235
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5800
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5810
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 5601
+              },
+              {
+                "type": "COURSE",
+                "subject": "CAEP",
+                "classId": 6326
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5220
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5230
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 5240
+              },
+              {
+                "type": "COURSE",
+                "subject": "EXSC",
+                "classId": 6202
+              },
+              {
+                "type": "COURSE",
+                "subject": "HLTH",
+                "classId": 5410
+              },
+              {
+                "type": "COURSE",
+                "subject": "HLTH",
+                "classId": 5450
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 5630
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 6500
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 7315
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5250
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5659
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5665
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 7247
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 5202
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 6202
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 6210
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHTH",
+                "classId": 6440
+              },
+              {
+                "type": "COURSE",
+                "subject": "PT",
+                "classId": 5138
+              },
+              {
+                "type": "COURSE",
+                "subject": "PT",
+                "classId": 5150
+              },
+              {
+                "type": "COURSE",
+                "subject": "PT",
+                "classId": 5209
+              },
+              {
+                "type": "COURSE",
+                "subject": "PT",
+                "classId": 5410
+              },
+              {
+                "type": "COURSE",
+                "subject": "PT",
+                "classId": 6221
               }
             ]
           }

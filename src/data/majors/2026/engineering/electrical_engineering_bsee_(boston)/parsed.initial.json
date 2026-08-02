@@ -2,8 +2,10 @@
   "name": "Electrical Engineering, BSEE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 133,
   "yearVersion": 2026,
@@ -199,7 +201,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Supplemental Credit (Engineering Requirements)",
+      "title": "Supplemental Credit",
       "requirements": [
         {
           "type": "XOM",
@@ -321,7 +323,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Supplemental Credit (Supporting Courses: Mathematics/Science)",
+      "title": "Supplemental Credit (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -425,260 +427,251 @@
         }
       ],
       "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "EECE Core",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 3392
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 3410
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 4534
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 4574
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 4604
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 4632
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 4646
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5161
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5170
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5606
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5608
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5647
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5649
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5651
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5653
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Engineering and Science Breadth",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 2310
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 2320
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 3312
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 3322
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 4512
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHME",
-              "classId": 5105
-            },
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 4530
-            },
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 5617
-            },
-            {
-              "type": "COURSE",
-              "subject": "ME",
-              "classId": 2340
-            },
-            {
-              "type": "COURSE",
-              "subject": "ME",
-              "classId": 5600
-            },
-            {
-              "type": "COURSE",
-              "subject": "ME",
-              "classId": 5620
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 4305
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 4623
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5114
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5260
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5318
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5352
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Project Management, Product Development, and Entrepreneurship",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ENTR",
-              "classId": 3330
-            },
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 5010
-            },
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 5020
-            },
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 5030
-            },
-            {
-              "type": "COURSE",
-              "subject": "GE",
-              "classId": 5100
-            },
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 2310
-            },
-            {
-              "type": "COURSE",
-              "subject": "MISM",
-              "classId": 2301
-            },
-            {
-              "type": "COURSE",
-              "subject": "MISM",
-              "classId": 2420
-            },
-            {
-              "type": "COURSE",
-              "subject": "MKTG",
-              "classId": 4510
-            },
-            {
-              "type": "COURSE",
-              "subject": "SCHM",
-              "classId": 2301
-            },
-            {
-              "type": "COURSE",
-              "subject": "SCHM",
-              "classId": 3301
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
   ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Semiconductor Engineering Concentration",
+        "label": "Semiconductor Engineering",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 3392
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 3410
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 4534
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 4574
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 4604
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 4632
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 4646
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5161
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5170
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5606
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5608
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5647
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5649
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5651
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5653
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 2310
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 2320
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 3312
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 3322
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 4512
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5105
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 4530
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 5617
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5600
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 5620
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 4305
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 4623
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5114
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5260
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5318
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5352
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ENTR",
+                "classId": 3330
+              },
+              {
+                "type": "COURSE",
+                "subject": "GE",
+                "classId": 5010
+              },
+              {
+                "type": "COURSE",
+                "subject": "GE",
+                "classId": 5020
+              },
+              {
+                "type": "COURSE",
+                "subject": "GE",
+                "classId": 5030
+              },
+              {
+                "type": "COURSE",
+                "subject": "GE",
+                "classId": 5100
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 2310
+              },
+              {
+                "type": "COURSE",
+                "subject": "MISM",
+                "classId": 2301
+              },
+              {
+                "type": "COURSE",
+                "subject": "MISM",
+                "classId": 2420
+              },
+              {
+                "type": "COURSE",
+                "subject": "MKTG",
+                "classId": 4510
+              },
+              {
+                "type": "COURSE",
+                "subject": "SCHM",
+                "classId": 2301
+              },
+              {
+                "type": "COURSE",
+                "subject": "SCHM",
+                "classId": 3301
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  },
   "generalElectiveSH": 28
 }

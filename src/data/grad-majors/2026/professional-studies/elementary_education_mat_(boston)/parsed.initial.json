@@ -2,8 +2,10 @@
   "name": "Elementary Education, MAT (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -82,7 +84,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Program Credit/GPA Requirements",
+      "title": "Elementary MAT+ Special Education",
       "requirements": [
         {
           "type": "COURSE",
@@ -111,6 +113,39 @@
         }
       ],
       "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "MAT+ in English as a Second Language (ESL)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6310
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6429
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6517
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6874
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
     }
   ]
 }

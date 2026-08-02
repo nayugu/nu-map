@@ -2,10 +2,12 @@
   "name": "Chemistry, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
-  "totalCreditsRequired": 138,
+  "totalCreditsRequired": 134,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -403,105 +405,257 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Advanced Chemistry",
-      "requirements": [
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 4456
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 4457
-            }
-          ]
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 5550
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 5620
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 5625
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 5630
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Additional Supporting Courses",
-      "requirements": [
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 1111
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 1112
-            }
-          ]
-        },
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 1113
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 1114
-            }
-          ]
-        },
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 2301
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 2302
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 3
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Chemical Biology",
+        "label": "Chemical Biology",
+        "requirements": [
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 4456
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 4457
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5550
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5620
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5625
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5630
+              }
+            ]
+          },
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 1111
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 1112
+              }
+            ]
+          },
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 1113
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 1114
+              }
+            ]
+          },
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 2301
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 2302
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Materials Chemistry",
+        "label": "Materials Chemistry",
+        "requirements": [
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 4628
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 4629
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5610
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5640
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5651
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5105
+              }
+            ]
+          },
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "ME",
+                "classId": 2341
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CHEM",
+                    "classId": 3331
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHEM",
+                    "classId": 3332
+                  }
+                ]
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CHEM",
+                    "classId": 4456
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHEM",
+                    "classId": 4457
+                  }
+                ]
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CHEM",
+                    "classId": 4628
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHEM",
+                    "classId": 4629
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5550
+              },
+              {
+                "type": "RANGE",
+                "subject": "CHEM",
+                "idRangeStart": 5610,
+                "idRangeEnd": 5620,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "CHEM",
+                "idRangeStart": 5625,
+                "idRangeEnd": 5627,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "CHEM",
+                "idRangeStart": 5629,
+                "idRangeEnd": 5700,
+                "exceptions": []
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

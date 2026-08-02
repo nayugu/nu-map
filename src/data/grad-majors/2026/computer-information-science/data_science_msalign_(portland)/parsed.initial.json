@@ -2,10 +2,12 @@
   "name": "Data Science, MS—Align (Portland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
-  "totalCreditsRequired": 48,
+  "totalCreditsRequired": 40,
   "yearVersion": 2026,
   "requirementSections": [
     {

@@ -2,8 +2,10 @@
   "name": "Biomedical Physics, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 135,
   "yearVersion": 2026,
@@ -505,99 +507,6 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Additional Recommended Courses for Premedical School Track",
-      "requirements": [
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 2301
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 2302
-            }
-          ]
-        },
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 3611
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 3612
-            }
-          ]
-        },
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 1214
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 1215
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 1216
-            }
-          ]
-        },
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 2311
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 2312
-            }
-          ]
-        },
-        {
-          "type": "AND",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 2313
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 2314
-            }
-          ]
-        },
-        {
-          "type": "COURSE",
-          "subject": "MATH",
-          "classId": 2280
-        }
-      ],
-      "minRequirementCount": 6,
-      "shared": true
     }
   ]
 }

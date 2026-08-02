@@ -2,8 +2,10 @@
   "name": "Art, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 130,
   "yearVersion": 2026,
@@ -158,339 +160,6 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Arts, Media and Design Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 20,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 2000
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 2100
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 2340
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2360
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2361
-                }
-              ]
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2370
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2371
-                }
-              ]
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2380
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTD",
-                  "classId": 2381
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3000
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3460
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3470
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3471
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3472
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3473
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3480
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 3490
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 4565
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 4570
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 4575
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 4660
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTD",
-              "classId": 4661
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTE",
-              "classId": 2500
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTE",
-              "classId": 2501
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTE",
-              "classId": 3901
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTE",
-              "classId": 4901
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 1250
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARTG",
-                  "classId": 2250
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARTG",
-                  "classId": 2251
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 2252
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 1100
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 2200
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 2210
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 2211
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 2311
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 2312
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 2313
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 3000
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 3211
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 4000
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTH",
-              "classId": 5600
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTS",
-              "classId": 2340
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTS",
-              "classId": 2341
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTS",
-              "classId": 3449
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARCH",
-                  "classId": 1310
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARCH",
-                  "classId": 1311
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 1450
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 2330
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 2340
-            },
-            {
-              "type": "COURSE",
-              "subject": "COMM",
-              "classId": 1101
-            },
-            {
-              "type": "COURSE",
-              "subject": "GAME",
-              "classId": 1110
-            },
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 1150
-            },
-            {
-              "type": "COURSE",
-              "subject": "MSCR",
-              "classId": 1220
-            },
-            {
-              "type": "COURSE",
-              "subject": "MSCR",
-              "classId": 1230
-            },
-            {
-              "type": "COURSE",
-              "subject": "MSCR",
-              "classId": 2220
-            },
-            {
-              "type": "COURSE",
-              "subject": "MSCR",
-              "classId": 2336
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1113
-            },
-            {
-              "type": "COURSE",
-              "subject": "THTR",
-              "classId": 1101
-            },
-            {
-              "type": "COURSE",
-              "subject": "THTR",
-              "classId": 1270
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
   ],
   "concentrations": {
@@ -498,7 +167,8 @@
     "concentrationOptions": [
       {
         "type": "SECTION",
-        "title": "Art + Design History Electives",
+        "title": "Concentration in Art History and Visual Studies",
+        "label": "Art History and Visual Studies",
         "requirements": [
           {
             "type": "XOM",
@@ -573,6 +243,340 @@
                 "type": "COURSE",
                 "subject": "ARTH",
                 "classId": 5600
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 20,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2100
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 2340
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2360
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2361
+                  }
+                ]
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2370
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2371
+                  }
+                ]
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2380
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2381
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3460
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3470
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3471
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3472
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3473
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3480
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 3490
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4565
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4570
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4575
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4660
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTD",
+                "classId": 4661
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 2500
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 2501
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 3901
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTE",
+                "classId": 4901
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 1250
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2250
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2251
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 2252
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 1100
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2200
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2211
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2311
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2312
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 2313
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 3000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 3211
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 4000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTH",
+                "classId": 5600
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTS",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTS",
+                "classId": 2341
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTS",
+                "classId": 3449
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 1310
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 1311
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 1450
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 2330
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 1101
+              },
+              {
+                "type": "COURSE",
+                "subject": "GAME",
+                "classId": 1110
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 1150
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 1220
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 1230
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 2220
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 2336
+              },
+              {
+                "type": "COURSE",
+                "subject": "MUSC",
+                "classId": 1113
+              },
+              {
+                "type": "COURSE",
+                "subject": "THTR",
+                "classId": 1101
+              },
+              {
+                "type": "COURSE",
+                "subject": "THTR",
+                "classId": 1270
               }
             ]
           }

@@ -2,8 +2,10 @@
   "name": "School Psychology, CAGS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
   "totalCreditsRequired": 31,
   "yearVersion": 2026,
@@ -95,58 +97,60 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Applied Behavior Analysis",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6326
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6327
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6329
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 6336
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Intensive Practicum",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8417
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8418
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8419
+        },
+        {
+          "type": "COURSE",
+          "subject": "CAEP",
+          "classId": 8421
+        }
+      ],
+      "minRequirementCount": 4
     }
-  ],
-  "concentrations": {
-    "minOptions": 1,
-    "concentrationOptions": [
-      {
-        "type": "SECTION",
-        "title": "Optional Concentration",
-        "requirements": [
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 6326
-          },
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 6327
-          },
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 6329
-          },
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 6336
-          },
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 8417
-          },
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 8418
-          },
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 8419
-          },
-          {
-            "type": "COURSE",
-            "subject": "CAEP",
-            "classId": 8421
-          }
-        ],
-        "minRequirementCount": 8
-      }
-    ]
-  }
+  ]
 }

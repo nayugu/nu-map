@@ -2,8 +2,10 @@
   "name": "Nursing, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 11,
+    "tablesConsumed": 11
   },
   "totalCreditsRequired": 43,
   "yearVersion": 2026,
@@ -59,6 +61,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Adult-Gerontology Nurse Practitioner, Acute Care",
+        "label": "Adult-Gerontology Nurse Practitioner, Acute Care",
         "requirements": [
           {
             "type": "COURSE",
@@ -106,6 +109,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Adult-Gerontology Nurse Practitioner, Primary Care",
+        "label": "Adult-Gerontology Nurse Practitioner, Primary Care",
         "requirements": [
           {
             "type": "COURSE",
@@ -153,6 +157,7 @@
       {
         "type": "SECTION",
         "title": "Nursing Concentration in Family Nurse Practitioner, Primary Care",
+        "label": "Family Nurse Practitioner, Primary Care",
         "requirements": [
           {
             "type": "COURSE",
@@ -210,6 +215,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Neonatal Nurse Practitioner",
+        "label": "Neonatal Nurse Practitioner",
         "requirements": [
           {
             "type": "COURSE",
@@ -252,6 +258,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Pediatric Nurse Practitioner, Acute & Primary Care",
+        "label": "Pediatric Nurse Practitioner, Acute and Primary Care",
         "requirements": [
           {
             "type": "COURSE",
@@ -309,6 +316,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Pediatric Nurse Practitioner, Primary Care",
+        "label": "Pediatric Nurse Practitioner, Primary Care",
         "requirements": [
           {
             "type": "COURSE",
@@ -351,6 +359,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Psychiatric-Mental Health Nurse Practitioner",
+        "label": "Psychiatric-Mental Health Nurse Practitioner",
         "requirements": [
           {
             "type": "COURSE",

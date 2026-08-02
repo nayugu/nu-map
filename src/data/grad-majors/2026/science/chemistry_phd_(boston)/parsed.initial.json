@@ -2,15 +2,17 @@
   "name": "Chemistry, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Required Core (Core Requirements)",
+      "title": "Required Core",
       "requirements": [
         {
           "type": "COURSE",
@@ -37,7 +39,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -88,7 +90,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Core (Core Requirements)",
+      "title": "Required Core (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -101,11 +103,12 @@
           "classId": 7750
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -113,11 +116,12 @@
           "classId": 8504
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

@@ -2,8 +2,10 @@
   "name": "Nanomedicine, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 34,
   "yearVersion": 2026,
@@ -352,6 +354,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Nanoformulation Research",
+        "label": "Nanoformulation Research",
         "requirements": [
           {
             "type": "OR",
@@ -399,6 +402,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Translation and Commercialization",
+        "label": "Translation and Commercialization",
         "requirements": [
           {
             "type": "OR",
@@ -446,6 +450,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Vaccine Development",
+        "label": "Vaccine Development",
         "requirements": [
           {
             "type": "COURSE",
@@ -479,6 +484,29 @@
           }
         ],
         "minRequirementCount": 6
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "NNMD",
+                "classId": 5470
+              },
+              {
+                "type": "COURSE",
+                "subject": "NNMD",
+                "classId": 5370
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
       }
     ]
   }

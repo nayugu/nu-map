@@ -2,15 +2,17 @@
   "name": "History, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 45,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Theory and Methodology (Core Requirements)",
+      "title": "Theory and Methodology",
       "requirements": [
         {
           "type": "COURSE",
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Digital History (Core Requirements)",
+      "title": "Digital History",
       "requirements": [
         {
           "type": "COURSE",
@@ -69,7 +71,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Research Seminar (Core Requirements)",
+      "title": "Research Seminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -81,7 +83,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Practicum (Core Requirements)",
+      "title": "Practicum",
       "requirements": [
         {
           "type": "COURSE",
@@ -114,7 +116,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation",
       "requirements": [
         {
           "type": "OR",
@@ -153,7 +155,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation",
       "requirements": [
         {
           "type": "OR",
@@ -170,7 +172,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Theory and Methodology (Core Requirements)",
+      "title": "Theory and Methodology (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -178,11 +180,12 @@
           "classId": 5102
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Digital History (Core Requirements)",
+      "title": "Digital History (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -190,7 +193,8 @@
           "classId": 7370
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -218,12 +222,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
-      "title": "Research Seminar (Core Requirements)",
+      "title": "Research Seminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -231,11 +234,12 @@
           "classId": 7314
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Practicum (Core Requirements)",
+      "title": "Practicum (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -243,11 +247,12 @@
           "classId": 8409
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Electives",
+      "title": "Electives (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -268,7 +273,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -281,11 +286,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -307,7 +313,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -320,7 +326,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

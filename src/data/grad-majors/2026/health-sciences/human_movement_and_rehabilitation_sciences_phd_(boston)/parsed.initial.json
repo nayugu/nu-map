@@ -2,15 +2,17 @@
   "name": "Human Movement and Rehabilitation Sciences, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -22,7 +24,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Rehabilitation Science and Human Movement (Core Requirements)",
+      "title": "Rehabilitation Science and Human Movement",
       "requirements": [
         {
           "type": "COURSE",
@@ -244,7 +246,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminar (Core Requirements)",
+      "title": "Seminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -252,11 +254,12 @@
           "classId": 7030
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Rehabilitation Science and Human Movement (Core Requirements)",
+      "title": "Rehabilitation Science and Human Movement (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -274,11 +277,12 @@
           "classId": 7020
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Electives",
+      "title": "Electives (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -466,7 +470,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

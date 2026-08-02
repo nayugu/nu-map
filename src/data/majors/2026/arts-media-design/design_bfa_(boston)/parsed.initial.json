@@ -2,10 +2,12 @@
   "name": "Design, BFA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9
   },
-  "totalCreditsRequired": 130,
+  "totalCreditsRequired": 128,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -273,61 +275,239 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Required Courses",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "ARTG",
-          "classId": 2810
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARTG",
-          "classId": 3810
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARTG",
-          "classId": 5000
-        }
-      ],
-      "minRequirementCount": 3
-    },
-    {
-      "type": "SECTION",
-      "title": "Elective",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 4,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 2290
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 3100
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 3250
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5640
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Creative Fabrication",
+        "label": "Creative Fabrication",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 2810
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 3810
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 5000
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 2290
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3100
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3250
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5640
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Experience Design",
+        "label": "Experience Design",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 3462
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 3464
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 5000
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3100
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5640
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Graphic Design",
+        "label": "Graphic Design",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 2252
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 3452
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 5000
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3470
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 4554
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Information Design",
+        "label": "Information Design",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 2242
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 3444
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 5000
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 5150
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 5151
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5320
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Interaction Design",
+        "label": "Interaction Design",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 2400
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 3400
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 5000
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3250
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5640
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARTG",
+            "classId": 5000
+          }
+        ],
+        "minRequirementCount": 1
+      }
+    ]
+  }
 }

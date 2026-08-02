@@ -1,0 +1,334 @@
+{
+  "name": "International Business, BSIB (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8
+  },
+  "totalCreditsRequired": 128,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Business Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 1201
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 2201
+        },
+        {
+          "type": "COURSE",
+          "subject": "INNO",
+          "classId": 2301
+        },
+        {
+          "type": "COURSE",
+          "subject": "MGSC",
+          "classId": 2301
+        },
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 2201
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3201
+            },
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3203
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "International Business Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 1205
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 2205
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 2206
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 3205
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 4202
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 4320
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 3330
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 4983
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4512
+            },
+            {
+              "type": "COURSE",
+              "subject": "SCHM",
+              "classId": 3301
+            },
+            {
+              "type": "COURSE",
+              "subject": "STRT",
+              "classId": 3301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "International Experiential Learning",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3948
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "General Education",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BUSN",
+          "classId": 1102
+        },
+        {
+          "type": "COURSE",
+          "subject": "BUSN",
+          "classId": 1103
+        },
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 1116
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Business Experiential Learning",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BUSN",
+              "classId": 4945
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3945
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3946
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3947
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3948
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEBA",
+              "classId": 2945
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEBA",
+              "classId": 2948
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Business Core (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 1201
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 2201
+        },
+        {
+          "type": "COURSE",
+          "subject": "INNO",
+          "classId": 2301
+        },
+        {
+          "type": "COURSE",
+          "subject": "MGSC",
+          "classId": 2301
+        },
+        {
+          "type": "COURSE",
+          "subject": "MKTG",
+          "classId": 2201
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3201
+            },
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3203
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 6,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "International Business Requirements (2)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 1205
+            },
+            {
+              "type": "COURSE",
+              "subject": "INTB",
+              "classId": 1203
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 2205
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 2206
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 3320
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTB",
+          "classId": 4202
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "General Education (2)",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BUSN",
+          "classId": 1103
+        },
+        {
+          "type": "COURSE",
+          "subject": "ECON",
+          "classId": 1116
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 1111
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 3304
+        }
+      ],
+      "minRequirementCount": 4,
+      "shared": true
+    }
+  ]
+}

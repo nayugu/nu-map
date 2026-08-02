@@ -2,8 +2,10 @@
   "name": "Informatics, MPS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -56,6 +58,113 @@
         }
       ],
       "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6015
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6030
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6050
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6130
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6501
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6145
+            },
+            {
+              "type": "COURSE",
+              "subject": "DGM",
+              "classId": 6521
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 5103
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "GIS",
+              "classId": 6360
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6030
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6082
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6345
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6045
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 5900
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6205
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ],
   "concentrations": {
@@ -64,6 +173,7 @@
       {
         "type": "SECTION",
         "title": "Analytics Concentration",
+        "label": "Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -116,6 +226,7 @@
       {
         "type": "SECTION",
         "title": "Cloud Computing Application and Management Concentration",
+        "label": "Cloud Computing Application and Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -163,6 +274,7 @@
       {
         "type": "SECTION",
         "title": "Human-Centered Informatics Concentration",
+        "label": "Human-Centered Informatics",
         "requirements": [
           {
             "type": "COURSE",
@@ -210,6 +322,7 @@
       {
         "type": "SECTION",
         "title": "Information Security Management Concentration",
+        "label": "Information Security Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -257,6 +370,7 @@
       {
         "type": "SECTION",
         "title": "Leading and Managing Technical Projects Concentration",
+        "label": "Leading and Managing Technical Projects",
         "requirements": [
           {
             "type": "COURSE",

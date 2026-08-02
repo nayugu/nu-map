@@ -2,8 +2,10 @@
   "name": "Accounting, MSA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 30,
   "yearVersion": 2026,
@@ -61,7 +63,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Tracks",
+      "title": "Audit Track",
       "requirements": [
         {
           "type": "COURSE",
@@ -80,6 +82,29 @@
         }
       ],
       "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Taxation Track",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 6231
+        },
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 6235
+        },
+        {
+          "type": "COURSE",
+          "subject": "ACCT",
+          "classId": 6254
+        }
+      ],
+      "minRequirementCount": 3,
+      "shared": true
     },
     {
       "type": "SECTION",

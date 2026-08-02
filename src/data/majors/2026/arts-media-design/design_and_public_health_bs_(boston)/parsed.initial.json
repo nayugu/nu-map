@@ -2,15 +2,17 @@
   "name": "Design and Public Health, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
-  "totalCreditsRequired": 143,
+  "totalCreditsRequired": 128,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Required Courses (Design Requirements)",
+      "title": "Required Courses",
       "requirements": [
         {
           "type": "COURSE",
@@ -79,121 +81,6 @@
         }
       ],
       "minRequirementCount": 5
-    },
-    {
-      "type": "SECTION",
-      "title": "Required Courses (Concentrations)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "ARCH",
-          "classId": 1120
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARCH",
-          "classId": 1310
-        },
-        {
-          "type": "COURSE",
-          "subject": "ARCH",
-          "classId": 2260
-        }
-      ],
-      "minRequirementCount": 3
-    },
-    {
-      "type": "SECTION",
-      "title": "Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 1453
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 2130
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 2140
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ARCH",
-                  "classId": 2340
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ARCH",
-                  "classId": 2341
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 3170
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 3210
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 4850
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 5115
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 5310
-            },
-            {
-              "type": "COURSE",
-              "subject": "LARC",
-              "classId": 2130
-            },
-            {
-              "type": "COURSE",
-              "subject": "LARC",
-              "classId": 2140
-            },
-            {
-              "type": "COURSE",
-              "subject": "LARC",
-              "classId": 2330
-            },
-            {
-              "type": "COURSE",
-              "subject": "LARC",
-              "classId": 2340
-            },
-            {
-              "type": "COURSE",
-              "subject": "LARC",
-              "classId": 2430
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -695,5 +582,284 @@
       ],
       "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Concentration in Built Environment",
+        "label": "Built Environment",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ARCH",
+            "classId": 1120
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARCH",
+            "classId": 1310
+          },
+          {
+            "type": "COURSE",
+            "subject": "ARCH",
+            "classId": 2260
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 1453
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 2130
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 2140
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 2340
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 2341
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 3170
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 3210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 4850
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARCH",
+                "classId": 5310
+              },
+              {
+                "type": "COURSE",
+                "subject": "LARC",
+                "classId": 2130
+              },
+              {
+                "type": "COURSE",
+                "subject": "LARC",
+                "classId": 2140
+              },
+              {
+                "type": "COURSE",
+                "subject": "LARC",
+                "classId": 2330
+              },
+              {
+                "type": "COURSE",
+                "subject": "LARC",
+                "classId": 2340
+              },
+              {
+                "type": "COURSE",
+                "subject": "LARC",
+                "classId": 2430
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Concentration in Integrated Design",
+        "label": "Integrated Design",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTF",
+                "classId": 1200
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTF",
+                "classId": 1210
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTF",
+                    "classId": 1230
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTF",
+                    "classId": 1231
+                  }
+                ]
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTF",
+                    "classId": 1240
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTF",
+                    "classId": 1241
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "AND",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 1290
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 1291
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2262
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2263
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5000
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5710
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 2810
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3810
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3462
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3464
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 2252
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3452
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 2242
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3444
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2400
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2401
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 3400
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

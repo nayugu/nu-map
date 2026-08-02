@@ -2,8 +2,10 @@
   "name": "Management, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 21,
+    "tablesConsumed": 21
   },
   "totalCreditsRequired": 30,
   "yearVersion": 2026,
@@ -475,6 +477,7 @@
       {
         "type": "SECTION",
         "title": "Accounting Analytics Concentration",
+        "label": "Accounting Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -553,6 +556,7 @@
       {
         "type": "SECTION",
         "title": "AI Applications Concentration",
+        "label": "AI Applications",
         "requirements": [
           {
             "type": "COURSE",
@@ -606,6 +610,7 @@
       {
         "type": "SECTION",
         "title": "Analytics Concentration",
+        "label": "Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -679,6 +684,7 @@
       {
         "type": "SECTION",
         "title": "Brand Management Concentration",
+        "label": "Brand Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -732,6 +738,7 @@
       {
         "type": "SECTION",
         "title": "Business Management for Healthcare Concentration",
+        "label": "Business Management for Healthcare",
         "requirements": [
           {
             "type": "OR",
@@ -829,6 +836,7 @@
       {
         "type": "SECTION",
         "title": "Corporate Finance Concentration",
+        "label": "Corporate Finance",
         "requirements": [
           {
             "type": "COURSE",
@@ -877,6 +885,7 @@
       {
         "type": "SECTION",
         "title": "Corporate Innovation Concentration",
+        "label": "Corporate Innovation",
         "requirements": [
           {
             "type": "XOM",
@@ -935,6 +944,7 @@
       {
         "type": "SECTION",
         "title": "Digital Transformation in Healthcare Concentration",
+        "label": "Digital Transformation in Healthcare",
         "requirements": [
           {
             "type": "OR",
@@ -1028,6 +1038,7 @@
       {
         "type": "SECTION",
         "title": "Entrepreneurship Concentration",
+        "label": "Entrepreneurship",
         "requirements": [
           {
             "type": "XOM",
@@ -1101,6 +1112,7 @@
       {
         "type": "SECTION",
         "title": "Healthcare Administration Concentration",
+        "label": "Healthcare Administration",
         "requirements": [
           {
             "type": "OR",
@@ -1224,6 +1236,7 @@
       {
         "type": "SECTION",
         "title": "International Business Concentration",
+        "label": "International Business",
         "requirements": [
           {
             "type": "COURSE",
@@ -1267,6 +1280,7 @@
       {
         "type": "SECTION",
         "title": "Investments Concentration",
+        "label": "Investments",
         "requirements": [
           {
             "type": "COURSE",
@@ -1315,6 +1329,7 @@
       {
         "type": "SECTION",
         "title": "Leading People and Organizations Concentration",
+        "label": "Leading People and Organizations",
         "requirements": [
           {
             "type": "COURSE",
@@ -1368,6 +1383,7 @@
       {
         "type": "SECTION",
         "title": "Marketing Concentration",
+        "label": "Marketing",
         "requirements": [
           {
             "type": "COURSE",
@@ -1441,6 +1457,7 @@
       {
         "type": "SECTION",
         "title": "Marketing Analytics Concentration",
+        "label": "Marketing Analytics",
         "requirements": [
           {
             "type": "COURSE",
@@ -1484,6 +1501,7 @@
       {
         "type": "SECTION",
         "title": "Operations and Supply Chain Management Concentration",
+        "label": "Operations and Supply Chain Management",
         "requirements": [
           {
             "type": "COURSE",
@@ -1537,6 +1555,7 @@
       {
         "type": "SECTION",
         "title": "Public Health Concentration",
+        "label": "Public Health",
         "requirements": [
           {
             "type": "COURSE",
@@ -1564,6 +1583,7 @@
       {
         "type": "SECTION",
         "title": "Strategic Technology Leadership Concentration",
+        "label": "Strategic Technology Leadership",
         "requirements": [
           {
             "type": "OR",
@@ -1621,6 +1641,7 @@
       {
         "type": "SECTION",
         "title": "Sustainability and Business Concentration",
+        "label": "Sustainability and Business",
         "requirements": [
           {
             "type": "COURSE",

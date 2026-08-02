@@ -2,10 +2,12 @@
   "name": "Population Health, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
-  "totalCreditsRequired": 0,
+  "totalCreditsRequired": 30,
   "yearVersion": 2026,
   "requirementSections": [
     {

@@ -2,8 +2,10 @@
   "name": "Applied Physics and Engineering, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -46,124 +48,331 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Core Courses",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EECE",
-          "classId": 7205
-        },
-        {
-          "type": "COURSE",
-          "subject": "PHYS",
-          "classId": 7321
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Engineering Coursework",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5639
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5640
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5642
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5643
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5644
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7205
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7271
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7352
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7353
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 7374
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Physics Coursework",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5116
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 5318
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 7301
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 7305
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHYS",
-              "classId": 7335
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
-  ]
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Analysis, Modeling, and Computation",
+        "label": "Analysis, Modeling, and Computation",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EECE",
+            "classId": 7205
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHYS",
+            "classId": 7321
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5639
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5640
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5642
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5643
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5644
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7205
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7271
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7352
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7353
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7374
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5116
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5318
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7301
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7305
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7335
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Electromagnetics, Plasma, and Optics",
+        "label": "Electromagnetics, Plasma, and Optics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EECE",
+            "classId": 7203
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHYS",
+            "classId": 7302
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5698
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7105
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7202
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7245
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7270
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7271
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7275
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7293
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5318
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7305
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7315
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7316
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7321
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7324
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7731
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Microsystems, Materials, and Devices",
+        "label": "Microsystems, Materials, and Devices",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EECE",
+            "classId": 7201
+          },
+          {
+            "type": "COURSE",
+            "subject": "PHYS",
+            "classId": 7324
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5606
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 5680
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7204
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7240
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7244
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7245
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7353
+              },
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7398
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 5318
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7301
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7302
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7305
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7315
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7316
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7321
+              },
+              {
+                "type": "COURSE",
+                "subject": "PHYS",
+                "classId": 7734
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
 }

@@ -2,8 +2,10 @@
   "name": "Health Law and Policy, Graduate Certificate (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -16,6 +18,58 @@
           "type": "COURSE",
           "subject": "LAW",
           "classId": 7335
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Law Courses (2)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7410
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7469
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7494
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7512
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7527
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7588
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7606
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7619
+            }
+          ]
         }
       ],
       "minRequirementCount": 1

@@ -2,15 +2,17 @@
   "name": "Criminology and Justice Policy, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 54,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Pro-Seminar (Core Requirements)",
+      "title": "Pro-Seminar",
       "requirements": [
         {
           "type": "COURSE",
@@ -27,7 +29,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Criminal Justice Process (Core Requirements)",
+      "title": "Criminal Justice Process",
       "requirements": [
         {
           "type": "COURSE",
@@ -39,7 +41,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Criminological Theory (Core Requirements)",
+      "title": "Criminological Theory",
       "requirements": [
         {
           "type": "COURSE",
@@ -56,7 +58,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Analysis & Methods (Core Requirements)",
+      "title": "Analysis & Methods",
       "requirements": [
         {
           "type": "COURSE",
@@ -78,7 +80,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Practicum (Core Requirements)",
+      "title": "Practicum",
       "requirements": [
         {
           "type": "COURSE",
@@ -143,7 +145,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation",
       "requirements": [
         {
           "type": "OR",
@@ -187,7 +189,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation",
       "requirements": [
         {
           "type": "OR",
@@ -204,7 +206,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Pro-Seminar (Core Requirements)",
+      "title": "Pro-Seminar (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -217,11 +219,12 @@
           "classId": 7002
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Criminal Justice Process (Core Requirements)",
+      "title": "Criminal Justice Process (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -229,11 +232,12 @@
           "classId": 7203
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Criminological Theory (Core Requirements)",
+      "title": "Criminological Theory (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -246,11 +250,12 @@
           "classId": 7711
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Analysis & Methods (Core Requirements)",
+      "title": "Analysis & Methods (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -268,11 +273,12 @@
           "classId": 7500
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Practicum (Core Requirements)",
+      "title": "Practicum (2)",
       "requirements": [
         {
           "type": "COURSE",
@@ -285,11 +291,12 @@
           "classId": 7700
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Electives",
+      "title": "Electives (2)",
       "requirements": [
         {
           "type": "XOM",
@@ -333,11 +340,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     },
     {
       "type": "SECTION",
-      "title": "Exam Preparation (Dissertation)",
+      "title": "Exam Preparation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -359,7 +367,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation",
+      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -381,7 +389,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Dissertation Continuation (Dissertation)",
+      "title": "Dissertation Continuation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -394,7 +402,8 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "shared": true
     }
   ]
 }

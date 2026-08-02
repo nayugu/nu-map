@@ -2,8 +2,10 @@
   "name": "Public Policy, MPP (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6
   },
   "totalCreditsRequired": 40,
   "yearVersion": 2026,
@@ -142,6 +144,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Healthcare Management and Policy",
+        "label": "Healthcare Management and Policy Concentration",
         "requirements": [
           {
             "type": "OR",
@@ -245,6 +248,7 @@
       {
         "type": "SECTION",
         "title": "Concentration in Sustainability and Climate Change Policy",
+        "label": "Sustainability and Climate Change Policy Concentration",
         "requirements": [
           {
             "type": "XOM",
@@ -304,6 +308,76 @@
                 "type": "COURSE",
                 "subject": "PPUA",
                 "classId": 6532
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "CRIM",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "ECON",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "ENGL",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "HIST",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "LPSC",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "POLS",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "PPUA",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
+              },
+              {
+                "type": "RANGE",
+                "subject": "SOCL",
+                "idRangeStart": 5000,
+                "idRangeEnd": 7999,
+                "exceptions": []
               }
             ]
           }

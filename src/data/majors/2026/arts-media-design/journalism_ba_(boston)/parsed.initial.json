@@ -2,10 +2,12 @@
   "name": "Journalism, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2
   },
-  "totalCreditsRequired": 131,
+  "totalCreditsRequired": 129,
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -34,6 +36,88 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Journalism Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2201
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2301
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 3610
+        }
+      ],
+      "minRequirementCount": 4,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Journalism",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 1150
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2350
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 3550
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 4650
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 5314
+        }
+      ],
+      "minRequirementCount": 5
     }
   ]
 }

@@ -2,8 +2,10 @@
   "name": "Urban Informatics, MS (Arlington)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 33,
   "yearVersion": 2026,
@@ -82,6 +84,331 @@
                   "type": "COURSE",
                   "subject": "INSH",
                   "classId": 6864
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 13,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7110
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7380
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7381
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7388
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 7392
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7374
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5230
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5235
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5246
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5268
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5264
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5265
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5266
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6502
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6552
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 7346
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6302
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6406
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 7334
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5261
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6212
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6509
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6966
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 7673
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 6410
+            }
+          ],
+          "groups": [
+            {
+              "title": "Methods and Applications",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 7110
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 7380
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 7381
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 7388
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CIVE",
+                  "classId": 7392
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 7374
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5235
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5246
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5268
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5264
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5265
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5266
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6502
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6552
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 7346
+                }
+              ]
+            },
+            {
+              "title": "Analysis",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6302
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6406
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 7334
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5261
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6212
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6216
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6509
+                }
+              ]
+            },
+            {
+              "title": "Practicum or Capstone",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6966
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 7673
+                }
+              ]
+            },
+            {
+              "title": "Portfolio",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6410
                 }
               ]
             }

@@ -2,8 +2,10 @@
   "name": "Artificial Intelligence, MS (Portland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -63,7 +65,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Options",
+      "title": "Specialization Option",
       "requirements": [
         {
           "type": "XOM",
@@ -340,6 +342,23 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 7990
+        },
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 8674
+        }
+      ],
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

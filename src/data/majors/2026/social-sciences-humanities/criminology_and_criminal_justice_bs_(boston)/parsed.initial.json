@@ -2,8 +2,10 @@
   "name": "Criminology and Criminal Justice, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
   "totalCreditsRequired": 128,
   "yearVersion": 2026,
@@ -279,7 +281,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Returning from Co-op (Crime Problems and Justice System Challenges)",
+      "title": "Returning from Co-op",
       "requirements": [
         {
           "type": "COURSE",
@@ -330,7 +332,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Returning from Co-op (Solutions and Reform)",
+      "title": "Returning from Co-op (2)",
       "requirements": [
         {
           "type": "COURSE",

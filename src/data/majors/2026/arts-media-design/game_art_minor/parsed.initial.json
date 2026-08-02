@@ -2,15 +2,17 @@
   "name": "Game Art, Minor",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "Required Courses (Requirements for Non–Art + Design Majors)",
+      "title": "Required Courses",
       "requirements": [
         {
           "type": "AND",
@@ -85,7 +87,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Courses (Requirements for Art + Design Majors)",
+      "title": "Required Courses (2)",
       "requirements": [
         {
           "type": "AND",
@@ -115,6 +117,69 @@
       ],
       "minRequirementCount": 3,
       "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3471
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3472
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3473
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 3901
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 4901
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2500
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
     }
   ]
 }

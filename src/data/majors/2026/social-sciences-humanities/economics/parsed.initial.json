@@ -1,0 +1,68 @@
+{
+  "name": "Economics",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Academic Progression Standards",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 1115
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 1116
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1231
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2315
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2316
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2560
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ]
+}

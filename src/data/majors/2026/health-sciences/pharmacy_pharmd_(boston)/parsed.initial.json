@@ -2,15 +2,17 @@
   "name": "Pharmacy, PharmD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4
   },
-  "totalCreditsRequired": 198,
+  "totalCreditsRequired": 152,
   "yearVersion": 2026,
   "requirementSections": [
     {
       "type": "SECTION",
-      "title": "YEAR 1 (NUpath Requirements)",
+      "title": "YEAR 1",
       "requirements": [
         {
           "type": "COURSE",
@@ -22,7 +24,7 @@
     },
     {
       "type": "SECTION",
-      "title": "YEAR 2 (NUpath Requirements)",
+      "title": "YEAR 2",
       "requirements": [
         {
           "type": "AND",
@@ -538,7 +540,7 @@
     },
     {
       "type": "SECTION",
-      "title": "YEAR 1 (Supporting Courses)",
+      "title": "YEAR 1 (2)",
       "requirements": [
         {
           "type": "AND",
@@ -642,7 +644,7 @@
     },
     {
       "type": "SECTION",
-      "title": "YEAR 2 (Supporting Courses)",
+      "title": "YEAR 2 (2)",
       "requirements": [
         {
           "type": "AND",

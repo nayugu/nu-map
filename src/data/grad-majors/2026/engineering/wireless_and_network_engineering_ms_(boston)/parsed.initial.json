@@ -2,8 +2,10 @@
   "name": "Wireless and Network Engineering, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5
   },
   "totalCreditsRequired": 32,
   "yearVersion": 2026,
@@ -35,6 +37,23 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis Option",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EECE",
+          "classId": 7945
+        },
+        {
+          "type": "COURSE",
+          "subject": "EECE",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

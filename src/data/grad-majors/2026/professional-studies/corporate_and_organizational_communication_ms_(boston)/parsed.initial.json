@@ -2,8 +2,10 @@
   "name": "Corporate and Organizational Communication, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "7/20/2026",
-    "branch": "main"
+    "lastEdited": "8/2/2026",
+    "branch": "main",
+    "tablesPresent": 10,
+    "tablesConsumed": 10
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -80,29 +82,51 @@
     },
     {
       "type": "SECTION",
-      "title": "Required Courses (Program Credit/GPA Requirements)",
+      "title": "Elective Courses",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "CMN",
-          "classId": 6085
-        },
-        {
-          "type": "COURSE",
-          "subject": "CMN",
-          "classId": 6095
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentration Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 10,
+          "type": "OR",
           "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6010
+            },
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6070
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6005
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6025
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6050
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6060
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6085
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6095
+            },
             {
               "type": "COURSE",
               "subject": "CMN",
@@ -110,18 +134,8 @@
             },
             {
               "type": "COURSE",
-              "subject": "GST",
-              "classId": 6100
-            },
-            {
-              "type": "COURSE",
-              "subject": "GST",
-              "classId": 6101
-            },
-            {
-              "type": "COURSE",
-              "subject": "HRM",
-              "classId": 6070
+              "subject": "CMN",
+              "classId": 6110
             },
             {
               "type": "COURSE",
@@ -130,18 +144,13 @@
             },
             {
               "type": "COURSE",
-              "subject": "ITC",
-              "classId": 6045
-            },
-            {
-              "type": "COURSE",
               "subject": "LDR",
-              "classId": 6145
+              "classId": 6101
             },
             {
               "type": "COURSE",
               "subject": "PBR",
-              "classId": 6100
+              "classId": 6001
             }
           ]
         }
@@ -154,30 +163,298 @@
     "concentrationOptions": [
       {
         "type": "SECTION",
-        "title": "Concentration or Electives",
+        "title": "Cross-Cultural Communication",
+        "label": "Cross-Cultural Communication",
         "requirements": [
           {
-            "type": "OR",
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6085
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6095
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 10,
             "courses": [
               {
                 "type": "COURSE",
-                "subject": "ALY",
-                "classId": 6010
+                "subject": "CMN",
+                "classId": 6096
               },
               {
                 "type": "COURSE",
-                "subject": "ALY",
+                "subject": "GST",
+                "classId": 6100
+              },
+              {
+                "type": "COURSE",
+                "subject": "GST",
+                "classId": 6101
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
                 "classId": 6070
               },
               {
                 "type": "COURSE",
+                "subject": "INT",
+                "classId": 6900
+              },
+              {
+                "type": "COURSE",
+                "subject": "ITC",
+                "classId": 6045
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6145
+              },
+              {
+                "type": "COURSE",
+                "subject": "PBR",
+                "classId": 6100
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Human Resource Management",
+        "label": "Human Resource Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6015
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6025
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6042
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 7,
+            "courses": [
+              {
+                "type": "COURSE",
                 "subject": "CMN",
+                "classId": 6096
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
                 "classId": 6005
               },
               {
                 "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6010
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6020
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6030
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6035
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6047
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6060
+              },
+              {
+                "type": "COURSE",
+                "subject": "HRM",
+                "classId": 6070
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Leadership",
+        "label": "Leadership",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6110
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6135
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 6,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6095
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6115
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6140
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6145
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6150
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Project Management",
+        "label": "Project Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 5900
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6005
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6015
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6025
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 5,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6125
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6135
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6140
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6210
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6710
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6810
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Public and Media Relations",
+        "label": "Public and Media Relations",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PBR",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "PBR",
+            "classId": 6135
+          },
+          {
+            "type": "COURSE",
+            "subject": "PBR",
+            "classId": 6710
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 7,
+            "courses": [
+              {
+                "type": "COURSE",
                 "subject": "CMN",
                 "classId": 6025
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6045
               },
               {
                 "type": "COURSE",
@@ -187,17 +464,160 @@
               {
                 "type": "COURSE",
                 "subject": "CMN",
+                "classId": 6075
+              },
+              {
+                "type": "COURSE",
+                "subject": "DGM",
+                "classId": 6290
+              },
+              {
+                "type": "COURSE",
+                "subject": "DGM",
+                "classId": 6550
+              },
+              {
+                "type": "COURSE",
+                "subject": "PBR",
+                "classId": 6001
+              },
+              {
+                "type": "COURSE",
+                "subject": "PBR",
+                "classId": 6125
+              },
+              {
+                "type": "COURSE",
+                "subject": "PBR",
+                "classId": 6130
+              },
+              {
+                "type": "COURSE",
+                "subject": "PBR",
+                "classId": 6140
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Sales Management",
+        "label": "Sales Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "SMT",
+            "classId": 6010
+          },
+          {
+            "type": "COURSE",
+            "subject": "SMT",
+            "classId": 6020
+          },
+          {
+            "type": "COURSE",
+            "subject": "SMT",
+            "classId": 6060
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 6,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6040
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6045
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
                 "classId": 6060
               },
               {
                 "type": "COURSE",
+                "subject": "EAI",
+                "classId": 6020
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6110
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6135
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 5900
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6185
+              },
+              {
+                "type": "COURSE",
+                "subject": "PJM",
+                "classId": 6210
+              },
+              {
+                "type": "COURSE",
+                "subject": "SMT",
+                "classId": 6983
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Social Media",
+        "label": "Social Media",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6045
+          },
+          {
+            "type": "COURSE",
+            "subject": "DGM",
+            "classId": 6285
+          },
+          {
+            "type": "COURSE",
+            "subject": "DGM",
+            "classId": 6290
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 5,
+            "courses": [
+              {
+                "type": "COURSE",
                 "subject": "CMN",
-                "classId": 6085
+                "classId": 6040
               },
               {
                 "type": "COURSE",
                 "subject": "CMN",
-                "classId": 6095
+                "classId": 6075
               },
               {
                 "type": "COURSE",
@@ -206,18 +626,13 @@
               },
               {
                 "type": "COURSE",
-                "subject": "CMN",
-                "classId": 6110
+                "subject": "DGM",
+                "classId": 6168
               },
               {
                 "type": "COURSE",
-                "subject": "INT",
-                "classId": 6900
-              },
-              {
-                "type": "COURSE",
-                "subject": "LDR",
-                "classId": 6101
+                "subject": "DGM",
+                "classId": 6550
               },
               {
                 "type": "COURSE",
@@ -227,7 +642,7 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 4
       }
     ]
   }
