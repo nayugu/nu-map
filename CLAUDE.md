@@ -8,8 +8,8 @@ updates course data. Two workflows are legacy and easy to mistake for the live p
 | Workflow | Cadence | Role |
 |---|---|---|
 | `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs — plus **NUPath from Tableau** (`fetch-nupath --tableau` → `merge-nupath`), Banner availability, **primary instructors** (`--prof`: one newest completed term per run, cached forever after — one getFacultyMeetingTimes call per section), offering summary, and manual patches. Pushes directly to main. |
-| `update-majors.yml` | Bimonthly (odd months) | Undergrad program requirements |
-| `update-grad-majors.yml` | Bimonthly (odd months) | Graduate program requirements |
+| `update-majors.yml` | Bimonthly (odd months) | Undergrad program requirements. Scrape → `check-major-integrity` → `verify-majors --report --write` → ratchet → push. |
+| `update-grad-majors.yml` | Bimonthly (odd months) | Graduate program requirements, same four steps. |
 | `catalog-rotate.yml` | **LEGACY — manual only** | Superseded by the monthly full scrape above. Old design: one subject every 3 days via PR review; its schedule was disabled because GitHub Actions here cannot open PRs. Do not re-enable. |
 | `update-nupath.yml` | **LEGACY — manual only** | Superseded by the Tableau step now inside `update-courses.yml`. Its one remaining use: it installs Playwright, so it is the manual escalation path if Tableau's REST and direct-CSV routes both break. Do not schedule it — it would double-write the same data. |
 
@@ -48,6 +48,35 @@ Facts that follow from this:
   removed in July 2026 — our scrapers are the sole data source, and the
   `nayugu/*` forks backing them are deleted from GitHub. Never reintroduce a
   submodule data path; `git submodule update` on pre-removal commits cannot work.
+
+## Major/minor requirements
+
+- **There is no Tableau-equivalent for majors.** Verified 2026-08-02 and
+  recorded in `scripts/lib/major-verify.js`: Banner has no program/degree
+  endpoints (404), Degree Works and CourseLeaf CIM are SSO-gated, the per-page
+  PDF is the same render as the HTML, and `sandboxnu/graduatenu` is GPL-3.0
+  (incompatible with the Option B commercial licence) with known errors. The
+  catalog's Program Requirements pane is the single authority. Don't re-hunt.
+- Both scrapers share `scripts/lib/catalog-program-parser.js`. Requirement
+  tables live under **27 different container ids** including NEU's own typos,
+  52 pages spread them across more than one pane, and the Sample Plan of Study
+  pane is excluded deliberately. Match `*textcontainer` + "has tables"; never
+  hard-code `programrequirementstextcontainer`.
+- **The Sample Plan of Study is a witness, not a source.** It is one valid
+  path, so it can prove we dropped requirements and can never prove we have
+  them all. Never assert parsed ⊆ plan — the plan takes one branch of every
+  choice. Its total legitimately exceeds the minimum, so it is info only.
+- Concentrations are found through the page's **anchor graph**, not heading
+  text — wording varies far too much. A concentration's title is its only
+  identity across saved plans, share links and MCP `SET_CONCENTRATION`, so
+  every lookup goes through `src/core/concentrationResolve.js`.
+- `verify-majors.js` must run **after** the scrape: the scraper deliberately
+  drops `metadata.verification` rather than carry a stale verdict forward.
+- Both scrapers buffer their whole run and refuse to write if it looks like
+  upstream breakage (`scripts/lib/scrape-rails.js`) — same principle as
+  `fetch-nupath`'s 5% rule. They push straight to main unattended.
+- Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
+  robots.txt and both scrapers used to violate it.
 
 ## Claude/MCP integration
 

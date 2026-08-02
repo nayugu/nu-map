@@ -23,13 +23,14 @@
  * Override: MAJORS_DELAY_MS=300 node scripts/scrape-majors.js
  */
 
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 import { join, dirname }            from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
 import { markSharedSections }       from './lib/major-integrity.js';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
+import { checkScrapeRails }          from './lib/scrape-rails.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
          extractPlanOfStudyCourses,
          normalizeConcentrationHref,
@@ -189,6 +190,21 @@ async function scrapeProgram(url) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
+/** Every committed program file in this tree, so the rails can see removals. */
+function listCommittedPrograms() {
+  const out = [];
+  const walk = dir => {
+    if (!existsSync(dir)) return;
+    for (const e of readdirSync(dir)) {
+      const p = join(dir, e);
+      if (statSync(p).isDirectory()) walk(p);
+      else if (e === 'parsed.initial.json') out.push(p);
+    }
+  };
+  walk(OUT_ROOT);
+  return out;
+}
+
 async function main() {
   let programs;
 
@@ -204,6 +220,10 @@ async function main() {
   }
 
   let done = 0, skipped = 0, failed = 0, written = 0;
+  // Buffered, not written as we go: the rails below need to see the whole run
+  // before any of it lands. Writing per-program meant a broken parse was
+  // already committed by the time anyone looked at the log.
+  const pending = new Map();   // outPath → parsed program
 
   for (const prog of programs) {
     process.stdout.write(`  ${prog.url} … `);
@@ -226,11 +246,12 @@ async function main() {
           console.warn(`  ⚠  _CHOOSE markers not converted at: ${leaks.join(', ')}`);
         }
 
-        if (WRITE) {
-          mkdirSync(dirname(path), { recursive: true });
-          writeFileSync(path, JSON.stringify(data, null, 2));
-          written++;
-        }
+        // metadata.verification is deliberately NOT carried over from the
+        // previous file. The requirements just changed, so an old verdict
+        // would be a stale claim — worse than no claim. verify-majors.js
+        // recomputes it immediately after the scrape; both workflows run it
+        // in that order.
+        pending.set(path, data);
         done++;
       }
     } catch (err) {
@@ -241,6 +262,39 @@ async function main() {
     // No sleep here — politeFetch owns the rate limit globally, so it also
     // applies to the extra requests a single program can make. Sleeping again
     // would double the gap, and would make a fully-cached run needlessly slow.
+  }
+
+  // ── Write rails ────────────────────────────────────────────────────────
+  // Compare the whole run against what is committed before letting any of it
+  // land. A single program regressing is drift; a fleet regressing is upstream
+  // breakage, and this job pushes straight to main unattended.
+  if (WRITE && !URL_ARG && !DRY_RUN) {
+    const previous = new Map();
+    for (const p of pending.keys()) {
+      if (existsSync(p)) { try { previous.set(p, JSON.parse(readFileSync(p, 'utf8'))); } catch {} }
+    }
+    for (const p of listCommittedPrograms()) {
+      if (!previous.has(p)) { try { previous.set(p, JSON.parse(readFileSync(p, 'utf8'))); } catch {} }
+    }
+    const { ok, failures, stats } = checkScrapeRails({
+      discovered: programs.length, failed, results: pending, previous,
+    });
+    console.log(`\nRails: ${stats.nowCount} parsed vs ${stats.prevCount} committed, ` +
+                `${stats.nowSections} sections vs ${stats.prevSections}, ${stats.vanished} vanished.`);
+    if (!ok) {
+      console.error(`\n❌  Refusing to write — this run looks like upstream breakage:\n`);
+      for (const f of failures) console.error(`   • ${f}`);
+      console.error(`\n    Nothing was written. Inspect the catalog markup before re-running.\n`);
+      process.exit(1);
+    }
+  }
+
+  if (WRITE) {
+    for (const [p, data] of pending) {
+      mkdirSync(dirname(p), { recursive: true });
+      writeFileSync(p, JSON.stringify(data, null, 2));
+      written++;
+    }
   }
 
   console.log(`\nResults: ${done} scraped, ${written} written, ${skipped} skipped, ${failed} failed`);

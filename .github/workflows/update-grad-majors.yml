@@ -10,12 +10,8 @@ name: Update Graduate Major Requirements
 # Pushes directly to main — no PR. Same pattern as update-majors.yml.
 
 on:
-  # ⏸ SCHEDULE PAUSED — 2026-08-02, during the requirement-parser rewrite.
-  # Paused for the same reason as update-majors.yml; see the note there.
-  # Both scrapers share the parsing logic being rebuilt, so they restore
-  # together. workflow_dispatch stays enabled meanwhile.
-  # schedule:
-  #   - cron: "0 9 1 1,3,5,7,9,11 *"   # 09:00 UTC on the 1st of odd months
+  schedule:
+    - cron: "0 9 1 1,3,5,7,9,11 *"   # 1st of odd months
   workflow_dispatch:
 
 permissions:
@@ -51,6 +47,21 @@ jobs:
       - name: Check major integrity
         run: node scripts/check-major-integrity.js
 
+      # ── Cross-check the scrape against the catalog ────────────────────────
+      #   check-major-integrity (above) asks only whether sections remain
+      #   satisfiable. This asks whether the data still agrees with the pages
+      #   it came from: every requirement table parsed or explicitly excluded,
+      #   every sample-plan course accounted for, every course code real.
+      #
+      #   Must run AFTER the scrape — the scraper deliberately drops the old
+      #   metadata.verification rather than carry a stale verdict forward.
+      #   Two steps so the report is still committed when the ratchet fails.
+      - name: Verify requirements against the catalog
+        run: node scripts/verify-majors.js --report --write 2>&1 | tee /tmp/verify-log.txt
+
+      - name: Verification ratchet
+        run: node scripts/verify-majors.js
+
       # ── Commit and push directly to main ──────────────────────────────────
       - name: Check for changes
         id: changes
@@ -66,6 +77,9 @@ jobs:
           ADDED=$(grep -oP 'OK\s+' /tmp/grad-majors-log.txt | wc -l | tr -d ' ')
 
           git add src/data/grad-majors/
+          # The verification verdict lives in each program file, and the report
+          # and baseline are the human/machine record of this run's fidelity.
+          git add docs/verification-report.md scripts/major-verify-baseline.json
           git diff --cached --quiet || git commit -m "data: update graduate major requirements ($ADDED programs) [$DATE]
 
           Source: catalog.northeastern.edu

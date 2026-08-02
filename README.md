@@ -51,7 +51,7 @@ Data refreshes automatically via GitHub Actions:
 | Workflow | Cadence | Covers |
 |---|---|---|
 | `update-courses.yml` | Monthly | Full catalog scrape (titles, descriptions, credits, prereqs), NUPath from the Registrar's Tableau dashboard, Banner term availability and enrollment, instructors, manual patches |
-| `update-majors.yml` / `update-grad-majors.yml` | Every two months | Undergraduate / graduate program requirements |
+| `update-majors.yml` / `update-grad-majors.yml` | Every two months | Undergraduate / graduate program requirements, cross-checked against the catalog before the push (see [`docs/verification-report.md`](docs/verification-report.md)) |
 
 `catalog-rotate.yml` and `update-nupath.yml` are superseded by the monthly scrape and kept for manual cross-checks only.
 
@@ -65,6 +65,16 @@ different things, and no source covers everything:
 | NUPath designations | Tableau (Registrar's NUpath dashboard) | Catalog, additive only |
 | Titles, descriptions, credits, prereqs/coreqs | Catalog course pages | — |
 | Sections, terms, seats, instructors | Banner SSB | — |
+| Major/minor requirements | Catalog Program Requirements pane | **none — see below** |
+
+Degree requirements are the one field with **no second source**. Banner exposes
+no program endpoints, Degree Works and the CourseLeaf admin are SSO-gated, and
+the per-page PDF is the same render as the HTML. So `npm run data:verify`
+performs internal-consistency checking, not source triangulation: it confirms
+we parsed the catalog faithfully, and cannot confirm the catalog is right. Each
+program carries a verdict — green (fully corroborated by the catalog's own
+sample plan), grey (checks pass but no sample plan exists to check against), or
+amber (known discrepancies) — surfaced in the UI and in `audit_requirements`.
 
 Two rules keep a weaker source from degrading a stronger one:
 
