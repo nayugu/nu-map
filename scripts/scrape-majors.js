@@ -28,6 +28,10 @@ import { join, dirname }            from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
 import { markSharedSections }       from './lib/major-integrity.js';
+import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
+import { parseSitemapPrograms }      from './lib/catalog-programs.js';
+import { parseRequirements, parseTotalCredits, findLeakedMarkers,
+         UNDERGRAD_PROFILE as PROFILE } from './lib/catalog-program-parser.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -35,7 +39,8 @@ const OUT_ROOT    = join(ROOT, 'src/data/majors');
 const CHANGE_LOG  = join(ROOT, 'public/northeastern/change-log.json');
 const CHANGE_LOG_MAX = 600;
 const BASE      = 'https://catalog.northeastern.edu';
-const AZ_URL    = `${BASE}/azindex/`;
+// /azindex/ is Disallow'd in the catalog's robots.txt; the sitemap is not.
+const SITEMAP_URL = `${BASE}/sitemap.xml`;
 const DELAY_MS  = parseInt(process.env.MAJORS_DELAY_MS ?? '600', 10);
 const YEAR      = parseInt(process.env.MAJORS_YEAR ?? String(new Date().getFullYear()), 10);
 
@@ -45,15 +50,10 @@ const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
 
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-async function fetchPage(url) {
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'nu-map-scraper/1.0 (educational planning tool; not for commercial use)' },
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.text();
-}
+// Every request goes through politeFetch, which owns the rate limit globally —
+// so extra fetches inside a program (concentration pages) can't outpace the
+// configured delay. Set CATALOG_HTML_CACHE to reuse pages across local runs.
+const fetchPage = url => politeFetch(url, { delayMs: DELAY_MS });
 
 /** "Computer Science, BSCS (Boston)" → "computer_science_bscs_(boston)" */
 function slugify(str) {
@@ -68,542 +68,34 @@ function slugify(str) {
 // ── Program list ──────────────────────────────────────────────────────────────
 
 async function fetchProgramUrls() {
-  console.log('Fetching AZ index…');
-  const html = await fetchPage(AZ_URL);
-  const root = parseHTML(html);
-
-  const seen     = new Set();
-  const programs = [];
-
-  for (const a of root.querySelectorAll('a[href]')) {
-    const href = a.getAttribute('href') ?? '';
-    if (!href.startsWith('/undergraduate/')) continue;
-
-    // Degree program pages have ≥4 path segments:
-    // /undergraduate/{college}/{department}/{degree}/
-    const parts = href.replace(/^\/|\/$/g, '').split('/');
-    if (parts.length < 4) continue;
-
-    const url = BASE + href;
-    if (seen.has(url)) continue;
-    seen.add(url);
-
-    programs.push({
-      url,
-      college: parts[1],          // e.g. "computer-information-science"
-      name:    a.text.trim(),
-    });
-  }
-
+  console.log('Fetching sitemap…');
+  const xml = await fetchPage(SITEMAP_URL);
+  const programs = parseSitemapPrograms(xml, { pathPrefix: '/undergraduate/', minSegments: 3 });
   console.log(`Found ${programs.length} program URLs`);
   return programs;
 }
 
 // ── Credit helpers ────────────────────────────────────────────────────────────
 
-function extractTotalCredits(root) {
-  // Catalog uses class "plangridtotal" for the "Total Hours: 134" row
-  for (const tr of root.querySelectorAll('tr.plangridtotal, tr.listsum, tr.total')) {
-    const cells = tr.querySelectorAll('td');
-    const cell = cells[cells.length - 1];
-    if (!cell) continue;
-    const text = cell.text.trim();
-    // "Total Hours: 134" or just "134"
-    const m = text.match(/(\d+)\s*$/);
-    if (m) {
-      const n = parseInt(m[1], 10);
-      if (n > 60 && n < 250) return n;
-    }
-  }
-  // Fallback: scan raw text for "Total Hours: 134"
-  const m = root.text.match(/[Tt]otal\s+[Hh]ours?[\s:]+(\d+)/);
-  return m ? parseInt(m[1], 10) : 0;
-}
-
-function parseHoursCell(tr) {
-  const cell = tr.querySelector('.hourscol');
-  if (!cell) return 0;
-  const n = parseInt(cell.text.trim(), 10);
-  return isNaN(n) ? 0 : n;
-}
-
 // ── Course link parsing ───────────────────────────────────────────────────────
-
-/** Returns { subject, classId } or null. classId is a number. */
-function parseCourseLink(a) {
-  const text = a.text.trim();
-  // "CS 3000" or "MATH 1341"
-  const m = text.match(/^([A-Z]{2,6})\s+(\d+[A-Z]?)$/);
-  if (!m) return null;
-  const num = parseInt(m[2], 10);
-  if (isNaN(num)) return null;
-  return { subject: m[1], classId: num };
-}
-
-function firstCourseLink(container) {
-  for (const a of container.querySelectorAll('a')) {
-    const c = parseCourseLink(a);
-    if (c) return c;
-  }
-  return null;
-}
 
 // ── Range text parser ─────────────────────────────────────────────────────────
 
-/**
- * Parse free-text range descriptions into RANGE nodes.
- * Handles: "CS 2500 or higher", "Any ENGW course", "CS 2500-2999",
- *          "CS 2500 and above", "CS 2500 or higher, except CS 5010",
- *          "MATH 3001 to MATH 4999 but not MATH 4000"
- */
-function parseRangeText(raw) {
-  const text = raw.trim();
-
-  // Extract exceptions first: ", except CS 5010, CS 5020" / "but not MATH 4000"
-  const exceptions = [];
-  const excMatch = text.match(/,?\s*(?:except|but\s+not)\s+(.*)/i);
-  if (excMatch) {
-    for (const chunk of excMatch[1].split(/,\s*|\s+(?:and|or)\s+/i)) {
-      const em = chunk.trim().match(/([A-Z]{2,6})\s+(\d+)/);
-      if (em) exceptions.push({ type: 'COURSE', subject: em[1], classId: parseInt(em[2], 10) });
-    }
-  }
-  const clean = text.replace(/,?\s*(?:except|but\s+not).*/i, '').trim();
-
-  // "SUBJ NNNN or higher" / "SUBJ NNNN and above"
-  let m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s+(?:or\s+higher|and\s+above)/i);
-  if (m) return { type: 'RANGE', subject: m[1], idRangeStart: parseInt(m[2], 10), idRangeEnd: 9999, exceptions };
-
-  // "SUBJ NNNN-MMMM" / "SUBJ NNNN–MMMM" / "SUBJ NNNN to [SUBJ ]MMMM" / "… through …"
-  m = clean.match(/^([A-Z]{2,6})\s+(\d+)\s*(?:[-–]|\bto\b|\bthrough\b)\s*(?:[A-Z]{2,6}\s+)?(\d+)/i);
-  if (m) return { type: 'RANGE', subject: m[1], idRangeStart: parseInt(m[2], 10), idRangeEnd: parseInt(m[3], 10), exceptions };
-
-  // "Any SUBJ course"
-  m = clean.match(/^[Aa]ny\s+([A-Z]{2,6})\s+course/i);
-  if (m) return { type: 'RANGE', subject: m[1], idRangeStart: 1000, idRangeEnd: 9999, exceptions };
-
-  // Bare "SUBJ NNNN" with no range indicator but inside a range context — treat as lower bound
-  m = clean.match(/^([A-Z]{2,6})\s+(\d+)$/);
-  if (m && exceptions.length) return { type: 'RANGE', subject: m[1], idRangeStart: parseInt(m[2], 10), idRangeEnd: 9999, exceptions };
-
-  return null;
-}
-
 // ── Row group parser ──────────────────────────────────────────────────────────
-
-/**
- * Parse "choose N" count from a comment string.
- * "Complete one of the following" → 1
- * "Select two of the following"   → 2
- * Returns null if not a choose-N instruction.
- */
-function parseChooseInstruction(text) {
-  const WORD = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8 };
-  const m = text.match(/(?:complete|choose|select|take)\s+(\w+)\s+of/i);
-  if (!m) return null;
-  const w = m[1].toLowerCase();
-  return WORD[w] ?? (parseInt(w, 10) || null);
-}
-
-/**
- * Parse "N credit hours" from a comment string.
- * "Select 12 credit hours from the following" → 12
- */
-function parseCreditInstruction(text) {
-  const m = text.match(/(\d+)\s+(?:credit|semester)\s+hours?/i);
-  return m ? parseInt(m[1], 10) : null;
-}
-
-function flattenCourseNodes(reqs) {
-  const out = [];
-  for (const r of reqs) {
-    if (r.type === 'COURSE' || r.type === 'RANGE') out.push(r);
-    else if (r.courses) out.push(...flattenCourseNodes(r.courses));
-  }
-  return out;
-}
-
-/**
- * Convert a flat list of <tr> elements into a requirements array.
- * Handles: COURSE, AND (lab pairs), OR (orclass rows), RANGE (commentindent),
- *          XOM/OR groups introduced by "choose N" comment rows.
- */
-function parseRowGroup(rows) {
-  const requirements = [];
-
-  // Pending state
-  let pending       = null;   // last node awaiting possible OR alternatives
-  let inChoose      = false;  // inside a "choose N" or "X credit hours" block
-  let chooseItems   = [];     // options accumulated in choose block
-  let chooseCreds   = 0;      // credit threshold (XOM)
-  let chooseCount   = 0;      // pick-N count (OR / minRequirementCount)
-  let chooseExplicit = false; // true when a "Complete N"/credit comment opened the group
-  let splitPendingCredit = null; // split/supplemental credit (SH) awaiting its single course
-
-  function commitPending() {
-    if (!pending) return;
-    (inChoose ? chooseItems : requirements).push(pending);
-    pending = null;
-  }
-
-  function commitChooseGroup() {
-    if (!inChoose) return;
-    inChoose = false;
-    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; return; }
-
-    if (chooseCreds > 0) {
-      // A credit-hour annotation followed by exactly one course is just a required course,
-      // not an elective pool. Emit as COURSE so the renderer doesn't show "X/Y SH from pool".
-      if (chooseItems.length === 1 && chooseItems[0].type === 'COURSE') {
-        requirements.push(chooseItems[0]);
-      } else {
-        requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
-      }
-    } else if (chooseCount === 1 || chooseItems.length <= 2) {
-      requirements.push({ type: 'OR', courses: chooseItems });
-    } else if (!chooseExplicit) {
-      // Group formed only by blockindent, with no "Complete N"/credit instruction —
-      // e.g. a bare referenced electives pool whose required count is stated in another
-      // section. Default to "pick one" rather than fabricating "take all N courses".
-      requirements.push({ type: 'OR', courses: chooseItems });
-    } else {
-      // Pick N of M: emit as a SECTION node inline so the outer section can wrap it
-      // For now emit the items directly; the section's minRequirementCount will be set
-      // by the caller when it knows the choose count.  Tag the group for the caller.
-      requirements.push({
-        type: '_CHOOSE',        // internal marker; caller converts
-        minCount: chooseCount || chooseItems.length,
-        courses: chooseItems,
-      });
-    }
-
-    chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false;
-  }
-
-  for (const tr of rows) {
-    const cls = tr.getAttribute('class') ?? '';
-
-    // ── OR-alternative row (class="orclass …") ────────────────────────────────
-    if (cls.includes('orclass')) {
-      const codecol = tr.querySelector('td.codecol');
-      if (!codecol) continue;
-      const c = firstCourseLink(codecol);
-      if (!c) continue;
-      const node = { type: 'COURSE', ...c };
-
-      if (pending?.type === 'COURSE' || pending?.type === 'AND') {
-        pending = { type: 'OR', courses: [pending, node] };
-      } else if (pending?.type === 'OR') {
-        pending.courses.push(node);
-      } else {
-        // No pending — append to last item in the current accumulator
-        const arr = inChoose ? chooseItems : requirements;
-        const last = arr[arr.length - 1];
-        if (last?.type === 'COURSE' || last?.type === 'AND') {
-          arr[arr.length - 1] = { type: 'OR', courses: [last, node] };
-        } else if (last?.type === 'OR') {
-          last.courses.push(node);
-        }
-      }
-      continue;
-    }
-
-    const codecol = tr.querySelector('td.codecol');
-
-    // ── Regular codecol row ───────────────────────────────────────────────────
-    if (codecol) {
-      // Indented option? (blockindent DIV wrapping the link)
-      const isIndented = !!codecol.querySelector('div.blockindent');
-      const container  = isIndented ? codecol.querySelector('div.blockindent') : codecol;
-      const primary    = firstCourseLink(container);
-      if (!primary) continue;
-
-      // AND sub-courses: <span class="blockindent">and CS 3101</span>
-      const andCourses = [];
-      for (const span of codecol.querySelectorAll('span.blockindent')) {
-        const c = firstCourseLink(span);
-        if (c) andCourses.push(c);
-      }
-
-      const node = andCourses.length
-        ? { type: 'AND', courses: [{ type: 'COURSE', ...primary }, ...andCourses.map(c => ({ type: 'COURSE', ...c }))] }
-        : { type: 'COURSE', ...primary };
-
-      // A split/supplemental-credit annotation is awaiting this course → emit as a
-      // single-course XOM carrying the section's allotted SH, so the course can satisfy
-      // this section while also counting toward the others it appears in.
-      if (splitPendingCredit !== null && node.type === 'COURSE') {
-        requirements.push({ type: 'XOM', numCreditsMin: splitPendingCredit, courses: [node] });
-        splitPendingCredit = null;
-        continue;
-      }
-      splitPendingCredit = null;
-
-      if (isIndented) {
-        // Options inside a "choose N" block
-        commitPending();
-        if (!inChoose) inChoose = true;
-        pending = node;
-      } else {
-        commitPending();
-        if (inChoose) commitChooseGroup();
-        pending = node;
-      }
-      continue;
-    }
-
-    // ── colspan=2 row (comment, range, or choose instruction) ─────────────────
-    const wide = tr.querySelector('td[colspan="2"]');
-    if (!wide) continue;
-
-    // RANGE: <span class="courselistcomment commentindent"> inside blockindent div
-    const rangeSpan = wide.querySelector('span.commentindent');
-    if (rangeSpan) {
-      const node = parseRangeText(rangeSpan.text.trim());
-      if (node) {
-        commitPending();
-        (inChoose ? chooseItems : requirements).push(node);
-      }
-      continue;
-    }
-
-    // Comment (not an areaheader): "Complete one of the following", "Select 12 credit hours…"
-    const commentSpan = wide.querySelector('span.courselistcomment');
-    if (commentSpan && !commentSpan.getAttribute('class')?.includes('areaheader')) {
-      const text = commentSpan.text.trim();
-
-      // Split/supplemental credit: a per-course annotation cross-counting one course into
-      // this section, e.g. "3 semester hours from the following count toward the
-      // mathematics/science requirement:" or "…already required above and also fulfills the
-      // integrative requirement:". The credit shown (if any) is only the portion allotted to
-      // THIS section — the course's full SH is split across the sections it appears in
-      // (common in combined-degree programs like IECS). Attach it to the next single course
-      // as an XOM so gradRequirements' split-credit path lets it satisfy every section it
-      // appears in without inflating total credits.
-      if (/(?:counts? toward|fulfills) the .+? requirement/i.test(text)) {
-        commitPending();
-        splitPendingCredit = parseCreditInstruction(text) ?? 0;
-        continue;
-      }
-
-      const credits = parseCreditInstruction(text);
-      const count   = credits !== null ? null : parseChooseInstruction(text);
-      // Last resort: credit is only in the hourscol, not in the comment text.
-      // Only used when both text-based parsers come up empty (e.g. "Complete three
-      // courses from two of the following breadth areas: [12 in hourscol]").
-      const hoursCredit = (credits === null && count === null)
-        ? (parseHoursCell(tr) || null) : null;
-      const effectiveCredits = credits ?? hoursCredit;
-
-      if (effectiveCredits !== null || count !== null) {
-        commitPending();
-        commitChooseGroup();
-        inChoose     = true;
-        chooseCreds  = effectiveCredits ?? 0;
-        chooseCount  = count  ?? 0;
-        chooseExplicit = true;
-      }
-      continue;
-    }
-  }
-
-  commitPending();
-  commitChooseGroup();
-
-  // Post-process: expand _CHOOSE markers into proper OR/XOM nodes
-  return requirements.map(r => {
-    if (r.type !== '_CHOOSE') return r;
-    if (r.courses.length <= 2 || r.minCount === 1) return { type: 'OR', courses: r.courses };
-    return { type: 'XOM', numCreditsMin: r.minCount * 4, courses: r.courses };
-  });
-}
 
 // ── Table parser ──────────────────────────────────────────────────────────────
 
-/**
- * Parse a sc_courselist <table> into an array of SECTION nodes.
- *
- * If the table contains areaheader rows they act as sub-section boundaries.
- * Each sub-section becomes its own SECTION node.  If there are no areaheaders
- * the whole table becomes one SECTION using h2Title.
- */
-function parseTable(table, h2Title) {
-  const rows = table.querySelectorAll('tr');
-
-  // Split rows on areaheader boundaries
-  const groups = [];   // [{ title, creditHint, rows[] }]
-  let cur = null;
-
-  for (const tr of rows) {
-    // Skip hidden noscript thead rows
-    const cls = tr.getAttribute('class') ?? '';
-    if (cls.includes('hidden') && cls.includes('noscript')) continue;
-
-    const isAreaHeader =
-      cls.includes('areaheader') ||
-      !!tr.querySelector('span.areaheader, span.courselistcomment.areaheader');
-
-    if (isAreaHeader) {
-      if (cur) groups.push(cur);
-      const span    = tr.querySelector('span.areaheader, span.courselistcomment.areaheader');
-      const title   = span?.text?.trim() ?? tr.text.trim().replace(/\s+/g, ' ');
-      const credits = parseHoursCell(tr);
-      cur = { title, creditHint: credits, rows: [] };
-    } else {
-      if (!cur) cur = { title: h2Title, creditHint: 0, rows: [] };
-      cur.rows.push(tr);
-    }
-  }
-  if (cur?.rows.length) groups.push(cur);
-
-  if (!groups.length) return [];
-
-  // "Choose from N areas" pattern (e.g. MSCS Breadth, AI MS Specialization):
-  // An initial comment row specifies a credit minimum for a pool that spans multiple
-  // areaheader sub-sections, but uses plain wording ("Complete three courses from two
-  // of the following…") so parseCreditInstruction misses it — the credit lives only
-  // in the row's hourscol. When detected, merge all areaheader groups into one XOM
-  // rather than emitting each area as an independent all-required section.
-  if (groups.length >= 3) {
-    const initial = groups[0];
-    if (initial.title === h2Title && initial.creditHint === 0) {
-      const areaGroups = groups.slice(1);
-      if (areaGroups.every(g => g.creditHint === 0)) {
-        let poolCredit = 0;
-        for (const tr of initial.rows) {
-          const span = tr.querySelector('span.courselistcomment');
-          if (span && !span.getAttribute('class')?.includes('areaheader')) {
-            const h = parseHoursCell(tr);
-            if (h > 0 && parseCreditInstruction(span.text.trim()) === null) {
-              poolCredit = h;
-              break;
-            }
-          }
-        }
-        if (poolCredit > 0 && parseRowGroup(initial.rows).length === 0) {
-          const groups2 = areaGroups.map(g => ({
-            title: g.title,
-            courses: flattenCourseNodes(parseRowGroup(g.rows)),
-          })).filter(g => g.courses.length > 0);
-          const allCourses = groups2.flatMap(g => g.courses);
-          if (allCourses.length > 0) {
-            return [{
-              type: 'SECTION',
-              title: h2Title,
-              requirements: [{ type: 'XOM', numCreditsMin: poolCredit, courses: allCourses, groups: groups2 }],
-              minRequirementCount: 1,
-            }];
-          }
-        }
-      }
-    }
-  }
-
-  return groups.map(g => {
-    const requirements = parseRowGroup(g.rows);
-    if (!requirements.length) return null;
-
-    if (g.creditHint > 0) {
-      // The section header specifies a credit total → wrap in XOM
-      return {
-        type: 'SECTION',
-        title: g.title,
-        requirements: [{ type: 'XOM', numCreditsMin: g.creditHint, courses: requirements }],
-        minRequirementCount: 1,
-      };
-    }
-
-    return {
-      type: 'SECTION',
-      title: g.title,
-      requirements,
-      minRequirementCount: requirements.length,
-    };
-  }).filter(Boolean);
-}
-
 // ── Full page parser ──────────────────────────────────────────────────────────
 
-function parseRequirements(root) {
-  const requirementSections = [];
-  const concentrationOptions = [];
-  let generalElectiveSH = 0;
-
-  // Walk through h2 + table.sc_courselist pairs in document order.
-  // We collect all block-level elements and step through them tracking
-  // the most recently seen h2 as context for the next table.
-  const blocks = root.querySelectorAll('h2, table.sc_courselist');
-  let currentH2 = null;
-
-  for (const el of blocks) {
-    if (el.tagName === 'H2') {
-      currentH2 = el.text.trim().replace(/\s+/g, ' ');
-      continue;
-    }
-
-    // TABLE
-    if (!currentH2) continue;
-
-    // Concentrations get their own bucket
-    if (/^Concentration in /i.test(currentH2)) {
-      const sections = parseTable(el, currentH2);
-      if (sections.length === 1) concentrationOptions.push(sections[0]);
-      // Reset so the next table isn't attributed to this concentration
-      currentH2 = null;
-      continue;
-    }
-
-    // Capture SH from "Required General Electives" table then skip it;
-    // gradRequirements.js builds the section dynamically.
-    if (/^Required General Electives/i.test(currentH2)) {
-      for (const tr of el.querySelectorAll('tr')) {
-        const sh = parseHoursCell(tr);
-        if (sh > 0) { generalElectiveSH = sh; break; }
-      }
-      currentH2 = null;
-      continue;
-    }
-
-    const sections = parseTable(el, currentH2);
-    // Tag each section with its h2 context so we can qualify duplicates later
-    sections.forEach(s => { s._h2 = currentH2; });
-    requirementSections.push(...sections);
-    currentH2 = null;
-  }
-
-  // Qualify sections whose titles collide (same areaheader in different h2 tables).
-  // e.g. two "Supplemental Credit" sections under different h2s get their h2 appended.
-  const titleCount = {};
-  requirementSections.forEach(s => { titleCount[s.title] = (titleCount[s.title] ?? 0) + 1; });
-  requirementSections.forEach(s => {
-    if (titleCount[s.title] > 1 && s._h2 && s._h2 !== s.title) {
-      s.title = `${s.title} (${s._h2})`;
-    }
-    delete s._h2;
-  });
-
-  const concentrations = concentrationOptions.length
-    ? { minOptions: 1, concentrationOptions }
-    : null;
-
-  return { requirementSections, concentrations, generalElectiveSH };
-}
-
+// ── Requirements region ───────────────────────────────────────────────────────
+//
+// Every table.sc_courselist lives in the Program Requirements tab pane
+// (verified across the catalog). Program pages use
+// #programrequirementstextcontainer; standalone concentration pages use
+// #concentrationrequirementstextcontainer — hence the suffix match rather than
+// a literal id. Scoping here keeps page chrome (the Print Options dialog, the
+// edition sidebar) and the Plan of Study pane out of the walk.
 // ── Validate no internal markers escape into output ───────────────────────────
-function findLeakedMarkers(obj, path = '') {
-  if (!obj || typeof obj !== 'object') return [];
-  const leaks = [];
-  if (obj.type === '_CHOOSE') leaks.push(path);
-  for (const [k, v] of Object.entries(obj)) {
-    if (Array.isArray(v)) {
-      v.forEach((item, i) => leaks.push(...findLeakedMarkers(item, `${path}.${k}[${i}]`)));
-    } else if (v && typeof v === 'object') {
-      leaks.push(...findLeakedMarkers(v, `${path}.${k}`));
-    }
-  }
-  return leaks;
-}
-
 // ── Output path ───────────────────────────────────────────────────────────────
 
 function outPath(college, slug) {
@@ -621,14 +113,27 @@ async function scrapeProgram(url) {
     ?.replace(/\s+/g, ' ')
     ?? '';
 
-  const totalCreditsRequired     = extractTotalCredits(root);
-  const { requirementSections, concentrations, generalElectiveSH } = parseRequirements(root);
+  const { value: totalCreditsRequired, source: totalCreditsSource } = parseTotalCredits(root, PROFILE);
+  const { requirementSections, concentrations, generalElectiveSH,
+          tablesPresent, tablesConsumed } = parseRequirements(root, PROFILE);
 
-  if (!requirementSections.length) return null;
+  // A program can be entirely concentrations: Philosophy BA's whole major is
+  // five mutually-exclusive options and has no base requirement section.
+  // Dropping it for having no sections lost the program altogether.
+  if (!requirementSections.length && !concentrations) return null;
 
   const data = {
     name,
-    metadata:  { verified: false, lastEdited: new Date().toLocaleDateString('en-US'), branch: 'main' },
+    metadata:  {
+      verified: false,
+      lastEdited: new Date().toLocaleDateString('en-US'),
+      branch: 'main',
+      // Parse coverage — how many requirement tables the page offered vs how
+      // many we actually turned into requirements. Any gap means content was
+      // dropped on the floor; scripts/verify-majors.js gates on it.
+      tablesPresent,
+      tablesConsumed,
+    },
     totalCreditsRequired,
     yearVersion: YEAR,
     requirementSections,
@@ -673,7 +178,9 @@ async function main() {
         const slug = slugify(data.name || prog.college);
         const path = outPath(prog.college, slug);
         const concCount = data.concentrations?.concentrationOptions?.length ?? 0;
-        console.log(`OK  "${data.name}" — ${data.requirementSections.length} sections${concCount ? ` + ${concCount} concentrations` : ''}, ${data.totalCreditsRequired} SH`);
+        const { tablesPresent: tp, tablesConsumed: tc } = data.metadata;
+        const gap = tp > tc ? `  ⚠ DROPPED ${tp - tc}/${tp} tables` : '';
+        console.log(`OK  "${data.name}" — ${data.requirementSections.length} sections${concCount ? ` + ${concCount} concentrations` : ''}, ${data.totalCreditsRequired} SH${gap}`);
 
         const leaks = findLeakedMarkers(data);
         if (leaks.length) {
@@ -692,7 +199,9 @@ async function main() {
       failed++;
     }
 
-    await sleep(DELAY_MS);
+    // No sleep here — politeFetch owns the rate limit globally, so it also
+    // applies to the extra requests a single program can make. Sleeping again
+    // would double the gap, and would make a fully-cached run needlessly slow.
   }
 
   console.log(`\nResults: ${done} scraped, ${written} written, ${skipped} skipped, ${failed} failed`);

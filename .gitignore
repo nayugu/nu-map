@@ -11,3 +11,7 @@ test-results/
 # Local miniflare emulator state (KV blobs, Durable Object SQLite, caches).
 # Rewritten on every `wrangler dev`, so it dirties the tree constantly.
 .wrangler/
+
+# Opt-in HTML cache for the catalog scrapers (CATALOG_HTML_CACHE=.cache/catalog).
+# Development only — never enabled in CI, which must see the live catalog.
+.cache/

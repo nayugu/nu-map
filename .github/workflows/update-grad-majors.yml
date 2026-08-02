@@ -10,8 +10,12 @@ name: Update Graduate Major Requirements
 # Pushes directly to main — no PR. Same pattern as update-majors.yml.
 
 on:
-  schedule:
-    - cron: "0 9 1 1,3,5,7,9,11 *"   # 09:00 UTC on the 1st of odd months
+  # ⏸ SCHEDULE PAUSED — 2026-08-02, during the requirement-parser rewrite.
+  # Paused for the same reason as update-majors.yml; see the note there.
+  # Both scrapers share the parsing logic being rebuilt, so they restore
+  # together. workflow_dispatch stays enabled meanwhile.
+  # schedule:
+  #   - cron: "0 9 1 1,3,5,7,9,11 *"   # 09:00 UTC on the 1st of odd months
   workflow_dispatch:
 
 permissions:
