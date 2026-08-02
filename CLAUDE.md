@@ -7,11 +7,11 @@ updates course data. Two workflows are legacy and easy to mistake for the live p
 
 | Workflow | Cadence | Role |
 |---|---|---|
-| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs, **NUPath** — plus Banner availability, **primary instructors** (`--prof`: one newest completed term per run, cached forever after — one getFacultyMeetingTimes call per section), offering summary, and manual patches. Pushes directly to main. |
+| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs — plus **NUPath from Tableau** (`fetch-nupath --tableau` → `merge-nupath`), Banner availability, **primary instructors** (`--prof`: one newest completed term per run, cached forever after — one getFacultyMeetingTimes call per section), offering summary, and manual patches. Pushes directly to main. |
 | `update-majors.yml` | Bimonthly (odd months) | Undergrad program requirements |
 | `update-grad-majors.yml` | Bimonthly (odd months) | Graduate program requirements |
 | `catalog-rotate.yml` | **LEGACY — manual only** | Superseded by the monthly full scrape above. Old design: one subject every 3 days via PR review; its schedule was disabled because GitHub Actions here cannot open PRs. Do not re-enable. |
-| `update-nupath.yml` | **LEGACY — manual only** | Superseded: NUPath rides the monthly catalog scrape (`nuPath` is a diff field in `scrape-catalog.js`). Kept only as a manual cross-check against the Registrar's Tableau dashboard, the authoritative NUPath source. Do not schedule it. |
+| `update-nupath.yml` | **LEGACY — manual only** | Superseded by the Tableau step now inside `update-courses.yml`. Its one remaining use: it installs Playwright, so it is the manual escalation path if Tableau's REST and direct-CSV routes both break. Do not schedule it — it would double-write the same data. |
 
 Merged summer terms (AY2026+): NEU retired the 40/60 summer codes; a single
 `…50` code carries both sessions, split back into synthetic 40/60 codes by
@@ -24,6 +24,21 @@ Facts that follow from this:
 
 - NUPath designations, descriptions, and prereqs all refresh **monthly** — do not
   describe them as static, manual, or annually updated.
+- **NUPath has 13 codes, not 12.** 11 competencies, but competency 9 ("Writing
+  Across Audiences and Genres") is awarded as three: `WF`, `WD`, `WI`.
+- **Source authority is per field, not a global ranking** (see README → Source
+  hierarchy). For NUPath, Tableau is authoritative and the catalog is a fallback;
+  for titles/descriptions/prereqs the catalog is authoritative. Two invariants
+  live in `scripts/lib/nupath.js` and must not be weakened:
+  1. a source may only *remove* a code it can express — the catalog prints 11 of
+     13 and never `WF`/`WD`, so its silence there means nothing;
+  2. only the authoritative source may remove at all; fallbacks are additive.
+  `fetch-nupath` also refuses to write if a run would clear more than 5% of
+  courses, so a broken upstream cannot silently empty the catalog.
+- The catalog's `Attribute(s):` line is a plain `<p class="courseblockextra">`
+  with **no** nupath/attribute class — find it by its label text
+  (`findAttributeText`), never by a class selector. A class-based selector
+  matched zero blocks and made the catalog contribute no NUPath at all.
 - The runtime file is `public/northeastern/catalog-courses.json` (browser app,
   Node MCP server, and Cloudflare worker all load it). `all-courses.json` is the
   scrape intermediate; `merge-nupath.js` backfills nuPath from it at build time.

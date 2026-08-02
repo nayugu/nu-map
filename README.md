@@ -50,10 +50,33 @@ Data refreshes automatically via GitHub Actions:
 
 | Workflow | Cadence | Covers |
 |---|---|---|
-| `update-courses.yml` | Monthly | Full catalog scrape (titles, descriptions, credits, prereqs, NUPath), Banner term availability and enrollment, instructors, manual patches |
+| `update-courses.yml` | Monthly | Full catalog scrape (titles, descriptions, credits, prereqs), NUPath from the Registrar's Tableau dashboard, Banner term availability and enrollment, instructors, manual patches |
 | `update-majors.yml` / `update-grad-majors.yml` | Every two months | Undergraduate / graduate program requirements |
 
 `catalog-rotate.yml` and `update-nupath.yml` are superseded by the monthly scrape and kept for manual cross-checks only.
+
+### Source hierarchy
+
+Authority is **per field**, not a single ranking — each source is definitive for
+different things, and no source covers everything:
+
+| Field | Authoritative source | Fallback |
+|---|---|---|
+| NUPath designations | Tableau (Registrar's NUpath dashboard) | Catalog, additive only |
+| Titles, descriptions, credits, prereqs/coreqs | Catalog course pages | — |
+| Sections, terms, seats, instructors | Banner SSB | — |
+
+Two rules keep a weaker source from degrading a stronger one:
+
+1. **Capability** — a source may only remove a code it is able to express. The
+   catalog prints just 11 of the 13 NUPath codes (never `WF` or `WD`), so its
+   silence about those two is not evidence of absence.
+2. **Trust** — only the authoritative source for a field may remove anything.
+   The catalog runs as the NUPath fallback when Tableau is unreachable, and in
+   that role it can add designations but never delete them.
+
+Tableau needs no rotation: it is a single CSV covering every NUPath-bearing
+course, so the monthly job refreshes all of it in one request.
 
 Manual commands for local data work:
 
@@ -92,9 +115,9 @@ Push to `main` → GitHub Actions publishes `dist/` to the `gh-pages` branch (mi
 
 | Source | Provides | Cadence |
 |---|---|---|
-| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, prereqs/coreqs, NUPath | Monthly (automated) |
+| [catalog.northeastern.edu](https://catalog.northeastern.edu/course-descriptions/) | Titles, descriptions, credits, prereqs/coreqs; NUPath fallback (11 of 13 codes, additive only) | Monthly (automated) |
 | [nubanner.neu.edu](https://nubanner.neu.edu) (Banner SSB) | Term availability, enrollment, instructors | Monthly (automated) |
-| [tableau.northeastern.edu](https://tableau.northeastern.edu) | NUPath designations (manual cross-check) | Manual |
+| [tableau.northeastern.edu](https://tableau.northeastern.edu) | NUPath designations — authoritative, all 13 codes | Monthly (automated) |
 | [catalog.northeastern.edu](https://catalog.northeastern.edu/) (program pages) | Major/minor/grad requirement JSON | Every two months (automated) |
 
 ---
