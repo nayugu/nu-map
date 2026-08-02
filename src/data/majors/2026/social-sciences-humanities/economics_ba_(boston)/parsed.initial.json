@@ -1,11 +1,57 @@
 {
   "name": "Economics, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CS1100",
+      "CS1101",
+      "ECON1000",
+      "ECON1115",
+      "ECON1116",
+      "ECON2315",
+      "ECON2316",
+      "ECON2350",
+      "ECON2560",
+      "ECON4692",
+      "ECON4997",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3308",
+      "MATH1231",
+      "MATH1241",
+      "MATH1245",
+      "MATH1251",
+      "MATH1340",
+      "MATH1341",
+      "MISM2510"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

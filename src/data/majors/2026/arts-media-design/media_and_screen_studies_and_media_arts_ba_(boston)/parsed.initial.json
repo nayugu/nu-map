@@ -1,11 +1,52 @@
 {
   "name": "Media and Screen Studies and Media Arts, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ARTD1001",
+      "ARTD1002",
+      "ARTD4530",
+      "ARTF1000",
+      "ARTF1240",
+      "ARTF1241",
+      "ARTH1001",
+      "ARTH1002",
+      "ARTH2212",
+      "EEAM2000",
+      "ENGW1111",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420",
+      "MSCR3600"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "stated-total",

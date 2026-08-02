@@ -1,11 +1,56 @@
 {
   "name": "Health Science and Communication Studies, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOL1111",
+      "BIOL1112",
+      "BIOL1113",
+      "BIOL1114",
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM1163",
+      "COMM1000",
+      "COMM1101",
+      "COMM1112",
+      "COMM2301",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3306",
+      "HSCI1000",
+      "HSCI2000",
+      "MATH1241",
+      "PHTH1260",
+      "PHTH2210",
+      "PSYC1101"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 131,
   "totalCreditsSource": "stated-total",

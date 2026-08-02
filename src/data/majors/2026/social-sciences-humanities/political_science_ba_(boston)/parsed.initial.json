@@ -5,7 +5,52 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 11,
-    "tablesConsumed": 11
+    "tablesConsumed": 11,
+    "tablesOnPage": 11,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3315",
+      "ENVR3300",
+      "ENVR3301",
+      "MATH1215",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2399",
+      "POLS2400",
+      "POLS4701",
+      "POLS4703"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.6,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 3,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "high",
+          "message": "3 of 14 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

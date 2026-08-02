@@ -5,7 +5,48 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ENGW1111",
+      "HIST1000",
+      "HIST1130",
+      "HIST1170",
+      "HIST1200",
+      "HIST1201",
+      "HIST2301",
+      "HIST2302",
+      "HIST4701",
+      "MATH1215"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.6,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 3,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "high",
+          "message": "3 of 10 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

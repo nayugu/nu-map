@@ -1,11 +1,62 @@
 {
   "name": "Africana Studies and Media and Screen Studies, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "AFCS1101",
+      "AFCS1113",
+      "AFCS1270",
+      "AFCS2296",
+      "AFCS2619",
+      "AFCS2690",
+      "AFCS3424",
+      "AFCS3664",
+      "AFCS3900",
+      "AFCS4526",
+      "AFCS4700",
+      "ARTD2380",
+      "CLTR1000",
+      "COMM2655",
+      "COMM3655",
+      "COMM4755",
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420",
+      "MSCR2220",
+      "MSCR2335",
+      "MSCR2505",
+      "MSCR3420"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

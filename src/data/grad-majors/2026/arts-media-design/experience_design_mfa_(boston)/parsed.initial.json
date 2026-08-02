@@ -5,7 +5,49 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 2,
-    "tablesConsumed": 2
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ARTG5120",
+      "ARTG5600",
+      "ARTG5610",
+      "ARTG5620",
+      "ARTG5640",
+      "ARTG6310",
+      "ARTG6600",
+      "ARTG6700",
+      "ARTG7100",
+      "ARTG7910",
+      "ARTG7990"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 60,
   "totalCreditsSource": "stated-total",

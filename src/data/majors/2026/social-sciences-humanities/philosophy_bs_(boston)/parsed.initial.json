@@ -5,7 +5,49 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3309",
+      "ENGW3315",
+      "PHIL1000",
+      "PHIL1101",
+      "PHIL1110",
+      "PHIL1115",
+      "PHIL2325",
+      "PHIL2330",
+      "PHIL3435"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 11 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

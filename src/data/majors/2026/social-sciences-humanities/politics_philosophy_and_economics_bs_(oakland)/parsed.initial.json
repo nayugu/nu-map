@@ -1,11 +1,57 @@
 {
   "name": "Politics, Philosophy, and Economics, BS (Oakland)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 11,
-    "tablesConsumed": 11
+    "tablesConsumed": 11,
+    "tablesOnPage": 11,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ECON1115",
+      "ECON1116",
+      "ECON2315",
+      "ECON2316",
+      "ENGW1111",
+      "MATH1231",
+      "MATH1241",
+      "MATH1245",
+      "MATH1251",
+      "MATH1340",
+      "MATH1341",
+      "PHIL1000",
+      "PHIL1115",
+      "PHIL1160",
+      "PHIL2303",
+      "PHIL2325",
+      "PHIL3000",
+      "PHIL3435",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

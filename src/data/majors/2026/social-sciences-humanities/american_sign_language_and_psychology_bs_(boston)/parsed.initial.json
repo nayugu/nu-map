@@ -5,7 +5,59 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 3,
-    "tablesConsumed": 3
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "AMSL1101",
+      "AMSL1102",
+      "AMSL2101",
+      "AMSL2102",
+      "AMSL3101",
+      "AMSL3102",
+      "DEAF1500",
+      "DEAF2500",
+      "DEAF2700",
+      "ENGW1111",
+      "ENGW3315",
+      "INTP3500",
+      "INTP3510",
+      "INTP3970",
+      "INTP4940",
+      "LING1150",
+      "MATH1215",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3464",
+      "PSYC3466"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "2 of 21 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

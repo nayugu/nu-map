@@ -5,7 +5,59 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 9,
-    "tablesConsumed": 9
+    "tablesConsumed": 9,
+    "tablesOnPage": 9,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ANTH1000",
+      "ANTH1101",
+      "ANTH2305",
+      "ANTH3410",
+      "ANTH3421",
+      "ANTH3441",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3306",
+      "ENGW3308",
+      "HSCI1000",
+      "HSCI2000",
+      "PHTH1260",
+      "PHTH2210",
+      "PHTH2300",
+      "PHTH2350",
+      "PHTH2515",
+      "PHTH4120",
+      "PHTH4202",
+      "PHTH4540",
+      "PSYC1101"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

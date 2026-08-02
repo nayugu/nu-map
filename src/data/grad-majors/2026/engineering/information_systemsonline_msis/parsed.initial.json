@@ -5,7 +5,55 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 2,
-    "tablesConsumed": 2
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CSYE6225",
+      "CSYE6255",
+      "CSYE7280",
+      "CSYE7400",
+      "DAMG6210",
+      "DAMG7350",
+      "DAMG7370",
+      "INFO5100",
+      "INFO5101",
+      "INFO6150",
+      "INFO6205",
+      "INFO6245",
+      "INFO6255",
+      "INFO7245",
+      "INFO7260",
+      "TELE5600",
+      "TELE6300"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "2 of 17 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 32,
   "totalCreditsSource": "stated-total",

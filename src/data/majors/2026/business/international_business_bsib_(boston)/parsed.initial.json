@@ -5,7 +5,58 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 8,
-    "tablesConsumed": 8
+    "tablesConsumed": 8,
+    "tablesOnPage": 8,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ACCT1201",
+      "ACCT2301",
+      "BUSN1102",
+      "BUSN1103",
+      "ECON1116",
+      "ENGW1111",
+      "ENGW3304",
+      "FINA2201",
+      "INNO2301",
+      "INTB1205",
+      "INTB2205",
+      "INTB2206",
+      "INTB3205",
+      "INTB4202",
+      "MGSC2301",
+      "MISM2301",
+      "MKTG2201",
+      "ORGB3201",
+      "ORGB3203",
+      "SCHM2301"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 3,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "3 of 20 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

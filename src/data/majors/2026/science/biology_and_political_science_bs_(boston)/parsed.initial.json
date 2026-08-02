@@ -1,11 +1,63 @@
 {
   "name": "Biology and Political Science, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 11,
-    "tablesConsumed": 11
+    "tablesConsumed": 11,
+    "tablesOnPage": 11,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOL1000",
+      "BIOL1107",
+      "BIOL1108",
+      "BIOL2299",
+      "BIOL2301",
+      "BIOL2302",
+      "BIOL2309",
+      "BIOL3611",
+      "BIOL3612",
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM1163",
+      "CHEM2311",
+      "CHEM2312",
+      "CHEM2313",
+      "CHEM2314",
+      "EESC2000",
+      "ENGW1111",
+      "ENVR2500",
+      "ENVR2501",
+      "MATH1341",
+      "PHYS1145",
+      "PHYS1146",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 136,
   "totalCreditsSource": "stated-total",

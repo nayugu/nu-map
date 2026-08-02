@@ -5,7 +5,66 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 6,
-    "tablesConsumed": 6
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CS1200",
+      "CS1210",
+      "CS1800",
+      "CS1802",
+      "CS2000",
+      "CS2001",
+      "CS2100",
+      "CS2101",
+      "CS2484",
+      "CS3000",
+      "CS3100",
+      "CS3101",
+      "CS3200",
+      "CS4530",
+      "CS4535",
+      "CS4550",
+      "EEAM2000",
+      "ENGW1111",
+      "INAM2000",
+      "MATH1341",
+      "THTR1100",
+      "THTR1101",
+      "THTR1120",
+      "THTR1131",
+      "THTR1270",
+      "THTR2000",
+      "THTR3325",
+      "THTR4702"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 133,
   "totalCreditsSource": "stated-required",

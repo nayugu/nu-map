@@ -1,11 +1,54 @@
 {
   "name": "Cultural Anthropology and Theatre, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ANTH1000",
+      "ANTH1101",
+      "ANTH2305",
+      "ANTH3410",
+      "ANTH3421",
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "INAM2000",
+      "THTR1000",
+      "THTR1100",
+      "THTR1101",
+      "THTR1120",
+      "THTR1131",
+      "THTR1270",
+      "THTR2000",
+      "THTR3325",
+      "THTR4702"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

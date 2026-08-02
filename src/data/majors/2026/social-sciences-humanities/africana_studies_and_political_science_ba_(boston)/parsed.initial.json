@@ -5,7 +5,54 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 12,
-    "tablesConsumed": 12
+    "tablesConsumed": 12,
+    "tablesOnPage": 12,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "AFCS1101",
+      "AFCS1261",
+      "AFCS1270",
+      "AFCS2296",
+      "AFCS2325",
+      "AFCS3900",
+      "AFCS4526",
+      "CLTR1000",
+      "ENGW1111",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2399",
+      "POLS2400",
+      "PSYC1101"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 16 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

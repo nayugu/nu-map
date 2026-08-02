@@ -5,7 +5,66 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 2,
-    "tablesConsumed": 2
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "PHMD5115",
+      "PHMD5120",
+      "PHMD5140",
+      "PHMD5182",
+      "PHMD5191",
+      "PHMD5192",
+      "PHMD5210",
+      "PHMD5215",
+      "PHMD5220",
+      "PHMD5240",
+      "PHMD5245",
+      "PHMD5283",
+      "PHMD5284",
+      "PHMD5285",
+      "PHMD5293",
+      "PHMD5294",
+      "PHMD5295",
+      "PHMD5320",
+      "PHMD5335",
+      "PHMD5345",
+      "PHMD5386",
+      "PHMD5396",
+      "PHMD6964",
+      "PHSC5110",
+      "PHSC5130",
+      "PHSC5181",
+      "PHSC5205",
+      "PHSC5230"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 118,
   "totalCreditsSource": "stated-total",

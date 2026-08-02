@@ -5,7 +5,62 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ACCT1201",
+      "BUSN1102",
+      "BUSN1103",
+      "COMM1000",
+      "COMM1101",
+      "COMM1112",
+      "COMM1113",
+      "COMM2301",
+      "COMM3409",
+      "COMM4608",
+      "COOP3945",
+      "ECON1115",
+      "ECON1116",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3304",
+      "ENGW3314",
+      "ENGW3315",
+      "FINA2201",
+      "MATH1231",
+      "MGSC2301",
+      "MKTG2201",
+      "MKTG4504",
+      "STRT4501"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "2 of 24 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

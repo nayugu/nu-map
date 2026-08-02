@@ -5,7 +5,47 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 1,
-    "tablesConsumed": 1
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1230",
+      "MSCR1320",
+      "MSCR1420",
+      "MSCR2220",
+      "MSCR4623"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "total-from-sample-plan",
+          "severity": "medium",
+          "message": "total 130 came from the Sample Plan of Study, which is one path and may exceed the true minimum"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "plan-grid",

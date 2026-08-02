@@ -5,7 +5,50 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "INAM7000",
+      "INAM7001",
+      "INAM7900",
+      "INAM7901",
+      "INAM9990",
+      "INAM9991",
+      "INAM9996"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.7,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "total-from-sample-plan",
+          "severity": "medium",
+          "message": "total 48 came from the Sample Plan of Study, which is one path and may exceed the true minimum"
+        },
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 7 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 48,
   "totalCreditsSource": "plan-grid",

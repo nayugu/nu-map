@@ -598,6 +598,34 @@ export function parseTotalCredits(pageRoot, profile) {
   return { value: 0, source: null };
 }
 
+
+/**
+ * Course codes named in the Sample Plan of Study.
+ *
+ * Read from the anchors, never the cell text. The catalog renders compound
+ * cells as "ME 2355and ME 2356" and "ME 3475 or  3480" — where the alternative
+ * drops the subject prefix — so a text regex recovers about a third of them,
+ * while every course is its own <a class="code" title="ME 2355">. Cells with
+ * no anchor are placeholders ("Elective", "Co-op", "Vacation") and are
+ * deliberately skipped.
+ *
+ * This feeds a WITNESS check, not a source of truth: the plan is one valid
+ * path, so it can show that we dropped requirements but never that we have
+ * them all. See scripts/lib/major-verify.js.
+ */
+export function extractPlanOfStudyCourses(pageRoot) {
+  const keys = new Set();
+  for (const pane of pageRoot.querySelectorAll('div[id]')) {
+    if (!/^planofstudy/.test(pane.getAttribute('id') ?? '')) continue;
+    for (const a of pane.querySelectorAll('a.code, a.bubblelink')) {
+      const raw = (a.getAttribute('title') || a.text || '').replace(/\u00a0/g, ' ').trim();
+      const m = /^([A-Z]{2,6})\s+(\d{3,4}[A-Z]?)$/.exec(raw);
+      if (m) keys.add(`${m[1]}${parseInt(m[2], 10)}`);
+    }
+  }
+  return [...keys].sort();
+}
+
 // ── Block stream ─────────────────────────────────────────────────────────────
 
 const HEADING = /^H([2-4])$/;

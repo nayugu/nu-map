@@ -5,7 +5,60 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 10,
-    "tablesConsumed": 10
+    "tablesConsumed": 10,
+    "tablesOnPage": 10,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ARCH2240",
+      "ARCH2340",
+      "ARCH2341",
+      "ARCH3450",
+      "ARCH5115",
+      "ARCH5210",
+      "ARCH5211",
+      "ARCH5230",
+      "ARCH5231",
+      "ARCH5310",
+      "ARCH5330",
+      "ARCH5340",
+      "ARCH5430",
+      "ARCH6100",
+      "ARCH6115",
+      "ARCH6200",
+      "ARCH6340",
+      "ARCH6440",
+      "ARCH7120",
+      "ARCH7140",
+      "ARCH7220",
+      "ARCH7430"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 3,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "3 of 22 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 80,
   "totalCreditsSource": "stated-total",

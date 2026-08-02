@@ -1,11 +1,56 @@
 {
   "name": "Environmental and Sustainability Sciences, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 7,
-    "tablesConsumed": 7
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EEMB2302",
+      "EEMB2303",
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3307",
+      "ENVR1200",
+      "ENVR1201",
+      "ENVR1400",
+      "ENVR1401",
+      "ENVR1500",
+      "ENVR1501",
+      "ENVR2500",
+      "ENVR2501",
+      "ENVR2515",
+      "ENVR3300",
+      "ENVR3301",
+      "ENVR4000",
+      "ENVR4050",
+      "INSC1000",
+      "MATH1241"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

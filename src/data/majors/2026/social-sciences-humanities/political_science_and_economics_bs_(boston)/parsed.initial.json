@@ -1,11 +1,59 @@
 {
   "name": "Political Science and Economics, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 13,
-    "tablesConsumed": 13
+    "tablesConsumed": 13,
+    "tablesOnPage": 13,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CS1100",
+      "ECON1115",
+      "ECON1116",
+      "ECON2315",
+      "ECON2316",
+      "ECON2350",
+      "ECON2560",
+      "ECON4692",
+      "ECON4997",
+      "ENGW1111",
+      "MATH1231",
+      "MATH1241",
+      "MATH1245",
+      "MATH1251",
+      "MATH1340",
+      "MATH1341",
+      "MISM2510",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400",
+      "POLS4701",
+      "POLS4703"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

@@ -1,11 +1,48 @@
 {
   "name": "Political Science and International Affairs, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 18,
-    "tablesConsumed": 18
+    "tablesConsumed": 18,
+    "tablesOnPage": 18,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ECON3290",
+      "ENGW1111",
+      "ENGW3315",
+      "HIST2211",
+      "INTL1101",
+      "INTL3400",
+      "MATH1215",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

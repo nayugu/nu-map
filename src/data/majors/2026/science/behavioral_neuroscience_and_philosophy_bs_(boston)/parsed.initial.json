@@ -1,11 +1,64 @@
 {
   "name": "Behavioral Neuroscience and Philosophy, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOL1107",
+      "BIOL1108",
+      "BIOL2299",
+      "BIOL2301",
+      "BIOL2302",
+      "BIOL4709",
+      "BIOL5587",
+      "BNSC1000",
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM1163",
+      "CHEM2311",
+      "CHEM2312",
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3315",
+      "MATH1341",
+      "PHIL1105",
+      "PHIL1115",
+      "PHIL1145",
+      "PHIL2325",
+      "PHIL2330",
+      "PHIL4535",
+      "PHIL4555",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3200",
+      "PSYC3458"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 92,
   "totalCreditsSource": "stated-total",

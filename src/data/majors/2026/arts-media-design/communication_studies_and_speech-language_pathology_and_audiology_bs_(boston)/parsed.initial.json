@@ -5,7 +5,70 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOL2217",
+      "BIOL2218",
+      "BIOL2219",
+      "BIOL2220",
+      "COMM1000",
+      "COMM1101",
+      "COMM1112",
+      "COMM1120",
+      "COMM3201",
+      "COMM3409",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3306",
+      "HLTH2100",
+      "PHIL1165",
+      "PHTH2210",
+      "PHTH2300",
+      "PHYS1145",
+      "PHYS1146",
+      "PSYC1101",
+      "SLPA1000",
+      "SLPA1101",
+      "SLPA1102",
+      "SLPA1103",
+      "SLPA1200",
+      "SLPA1203",
+      "SLPA1205",
+      "SLPA2000",
+      "SLPA4500",
+      "SLPA4651",
+      "SLPA5107",
+      "SLPA6219"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 3,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "3 of 32 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 132,
   "totalCreditsSource": "stated-total",

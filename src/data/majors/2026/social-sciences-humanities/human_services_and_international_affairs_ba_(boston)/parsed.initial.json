@@ -1,11 +1,53 @@
 {
   "name": "Human Services and International Affairs, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 9,
-    "tablesConsumed": 9
+    "tablesConsumed": 9,
+    "tablesOnPage": 9,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ECON1115",
+      "ECON3290",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3315",
+      "HUSV1101",
+      "HUSV2300",
+      "HUSV2970",
+      "HUSV3900",
+      "HUSV4700",
+      "HUSV4994",
+      "INTL1000",
+      "INTL1101",
+      "INTL2718",
+      "INTL3400",
+      "INTL4700",
+      "POLS1160"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

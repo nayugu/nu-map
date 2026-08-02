@@ -1,11 +1,52 @@
 {
   "name": "Political Science and Human Services, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 12,
-    "tablesConsumed": 12
+    "tablesConsumed": 12,
+    "tablesOnPage": 12,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3308",
+      "ENGW3315",
+      "HUSV1000",
+      "HUSV1101",
+      "HUSV2300",
+      "HUSV3570",
+      "HUSV3900",
+      "HUSV4994",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400",
+      "POLS3307"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

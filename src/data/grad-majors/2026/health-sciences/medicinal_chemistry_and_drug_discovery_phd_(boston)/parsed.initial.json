@@ -5,7 +5,56 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CHEM5626",
+      "CHEM5628",
+      "PHSC5100",
+      "PHSC5102",
+      "PHSC5212",
+      "PHSC5305",
+      "PHSC5450",
+      "PHSC6213",
+      "PHSC6214",
+      "PHSC6300",
+      "PHSC6810",
+      "PHSC7020",
+      "PHSC8940",
+      "PHSC8986",
+      "PHSC9681",
+      "PHSC9990",
+      "PHSC9991",
+      "PHSC9996"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "2 of 18 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 32,
   "totalCreditsSource": "stated-total",

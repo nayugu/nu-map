@@ -1,11 +1,61 @@
 {
   "name": "Nursing, BSN—Transfer Track (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 3,
-    "tablesConsumed": 3
+    "tablesConsumed": 3,
+    "tablesOnPage": 4,
+    "tablesExcluded": 1,
+    "planOfStudyCourses": [
+      "ENGW3306",
+      "ENGW3315",
+      "HLTH2100",
+      "NRSG2215",
+      "NRSG2221",
+      "NRSG2222",
+      "NRSG2350",
+      "NRSG3320",
+      "NRSG3321",
+      "NRSG3333",
+      "NRSG3334",
+      "NRSG3344",
+      "NRSG3345",
+      "NRSG3400",
+      "NRSG3401",
+      "NRSG3420",
+      "NRSG3421",
+      "NRSG4504",
+      "NRSG4505",
+      "NRSG4604",
+      "NRSG4605",
+      "NRSG4610",
+      "NRSG4889",
+      "NRSG4996",
+      "NRSG5220"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "stated-total",

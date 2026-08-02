@@ -1,11 +1,53 @@
 {
   "name": "Criminal Justice and Psychology, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CRIM1100",
+      "CRIM1110",
+      "CRIM1120",
+      "CRIM3040",
+      "CRIM3600",
+      "CS1100",
+      "EESC2000",
+      "ENGW1111",
+      "INSC1000",
+      "MATH1215",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3400",
+      "PSYC3402",
+      "PSYC3450",
+      "PSYC3458",
+      "PSYC4612"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

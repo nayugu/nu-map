@@ -1,11 +1,54 @@
 {
   "name": "Environmental and Sustainability Sciences and Landscape Architecture, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ARCH1110",
+      "ARCH1120",
+      "EEAM2000",
+      "EEMB2302",
+      "EEMB2303",
+      "ENGW1111",
+      "ENGW3314",
+      "ENVR1400",
+      "ENVR1401",
+      "ENVR2200",
+      "ENVR2515",
+      "ENVR3300",
+      "ENVR3301",
+      "LARC2130",
+      "LARC2230",
+      "LARC2330",
+      "LARC2340",
+      "LARC2430"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 132,
   "totalCreditsSource": "stated-total",

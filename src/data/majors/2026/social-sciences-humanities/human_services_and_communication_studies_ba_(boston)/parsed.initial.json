@@ -5,7 +5,53 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "COMM1000",
+      "COMM1101",
+      "COMM1112",
+      "COMM2301",
+      "COMM3201",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3315",
+      "HUSV1000",
+      "HUSV1101",
+      "HUSV2300",
+      "HUSV2970",
+      "HUSV3570",
+      "HUSV3900",
+      "MATH1215"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 15 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "stated-total",

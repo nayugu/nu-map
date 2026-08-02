@@ -5,7 +5,60 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 21,
-    "tablesConsumed": 21
+    "tablesConsumed": 21,
+    "tablesOnPage": 21,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "FINA6309",
+      "HINF5101",
+      "HINF6404",
+      "HRMG6200",
+      "HRMG6222",
+      "INNO6200",
+      "INNO6222",
+      "INNO6240",
+      "INNO6241",
+      "INNO6242",
+      "INNO6250",
+      "INNO6254",
+      "INTB6226",
+      "MGMT6213",
+      "MGMT6214",
+      "MGSC6281",
+      "MISM6200",
+      "MISM6212",
+      "MKTG6230",
+      "SCHM6214",
+      "SCHM6223",
+      "STRT6220"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 2,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 30,
   "totalCreditsSource": "stated-total",

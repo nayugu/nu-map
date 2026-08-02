@@ -1,11 +1,53 @@
 {
   "name": "Environmental Studies and International Affairs, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 10,
-    "tablesConsumed": 10
+    "tablesConsumed": 10,
+    "tablesOnPage": 10,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ECON3423",
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3308",
+      "ENGW3315",
+      "ENVR1000",
+      "ENVR1101",
+      "ENVR1110",
+      "ENVR2515",
+      "ENVR3300",
+      "ENVR3301",
+      "INTL1000",
+      "INTL1101",
+      "INTL3400",
+      "INTL4700",
+      "POLS1160",
+      "SOCL1246"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

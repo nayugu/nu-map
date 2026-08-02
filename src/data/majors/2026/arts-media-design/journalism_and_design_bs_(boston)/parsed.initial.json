@@ -1,11 +1,58 @@
 {
   "name": "Journalism and Design, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ARTF1000",
+      "ARTF1220",
+      "ARTG1001",
+      "ARTG1002",
+      "ARTG1270",
+      "ARTG1271",
+      "ARTG1290",
+      "ARTG1291",
+      "ARTG4550",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3302",
+      "JRNL1000",
+      "JRNL1101",
+      "JRNL1102",
+      "JRNL1150",
+      "JRNL2201",
+      "JRNL2301",
+      "JRNL3550",
+      "JRNL3610",
+      "JRNL4650",
+      "JRNL5311"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 129,
   "totalCreditsSource": "stated-total",

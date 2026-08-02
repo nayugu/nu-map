@@ -1,11 +1,47 @@
 {
   "name": "Public Relations, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 1,
-    "tablesConsumed": 1
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "COMM1000",
+      "COMM1113",
+      "COMM4608",
+      "EEAM2000",
+      "ENGW1111",
+      "JRNL1000",
+      "JRNL2200",
+      "JRNL5311",
+      "JRNL5480",
+      "PREL1425",
+      "PREL3625"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-overall",

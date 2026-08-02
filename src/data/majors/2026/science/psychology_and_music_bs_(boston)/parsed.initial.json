@@ -1,11 +1,58 @@
 {
   "name": "Psychology and Music, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 7,
-    "tablesConsumed": 7
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EEAM2000",
+      "EESC2000",
+      "ENGW1111",
+      "INAM3200",
+      "MATH1213",
+      "MUSC1000",
+      "MUSC1001",
+      "MUSC1002",
+      "MUSC1003",
+      "MUSC1119",
+      "MUSC1201",
+      "MUSC1202",
+      "MUSC2350",
+      "MUSC3300",
+      "MUSC4510",
+      "PSYC1000",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3452",
+      "PSYC3458",
+      "PSYC3464",
+      "PSYC3466"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "stated-total",

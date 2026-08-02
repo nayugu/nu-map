@@ -5,7 +5,65 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 8,
-    "tablesConsumed": 8
+    "tablesConsumed": 8,
+    "tablesOnPage": 8,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ANTH2305",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3306",
+      "ENGW3308",
+      "HSCI1000",
+      "HSCI2000",
+      "PHTH1260",
+      "PHTH2210",
+      "PHTH2300",
+      "PHTH2350",
+      "PHTH2515",
+      "PHTH4120",
+      "PHTH4202",
+      "PHTH4540",
+      "PSYC1101",
+      "SOCL1000",
+      "SOCL1101",
+      "SOCL2320",
+      "SOCL2321",
+      "SOCL3300",
+      "SOCL3441"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.7,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        },
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "2 of 22 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

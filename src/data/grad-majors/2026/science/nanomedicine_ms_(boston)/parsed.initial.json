@@ -1,11 +1,66 @@
 {
   "name": "Nanomedicine, MS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 6,
-    "tablesConsumed": 6
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOE5820",
+      "BIOT5120",
+      "BIOT5145",
+      "BIOT5219",
+      "BIOT5220",
+      "BIOT5225",
+      "BIOT5630",
+      "BIOT5910",
+      "BIOT5920",
+      "BIOT5930",
+      "BIOT6214",
+      "BIOT6310",
+      "CHEM5648",
+      "CHME5631",
+      "EESC6500",
+      "EESC6964",
+      "EESC6965",
+      "NNMD5270",
+      "NNMD5271",
+      "NNMD5310",
+      "NNMD5370",
+      "NNMD5470",
+      "NNMD5570",
+      "NNMD6272",
+      "NNMD6370",
+      "NNMD6984",
+      "NNMD7500",
+      "PHSC5560",
+      "PHSC6214",
+      "PMST6252"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 34,
   "totalCreditsSource": "stated-total",

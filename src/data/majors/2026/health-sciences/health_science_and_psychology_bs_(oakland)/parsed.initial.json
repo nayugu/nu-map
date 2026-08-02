@@ -1,11 +1,61 @@
 {
   "name": "Health Science and Psychology, BS (Oakland)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOL1111",
+      "BIOL1112",
+      "BIOL1113",
+      "BIOL1114",
+      "CAEP2012",
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM1163",
+      "EESC2000",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3306",
+      "HSCI1000",
+      "HSCI2000",
+      "INSC1000",
+      "MATH1241",
+      "PHIL1165",
+      "PHTH1260",
+      "PHTH1261",
+      "PHTH4540",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3458",
+      "PSYC3510",
+      "PSYC4514"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 132,
   "totalCreditsSource": "stated-total",

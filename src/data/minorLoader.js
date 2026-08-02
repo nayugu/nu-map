@@ -46,7 +46,7 @@ let _cachedMajorReqs = null;
 export function getMinorOptions(majorRequirements) {
   if (_cachedOptions && _cachedMajorReqs === majorRequirements) return _cachedOptions;
 
-  const { fmtLabel, fmtLocation } = majorRequirements;
+  const { fmtLabel, parseProgram } = majorRequirements;
   _cachedMajorReqs = majorRequirements;
   _cachedOptions = Object.keys(_moduleMap)
     .map(path => {
@@ -60,11 +60,11 @@ export function getMinorOptions(majorRequirements) {
       const year         = parseInt(parts[yearIdx], 10);
       const college      = parts[yearIdx + 1] ?? '';
       const folder       = parts[yearIdx + 2] ?? '';
-      const label        = fmtLabel(folder);
-      const location     = fmtLocation(folder);
+      const { name, degree, location, acronyms } = parseProgram(folder);
+      const label        = degree ? `${name}, ${degree}` : name;
       const collegeLabel = fmtLabel(college);
 
-      return { path, year, college, collegeLabel, folder, label, location };
+      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronyms };
     })
     .filter(Boolean)
     .sort((a, b) =>

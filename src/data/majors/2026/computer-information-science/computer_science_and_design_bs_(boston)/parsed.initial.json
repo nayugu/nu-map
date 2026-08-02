@@ -5,7 +5,71 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 8,
-    "tablesConsumed": 8
+    "tablesConsumed": 8,
+    "tablesOnPage": 8,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ARTF1000",
+      "ARTF1220",
+      "ARTG1001",
+      "ARTG1002",
+      "ARTG1270",
+      "ARTG1271",
+      "ARTG1290",
+      "ARTG1291",
+      "ARTG2262",
+      "ARTG2263",
+      "ARTG4550",
+      "CS1200",
+      "CS1210",
+      "CS1800",
+      "CS1802",
+      "CS2000",
+      "CS2001",
+      "CS2100",
+      "CS2101",
+      "CS2484",
+      "CS3000",
+      "CS3100",
+      "CS3101",
+      "CS4530",
+      "CS4535",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3302"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.7,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 2,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        },
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "2 of 28 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 129,
   "totalCreditsSource": "stated-total",

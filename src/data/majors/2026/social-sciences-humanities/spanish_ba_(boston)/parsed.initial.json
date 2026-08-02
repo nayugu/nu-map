@@ -5,7 +5,51 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 1,
-    "tablesConsumed": 1
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CLTR1000",
+      "CLTR1120",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3315",
+      "LING1150",
+      "MATH1215",
+      "SPNS2102",
+      "SPNS3101",
+      "SPNS3102",
+      "SPNS3502",
+      "SPNS3601",
+      "SPNS4700"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 13 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

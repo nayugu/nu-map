@@ -5,7 +5,67 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 2,
-    "tablesConsumed": 2
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ARCH1000",
+      "ARCH1110",
+      "ARCH1120",
+      "ARCH1310",
+      "ARCH1311",
+      "ARCH2130",
+      "ARCH2140",
+      "ARCH2240",
+      "ARCH2340",
+      "ARCH2341",
+      "ARCH3170",
+      "ARCH3210",
+      "ARCH3211",
+      "ARCH3370",
+      "ARCH3450",
+      "ARCH5115",
+      "ARCH5140",
+      "ARCH5230",
+      "ARCH5231",
+      "ARCH5310",
+      "ARCH5330",
+      "ARCH5430",
+      "ARCH6330",
+      "ARCH6430",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3314",
+      "MATH1241",
+      "PHYS1141"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "2 of 29 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 142,
   "totalCreditsSource": "stated-total",

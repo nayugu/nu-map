@@ -60,7 +60,7 @@ export function getMajorOptions(majorRequirements) {
   // Re-derive if the adapter changed (different institution)
   if (_cachedOptions && _cachedMajorReqs === majorRequirements) return _cachedOptions;
 
-  const { fmtLabel, fmtLocation } = majorRequirements;
+  const { fmtLabel, parseProgram } = majorRequirements;
   _cachedMajorReqs = majorRequirements;
   _cachedOptions = Object.keys(_moduleMap)
     .map(path => {
@@ -76,11 +76,13 @@ export function getMajorOptions(majorRequirements) {
       const college     = parts[yearIdx + 1] ?? '';
       const folder      = parts[yearIdx + 2] ?? '';
       if (folder.endsWith('_minor')) return null; // minors live in the minor search
-      const label       = fmtLabel(folder);
-      const location    = fmtLocation(folder);
+      // name/degree/acronyms are what searchRank scores against; label is the
+      // catalog's own rendering of the two, e.g. "Computer Science, BSCS".
+      const { name, degree, location, acronyms } = parseProgram(folder);
+      const label        = degree ? `${name}, ${degree}` : name;
       const collegeLabel = fmtLabel(college);
 
-      return { path, year, college, collegeLabel, folder, label, location };
+      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronyms };
     })
     .filter(Boolean)
     .sort((a, b) =>
@@ -170,7 +172,7 @@ export async function loadMajor(path) {
 export function getGradMajorOptions(majorRequirements) {
   if (_cachedGradOptions && _cachedGradMajorReqs === majorRequirements) return _cachedGradOptions;
 
-  const { fmtLabel, fmtLocation } = majorRequirements;
+  const { fmtLabel, parseProgram } = majorRequirements;
   _cachedGradMajorReqs = majorRequirements;
   _cachedGradOptions = Object.keys(_gradMap)
     .map(path => {
@@ -184,11 +186,11 @@ export function getGradMajorOptions(majorRequirements) {
       const year        = parseInt(parts[yearIdx], 10);
       const college     = parts[yearIdx + 1] ?? '';
       const folder      = parts[yearIdx + 2] ?? '';
-      const label       = fmtLabel(folder);
-      const location    = fmtLocation(folder);
+      const { name, degree, location, acronyms } = parseProgram(folder);
+      const label        = degree ? `${name}, ${degree}` : name;
       const collegeLabel = fmtLabel(college);
 
-      return { path, year, college, collegeLabel, folder, label, location };
+      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronyms };
     })
     .filter(Boolean)
     .sort((a, b) =>

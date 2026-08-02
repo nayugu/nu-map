@@ -1,11 +1,48 @@
 {
   "name": "Applied Behavior Analysis, MS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CAEP6326",
+      "CAEP6327",
+      "CAEP6328",
+      "CAEP6329",
+      "CAEP6341",
+      "CAEP6342",
+      "CAEP6343",
+      "CAEP6344",
+      "CAEP7412",
+      "CAEP7413",
+      "CAEP8412",
+      "CAEP8413"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 30,
   "totalCreditsSource": "stated-total",

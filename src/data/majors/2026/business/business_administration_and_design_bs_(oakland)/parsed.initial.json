@@ -1,11 +1,63 @@
 {
   "name": "Business Administration and Design, BS (Oakland)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 6,
-    "tablesConsumed": 6
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ACCT1201",
+      "ARTF1000",
+      "ARTF1220",
+      "ARTG1001",
+      "ARTG1002",
+      "ARTG1270",
+      "ARTG1271",
+      "ARTG1290",
+      "ARTG1291",
+      "ARTG2262",
+      "ARTG2263",
+      "ARTG4550",
+      "BUSN1102",
+      "BUSN1103",
+      "ECON1115",
+      "ECON1116",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3314",
+      "ENGW3315",
+      "FINA2201",
+      "INTB1203",
+      "MGSC2301",
+      "MKTG2201",
+      "ORGB3201",
+      "ORGB3203",
+      "STRT4501"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

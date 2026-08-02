@@ -1,0 +1,36 @@
+{
+  "_readme": "Tolerances and allowlists for scripts/verify-majors.js. Data, not code, so tuning is reviewable in a diff.",
+  "planCoverageHigh": 0.8,
+  "planCoverageMedium": 0.95,
+  "_planCoverage": "Fraction of the Sample Plan of Study's courses that must be explained by parsed requirements. Below 'high' is a strong signal that requirement tables were dropped. Never inverted: absence of a requirement from the plan means nothing, because the plan picks one branch of every choice.",
+  "universitywide": [
+    "ENGW1102",
+    "ENGW1110",
+    "ENGW1111",
+    "ENGW1113",
+    "ENGW1114",
+    "ENGW3302",
+    "ENGW3303",
+    "ENGW3304",
+    "ENGW3306",
+    "ENGW3307",
+    "ENGW3308",
+    "ENGW3309",
+    "ENGW3311",
+    "ENGW3314",
+    "ENGW3315",
+    "EESH2000",
+    "EEAM2000",
+    "EESL2000",
+    "EECS2000",
+    "EEHS2000"
+  ],
+  "_universitywide": "Courses that appear in sample plans but are satisfied through Universitywide/Experiential blocks the program pages link out to rather than list. Without these they read as unexplained on nearly every program.",
+  "universitywidePatterns": [
+    "^[A-Z]{2,6}1000$",
+    "^EE[A-Z]{2}\\d{4}$",
+    "^[A-Z]{2,6}1990$",
+    "^[A-Z]{2,6}2990$"
+  ],
+  "_universitywidePatterns": "Regex forms, applied to the same effect as the literal list. <SUBJ>1000 is the first-year seminar every college runs under its own subject code, EE**#### are the Experiential Learning courses, and <SUBJ>1990/2990 are transfer-credit placeholders. All appear in sample plans but are satisfied through Universitywide blocks the program pages link to rather than enumerate."
+}

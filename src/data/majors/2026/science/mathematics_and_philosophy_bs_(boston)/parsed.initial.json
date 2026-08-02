@@ -1,11 +1,49 @@
 {
   "name": "Mathematics and Philosophy, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "MATH1341",
+      "MATH1342",
+      "MATH1365",
+      "MATH2321",
+      "MATH2331",
+      "MATH2341",
+      "MATH3081",
+      "PHIL1115",
+      "PHIL2001",
+      "PHIL2325",
+      "PHIL2330",
+      "PHIL3050",
+      "PHIL4515"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 68,
   "totalCreditsSource": "stated-required",

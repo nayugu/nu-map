@@ -5,7 +5,77 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM1163",
+      "CHEM2161",
+      "CHEM2162",
+      "CHEM2311",
+      "CHEM2312",
+      "CHEM2313",
+      "CHEM2314",
+      "CHEM2321",
+      "CHEM2322",
+      "CHEM3401",
+      "CHEM3402",
+      "CHEM4750",
+      "CS1200",
+      "CS1210",
+      "CS1800",
+      "CS1802",
+      "CS2000",
+      "CS2001",
+      "CS3200",
+      "DS2500",
+      "DS2501",
+      "DS3000",
+      "DS3500",
+      "DS4200",
+      "DS4300",
+      "DS4400",
+      "ENGW1111",
+      "ENGW3302",
+      "ENGW3307",
+      "ENGW3315",
+      "ENVR2500",
+      "ENVR2501",
+      "MATH1341",
+      "MATH1342",
+      "PHYS1151",
+      "PHYS1152",
+      "PHYS1153"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "stated-total",

@@ -5,7 +5,53 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 2,
-    "tablesConsumed": 2
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3314",
+      "MUSC1000",
+      "MUSC1001",
+      "MUSC1002",
+      "MUSC1003",
+      "MUSC1119",
+      "MUSC1201",
+      "MUSC1202",
+      "MUSC2350",
+      "MUST1220",
+      "MUST2102",
+      "MUST2431",
+      "MUST4611"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 129,
   "totalCreditsSource": "stated-total",

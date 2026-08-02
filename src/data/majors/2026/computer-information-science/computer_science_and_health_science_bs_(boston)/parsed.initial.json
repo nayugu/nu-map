@@ -5,7 +5,75 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 7,
-    "tablesConsumed": 7
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOL1111",
+      "BIOL1112",
+      "BIOL1113",
+      "BIOL1114",
+      "BIOL2329",
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM1163",
+      "CS1200",
+      "CS1210",
+      "CS1800",
+      "CS1802",
+      "CS2000",
+      "CS2001",
+      "CS2100",
+      "CS2101",
+      "CS2484",
+      "CS3000",
+      "CS3100",
+      "CS3101",
+      "CS3200",
+      "CS4530",
+      "CS4535",
+      "ENGW1111",
+      "ENGW3302",
+      "ENGW3315",
+      "MATH1241",
+      "MATH1341",
+      "PHIL1165",
+      "PHTH1260",
+      "PHTH2300",
+      "PHTH2350",
+      "PHTH2515",
+      "PHTH4120",
+      "PHTH4202",
+      "PHTH4540",
+      "PSYC1101"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 1,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unknown-course",
+          "severity": "medium",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 132,
   "totalCreditsSource": "stated-required",

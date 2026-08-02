@@ -5,7 +5,30 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 1,
-    "tablesConsumed": 1
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 24,
   "totalCreditsSource": "stated-total",

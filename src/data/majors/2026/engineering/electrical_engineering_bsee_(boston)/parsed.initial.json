@@ -1,11 +1,62 @@
 {
   "name": "Electrical Engineering, BSEE (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 6,
-    "tablesConsumed": 6
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CHEM1151",
+      "CHEM1153",
+      "EECE2140",
+      "EECE2150",
+      "EECE2160",
+      "EECE3468",
+      "EECE4791",
+      "EECE4792",
+      "ENCP2000",
+      "ENCP3000",
+      "ENGW1111",
+      "ENGW3302",
+      "ENGW3315",
+      "GE1000",
+      "GE1501",
+      "GE1502",
+      "MATH1341",
+      "MATH1342",
+      "MATH2321",
+      "MATH2341",
+      "PHYS1151",
+      "PHYS1152",
+      "PHYS1153",
+      "PHYS1155",
+      "PHYS1156",
+      "PHYS1157"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 133,
   "totalCreditsSource": "stated-total",

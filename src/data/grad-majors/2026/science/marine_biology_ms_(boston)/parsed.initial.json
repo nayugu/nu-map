@@ -1,11 +1,54 @@
 {
   "name": "Marine Biology, MS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 1,
-    "tablesConsumed": 1
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EEMB5303",
+      "EEMB5504",
+      "EEMB5505",
+      "EEMB5506",
+      "EEMB5507",
+      "EEMB5508",
+      "EEMB5518",
+      "EEMB5519",
+      "EEMB5520",
+      "EEMB5522",
+      "EEMB5533",
+      "EEMB5535",
+      "EEMB5538",
+      "EEMB5540",
+      "EEMB5541",
+      "EEMB5542",
+      "EEMB5546",
+      "EEMB7674"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 37,
   "totalCreditsSource": "stated-total",

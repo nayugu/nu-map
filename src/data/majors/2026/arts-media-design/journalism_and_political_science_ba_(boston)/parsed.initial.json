@@ -1,11 +1,57 @@
 {
   "name": "Journalism and Political Science, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 11,
-    "tablesConsumed": 11
+    "tablesConsumed": 11,
+    "tablesOnPage": 11,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "COMM3320",
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "JRNL1000",
+      "JRNL1101",
+      "JRNL1102",
+      "JRNL1150",
+      "JRNL2201",
+      "JRNL2301",
+      "JRNL3550",
+      "JRNL3610",
+      "JRNL4650",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2399",
+      "POLS2400",
+      "POLS3320",
+      "POLS4701",
+      "POLS4703"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 129,
   "totalCreditsSource": "stated-total",

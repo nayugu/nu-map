@@ -1,11 +1,48 @@
 {
   "name": "Media and Screen Studies and History, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 4,
-    "tablesConsumed": 4
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "HIST1200",
+      "HIST1201",
+      "HIST1357",
+      "HIST2301",
+      "HIST2302",
+      "HIST4701",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "stated-total",

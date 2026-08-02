@@ -1,11 +1,47 @@
 {
   "name": "Criminal Justice and Political Science, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 14,
-    "tablesConsumed": 14
+    "tablesConsumed": 14,
+    "tablesOnPage": 14,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "CRIM1100",
+      "CRIM1110",
+      "CRIM1120",
+      "CRIM3700",
+      "CS1100",
+      "CS1101",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400",
+      "POLS4701"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

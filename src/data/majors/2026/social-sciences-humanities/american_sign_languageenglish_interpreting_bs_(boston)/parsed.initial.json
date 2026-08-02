@@ -1,11 +1,61 @@
 {
   "name": "American Sign Language—English Interpreting, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 1,
-    "tablesConsumed": 1
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "AMSL1101",
+      "AMSL1102",
+      "AMSL2101",
+      "AMSL2102",
+      "AMSL3101",
+      "AMSL3102",
+      "DEAF1500",
+      "DEAF2500",
+      "DEAF2700",
+      "ENGW1111",
+      "ENGW3315",
+      "INTP1000",
+      "INTP3500",
+      "INTP3510",
+      "INTP3515",
+      "INTP3550",
+      "INTP3970",
+      "INTP4510",
+      "INTP4515",
+      "INTP4650",
+      "INTP4651",
+      "INTP4940",
+      "INTP4995",
+      "LING1150",
+      "MATH1215"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 129,
   "totalCreditsSource": "stated-total",

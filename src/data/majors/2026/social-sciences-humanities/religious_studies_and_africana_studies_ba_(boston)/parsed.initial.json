@@ -1,11 +1,48 @@
 {
   "name": "Religious Studies and Africana Studies, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 3,
-    "tablesConsumed": 3
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "AFCS1101",
+      "AFCS1113",
+      "AFCS1270",
+      "AFCS2296",
+      "AFCS2325",
+      "AFCS2619",
+      "AFCS3424",
+      "AFCS4526",
+      "AFCS4700",
+      "CLTR1000",
+      "ENGW1111",
+      "PHIL1110"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

@@ -1,11 +1,56 @@
 {
   "name": "Journalism and International Affairs, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 12,
-    "tablesConsumed": 12
+    "tablesConsumed": 12,
+    "tablesOnPage": 12,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ANTH1101",
+      "ECON1115",
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "HIST2211",
+      "HIST2311",
+      "INTL1000",
+      "INTL1101",
+      "INTL2718",
+      "INTL3400",
+      "JRNL1000",
+      "JRNL1101",
+      "JRNL1102",
+      "JRNL1150",
+      "JRNL2201",
+      "JRNL3550",
+      "JRNL4650",
+      "POLS1155",
+      "POLS1160"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 129,
   "totalCreditsSource": "stated-overall",

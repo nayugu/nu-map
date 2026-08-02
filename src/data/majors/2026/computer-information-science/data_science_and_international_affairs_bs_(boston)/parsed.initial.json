@@ -1,11 +1,65 @@
 {
   "name": "Data Science and International Affairs, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 12,
-    "tablesConsumed": 12
+    "tablesConsumed": 12,
+    "tablesOnPage": 12,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ANTH1101",
+      "CS1200",
+      "CS1210",
+      "CS1800",
+      "CS1802",
+      "CS2000",
+      "CS2001",
+      "CS3200",
+      "CY4170",
+      "DS2500",
+      "DS2501",
+      "DS3000",
+      "DS3500",
+      "DS4200",
+      "DS4300",
+      "DS4400",
+      "ECON2350",
+      "ENGW1111",
+      "ENGW3302",
+      "ENGW3308",
+      "ENGW3315",
+      "HIST2211",
+      "HIST2311",
+      "INTL1101",
+      "INTL2718",
+      "INTL3400",
+      "INTL4700",
+      "MATH1341",
+      "POLS1160"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 131,
   "totalCreditsSource": "stated-total",

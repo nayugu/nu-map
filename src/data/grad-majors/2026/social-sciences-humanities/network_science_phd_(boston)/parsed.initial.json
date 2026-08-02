@@ -5,7 +5,47 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 3,
-    "tablesConsumed": 3
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "NETS6116",
+      "NETS7332",
+      "NETS7334",
+      "NETS7335",
+      "NETS8986",
+      "NETS9990",
+      "NETS9991",
+      "NETS9996",
+      "PHYS5116"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 9 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 40,
   "totalCreditsSource": "stated-total",

@@ -5,7 +5,46 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 3,
-    "tablesConsumed": 3
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "ENGW1111",
+      "HBRW1101",
+      "HBRW1102",
+      "HIST1100",
+      "JWSS1285",
+      "JWSS4660",
+      "PHIL1110",
+      "PHIL1285"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.6,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 2,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "high",
+          "message": "2 of 8 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",

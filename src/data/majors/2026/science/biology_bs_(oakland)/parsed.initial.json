@@ -1,11 +1,63 @@
 {
   "name": "Biology, BS (Oakland)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
-    "tablesConsumed": 5
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "BIOL1000",
+      "BIOL1107",
+      "BIOL1108",
+      "BIOL2299",
+      "BIOL2301",
+      "BIOL2302",
+      "BIOL2309",
+      "BIOL3611",
+      "BIOL3612",
+      "BIOL4701",
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM2311",
+      "CHEM2312",
+      "CHEM2313",
+      "CHEM2314",
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3307",
+      "ENVR2500",
+      "ENVR2501",
+      "INSC1000",
+      "MATH1341",
+      "PHYS1145",
+      "PHYS1146",
+      "PHYS1147",
+      "PHYS1148"
+    ],
+    "verification": {
+      "level": "verified",
+      "score": 1,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
   },
   "totalCreditsRequired": 130,
   "totalCreditsSource": "stated-total",

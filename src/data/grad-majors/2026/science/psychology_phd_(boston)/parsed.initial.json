@@ -5,7 +5,55 @@
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 6,
-    "tablesConsumed": 6
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "planOfStudyCourses": [
+      "PSYC5110",
+      "PSYC5115",
+      "PSYC5120",
+      "PSYC5130",
+      "PSYC5140",
+      "PSYC5150",
+      "PSYC5170",
+      "PSYC5180",
+      "PSYC5181",
+      "PSYC5301",
+      "PSYC7302",
+      "PSYC7990",
+      "PSYC7996",
+      "PSYC8401",
+      "PSYC9990",
+      "PSYC9991",
+      "PSYC9996"
+    ],
+    "verification": {
+      "level": "review",
+      "score": 0.85,
+      "checkedAt": "2026-08-02",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 1,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 17 sample-plan courses are unaccounted for"
+        }
+      ]
+    }
   },
   "totalCreditsRequired": 50,
   "totalCreditsSource": "stated-total",
