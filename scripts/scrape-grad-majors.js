@@ -32,6 +32,7 @@ import { markSharedSections }       from './lib/major-integrity.js';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
+         normalizeConcentrationHref,
          GRAD_PROFILE as PROFILE } from './lib/catalog-program-parser.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -105,6 +106,32 @@ function outPath(college, slug) {
 
 // ── Scrape one program ────────────────────────────────────────────────────────
 
+/**
+ * Parse a page, then resolve any concentrations that live on their own pages.
+ *
+ * Business programs list ~17 concentrations as links rather than inline
+ * tables. Those pages were already being fetched every run and thrown away as
+ * "no requirements found", so resolving them costs no extra requests once the
+ * page cache is warm. Only /concentrations/ paths are followed, and the count
+ * is capped, so a markup change can't turn the scraper into a crawler.
+ */
+const MAX_EXTERNAL_CONCENTRATIONS = 40;
+
+async function parseRequirementsResolvingExternals(root) {
+  const first = parseRequirements(root, PROFILE);
+  const pending = (first.pendingExternal ?? []).slice(0, MAX_EXTERNAL_CONCENTRATIONS);
+  if (!pending.length) return first;
+
+  const resolved = new Map();
+  for (const link of pending) {
+    const url = normalizeConcentrationHref(link.href);
+    if (!url) continue;
+    try { resolved.set(url, parseHTML(await fetchPage(url))); }
+    catch { /* a missing concentration page must not fail the program */ }
+  }
+  return parseRequirements(root, PROFILE, { resolveExternal: u => resolved.get(u) ?? null });
+}
+
 async function scrapeProgram(url) {
   const html = await fetchPage(url);
   const root = parseHTML(html);
@@ -116,7 +143,7 @@ async function scrapeProgram(url) {
 
   const { value: totalCreditsRequired, source: totalCreditsSource } = parseTotalCredits(root, PROFILE);
   const { requirementSections, concentrations, generalElectiveSH,
-          tablesPresent, tablesConsumed } = parseRequirements(root, PROFILE);
+          tablesPresent, tablesConsumed } = await parseRequirementsResolvingExternals(root);
 
   // A program can be entirely concentrations: Philosophy BA's whole major is
   // five mutually-exclusive options and has no base requirement section.
@@ -136,6 +163,10 @@ async function scrapeProgram(url) {
       tablesConsumed,
     },
     totalCreditsRequired,
+    // Which phrasing produced the number — 'stated-total' and friends come
+    // from what the page says is required; 'plan-grid' means we fell back to
+    // the sample plan and the value may exceed the true minimum.
+    ...(totalCreditsSource ? { totalCreditsSource } : {}),
     yearVersion: YEAR,
     requirementSections,
     ...(concentrations ? { concentrations } : {}),

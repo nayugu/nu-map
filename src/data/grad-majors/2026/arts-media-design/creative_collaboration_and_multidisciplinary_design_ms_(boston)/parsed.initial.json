@@ -8,6 +8,7 @@
     "tablesConsumed": 2
   },
   "totalCreditsRequired": 32,
+  "totalCreditsSource": "plan-grid",
   "yearVersion": 2026,
   "requirementSections": [
     {

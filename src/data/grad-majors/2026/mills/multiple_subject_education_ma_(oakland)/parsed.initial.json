@@ -7,7 +7,8 @@
     "tablesPresent": 1,
     "tablesConsumed": 1
   },
-  "totalCreditsRequired": 0,
+  "totalCreditsRequired": 37,
+  "totalCreditsSource": "stated-minimum",
   "yearVersion": 2026,
   "requirementSections": [
     {

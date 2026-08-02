@@ -8,6 +8,7 @@
     "tablesConsumed": 10
   },
   "totalCreditsRequired": 80,
+  "totalCreditsSource": "stated-total",
   "yearVersion": 2026,
   "requirementSections": [
     {

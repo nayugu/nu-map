@@ -54,7 +54,11 @@ export const UNDERGRAD_PROFILE = {
 export const GRAD_PROFILE = {
   level: 'grad',
   pathPrefix: '/graduate/',
-  creditWindow: [20, 150],
+  // Floor is 8, not 20: graduate certificates are 12–17 semester hours, and a
+  // 20 floor silently zeroed 156 of them. Safe because parseTotalCredits only
+  // matches phrasings containing "total" or "required" — a bare "Complete 8
+  // semester hours from the following" cannot reach it.
+  creditWindow: [8, 150],
 };
 
 function parseHoursCell(tr) {
@@ -545,13 +549,27 @@ export function parseTotalCredits(pageRoot, profile) {
     .replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
 
   // Ordered by how explicitly the phrasing claims to be the DEGREE total.
-  // The range form ("36–44 total semester hours required") is grad-only and
-  // was unhandled, which is why 215 graduate programs stored 0.
+  //
+  // The catalog states this six different ways and each variant, when
+  // unhandled, silently zeroed a whole class of programs:
+  //   "134 total semester hours required"      the common undergrad form
+  //   "36–44 total semester hours required"    grad ranges
+  //   "12 total credits required"              law and several certificates
+  //   "A total of 42 semester hours are required"   inverted word order
+  //   "39 minimum semester hours required"
+  //   "129 overall semester hours required"    when a major subtotal also appears
+  //
+  // UNIT is deliberately "semester hours" or "credits" only — never "quarter
+  // hours", which CPS states alongside and which is not the same unit.
+  const N = String.raw`(\d+)(?:\s*[-–]\s*\d+)?`;
+  const UNIT = String.raw`(?:semester\s+hours?|credits?)`;
   const patterns = [
-    [/(\d+)(?:\s*[-–]\s*\d+)?\s+total\s+semester\s+hours?\s+required/i, 'stated-total'],
-    [/(\d+)(?:\s*[-–]\s*\d+)?\s+overall\s+semester\s+hours?\s+required/i, 'stated-overall'],
-    [/(\d+)(?:\s*[-–]\s*\d+)?\s+total\s+semester\s+hours?/i,             'stated-total'],
-    [/(\d+)(?:\s*[-–]\s*\d+)?\s+semester\s+hours?\s+required/i,          'stated-required'],
+    [new RegExp(`${N}\\s+total\\s+${UNIT}\\s+required`, 'i'),   'stated-total'],
+    [new RegExp(`a\\s+total\\s+of\\s+${N}\\s+${UNIT}`, 'i'),     'stated-total'],
+    [new RegExp(`${N}\\s+overall\\s+${UNIT}\\s+required`, 'i'),  'stated-overall'],
+    [new RegExp(`${N}\\s+total\\s+${UNIT}`, 'i'),                'stated-total'],
+    [new RegExp(`${N}\\s+minimum\\s+${UNIT}\\s+required`, 'i'),  'stated-minimum'],
+    [new RegExp(`${N}\\s+${UNIT}\\s+required`, 'i'),             'stated-required'],
   ];
   for (const [re, source] of patterns) {
     const m = text.match(re);
@@ -748,6 +766,23 @@ function findGateways(blocks, anchors) {
   return gateways;
 }
 
+/**
+ * Canonical form for a concentration link.
+ *
+ * The catalog emits three shapes for the same target — bare, trailing slash,
+ * and /index.html — and at least one href carries whitespace *inside* the
+ * attribute. Normalising here keeps the pre-fetch map and the resolver in
+ * agreement.
+ */
+export function normalizeConcentrationHref(href, base = 'https://catalog.northeastern.edu') {
+  let h = String(href || '').trim();
+  if (!h) return null;
+  h = h.replace(/\/index\.html$/i, '');
+  if (h.startsWith('http')) return h.replace(/\/?$/, '/');
+  if (!h.startsWith('/')) h = '/' + h;
+  return base + h.replace(/\/?$/, '/');
+}
+
 /** Deterministic de-duplication — titles are user-visible keys, so order matters. */
 function uniquify(title, used) {
   if (!used.has(title)) { used.add(title); return title; }
@@ -893,7 +928,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
   // Concentrations that live on their own page (the business school pattern).
   if (ctx.resolveExternal) {
     for (const link of externalLinks) {
-      const extRoot = ctx.resolveExternal(link.href);
+      const extRoot = ctx.resolveExternal(normalizeConcentrationHref(link.href));
       if (!extRoot) continue;
       const extContainer = requirementsRoot(extRoot);
       const heading = extContainer.querySelector('h2, h1');
@@ -923,7 +958,11 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
 
   return { requirementSections, concentrations, generalElectiveSH,
            tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
-           excludedPanes, warnings };
+           excludedPanes, warnings,
+           // Concentrations hosted on their own pages. Parsing is synchronous
+           // and fetching is not, so the caller pre-fetches these and calls
+           // again with ctx.resolveExternal. Empty once resolved.
+           pendingExternal: ctx.resolveExternal ? [] : externalLinks };
 }
 
 /**
