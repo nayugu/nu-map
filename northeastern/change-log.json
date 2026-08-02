@@ -1,6 +1,280 @@
 {
   "runs": [
     {
+      "type": "nupath-auto-update",
+      "subject": "🤖 NUpath Auto-Update",
+      "timestamp": "2026-08-02T16:03:27.932Z",
+      "source": "Tableau CSV (direct)",
+      "triggeredBy": "local",
+      "runId": null,
+      "stats": {
+        "scanned": 1486,
+        "changed": 17,
+        "cleared": 0,
+        "unchanged": 1353,
+        "notInMap": 6509,
+        "gained": 18,
+        "lost": 1,
+        "gainedOnly": 16,
+        "lostOnly": 1,
+        "mixed": 0
+      },
+      "discrepancies": [
+        {
+          "subject": "ARCH",
+          "number": "2340",
+          "oldNuPath": [
+            "IC",
+            "SI",
+            "WI"
+          ],
+          "newNuPath": [
+            "IC",
+            "SI"
+          ],
+          "added": [],
+          "removed": [
+            "WI"
+          ]
+        },
+        {
+          "subject": "ARTH",
+          "number": "1001",
+          "oldNuPath": [
+            "IC"
+          ],
+          "newNuPath": [
+            "DD",
+            "IC"
+          ],
+          "added": [
+            "DD"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "ARTH",
+          "number": "1002",
+          "oldNuPath": [],
+          "newNuPath": [
+            "WI"
+          ],
+          "added": [
+            "WI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "CS",
+          "number": "6140",
+          "oldNuPath": [],
+          "newNuPath": [
+            "CE"
+          ],
+          "added": [
+            "CE"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "ENGW",
+          "number": "1102",
+          "oldNuPath": [],
+          "newNuPath": [
+            "WF"
+          ],
+          "added": [
+            "WF"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "ENGW",
+          "number": "1111",
+          "oldNuPath": [],
+          "newNuPath": [
+            "WF"
+          ],
+          "added": [
+            "WF"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "ENGW",
+          "number": "1114",
+          "oldNuPath": [],
+          "newNuPath": [
+            "WF"
+          ],
+          "added": [
+            "WF"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "MISM",
+          "number": "3403",
+          "oldNuPath": [],
+          "newNuPath": [
+            "AD"
+          ],
+          "added": [
+            "AD"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "MSCR",
+          "number": "4208",
+          "oldNuPath": [],
+          "newNuPath": [
+            "WI"
+          ],
+          "added": [
+            "WI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "POLS",
+          "number": "2333",
+          "oldNuPath": [],
+          "newNuPath": [
+            "IC",
+            "SI"
+          ],
+          "added": [
+            "IC",
+            "SI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "POLS",
+          "number": "3465",
+          "oldNuPath": [],
+          "newNuPath": [
+            "SI"
+          ],
+          "added": [
+            "SI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "THTR",
+          "number": "3550",
+          "oldNuPath": [],
+          "newNuPath": [
+            "EI"
+          ],
+          "added": [
+            "EI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "ARTH",
+          "number": "1110",
+          "oldNuPath": [],
+          "newNuPath": [
+            "IC",
+            "SI"
+          ],
+          "added": [
+            "IC",
+            "SI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "ENG",
+          "number": "1105",
+          "oldNuPath": [],
+          "newNuPath": [
+            "WF"
+          ],
+          "added": [
+            "WF"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "ENG",
+          "number": "1107",
+          "oldNuPath": [],
+          "newNuPath": [
+            "WF"
+          ],
+          "added": [
+            "WF"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "GE",
+          "number": "1520",
+          "oldNuPath": [],
+          "newNuPath": [
+            "EI"
+          ],
+          "added": [
+            "EI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "MISM",
+          "number": "2420",
+          "oldNuPath": [],
+          "newNuPath": [
+            "AD"
+          ],
+          "added": [
+            "AD"
+          ],
+          "removed": []
+        }
+      ]
+    },
+    {
+      "type": "availability",
+      "subject": "📅 Term Availability",
+      "timestamp": "2026-08-01T08:30:33.925Z",
+      "terms": [
+        "202360",
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630",
+        "202640",
+        "202660"
+      ],
+      "covered": 4726,
+      "total": 7879,
+      "detailTerms": [
+        "202360",
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630"
+      ],
+      "detailCovered": 4626
+    },
+    {
       "type": "availability",
       "subject": "📅 Term Availability",
       "timestamp": "2026-07-26T07:21:04.023Z",
