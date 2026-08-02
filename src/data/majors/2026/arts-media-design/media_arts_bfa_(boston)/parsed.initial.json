@@ -341,7 +341,7 @@
     }
   ],
   "concentrations": {
-    "minOptions": 1,
+    "minOptions": 0,
     "concentrationOptions": [
       {
         "type": "SECTION",

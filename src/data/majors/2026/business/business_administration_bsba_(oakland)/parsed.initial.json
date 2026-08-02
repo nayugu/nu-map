@@ -48,11 +48,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "3 of 14 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete",
+          "message": "3 of 14 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "BUSN1101",
-            "BUSN1102",
-            "BUSN1103"
+            "BUSN 1101 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "BUSN 1102 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "BUSN 1103 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }
@@ -314,7 +314,7 @@
     }
   ],
   "concentrations": {
-    "minOptions": 0,
+    "minOptions": 1,
     "concentrationOptions": [
       {
         "type": "SECTION",

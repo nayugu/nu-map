@@ -41,14 +41,18 @@
         {
           "check": "total-from-sample-plan",
           "severity": "medium",
-          "message": "total 48 came from the Sample Plan of Study, which is one path and may exceed the true minimum"
+          "message": "the credit total was taken from the sample four-year plan, not from a stated requirement",
+          "detail": [
+            "48 SH is what that one sample path adds up to; the real minimum may be lower"
+          ],
+          "overflow": 0
         },
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 7 sample-plan courses are unaccounted for",
+          "message": "1 of 7 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "INAM9996"
+            "INAM 9996 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

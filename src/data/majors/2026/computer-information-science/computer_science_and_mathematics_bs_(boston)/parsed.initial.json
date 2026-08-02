@@ -62,10 +62,10 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "message": "2 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "DS4900",
-            "MATH4000"
+            "DS 4900 — required by this program, but we have no record of the course",
+            "MATH 4000 — required by this program, but we have no record of the course"
           ],
           "overflow": 0
         }

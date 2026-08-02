@@ -56,19 +56,19 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 22 sample-plan courses are unaccounted for",
+          "message": "2 of 22 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ANTH2305",
-            "HSCI2000"
+            "ANTH 2305 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "HSCI 2000 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "HLTH5280"
+            "HLTH 5280 — required by this program, but we have no record of the course"
           ],
           "overflow": 0
         }

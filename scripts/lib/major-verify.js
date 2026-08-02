@@ -88,6 +88,9 @@ export function expectsPlanOfStudy(kind) {
 
 const courseKey = (subject, classId) => `${subject}${classId}`;
 
+/** "CS3500" → "CS 3500". Nobody reads course keys unspaced. */
+const pretty = k => String(k).replace(/^([A-Z]+)(\d.*)$/, '$1 $2');
+
 /** Walk a requirement tree, yielding every node. */
 function* walk(node) {
   if (Array.isArray(node)) { for (const n of node) yield* walk(n); return; }
@@ -172,7 +175,8 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     counters.tablesUnaccounted = unaccounted;
     if (unaccounted > 0) {
       add('requirement-table-parity', 'high',
-        `${unaccounted} of ${onPage} requirement tables on the catalog page were neither parsed nor excluded — this program is missing requirements`);
+        `${unaccounted} of ${onPage} requirement tables on the catalog page were not read, so requirements are missing from this list`,
+        (meta.unconsumedHeadings ?? []).map(h => `"${h}" — this section is on the catalog page but not shown here`));
     }
   } else {
     counters.tablesUnaccounted = 0;
@@ -182,22 +186,28 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
   // ── 2. Internal markers must never reach the data.
   const leaked = [...walk([...sections, ...concOpts])].filter(n => n.type === '_CHOOSE').length;
   counters.leakedMarkers = leaked;
-  if (leaked) add('choose-marker-leak', 'high', `${leaked} internal _CHOOSE marker(s) escaped into the output`);
+  if (leaked) add('choose-marker-leak', 'high',
+    `${leaked} requirement(s) could not be interpreted and may display incorrectly`,
+    ['A "choose N of the following" rule was left unresolved — treat the affected section as unreliable']);
 
   // ── 3. Structure sanity.
   if (!sections.length && !concOpts.length) {
-    add('empty-program', 'high', 'no requirement sections and no concentrations');
+    add('empty-program', 'high',
+      'no requirements could be read from this program at all',
+      ['The catalog page may have changed shape — treat this program as unavailable']);
   }
   const dupSections = duplicates(sections.map(s => s.title));
   counters.duplicateSectionTitles = dupSections.length;
   if (dupSections.length) {
     add('duplicate-section-titles', 'medium',
-      `${dupSections.length} section title(s) appear more than once; the runtime merges them, which can hide a requirement`, dupSections);
+      `${dupSections.length} section name(s) appear twice, and the two get merged — which can hide a requirement`,
+      dupSections.map(t => `"${t}" appears more than once`));
   }
   const dupConc = duplicates(concOpts.map(c => c.title));
   if (dupConc.length) {
     add('duplicate-concentration-titles', 'high',
-      'concentration titles must be unique — they are the key the UI and MCP use to select one', dupConc);
+      'two concentrations share a name, so one of them cannot be selected',
+      dupConc.map(t => `"${t}" is listed twice — only the first can be chosen`));
   }
 
   // ── 4. Credit total.
@@ -209,10 +219,12 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     // program its absence is worth surfacing.
     add('missing-total-credits',
       (kind === 'minor' || kind === 'certificate') ? 'info' : 'medium',
-      'the page states no total credit requirement we recognise');
+      'the catalog page states no total credit requirement',
+      ['Progress here counts requirements, not credits — check the total with your advisor']);
   } else if (program.totalCreditsSource === 'plan-grid') {
     add('total-from-sample-plan', 'medium',
-      `total ${total} came from the Sample Plan of Study, which is one path and may exceed the true minimum`);
+      'the credit total was taken from the sample four-year plan, not from a stated requirement',
+      [`${total} SH is what that one sample path adds up to; the real minimum may be lower`]);
   }
 
   // ── 5. Every referenced course must exist in the catalog.
@@ -224,7 +236,8 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
       // the program being wrong — real, but not evidence of missing
       // requirements, so it must not paint a program red on its own.
       add('unknown-course', unknown.length > 3 ? 'medium' : 'info',
-        `${unknown.length} referenced course(s) are absent from the course catalog, so they can never be satisfied`, unknown);
+        `${unknown.length} course(s) required here are missing from our course catalog, so they can never be checked off`,
+        unknown.map(k => `${pretty(k)} — required by this program, but we have no record of the course`));
     }
   }
 
@@ -243,12 +256,14 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
       .sort();
     counters.planUnexplained = unexplained.length;
     const ratio = 1 - unexplained.length / plan.length;
+    const why = unexplained.map(k =>
+      `${pretty(k)} — the catalog's four-year plan includes it, but no requirement here asks for it`);
     if (ratio < (policy.planCoverageHigh ?? 0.80)) {
       add('plan-witness-unaccounted', 'high',
-        `${unexplained.length} of ${plan.length} courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete`, unexplained);
+        `${unexplained.length} of ${plan.length} courses in the catalog's own four-year plan are missing from these requirements`, why);
     } else if (ratio < (policy.planCoverageMedium ?? 0.95)) {
       add('plan-witness-unaccounted', 'medium',
-        `${unexplained.length} of ${plan.length} sample-plan courses are unaccounted for`, unexplained);
+        `${unexplained.length} of ${plan.length} courses in the catalog's four-year plan aren't accounted for here`, why);
     }
   } else {
     counters.planUnexplained = 0;
@@ -256,7 +271,8 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     // publish one; minors and certificates never do.
     if (expectsPlanOfStudy(kind)) {
       add('no-sample-plan', 'medium',
-        'this program publishes no sample plan of study, so we could not confirm nothing is missing');
+        'this program publishes no sample four-year plan, so our strongest check could not run',
+        ['Almost every major publishes one, so its absence here is unusual']);
     }
   }
 

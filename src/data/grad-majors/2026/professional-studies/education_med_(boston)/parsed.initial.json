@@ -31,16 +31,20 @@
         {
           "check": "missing-total-credits",
           "severity": "medium",
-          "message": "the page states no total credit requirement we recognise"
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            "Progress here counts requirements, not credits — check the total with your advisor"
+          ],
+          "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "3 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "message": "3 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "EDU6182",
-            "EDU6333",
-            "EDU6340"
+            "EDU 6182 — required by this program, but we have no record of the course",
+            "EDU 6333 — required by this program, but we have no record of the course",
+            "EDU 6340 — required by this program, but we have no record of the course"
           ],
           "overflow": 0
         }

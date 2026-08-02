@@ -184,6 +184,10 @@ export function PlannerProvider({ children }) {
   // Plan-specific program selections (major path, concentration label, minor paths)
   const [major,       setMajor]          = useState("");
   const [conc,        setConc]           = useState("");
+  // Second major's concentration. 51 undergraduate programs REQUIRE one
+  // (BSBA among them), so a second major had no way to express a mandatory
+  // choice until this existed.
+  const [conc2,       setConc2]          = useState("");
   const [minor1,      setMinor1]         = useState("");
   const [minor2,      setMinor2]         = useState("");
   const [major2,      setMajor2]         = useState("");
@@ -195,7 +199,7 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("student-type"), type); } catch {}
     setMajor("");
     setMajor2("");
-    setConc("");
+    setConc(""); setConc2("");
   };
   // Set of course IDs that are placed out (satisfy prereqs, no credit)
   const [placedOut, setPlacedOut] = useState(() => {
@@ -935,6 +939,7 @@ export function PlannerProvider({ children }) {
     if ("major"         in programUpdates) setMajor(programUpdates.major);
     if ("major2"        in programUpdates) setMajor2(programUpdates.major2);
     if ("conc"          in programUpdates) setConc(programUpdates.conc);
+    if ("conc2"         in programUpdates) setConc2(programUpdates.conc2);
     if ("minor1"        in programUpdates) setMinor1(programUpdates.minor1);
     if ("minor2"        in programUpdates) setMinor2(programUpdates.minor2);
     if ("bonusSH"       in programUpdates) setBonusSH(programUpdates.bonusSH);
@@ -1881,7 +1886,7 @@ export function PlannerProvider({ children }) {
     setBonusSH(0);
     setMajor("");
     setMajor2("");
-    setConc("");
+    setConc(""); setConc2("");
     setMinor1("");
     setMinor2("");
     setStudentTypeRaw("undergrad");
@@ -1966,7 +1971,7 @@ export function PlannerProvider({ children }) {
     gradSem: planGradSem, gradYear: planGradYear,
     placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
-    major, major2, conc, minor1, minor2, studentType,
+    major, major2, conc, conc2, minor1, minor2, studentType,
     placedOut: [...placedOut],
   });
 
@@ -1995,7 +2000,7 @@ export function PlannerProvider({ children }) {
     if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
     setMajor(d.major ?? "");
     setMajor2(d.major2 ?? "");
-    setConc(d.conc ?? "");
+    setConc(d.conc ?? ""); setConc2(d.conc2 ?? "");
     setMinor1(d.minor1 ?? "");
     setMinor2(d.minor2 ?? "");
     const st = d.studentType ?? "undergrad";
@@ -2057,7 +2062,7 @@ export function PlannerProvider({ children }) {
           studentType: cohort.studentType ?? "undergrad",
           placements: {}, specialTermPl: {}, semOrders: {},
           shOverrides: {}, offeredOverrides: {}, collapsedSubs: {},
-          bonusSH: 0, major: "", major2: "", conc: "",
+          bonusSH: 0, major: "", major2: "", conc: "", conc2: "",
           minor1: "", minor2: "", placedOut: [],
         }));
       } catch {}
@@ -2102,7 +2107,7 @@ export function PlannerProvider({ children }) {
       return;
     }
     saveCurrentPlanToSlot();
-  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -2115,7 +2120,7 @@ export function PlannerProvider({ children }) {
       placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
       offeredOverrides, collapsedSubs,
       placedOut: [...placedOut], substitutions,
-      major, major2, conc, minor1, minor2, studentType,
+      major, major2, conc, conc2, minor1, minor2, studentType,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
@@ -2148,7 +2153,7 @@ export function PlannerProvider({ children }) {
     if (d.gradYear){ setPlanGradYear(d.gradYear); try { localStorage.setItem(key("grad-year"),d.gradYear);} catch {} }
     setMajor(d.major ?? "");
     setMajor2(d.major2 ?? "");
-    setConc(d.conc ?? "");
+    setConc(d.conc ?? ""); setConc2(d.conc2 ?? "");
     setMinor1(d.minor1 ?? "");
     setMinor2(d.minor2 ?? "");
     const st = d.studentType ?? "undergrad";
@@ -2212,7 +2217,7 @@ export function PlannerProvider({ children }) {
     const {
       studentType: st = "undergrad",
       entSem, entYear, gradSem, gradYear,
-      major: mj = "", major2: mj2 = "", conc: cc = "", minor1: mn1 = "", minor2: mn2 = "",
+      major: mj = "", major2: mj2 = "", conc: cc = "", conc2: cc2 = "", minor1: mn1 = "", minor2: mn2 = "",
     } = setup;
 
     // Apply to the live current plan; the auto-save effect persists it.
@@ -2221,7 +2226,7 @@ export function PlannerProvider({ children }) {
     if (entYear) { setPlanEntYear(entYear);  try { localStorage.setItem(key("ent-year"), entYear); } catch {} }
     if (gradSem) { setPlanGradSem(gradSem);  try { localStorage.setItem(key("grad-sem"), gradSem); } catch {} }
     if (gradYear){ setPlanGradYear(gradYear); try { localStorage.setItem(key("grad-year"),gradYear);} catch {} }
-    setMajor(mj); setMajor2(mj2); setConc(cc); setMinor1(mn1); setMinor2(mn2);
+    setMajor(mj); setMajor2(mj2); setConc(cc); setConc2(cc2); setMinor1(mn1); setMinor2(mn2);
     setPlans(prev => prev.map(p => p.id === activePlanId ? { ...p, studentType: st } : p));
 
     try { localStorage.setItem(key("seen-cohort-setup"), "1"); } catch {}
@@ -2380,7 +2385,7 @@ export function PlannerProvider({ children }) {
   buildPlanContextRef.current = () => ({
     planId:    activePlanId,
     planName:  plans.find(p => p.id === activePlanId)?.name ?? "Untitled",
-    major, major2, concentration: conc, minor1, minor2,
+    major, major2, concentration: conc, concentration2: conc2, minor1, minor2,
     majorLabel: null, major2Label: null, minor1Label: null, minor2Label: null,
     studentType,
     currentSemId,
@@ -2420,7 +2425,7 @@ export function PlannerProvider({ children }) {
     return () => clearTimeout(timer);
   }, [ // eslint-disable-line react-hooks/exhaustive-deps
     aiAssistant, placements, specialTermPl, placedOut, substitutions,
-    major, major2, conc, minor1, minor2, studentType, currentSemId, bonusSH, shOverrides,
+    major, major2, conc, conc2, minor1, minor2, studentType, currentSemId, bonusSH, shOverrides,
     offeredOverrides, semOrders, planEntSem, planEntYear, planGradSem, planGradYear,
     selectedId, activePlanId, plans, starredIds, palette, locale,
     prereqViolations, coreqViolations, coopGradConflicts, claudeAccessRev,
@@ -2442,7 +2447,7 @@ export function PlannerProvider({ children }) {
       placedOut: [...placedOut], substitutions,
       workExperience: specialTermPl, shOverrides, offeredOverrides,
       currentSemId, bonusSH,
-      major, major2, concentration: conc, minor1, minor2, studentType,
+      major, major2, concentration: conc, concentration2: conc2, minor1, minor2, studentType,
       entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear,
       starredIds: [...starredIds], palette: [...palette],
       planId: activePlanId,
@@ -2463,10 +2468,10 @@ export function PlannerProvider({ children }) {
     // Scalar-field diff (drives orange marks on selectors/badges) + a
     // focus target so the right panel opens and scrolls into view.
     const changed = new Set();
-    const scalar = { major, major2, conc, studentType, bonusSH, currentSemId,
+    const scalar = { major, major2, conc, conc2, studentType, bonusSH, currentSemId,
       entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear,
       minor1, minor2, planName: snap.planName };
-    const nextScalar = { major: next.major, major2: next.major2, conc: next.concentration,
+    const nextScalar = { major: next.major, major2: next.major2, conc: next.concentration, conc2: next.concentration2,
       studentType: next.studentType, bonusSH: next.bonusSH, currentSemId: next.currentSemId,
       entSem: next.entSem, entYear: next.entYear, gradSem: next.gradSem, gradYear: next.gradYear,
       minor1: next.minor1, minor2: next.minor2, planName: next.planName };
@@ -2690,6 +2695,7 @@ export function PlannerProvider({ children }) {
     major:  pv?.major  ?? major,  setMajor,
     major2: pv?.major2 ?? major2, setMajor2,
     conc:   pv?.concentration ?? conc, setConc,
+    conc2:  pv?.concentration2 ?? conc2, setConc2,
     minor1: pv?.minor1 ?? minor1, setMinor1,
     minor2: pv?.minor2 ?? minor2, setMinor2,
     studentType: pv?.studentType ?? studentType,

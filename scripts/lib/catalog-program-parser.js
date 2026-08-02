@@ -976,6 +976,14 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
 
   const tablesConsumed = consumed.size;
   const unaccounted = tablesOnPage - tablesConsumed - tablesExcluded;
+
+  // Name the sections we failed to read, not just how many. "3 tables were
+  // dropped" is unactionable; "Political Science Electives was not read" tells
+  // a reader exactly what is missing from their requirement list.
+  const unconsumedHeadings = [];
+  for (const [headingIdx, tableBlocks] of owners) {
+    if (tableBlocks.some(tb => !consumed.has(tb))) unconsumedHeadings.push(blocks[headingIdx].text);
+  }
   if (unaccounted > 0) {
     warnings.push(`${unaccounted} of ${tablesOnPage} tables on the page were neither parsed nor excluded`);
   }
@@ -986,7 +994,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
 
   return { requirementSections, concentrations, generalElectiveSH,
            tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
-           excludedPanes, warnings,
+           excludedPanes, unconsumedHeadings, warnings,
            // Concentrations hosted on their own pages. Parsing is synchronous
            // and fetching is not, so the caller pre-fetches these and calls
            // again with ctx.resolveExternal. Empty once resolved.
@@ -1020,11 +1028,22 @@ function concentrationMinOptions(blocks, gateways, concHeadings = new Map()) {
     }
     const text = parts.join(' ').replace(/\s+/g, ' ');
 
+    // Order matters. BSBA reads "One concentration is required. A second
+    // concentration is optional." — testing for "is optional" first matched
+    // the SECOND sentence and marked the whole thing optional, so a required
+    // choice silently became a suggestion. Require-clauses are checked before
+    // optional ones, and the optional test refuses to match when it is
+    // qualified by "second"/"additional".
+    const OPTIONAL_UNQUALIFIED =
+      /\b(?<!second\s)(?<!additional\s)concentrations?\s+(?:is|are)\s+optional\b/i;
+
     let v = null;
     if (/\(\s*optional\s*\)/i.test(heading.text)) v = 0;
-    else if (/\bis\s+optional\b/i.test(text))     v = 0;
     else if (/\btwo\s+concentrations?\s+(?:are\s+)?required\b/i.test(text)) v = 2;
     else if (/\bone\s+concentration\s+is\s+required\b/i.test(text)) v = 1;
+    else if (/\brequired\s+concentration\b/i.test(text))              v = 1;
+    else if (OPTIONAL_UNQUALIFIED.test(text))                          v = 0;
+    else if (/\bconcentration\s+is\s+not\s+required\b/i.test(text))  v = 0;
     else if (/\b(?:pick|select|choose|complete)\s+one\b/i.test(text))  v = 1;
     else if (/\brequired\b/i.test(heading.text))  v = 1;
 

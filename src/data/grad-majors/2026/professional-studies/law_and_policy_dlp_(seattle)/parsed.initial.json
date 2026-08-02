@@ -31,17 +31,21 @@
         {
           "check": "missing-total-credits",
           "severity": "medium",
-          "message": "the page states no total credit requirement we recognise"
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            "Progress here counts requirements, not credits — check the total with your advisor"
+          ],
+          "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "medium",
-          "message": "4 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "message": "4 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "LWP6402",
-            "LWP6420",
-            "LWP6423",
-            "LWP6500"
+            "LWP 6402 — required by this program, but we have no record of the course",
+            "LWP 6420 — required by this program, but we have no record of the course",
+            "LWP 6423 — required by this program, but we have no record of the course",
+            "LWP 6500 — required by this program, but we have no record of the course"
           ],
           "overflow": 0
         }

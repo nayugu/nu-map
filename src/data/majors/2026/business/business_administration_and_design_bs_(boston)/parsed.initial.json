@@ -689,7 +689,7 @@
     }
   ],
   "concentrations": {
-    "minOptions": 0,
+    "minOptions": 1,
     "concentrationOptions": [
       {
         "type": "SECTION",

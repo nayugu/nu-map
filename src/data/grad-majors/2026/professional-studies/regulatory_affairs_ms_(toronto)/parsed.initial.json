@@ -31,7 +31,11 @@
         {
           "check": "missing-total-credits",
           "severity": "medium",
-          "message": "the page states no total credit requirement we recognise"
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            "Progress here counts requirements, not credits — check the total with your advisor"
+          ],
+          "overflow": 0
         }
       ]
     }
@@ -115,7 +119,7 @@
     }
   ],
   "concentrations": {
-    "minOptions": 1,
+    "minOptions": 0,
     "concentrationOptions": [
       {
         "type": "SECTION",

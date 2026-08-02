@@ -51,9 +51,9 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 17 sample-plan courses are unaccounted for",
+          "message": "1 of 17 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ENGL4710"
+            "ENGL 4710 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

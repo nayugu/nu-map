@@ -57,10 +57,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 23 sample-plan courses are unaccounted for",
+          "message": "2 of 23 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ECON4692",
-            "POLS2325"
+            "ECON 4692 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "POLS 2325 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

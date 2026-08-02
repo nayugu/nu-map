@@ -19,6 +19,7 @@
 import { useRef, useState, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import { useLanguage } from "../context/LanguageContext.jsx";
+import { REL_STYLE } from "../core/constants.js";
 
 const WIDTH = 268;
 const GAP   = 12;
@@ -40,8 +41,11 @@ const prettyCourse = k => String(k).replace(/^([A-Z]+)(\d.*)$/, "$1 $2");
  */
 function CheckRow({ state, detail = [], overflow = 0, moreLabel, children }) {
   const mark = state === "pass" ? "✓" : state === "fail" ? "✕" : "–";
-  const color = state === "pass" ? "var(--success-mark, var(--success))"
-              : state === "fail" ? "var(--warn, var(--text-2))"
+  // Same green and red as the header's relationship legend and the badge
+  // itself, read from REL_STYLE so the three can't drift apart. The ✕ was a
+  // dark yellow, which read as a caution rather than the failure it is.
+  const color = state === "pass" ? REL_STYLE.prerequisite.color
+              : state === "fail" ? REL_STYLE["prerequisite-order"].color
               : "var(--text-5)";
   return (
     <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>

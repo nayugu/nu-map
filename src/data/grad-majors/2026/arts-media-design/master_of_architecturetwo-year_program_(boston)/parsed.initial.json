@@ -47,10 +47,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 13 sample-plan courses are unaccounted for",
+          "message": "2 of 13 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ARCH5211",
-            "ARCH5340"
+            "ARCH 5211 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "ARCH 5340 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }
@@ -158,7 +158,7 @@
     }
   ],
   "concentrations": {
-    "minOptions": 1,
+    "minOptions": 0,
     "concentrationOptions": [
       {
         "type": "SECTION",

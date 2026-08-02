@@ -54,10 +54,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 20 sample-plan courses are unaccounted for",
+          "message": "2 of 20 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "HUSV4994",
-            "MATH1215"
+            "HUSV 4994 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "MATH 1215 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

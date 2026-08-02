@@ -54,11 +54,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 20 sample-plan courses are unaccounted for",
+          "message": "3 of 20 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ACCT2301",
-            "MISM2301",
-            "SCHM2301"
+            "ACCT 2301 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "MISM 2301 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "SCHM 2301 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

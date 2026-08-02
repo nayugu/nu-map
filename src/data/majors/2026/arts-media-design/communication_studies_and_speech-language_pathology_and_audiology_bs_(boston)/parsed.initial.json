@@ -66,11 +66,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 32 sample-plan courses are unaccounted for",
+          "message": "3 of 32 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "COMM1120",
-            "COMM3409",
-            "PHIL1165"
+            "COMM 1120 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "COMM 3409 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHIL 1165 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

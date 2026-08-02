@@ -58,10 +58,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 24 sample-plan courses are unaccounted for",
+          "message": "2 of 24 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "BUSN1103",
-            "COMM3409"
+            "BUSN 1103 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "COMM 3409 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

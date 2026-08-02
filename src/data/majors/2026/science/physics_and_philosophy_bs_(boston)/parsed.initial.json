@@ -67,11 +67,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 33 sample-plan courses are unaccounted for",
+          "message": "3 of 33 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PHYS1167",
-            "PHYS3603",
-            "PHYS5318"
+            "PHYS 1167 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 3603 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 5318 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

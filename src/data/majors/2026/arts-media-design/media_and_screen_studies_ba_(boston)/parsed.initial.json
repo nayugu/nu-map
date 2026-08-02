@@ -43,7 +43,11 @@
         {
           "check": "total-from-sample-plan",
           "severity": "medium",
-          "message": "total 130 came from the Sample Plan of Study, which is one path and may exceed the true minimum"
+          "message": "the credit total was taken from the sample four-year plan, not from a stated requirement",
+          "detail": [
+            "130 SH is what that one sample path adds up to; the real minimum may be lower"
+          ],
+          "overflow": 0
         }
       ]
     }

@@ -17,7 +17,7 @@ names, and a list of every affected program is not a work order.
 
 ### `missing-total-credits` · 267 program(s) · medium
 
-the page states no total credit requirement we recognise
+the catalog page states no total credit requirement
 
 - Foundation Year — `majors/2026/admission/foundation_year`
 - Animation, Minor — `majors/2026/arts-media-design/animation_minor`
@@ -33,7 +33,7 @@ the page states no total credit requirement we recognise
 
 ### `unknown-course` · 130 program(s) · info
 
-1 referenced course(s) are absent from the course catalog, so they can never be satisfied
+1 course(s) required here are missing from our course catalog, so they can never be checked off
 
 - Design and Public Health, BS (Boston) — `majors/2026/arts-media-design/design_and_public_health_bs_(boston)`
 - Game Design and Music with Concentration in Music Technology, BS (Boston) — `majors/2026/arts-media-design/game_design_and_music_with_concentration_in_music_technology_bs_(boston)`
@@ -49,7 +49,7 @@ the page states no total credit requirement we recognise
 
 ### `plan-witness-unaccounted` · 75 program(s) · medium
 
-2 of 23 sample-plan courses are unaccounted for
+2 of 23 courses in the catalog's four-year plan aren't accounted for here
 
 - Architectural Studies and Design, BS (Boston) — `majors/2026/arts-media-design/architectural_studies_and_design_bs_(boston)`
 - Architectural Studies, BS (Boston) — `majors/2026/arts-media-design/architectural_studies_bs_(boston)`
@@ -65,7 +65,7 @@ the page states no total credit requirement we recognise
 
 ### `no-sample-plan` · 9 program(s) · medium
 
-this program publishes no sample plan of study, so we could not confirm nothing is missing
+this program publishes no sample four-year plan, so our strongest check could not run
 
 - Foundation Year — `majors/2026/admission/foundation_year`
 - Design, BFA (Boston) — `majors/2026/arts-media-design/design_bfa_(boston)`
@@ -79,7 +79,7 @@ this program publishes no sample plan of study, so we could not confirm nothing 
 
 ### `total-from-sample-plan` · 3 program(s) · medium
 
-total 130 came from the Sample Plan of Study, which is one path and may exceed the true minimum
+the credit total was taken from the sample four-year plan, not from a stated requirement
 
 - Media and Screen Studies, BA (Boston) — `majors/2026/arts-media-design/media_and_screen_studies_ba_(boston)`
 - Creative Collaboration and Multidisciplinary Design, MS (Boston) — `grad-majors/2026/arts-media-design/creative_collaboration_and_multidisciplinary_design_ms_(boston)`

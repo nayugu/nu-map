@@ -73,20 +73,20 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 39 sample-plan courses are unaccounted for",
+          "message": "3 of 39 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "CHEM1211",
-            "CHEM1212",
-            "CHEM1213"
+            "CHEM 1211 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "CHEM 1212 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "CHEM 1213 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "DS4900"
+            "DS 4900 — required by this program, but we have no record of the course"
           ],
           "overflow": 0
         }

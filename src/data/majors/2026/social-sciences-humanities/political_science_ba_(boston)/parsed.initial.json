@@ -48,11 +48,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "3 of 14 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete",
+          "message": "3 of 14 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "ENVR3300",
-            "ENVR3301",
-            "MATH1215"
+            "ENVR 3300 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "ENVR 3301 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "MATH 1215 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

@@ -144,8 +144,8 @@ async function scrapeProgram(url) {
 
   const { value: totalCreditsRequired, source: totalCreditsSource } = parseTotalCredits(root, PROFILE);
   const { requirementSections, concentrations, generalElectiveSH,
-          tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded }
-            = await parseRequirementsResolvingExternals(root);
+          tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
+          unconsumedHeadings } = await parseRequirementsResolvingExternals(root);
 
   // A program can be entirely concentrations: Philosophy BA's whole major is
   // five mutually-exclusive options and has no base requirement section.
@@ -165,6 +165,7 @@ async function scrapeProgram(url) {
       tablesConsumed,
       tablesOnPage,
       tablesExcluded,
+      ...(unconsumedHeadings?.length ? { unconsumedHeadings } : {}),
       // Courses the department's own sample plan names. A one-directional
       // witness: anything here that matches no requirement means we dropped
       // something. Never the reverse — the plan picks one branch per choice.

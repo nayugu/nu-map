@@ -732,13 +732,13 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
       {/* Header row: label + triangle toggle */}
       <div onClick={() => setExpanded(v => !v)} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+          <div style={{ display: "flex", alignItems: "center", fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
             {label}
             <VerificationPill verification={minor.metadata?.verification}
                               verified={minor.metadata?.verified} t={t} />
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
-          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{scaleLatinRuns(minorName)}</div>
+          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: isPhone ? 3 : 5 }}>{scaleLatinRuns(minorName)}</div>
         </div>
         {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>}
       </div>
@@ -782,12 +782,12 @@ function MajorCard({ label, name, subtitle, verified, verification, progress, ex
       {/* Header row: label + triangle toggle */}
       <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+          <div style={{ display: "flex", alignItems: "center", fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
             {label}
             <VerificationPill verification={verification} verified={verified} t={t} />
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
-          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{scaleLatinRuns(name)}</div>
+          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: isPhone ? 3 : 5 }}>{scaleLatinRuns(name)}</div>
           {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)",
             fontSize: isPhone ? 7 : 9, marginTop: 1,
             /* Indented so it reads as belonging to the program above it
@@ -871,6 +871,7 @@ export default function GradPanel({ wideCatalog = false }) {
     major: majorPath, setMajor: setMajorPath,
     major2: major2Path, setMajor2: setMajor2Path,
     conc: selConc, setConc: setSelConc,
+    conc2: selConc2, setConc2: setSelConc2,
     minor1, setMinor1,
     minor2, setMinor2,
     getSemStatus,
@@ -919,6 +920,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const [majorGone,      setMajorGone]      = useState(false);
   const majorName = useTranslatedText(major?.name ?? null);
   const concName  = useTranslatedText(selConc || null);
+  const conc2Name = useTranslatedText(selConc2 || null);
 
   const [major2Data,    setMajor2Data]    = useState(null);
   const [fetching2,     setFetching2]     = useState(false);
@@ -1010,6 +1012,20 @@ export default function GradPanel({ wideCatalog = false }) {
     return new Map([["Concentrations", opts]]);
   }, [major]);
 
+  const conc2Groups = useMemo(() => {
+    const opts = (major2Data?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));
+    return new Map([["Concentrations", opts]]);
+  }, [major2Data]);
+
+  // Same stale-title recovery as major 1 — a scraper-side rename must not
+  // silently drop the second major's choice either.
+  useEffect(() => {
+    if (!major2Data || !selConc2) return;
+    const still = resolveConcentration(major2Data, selConc2);
+    if (!still) setSelConc2("");
+    else if (still.title !== selConc2) setSelConc2(still.title);
+  }, [major2Data]);
+
   const npCovered  = useMemo(() => attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)), [attributeSystem, placements, courseMap, specialTermPl, specialTerms, SEM_INDEX]);
   // Which placed classes satisfy each NUPath code → { [code]: [{id, code}] }.
   // Drives the grid's hover tooltip / click-to-reveal ("which class satisfies it").
@@ -1098,9 +1114,19 @@ export default function GradPanel({ wideCatalog = false }) {
   // ── Second major allocation (courses double-count freely per NU policy) ─
   const major2Sections = useMemo(() => {
     if (!major2Data) return [];
-    const { sections, generalElectives } = allocateMajorWithElectives(major2Data, placedSet, courseMap, doneSet, realPlacedSet);
-    return [...sections, generalElectives];
-  }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet]);
+    const { sections, generalElectives, allocatedSet } =
+      allocateMajorWithElectives(major2Data, placedSet, courseMap, doneSet, realPlacedSet);
+    const out = [...sections, generalElectives];
+    // Concentration shares this major's used set, so a course already counted
+    // toward its requirements can't also satisfy its concentration — the same
+    // rule major 1 uses. Across the two majors, courses still double-count
+    // freely, per NU policy.
+    if (selConc2 && major2Data.concentrations) {
+      const chosen = resolveConcentration(major2Data, selConc2);
+      if (chosen) out.push(...allocateSections([chosen], placedSet, allocatedSet, courseMap));
+    }
+    return out;
+  }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet, selConc2]);
 
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
@@ -1283,6 +1309,24 @@ export default function GradPanel({ wideCatalog = false }) {
                       onRemove={() => { setMajor2Path(""); setShowMajor2(false); }}
                     />
                   )}
+
+                  {/* The second major's concentration. 51 undergraduate
+                      programs require one — BSBA among them — so without this
+                      a second major could not express a mandatory choice. */}
+                  {major2Data?.concentrations?.concentrationOptions?.length > 0 && (
+                    <div style={{ marginTop: 6 }}>
+                      <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
+                        {t("grad.conc.label")}
+                      </div>
+                      <SearchCombo value={selConc2} onChange={setSelConc2} groups={conc2Groups}
+                                   placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} />
+                      {major2Data.concentrations.minOptions > 0 && !selConc2 && (
+                        <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
+                          ⚠ {major2Data.concentrations.minOptions} concentration{major2Data.concentrations.minOptions > 1 ? "s" : ""} required
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <button
@@ -1366,6 +1410,7 @@ export default function GradPanel({ wideCatalog = false }) {
         {(major2Data || fetching2) && <MajorCard
           label={t("grad.major2.label")}
           name={major2Name}
+          subtitle={selConc2 ? conc2Name : null}
           nameColor={claudePreview?.changed?.has?.("major2") ? "#fb923c" : undefined}
           verified={!!major2Data?.metadata?.verified}
           verification={major2Data?.metadata?.verification}

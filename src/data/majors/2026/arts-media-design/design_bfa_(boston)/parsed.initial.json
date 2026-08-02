@@ -32,7 +32,11 @@
         {
           "check": "no-sample-plan",
           "severity": "medium",
-          "message": "this program publishes no sample plan of study, so we could not confirm nothing is missing"
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            "Almost every major publishes one, so its absence here is unusual"
+          ],
+          "overflow": 0
         }
       ]
     }
@@ -309,7 +313,7 @@
     }
   ],
   "concentrations": {
-    "minOptions": 1,
+    "minOptions": 0,
     "concentrationOptions": [
       {
         "type": "SECTION",

@@ -31,12 +31,20 @@
         {
           "check": "missing-total-credits",
           "severity": "medium",
-          "message": "the page states no total credit requirement we recognise"
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            "Progress here counts requirements, not credits — check the total with your advisor"
+          ],
+          "overflow": 0
         },
         {
           "check": "no-sample-plan",
           "severity": "medium",
-          "message": "this program publishes no sample plan of study, so we could not confirm nothing is missing"
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            "Almost every major publishes one, so its absence here is unusual"
+          ],
+          "overflow": 0
         }
       ]
     }

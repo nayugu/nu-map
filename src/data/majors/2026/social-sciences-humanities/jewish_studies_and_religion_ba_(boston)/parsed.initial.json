@@ -42,10 +42,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "2 of 8 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete",
+          "message": "2 of 8 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "HBRW1101",
-            "HBRW1102"
+            "HBRW 1101 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "HBRW 1102 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

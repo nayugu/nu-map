@@ -82,14 +82,14 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "6 of 48 sample-plan courses are unaccounted for",
+          "message": "6 of 48 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "CHEM1213",
-            "CHEM1214",
-            "CHEM1215",
-            "CHEM1216",
-            "PHYS1163",
-            "PHYS1167"
+            "CHEM 1213 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "CHEM 1214 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "CHEM 1215 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "CHEM 1216 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 1163 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 1167 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

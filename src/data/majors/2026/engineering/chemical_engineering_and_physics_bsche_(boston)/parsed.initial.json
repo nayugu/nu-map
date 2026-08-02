@@ -84,14 +84,14 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "6 of 50 sample-plan courses are unaccounted for",
+          "message": "6 of 50 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PHYS3603",
-            "PHYS4305",
-            "PHYS4621",
-            "PHYS4623",
-            "PHYS4651",
-            "PHYS4652"
+            "PHYS 3603 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 4305 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 4621 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 4623 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 4651 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHYS 4652 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

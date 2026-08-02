@@ -85,11 +85,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 51 sample-plan courses are unaccounted for",
+          "message": "3 of 51 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "CHEM1103",
-            "CHEM1163",
-            "NRSG4996"
+            "CHEM 1103 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "CHEM 1163 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "NRSG 4996 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

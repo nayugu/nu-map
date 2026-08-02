@@ -63,10 +63,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 29 sample-plan courses are unaccounted for",
+          "message": "2 of 29 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ARCH6330",
-            "ARCH6430"
+            "ARCH 6330 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "ARCH 6430 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

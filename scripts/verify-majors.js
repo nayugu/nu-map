@@ -86,8 +86,9 @@ export function verifyAll() {
       if (impossible.length) {
         v.discrepancies.unshift({
           check: 'internal-satisfiability', severity: 'high',
-          message: `${impossible.length} section(s) can never be completed under single-use allocation`,
-          detail: impossible.slice(0, 12),
+          message: `${impossible.length} section(s) can never be completed as written`,
+          detail: impossible.slice(0, 12).map(t =>
+            `"${t}" — every course it accepts is already claimed by another requirement`),
         });
         v.counters.impossibleSections = impossible.length;
         v.level = 'review';

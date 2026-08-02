@@ -46,11 +46,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "3 of 12 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete",
+          "message": "3 of 12 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "MATH1215",
-            "PHIL1101",
-            "PHIL6962"
+            "MATH 1215 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHIL 1101 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "PHIL 6962 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

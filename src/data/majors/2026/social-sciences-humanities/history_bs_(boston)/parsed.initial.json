@@ -44,11 +44,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "3 of 10 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete",
+          "message": "3 of 10 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "HIST1130",
-            "HIST1170",
-            "MATH1215"
+            "HIST 1130 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "HIST 1170 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "MATH 1215 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

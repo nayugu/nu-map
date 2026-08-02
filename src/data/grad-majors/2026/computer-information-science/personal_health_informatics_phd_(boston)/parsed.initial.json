@@ -49,10 +49,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 15 sample-plan courses are unaccounted for",
+          "message": "2 of 15 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "CS5520",
-            "HINF9996"
+            "CS 5520 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "HINF 9996 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }

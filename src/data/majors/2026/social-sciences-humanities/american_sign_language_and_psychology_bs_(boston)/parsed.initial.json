@@ -55,10 +55,10 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 21 sample-plan courses are unaccounted for",
+          "message": "2 of 21 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "AMSL3102",
-            "MATH1215"
+            "AMSL 3102 — the catalog's four-year plan includes it, but no requirement here asks for it",
+            "MATH 1215 — the catalog's four-year plan includes it, but no requirement here asks for it"
           ],
           "overflow": 0
         }
