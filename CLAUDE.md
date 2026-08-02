@@ -64,17 +64,22 @@ Facts that follow from this:
   `git diff HEAD origin/main` to see what changed). Pull again before editing
   shared docs (TODO.md, IDEAS.md). With `pull.rebase` set, pull refuses while
   you have uncommitted changes — commit or stash first.
-- Code changes go branch → PR → **merge commit**: `git switch -c fix/short-name`,
-  push, open a PR, partner skims, merge. Never squash-merge — squashing
-  collapses the branch's commits into one, so the individual history is lost
-  the moment the branch ref is deleted. A merge commit keeps every commit AND
-  marks which branch they came from, so deleting the branch afterwards is
-  safe (GitHub: Settings → General → Pull Requests). Trivial docs edits may
-  go straight to main.
-- Pair-programming sessions (both humans reviewing live) may skip the PR:
-  rebase the feature branch onto origin/main, fast-forward merge to main,
-  push, then delete the branch — every commit is already in main by its own
-  SHA, so only the label goes away.
+- **Pairing is the default, so committing straight to main is the default.**
+  Do not open a PR unless asked. Either commit to main directly, or branch,
+  commit, rebase onto origin/main, `git merge --ff-only`, delete the branch —
+  every commit is already in main by its own SHA, so only the label goes away.
+- **Committing needs no permission; pushing does.** Always ask before
+  `git push`. Commits are local and easy to amend or reset; a push is
+  outward-facing and may carry someone else's commits with it.
+- If a PR is explicitly requested, it merges as a **merge commit**. Never
+  squash-merge — squashing collapses the branch's commits into one, so the
+  individual history is lost the moment the branch ref is deleted. A merge
+  commit keeps every commit AND marks which branch they came from, so
+  deleting the branch afterwards is safe (GitHub: Settings → General →
+  Pull Requests).
+- Two agents often work this repo at once. Stage only your own files — never
+  `git add -A` on a shared tree — and leave the partner's uncommitted work
+  and unpushed commits alone.
 - No long-lived or personal branches — they drift fast here (the monthly
   scrape commits straight to main; one March branch died 469 commits behind).
 - Never enable required-PR branch protection on main: the scheduled data
