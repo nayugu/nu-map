@@ -60,6 +60,26 @@ jobs:
       - name: Refresh RateMyHusky links
         run: node scripts/scrape-ratemyhusky.js --write 2>&1 | tee /tmp/ratemyhusky-log.txt || echo "RateMyHusky refresh skipped (non-fatal)."
 
+      # ── Step 2d: Refresh NUpath from the Registrar's Tableau dashboard ────────
+      #   Tableau is the authoritative NUpath source and the ONLY one that
+      #   carries WF and WD — the catalog prints just 11 of the 13 codes. Before
+      #   this step existed, those two refreshed only when someone manually ran
+      #   the legacy update-nupath workflow, so they sat frozen indefinitely.
+      #
+      #   --tableau (never the catalog fallback): the fallback is additive-only
+      #   by policy, but forcing the authoritative source keeps a degraded read
+      #   from masquerading as a real refresh. Non-fatal — if Tableau is down we
+      #   keep last month's designations rather than failing the whole run.
+      - name: Refresh NUpath from Tableau
+        run: node scripts/fetch-nupath.js --tableau --write 2>&1 | tee /tmp/nupath-log.txt || echo "::warning::NUpath refresh skipped — Tableau unreachable. Designations unchanged from last run."
+
+      # ── Step 2e: Propagate NUpath into the runtime file ───────────────────────
+      #   fetch-nupath writes all-courses.json; the app loads catalog-courses.json.
+      #   This carries additions AND corrections across, so a code the Registrar
+      #   removed actually disappears from what students and advisors see.
+      - name: Merge NUpath into catalog-courses
+        run: node scripts/merge-nupath.js --write 2>&1 | tee /tmp/nupath-merge-log.txt
+
       # ── Step 3: Apply manual patches ──────────────────────────────────────────
       - name: Apply patches
         run: node scripts/apply-patches.js --write 2>&1 | tee /tmp/patches-log.txt
