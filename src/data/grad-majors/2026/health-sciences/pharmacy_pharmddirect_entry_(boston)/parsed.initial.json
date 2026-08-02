@@ -1,7 +1,7 @@
 {
   "name": "Pharmacy, PharmD—Direct Entry (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 2,
@@ -39,8 +39,9 @@
       "PHSC5230"
     ],
     "verification": {
-      "level": "review",
-      "score": 0.85,
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [
         "requirement-tables",
@@ -60,7 +61,7 @@
       "discrepancies": [
         {
           "check": "unknown-course",
-          "severity": "medium",
+          "severity": "info",
           "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
         }
       ]

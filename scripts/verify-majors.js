@@ -204,7 +204,7 @@ function main() {
       program.metadata = program.metadata ?? {};
       program.metadata.verified = r.level === 'verified';
       program.metadata.verification = {
-        level: r.level, score: r.score, checkedAt: new Date().toISOString().slice(0, 10),
+        level: r.level, kind: r.kind, score: r.score, checkedAt: new Date().toISOString().slice(0, 10),
         sourcesAvailable: r.sourcesAvailable, counters: r.counters,
         discrepancies: r.discrepancies.map(({ check, severity, message }) => ({ check, severity, message })),
       };

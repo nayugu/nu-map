@@ -1,7 +1,7 @@
 {
   "name": "Forensic Accounting, Graduate Certificate (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 1,
@@ -10,8 +10,9 @@
     "tablesExcluded": 0,
     "planOfStudyCourses": [],
     "verification": {
-      "level": "review",
-      "score": 0.85,
+      "level": "verified",
+      "kind": "certificate",
+      "score": 0.98,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [
         "requirement-tables",
@@ -29,7 +30,7 @@
       "discrepancies": [
         {
           "check": "missing-total-credits",
-          "severity": "medium",
+          "severity": "info",
           "message": "the page states no total credit requirement we recognise"
         }
       ]

@@ -8,7 +8,7 @@ Generated 2026-08-02 by `npm run data:verify`.
 > the per-page PDF is the same render as the HTML. These checks confirm we
 > parsed the catalog faithfully. They cannot confirm the catalog is right.
 
-**1017 programs** — 225 verified · 501 partial · 291 review · 0 unverified
+**1017 programs** — 880 verified · 129 partial · 8 review · 0 unverified
 
 ## Findings by root cause
 
@@ -31,7 +31,7 @@ the page states no total credit requirement we recognise
 - Communication Studies, Minor — `majors/2026/arts-media-design/communication_studies_minor`
 - …and 257 more
 
-### `unknown-course` · 130 program(s) · medium
+### `unknown-course` · 130 program(s) · info
 
 1 referenced course(s) are absent from the course catalog, so they can never be satisfied
 
@@ -62,6 +62,20 @@ the page states no total credit requirement we recognise
 - Business Administration, BSBA (Boston) — `majors/2026/business/business_administration_bsba_(boston)`
 - Business Administration, BSBA (Oakland) — `majors/2026/business/business_administration_bsba_(oakland)`
 - …and 65 more
+
+### `no-sample-plan` · 9 program(s) · medium
+
+this program publishes no sample plan of study, so we could not confirm nothing is missing
+
+- Foundation Year — `majors/2026/admission/foundation_year`
+- Design, BFA (Boston) — `majors/2026/arts-media-design/design_bfa_(boston)`
+- Health Science and Business Administration, BS (Boston) — `majors/2026/health-sciences/health_science_and_business_administration_bs_(boston)`
+- Health Science and Sociology, BS (Boston) — `majors/2026/health-sciences/health_science_and_sociology_bs_(boston)`
+- Nursing, BSN—Accelerated Program for Second-Degree Students (Boston) — `majors/2026/health-sciences/nursing_bsnaccelerated_program_for_second-degree_students_(boston)`
+- Nursing, BSN—Accelerated Program for Second-Degree Students (Charlotte) — `majors/2026/health-sciences/nursing_bsnaccelerated_program_for_second-degree_students_(charlotte)`
+- Economics — `majors/2026/social-sciences-humanities/economics`
+- Additional Requirements for BA Students — `majors/2026/university-academics/additional_requirements_for_ba_students`
+- Writing-Intensive Courses — `majors/2026/university-academics/writing-intensive_courses`
 
 ### `total-from-sample-plan` · 3 program(s) · medium
 

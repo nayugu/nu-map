@@ -9,6 +9,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useMemo, useEffect, useContext, createContext, useRef } from "react";
 import { createPortal } from "react-dom";
+import VerificationPopover from "./VerificationPopover.jsx";
 import { usePlanner }         from "../context/PlannerContext.jsx";
 import { usePort }             from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
@@ -19,6 +20,7 @@ import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { filterInTimeline } from "../core/planModel.js";
+import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
 import {
@@ -600,30 +602,51 @@ function NuPathGrid({ covered, sources = {} }) {
  * than saying less.
  */
 function VerificationPill({ verification, verified, t }) {
+  const [hover, setHover] = useState(null);   // anchor rect while hovered
   const level = verification?.level ?? (verified ? "verified" : null);
   if (!level || level === "unverified") return null;
 
   const problems = (verification?.discrepancies ?? [])
     .filter(d => d.severity === "high" || d.severity === "medium");
 
-  const style = {
-    verified: { bg: "var(--success-bg)", fg: "var(--success)", bd: "var(--success-border)" },
-    partial:  { bg: "var(--bg-surface-2)", fg: "var(--text-4)", bd: "var(--border-2)" },
-    review:   { bg: "var(--warn-bg, var(--bg-surface-2))", fg: "var(--warn, var(--text-3))", bd: "var(--warn-border, var(--border-2))" },
+  // Green / yellow / red, with a word rather than a count. "1 source" and
+  // "2 to check" told an advisor nothing — the state has to be readable
+  // without knowing how the checking works.
+  //
+  // Chrome stays neutral and the colour lives in the type, matching the NUPath
+  // grid directly above it. A filled badge shouted over a deliberately calm
+  // panel; this is a footnote about our confidence, not a status alarm, and it
+  // should not out-rank the requirements it annotates.
+  // The same green/yellow/red as the relationship legend in the header, taken
+  // from REL_STYLE rather than copied, so the two never drift apart. The
+  // mapping is semantic as well as visual: green is the "correct" colour there
+  // too, red is "wrong order", and yellow is "misplaced — look at this".
+  const fg = {
+    verified: REL_STYLE.prerequisite.color,
+    partial:  REL_STYLE["corequisite-viol"].color,
+    review:   REL_STYLE["prerequisite-order"].color,
   }[level] ?? null;
-  if (!style) return null;
+  if (!fg) return null;
+  const style = { bg: "transparent", fg, bd: "var(--border-2)" };
 
-  const text = level === "verified" ? t("grad.verified")
+  const text = level === "verified" ? t("grad.verify.checked")
              : level === "partial"  ? t("grad.verify.partial")
-             : t("grad.verify.review", { n: problems.length });
-
-  const tip = level === "verified" ? t("grad.verify.tip.verified")
-            : level === "partial"  ? t("grad.verify.tip.partial")
-            : `${t("grad.verify.tip.review")}\n\n` + problems.map(d => `• ${d.message}`).join("\n");
+             : t("grad.verify.review");
 
   return (
-    <span title={tip} style={{ marginLeft: 6, fontSize: 8, background: style.bg, color: style.fg,
-      border: `1px solid ${style.bd}`, borderRadius: 99, padding: "1px 5px", cursor: "help" }}>{text}</span>
+    <>
+      <span
+        onMouseEnter={e => setHover(e.currentTarget.getBoundingClientRect())}
+        onMouseLeave={() => setHover(null)}
+        style={{ marginLeft: 6, fontSize: 8, background: style.bg, color: style.fg,
+          border: `1px solid ${style.bd}`, borderRadius: 99, padding: "1px 5px", cursor: "help" }}
+      >{text}</span>
+
+      {/* Opens on mouseenter with no delay. The native `title` waits about a
+          second, which for a badge whose entire job is to explain itself meant
+          the explanation was never read. */}
+      {hover && <VerificationPopover verification={verification} level={level} rect={hover} />}
+    </>
   );
 }
 

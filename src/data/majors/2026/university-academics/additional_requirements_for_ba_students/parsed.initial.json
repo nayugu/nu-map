@@ -10,8 +10,9 @@
     "tablesExcluded": 0,
     "planOfStudyCourses": [],
     "verification": {
-      "level": "review",
-      "score": 0.85,
+      "level": "partial",
+      "kind": "major",
+      "score": 0.7,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [
         "requirement-tables",
@@ -31,6 +32,11 @@
           "check": "missing-total-credits",
           "severity": "medium",
           "message": "the page states no total credit requirement we recognise"
+        },
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample plan of study, so we could not confirm nothing is missing"
         }
       ]
     }

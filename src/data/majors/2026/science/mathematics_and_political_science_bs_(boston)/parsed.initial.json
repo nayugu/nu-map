@@ -27,7 +27,8 @@
       "POLS4703"
     ],
     "verification": {
-      "level": "review",
+      "level": "partial",
+      "kind": "major",
       "score": 0.85,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [

@@ -33,8 +33,9 @@
       "SOCL3441"
     ],
     "verification": {
-      "level": "review",
-      "score": 0.7,
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [
         "requirement-tables",
@@ -53,14 +54,14 @@
       },
       "discrepancies": [
         {
-          "check": "unknown-course",
-          "severity": "medium",
-          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
-        },
-        {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
           "message": "2 of 22 sample-plan courses are unaccounted for"
+        },
+        {
+          "check": "unknown-course",
+          "severity": "info",
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
         }
       ]
     }

@@ -18,7 +18,8 @@
       "INAM9996"
     ],
     "verification": {
-      "level": "review",
+      "level": "partial",
+      "kind": "grad",
       "score": 0.7,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [

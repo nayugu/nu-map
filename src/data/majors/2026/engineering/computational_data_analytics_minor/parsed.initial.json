@@ -1,7 +1,7 @@
 {
   "name": "Computational Data Analytics, Minor",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 3,
@@ -10,7 +10,8 @@
     "tablesExcluded": 0,
     "planOfStudyCourses": [],
     "verification": {
-      "level": "partial",
+      "level": "verified",
+      "kind": "minor",
       "score": 0.98,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [

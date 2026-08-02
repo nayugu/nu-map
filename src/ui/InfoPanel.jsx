@@ -2,6 +2,7 @@
 // INFO PANEL  — bottom drawer for selected course details
 // ═══════════════════════════════════════════════════════════════════
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import HoverCard from "./HoverCard.jsx";
 import { createPortal } from "react-dom";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { usePort }                  from "../context/InstitutionContext.jsx";
@@ -1266,44 +1267,3 @@ function SchedulePopover({ pat, color, rect }) {
   );
 }
 
-// Instant hover card for header badges (desktop only — same hover-anchored
-// portal pattern as OfferingPopover/SchedulePopover, and portalled to
-// document.body for the same transform:scale reason). Replaces the native
-// `title` tooltip, whose ~1s delay made the content feel hidden. Shared by
-// the NUPath badges (full attribute name) and the ↻ repeat badge (repeat
-// rule + planned takes).
-function HoverCard({ children, rect }) {
-  const ref = useRef(null);
-  const [placed, setPlaced] = useState(null);   // measured-and-clamped position
-  const GAP  = 7;    // clearance between the badge and the popover
-  const EDGE = 8;    // min clearance from any viewport edge
-
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const w = el.offsetWidth, h = el.offsetHeight;
-    let left = rect.left + rect.width / 2 - w / 2;                   // centred over the badge
-    left = Math.min(Math.max(EDGE, left), window.innerWidth - w - EDGE);
-    let top = rect.top - GAP - h;                                    // above the badge…
-    if (top < EDGE) top = rect.bottom + GAP;                         // …or below if it'd clip the top
-    top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
-    setPlaced({ top: Math.round(top), left: Math.round(left) });
-  }, [rect]);
-
-  return createPortal(
-    <div ref={ref} style={{
-      position: "fixed",
-      left: placed ? placed.left : Math.round(rect.left),
-      top:  placed ? placed.top  : Math.round(rect.top),
-      zIndex: 9000, padding: "7px 11px", whiteSpace: "nowrap",
-      background: "var(--bg-surface)", border: "1px solid var(--border-card)",
-      borderRadius: 7, boxShadow: "var(--shadow-modal)", pointerEvents: "none",
-      fontFamily: "'Inter', system-ui, sans-serif",
-      fontSize: 13.5, color: "var(--text-2)",
-      visibility: placed ? "visible" : "hidden",
-    }}>
-      {children}
-    </div>,
-    document.body
-  );
-}

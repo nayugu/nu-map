@@ -35,6 +35,7 @@
     ],
     "verification": {
       "level": "review",
+      "kind": "major",
       "score": 0.6,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [

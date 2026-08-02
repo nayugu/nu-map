@@ -18,6 +18,7 @@
     ],
     "verification": {
       "level": "verified",
+      "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [

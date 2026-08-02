@@ -11,7 +11,8 @@
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
-      "score": 1,
+      "kind": "major",
+      "score": 0.85,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [
         "requirement-tables",
@@ -27,7 +28,13 @@
         "planUnexplained": 0,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample plan of study, so we could not confirm nothing is missing"
+        }
+      ]
     }
   },
   "totalCreditsRequired": 130,

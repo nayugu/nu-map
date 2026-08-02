@@ -1,7 +1,7 @@
 {
   "name": "Experience Design, Graduate Certificate (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 2,
@@ -10,7 +10,8 @@
     "tablesExcluded": 0,
     "planOfStudyCourses": [],
     "verification": {
-      "level": "partial",
+      "level": "verified",
+      "kind": "certificate",
       "score": 1,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [

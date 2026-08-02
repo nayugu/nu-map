@@ -58,6 +58,34 @@ export const SEVERITY = ['high', 'medium', 'info'];
 /** Verdicts, best first. See levelFor(). */
 export const LEVELS = ['verified', 'partial', 'review', 'unverified'];
 
+
+/**
+ * What kind of program this is, and therefore which checks are meaningful.
+ *
+ * Measured across the corpus: 98% of undergraduate majors publish a Sample
+ * Plan of Study (351 of 360), while **0%** of minors and 0% of graduate
+ * certificates do, and only 11% of graduate programs. So a missing plan means
+ * completely different things depending on the program:
+ *
+ *   - for an undergrad major it is anomalous and worth flagging
+ *   - for a minor it is simply how minors are published
+ *
+ * Grading everything against the same absolute bar left all 172 minors
+ * permanently yellow for a structural reason unrelated to their quality —
+ * which is not a signal, just noise that makes minors look worse than majors.
+ */
+export function programKind(id, program) {
+  if (/_minor$/.test(id)) return 'minor';
+  if (/certificate/i.test(id) || /certificate/i.test(program?.name ?? '')) return 'certificate';
+  if (id.startsWith('grad-majors/')) return 'grad';
+  return 'major';
+}
+
+/** Is a sample plan of study expected to exist for this kind of program? */
+export function expectsPlanOfStudy(kind) {
+  return kind === 'major';
+}
+
 const courseKey = (subject, classId) => `${subject}${classId}`;
 
 /** Walk a requirement tree, yielding every node. */
@@ -127,7 +155,8 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     d.push({ check, severity, message, ...(detail.length ? { detail: detail.slice(0, 12), overflow: Math.max(0, detail.length - 12) } : {}) });
 
   const meta      = program.metadata ?? {};
-  const isMinor   = /_minor$/.test(id);
+  const kind      = programKind(id, program);
+  const isMinor   = kind === 'minor';
   const sections  = program.requirementSections ?? [];
   const concOpts  = program.concentrations?.concentrationOptions ?? [];
   const counters  = {};
@@ -176,7 +205,10 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
   counters.zeroTotal = total > 0 ? 0 : 1;
   if (!total) {
     // Minors legitimately state no degree total.
-    add('missing-total-credits', isMinor ? 'info' : 'medium',
+    // Minors and certificates routinely state no degree total; for a full
+    // program its absence is worth surfacing.
+    add('missing-total-credits',
+      (kind === 'minor' || kind === 'certificate') ? 'info' : 'medium',
       'the page states no total credit requirement we recognise');
   } else if (program.totalCreditsSource === 'plan-grid') {
     add('total-from-sample-plan', 'medium',
@@ -188,7 +220,10 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     const unknown = [...courseKeysOf(program)].filter(k => !courseIndex.has(k)).sort();
     counters.unknownCourses = unknown.length;
     if (unknown.length) {
-      add('unknown-course', 'medium',
+      // Usually our course catalog missing a subject (LAW, MUST) rather than
+      // the program being wrong — real, but not evidence of missing
+      // requirements, so it must not paint a program red on its own.
+      add('unknown-course', unknown.length > 3 ? 'medium' : 'info',
         `${unknown.length} referenced course(s) are absent from the course catalog, so they can never be satisfied`, unknown);
     }
   }
@@ -217,6 +252,12 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     }
   } else {
     counters.planUnexplained = 0;
+    // Only worth saying when a plan was expected. 98% of undergrad majors
+    // publish one; minors and certificates never do.
+    if (expectsPlanOfStudy(kind)) {
+      add('no-sample-plan', 'medium',
+        'this program publishes no sample plan of study, so we could not confirm nothing is missing');
+    }
   }
 
   const sourcesAvailable = [
@@ -227,7 +268,8 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
   ];
 
   return {
-    level: levelFor(d, plan),
+    kind,
+    level: levelFor(d),
     score: scoreFor(d, counters),
     counters,
     sourcesAvailable,
@@ -248,10 +290,18 @@ function duplicates(list) {
  * "verified" is defined by checks passing plus the strongest check having been
  * runnable — not by counting the plan as a corroborating source.
  */
-export function levelFor(discrepancies, planCourses) {
+export function levelFor(discrepancies) {
+  // Severity carries the meaning, so each colour says something distinct:
+  //   red    something is likely wrong or missing
+  //   yellow nothing looks wrong, but a check was inconclusive
+  //   green  every check that applies to this kind of program passed
+  //
+  // Crucially this is graded against what is CHECKABLE for the program's kind,
+  // not an absolute bar. A minor that passes everything applicable is green;
+  // it is not marked down for lacking a sample plan that minors never have.
   if (discrepancies.some(x => x.severity === 'high'))   return 'review';
-  if (discrepancies.some(x => x.severity === 'medium')) return 'review';
-  return Array.isArray(planCourses) && planCourses.length ? 'verified' : 'partial';
+  if (discrepancies.some(x => x.severity === 'medium')) return 'partial';
+  return 'verified';
 }
 
 /** 0–1, for RANKING THE TRIAGE REPORT only. Never shown to students. */

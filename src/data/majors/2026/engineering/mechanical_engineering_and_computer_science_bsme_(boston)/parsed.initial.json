@@ -1,7 +1,7 @@
 {
   "name": "Mechanical Engineering and Computer Science, BSME (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 7,
@@ -59,8 +59,9 @@
       "PHYS1157"
     ],
     "verification": {
-      "level": "review",
-      "score": 0.85,
+      "level": "verified",
+      "kind": "major",
+      "score": 0.98,
       "checkedAt": "2026-08-02",
       "sourcesAvailable": [
         "requirement-tables",
@@ -80,7 +81,7 @@
       "discrepancies": [
         {
           "check": "unknown-course",
-          "severity": "medium",
+          "severity": "info",
           "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
         }
       ]
