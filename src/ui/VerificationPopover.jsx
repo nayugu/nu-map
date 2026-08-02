@@ -32,28 +32,41 @@ const EDGE  = 8;
 const prettyCourse = k => String(k).replace(/^([A-Z]+)(\d.*)$/, "$1 $2");
 
 /**
- * pass | fail | na — a mark, a colour, a line of plain language, and (when the
- * check failed) the specific things that caused it.
+ * A mark, a colour, a line of plain language, and (when something is off) the
+ * specific causes.
+ *
+ * Four states, because three conflated two different things:
+ *
+ *   pass  ✓  green   the check passed
+ *   fail  ✕  red     the check failed AND counts against the program
+ *   note  !  muted   worth knowing, but deliberately NOT counted
+ *   na    –  muted   this check does not apply to this kind of program
+ *
+ * `note` exists because a red ✕ next to a green badge is a contradiction the
+ * reader is right to distrust. One or two course codes missing from our
+ * catalog is almost always our own gap (LAW, DS), so it is graded info and
+ * does not colour the badge — but it was still drawing a failure mark. The
+ * mark now follows the same severity the badge does.
  *
  * The named causes are the difference between "something doesn't line up" and
- * a finding an advisor can act on: they can look up ENVR 3300 and decide
- * whether it matters. Without them the popover only restates the badge.
+ * a finding an advisor can act on.
  */
+const LINE = "16px";   // one shared line box, so the mark sits on the first line of text
+
 function CheckRow({ state, detail = [], overflow = 0, moreLabel, children }) {
-  const mark = state === "pass" ? "✓" : state === "fail" ? "✕" : "–";
+  const mark = state === "pass" ? "✓" : state === "fail" ? "✕" : state === "note" ? "!" : "–";
   // Same green and red as the header's relationship legend and the badge
-  // itself, read from REL_STYLE so the three can't drift apart. The ✕ was a
-  // dark yellow, which read as a caution rather than the failure it is.
+  // itself, read from REL_STYLE so the three can't drift apart.
   const color = state === "pass" ? REL_STYLE.prerequisite.color
               : state === "fail" ? REL_STYLE["prerequisite-order"].color
               : "var(--text-5)";
   return (
     <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
       <span style={{ flexShrink: 0, width: 10, textAlign: "center", fontSize: 10,
-                     fontWeight: 800, color, lineHeight: "16px" }}>{mark}</span>
+                     fontWeight: 800, color, lineHeight: LINE }}>{mark}</span>
       <div style={{ minWidth: 0 }}>
-        <span style={{ fontSize: 11, lineHeight: 1.45,
-                       color: state === "na" ? "var(--text-5)" : "var(--text-3)" }}>{children}</span>
+        <span style={{ fontSize: 11, lineHeight: LINE, display: "block",
+                       color: state === "pass" || state === "fail" ? "var(--text-3)" : "var(--text-5)" }}>{children}</span>
         {detail.length > 0 && (
           <div style={{ marginTop: 3, fontSize: 10.5, lineHeight: 1.5, color: "var(--text-4)" }}>
             {detail.map((d, i) => (
@@ -98,11 +111,17 @@ export default function VerificationPopover({ verification, level, rect }) {
   const findings = verification?.discrepancies ?? [];
   const causeOf = (...checks) => {
     const d = findings.find(f => checks.includes(f.check));
-    if (!d) return { detail: [], overflow: 0 };
+    if (!d) return { detail: [], overflow: 0, severity: null };
     // Course keys read better spaced; anything else is already prose.
     const detail = (d.detail ?? []).map(x => /^[A-Z]+\d/.test(x) ? prettyCourse(x) : x);
-    return { detail, overflow: d.overflow ?? 0 };
+    return { detail, overflow: d.overflow ?? 0, severity: d.severity };
   };
+
+  // The mark must agree with the badge: only a finding that COUNTS against the
+  // program may draw a failure. An info-level finding is a note.
+  const markFor = (sev, fallback = "pass") =>
+    sev === null || sev === undefined ? fallback
+    : sev === "info" ? "note" : "fail";
 
   // Whether a sample plan was ever expected. 98% of undergraduate majors
   // publish one; minors and certificates never do. Saying "no plan to compare
@@ -112,17 +131,21 @@ export default function VerificationPopover({ verification, level, rect }) {
 
   // Each row: did the check pass, fail, or was it unavailable? Order runs
   // strongest evidence first, so the most meaningful line is read first.
+  const tables = causeOf("requirement-table-parity");
+  const planC  = causeOf("plan-witness-unaccounted");
+  const course = causeOf("unknown-course");
+  const total  = causeOf("missing-total-credits", "total-from-sample-plan");
+
   const rows = [
-    { state: num("tablesUnaccounted") === 0 ? "pass" : "fail",
-      text:  t("verify.pop.complete"), ...causeOf("requirement-table-parity") },
-    { state: !hasPlan ? "na" : num("planUnexplained") === 0 ? "pass" : "fail",
+    { state: markFor(tables.severity), text: t("verify.pop.complete"), ...tables },
+    { state: !hasPlan ? "na" : markFor(planC.severity),
       text:  hasPlan ? t("verify.pop.plan")
            : planExpected ? t("verify.pop.planMissing") : t("verify.pop.planNA"),
-      ...causeOf("plan-witness-unaccounted") },
-    { state: num("unknownCourses") === 0 ? "pass" : "fail",
-      text:  t("verify.pop.courses"), ...causeOf("unknown-course") },
-    { state: num("zeroTotal") === 0 ? "pass" : "na",
-      text:  num("zeroTotal") === 0 ? t("verify.pop.total") : t("verify.pop.totalNone") },
+      ...planC },
+    { state: markFor(course.severity), text: t("verify.pop.courses"), ...course },
+    { state: num("zeroTotal") === 0 ? markFor(total.severity) : "na",
+      text:  num("zeroTotal") === 0 ? t("verify.pop.total") : t("verify.pop.totalNone"),
+      ...total },
   ];
 
   // Findings with no row of their own — duplicate titles, impossible sections,
@@ -133,7 +156,7 @@ export default function VerificationPopover({ verification, level, rect }) {
                          "total-from-sample-plan"]);
   for (const f of findings) {
     if (OWNED.has(f.check) || f.severity === "info") continue;
-    rows.push({ state: "fail", text: f.message,
+    rows.push({ state: markFor(f.severity, "fail"), text: f.message,
                 detail: (f.detail ?? []).map(x => /^[A-Z]+\d/.test(x) ? prettyCourse(x) : x),
                 overflow: f.overflow ?? 0 });
   }
