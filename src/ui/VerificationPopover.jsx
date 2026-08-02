@@ -96,7 +96,7 @@ function CheckRow({ state, detail = [], overflow = 0, moreLabel, children }) {
   );
 }
 
-export default function VerificationPopover({ verification, level, rect }) {
+export default function VerificationPopover({ verification, level, rect, interactive = false, onDismiss }) {
   const { t } = useLanguage();
   const ref = useRef(null);
   const [placed, setPlaced] = useState(null);
@@ -129,13 +129,22 @@ export default function VerificationPopover({ verification, level, rect }) {
                  : t("verify.pop.headline.review");
 
   return createPortal(
-    <div ref={ref} style={{
+    <>
+      {interactive && (
+        // Tap-outside to close. Touch has no "mouse leave".
+        <div onClick={e => { e.stopPropagation(); onDismiss?.(); }}
+             style={{ position: "fixed", inset: 0, zIndex: 9000 }} />
+      )}
+      <div ref={ref} style={{
       position: "fixed",
       left: placed ? placed.left : Math.round(rect.left + rect.width / 2 - WIDTH / 2),
       top:  placed ? placed.top  : Math.round(rect.top - GAP),
-      zIndex: 9000, width: WIDTH, padding: "15px 17px",
+      zIndex: 9001, width: WIDTH, padding: "15px 17px",
       background: "var(--bg-surface)", border: "1px solid var(--border-card)",
-      borderRadius: 9, boxShadow: "var(--shadow-modal)", pointerEvents: "none",
+      borderRadius: 9, boxShadow: "var(--shadow-modal)",
+      // Inert while hovering on desktop so it can't steal the pointer; on
+      // touch it must be tappable, because the catalog link lives inside it.
+      pointerEvents: interactive ? "auto" : "none",
       fontFamily: "'Inter', system-ui, sans-serif",
       visibility: placed ? "visible" : "hidden",
     }}>
@@ -164,7 +173,23 @@ export default function VerificationPopover({ verification, level, rect }) {
                     fontSize: 10.5, lineHeight: 1.5, color: "var(--text-4)" }}>
         <bdi>{t("verify.pop.caveat")}</bdi>
       </div>
-    </div>,
+
+      {/* Touch only. On desktop this popover opens on hover and is
+          pointer-events:none, so a link here could never be clicked — there
+          the badge itself is the link. On touch the badge's link is disabled
+          (tapping it opens this instead), so this is the only route to the
+          source. */}
+      {interactive && verification?.sourceUrl && (
+        <a href={verification.sourceUrl} target="_blank" rel="noopener noreferrer"
+           onClick={e => e.stopPropagation()}
+           style={{ display: "inline-block", marginTop: 9, fontSize: 10.5, fontWeight: 600,
+                    color: "var(--active, var(--text-2))", textDecoration: "none",
+                    pointerEvents: "auto" }}>
+          {t("verify.pop.openCatalog")} ↗
+        </a>
+      )}
+    </div>
+    </>,
     document.body
   );
 }

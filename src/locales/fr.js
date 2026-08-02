@@ -133,6 +133,7 @@ export const strings = {
   "verify.pop.check.empty-program": "Aucune exigence n'a pu être lue pour ce programme",
   "verify.pop.totalNone": "Le catalogue n'indique aucun total de crédits",
   "verify.pop.caveat": "Cela vérifie que nous avons bien recopié le catalogue, non qu'il soit correct. Confirmez toujours avec votre conseiller.",
+  "verify.pop.openCatalog":  "Ouvrir la page du catalogue",
   "verify.detail.planMissingCourse": "{course} — le plan de quatre ans du catalogue l'inclut, mais aucune exigence ici ne le demande",
   "verify.detail.planLikelyElective": "{course} — figure au plan de quatre ans mais hors des matières de ce programme ; probablement un cours au choix",
   "verify.detail.unknownCourse": "{course} — absent de notre liste de cours, cette exigence ne peut donc pas être cochée ici",

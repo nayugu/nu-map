@@ -601,13 +601,10 @@ function NuPathGrid({ covered, sources = {} }) {
  * worked example fully corroborates it. Over-claiming to an advisor is worse
  * than saying less.
  */
-function VerificationPill({ verification, verified, t }) {
-  const [hover, setHover] = useState(null);   // anchor rect while hovered
+function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
+  const [open, setOpen] = useState(null);   // anchor rect while shown
   const level = verification?.level ?? (verified ? "verified" : null);
   if (!level || level === "unverified") return null;
-
-  const problems = (verification?.discrepancies ?? [])
-    .filter(d => d.severity === "high" || d.severity === "medium");
 
   // Green / yellow / red, with a word rather than a count. "1 source" and
   // "2 to check" told an advisor nothing — the state has to be readable
@@ -615,59 +612,81 @@ function VerificationPill({ verification, verified, t }) {
   //
   // Chrome stays neutral and the colour lives in the type, matching the NUPath
   // grid directly above it. A filled badge shouted over a deliberately calm
-  // panel; this is a footnote about our confidence, not a status alarm, and it
-  // should not out-rank the requirements it annotates.
-  // The same green/yellow/red as the relationship legend in the header, taken
-  // from REL_STYLE rather than copied, so the two never drift apart. The
-  // mapping is semantic as well as visual: green is the "correct" colour there
-  // too, red is "wrong order", and yellow is "misplaced — look at this".
+  // panel; this is a footnote about our confidence, not a status alarm.
+  //
+  // The colours are REL_STYLE's — the header legend's — read rather than
+  // copied so the two can't drift. The mapping is semantic there too: green is
+  // "correct", red is "wrong order", yellow is "misplaced, look at this".
   const fg = {
     verified: REL_STYLE.prerequisite.color,
     partial:  REL_STYLE["corequisite-viol"].color,
     review:   REL_STYLE["prerequisite-order"].color,
   }[level] ?? null;
   if (!fg) return null;
-  const style = { bg: "transparent", fg, bd: "var(--border-2)" };
 
   const text = level === "verified" ? t("grad.verify.checked")
              : level === "partial"  ? t("grad.verify.partial")
              : t("grad.verify.review");
 
-  // Clicking opens the catalog page this program was read from. The badge's
-  // whole claim is "we copied the catalog correctly", so the natural next
-  // question is "let me see the catalog" — and an advisor checking a
-  // discrepancy needs the source, not a description of it.
+  // Two input models, split on the right breakpoint for each concern.
+  //
+  //   INTERACTION keys off isMobile (<1024px, phone AND tablet), because the
+  //   deciding factor is that touch has no hover — a tablet can't reveal the
+  //   explanation any more than a phone can.
+  //     desktop  hover shows the explanation, click opens the catalog page
+  //     touch    tap shows the explanation; the catalog link is deliberately
+  //              disabled, since a tap that navigated out of the app was
+  //              previously the badge's only behaviour and left its
+  //              explanation unreachable
+  //
+  //   LAYOUT keys off isPhone (<600px), because that is where the badge
+  //   actually overflowed the card. A tablet has room to keep it inline.
   const href = verification?.sourceUrl;
 
   const pill = (
     <span
-      onMouseEnter={e => setHover(e.currentTarget.getBoundingClientRect())}
-      onMouseLeave={() => setHover(null)}
-      style={{ marginLeft: 6, fontSize: 8, background: style.bg, color: style.fg,
-        border: `1px solid ${style.bd}`, borderRadius: 99, padding: "1px 5px",
-        cursor: href ? "pointer" : "help" }}
-    >{text}{href && <span style={{ marginLeft: 3, opacity: 0.7 }}>↗</span>}</span>
+      onMouseEnter={isMobile ? undefined : e => setOpen(e.currentTarget.getBoundingClientRect())}
+      onMouseLeave={isMobile ? undefined : () => setOpen(null)}
+      onClick={isMobile ? (e => {
+        e.stopPropagation();
+        // Read the rect NOW: by the time the state updater runs React has
+        // already nulled currentTarget on the pooled event.
+        const rect = e.currentTarget.getBoundingClientRect();
+        setOpen(o => (o ? null : rect));
+      }) : undefined}
+      style={{
+        fontSize: 8, background: "transparent", color: fg,
+        border: `1px solid var(--border-2)`, borderRadius: 99, padding: "1px 5px",
+        cursor: "pointer", whiteSpace: "nowrap",
+        ...(isPhone ? { alignSelf: "flex-start", marginTop: 2 } : { marginLeft: 6 }),
+      }}
+    >{text}</span>
   );
 
   return (
     <>
-      {href
+      {!isMobile && href
         ? <a href={href} target="_blank" rel="noopener noreferrer"
              // The card header toggles expand/collapse; the link must not do both.
              onClick={e => e.stopPropagation()}
              style={{ textDecoration: "none", display: "inline-flex", alignItems: "center" }}>{pill}</a>
         : pill}
 
-      {/* Opens on mouseenter with no delay. The native `title` waits about a
-          second, which for a badge whose entire job is to explain itself meant
-          the explanation was never read. */}
-      {hover && <VerificationPopover verification={verification} level={level} rect={hover} />}
+      {open && (
+        <VerificationPopover
+          verification={verification} level={level} rect={open}
+          // Only touch needs the popover to accept input, for tap-outside to
+          // dismiss. On desktop it stays inert so it can't steal the pointer.
+          interactive={isMobile}
+          onDismiss={() => setOpen(null)}
+        />
+      )}
     </>
   );
 }
 
 function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameColor }) {
-  const { courseMap, majorRequirements, isPhone } = useContext(GradCtx);
+  const { courseMap, majorRequirements, isPhone, isMobile } = useContext(GradCtx);
   const { t } = useLanguage();
   const [minor, setMinor] = useState(null);
   const [err, setErr] = useState(null);
@@ -748,11 +767,17 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
       {/* Header row: label + triangle toggle */}
       <div onClick={() => setExpanded(v => !v)} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
-            <span>{scaleLatinRuns(label)}</span>
-            <VerificationPill verification={minor.metadata?.verification}
-                              verified={minor.metadata?.verified} t={t} />
-            {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
+          {/* Phone drops the badge to its own line: inline it overflowed the
+              card, and the label plus the expand caret already fill the row. */}
+          <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span>{scaleLatinRuns(label)}</span>
+              {!isPhone && <VerificationPill verification={minor.metadata?.verification}
+                                             verified={minor.metadata?.verified} t={t} isMobile={isMobile} />}
+              {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
+            </div>
+            {isPhone && <VerificationPill verification={minor.metadata?.verification}
+                                          verified={minor.metadata?.verified} t={t} isPhone isMobile={isMobile} />}
           </div>
           <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: isPhone ? 3 : 5 }}>{scaleLatinRuns(minorName)}</div>
         </div>
@@ -791,22 +816,27 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
 
 // ── MajorCard: framed collapsible card for a major's requirements ─
 // Frame is a subtle background tint (no border line) matching MinorBlock.
-function MajorCard({ label, name, subtitle, verified, verification, progress, expanded, onToggle, isPhone, loading, loadingLabel, children, nameColor, subtitleColor }) {
+function MajorCard({ label, name, subtitle, verified, verification, progress, expanded, onToggle, isPhone, isMobile, loading, loadingLabel, children, nameColor, subtitleColor }) {
   const { t } = useLanguage();
   return (
     <div style={{ border: "1px solid var(--border-1)", borderRadius: 6, marginBottom: 10 }}>
       {/* Header row: label + triangle toggle */}
       <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
-            {/* One span, not the bare array: scaleLatinRuns splits "专业 1" into
-                a CJK part and a scaled Latin run, and as direct flex children
-                those become separate flex items whose separating space
-                collapses. Keeping them in an inline container preserves normal
-                text flow while the row itself stays flex to centre the pill. */}
-            <span>{scaleLatinRuns(label)}</span>
-            <VerificationPill verification={verification} verified={verified} t={t} />
-            {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
+          {/* Phone puts the badge on its own line: inline it ran past the card
+              edge and got clipped. Desktop keeps it beside the label. */}
+          <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {/* One span, not the bare array: scaleLatinRuns splits "专业 1" into
+                  a CJK part and a scaled Latin run, and as direct flex children
+                  those become separate flex items whose separating space
+                  collapses. Keeping them in an inline container preserves normal
+                  text flow while the row itself stays flex to centre the pill. */}
+              <span>{scaleLatinRuns(label)}</span>
+              {!isPhone && <VerificationPill verification={verification} verified={verified} t={t} isMobile={isMobile} />}
+              {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
+            </div>
+            {isPhone && <VerificationPill verification={verification} verified={verified} t={t} isPhone isMobile={isMobile} />}
           </div>
           <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: isPhone ? 3 : 5 }}>{scaleLatinRuns(name)}</div>
           {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)",
@@ -887,7 +917,7 @@ export default function GradPanel({ wideCatalog = false }) {
     try { const v = localStorage.getItem(`${pfx}-grad-show-program`); return v === null ? true : v !== "false"; } catch { return true; }
   });
   const {
-    placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone,
+    placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile,
     specialTermPl, SEM_INDEX,
     major: majorPath, setMajor: setMajorPath,
     major2: major2Path, setMajor2: setMajor2Path,
@@ -1175,7 +1205,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
   return (
-    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, attributeSystem, majorRequirements, wideCatalog }}>
+    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile, attributeSystem, majorRequirements, wideCatalog }}>
       <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
         {/* ── Program selection (collapsible) ─────────────────── */}
@@ -1288,6 +1318,7 @@ export default function GradPanel({ wideCatalog = false }) {
                 {majorGone && (
                   <StaleNotice
                     isPhone={isPhone}
+          isMobile={isMobile}
                     message={t("grad.stale.program")}
                     removeLabel={t("grad.stale.remove")}
                     onRemove={() => setSelPath("")}
@@ -1325,6 +1356,7 @@ export default function GradPanel({ wideCatalog = false }) {
                   {major2Gone && (
                     <StaleNotice
                       isPhone={isPhone}
+          isMobile={isMobile}
                       message={t("grad.stale.program")}
                       removeLabel={t("grad.stale.remove")}
                       onRemove={() => { setMajor2Path(""); setShowMajor2(false); }}
@@ -1415,6 +1447,7 @@ export default function GradPanel({ wideCatalog = false }) {
           expanded={expandMajor1}
           onToggle={() => setExpandMajor1(v => !v)}
           isPhone={isPhone}
+          isMobile={isMobile}
         >
           {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
           {concSection && (
@@ -1439,6 +1472,7 @@ export default function GradPanel({ wideCatalog = false }) {
           expanded={expandMajor2}
           onToggle={() => setExpandMajor2(v => !v)}
           isPhone={isPhone}
+          isMobile={isMobile}
           loading={fetching2}
           loadingLabel={t("grad.loading")}
         >

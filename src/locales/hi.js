@@ -133,6 +133,7 @@ export const strings = {
   "verify.pop.check.empty-program": "इस प्रोग्राम की कोई आवश्यकता नहीं पढ़ी जा सकी",
   "verify.pop.totalNone": "कैटलॉग कुल क्रेडिट नहीं बताता",
   "verify.pop.caveat": "यह जाँचता है कि हमने कैटलॉग सही उतारा — यह नहीं कि कैटलॉग सही है। हमेशा अपने सलाहकार से पुष्टि करें।",
+  "verify.pop.openCatalog":  "कैटलॉग पेज खोलें",
   "verify.detail.planMissingCourse": "{course} — कैटलॉग की चार-वर्षीय योजना में है, पर यहाँ कोई आवश्यकता इसे नहीं माँगती",
   "verify.detail.planLikelyElective": "{course} — चार-वर्षीय योजना में है, पर इस प्रोग्राम के विषयों से बाहर; संभवतः एक वैकल्पिक कोर्स",
   "verify.detail.unknownCourse": "{course} — हमारी कोर्स सूची में नहीं है, इसलिए यह आवश्यकता यहाँ चिह्नित नहीं की जा सकती",

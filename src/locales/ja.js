@@ -134,6 +134,7 @@ export const strings = {
   "verify.pop.check.empty-program": "このプログラムの要件を読み取れませんでした",
   "verify.pop.totalNone": "カタログに総単位数の記載なし",
   "verify.pop.caveat": "カタログを正しく写せたかの確認であり、カタログ自体の正確さは保証しません。必ずアドバイザーにご確認ください。",
+  "verify.pop.openCatalog":  "カタログのページを開く",
   "verify.detail.planMissingCourse": "{course} — カタログの履修モデルには含まれますが、ここのどの要件も求めていません",
   "verify.detail.planLikelyElective": "{course} — 履修モデルにはありますが本プログラムの科目領域外で、選択科目と思われます",
   "verify.detail.unknownCourse": "{course} — 当方の科目一覧に無いため、この要件はここでチェックできません",

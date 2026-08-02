@@ -134,6 +134,7 @@ export const strings = {
   "verify.pop.check.empty-program": "No requirements could be read for this program",
   "verify.pop.totalNone": "The catalog states no total credit count",
   "verify.pop.caveat": "This checks that we copied the catalog correctly — not that the catalog is correct. Always confirm with your advisor.",
+  "verify.pop.openCatalog":  "Open the catalog page",
   "verify.detail.planMissingCourse": "{course} — the catalog's four-year plan includes it, but no requirement here asks for it",
   "verify.detail.planLikelyElective": "{course} — in the four-year plan, but outside this program's subjects, so likely an elective",
   "verify.detail.unknownCourse": "{course} — missing from our course list, so this requirement can't be ticked off here",

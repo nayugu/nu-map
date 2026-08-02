@@ -133,6 +133,7 @@ export const strings = {
   "verify.pop.check.empty-program": "无法读取该专业的任何要求",
   "verify.pop.totalNone": "目录未标明总学分",
   "verify.pop.caveat": "这只说明我们准确抄录了目录，不代表目录本身正确。请务必与学业顾问核实。",
+  "verify.pop.openCatalog":  "打开目录页面",
   "verify.detail.planMissingCourse": "{course} — 目录的四年修读计划包含该课程，但此处没有任何要求需要它",
   "verify.detail.planLikelyElective": "{course} — 出现在四年修读计划中，但不属于本专业的学科范围，很可能是选修课",
   "verify.detail.unknownCourse": "{course} — 不在我们的课程列表中，因此此项要求无法在此勾选",

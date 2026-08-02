@@ -133,6 +133,7 @@ export const strings = {
   "verify.pop.check.empty-program": "تعذّرت قراءة أي متطلبات لهذا البرنامج",
   "verify.pop.totalNone": "الدليل لا يذكر إجمالي الساعات",
   "verify.pop.caveat": "هذا يتحقق من دقة النسخ عن الدليل، لا من صحة الدليل نفسه. تأكّد دائمًا من مرشدك الأكاديمي.",
+  "verify.pop.openCatalog":  "فتح صفحة الدليل",
   "verify.detail.planMissingCourse": "{course} — خطة السنوات الأربع في الدليل تتضمنه، لكن لا يطلبه أي متطلب هنا",
   "verify.detail.planLikelyElective": "{course} — موجود في خطة السنوات الأربع لكنه خارج مواد هذا البرنامج، فالأرجح أنه مقرر اختياري",
   "verify.detail.unknownCourse": "{course} — غير موجود في قائمة المقررات لدينا، لذا لا يمكن تحديد هذا المتطلب هنا",

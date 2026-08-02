@@ -133,6 +133,7 @@ export const strings = {
   "verify.pop.check.empty-program": "이 프로그램의 요건을 전혀 읽지 못했습니다",
   "verify.pop.totalNone": "카탈로그에 총 학점 명시 없음",
   "verify.pop.caveat": "카탈로그를 정확히 옮겼는지 확인한 것이며, 카탈로그 자체의 정확성은 보장하지 않습니다. 반드시 지도교수와 확인하세요.",
+  "verify.pop.openCatalog":  "카탈로그 페이지 열기",
   "verify.detail.planMissingCourse": "{course} — 카탈로그의 4년 계획에는 있지만, 여기 어떤 요건도 요구하지 않습니다",
   "verify.detail.planLikelyElective": "{course} — 4년 계획에는 있으나 이 프로그램의 교과 영역 밖이라 선택과목으로 보입니다",
   "verify.detail.unknownCourse": "{course} — 저희 과목 목록에 없어 이 요건은 여기서 체크할 수 없습니다",
