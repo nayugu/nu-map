@@ -64,22 +64,33 @@ Facts that follow from this:
   `git diff HEAD origin/main` to see what changed). Pull again before editing
   shared docs (TODO.md, IDEAS.md). With `pull.rebase` set, pull refuses while
   you have uncommitted changes — commit or stash first.
-- **Pairing is the default, so committing straight to main is the default.**
-  Do not open a PR unless asked. Either commit to main directly, or branch,
-  commit, rebase onto origin/main, `git merge --ff-only`, delete the branch —
-  every commit is already in main by its own SHA, so only the label goes away.
+- **Default flow: branch → commit → rebase onto origin/main → `git merge
+  --ff-only` → delete the branch.** Pairing is the normal mode here, so
+  **no PRs** — do not open one unless explicitly asked. The branch is just
+  somewhere to commit work that is not a coherent unit yet; every commit
+  lands in main by its own SHA, so deleting the label afterwards loses
+  nothing.
+- **Stay mergeable at all times**: rebased on `origin/main`, tests green, no
+  half-finished commit at the tip. Merging should never be a project — if it
+  is, the branch drifted too long.
 - **Committing needs no permission; pushing does.** Always ask before
   `git push`. Commits are local and easy to amend or reset; a push is
   outward-facing and may carry someone else's commits with it.
+- **A branch does not isolate a shared checkout.** Branches are per-repo, not
+  per-agent: one `HEAD`, one working tree. When two sessions run at once,
+  `git switch` moves both, and uncommitted edits follow across the switch —
+  this is how one session's edits to majorLoader.js/minorLoader.js ended up
+  inside the other's commit on Aug 2, 2026. So stage your own files
+  explicitly, never `git add -A`, and leave the partner's uncommitted work
+  and unpushed commits alone. For real isolation use `git worktree` (its own
+  directory, `HEAD` and branch) — it needs a separate `npm install`, so it
+  is worth it only when both sessions are live in the same files.
 - If a PR is explicitly requested, it merges as a **merge commit**. Never
   squash-merge — squashing collapses the branch's commits into one, so the
   individual history is lost the moment the branch ref is deleted. A merge
   commit keeps every commit AND marks which branch they came from, so
   deleting the branch afterwards is safe (GitHub: Settings → General →
   Pull Requests).
-- Two agents often work this repo at once. Stage only your own files — never
-  `git add -A` on a shared tree — and leave the partner's uncommitted work
-  and unpushed commits alone.
 - No long-lived or personal branches — they drift fast here (the monthly
   scrape commits straight to main; one March branch died 469 commits behind).
 - Never enable required-PR branch protection on main: the scheduled data
