@@ -86,7 +86,7 @@ npm run data:patch:write    # re-apply YAML corrections from data/patches/
 npm run data:validate       # validate patches (dry run: data:patch)
 ```
 
-Data corrections belong in the scrape scripts or `data/northeastern/patches/` — anything else is overwritten by the next scheduled run. See [`data/northeastern/patches/CONTRIBUTING.md`](data/northeastern/patches/CONTRIBUTING.md) for the patch format.
+Data corrections belong in the scrape scripts or `data/northeastern/patches/` — anything else is overwritten by the next scheduled run. See [`data/northeastern/patches/PATCH-FORMAT.md`](data/northeastern/patches/PATCH-FORMAT.md) for the patch format.
 
 ---
 

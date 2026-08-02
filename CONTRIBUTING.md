@@ -1,30 +1,29 @@
 # Contributing
 
-PRs and issues are welcome. NU Map is a two-student project and we're happy to
-have help — bug reports, data corrections, translations, and forks for other
-universities especially.
+**NU Map is not accepting unsolicited contributions.**
 
-For the mechanics of the project (architecture, data pipeline, how to run it),
-start with the [README](README.md). Data corrections have their own format and
-rules: see [`data/northeastern/patches/CONTRIBUTING.md`](data/northeastern/patches/CONTRIBUTING.md).
-Note that **data fixes must go in the scrape scripts or the patch files** —
-anything else gets overwritten by the next scheduled scrape.
+It is a two-student project, and the data it publishes is used by academic
+advisors. We do not have the reviewing capacity to hold incoming changes to the
+standard that use demands, and an unreviewed change here is worse than no
+change. Unsolicited pull requests will generally be closed without review.
 
-## House rules
+One exception, because it costs us nothing and the accuracy matters: if you
+have found something **factually wrong in the course data**, open an issue
+describing the error. A report is useful to us; a patch is not.
 
-- Conventional commit subjects (`type: description`). For features and fixes,
-  add a body of bullet points explaining the mechanism, not just the what.
-- Every user-facing string needs a hand-written translation in all 8 locales
-  under `src/locales/`.
-- Branch → PR → **merge commit**. Never squash — it destroys the individual
-  commit history the moment the branch ref is deleted.
-- The repo is public. Keep notes and comments whiteboard-safe.
+You are free to **fork** under the AGPL, including for other universities. That
+needs nothing from us. See [`LICENSING.md`](LICENSING.md) for terms and the
+[README](README.md) for how the project fits together.
 
 ## Contributor terms
 
-*Plain-language summary, non-binding: you keep the copyright in what you write,
-and you let us ship it under both of the project's licenses. There is nothing to
-sign. If that doesn't work for you, tell us before you write code.*
+*These terms remain in force. They govern anything we do accept, and
+[`LICENSING.md`](LICENSING.md) §7.1 relies on them — the commercial option there
+requires the Licensor to hold rights covering contributed material.*
+
+*Plain-language summary, non-binding: if we do take something you wrote, you
+keep the copyright in it, and you let us ship it under both of the project's
+licenses. There is nothing to sign.*
 
 The following terms are stated because the Work is dual-licensed under
 [`LICENSING.md`](LICENSING.md), and the offering of a commercial license under
@@ -58,9 +57,9 @@ clause 3.
 
 **5. Acceptance.** Submission of a Contribution constitutes agreement to these
 terms. No separate instrument, contributor-license-agreement signature, or
-electronic assent is required. Should any of these terms be unacceptable to You,
-raise the matter by issue before commencing work; the Licensor would prefer to
-resolve it than to decline a Contribution it would otherwise welcome.
+electronic assent is required. Nothing in these terms obliges the Licensor to
+review, accept, or respond to a Contribution, and the Licensor does not
+presently solicit them.
 
 **6. Attribution of contributors.** Your Contribution remains attributed to You in
 the public version-control history of the Work, which the Licensor maintains as a
