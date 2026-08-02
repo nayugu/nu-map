@@ -115,6 +115,7 @@ export const strings = {
   "grad.verify.partial":      "部分核对",
   "grad.verify.review":       "需要复核",
   "verify.pop.title": "我们如何核对",
+  "verify.pop.more":          "…还有 {n} 项",
   "verify.pop.headline.verified": "能核对的部分全部一致。",
   "verify.pop.headline.partial": "能核对的部分全部一致，但有一项无法核对。",
   "verify.pop.headline.review": "存在不一致。该专业可能有缺失内容。",

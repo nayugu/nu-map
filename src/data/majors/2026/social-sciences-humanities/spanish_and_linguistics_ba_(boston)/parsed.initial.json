@@ -50,7 +50,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 16 sample-plan courses are unaccounted for"
+          "message": "1 of 16 sample-plan courses are unaccounted for",
+          "detail": [
+            "COOP3948"
+          ],
+          "overflow": 0
         }
       ]
     }

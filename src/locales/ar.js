@@ -115,6 +115,7 @@ export const strings = {
   "grad.verify.partial":      "تحقّق جزئي",
   "grad.verify.review":       "يحتاج مراجعة",
   "verify.pop.title": "كيف تحقّقنا",
+  "verify.pop.more":          "…و{n} غير ذلك",
   "verify.pop.headline.verified": "كل ما يمكننا التحقق منه متطابق.",
   "verify.pop.headline.partial": "كل ما يمكننا التحقق منه متطابق، لكن تعذّر إجراء فحص واحد.",
   "verify.pop.headline.review": "هناك ما لا يتطابق. قد تكون بعض الأجزاء ناقصة.",

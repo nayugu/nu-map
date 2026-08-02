@@ -73,12 +73,22 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 39 sample-plan courses are unaccounted for"
+          "message": "3 of 39 sample-plan courses are unaccounted for",
+          "detail": [
+            "CHEM1211",
+            "CHEM1212",
+            "CHEM1213"
+          ],
+          "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "DS4900"
+          ],
+          "overflow": 0
         }
       ]
     }

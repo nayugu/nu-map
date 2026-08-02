@@ -62,12 +62,22 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 28 sample-plan courses are unaccounted for"
+          "message": "2 of 28 sample-plan courses are unaccounted for",
+          "detail": [
+            "ARTG2262",
+            "ARTG2263"
+          ],
+          "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "CS4991",
+            "DS4900"
+          ],
+          "overflow": 0
         }
       ]
     }

@@ -42,7 +42,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "2 of 8 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete"
+          "message": "2 of 8 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete",
+          "detail": [
+            "HBRW1101",
+            "HBRW1102"
+          ],
+          "overflow": 0
         }
       ]
     }

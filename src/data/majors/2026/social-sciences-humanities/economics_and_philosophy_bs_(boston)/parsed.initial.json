@@ -57,7 +57,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 23 sample-plan courses are unaccounted for"
+          "message": "2 of 23 sample-plan courses are unaccounted for",
+          "detail": [
+            "ECON4692",
+            "POLS2325"
+          ],
+          "overflow": 0
         }
       ]
     }

@@ -54,7 +54,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 20 sample-plan courses are unaccounted for"
+          "message": "2 of 20 sample-plan courses are unaccounted for",
+          "detail": [
+            "HUSV4994",
+            "MATH1215"
+          ],
+          "overflow": 0
         }
       ]
     }

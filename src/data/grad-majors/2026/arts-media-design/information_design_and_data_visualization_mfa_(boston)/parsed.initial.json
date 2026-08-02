@@ -47,7 +47,11 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "ARTG7990"
+          ],
+          "overflow": 0
         }
       ]
     }

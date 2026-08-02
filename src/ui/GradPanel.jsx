@@ -788,7 +788,11 @@ function MajorCard({ label, name, subtitle, verified, verification, progress, ex
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
           <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{scaleLatinRuns(name)}</div>
-          {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)", fontSize: isPhone ? 7 : 9, marginTop: 1 }}>{scaleLatinRuns(subtitle)}</div>}
+          {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)",
+            fontSize: isPhone ? 7 : 9, marginTop: 1,
+            /* Indented so it reads as belonging to the program above it
+               rather than as a second, equal line. */
+            marginInlineStart: isPhone ? 5 : 8 }}>{scaleLatinRuns(subtitle)}</div>}
         </div>
         {!isPhone && progress.requiredSH > 0 && (
           <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>

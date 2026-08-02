@@ -44,7 +44,13 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "3 of 10 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete"
+          "message": "3 of 10 courses in the catalog's own sample plan match nothing in the parsed requirements — sections are likely incomplete",
+          "detail": [
+            "HIST1130",
+            "HIST1170",
+            "MATH1215"
+          ],
+          "overflow": 0
         }
       ]
     }

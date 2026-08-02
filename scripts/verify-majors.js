@@ -206,7 +206,15 @@ function main() {
       program.metadata.verification = {
         level: r.level, kind: r.kind, score: r.score, checkedAt: new Date().toISOString().slice(0, 10),
         sourcesAvailable: r.sourcesAvailable, counters: r.counters,
-        discrepancies: r.discrepancies.map(({ check, severity, message }) => ({ check, severity, message })),
+        // Keep `detail` — it names the specific courses or titles that caused
+        // the finding, which is what makes the popover actionable rather than
+        // just declarative. Capped at 6 for the shipped file; the full list
+        // stays in the report.
+        discrepancies: r.discrepancies.map(({ check, severity, message, detail, overflow }) => ({
+          check, severity, message,
+          ...(detail?.length ? { detail: detail.slice(0, 6),
+                                 overflow: (overflow ?? 0) + Math.max(0, detail.length - 6) } : {}),
+        })),
       };
       writeFileSync(r.file, JSON.stringify(program, null, 2), 'utf8');
     }

@@ -55,7 +55,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 21 sample-plan courses are unaccounted for"
+          "message": "2 of 21 sample-plan courses are unaccounted for",
+          "detail": [
+            "AMSL3102",
+            "MATH1215"
+          ],
+          "overflow": 0
         }
       ]
     }

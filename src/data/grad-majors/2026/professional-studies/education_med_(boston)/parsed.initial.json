@@ -36,7 +36,13 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "3 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "3 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "EDU6182",
+            "EDU6333",
+            "EDU6340"
+          ],
+          "overflow": 0
         }
       ]
     }

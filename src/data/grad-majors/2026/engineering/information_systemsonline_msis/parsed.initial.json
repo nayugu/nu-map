@@ -51,7 +51,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 17 sample-plan courses are unaccounted for"
+          "message": "2 of 17 sample-plan courses are unaccounted for",
+          "detail": [
+            "DAMG7370",
+            "INFO6205"
+          ],
+          "overflow": 0
         }
       ]
     }

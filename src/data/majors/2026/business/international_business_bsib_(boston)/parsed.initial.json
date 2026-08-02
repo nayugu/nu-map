@@ -54,7 +54,13 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 20 sample-plan courses are unaccounted for"
+          "message": "3 of 20 sample-plan courses are unaccounted for",
+          "detail": [
+            "ACCT2301",
+            "MISM2301",
+            "SCHM2301"
+          ],
+          "overflow": 0
         }
       ]
     }

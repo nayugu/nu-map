@@ -85,7 +85,13 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 51 sample-plan courses are unaccounted for"
+          "message": "3 of 51 sample-plan courses are unaccounted for",
+          "detail": [
+            "CHEM1103",
+            "CHEM1163",
+            "NRSG4996"
+          ],
+          "overflow": 0
         }
       ]
     }

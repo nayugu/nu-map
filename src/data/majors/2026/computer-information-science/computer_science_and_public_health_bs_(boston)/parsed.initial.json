@@ -65,7 +65,12 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "DS4900",
+            "HLTH5280"
+          ],
+          "overflow": 0
         }
       ]
     }

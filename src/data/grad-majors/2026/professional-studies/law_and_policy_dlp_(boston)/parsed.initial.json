@@ -36,7 +36,14 @@
         {
           "check": "unknown-course",
           "severity": "medium",
-          "message": "4 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "4 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "LWP6402",
+            "LWP6420",
+            "LWP6423",
+            "LWP6500"
+          ],
+          "overflow": 0
         }
       ]
     }

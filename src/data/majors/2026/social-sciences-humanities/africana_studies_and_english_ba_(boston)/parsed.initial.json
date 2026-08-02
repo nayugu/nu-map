@@ -47,7 +47,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 13 sample-plan courses are unaccounted for"
+          "message": "1 of 13 sample-plan courses are unaccounted for",
+          "detail": [
+            "AFCS2355"
+          ],
+          "overflow": 0
         }
       ]
     }

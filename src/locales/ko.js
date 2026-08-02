@@ -115,6 +115,7 @@ export const strings = {
   "grad.verify.partial":      "일부 확인",
   "grad.verify.review":       "확인 필요",
   "verify.pop.title": "확인한 내용",
+  "verify.pop.more":          "…외 {n}건",
   "verify.pop.headline.verified": "확인 가능한 모든 항목이 일치합니다.",
   "verify.pop.headline.partial": "확인 가능한 항목은 일치하지만, 한 가지는 확인할 수 없었습니다.",
   "verify.pop.headline.review": "일치하지 않는 부분이 있습니다. 일부가 누락되었을 수 있습니다.",

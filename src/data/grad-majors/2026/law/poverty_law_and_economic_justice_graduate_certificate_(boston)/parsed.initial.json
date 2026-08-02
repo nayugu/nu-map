@@ -32,7 +32,14 @@
         {
           "check": "unknown-course",
           "severity": "medium",
-          "message": "4 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "4 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "LAW7335",
+            "LAW7525",
+            "LAW7535",
+            "LAW7664"
+          ],
+          "overflow": 0
         }
       ]
     }

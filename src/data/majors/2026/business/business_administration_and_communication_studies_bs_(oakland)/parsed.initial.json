@@ -58,7 +58,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 24 sample-plan courses are unaccounted for"
+          "message": "2 of 24 sample-plan courses are unaccounted for",
+          "detail": [
+            "BUSN1103",
+            "COMM3409"
+          ],
+          "overflow": 0
         }
       ]
     }

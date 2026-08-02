@@ -51,7 +51,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 17 sample-plan courses are unaccounted for"
+          "message": "1 of 17 sample-plan courses are unaccounted for",
+          "detail": [
+            "PSYC7996"
+          ],
+          "overflow": 0
         }
       ]
     }

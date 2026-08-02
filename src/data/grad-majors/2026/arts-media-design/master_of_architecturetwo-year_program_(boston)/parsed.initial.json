@@ -47,7 +47,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 13 sample-plan courses are unaccounted for"
+          "message": "2 of 13 sample-plan courses are unaccounted for",
+          "detail": [
+            "ARCH5211",
+            "ARCH5340"
+          ],
+          "overflow": 0
         }
       ]
     }

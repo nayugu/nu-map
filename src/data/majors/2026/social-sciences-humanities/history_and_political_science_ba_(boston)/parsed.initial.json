@@ -45,7 +45,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 11 sample-plan courses are unaccounted for"
+          "message": "1 of 11 sample-plan courses are unaccounted for",
+          "detail": [
+            "PHIL5001"
+          ],
+          "overflow": 0
         }
       ]
     }

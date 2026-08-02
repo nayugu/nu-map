@@ -56,7 +56,12 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "2 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "FINA6309",
+            "MGMT6214"
+          ],
+          "overflow": 0
         }
       ]
     }

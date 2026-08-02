@@ -50,7 +50,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 16 sample-plan courses are unaccounted for"
+          "message": "1 of 16 sample-plan courses are unaccounted for",
+          "detail": [
+            "PSYC1101"
+          ],
+          "overflow": 0
         }
       ]
     }

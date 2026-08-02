@@ -36,7 +36,16 @@
         {
           "check": "unknown-course",
           "severity": "medium",
-          "message": "7 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "7 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "PJM5000",
+            "PJM5005",
+            "PJM5015",
+            "PJM5025",
+            "PJM5135",
+            "PJM5205"
+          ],
+          "overflow": 1
         }
       ]
     }

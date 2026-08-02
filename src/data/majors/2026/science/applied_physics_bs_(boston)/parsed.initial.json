@@ -68,7 +68,13 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 34 sample-plan courses are unaccounted for"
+          "message": "3 of 34 sample-plan courses are unaccounted for",
+          "detail": [
+            "CHEM1213",
+            "PHYS1163",
+            "PHYS1167"
+          ],
+          "overflow": 0
         }
       ]
     }

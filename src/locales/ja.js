@@ -116,6 +116,7 @@ export const strings = {
   "grad.verify.partial":      "一部確認",
   "grad.verify.review":       "要確認",
   "verify.pop.title": "確認した内容",
+  "verify.pop.more":          "…ほか {n} 件",
   "verify.pop.headline.verified": "確認できる範囲はすべて一致しています。",
   "verify.pop.headline.partial": "確認できる範囲は一致していますが、実施できない確認が一つあります。",
   "verify.pop.headline.review": "一致しない点があります。一部が欠落している可能性があります。",

@@ -115,6 +115,7 @@ export const strings = {
   "grad.verify.partial":      "parcialmente comprobado",
   "grad.verify.review":       "requiere revisión",
   "verify.pop.title": "CÓMO LO COMPROBAMOS",
+  "verify.pop.more":          "…y {n} más",
   "verify.pop.headline.verified": "Todo lo que podemos comprobar coincide.",
   "verify.pop.headline.partial": "Todo lo que podemos comprobar coincide, pero una comprobación no pudo hacerse.",
   "verify.pop.headline.review": "Algo no coincide. Puede que falten partes de este programa.",

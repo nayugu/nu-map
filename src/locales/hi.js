@@ -115,6 +115,7 @@ export const strings = {
   "grad.verify.partial":      "आंशिक रूप से जाँचा",
   "grad.verify.review":       "समीक्षा आवश्यक",
   "verify.pop.title": "हमने कैसे जाँचा",
+  "verify.pop.more":          "…और {n} अन्य",
   "verify.pop.headline.verified": "जो कुछ हम जाँच सकते हैं वह मेल खाता है।",
   "verify.pop.headline.partial": "सब मेल खाता है, पर एक जाँच नहीं हो सकी।",
   "verify.pop.headline.review": "कुछ मेल नहीं खा रहा। कुछ हिस्से छूटे हो सकते हैं।",

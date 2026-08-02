@@ -32,7 +32,15 @@
         {
           "check": "unknown-course",
           "severity": "medium",
-          "message": "5 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "5 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "CAEP7741",
+            "CAEP7742",
+            "CAEP7743",
+            "CAEP7744",
+            "CAEP7798"
+          ],
+          "overflow": 0
         }
       ]
     }

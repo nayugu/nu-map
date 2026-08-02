@@ -57,7 +57,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 23 sample-plan courses are unaccounted for"
+          "message": "2 of 23 sample-plan courses are unaccounted for",
+          "detail": [
+            "PHSC8986",
+            "PHSC9996"
+          ],
+          "overflow": 0
         }
       ]
     }

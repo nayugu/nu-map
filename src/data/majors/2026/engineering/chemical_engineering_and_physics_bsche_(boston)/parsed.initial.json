@@ -84,7 +84,16 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "6 of 50 sample-plan courses are unaccounted for"
+          "message": "6 of 50 sample-plan courses are unaccounted for",
+          "detail": [
+            "PHYS3603",
+            "PHYS4305",
+            "PHYS4621",
+            "PHYS4623",
+            "PHYS4651",
+            "PHYS4652"
+          ],
+          "overflow": 0
         }
       ]
     }

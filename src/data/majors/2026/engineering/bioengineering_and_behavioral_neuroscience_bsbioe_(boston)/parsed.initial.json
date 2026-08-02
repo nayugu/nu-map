@@ -81,7 +81,13 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 47 sample-plan courses are unaccounted for"
+          "message": "3 of 47 sample-plan courses are unaccounted for",
+          "detail": [
+            "PHYS1172",
+            "PHYS1173",
+            "PT5411"
+          ],
+          "overflow": 0
         }
       ]
     }

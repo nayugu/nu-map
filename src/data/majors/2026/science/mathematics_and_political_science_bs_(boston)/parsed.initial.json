@@ -50,7 +50,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 16 sample-plan courses are unaccounted for"
+          "message": "2 of 16 sample-plan courses are unaccounted for",
+          "detail": [
+            "POLS4701",
+            "POLS4703"
+          ],
+          "overflow": 0
         }
       ]
     }

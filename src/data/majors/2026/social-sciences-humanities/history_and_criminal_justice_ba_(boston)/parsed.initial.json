@@ -44,7 +44,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 10 sample-plan courses are unaccounted for"
+          "message": "1 of 10 sample-plan courses are unaccounted for",
+          "detail": [
+            "CRIM3000"
+          ],
+          "overflow": 0
         }
       ]
     }

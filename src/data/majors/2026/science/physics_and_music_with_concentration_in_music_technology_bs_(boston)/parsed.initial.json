@@ -79,12 +79,25 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "6 of 45 sample-plan courses are unaccounted for"
+          "message": "6 of 45 sample-plan courses are unaccounted for",
+          "detail": [
+            "PHYS3601",
+            "PHYS3603",
+            "PHYS4621",
+            "PHYS4623",
+            "PHYS4651",
+            "PHYS4652"
+          ],
+          "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "MUST5973"
+          ],
+          "overflow": 0
         }
       ]
     }

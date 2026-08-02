@@ -56,12 +56,21 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 22 sample-plan courses are unaccounted for"
+          "message": "2 of 22 sample-plan courses are unaccounted for",
+          "detail": [
+            "ANTH2305",
+            "HSCI2000"
+          ],
+          "overflow": 0
         },
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied"
+          "message": "1 referenced course(s) are absent from the course catalog, so they can never be satisfied",
+          "detail": [
+            "HLTH5280"
+          ],
+          "overflow": 0
         }
       ]
     }

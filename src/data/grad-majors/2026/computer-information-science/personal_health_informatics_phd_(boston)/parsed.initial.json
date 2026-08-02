@@ -49,7 +49,12 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 15 sample-plan courses are unaccounted for"
+          "message": "2 of 15 sample-plan courses are unaccounted for",
+          "detail": [
+            "CS5520",
+            "HINF9996"
+          ],
+          "overflow": 0
         }
       ]
     }

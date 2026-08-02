@@ -66,7 +66,13 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 32 sample-plan courses are unaccounted for"
+          "message": "3 of 32 sample-plan courses are unaccounted for",
+          "detail": [
+            "COMM1120",
+            "COMM3409",
+            "PHIL1165"
+          ],
+          "overflow": 0
         }
       ]
     }

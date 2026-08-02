@@ -46,7 +46,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 7 sample-plan courses are unaccounted for"
+          "message": "1 of 7 sample-plan courses are unaccounted for",
+          "detail": [
+            "INAM9996"
+          ],
+          "overflow": 0
         }
       ]
     }

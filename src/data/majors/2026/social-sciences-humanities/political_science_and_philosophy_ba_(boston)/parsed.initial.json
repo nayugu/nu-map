@@ -48,7 +48,11 @@
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 14 sample-plan courses are unaccounted for"
+          "message": "1 of 14 sample-plan courses are unaccounted for",
+          "detail": [
+            "MATH1215"
+          ],
+          "overflow": 0
         }
       ]
     }
