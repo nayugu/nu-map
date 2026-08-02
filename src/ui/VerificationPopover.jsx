@@ -20,16 +20,11 @@ import { useRef, useState, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
+import { STATE, buildCheckRows } from "../core/verificationRows.js";
 
 const WIDTH = 268;
 const GAP   = 12;
 const EDGE  = 8;
-
-/**
- * "CS3500" → "CS 3500". Course keys are stored unspaced; nobody reads them
- * that way.
- */
-const prettyCourse = k => String(k).replace(/^([A-Z]+)(\d.*)$/, "$1 $2");
 
 /**
  * A mark, a colour, a line of plain language, and (when something is off) the
@@ -53,12 +48,27 @@ const prettyCourse = k => String(k).replace(/^([A-Z]+)(\d.*)$/, "$1 $2");
  */
 const LINE = "16px";   // one shared line box, so the mark sits on the first line of text
 
+/**
+ * One state per severity, so the marks and the badge cannot disagree.
+ *
+ *   pass ✓ green   nothing found
+ *   fail ✕ red     high — counted, and the badge is red
+ *   warn ! yellow  medium — counted, and the badge is yellow
+ *   note · grey    info — surfaced, deliberately not counted
+ *   na   – grey    this check does not apply to this kind of program
+ *
+ * The badge colour is the worst mark present, by construction. An audit of all
+ * 1,017 programs found 52 showing a yellow badge with no row explaining it,
+ * because marks were derived from counters while the badge came from severity.
+ * Deriving both from severity is what closes that.
+ */
 function CheckRow({ state, detail = [], overflow = 0, moreLabel, children }) {
-  const mark = state === "pass" ? "✓" : state === "fail" ? "✕" : state === "note" ? "!" : "–";
-  // Same green and red as the header's relationship legend and the badge
-  // itself, read from REL_STYLE so the three can't drift apart.
+  const mark = STATE[state]?.mark ?? "–";
+  // Green, red and yellow read from REL_STYLE — the header legend's colours,
+  // and the badge's — so all three stay in step.
   const color = state === "pass" ? REL_STYLE.prerequisite.color
               : state === "fail" ? REL_STYLE["prerequisite-order"].color
+              : state === "warn" ? REL_STYLE["corequisite-viol"].color
               : "var(--text-5)";
   return (
     <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
@@ -66,7 +76,7 @@ function CheckRow({ state, detail = [], overflow = 0, moreLabel, children }) {
                      fontWeight: 800, color, lineHeight: LINE }}>{mark}</span>
       <div style={{ minWidth: 0 }}>
         <span style={{ fontSize: 11, lineHeight: LINE, display: "block",
-                       color: state === "pass" || state === "fail" ? "var(--text-3)" : "var(--text-5)" }}>{children}</span>
+                       color: state === "note" || state === "na" ? "var(--text-5)" : "var(--text-3)" }}>{children}</span>
         {detail.length > 0 && (
           <div style={{ marginTop: 5, fontSize: 10.5, lineHeight: 1.5, color: "var(--text-4)",
                         display: "flex", flexDirection: "column", gap: 4 }}>
@@ -103,68 +113,16 @@ export default function VerificationPopover({ verification, level, rect }) {
     setPlaced({ top: Math.round(top), left: Math.round(left) });
   }, [rect, verification]);
 
-  const c        = verification?.counters ?? {};
-  const sources  = verification?.sourcesAvailable ?? [];
-  const hasPlan  = sources.includes("plan-of-study");
-  const num      = k => (Number.isFinite(c[k]) ? c[k] : 0);
+  // Rows come from src/core/verificationRows.js so the badge and the marks are
+  // computed once, from the same input. They previously disagreed twice; an
+  // invariant test now checks the two agree on every shipped program.
+  const rows = buildCheckRows(verification);
 
   // Detail bullets ship as { key, params } so they can be translated here
   // rather than baked into the committed data in English. Older data may still
   // hold plain strings; those pass through unchanged.
   const renderDetail = d =>
     typeof d === "string" ? d : t(`verify.detail.${d.key}`, d.params ?? {});
-
-  // Find the finding behind a row, so the row can name what caused it.
-  const findings = verification?.discrepancies ?? [];
-  const causeOf = (...checks) => {
-    const d = findings.find(f => checks.includes(f.check));
-    if (!d) return { detail: [], overflow: 0, severity: null };
-    // Course keys read better spaced; anything else is already prose.
-    return { detail: (d.detail ?? []).map(renderDetail), overflow: d.overflow ?? 0, severity: d.severity };
-  };
-
-  // The mark must agree with the badge: only a finding that COUNTS against the
-  // program may draw a failure. An info-level finding is a note.
-  const markFor = (sev, fallback = "pass") =>
-    sev === null || sev === undefined ? fallback
-    : sev === "info" ? "note" : "fail";
-
-  // Whether a sample plan was ever expected. 98% of undergraduate majors
-  // publish one; minors and certificates never do. Saying "no plan to compare
-  // against" without that context reads as a gap in OUR work rather than
-  // simply how minors are published.
-  const planExpected = verification?.kind === "major";
-
-  // Each row: did the check pass, fail, or was it unavailable? Order runs
-  // strongest evidence first, so the most meaningful line is read first.
-  const tables = causeOf("requirement-table-parity");
-  const planC  = causeOf("plan-witness-unaccounted");
-  const course = causeOf("unknown-course");
-  const total  = causeOf("missing-total-credits", "total-from-sample-plan");
-
-  const rows = [
-    { state: markFor(tables.severity), text: t("verify.pop.complete"), ...tables },
-    { state: !hasPlan ? "na" : markFor(planC.severity),
-      text:  hasPlan ? t("verify.pop.plan")
-           : planExpected ? t("verify.pop.planMissing") : t("verify.pop.planNA"),
-      ...planC },
-    { state: markFor(course.severity), text: t("verify.pop.courses"), ...course },
-    { state: num("zeroTotal") === 0 ? markFor(total.severity) : "na",
-      text:  num("zeroTotal") === 0 ? t("verify.pop.total") : t("verify.pop.totalNone"),
-      ...total },
-  ];
-
-  // Findings with no row of their own — duplicate titles, impossible sections,
-  // a leaked marker. Rare, but they must not vanish just because the four
-  // standard rows don't cover them.
-  const OWNED = new Set(["requirement-table-parity", "plan-witness-unaccounted",
-                         "unknown-course", "missing-total-credits", "no-sample-plan",
-                         "total-from-sample-plan"]);
-  for (const f of findings) {
-    if (OWNED.has(f.check) || f.severity === "info") continue;
-    rows.push({ state: markFor(f.severity, "fail"), text: f.message,
-                detail: (f.detail ?? []).map(renderDetail), overflow: f.overflow ?? 0 });
-  }
 
   const headline = level === "verified" ? t("verify.pop.headline.verified")
                  : level === "partial"  ? t("verify.pop.headline.partial")
@@ -193,9 +151,11 @@ export default function VerificationPopover({ verification, level, rect }) {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
         {rows.map((r, i) => (
-          <CheckRow key={i} state={r.state} detail={r.detail} overflow={r.overflow}
+          <CheckRow key={i} state={r.state}
+                    detail={(r.detail ?? []).map(renderDetail)}
+                    overflow={r.overflow}
                     moreLabel={t("verify.pop.more", { n: r.overflow })}>
-            {r.text}
+            {t(r.textKey, { n: r.detail?.length ?? 0 })}
           </CheckRow>
         ))}
       </div>
