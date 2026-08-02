@@ -15,6 +15,7 @@
 
 import { extractEdges } from "../../core/courseModel.js";
 import { resolveConcentration } from "../../core/concentrationResolve.js";
+import { buildCheckRows, detailText } from "../../core/verificationRows.js";
 import { evalPrereqTree } from "../../core/prereqEval.js";
 import {
   buildPlacedKeySet,
@@ -477,8 +478,19 @@ export function createPlannerQuery(deps) {
       ...(v ? {
         verification: {
           level: v.level,
+          // The same rows the human popover draws, from the same function, so
+          // the model and the student are never told different things. Each is
+          // one check with its outcome and, where something is off, the
+          // specific courses or sections responsible.
+          checks: buildCheckRows(v).map(r => ({
+            check: r.textKey.replace(/^verify\.pop\./, ''),
+            outcome: { pass: 'pass', fail: 'failed', warn: 'inconclusive',
+                       note: 'note', na: 'not-applicable' }[r.state],
+            ...(r.detail?.length ? { because: r.detail.map(detailText) } : {}),
+          })),
           sourcesAvailable: v.sourcesAvailable,
-          discrepancies: problems.map(({ check, severity, message }) => ({ check, severity, message })),
+          // Where this was read from, so a caller can cite or check the source.
+          ...(v.sourceUrl ? { catalogPage: v.sourceUrl } : {}),
         },
       } : {}),
       ...(problems.length ? {

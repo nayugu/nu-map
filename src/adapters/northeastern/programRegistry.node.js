@@ -39,7 +39,19 @@ function scanTree(dir, level, programs, programData) {
       let json;
       try { json = JSON.parse(readFileSync(full, "utf8")); } catch { continue; }
 
-      const id = `${year}/${college}/${folder}`;
+      // Graduate ids carry a "grad/" prefix. Without it the two PharmD
+      // programs — the 0-6 direct-entry one (10 sections, 152 SH) and the
+      // graduate-entry one (1 section, 36 SH) — produce the same
+      // `2026/health-sciences/pharmacy_pharmd_(boston)` and one silently
+      // overwrote the other in programData, leaving it unreachable in both the
+      // app and the MCP.
+      //
+      // Ids appear in saved plans, share links and MCP programId, so this
+      // would be breaking on its own — but resolveInMap's tiered fallbacks
+      // (same college+folder, then same folder in any college) still resolve
+      // an old unprefixed grad id to the prefixed one.
+      const id = level === "grad" ? `grad/${year}/${college}/${folder}`
+                                  : `${year}/${college}/${folder}`;
       programs.push({
         id,
         label:    json.name ?? fmtLabel(folder),
@@ -49,6 +61,15 @@ function scanTree(dir, level, programs, programData) {
         college,
         year,
         verified:             json.metadata?.verified === true,
+        // Compact fidelity summary for list_programs. The full discrepancy
+        // detail stays in programData (and in audit_requirements); this is
+        // just enough for a caller to rank or filter without loading trees.
+        verification:         json.metadata?.verification
+          ? { level: json.metadata.verification.level,
+              issues: (json.metadata.verification.discrepancies ?? [])
+                        .filter(d => d.severity !== 'info').length }
+          : null,
+        sourceUrl:            json.metadata?.sourceUrl ?? null,
         totalCreditsRequired: json.totalCreditsRequired ?? null,
         concentrationCount:   json.concentrations?.concentrationOptions?.length ?? 0,
         concentrationRequired: (json.concentrations?.minOptions ?? 0) > 0,

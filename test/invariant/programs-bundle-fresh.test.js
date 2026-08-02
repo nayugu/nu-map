@@ -1,0 +1,73 @@
+// INVARIANT · programs-bundle.json must match src/data.
+//
+// The bundle is what the hosted MCP worker serves: it can't read 1,017 files
+// over the network, so it fetches this single artifact from GitHub raw. That
+// makes it a COPY of the source tree, and copies drift — this one sat six
+// weeks stale, so production MCP was answering from data that predated a whole
+// parser rewrite while local tools were current.
+//
+// Regenerating it is cheap (`npm run data:programs-bundle`). Noticing it went
+// stale was the part with no mechanism, so that's what this supplies.
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
+import { join } from 'path';
+
+const ROOT = join(import.meta.dirname, '../..');
+const bundle = JSON.parse(readFileSync(join(ROOT, 'public/northeastern/programs-bundle.json'), 'utf8'));
+
+function walk(dir, out = []) {
+  if (!existsSync(dir)) return out;
+  for (const e of readdirSync(dir)) {
+    const p = join(dir, e);
+    if (statSync(p).isDirectory()) walk(p, out);
+    else if (e === 'parsed.initial.json') out.push(p);
+  }
+  return out;
+}
+const files = [...walk(join(ROOT, 'src/data/majors')), ...walk(join(ROOT, 'src/data/grad-majors'))];
+
+test('bundle › contains every program in src/data, and no extras', () => {
+  const onDisk = files.length;
+  const inBundle = Object.keys(bundle.programData).length;
+  assert.equal(inBundle, onDisk,
+    `bundle has ${inBundle} programs, src/data has ${onDisk} — run: npm run data:programs-bundle`);
+});
+
+test('bundle › program ids are unique', () => {
+  // The undergrad and graduate PharmD are different programs on different
+  // catalog pages. While ids were year/college/folder they collided, and
+  // programData — being keyed by id — silently kept only one, leaving the
+  // other unreachable in the app and the MCP.
+  const ids = bundle.programs.map(p => p.id);
+  const dupes = ids.filter((v, i) => ids.indexOf(v) !== i);
+  assert.deepEqual([...new Set(dupes)], []);
+  assert.equal(Object.keys(bundle.programData).length, ids.length);
+});
+
+test('bundle › every program matches its source file', () => {
+  // Compare the fields that change when the scraper or verifier runs. A full
+  // deep-equal would be stricter but slower and noisier; these move together.
+  // Keyed by the same id the registry builds — grad ids carry a "grad/"
+  // prefix, so folder alone is not unique.
+  const byId = new Map(Object.entries(bundle.programData));
+  const drift = [];
+  for (const f of files) {
+    const src = JSON.parse(readFileSync(f, 'utf8'));
+    const parts = f.split('/');
+    const [year, college, folder] = parts.slice(-4, -1);
+    const id = f.includes('/grad-majors/') ? `grad/${year}/${college}/${folder}`
+                                           : `${year}/${college}/${folder}`;
+    const b = byId.get(id);
+    if (!b) { drift.push(`${id}: absent from bundle`); continue; }
+    const shape = p => [
+      p.requirementSections?.length ?? 0,
+      p.concentrations?.concentrationOptions?.length ?? 0,
+      p.totalCreditsRequired ?? 0,
+      p.metadata?.verification?.level ?? null,
+    ].join('|');
+    if (shape(src) !== shape(b)) drift.push(`${id}: src ${shape(src)} vs bundle ${shape(b)}`);
+  }
+  assert.deepEqual(drift.slice(0, 8), [],
+    `${drift.length} program(s) differ — run: npm run data:programs-bundle`);
+});

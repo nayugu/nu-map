@@ -21,6 +21,36 @@
  * knowledge.
  */
 
+/**
+ * Detail bullets are stored as { key, params }, not as sentences.
+ *
+ * They are generated here but READ in the browser, where the user may be on
+ * any of eight locales. Baking English into the committed data would make them
+ * the only part of the graduation panel that can't be translated. The UI
+ * renders `verify.detail.<key>`; DETAIL_EN below is the fallback used by the
+ * CLI, the report and the MCP payload, none of which are localised.
+ */
+export const DETAIL_EN = {
+  planMissingCourse: p => `${p.course} — the catalog's four-year plan includes it, but no requirement here asks for it`,
+  planLikelyElective: p => `${p.course} — in the four-year plan, but outside this program's subjects, so likely an elective`,
+  unknownCourse:     p => `${p.course} — missing from our course list, so this requirement can't be ticked off`,
+  unreadSection:     p => `"${p.section}" — this section is on the catalog page but not shown here`,
+  duplicateSection:  p => `"${p.title}" appears more than once`,
+  duplicateConc:     p => `"${p.title}" is listed twice — only the first can be chosen`,
+  impossibleSection: p => `"${p.title}" — every course it accepts is already claimed by another requirement`,
+  totalFromPlan:     p => `${p.n} SH is what that one sample path adds up to; the real minimum may be lower`,
+  noTotal:           () => 'Progress here counts requirements, not credits — check the total with your advisor',
+  noPlanUnusual:     () => 'Almost every major publishes one, so its absence here is unusual',
+  markerLeak:        () => 'A "choose N of the following" rule was left unresolved — treat the affected section as unreliable',
+  emptyProgram:      () => 'The catalog page may have changed shape — treat this program as unavailable',
+};
+
+/** Render a stored bullet in English. */
+export function detailText(d) {
+  const f = DETAIL_EN[d?.key];
+  return f ? f(d.params ?? {}) : (typeof d === 'string' ? d : '');
+}
+
 /** One state per severity, so a mark can never contradict the badge. */
 export const STATE = {
   pass: { mark: "✓", rank: 0 },   // nothing found

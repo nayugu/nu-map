@@ -78,6 +78,15 @@ jobs:
       - name: Verification ratchet
         run: node scripts/verify-majors.js
 
+      # ── Rebuild the bundle the hosted MCP worker serves ───────────────────
+      #   The worker can't read 1,017 files over the network, so it fetches
+      #   this single artifact from GitHub raw — meaning it is a COPY of
+      #   src/data that can drift. It sat six weeks stale once, so production
+      #   MCP answered from data predating a whole parser rewrite. Rebuilding
+      #   it here, in the job that changed the data, is what stops that.
+      - name: Rebuild programs bundle
+        run: node scripts/build-programs-bundle.js
+
       # ── Commit and push directly to main ──────────────────────────────────
       - name: Check for changes
         id: changes
@@ -96,6 +105,7 @@ jobs:
           # The verification verdict lives in each program file, and the report
           # and baseline are the human/machine record of this run's fidelity.
           git add docs/verification-report.md scripts/major-verify-baseline.json
+          git add public/northeastern/programs-bundle.json
           git diff --cached --quiet || git commit -m "data: update major requirements ($ADDED programs) [$DATE]
 
           Source: catalog.northeastern.edu
