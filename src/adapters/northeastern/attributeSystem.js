@@ -3,10 +3,9 @@
 //
 // Covers NUPath — Northeastern University's general education framework.
 //
-// WF ("1st Yr Writing") is included in `_attributes` and getLabel() for
-// historical/PDF-export compat (planModel.js uses getLabel("WF")),
-// but is excluded from getGridLayout() / getGridCodes() because GradPanel
-// no longer displays it as an active requirement.
+// 11 competencies, 13 codes: competency 9 ("Writing Across Audiences and
+// Genres") is awarded as three separate codes — WF, WD and WI. Order below
+// follows the Registrar's nomenclature key.
 // ═══════════════════════════════════════════════════════════════════
 
 /** @type {import('../../ports/IAttributeSystem.js').Attribute[]} */
@@ -19,8 +18,6 @@ const _attributes = [
   { code: "AD", label: "Analyzing/Using Data"     },
   { code: "DD", label: "Difference/Diversity"     },
   { code: "ER", label: "Ethical Reasoning"        },
-  // WF: legacy code, no longer awarded as an active requirement.
-  // Kept here so getLabel("WF") resolves correctly in PDF export.
   { code: "WF", label: "1st Yr Writing"           },
   { code: "WD", label: "Adv Writing Disc"         },
   { code: "WI", label: "Writing Intensive"        },
@@ -28,11 +25,17 @@ const _attributes = [
   { code: "CE", label: "Capstone Experience"      },
 ];
 
-/** 3×4 grid layout used by GradPanel — excludes legacy WF. */
+/**
+ * Grid layout used by GradPanel. Rows group the codes by competency: the eight
+ * subject competencies, then the three writing codes with the experiential
+ * pair. Consumers render from getGridCodes() (the flattened order) and reflow
+ * to their own column count, so the ragged last row is grouping, not geometry.
+ */
 const _gridLayout = [
   ["ND", "EI", "IC", "FQ"],
   ["SI", "AD", "DD", "ER"],
-  ["WD", "WI", "EX", "CE"],
+  ["WF", "WD", "WI"],
+  ["EX", "CE"],
 ];
 
 const _gridCodes = _gridLayout.flat();

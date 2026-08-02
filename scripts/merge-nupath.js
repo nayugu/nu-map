@@ -36,11 +36,27 @@ for (const c of (Array.isArray(allCourses) ? allCourses : [])) {
 const raw    = Array.isArray(catalog) ? catalog : Object.values(catalog).flat();
 const before = raw.filter(c => c.nuPath?.length > 0).length;
 
+// Corrections, not just backfill.
+//
+// This used to skip any course that already had a nuPath, which meant a
+// *removal* or *change* from the authoritative source could never reach the
+// runtime file — only additions to empty fields did. Tableau outranks the
+// catalog (it is the only source for WF and WD), so when all-courses.json has
+// a non-empty value that disagrees, it wins.
+//
+// A course absent from the lookup, or present with no codes, is left alone:
+// the Tableau export only lists NUpath-bearing courses, so "not in the export"
+// means "no information", never "no attributes".
+const corrections = [];
 const updated = raw.map(c => {
-  if (c.nuPath?.length) return c; // already has nuPath — don't overwrite
   const id = `${(c.subject || "").toUpperCase().trim()}${(c.number || "").trim()}`;
   const nuPath = nuPathLookup[id];
-  return nuPath ? { ...c, nuPath } : c;
+  if (!nuPath) return c;
+
+  const current = c.nuPath ?? [];
+  if (JSON.stringify([...current].sort()) === JSON.stringify([...nuPath].sort())) return c;
+  if (current.length) corrections.push({ id, from: current, to: nuPath });
+  return { ...c, nuPath };
 });
 
 const after = updated.filter(c => c.nuPath?.length > 0).length;
@@ -50,6 +66,10 @@ console.log(`\nnuPath merge:`);
 console.log(`  Before : ${before} / ${total} courses with nuPath (${Math.round(before / total * 100)}%)`);
 console.log(`  After  : ${after}  / ${total} courses with nuPath (${Math.round(after  / total * 100)}%)`);
 console.log(`  Added  : ${after - before}`);
+console.log(`  Corrected: ${corrections.length} course(s) whose existing nuPath disagreed`);
+for (const { id, from, to } of corrections) {
+  console.log(`    ${id.padEnd(12)} ${JSON.stringify(from)} → ${JSON.stringify(to)}`);
+}
 
 if (after / total < 0.10) {
   console.warn(`\nWARNING: nuPath coverage is only ${Math.round(after / total * 100)}% after merge.`);

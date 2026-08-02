@@ -30,6 +30,10 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseHTML } from "node-html-parser";
+import {
+  NUPATH_CODES, parseNUPath, findAttributeText, indicatorColToCode,
+  inferFirstYearWriting, reportUnmapped, policyFor, reconcileNuPath,
+} from "./lib/nupath.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -64,43 +68,6 @@ const TABLEAU_WB    = "NUpathAttributes";
 const TABLEAU_VIEW  = "NUpathAttribute";
 const CATALOG_BASE  = "https://catalog.northeastern.edu";
 const CATALOG_INDEX = `${CATALOG_BASE}/course-descriptions/`;
-
-// ── NUPath code map (kept in sync with scrape-catalog.js / constants.js) ─────
-const NUPATH_MAP = {
-  "natural/designed world":       "ND",
-  "natural and designed world":   "ND",
-  "formal/quant":                 "FQ",
-  "formal and quantitative":      "FQ",
-  "societies/institutions":       "SI",
-  "societies and institutions":   "SI",
-  "interpreting culture":         "IC",
-  "intellectual life":            "IC",
-  "creative express":             "EI",
-  "creative expression":          "EI",
-  "ethical reasoning":            "ER",
-  "ethics and social justice":    "ER",
-  "difference/diversity":         "DD",
-  "differences and diversity":    "DD",
-  "analyzing/using data":         "AD",
-  "analyzing and using data":     "AD",
-  "1st yr writing":               "WF",
-  "first.year writing":           "WF",
-  "adv writing":                  "WD",
-  "advanced writing in":          "WD",
-  "writing intensive":            "WI",
-  "capstone experience":          "CE",
-  "integration experience":       "EX",
-  "experiential learning":        "EX",
-};
-
-function parseNUPath(text) {
-  const lower = text.toLowerCase();
-  const found = [];
-  for (const [fragment, code] of Object.entries(NUPATH_MAP)) {
-    if (lower.includes(fragment) && !found.includes(code)) found.push(code);
-  }
-  return found.sort();
-}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -249,38 +216,9 @@ async function fetchTableauCsvDirect() {
  * "Course ID " already contains the "SUBJ NUM" key (e.g. "ACCT 2301").
  *
  * We detect indicator columns dynamically by their " Ind." suffix and map
- * each column name through NUPATH_MAP to get the 2-letter code.
+ * each column name through NUPATH_MAP (scripts/lib/nupath.js) to get the
+ * 2-letter code, then check the result with reportUnmapped().
  */
-
-// Maps fragments of indicator column names → NUpath codes
-// (subset of NUPATH_MAP, tuned to the exact Tableau column names)
-const INDICATOR_FRAGMENT_MAP = {
-  "advanced writing":      "WD",
-  "adv writing":           "WD",
-  "analyzing/using data":  "AD",
-  "analyzing and using":   "AD",
-  "capstone":              "CE",
-  "creative express":      "EI",
-  "difference/diversity":  "DD",
-  "ethical reasoning":     "ER",
-  "formal/quant":          "FQ",
-  "integration experience":"EX",
-  "interpreting culture":  "IC",
-  "natural/designed world":"ND",
-  "societies/institutions":"SI",
-  "writing intensive":     "WI",
-  "1st yr writing":        "WF",
-  "first year writing":    "WF",
-  "first.year writing":    "WF",
-};
-
-function indicatorColToCode(colName) {
-  const lower = colName.toLowerCase().replace(/ ind\.?\s*$/, "").trim();
-  for (const [frag, code] of Object.entries(INDICATOR_FRAGMENT_MAP)) {
-    if (lower.includes(frag)) return code;
-  }
-  return null;
-}
 
 function parseTableauCsv(csv) {
   const lines = csv.trim().split(/\r?\n/);
@@ -298,11 +236,14 @@ function parseTableauCsv(csv) {
   }
 
   // Detect indicator columns and map them to NUpath codes
-  const indicatorCols = []; // { index, code }
+  const indicatorCols  = []; // { index, code }
+  const mappedHeaders  = [];
   for (let i = 0; i < header.length; i++) {
     if (!header[i].toLowerCase().endsWith("ind.") && !header[i].toLowerCase().endsWith("ind")) continue;
     const code = indicatorColToCode(header[i]);
-    if (code) indicatorCols.push({ index: i, code });
+    if (!code) continue;
+    indicatorCols.push({ index: i, code });
+    mappedHeaders.push(header[i]);
   }
 
   if (indicatorCols.length === 0) {
@@ -330,6 +271,41 @@ function parseTableauCsv(csv) {
   for (const [key, codeSet] of grouped) {
     result.set(key, [...codeSet].sort());
   }
+
+  // ── WF ──────────────────────────────────────────────────────────────────
+  // The dashboard has no first-year-writing column; it lists those courses
+  // with every indicator N instead. See inferFirstYearWriting() for why that
+  // is sound and when it refuses.
+  const wf = inferFirstYearWriting(result, indicatorCols.map(c => c.code));
+  if (wf.skipped) {
+    console.warn(`    ⚠  WF not inferred: ${wf.reason}`);
+  } else {
+    for (const key of wf.granted) result.set(key, ["WF"]);
+    console.log(`    ↳ WF inferred for ${wf.granted.length} course(s): ${wf.granted.join(", ") || "none"}`);
+  }
+
+  // ── Fidelity guard ──────────────────────────────────────────────────────
+  // Report anything still unexplained after inference, so the next silent hole
+  // surfaces in the run log instead of in an advisor's hands.
+  const { unmappedIndicators, zeroCodeRows, absentCodes } =
+    reportUnmapped(header, mappedHeaders, result);
+
+  if (unmappedIndicators.length) {
+    console.warn(`    ⚠  ${unmappedIndicators.length} indicator column(s) matched no NUpath code — every course carrying them loses that code:`);
+    for (const h of unmappedIndicators) console.warn(`         ${h}`);
+    console.warn(`       Add a fragment for each to NUPATH_MAP in scripts/lib/nupath.js.`);
+  }
+  if (absentCodes.length) {
+    console.warn(`    ⚠  No course claims: ${absentCodes.join(", ")} — column missing or renamed in the export.`);
+  }
+  if (zeroCodeRows.length) {
+    const shown = zeroCodeRows.slice(0, 12).join(", ");
+    console.warn(`    ⚠  ${zeroCodeRows.length} course row(s) parsed to zero codes: ${shown}${zeroCodeRows.length > 12 ? ", …" : ""}`);
+  }
+  if (!unmappedIndicators.length && !absentCodes.length && !zeroCodeRows.length) {
+    console.log(`    ✓  All ${NUPATH_CODES.length} NUpath codes present; no unmapped columns, no empty rows.`);
+  }
+
   return result;
 }
 
@@ -538,13 +514,12 @@ function extractNuPathFromPage(html, subjectCode) {
     const [, subject, number] = m;
     if (subjectCode && subject !== subjectCode) continue;
 
-    // NUPath: try dedicated attribute element first, fall back to description
-    const nuPathEl  = block.querySelector("[class*='nupath'], [class*='NUpath'], [class*='attribute']");
-    const descEl    = block.querySelector(".courseblockdesc, .cb_desc, .course-description, .courseblock-desc");
-    const attrText  = nuPathEl?.textContent ?? descEl?.textContent ?? "";
-    const nuPath    = parseNUPath(attrText);
-
-    result.set(`${subject} ${number}`, nuPath);
+    // The Attribute(s) line is a plain .courseblockextra — found by its label
+    // text, not by class. See findAttributeText().
+    const attrText = findAttributeText(
+      block.querySelectorAll(".courseblockextra, p").map(el => el.textContent)
+    );
+    result.set(`${subject} ${number}`, parseNUPath(attrText));
   }
   return result;
 }
@@ -671,16 +646,29 @@ let notInMap   = 0;
 // Collect discrepancies for change-log (mirrors catalog-check-server format)
 const discrepancies = []; // { subject, number, oldNuPath, newNuPath, added, removed }
 
+// How much this run's source is trusted — see reconcileNuPath(). Without this
+// a single unreachable-Tableau month would let the catalog fallback strip WF
+// and WD from every course and delete anything else it happened to miss.
+const policy  = policyFor(nuPathSource);
+const blindTo = NUPATH_CODES.filter(c => !policy.codes.includes(c));
+if (blindTo.length) {
+  console.log(`  Note: ${nuPathSource} cannot express ${blindTo.join(", ")} — existing values preserved.`);
+}
+if (!policy.authoritative) {
+  console.log(`  Note: ${nuPathSource} is a fallback source — additive only, it will not remove existing codes.`);
+}
+
 const updated = courses.map((c) => {
   const key      = courseKey(c);
-  const freshNP  = nuPathMap.get(key);
+  const reported = nuPathMap.get(key);
 
-  if (freshNP === undefined) {
+  if (reported === undefined) {
     notInMap++;
     return c; // not covered by source — leave as-is
   }
 
   const oldArr   = c.nuPath ?? [];
+  const freshNP  = reconcileNuPath(oldArr, reported, policy);
   const oldNP    = JSON.stringify(oldArr);
   const newNP    = JSON.stringify(freshNP);
 
@@ -711,22 +699,29 @@ console.log(`  = Unchanged : ${unchanged}`);
 console.log(`  ? Not in map: ${notInMap}  ← source didn't include this course`);
 console.log(sep);
 
-// Show first 30 changes
+// Show first 30 changes — from `discrepancies`, which holds the reconciled
+// result actually being written, not the source's raw reading.
 if (changed > 0) {
   console.log("\nSample changes (first 30):");
-  let shown = 0;
-  for (let i = 0; i < courses.length && shown < 30; i++) {
-    const c   = courses[i];
-    const key = courseKey(c);
-    const fp  = nuPathMap.get(key);
-    if (fp === undefined) continue;
-    if (JSON.stringify(c.nuPath ?? []) === JSON.stringify(fp)) continue;
-    const from = JSON.stringify(c.nuPath ?? []);
-    const to   = JSON.stringify(fp);
-    console.log(`  ${key.padEnd(14)}  ${from.padEnd(20)} → ${to}`);
-    shown++;
+  for (const d of discrepancies.slice(0, 30)) {
+    const key = `${d.subject} ${d.number}`;
+    console.log(`  ${key.padEnd(14)}  ${JSON.stringify(d.oldNuPath).padEnd(20)} → ${JSON.stringify(d.newNuPath)}`);
   }
   if (changed > 30) console.log(`  … and ${changed - 30} more changes`);
+}
+
+// ── Mass-clear rail ───────────────────────────────────────────────────────────
+// This script runs unattended on a schedule, so a bad upstream read must not be
+// able to silently strip the catalog. Clearing a few courses is normal churn;
+// clearing a large share of them means the source or the parse is broken, and
+// the right response is to keep yesterday's data and shout.
+const hadNuPath   = courses.filter(c => c.nuPath?.length).length;
+const clearLimit  = Math.max(20, Math.ceil(hadNuPath * 0.05));
+if (cleared > clearLimit) {
+  console.error(`\n❌  Refusing to write: ${cleared} courses would lose all NUpath codes ` +
+                `(limit ${clearLimit}, ${hadNuPath} currently have any).`);
+  console.error(`    ${nuPathSource} is likely broken or incomplete — data left unchanged.`);
+  process.exit(1);
 }
 
 // ── Write ─────────────────────────────────────────────────────────────────────

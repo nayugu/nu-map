@@ -29,6 +29,7 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseHTML } from "node-html-parser";
 import { parseRepeatability } from "../src/adapters/northeastern/repeatability.js";
+import { parseNUPath, findAttributeText, reconcileNuPath, SOURCE_POLICY } from "./lib/nupath.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -58,60 +59,10 @@ const SUBJECTS = (() => {
   return i !== -1 ? process.argv[i + 1]?.toUpperCase().split(",").map(s => s.trim()).filter(Boolean) : null;
 })();
 
-// ── NUPATH code map ───────────────────────────────────────────────────────────
-// Maps catalog Attribute(s) text fragments → internal NUPath codes.
-// Codes must match NUPATH_LABELS in src/core/constants.js exactly.
-// The catalog uses slash-notation, e.g. "NUpath Natural/Designed World".
-// Keep both slash and legacy "and" forms for resilience.
-const NUPATH_MAP = {
-  // ND — Natural/Designed World
-  "natural/designed world":       "ND",
-  "natural and designed world":   "ND",
-  // FQ — Formal/Quant Reasoning
-  "formal/quant":                 "FQ",
-  "formal and quantitative":      "FQ",
-  // SI — Societies/Institutions
-  "societies/institutions":       "SI",
-  "societies and institutions":   "SI",
-  // IC — Interpreting Culture
-  "interpreting culture":         "IC",
-  "intellectual life":            "IC",   // legacy
-  // EI — Creative Express/Innov
-  "creative express":             "EI",
-  "creative expression":          "EI",
-  // ER — Ethical Reasoning
-  "ethical reasoning":            "ER",
-  "ethics and social justice":    "ER",
-  // DD — Difference/Diversity
-  "difference/diversity":         "DD",
-  "differences and diversity":    "DD",
-  // AD — Analyzing/Using Data  (NOT "advanced writing")
-  "analyzing/using data":         "AD",
-  "analyzing and using data":     "AD",
-  // WF — 1st Yr Writing
-  "1st yr writing":               "WF",
-  "first.year writing":           "WF",
-  // WD — Advanced Writing in the Disciplines
-  "adv writing":                  "WD",
-  "advanced writing in":          "WD",
-  // WI — Writing Intensive
-  "writing intensive":            "WI",
-  // CE — Capstone Experience
-  "capstone experience":          "CE",
-  // EX — Integration/Experiential
-  "integration experience":       "EX",
-  "experiential learning":        "EX",
-};
-
-function parseNUPath(text) {
-  const lower = text.toLowerCase();
-  const found = [];
-  for (const [fragment, code] of Object.entries(NUPATH_MAP)) {
-    if (lower.includes(fragment) && !found.includes(code)) found.push(code);
-  }
-  // Sort for stable output — order is irrelevant in the app but avoids noisy diffs
-  return found.sort();
-}
+// ── NUPATH ────────────────────────────────────────────────────────────────────
+// The code map, the WF derivation and the WF drift check all live in
+// scripts/lib/nupath.js, shared with fetch-nupath.js so the two paths can't
+// disagree about what the catalog's attribute wording means.
 
 // ── Mark "(may be taken concurrently)" prereqs inline ────────────────────────
 // Concurrent prereqs stay in the prereq tree (not coreqs) but get flagged with
@@ -266,10 +217,16 @@ function parseSubjectPage(html, subjectCode) {
       : "";
 
     // ── NUPath ──
-    const nuPathEl = block.querySelector(
-      "[class*='nupath'], [class*='NUpath'], [class*='attribute']"
-    );
-    const nuPath = nuPathEl ? parseNUPath(nuPathEl.textContent) : [];
+    // Fallback source only: the catalog prints 11 of the 13 codes as
+    // Attribute(s) lines and never WF or WD. Tableau is authoritative, and the
+    // merge below keeps a previous non-empty nuPath rather than letting an
+    // empty catalog read overwrite it.
+    //
+    // The line is a plain .courseblockextra with no distinguishing class, so
+    // it has to be found by its label text — see findAttributeText().
+    const nuPath = parseNUPath(findAttributeText(
+      block.querySelectorAll(".courseblockextra, p").map(el => el.textContent)
+    ));
 
     // ── Prereqs / coreqs (text extraction) ──
     const extraEls = block.querySelectorAll('.courseblockextra, p');
@@ -470,7 +427,7 @@ async function runRotate() {
             : prev.creditsMax !== undefined ? { creditsMax: prev.creditsMax } : {}),
         scheduleType: cat.scheduleType || prev.scheduleType,
         description:  cat.description  || prev.description,
-        nuPath:       cat.nuPath?.length  ? cat.nuPath  : prev.nuPath,
+        nuPath:       reconcileNuPath(prev.nuPath ?? [], cat.nuPath ?? [], SOURCE_POLICY.catalog),
         // Always trust catalog prereqs/coreqs when they exist (even empty = confirmed no prereqs).
         // Only fall back to prev when catalog had no record for this course (cat field is undefined).
         prereqs: Array.isArray(cat.prereqs) ? cat.prereqs : (prev.prereqs ?? []),
@@ -620,7 +577,7 @@ async function runSubjects(subjectCodes) {
             : cat.credits != null ? {} : prev.creditsMax !== undefined ? { creditsMax: prev.creditsMax } : {}),
           scheduleType: cat.scheduleType || prev.scheduleType,
           description:  cat.description  || prev.description,
-          nuPath:       cat.nuPath?.length ? cat.nuPath : prev.nuPath,
+          nuPath:       reconcileNuPath(prev.nuPath ?? [], cat.nuPath ?? [], SOURCE_POLICY.catalog),
           prereqs: Array.isArray(cat.prereqs) ? cat.prereqs : (prev.prereqs ?? []),
           coreqs:  Array.isArray(cat.coreqs)  ? cat.coreqs  : (prev.coreqs  ?? []),
           // Repeatability rides the description (see rotate merge above).
@@ -735,7 +692,7 @@ if (existsSync(CATALOG_OUT)) {
       if (!prev) return c;
       return {
         ...c,
-        nuPath: c.nuPath?.length ? c.nuPath : (prev.nuPath ?? []),
+        nuPath: reconcileNuPath(prev.nuPath ?? [], c.nuPath ?? [], SOURCE_POLICY.catalog),
       };
     });
     const rescued = toWrite.filter((c, i) =>
@@ -747,8 +704,14 @@ if (existsSync(CATALOG_OUT)) {
   }
 }
 
-writeFileSync(CATALOG_OUT, JSON.stringify(toWrite, null, 0), "utf8");
-console.log(`\n✅  Wrote catalog snapshot → public/catalog-courses.json`);
+// --dry-run scrapes only the first 3 subjects, so writing here would replace
+// the full catalog with a ~90-course stub. Report instead of writing.
+if (DRY_RUN) {
+  console.log(`\n📋  DRY RUN — ${toWrite.length} courses scraped, catalog-courses.json left untouched.`);
+} else {
+  writeFileSync(CATALOG_OUT, JSON.stringify(toWrite, null, 0), "utf8");
+  console.log(`\n✅  Wrote catalog snapshot → public/catalog-courses.json`);
+}
 
 if (WRITE && !MERGE) {
   const now   = new Date();
@@ -785,7 +748,7 @@ if (MERGE) {
         : cat.credits != null ? {} : c.creditsMax !== undefined ? { creditsMax: c.creditsMax } : {}),
       scheduleType: cat.scheduleType || c.scheduleType,
       description:  cat.description  || c.description,
-      nuPath:       cat.nuPath?.length ? cat.nuPath : c.nuPath,
+      nuPath:       reconcileNuPath(c.nuPath ?? [], cat.nuPath ?? [], SOURCE_POLICY.catalog),
       prereqs:      Array.isArray(cat.prereqs) ? cat.prereqs : c.prereqs,
       coreqs:       Array.isArray(cat.coreqs)  ? cat.coreqs  : c.coreqs,
       // Repeatability rides the description (see rotate merge above).

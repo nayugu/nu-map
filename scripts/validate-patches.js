@@ -18,6 +18,8 @@ import { fileURLToPath } from "url";
 
 import yaml from "js-yaml";
 
+import { NUPATH_CODES } from "./lib/nupath.js";
+
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
 const PATCH_DIR  = resolve(ROOT, "data/northeastern/patches");
@@ -35,7 +37,10 @@ const existingKeys = new Set(
 
 const REQUIRED_ADD_FIELDS = ["subject", "number", "title", "credits"];
 const VALID_SCHED = ["Lecture", "Lab", "Seminar", "Studio", "Individual Instruction", "Off-campus instruction"];
-const VALID_NUPATH = ["ND","EI","IC","FQ","SI","AD","DD","ER","CE","WI","EX","NUpath Elective","Writing Intensive"];
+// All 13 codes, plus two legacy free-text values still present in old patches.
+// Previously hand-listed here and missing WF and WD, so a patch granting
+// either was rejected as invalid.
+const VALID_NUPATH = [...NUPATH_CODES, "NUpath Elective", "Writing Intensive"];
 
 function assertString(val, path) {
   if (typeof val !== "string" || val.trim() === "")
