@@ -310,7 +310,7 @@ export default function Header() {
       if (!p) return "";
       const parts = p.split('/');
       const folder = parts[parts.length - 2] || '';
-      return folder ? majorRequirements.fmtLabel(folder) : '';
+      return folder ? majorRequirements.fmtProgramLabel(folder) : '';
     };
     const programLines = [];
     if (isGrad) {
@@ -800,7 +800,7 @@ export default function Header() {
                       const raw = localStorage.getItem(`${institution.storagePrefix}-plan-data-${id}`);
                       const parts = (JSON.parse(raw || '{}').major || '').split('/');
                       const folder = parts[parts.length - 2] || '';
-                      return folder ? majorRequirements.fmtLabel(folder) : '';
+                      return folder ? majorRequirements.fmtProgramLabel(folder) : '';
                     } catch { return ''; }
                   };
 

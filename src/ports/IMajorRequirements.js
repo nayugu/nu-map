@@ -24,13 +24,26 @@ export const IMajorRequirements = "majorRequirements";
  * @property {string}  id         - Unique stable key passed back to auditMajor/auditMinor.
  *                                  Can be a file path, slug, UUID, or any stable string.
  * @property {string}  label      - Display name shown in the search dropdown and panel header,
- *                                  e.g. "Computer Science", "Data Science"
+ *                                  e.g. "Computer Science, BSCS", "Data Science, BS"
  * @property {string}  [location] - Secondary qualifier shown next to the label,
  *                                  e.g. "Boston", "Silicon Valley", "Online".
  *                                  Useful when the same program has multiple campus variants.
  *                                  Omit if not applicable.
  * @property {string}  [type]     - Program category: "major" | "concentration" | "minor" | "certificate".
  *                                  Used to filter the dropdown if the UI separates them.
+ *
+ * The three fields below let src/core/searchRank.js rank by how much of the
+ * program's *name* a query covers, rather than by raw label length. Omit them
+ * and ranking falls back to matching the whole label, which buries a plain
+ * program under its combined variants.
+ *
+ * @property {string}   [name]     - The program name alone, no degree or campus,
+ *                                   e.g. "Computer Science".
+ * @property {string}   [degree]   - The degree as the institution prints it,
+ *                                   e.g. "BSCS", "BSChE", "Minor".
+ * @property {string[]} [acronyms] - Abbreviations that should match this program,
+ *                                   e.g. ["cs"]. Never treated as unique — several
+ *                                   programs may claim the same one.
  */
 
 /**

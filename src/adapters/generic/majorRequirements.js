@@ -35,10 +35,28 @@ export function fmtLabel(raw) {
  */
 export function fmtLocation() { return ''; }
 
+/**
+ * Split a program folder slug into name / degree / campus / acronyms.
+ * Generic default: no degree-code or campus convention, so the whole slug is
+ * the name. Institutions whose folders encode a degree (see the Northeastern
+ * adapter) override this — the search ranker scores the parts separately.
+ *
+ * @param {string} raw
+ * @returns {{name: string, degree: string, location: string, acronyms: string[]}}
+ */
+export function parseProgram(raw) {
+  return { name: fmtLabel(raw), degree: '', location: '', acronyms: [] };
+}
+
+/** The label shown in the picker. Generic default: just the name. */
+export function fmtProgramLabel(raw) { return parseProgram(raw).name; }
+
 /** @type {import('../../ports/IMajorRequirements.js').IMajorRequirements} */
 export default {
   fmtLabel,
   fmtLocation,
+  fmtProgramLabel,
+  parseProgram,
 
   getMajorOptions()         { return []; },
   getMinorOptions()         { return []; },

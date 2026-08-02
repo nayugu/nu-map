@@ -39,9 +39,9 @@ import { parseMajorPathParts, normalizeFolder, resolveInMap } from './programPat
 export { normalizeFolder, resolveInMap };
 
 // ── Public API ───────────────────────────────────────────────────
-// Path-parsing helpers (fmtLabel, fmtLocation) come from the
-// majorRequirements port passed by the caller — not imported directly
-// from a specific adapter, preserving institution-agnosticism here.
+// Naming helpers (fmtLabel, parseProgram) come from the majorRequirements
+// port passed by the caller — not imported directly from a specific adapter,
+// preserving institution-agnosticism here.
 
 let _cachedOptions      = null;
 let _cachedMajorReqs    = null;
@@ -52,7 +52,8 @@ let _cachedGradMajorReqs = null;
  * Returns the full list of available major options derived from file paths.
  * No JSON is loaded; only the Vite module registry is consulted.
  *
- * Each option: { path, year, college, collegeLabel, folder, label, location }
+ * Each option: { path, year, college, collegeLabel, folder, label, location,
+ *                name, degree, acronym, acronyms }
  *
  * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
  */
@@ -78,11 +79,11 @@ export function getMajorOptions(majorRequirements) {
       if (folder.endsWith('_minor')) return null; // minors live in the minor search
       // name/degree/acronyms are what searchRank scores against; label is the
       // catalog's own rendering of the two, e.g. "Computer Science, BSCS".
-      const { name, degree, location, acronyms } = parseProgram(folder);
+      const { name, degree, location, acronym, acronyms } = parseProgram(folder);
       const label        = degree ? `${name}, ${degree}` : name;
       const collegeLabel = fmtLabel(college);
 
-      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronyms };
+      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronym, acronyms };
     })
     .filter(Boolean)
     .sort((a, b) =>
@@ -186,11 +187,11 @@ export function getGradMajorOptions(majorRequirements) {
       const year        = parseInt(parts[yearIdx], 10);
       const college     = parts[yearIdx + 1] ?? '';
       const folder      = parts[yearIdx + 2] ?? '';
-      const { name, degree, location, acronyms } = parseProgram(folder);
+      const { name, degree, location, acronym, acronyms } = parseProgram(folder);
       const label        = degree ? `${name}, ${degree}` : name;
       const collegeLabel = fmtLabel(college);
 
-      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronyms };
+      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronym, acronyms };
     })
     .filter(Boolean)
     .sort((a, b) =>

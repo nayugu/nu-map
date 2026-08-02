@@ -34,8 +34,8 @@ function parseMinorPathParts(path) {
 }
 
 // ── Public API ───────────────────────────────────────────────────
-// Path-parsing helpers (fmtLabel, fmtLocation) come from the
-// majorRequirements port passed by the caller — same port as majors.
+// Naming helpers (fmtLabel, parseProgram) come from the majorRequirements
+// port passed by the caller — same port as majors.
 
 let _cachedOptions   = null;
 let _cachedMajorReqs = null;
@@ -60,11 +60,11 @@ export function getMinorOptions(majorRequirements) {
       const year         = parseInt(parts[yearIdx], 10);
       const college      = parts[yearIdx + 1] ?? '';
       const folder       = parts[yearIdx + 2] ?? '';
-      const { name, degree, location, acronyms } = parseProgram(folder);
+      const { name, degree, location, acronym, acronyms } = parseProgram(folder);
       const label        = degree ? `${name}, ${degree}` : name;
       const collegeLabel = fmtLabel(college);
 
-      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronyms };
+      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronym, acronyms };
     })
     .filter(Boolean)
     .sort((a, b) =>

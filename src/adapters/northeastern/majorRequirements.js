@@ -29,16 +29,18 @@ import { getMinorOptions as _getMinorOptions, getMinorOptionGroups as _getMinorO
 
 // Label formatting lives in programNaming.js (pure, shared with the Node
 // program registry). Re-exported so existing importers keep working.
-import { fmtLabel, fmtLocation } from './programNaming.js';
-export { fmtLabel, fmtLocation };
+import { fmtLabel, fmtLocation, fmtProgramLabel, parseProgram } from './programNaming.js';
+export { fmtLabel, fmtLocation, fmtProgramLabel, parseProgram };
 
-// Self-reference passed to loaders so they can call fmtLabel/fmtLocation
-const _self = { fmtLabel, fmtLocation };
+// Self-reference passed to loaders so they can call the naming helpers
+const _self = { fmtLabel, fmtLocation, fmtProgramLabel, parseProgram };
 
 /** @type {import('../../ports/IMajorRequirements.js').IMajorRequirements} */
 export default {
   fmtLabel,
   fmtLocation,
+  fmtProgramLabel,
+  parseProgram,
 
   /** @returns {import('../../ports/IMajorRequirements.js').ProgramOption[]} */
   getMajorOptions() { return _getMajorOptions(_self); },
