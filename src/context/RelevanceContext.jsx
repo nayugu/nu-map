@@ -6,6 +6,7 @@
 // else one step below.
 // ═══════════════════════════════════════════════════════════════════
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { resolveConcentration } from "../core/concentrationResolve.js";
 import { usePlanner }         from "./PlannerContext.jsx";
 import { usePort }            from "./InstitutionContext.jsx";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
@@ -97,7 +98,7 @@ export function RelevanceProvider({ children }) {
       const { allocatedSet } = allocateMajorWithElectives(m, placedSet, courseMap);
       // Concentration shares the primary major's used set (same as GradPanel)
       if (m === majorData && conc && m.concentrations) {
-        const concSection = m.concentrations.concentrationOptions?.find(c => c.title === conc);
+        const concSection = resolveConcentration(m, conc);
         if (concSection) allocateSections([concSection], placedSet, allocatedSet, courseMap);
       }
       allocatedSet.forEach(k => majorKeys.add(k));
@@ -121,7 +122,7 @@ export function RelevanceProvider({ children }) {
     // required vs elective. Powers the Course Bank program filters.
     const splits = [majorData, major2Data, minor1Data, minor2Data].map(collectEligibleSpec);
     if (conc && majorData?.concentrations) {
-      const concSection = majorData.concentrations.concentrationOptions?.find(c => c.title === conc);
+      const concSection = resolveConcentration(majorData, conc);
       if (concSection) splits.push(collectEligibleSpec({ requirementSections: [concSection] }));
     }
     const { required, elective } = mergeSplitSpecs(...splits);
@@ -140,7 +141,7 @@ export function RelevanceProvider({ children }) {
     const progs = [];
     if (majorData) {
       const concSection = (conc && majorData.concentrations)
-        ? majorData.concentrations.concentrationOptions?.find(c => c.title === conc) : null;
+        ? resolveConcentration(majorData, conc) : null;
       progs.push({ type: "major", n: 1, numbered: majorCount > 1, data: majorData, concSection, isMinor: false, split: collectEligibleSpec(majorData) });
     }
     if (major2Data) progs.push({ type: "major", n: 2, numbered: true, data: major2Data, isMinor: false, split: collectEligibleSpec(major2Data) });

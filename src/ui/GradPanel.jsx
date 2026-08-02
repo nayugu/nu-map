@@ -17,6 +17,7 @@ import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
+import { resolveConcentration } from "../core/concentrationResolve.js";
 import { filterInTimeline } from "../core/planModel.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
@@ -581,6 +582,51 @@ function NuPathGrid({ covered, sources = {} }) {
 
 // ── Minor block (loads + validates a minor's requirement sections) ─
 
+/**
+ * Fidelity pill — three states, because "no badge" was previously
+ * indistinguishable from "never checked".
+ *
+ *   verified (green) every applicable check passed AND the catalog's own
+ *                    sample plan of study existed and was fully explained by
+ *                    the parsed requirements
+ *   partial  (grey)  everything available passed, but the page offers no
+ *                    sample plan, so the strongest check could not run. Every
+ *                    minor lands here permanently — they have no such plan.
+ *   review   (amber) known discrepancies; the tooltip lists them
+ *
+ * Grey rather than green for `partial` is the load-bearing choice: a program
+ * checked against one source has not earned the same badge as one whose
+ * worked example fully corroborates it. Over-claiming to an advisor is worse
+ * than saying less.
+ */
+function VerificationPill({ verification, verified, t }) {
+  const level = verification?.level ?? (verified ? "verified" : null);
+  if (!level || level === "unverified") return null;
+
+  const problems = (verification?.discrepancies ?? [])
+    .filter(d => d.severity === "high" || d.severity === "medium");
+
+  const style = {
+    verified: { bg: "var(--success-bg)", fg: "var(--success)", bd: "var(--success-border)" },
+    partial:  { bg: "var(--bg-surface-2)", fg: "var(--text-4)", bd: "var(--border-2)" },
+    review:   { bg: "var(--warn-bg, var(--bg-surface-2))", fg: "var(--warn, var(--text-3))", bd: "var(--warn-border, var(--border-2))" },
+  }[level] ?? null;
+  if (!style) return null;
+
+  const text = level === "verified" ? t("grad.verified")
+             : level === "partial"  ? t("grad.verify.partial")
+             : t("grad.verify.review", { n: problems.length });
+
+  const tip = level === "verified" ? t("grad.verify.tip.verified")
+            : level === "partial"  ? t("grad.verify.tip.partial")
+            : `${t("grad.verify.tip.review")}\n\n` + problems.map(d => `• ${d.message}`).join("\n");
+
+  return (
+    <span title={tip} style={{ marginLeft: 6, fontSize: 8, background: style.bg, color: style.fg,
+      border: `1px solid ${style.bd}`, borderRadius: 99, padding: "1px 5px", cursor: "help" }}>{text}</span>
+  );
+}
+
 function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameColor }) {
   const { courseMap, majorRequirements, isPhone } = useContext(GradCtx);
   const { t } = useLanguage();
@@ -665,9 +711,8 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
             {label}
-            {minor.metadata?.verified && (
-              <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>verified</span>
-            )}
+            <VerificationPill verification={minor.metadata?.verification}
+                              verified={minor.metadata?.verified} t={t} />
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
           <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{scaleLatinRuns(minorName)}</div>
@@ -707,7 +752,8 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
 
 // ── MajorCard: framed collapsible card for a major's requirements ─
 // Frame is a subtle background tint (no border line) matching MinorBlock.
-function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, expanded, onToggle, isPhone, loading, loadingLabel, children, nameColor, subtitleColor }) {
+function MajorCard({ label, name, subtitle, verified, verification, progress, expanded, onToggle, isPhone, loading, loadingLabel, children, nameColor, subtitleColor }) {
+  const { t } = useLanguage();
   return (
     <div style={{ border: "1px solid var(--border-1)", borderRadius: 6, marginBottom: 10 }}>
       {/* Header row: label + triangle toggle */}
@@ -715,9 +761,7 @@ function MajorCard({ label, name, subtitle, verified, verifiedLabel, progress, e
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
             {label}
-            {verified && (
-              <span style={{ marginLeft: 6, fontSize: 8, background: "var(--success-bg)", color: "var(--success)", border: "1px solid var(--success-border)", borderRadius: 99, padding: "1px 5px" }}>{verifiedLabel}</span>
-            )}
+            <VerificationPill verification={verification} verified={verified} t={t} />
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>
           <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: 2 }}>{scaleLatinRuns(name)}</div>
@@ -893,8 +937,13 @@ export default function GradPanel({ wideCatalog = false }) {
   // Reset concentration if not available in newly loaded major
   useEffect(() => {
     if (!major || !selConc) return;
-    const opts = major.concentrations?.concentrationOptions ?? [];
-    if (!opts.find(c => c.title === selConc)) setSelConc("");
+    // Resolve through aliases and labels before giving up. A scraper-side
+    // rename must not silently wipe a saved selection — titles are the only
+    // identity a concentration has, across saved plans, share links and the
+    // MCP SET_CONCENTRATION action.
+    const still = resolveConcentration(major, selConc);
+    if (!still) setSelConc("");
+    else if (still.title !== selConc) setSelConc(still.title);
   }, [major]);
 
   // Fetch second major JSON on path change
@@ -954,16 +1003,25 @@ export default function GradPanel({ wideCatalog = false }) {
     if (!major) return [];
     const sections = [...(major.requirementSections ?? [])];
     if (selConc && major.concentrations) {
-      const concSec = major.concentrations.concentrationOptions.find(c => c.title === selConc);
+      const concSec = resolveConcentration(major, selConc);
       if (concSec) sections.push(concSec);
     }
     return sections;
   }, [major, selConc]);
 
   // ── Allocate all sections together (shared used set) ────────────────
-  // Major gets General Electives automatically appended
-  const allocatedSections = useMemo(() => {
-    if (!major) return [];
+  // Major gets General Electives automatically appended.
+  //
+  // Returns the major and concentration parts SEPARATELY rather than one flat
+  // array the caller slices apart. The old code recovered the split with
+  // `slice(0, major.requirementSections.length + 1)`, which assumes allocation
+  // returns exactly one section per input. mergeDuplicateSections breaks that
+  // assumption whenever two sections share a title — the concentration then
+  // fell off the end and silently rendered as nothing. The parser now
+  // guarantees unique titles, but relying on that from here couples the UI to
+  // a scraper invariant for no reason.
+  const { majorSections, concSection } = useMemo(() => {
+    if (!major) return { majorSections: [], concSection: null };
 
     // Allocate major requirements + General Electives
     const { sections: majorResults, generalElectives, allocatedSet } = allocateMajorWithElectives(major, placedSet, courseMap, doneSet, realPlacedSet);
@@ -974,20 +1032,18 @@ export default function GradPanel({ wideCatalog = false }) {
     // Allocate concentration sharing the major's used set so courses already
     // counted toward major requirements can't also satisfy the concentration.
     if (selConc && major.concentrations) {
-      const concSection = major.concentrations.concentrationOptions.find(c => c.title === selConc);
-      if (concSection) {
-        const concResults = allocateSections([concSection], placedSet, allocatedSet, courseMap);
-        return [...majorWithElectives, ...concResults];
+      const chosen = resolveConcentration(major, selConc);
+      if (chosen) {
+        const [allocated] = allocateSections([chosen], placedSet, allocatedSet, courseMap);
+        return { majorSections: majorWithElectives, concSection: allocated ?? null };
       }
     }
 
-    return majorWithElectives;
+    return { majorSections: majorWithElectives, concSection: null };
   }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc]);
 
-  // Split back for display: major sections (including General Electives) and concentration (if any)
+  const allocatedSections = concSection ? [...majorSections, concSection] : majorSections;
   const majorSectionsCount = major?.requirementSections?.length ?? 0;
-  const majorSections = allocatedSections.slice(0, majorSectionsCount + 1); // +1 for General Electives
-  const concSection = allocatedSections.length > majorSectionsCount + 1 ? allocatedSections[majorSectionsCount + 1] : null;
 
   // Done-only allocation for Major 1 progress bar (uses doneSet instead of placedSet)
   const major1DoneSections = useMemo(() => {
@@ -1262,7 +1318,7 @@ export default function GradPanel({ wideCatalog = false }) {
           nameColor={claudePreview?.changed?.has?.("major") ? "#fb923c" : undefined}
           subtitleColor={claudePreview?.changed?.has?.("conc") ? "#fb923c" : undefined}
           verified={!!major?.metadata?.verified}
-          verifiedLabel={t("grad.verified")}
+          verification={major?.metadata?.verification}
           progress={major1Progress}
           expanded={expandMajor1}
           onToggle={() => setExpandMajor1(v => !v)}
@@ -1285,7 +1341,7 @@ export default function GradPanel({ wideCatalog = false }) {
           name={major2Name}
           nameColor={claudePreview?.changed?.has?.("major2") ? "#fb923c" : undefined}
           verified={!!major2Data?.metadata?.verified}
-          verifiedLabel={t("grad.verified")}
+          verification={major2Data?.metadata?.verification}
           progress={major2Progress}
           expanded={expandMajor2}
           onToggle={() => setExpandMajor2(v => !v)}

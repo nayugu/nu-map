@@ -14,6 +14,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { extractEdges } from "../../core/courseModel.js";
+import { resolveConcentration } from "../../core/concentrationResolve.js";
 import { evalPrereqTree } from "../../core/prereqEval.js";
 import {
   buildPlacedKeySet,
@@ -450,13 +451,22 @@ export function createPlannerQuery(deps) {
     const conc = concentration ?? plan.concentration ?? "";
     let concentrationApplied = null;
     if (conc && majorJson.concentrations) {
-      const concSection = majorJson.concentrations.concentrationOptions
-        .find(c => c.title === conc);
+      // Resolve through aliases/labels: a saved plan may carry a title from
+      // before a scraper-side rename, and silently ignoring it would audit the
+      // major without the concentration the user actually chose.
+      const concSection = resolveConcentration(majorJson, conc);
       if (concSection) {
         results = [...results, ...allocateSections([concSection], placedSet, allocatedSet, courseMap)];
-        concentrationApplied = conc;
+        concentrationApplied = concSection.title;
       }
     }
+
+    // Surface the fidelity verdict IN THE PAYLOAD, not only in the tool
+    // description. The server's own instructions already treat `note` as
+    // non-negotiable for seat counts; the same applies here — an audit built
+    // on incomplete requirements must not read as authoritative.
+    const v = majorJson.metadata?.verification ?? null;
+    const problems = (v?.discrepancies ?? []).filter(x => x.severity === 'high' || x.severity === 'medium');
 
     return {
       programId: id,
@@ -464,6 +474,18 @@ export function createPlannerQuery(deps) {
       totalCreditsRequired: majorJson.totalCreditsRequired ?? null,
       concentrationApplied,
       concentrationRequired: (majorJson.concentrations?.minOptions ?? 0) > 0 && !concentrationApplied,
+      ...(v ? {
+        verification: {
+          level: v.level,
+          sourcesAvailable: v.sourcesAvailable,
+          discrepancies: problems.map(({ check, severity, message }) => ({ check, severity, message })),
+        },
+      } : {}),
+      ...(problems.length ? {
+        note: `This program has ${problems.length} known parsing discrepanc${problems.length === 1 ? 'y' : 'ies'} against the catalog (see verification). Treat the audit as a best-effort guide, say so, and point the user to their advisor and the official degree audit.`,
+      } : v?.level === 'partial' ? {
+        note: 'Every check that could run on this program passed, but the catalog page provides no sample plan of study to cross-check against, so coverage is unconfirmed. Requirement audits remain a guide, not the authority.',
+      } : {}),
       sections: results.map(s => annotateStatus(s, doneSet)),
     };
   }
