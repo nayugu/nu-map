@@ -49,7 +49,12 @@
           "severity": "info",
           "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "ARTG 7990 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "ARTG 7990"
+              }
+            }
           ],
           "overflow": 0
         }

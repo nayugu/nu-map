@@ -45,7 +45,12 @@
           "severity": "medium",
           "message": "1 of 9 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PHYS 5116 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 5116"
+              }
+            }
           ],
           "overflow": 0
         }

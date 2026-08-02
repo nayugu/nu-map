@@ -48,9 +48,24 @@
           "severity": "high",
           "message": "3 of 12 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "MATH 1215 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHIL 1101 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHIL 6962 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "MATH 1215"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHIL 1101"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHIL 6962"
+              }
+            }
           ],
           "overflow": 0
         }

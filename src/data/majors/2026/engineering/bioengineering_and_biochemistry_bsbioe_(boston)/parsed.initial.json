@@ -85,10 +85,30 @@
           "severity": "medium",
           "message": "4 of 49 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PHYS 1152 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 1153 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 1156 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 1157 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 1152"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 1153"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 1156"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 1157"
+              }
+            }
           ],
           "overflow": 0
         }

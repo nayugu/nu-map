@@ -53,8 +53,18 @@
           "severity": "medium",
           "message": "2 of 17 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PHSC 8986 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHSC 9996 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHSC 8986"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHSC 9996"
+              }
+            }
           ],
           "overflow": 0
         }

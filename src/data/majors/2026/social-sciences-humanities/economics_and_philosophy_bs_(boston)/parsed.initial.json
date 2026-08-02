@@ -59,8 +59,18 @@
           "severity": "medium",
           "message": "2 of 23 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ECON 4692 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "POLS 2325 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ECON 4692"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "POLS 2325"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -59,11 +59,36 @@
           "severity": "high",
           "message": "5 of 23 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "HIST 1100 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "HIST 1246 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "HIST 2308 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "HIST 2360 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "HIST 3350 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HIST 1100"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HIST 1246"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HIST 2308"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HIST 2360"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HIST 3350"
+              }
+            }
           ],
           "overflow": 0
         }

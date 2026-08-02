@@ -81,12 +81,42 @@
           "severity": "medium",
           "message": "6 of 45 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PHYS 3601 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 3603 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4621 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4623 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4651 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4652 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 3601"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 3603"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4621"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4623"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4651"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4652"
+              }
+            }
           ],
           "overflow": 0
         },
@@ -95,7 +125,12 @@
           "severity": "info",
           "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "MUST 5973 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "MUST 5973"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -51,7 +51,12 @@
           "severity": "info",
           "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "MUST 5973 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "MUST 5973"
+              }
+            }
           ],
           "overflow": 0
         }

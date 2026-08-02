@@ -44,8 +44,18 @@
           "severity": "high",
           "message": "2 of 8 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "HBRW 1101 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "HBRW 1102 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HBRW 1101"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HBRW 1102"
+              }
+            }
           ],
           "overflow": 0
         }

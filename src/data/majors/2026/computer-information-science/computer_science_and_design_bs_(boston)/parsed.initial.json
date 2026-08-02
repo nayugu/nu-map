@@ -64,8 +64,18 @@
           "severity": "medium",
           "message": "2 of 28 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ARTG 2262 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "ARTG 2263 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARTG 2262"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARTG 2263"
+              }
+            }
           ],
           "overflow": 0
         },
@@ -74,8 +84,18 @@
           "severity": "info",
           "message": "2 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "CS 4991 — required by this program, but we have no record of the course",
-            "DS 4900 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "CS 4991"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "DS 4900"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -43,7 +43,12 @@
           "severity": "medium",
           "message": "1 of 7 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PSYC 1214 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PSYC 1214"
+              }
+            }
           ],
           "overflow": 0
         }

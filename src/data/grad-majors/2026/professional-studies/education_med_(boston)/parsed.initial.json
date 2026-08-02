@@ -33,7 +33,9 @@
           "severity": "medium",
           "message": "the catalog page states no total credit requirement",
           "detail": [
-            "Progress here counts requirements, not credits — check the total with your advisor"
+            {
+              "key": "noTotal"
+            }
           ],
           "overflow": 0
         },
@@ -42,9 +44,24 @@
           "severity": "info",
           "message": "3 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "EDU 6182 — required by this program, but we have no record of the course",
-            "EDU 6333 — required by this program, but we have no record of the course",
-            "EDU 6340 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "EDU 6182"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "EDU 6333"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "EDU 6340"
+              }
+            }
           ],
           "overflow": 0
         }

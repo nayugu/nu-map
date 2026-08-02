@@ -34,11 +34,36 @@
           "severity": "medium",
           "message": "5 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "CAEP 7741 — required by this program, but we have no record of the course",
-            "CAEP 7742 — required by this program, but we have no record of the course",
-            "CAEP 7743 — required by this program, but we have no record of the course",
-            "CAEP 7744 — required by this program, but we have no record of the course",
-            "CAEP 7798 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "CAEP 7741"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "CAEP 7742"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "CAEP 7743"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "CAEP 7744"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "CAEP 7798"
+              }
+            }
           ],
           "overflow": 0
         }

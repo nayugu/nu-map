@@ -58,9 +58,24 @@
           "severity": "medium",
           "message": "3 of 22 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ARCH 2341 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "ARCH 5211 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "ARCH 5231 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARCH 2341"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARCH 5211"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARCH 5231"
+              }
+            }
           ],
           "overflow": 0
         }

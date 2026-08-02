@@ -68,7 +68,8 @@ function CheckRow({ state, detail = [], overflow = 0, moreLabel, children }) {
         <span style={{ fontSize: 11, lineHeight: LINE, display: "block",
                        color: state === "pass" || state === "fail" ? "var(--text-3)" : "var(--text-5)" }}>{children}</span>
         {detail.length > 0 && (
-          <div style={{ marginTop: 3, fontSize: 10.5, lineHeight: 1.5, color: "var(--text-4)" }}>
+          <div style={{ marginTop: 5, fontSize: 10.5, lineHeight: 1.5, color: "var(--text-4)",
+                        display: "flex", flexDirection: "column", gap: 4 }}>
             {detail.map((d, i) => (
               <div key={i} style={{ display: "flex", gap: 5 }}>
                 <span style={{ color: "var(--text-5)" }}>·</span>
@@ -107,14 +108,19 @@ export default function VerificationPopover({ verification, level, rect }) {
   const hasPlan  = sources.includes("plan-of-study");
   const num      = k => (Number.isFinite(c[k]) ? c[k] : 0);
 
+  // Detail bullets ship as { key, params } so they can be translated here
+  // rather than baked into the committed data in English. Older data may still
+  // hold plain strings; those pass through unchanged.
+  const renderDetail = d =>
+    typeof d === "string" ? d : t(`verify.detail.${d.key}`, d.params ?? {});
+
   // Find the finding behind a row, so the row can name what caused it.
   const findings = verification?.discrepancies ?? [];
   const causeOf = (...checks) => {
     const d = findings.find(f => checks.includes(f.check));
     if (!d) return { detail: [], overflow: 0, severity: null };
     // Course keys read better spaced; anything else is already prose.
-    const detail = (d.detail ?? []).map(x => /^[A-Z]+\d/.test(x) ? prettyCourse(x) : x);
-    return { detail, overflow: d.overflow ?? 0, severity: d.severity };
+    return { detail: (d.detail ?? []).map(renderDetail), overflow: d.overflow ?? 0, severity: d.severity };
   };
 
   // The mark must agree with the badge: only a finding that COUNTS against the
@@ -157,8 +163,7 @@ export default function VerificationPopover({ verification, level, rect }) {
   for (const f of findings) {
     if (OWNED.has(f.check) || f.severity === "info") continue;
     rows.push({ state: markFor(f.severity, "fail"), text: f.message,
-                detail: (f.detail ?? []).map(x => /^[A-Z]+\d/.test(x) ? prettyCourse(x) : x),
-                overflow: f.overflow ?? 0 });
+                detail: (f.detail ?? []).map(renderDetail), overflow: f.overflow ?? 0 });
   }
 
   const headline = level === "verified" ? t("verify.pop.headline.verified")

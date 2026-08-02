@@ -43,7 +43,12 @@
           "severity": "medium",
           "message": "the credit total was taken from the sample four-year plan, not from a stated requirement",
           "detail": [
-            "48 SH is what that one sample path adds up to; the real minimum may be lower"
+            {
+              "key": "totalFromPlan",
+              "params": {
+                "n": 48
+              }
+            }
           ],
           "overflow": 0
         },
@@ -52,7 +57,12 @@
           "severity": "medium",
           "message": "1 of 7 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "INAM 9996 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "INAM 9996"
+              }
+            }
           ],
           "overflow": 0
         }

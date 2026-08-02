@@ -87,9 +87,24 @@
           "severity": "medium",
           "message": "3 of 51 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "CHEM 1103 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "CHEM 1163 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "NRSG 4996 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "CHEM 1103"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "CHEM 1163"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "NRSG 4996"
+              }
+            }
           ],
           "overflow": 0
         }

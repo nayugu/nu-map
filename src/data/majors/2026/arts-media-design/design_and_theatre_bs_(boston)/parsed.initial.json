@@ -58,8 +58,18 @@
           "severity": "medium",
           "message": "2 of 22 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ARTG 2262 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "ARTG 2263 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARTG 2262"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARTG 2263"
+              }
+            }
           ],
           "overflow": 0
         }

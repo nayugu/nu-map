@@ -58,8 +58,18 @@
           "severity": "medium",
           "message": "2 of 22 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ANTH 2305 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "HSCI 2000 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ANTH 2305"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HSCI 2000"
+              }
+            }
           ],
           "overflow": 0
         },
@@ -68,7 +78,12 @@
           "severity": "info",
           "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "HLTH 5280 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "HLTH 5280"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -52,8 +52,18 @@
           "severity": "medium",
           "message": "2 of 16 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "POLS 4701 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "POLS 4703 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "POLS 4701"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "POLS 4703"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -33,7 +33,9 @@
           "severity": "medium",
           "message": "the catalog page states no total credit requirement",
           "detail": [
-            "Progress here counts requirements, not credits — check the total with your advisor"
+            {
+              "key": "noTotal"
+            }
           ],
           "overflow": 0
         }

@@ -68,9 +68,24 @@
           "severity": "medium",
           "message": "3 of 32 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "COMM 1120 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "COMM 3409 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHIL 1165 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "COMM 1120"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "COMM 3409"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHIL 1165"
+              }
+            }
           ],
           "overflow": 0
         }

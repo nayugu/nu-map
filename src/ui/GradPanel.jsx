@@ -733,7 +733,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
       <div onClick={() => setExpanded(v => !v)} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
-            {label}
+            <span>{scaleLatinRuns(label)}</span>
             <VerificationPill verification={minor.metadata?.verification}
                               verified={minor.metadata?.verified} t={t} />
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
@@ -783,7 +783,12 @@ function MajorCard({ label, name, subtitle, verified, verification, progress, ex
       <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", padding: "8px 10px 0", cursor: "pointer", userSelect: "none" }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
-            {label}
+            {/* One span, not the bare array: scaleLatinRuns splits "专业 1" into
+                a CJK part and a scaled Latin run, and as direct flex children
+                those become separate flex items whose separating space
+                collapses. Keeping them in an inline container preserves normal
+                text flow while the row itself stays flex to centre the pill. */}
+            <span>{scaleLatinRuns(label)}</span>
             <VerificationPill verification={verification} verified={verified} t={t} />
             {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
           </div>

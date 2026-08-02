@@ -91,6 +91,35 @@ const courseKey = (subject, classId) => `${subject}${classId}`;
 /** "CS3500" → "CS 3500". Nobody reads course keys unspaced. */
 const pretty = k => String(k).replace(/^([A-Z]+)(\d.*)$/, '$1 $2');
 
+/**
+ * Detail bullets are stored as { key, params }, not as sentences.
+ *
+ * They are generated here but READ in the browser, where the user may be on
+ * any of eight locales. Baking English into the committed data would make them
+ * the only part of the graduation panel that can't be translated. The UI
+ * renders `verify.detail.<key>`; DETAIL_EN below is the fallback used by the
+ * CLI, the report and the MCP payload, none of which are localised.
+ */
+export const DETAIL_EN = {
+  planMissingCourse: p => `${p.course} — the catalog's four-year plan includes it, but no requirement here asks for it`,
+  unknownCourse:     p => `${p.course} — required by this program, but we have no record of the course`,
+  unreadSection:     p => `"${p.section}" — this section is on the catalog page but not shown here`,
+  duplicateSection:  p => `"${p.title}" appears more than once`,
+  duplicateConc:     p => `"${p.title}" is listed twice — only the first can be chosen`,
+  impossibleSection: p => `"${p.title}" — every course it accepts is already claimed by another requirement`,
+  totalFromPlan:     p => `${p.n} SH is what that one sample path adds up to; the real minimum may be lower`,
+  noTotal:           () => 'Progress here counts requirements, not credits — check the total with your advisor',
+  noPlanUnusual:     () => 'Almost every major publishes one, so its absence here is unusual',
+  markerLeak:        () => 'A "choose N of the following" rule was left unresolved — treat the affected section as unreliable',
+  emptyProgram:      () => 'The catalog page may have changed shape — treat this program as unavailable',
+};
+
+/** Render a stored bullet in English. */
+export function detailText(d) {
+  const f = DETAIL_EN[d?.key];
+  return f ? f(d.params ?? {}) : (typeof d === 'string' ? d : '');
+}
+
 /** Walk a requirement tree, yielding every node. */
 function* walk(node) {
   if (Array.isArray(node)) { for (const n of node) yield* walk(n); return; }
@@ -176,7 +205,7 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     if (unaccounted > 0) {
       add('requirement-table-parity', 'high',
         `${unaccounted} of ${onPage} requirement tables on the catalog page were not read, so requirements are missing from this list`,
-        (meta.unconsumedHeadings ?? []).map(h => `"${h}" — this section is on the catalog page but not shown here`));
+        (meta.unconsumedHeadings ?? []).map(h => ({ key: 'unreadSection', params: { section: h } })));
     }
   } else {
     counters.tablesUnaccounted = 0;
@@ -188,26 +217,26 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
   counters.leakedMarkers = leaked;
   if (leaked) add('choose-marker-leak', 'high',
     `${leaked} requirement(s) could not be interpreted and may display incorrectly`,
-    ['A "choose N of the following" rule was left unresolved — treat the affected section as unreliable']);
+    [{ key: 'markerLeak' }]);
 
   // ── 3. Structure sanity.
   if (!sections.length && !concOpts.length) {
     add('empty-program', 'high',
       'no requirements could be read from this program at all',
-      ['The catalog page may have changed shape — treat this program as unavailable']);
+      [{ key: 'emptyProgram' }]);
   }
   const dupSections = duplicates(sections.map(s => s.title));
   counters.duplicateSectionTitles = dupSections.length;
   if (dupSections.length) {
     add('duplicate-section-titles', 'medium',
       `${dupSections.length} section name(s) appear twice, and the two get merged — which can hide a requirement`,
-      dupSections.map(t => `"${t}" appears more than once`));
+      dupSections.map(t => ({ key: 'duplicateSection', params: { title: t } })));
   }
   const dupConc = duplicates(concOpts.map(c => c.title));
   if (dupConc.length) {
     add('duplicate-concentration-titles', 'high',
       'two concentrations share a name, so one of them cannot be selected',
-      dupConc.map(t => `"${t}" is listed twice — only the first can be chosen`));
+      dupConc.map(t => ({ key: 'duplicateConc', params: { title: t } })));
   }
 
   // ── 4. Credit total.
@@ -220,11 +249,11 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     add('missing-total-credits',
       (kind === 'minor' || kind === 'certificate') ? 'info' : 'medium',
       'the catalog page states no total credit requirement',
-      ['Progress here counts requirements, not credits — check the total with your advisor']);
+      [{ key: 'noTotal' }]);
   } else if (program.totalCreditsSource === 'plan-grid') {
     add('total-from-sample-plan', 'medium',
       'the credit total was taken from the sample four-year plan, not from a stated requirement',
-      [`${total} SH is what that one sample path adds up to; the real minimum may be lower`]);
+      [{ key: 'totalFromPlan', params: { n: total } }]);
   }
 
   // ── 5. Every referenced course must exist in the catalog.
@@ -237,7 +266,7 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
       // requirements, so it must not paint a program red on its own.
       add('unknown-course', unknown.length > 3 ? 'medium' : 'info',
         `${unknown.length} course(s) required here are missing from our course catalog, so they can never be checked off`,
-        unknown.map(k => `${pretty(k)} — required by this program, but we have no record of the course`));
+        unknown.map(k => ({ key: 'unknownCourse', params: { course: pretty(k) } })));
     }
   }
 
@@ -256,8 +285,7 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
       .sort();
     counters.planUnexplained = unexplained.length;
     const ratio = 1 - unexplained.length / plan.length;
-    const why = unexplained.map(k =>
-      `${pretty(k)} — the catalog's four-year plan includes it, but no requirement here asks for it`);
+    const why = unexplained.map(k => ({ key: 'planMissingCourse', params: { course: pretty(k) } }));
     if (ratio < (policy.planCoverageHigh ?? 0.80)) {
       add('plan-witness-unaccounted', 'high',
         `${unexplained.length} of ${plan.length} courses in the catalog's own four-year plan are missing from these requirements`, why);
@@ -272,7 +300,7 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     if (expectsPlanOfStudy(kind)) {
       add('no-sample-plan', 'medium',
         'this program publishes no sample four-year plan, so our strongest check could not run',
-        ['Almost every major publishes one, so its absence here is unusual']);
+        [{ key: 'noPlanUnusual' }]);
     }
   }
 

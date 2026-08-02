@@ -50,9 +50,24 @@
           "severity": "high",
           "message": "3 of 14 courses in the catalog's own four-year plan are missing from these requirements",
           "detail": [
-            "BUSN 1101 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "BUSN 1102 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "BUSN 1103 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "BUSN 1101"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "BUSN 1102"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "BUSN 1103"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -34,8 +34,18 @@
           "severity": "info",
           "message": "2 course(s) required here are missing from our course catalog, so they can never be checked off",
           "detail": [
-            "ACCT 6201 — required by this program, but we have no record of the course",
-            "MGSC 6204 — required by this program, but we have no record of the course"
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "ACCT 6201"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "MGSC 6204"
+              }
+            }
           ],
           "overflow": 0
         }

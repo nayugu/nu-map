@@ -53,8 +53,18 @@
           "severity": "medium",
           "message": "2 of 17 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "DAMG 7370 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "INFO 6205 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "DAMG 7370"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "INFO 6205"
+              }
+            }
           ],
           "overflow": 0
         }

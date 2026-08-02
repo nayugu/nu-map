@@ -86,12 +86,42 @@
           "severity": "medium",
           "message": "6 of 50 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "PHYS 3603 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4305 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4621 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4623 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4651 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4652 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 3603"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4305"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4621"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4623"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4651"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4652"
+              }
+            }
           ],
           "overflow": 0
         }

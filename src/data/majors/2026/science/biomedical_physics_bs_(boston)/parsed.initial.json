@@ -84,12 +84,42 @@
           "severity": "medium",
           "message": "6 of 48 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "CHEM 1213 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "CHEM 1214 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "CHEM 1215 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "CHEM 1216 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 1163 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 1167 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "CHEM 1213"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "CHEM 1214"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "CHEM 1215"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "CHEM 1216"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 1163"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 1167"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -51,8 +51,18 @@
           "severity": "medium",
           "message": "2 of 15 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ARCH 2330 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "ARCH 2331 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARCH 2330"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARCH 2331"
+              }
+            }
           ],
           "overflow": 0
         }

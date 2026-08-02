@@ -46,7 +46,12 @@
           "severity": "medium",
           "message": "the credit total was taken from the sample four-year plan, not from a stated requirement",
           "detail": [
-            "32 SH is what that one sample path adds up to; the real minimum may be lower"
+            {
+              "key": "totalFromPlan",
+              "params": {
+                "n": 32
+              }
+            }
           ],
           "overflow": 0
         }

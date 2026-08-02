@@ -51,8 +51,18 @@
           "severity": "medium",
           "message": "2 of 15 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "CS 5520 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "HINF 9996 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "CS 5520"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HINF 9996"
+              }
+            }
           ],
           "overflow": 0
         }

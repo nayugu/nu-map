@@ -23,7 +23,7 @@ import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from '
 import { join, dirname, relative } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 
-import { verifyProgram, LEVELS } from './lib/major-verify.js';
+import { verifyProgram, LEVELS, detailText } from './lib/major-verify.js';
 import { impossibleSectionTitles } from './lib/major-integrity.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -87,8 +87,7 @@ export function verifyAll() {
         v.discrepancies.unshift({
           check: 'internal-satisfiability', severity: 'high',
           message: `${impossible.length} section(s) can never be completed as written`,
-          detail: impossible.slice(0, 12).map(t =>
-            `"${t}" — every course it accepts is already claimed by another requirement`),
+          detail: impossible.slice(0, 12).map(t => ({ key: 'impossibleSection', params: { title: t } })),
         });
         v.counters.impossibleSections = impossible.length;
         v.level = 'review';
@@ -193,7 +192,7 @@ function main() {
       console.log(`\n${r.id}  [${r.level}, score ${r.score}]`);
       for (const d of r.discrepancies) {
         console.log(`   ${d.severity.padEnd(6)} ${d.check}: ${d.message}`);
-        if (d.detail?.length) console.log(`          ${d.detail.join(', ')}${d.overflow ? ` …+${d.overflow}` : ''}`);
+        if (d.detail?.length) for (const x of d.detail) console.log(`            ${detailText(x)}`);
       }
     }
     if (!UPDATE && !REPORTF && !WRITE) return 0;

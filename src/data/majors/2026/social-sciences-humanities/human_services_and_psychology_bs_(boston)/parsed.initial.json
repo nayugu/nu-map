@@ -60,8 +60,18 @@
           "severity": "medium",
           "message": "2 of 24 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "HUSV 4700 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "MATH 1241 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HUSV 4700"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "MATH 1241"
+              }
+            }
           ],
           "overflow": 0
         }

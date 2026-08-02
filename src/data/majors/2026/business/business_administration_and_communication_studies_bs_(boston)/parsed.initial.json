@@ -60,8 +60,18 @@
           "severity": "medium",
           "message": "2 of 24 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "BUSN 1103 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "COMM 3409 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "BUSN 1103"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "COMM 3409"
+              }
+            }
           ],
           "overflow": 0
         }

@@ -56,9 +56,24 @@
           "severity": "medium",
           "message": "3 of 20 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "ACCT 2301 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "MISM 2301 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "SCHM 2301 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ACCT 2301"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "MISM 2301"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "SCHM 2301"
+              }
+            }
           ],
           "overflow": 0
         }

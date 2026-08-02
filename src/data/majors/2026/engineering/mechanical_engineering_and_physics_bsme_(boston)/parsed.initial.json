@@ -93,12 +93,42 @@
           "severity": "medium",
           "message": "9 of 57 courses in the catalog's four-year plan aren't accounted for here",
           "detail": [
-            "MATH 2322 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "MATH 2342 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 3603 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4115 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4305 — the catalog's four-year plan includes it, but no requirement here asks for it",
-            "PHYS 4621 — the catalog's four-year plan includes it, but no requirement here asks for it"
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "MATH 2322"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "MATH 2342"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 3603"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4115"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4305"
+              }
+            },
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "PHYS 4621"
+              }
+            }
           ],
           "overflow": 3
         }
