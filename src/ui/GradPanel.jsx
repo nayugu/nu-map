@@ -658,7 +658,12 @@ function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
         fontSize: 8, background: "transparent", color: fg,
         border: `1px solid var(--border-2)`, borderRadius: 99, padding: "1px 5px",
         cursor: "pointer", whiteSpace: "nowrap",
-        ...(isPhone ? { alignSelf: "flex-start", marginTop: 2 } : { marginLeft: 6 }),
+        // inline-block so the vertical margins actually apply — on an inline
+        // span they are ignored, and the badge sat flush against the label
+        // above and the program name below.
+        ...(isPhone
+          ? { display: "inline-block", alignSelf: "flex-start", marginTop: 5, marginBottom: 3 }
+          : { marginLeft: 6 }),
       }}
     >{text}</span>
   );
