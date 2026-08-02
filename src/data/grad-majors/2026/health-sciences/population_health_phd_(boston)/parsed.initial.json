@@ -8,12 +8,14 @@
     "tablesConsumed": 10,
     "tablesOnPage": 10,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/population-health-phd/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/population-health-phd/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

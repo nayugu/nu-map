@@ -8,6 +8,7 @@
     "tablesConsumed": 9,
     "tablesOnPage": 9,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/architecture/two-year-program-march/",
     "planOfStudyCourses": [
       "ARCH5115",
       "ARCH5210",
@@ -28,6 +29,7 @@
       "kind": "grad",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/architecture/two-year-program-march/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -41,13 +43,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 2,
+        "planUnexplainedInSubject": 2,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 13 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "2 of 13 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",

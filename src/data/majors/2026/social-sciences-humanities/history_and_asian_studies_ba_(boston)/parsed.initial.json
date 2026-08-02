@@ -8,6 +8,7 @@
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-asian-studies-ba/",
     "planOfStudyCourses": [
       "ANTH4350",
       "ASNS1150",
@@ -38,6 +39,7 @@
       "kind": "major",
       "score": 0.6,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-asian-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -51,13 +53,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 5,
+        "planUnexplainedInSubject": 5,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "5 of 23 courses in the catalog's own four-year plan are missing from these requirements",
+          "message": "5 courses in this program's own subject are in the catalog's four-year plan but required by nothing here",
           "detail": [
             {
               "key": "planMissingCourse",

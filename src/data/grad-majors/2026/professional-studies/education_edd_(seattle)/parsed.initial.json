@@ -8,12 +8,14 @@
     "tablesConsumed": 9,
     "tablesOnPage": 9,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/doctoral-degree-programs/education-edd-sea/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "grad",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/doctoral-degree-programs/education-edd-sea/",
       "sourcesAvailable": [
         "requirement-tables",
         "course-catalog"

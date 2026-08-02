@@ -8,7 +8,7 @@ Generated 2026-08-02 by `npm run data:verify`.
 > the per-page PDF is the same render as the HTML. These checks confirm we
 > parsed the catalog faithfully. They cannot confirm the catalog is right.
 
-**1017 programs** — 880 verified · 129 partial · 8 review · 0 unverified
+**1017 programs** — 868 verified · 141 partial · 8 review · 0 unverified
 
 ## Findings by root cause
 
@@ -31,9 +31,25 @@ the catalog page states no total credit requirement
 - Communication Studies, Minor — `majors/2026/arts-media-design/communication_studies_minor`
 - …and 257 more
 
-### `unknown-course` · 130 program(s) · info
+### `plan-witness-unaccounted` · 113 program(s) · medium
 
-1 course(s) required here are missing from our course catalog, so they can never be checked off
+2 of 23 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed
+
+- Architectural Studies and Design, BS (Boston) — `majors/2026/arts-media-design/architectural_studies_and_design_bs_(boston)`
+- Architectural Studies, BS (Boston) — `majors/2026/arts-media-design/architectural_studies_bs_(boston)`
+- Architecture and English, BS (Boston) — `majors/2026/arts-media-design/architecture_and_english_bs_(boston)`
+- Architecture, BS (Boston) — `majors/2026/arts-media-design/architecture_bs_(boston)`
+- Communication Studies and Speech-Language Pathology and Audiology, BS (Boston) — `majors/2026/arts-media-design/communication_studies_and_speech-language_pathology_and_audiology_bs_(boston)`
+- Design and Public Health, BS (Boston) — `majors/2026/arts-media-design/design_and_public_health_bs_(boston)`
+- Design and Theatre, BS (Boston) — `majors/2026/arts-media-design/design_and_theatre_bs_(boston)`
+- Business Administration and Communication Studies, BS (Boston) — `majors/2026/business/business_administration_and_communication_studies_bs_(boston)`
+- Business Administration and Communication Studies, BS (Oakland) — `majors/2026/business/business_administration_and_communication_studies_bs_(oakland)`
+- Business Administration and Criminal Justice, BS — `majors/2026/business/business_administration_and_criminal_justice_bs`
+- …and 103 more
+
+### `unknown-course` · 72 program(s) · info
+
+1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner
 
 - Design and Public Health, BS (Boston) — `majors/2026/arts-media-design/design_and_public_health_bs_(boston)`
 - Game Design and Music with Concentration in Music Technology, BS (Boston) — `majors/2026/arts-media-design/game_design_and_music_with_concentration_in_music_technology_bs_(boston)`
@@ -44,24 +60,8 @@ the catalog page states no total credit requirement
 - Music with Concentration in Music Technology, BS (Boston) — `majors/2026/arts-media-design/music_with_concentration_in_music_technology_bs_(boston)`
 - Business Administration and Public Health, BS (Boston) — `majors/2026/business/business_administration_and_public_health_bs_(boston)`
 - Business Administration and Public Health, BS (Oakland) — `majors/2026/business/business_administration_and_public_health_bs_(oakland)`
-- Computer Science and Behavioral Neuroscience, BS (Boston) — `majors/2026/computer-information-science/computer_science_and_behavioral_neuroscience_bs_(boston)`
-- …and 120 more
-
-### `plan-witness-unaccounted` · 75 program(s) · medium
-
-2 of 23 courses in the catalog's four-year plan aren't accounted for here
-
-- Architectural Studies and Design, BS (Boston) — `majors/2026/arts-media-design/architectural_studies_and_design_bs_(boston)`
-- Architectural Studies, BS (Boston) — `majors/2026/arts-media-design/architectural_studies_bs_(boston)`
-- Architecture and English, BS (Boston) — `majors/2026/arts-media-design/architecture_and_english_bs_(boston)`
-- Architecture, BS (Boston) — `majors/2026/arts-media-design/architecture_bs_(boston)`
-- Communication Studies and Speech-Language Pathology and Audiology, BS (Boston) — `majors/2026/arts-media-design/communication_studies_and_speech-language_pathology_and_audiology_bs_(boston)`
-- Design and Theatre, BS (Boston) — `majors/2026/arts-media-design/design_and_theatre_bs_(boston)`
-- Business Administration and Communication Studies, BS (Boston) — `majors/2026/business/business_administration_and_communication_studies_bs_(boston)`
-- Business Administration and Communication Studies, BS (Oakland) — `majors/2026/business/business_administration_and_communication_studies_bs_(oakland)`
-- Business Administration, BSBA (Boston) — `majors/2026/business/business_administration_bsba_(boston)`
-- Business Administration, BSBA (Oakland) — `majors/2026/business/business_administration_bsba_(oakland)`
-- …and 65 more
+- Computer Science and Design, BS (Boston) — `majors/2026/computer-information-science/computer_science_and_design_bs_(boston)`
+- …and 62 more
 
 ### `no-sample-plan` · 9 program(s) · medium
 

@@ -1,13 +1,14 @@
 {
   "name": "Criminal Justice and Public Health, BS (Boston)",
   "metadata": {
-    "verified": true,
+    "verified": false,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 9,
     "tablesConsumed": 9,
     "tablesOnPage": 9,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/criminology-criminal-justice/criminal-justice-public-health-bs-bos/",
     "planOfStudyCourses": [
       "BIOL1111",
       "BIOL1112",
@@ -43,10 +44,11 @@
       "PSYC1101"
     ],
     "verification": {
-      "level": "verified",
+      "level": "partial",
       "kind": "major",
-      "score": 0.98,
+      "score": 0.83,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/criminology-criminal-justice/criminal-justice-public-health-bs-bos/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -60,13 +62,28 @@
         "zeroTotal": 0,
         "unknownCourses": 1,
         "planUnexplained": 1,
+        "planUnexplainedInSubject": 1,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 32 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
+          "detail": [
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "HSCI 2000"
+              }
+            }
+          ],
+          "overflow": 0
+        },
+        {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
+          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
           "detail": [
             {
               "key": "unknownCourse",

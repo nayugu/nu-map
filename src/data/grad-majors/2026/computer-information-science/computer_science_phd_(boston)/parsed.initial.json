@@ -8,6 +8,7 @@
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/computer-science-phd/",
     "planOfStudyCourses": [
       "CS9990",
       "CS9991",
@@ -18,6 +19,7 @@
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/computer-science-phd/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -31,6 +33,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []
@@ -835,7 +838,7 @@
               "idRangeEnd": 5850,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "CS",
                   "classId": 5340
                 }

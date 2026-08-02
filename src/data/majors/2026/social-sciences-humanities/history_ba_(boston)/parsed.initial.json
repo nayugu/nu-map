@@ -8,6 +8,7 @@
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-ba/",
     "planOfStudyCourses": [
       "ENGW1111",
       "HIST1000",
@@ -21,10 +22,11 @@
       "MATH1215"
     ],
     "verification": {
-      "level": "review",
+      "level": "partial",
       "kind": "major",
-      "score": 0.6,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-ba/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -38,13 +40,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 3,
+        "planUnexplainedInSubject": 2,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "high",
-          "message": "3 of 10 courses in the catalog's own four-year plan are missing from these requirements",
+          "severity": "medium",
+          "message": "2 of 10 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",
@@ -59,7 +62,7 @@
               }
             },
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
                 "course": "MATH 1215"
               }

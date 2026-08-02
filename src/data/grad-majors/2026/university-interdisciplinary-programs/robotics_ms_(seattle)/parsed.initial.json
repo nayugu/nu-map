@@ -8,12 +8,14 @@
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/university-interdisciplinary-programs/robotics-ms-sea/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/university-interdisciplinary-programs/robotics-ms-sea/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

@@ -8,12 +8,14 @@
     "tablesConsumed": 14,
     "tablesOnPage": 14,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/mathematics/mathematics-phd/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/mathematics/mathematics-phd/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

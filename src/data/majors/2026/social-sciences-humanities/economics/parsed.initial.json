@@ -8,12 +8,14 @@
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/economics/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.7,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/economics/",
       "sourcesAvailable": [
         "requirement-tables",
         "course-catalog"

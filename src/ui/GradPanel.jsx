@@ -633,14 +633,30 @@ function VerificationPill({ verification, verified, t }) {
              : level === "partial"  ? t("grad.verify.partial")
              : t("grad.verify.review");
 
+  // Clicking opens the catalog page this program was read from. The badge's
+  // whole claim is "we copied the catalog correctly", so the natural next
+  // question is "let me see the catalog" — and an advisor checking a
+  // discrepancy needs the source, not a description of it.
+  const href = verification?.sourceUrl;
+
+  const pill = (
+    <span
+      onMouseEnter={e => setHover(e.currentTarget.getBoundingClientRect())}
+      onMouseLeave={() => setHover(null)}
+      style={{ marginLeft: 6, fontSize: 8, background: style.bg, color: style.fg,
+        border: `1px solid ${style.bd}`, borderRadius: 99, padding: "1px 5px",
+        cursor: href ? "pointer" : "help" }}
+    >{text}{href && <span style={{ marginLeft: 3, opacity: 0.7 }}>↗</span>}</span>
+  );
+
   return (
     <>
-      <span
-        onMouseEnter={e => setHover(e.currentTarget.getBoundingClientRect())}
-        onMouseLeave={() => setHover(null)}
-        style={{ marginLeft: 6, fontSize: 8, background: style.bg, color: style.fg,
-          border: `1px solid ${style.bd}`, borderRadius: 99, padding: "1px 5px", cursor: "help" }}
-      >{text}</span>
+      {href
+        ? <a href={href} target="_blank" rel="noopener noreferrer"
+             // The card header toggles expand/collapse; the link must not do both.
+             onClick={e => e.stopPropagation()}
+             style={{ textDecoration: "none", display: "inline-flex", alignItems: "center" }}>{pill}</a>
+        : pill}
 
       {/* Opens on mouseenter with no delay. The native `title` waits about a
           second, which for a badge whose entire job is to explain itself meant

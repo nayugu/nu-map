@@ -8,12 +8,14 @@
     "tablesConsumed": 17,
     "tablesOnPage": 17,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-business-administration/mba-evening-part-time-program/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-business-administration/mba-evening-part-time-program/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -32,7 +34,7 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
+          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
           "detail": [
             {
               "key": "unknownCourse",

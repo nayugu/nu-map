@@ -120,13 +120,23 @@ export function detailText(d) {
   return f ? f(d.params ?? {}) : (typeof d === 'string' ? d : '');
 }
 
-/** Walk a requirement tree, yielding every node. */
-function* walk(node) {
-  if (Array.isArray(node)) { for (const n of node) yield* walk(n); return; }
+/**
+ * Walk a requirement tree, yielding every node.
+ *
+ * `exceptions` are traversed only when asked for. A RANGE's exceptions are
+ * courses the range EXCLUDES — "MATH 3001 to MATH 4999 but not MATH 4000",
+ * "DS 2500 or higher, except DS 4900" — so counting them as required inverts
+ * their meaning. It also produced nonsense findings: CS+Math was reported as
+ * requiring MATH 4000 and DS 4900 and missing both, when the catalog had
+ * explicitly ruled them out.
+ */
+function* walk(node, { exceptions = false } = {}) {
+  if (Array.isArray(node)) { for (const n of node) yield* walk(n, { exceptions }); return; }
   if (!node || typeof node !== 'object') return;
   yield node;
-  for (const k of ['requirements', 'courses', 'exceptions']) {
-    if (node[k]) yield* walk(node[k]);
+  const keys = exceptions ? ['requirements', 'courses', 'exceptions'] : ['requirements', 'courses'];
+  for (const k of keys) {
+    if (node[k]) yield* walk(node[k], { exceptions });
   }
 }
 
@@ -142,6 +152,27 @@ export function courseKeysOf(program) {
   }
   return keys;
 }
+
+/**
+ * The subjects a program's own requirements draw on.
+ *
+ * Used to tell a dropped requirement from a suggestion. A department filling a
+ * free-elective slot in its sample plan reaches for whatever it likes; a
+ * requirement we failed to read is overwhelmingly in the program's own
+ * discipline. RANGE nodes count too — a MATH range makes MATH in-discipline.
+ */
+export function requirementSubjects(program) {
+  const subs = new Set();
+  const roots = [
+    ...(program.requirementSections ?? []),
+    ...(program.concentrations?.concentrationOptions ?? []),
+  ];
+  for (const node of walk(roots)) {
+    if ((node.type === 'COURSE' || node.type === 'RANGE') && node.subject) subs.add(node.subject);
+  }
+  return subs;
+}
+
 
 /** RANGE nodes, so plan-of-study courses matched by a pool count as explained. */
 export function rangesOf(program) {
@@ -261,11 +292,11 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
     const unknown = [...courseKeysOf(program)].filter(k => !courseIndex.has(k)).sort();
     counters.unknownCourses = unknown.length;
     if (unknown.length) {
-      // Usually our course catalog missing a subject (LAW, MUST) rather than
-      // the program being wrong — real, but not evidence of missing
-      // requirements, so it must not paint a program red on its own.
+      // This is a gap in OUR course list, not a defect in the program, and it
+      // is reported as such: the consequence a user can act on is that the
+      // requirement will never tick off in the planner. Never red on its own.
       add('unknown-course', unknown.length > 3 ? 'medium' : 'info',
-        `${unknown.length} course(s) required here are missing from our course catalog, so they can never be checked off`,
+        `${unknown.length} course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner`,
         unknown.map(k => ({ key: 'unknownCourse', params: { course: pretty(k) } })));
     }
   }
@@ -284,14 +315,53 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
       .filter(k => !known.has(k) && !excused(k) && !matchedByRange(k, ranges))
       .sort();
     counters.planUnexplained = unexplained.length;
-    const ratio = 1 - unexplained.length / plan.length;
-    const why = unexplained.map(k => ({ key: 'planMissingCourse', params: { course: pretty(k) } }));
-    if (ratio < (policy.planCoverageHigh ?? 0.80)) {
+    // ── Grade by attributability, not by ratio ────────────────────────────
+    //
+    // A sample plan is an EXAMPLE. A course in it that nothing requires has two
+    // very different explanations, and a raw ratio cannot tell them apart:
+    //
+    //   (a) we failed to read a requirement           — our defect
+    //   (b) the department suggested a course that     — perfectly correct
+    //       isn't required: a free elective, one pick
+    //       from an open pool, a recommended extra
+    //
+    // Measured across the corpus, 41 of 75 flagged programs had EVERY unmatched
+    // course outside the program's own discipline — POLS BA's were ENVR, the
+    // physics degrees' were CHEM, and MATH 1215 (a common NUpath quantitative
+    // pick) recurred across unrelated majors. Calling those red asserted a
+    // fault we cannot demonstrate.
+    //
+    // Ratio was also a poor discriminator on its own: history_ba was red at
+    // 3/10 with only 2 in-discipline, while physics_and_music sat at medium
+    // with all 6 unmatched courses in-discipline.
+    //
+    // So only in-discipline courses count against a program. This is safe
+    // because requirement-table-parity independently catches an actually
+    // dropped table — including one full of out-of-subject supporting courses
+    // — and that check IS attributable to us and IS graded high.
+    const subs = requirementSubjects(program);
+    const subjOf = k => /^([A-Z]+)/.exec(k)?.[1];
+    const inSubject  = unexplained.filter(k => subs.has(subjOf(k)));
+    const outSubject = unexplained.filter(k => !subs.has(subjOf(k)));
+    counters.planUnexplainedInSubject = inSubject.length;
+
+    const why = [
+      ...inSubject.map(k  => ({ key: 'planMissingCourse',  params: { course: pretty(k) } })),
+      ...outSubject.map(k => ({ key: 'planLikelyElective', params: { course: pretty(k) } })),
+    ];
+
+    const heavy = inSubject.length >= (policy.planInSubjectHigh ?? 5)
+               || inSubject.length / plan.length >= (policy.planInSubjectHighRatio ?? 0.25);
+
+    if (inSubject.length && heavy) {
       add('plan-witness-unaccounted', 'high',
-        `${unexplained.length} of ${plan.length} courses in the catalog's own four-year plan are missing from these requirements`, why);
-    } else if (ratio < (policy.planCoverageMedium ?? 0.95)) {
+        `${inSubject.length} courses in this program's own subject are in the catalog's four-year plan but required by nothing here`, why);
+    } else if (inSubject.length) {
       add('plan-witness-unaccounted', 'medium',
-        `${unexplained.length} of ${plan.length} courses in the catalog's four-year plan aren't accounted for here`, why);
+        `${inSubject.length} of ${plan.length} courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed`, why);
+    } else if (outSubject.length) {
+      add('plan-witness-unaccounted', 'info',
+        `${outSubject.length} course(s) in the four-year plan aren't required here; all sit outside this program's subjects, so they read as electives`, why);
     }
   } else {
     counters.planUnexplained = 0;

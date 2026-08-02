@@ -8,6 +8,7 @@
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-bsba-oak/",
     "planOfStudyCourses": [
       "ACCT1201",
       "BUSN1101",
@@ -25,10 +26,11 @@
       "STRT4501"
     ],
     "verification": {
-      "level": "review",
+      "level": "partial",
       "kind": "major",
-      "score": 0.6,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-bsba-oak/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -42,13 +44,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 3,
+        "planUnexplainedInSubject": 3,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "high",
-          "message": "3 of 14 courses in the catalog's own four-year plan are missing from these requirements",
+          "severity": "medium",
+          "message": "3 of 14 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",

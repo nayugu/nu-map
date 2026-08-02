@@ -8,12 +8,14 @@
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/software-engineering-systems-ms/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/software-engineering-systems-ms/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

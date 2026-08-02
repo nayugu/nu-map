@@ -8,6 +8,7 @@
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/physics/physics-music-bs/",
     "planOfStudyCourses": [
       "EEAM2000",
       "EESC2000",
@@ -56,10 +57,11 @@
       "PHYS5318"
     ],
     "verification": {
-      "level": "partial",
+      "level": "review",
       "kind": "major",
-      "score": 0.83,
+      "score": 0.58,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/physics/physics-music-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -73,13 +75,14 @@
         "zeroTotal": 0,
         "unknownCourses": 1,
         "planUnexplained": 6,
+        "planUnexplainedInSubject": 6,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "medium",
-          "message": "6 of 45 courses in the catalog's four-year plan aren't accounted for here",
+          "severity": "high",
+          "message": "6 courses in this program's own subject are in the catalog's four-year plan but required by nothing here",
           "detail": [
             {
               "key": "planMissingCourse",
@@ -123,7 +126,7 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
+          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
           "detail": [
             {
               "key": "unknownCourse",

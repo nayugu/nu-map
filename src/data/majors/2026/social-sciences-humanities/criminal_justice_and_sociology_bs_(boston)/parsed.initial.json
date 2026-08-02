@@ -1,13 +1,14 @@
 {
   "name": "Criminal Justice and Sociology, BS (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/criminology-criminal-justice/criminal-justice-sociology-bs/",
     "planOfStudyCourses": [
       "CRIM1000",
       "CRIM1100",
@@ -30,10 +31,11 @@
       "SOCL4600"
     ],
     "verification": {
-      "level": "partial",
+      "level": "verified",
       "kind": "major",
-      "score": 0.85,
+      "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/criminology-criminal-justice/criminal-justice-sociology-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -47,16 +49,17 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "medium",
-          "message": "1 of 19 courses in the catalog's four-year plan aren't accounted for here",
+          "severity": "info",
+          "message": "1 course(s) in the four-year plan aren't required here; all sit outside this program's subjects, so they read as electives",
           "detail": [
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
                 "course": "MATH 1215"
               }

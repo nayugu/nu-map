@@ -8,12 +8,14 @@
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/chemistry-chemical-biology/chemistry-minor/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/chemistry-chemical-biology/chemistry-minor/",
       "sourcesAvailable": [
         "requirement-tables",
         "course-catalog"

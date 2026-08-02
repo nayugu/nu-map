@@ -8,6 +8,7 @@
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/applied-behavior-analysis-ms/",
     "planOfStudyCourses": [
       "CAEP6326",
       "CAEP6327",
@@ -27,6 +28,7 @@
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/applied-behavior-analysis-ms/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -40,6 +42,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

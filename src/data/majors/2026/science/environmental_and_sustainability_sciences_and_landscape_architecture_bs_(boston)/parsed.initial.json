@@ -8,6 +8,7 @@
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/marine-environmental/environmental-sustainability-sciences-landscape-architecture-bs/",
     "planOfStudyCourses": [
       "ARCH1110",
       "ARCH1120",
@@ -33,6 +34,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/marine-environmental/environmental-sustainability-sciences-landscape-architecture-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -46,6 +48,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

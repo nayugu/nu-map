@@ -8,12 +8,14 @@
     "tablesConsumed": 9,
     "tablesOnPage": 9,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/design-bfa/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/design-bfa/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

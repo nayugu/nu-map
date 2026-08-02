@@ -8,6 +8,7 @@
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/marine-environmental-sciences/marine-biology-three-seas-ms/",
     "planOfStudyCourses": [
       "EEMB5303",
       "EEMB5504",
@@ -33,6 +34,7 @@
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/marine-environmental-sciences/marine-biology-three-seas-ms/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -46,6 +48,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

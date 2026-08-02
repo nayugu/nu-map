@@ -1,13 +1,14 @@
 {
   "name": "Spanish and Linguistics, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-linguistics-ba-bos/",
     "planOfStudyCourses": [
       "CLTR1000",
       "CLTR1120",
@@ -27,10 +28,11 @@
       "SPNS3602"
     ],
     "verification": {
-      "level": "partial",
+      "level": "verified",
       "kind": "major",
-      "score": 0.85,
+      "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-linguistics-ba-bos/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -44,16 +46,17 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "medium",
-          "message": "1 of 16 courses in the catalog's four-year plan aren't accounted for here",
+          "severity": "info",
+          "message": "1 course(s) in the four-year plan aren't required here; all sit outside this program's subjects, so they read as electives",
           "detail": [
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
                 "course": "COOP 3948"
               }

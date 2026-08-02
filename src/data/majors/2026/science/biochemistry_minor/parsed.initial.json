@@ -8,12 +8,14 @@
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/biochemistry-minor/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/biochemistry-minor/",
       "sourcesAvailable": [
         "requirement-tables",
         "course-catalog"

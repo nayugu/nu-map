@@ -8,6 +8,7 @@
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-economics-bs-oak/",
     "planOfStudyCourses": [
       "CS1200",
       "CS1210",
@@ -48,8 +49,9 @@
     "verification": {
       "level": "verified",
       "kind": "major",
-      "score": 0.98,
+      "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-economics-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -61,26 +63,12 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
-      "discrepancies": [
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "DS 4900"
-              }
-            }
-          ],
-          "overflow": 0
-        }
-      ]
+      "discrepancies": []
     }
   },
   "totalCreditsRequired": 133,
@@ -258,7 +246,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "CS",
                   "classId": 5010
                 }
@@ -271,7 +259,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "CY",
                   "classId": 4930
                 }
@@ -284,7 +272,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "DS",
                   "classId": 4900
                 }

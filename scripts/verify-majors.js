@@ -205,6 +205,8 @@ function main() {
       program.metadata.verified = r.level === 'verified';
       program.metadata.verification = {
         level: r.level, kind: r.kind, score: r.score, checkedAt: new Date().toISOString().slice(0, 10),
+        // Surfaced so the badge can link straight to the page it was read from.
+        ...(program.metadata?.sourceUrl ? { sourceUrl: program.metadata.sourceUrl } : {}),
         sourcesAvailable: r.sourcesAvailable, counters: r.counters,
         // Keep `detail` — it names the specific courses or titles that caused
         // the finding, which is what makes the popover actionable rather than

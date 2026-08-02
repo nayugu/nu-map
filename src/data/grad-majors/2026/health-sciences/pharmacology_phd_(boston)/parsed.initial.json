@@ -8,6 +8,7 @@
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/pharmacology-phd/",
     "planOfStudyCourses": [
       "PHSC5100",
       "PHSC5102",
@@ -32,6 +33,7 @@
       "kind": "grad",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/pharmacology-phd/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -45,13 +47,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 2,
+        "planUnexplainedInSubject": 2,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 17 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "2 of 17 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",

@@ -1,13 +1,14 @@
 {
   "name": "Master of Architecture—Three-Year Program (Boston)",
   "metadata": {
-    "verified": true,
+    "verified": false,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 9,
     "tablesConsumed": 9,
     "tablesOnPage": 9,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/architecture/three-year-program-march/",
     "planOfStudyCourses": [
       "ARCH2240",
       "ARCH2340",
@@ -33,10 +34,11 @@
       "ARCH7430"
     ],
     "verification": {
-      "level": "verified",
+      "level": "partial",
       "kind": "grad",
-      "score": 1,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/architecture/three-year-program-march/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -50,9 +52,25 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
+        "planUnexplainedInSubject": 1,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 22 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
+          "detail": [
+            {
+              "key": "planMissingCourse",
+              "params": {
+                "course": "ARCH 2341"
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
     }
   },
   "totalCreditsRequired": 100,

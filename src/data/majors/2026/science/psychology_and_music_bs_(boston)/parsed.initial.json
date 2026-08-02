@@ -8,6 +8,7 @@
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/psychology/psychology-music-bs/",
     "planOfStudyCourses": [
       "EEAM2000",
       "EESC2000",
@@ -37,6 +38,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/psychology/psychology-music-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -50,6 +52,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

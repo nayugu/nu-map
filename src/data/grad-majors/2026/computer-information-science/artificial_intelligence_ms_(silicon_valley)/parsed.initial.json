@@ -8,12 +8,14 @@
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/artificial-intelligence-ms-sjo/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/artificial-intelligence-ms-sjo/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

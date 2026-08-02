@@ -8,6 +8,7 @@
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/bioengineering/bioengineering-biochemistry-bsbioe/",
     "planOfStudyCourses": [
       "BIOE2350",
       "BIOE2355",
@@ -64,6 +65,7 @@
       "kind": "major",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/bioengineering/bioengineering-biochemistry-bsbioe/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -77,13 +79,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 4,
+        "planUnexplainedInSubject": 4,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "4 of 49 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "4 of 49 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",

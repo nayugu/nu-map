@@ -8,6 +8,7 @@
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-criminal-justice-ba/",
     "planOfStudyCourses": [
       "CRIM1100",
       "CRIM1110",
@@ -25,6 +26,7 @@
       "kind": "major",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-criminal-justice-ba/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -38,13 +40,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
+        "planUnexplainedInSubject": 1,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "1 of 10 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "1 of 10 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",

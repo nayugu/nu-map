@@ -8,12 +8,14 @@
     "tablesConsumed": 9,
     "tablesOnPage": 9,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/organizational-leadership-ms/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "grad",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/organizational-leadership-ms/",
       "sourcesAvailable": [
         "requirement-tables",
         "course-catalog"

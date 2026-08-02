@@ -8,6 +8,7 @@
     "tablesConsumed": 10,
     "tablesOnPage": 10,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/architecture/three-year-program-advanced-degree-entrance-march/",
     "planOfStudyCourses": [
       "ARCH2240",
       "ARCH2340",
@@ -37,6 +38,7 @@
       "kind": "grad",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/architecture/three-year-program-advanced-degree-entrance-march/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -50,13 +52,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 3,
+        "planUnexplainedInSubject": 3,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 22 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "3 of 22 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",

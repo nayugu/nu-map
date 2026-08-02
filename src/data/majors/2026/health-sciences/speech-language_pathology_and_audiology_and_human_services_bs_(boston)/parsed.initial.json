@@ -8,6 +8,7 @@
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/clinical-rehabilitation-sciences/speech-language-pathology-audiology-human-services-bs/",
     "planOfStudyCourses": [
       "BIOL2217",
       "BIOL2218",
@@ -54,6 +55,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/clinical-rehabilitation-sciences/speech-language-pathology-audiology-human-services-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -67,6 +69,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

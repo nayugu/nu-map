@@ -8,6 +8,7 @@
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-bs-oak/",
     "planOfStudyCourses": [
       "BIOL1111",
       "BIOL1112",
@@ -31,6 +32,7 @@
       "kind": "major",
       "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -44,13 +46,14 @@
         "zeroTotal": 0,
         "unknownCourses": 1,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
+          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
           "detail": [
             {
               "key": "unknownCourse",

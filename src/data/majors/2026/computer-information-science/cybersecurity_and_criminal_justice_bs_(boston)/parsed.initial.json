@@ -8,6 +8,7 @@
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/cybersecurity-criminal-justice-bs/",
     "planOfStudyCourses": [
       "CRIM1100",
       "CRIM1110",
@@ -47,6 +48,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/cybersecurity-criminal-justice-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -60,6 +62,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

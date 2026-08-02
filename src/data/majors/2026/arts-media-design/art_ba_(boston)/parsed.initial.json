@@ -8,6 +8,7 @@
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/art-ba/",
     "planOfStudyCourses": [
       "ARTD4530",
       "ARTF1000",
@@ -24,6 +25,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/art-ba/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -37,6 +39,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

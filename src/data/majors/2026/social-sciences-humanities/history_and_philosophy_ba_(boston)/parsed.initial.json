@@ -8,6 +8,7 @@
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-philosophy-ba/",
     "planOfStudyCourses": [
       "ENGW1111",
       "HIST1000",
@@ -25,6 +26,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-philosophy-ba/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -38,6 +40,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

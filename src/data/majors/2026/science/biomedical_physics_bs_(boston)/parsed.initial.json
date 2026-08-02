@@ -8,6 +8,7 @@
     "tablesConsumed": 2,
     "tablesOnPage": 3,
     "tablesExcluded": 1,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/physics/biomedical-physics-bs/",
     "planOfStudyCourses": [
       "BIOL1111",
       "BIOL1112",
@@ -59,10 +60,11 @@
       "PHYS5318"
     ],
     "verification": {
-      "level": "partial",
+      "level": "review",
       "kind": "major",
-      "score": 0.85,
+      "score": 0.6,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/physics/biomedical-physics-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -76,13 +78,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 6,
+        "planUnexplainedInSubject": 6,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "medium",
-          "message": "6 of 48 courses in the catalog's four-year plan aren't accounted for here",
+          "severity": "high",
+          "message": "6 courses in this program's own subject are in the catalog's four-year plan but required by nothing here",
           "detail": [
             {
               "key": "planMissingCourse",

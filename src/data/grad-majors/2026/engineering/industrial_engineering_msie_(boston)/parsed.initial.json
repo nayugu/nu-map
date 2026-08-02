@@ -8,12 +8,14 @@
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/industrial-engineering-msie/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/industrial-engineering-msie/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

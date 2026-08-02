@@ -1,13 +1,14 @@
 {
   "name": "Data Science and Biochemistry, BS (Boston)",
   "metadata": {
-    "verified": true,
+    "verified": false,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-biochemistry-bs/",
     "planOfStudyCourses": [
       "BINF6310",
       "BIOC1000",
@@ -51,10 +52,11 @@
       "MATH1342"
     ],
     "verification": {
-      "level": "verified",
+      "level": "partial",
       "kind": "major",
-      "score": 0.98,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-biochemistry-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -66,20 +68,21 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 1,
+        "planUnexplainedInSubject": 1,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
+          "check": "plan-witness-unaccounted",
+          "severity": "medium",
+          "message": "1 of 40 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
-              "key": "unknownCourse",
+              "key": "planMissingCourse",
               "params": {
-                "course": "DS 4900"
+                "course": "CHEM 1163"
               }
             }
           ],
@@ -280,7 +283,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "CS",
                   "classId": 5010
                 }
@@ -293,7 +296,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "CY",
                   "classId": 4930
                 }
@@ -306,7 +309,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "DS",
                   "classId": 4900
                 }

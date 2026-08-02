@@ -8,12 +8,14 @@
     "tablesConsumed": 2,
     "tablesOnPage": 2,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/cross-cultural-communication-graduate-certificate/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "certificate",
       "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/cross-cultural-communication-graduate-certificate/",
       "sourcesAvailable": [
         "requirement-tables",
         "course-catalog"

@@ -8,6 +8,7 @@
     "tablesConsumed": 8,
     "tablesOnPage": 8,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/public-health-sociology-ba/",
     "planOfStudyCourses": [
       "ANTH2305",
       "EESH2000",
@@ -37,6 +38,7 @@
       "kind": "major",
       "score": 0.83,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/public-health-sociology-ba/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -50,24 +52,25 @@
         "zeroTotal": 0,
         "unknownCourses": 1,
         "planUnexplained": 2,
+        "planUnexplainedInSubject": 1,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "2 of 22 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "1 of 22 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",
               "params": {
-                "course": "ANTH 2305"
+                "course": "HSCI 2000"
               }
             },
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
-                "course": "HSCI 2000"
+                "course": "ANTH 2305"
               }
             }
           ],
@@ -76,7 +79,7 @@
         {
           "check": "unknown-course",
           "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
+          "message": "1 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
           "detail": [
             {
               "key": "unknownCourse",

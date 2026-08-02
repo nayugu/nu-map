@@ -8,12 +8,14 @@
     "tablesConsumed": 8,
     "tablesOnPage": 8,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/biotechnology-ms-tor/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/biotechnology-ms-tor/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

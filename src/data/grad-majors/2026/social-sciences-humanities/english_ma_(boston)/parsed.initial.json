@@ -8,12 +8,14 @@
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/english/english-ma/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/english/english-ma/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",

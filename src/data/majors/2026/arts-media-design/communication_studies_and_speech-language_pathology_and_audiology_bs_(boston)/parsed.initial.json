@@ -8,6 +8,7 @@
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/communication-studies-speech-language-pathology-bs/",
     "planOfStudyCourses": [
       "BIOL2217",
       "BIOL2218",
@@ -47,6 +48,7 @@
       "kind": "major",
       "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/communication-studies-speech-language-pathology-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -60,13 +62,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 3,
+        "planUnexplainedInSubject": 2,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 32 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "2 of 32 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",
@@ -81,7 +84,7 @@
               }
             },
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
                 "course": "PHIL 1165"
               }

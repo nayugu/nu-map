@@ -8,6 +8,7 @@
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-bs/",
     "planOfStudyCourses": [
       "ENGW1111",
       "HIST1000",
@@ -25,6 +26,7 @@
       "kind": "major",
       "score": 0.6,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -38,13 +40,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 3,
+        "planUnexplainedInSubject": 3,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "high",
-          "message": "3 of 10 courses in the catalog's own four-year plan are missing from these requirements",
+          "message": "3 courses in this program's own subject are in the catalog's four-year plan but required by nothing here",
           "detail": [
             {
               "key": "planMissingCourse",

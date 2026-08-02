@@ -1,13 +1,14 @@
 {
   "name": "Political Science, BA (Boston)",
   "metadata": {
-    "verified": false,
+    "verified": true,
     "lastEdited": "8/2/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
     "tablesOnPage": 11,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-ba/",
     "planOfStudyCourses": [
       "EESH2000",
       "ENGW1111",
@@ -25,10 +26,11 @@
       "POLS4703"
     ],
     "verification": {
-      "level": "review",
+      "level": "verified",
       "kind": "major",
-      "score": 0.6,
+      "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-ba/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -42,28 +44,29 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 3,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "high",
-          "message": "3 of 14 courses in the catalog's own four-year plan are missing from these requirements",
+          "severity": "info",
+          "message": "3 course(s) in the four-year plan aren't required here; all sit outside this program's subjects, so they read as electives",
           "detail": [
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
                 "course": "ENVR 3300"
               }
             },
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
                 "course": "ENVR 3301"
               }
             },
             {
-              "key": "planMissingCourse",
+              "key": "planLikelyElective",
               "params": {
                 "course": "MATH 1215"
               }

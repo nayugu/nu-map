@@ -8,6 +8,7 @@
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-ecology-evolutionary-biology-bs/",
     "planOfStudyCourses": [
       "BIOL2301",
       "BIOL2302",
@@ -52,8 +53,9 @@
     "verification": {
       "level": "partial",
       "kind": "major",
-      "score": 0.83,
+      "score": 0.85,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-ecology-evolutionary-biology-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -65,15 +67,16 @@
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
         "zeroTotal": 0,
-        "unknownCourses": 1,
+        "unknownCourses": 0,
         "planUnexplained": 3,
+        "planUnexplainedInSubject": 3,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
-          "message": "3 of 39 courses in the catalog's four-year plan aren't accounted for here",
+          "message": "3 of 39 courses in the catalog's four-year plan aren't required by anything here — they may be electives, or a requirement we missed",
           "detail": [
             {
               "key": "planMissingCourse",
@@ -91,20 +94,6 @@
               "key": "planMissingCourse",
               "params": {
                 "course": "CHEM 1213"
-              }
-            }
-          ],
-          "overflow": 0
-        },
-        {
-          "check": "unknown-course",
-          "severity": "info",
-          "message": "1 course(s) required here are missing from our course catalog, so they can never be checked off",
-          "detail": [
-            {
-              "key": "unknownCourse",
-              "params": {
-                "course": "DS 4900"
               }
             }
           ],
@@ -305,7 +294,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "CS",
                   "classId": 5010
                 }
@@ -318,7 +307,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "CY",
                   "classId": 4930
                 }
@@ -331,7 +320,7 @@
               "idRangeEnd": 9999,
               "exceptions": [
                 {
-                  "type": "COURSE",
+                  "type": "EXCLUDE",
                   "subject": "DS",
                   "classId": 4900
                 }

@@ -1,8 +1,5 @@
 {
   "_readme": "Tolerances and allowlists for scripts/verify-majors.js. Data, not code, so tuning is reviewable in a diff.",
-  "planCoverageHigh": 0.8,
-  "planCoverageMedium": 0.95,
-  "_planCoverage": "Fraction of the Sample Plan of Study's courses that must be explained by parsed requirements. Below 'high' is a strong signal that requirement tables were dropped. Never inverted: absence of a requirement from the plan means nothing, because the plan picks one branch of every choice.",
   "universitywide": [
     "ENGW1102",
     "ENGW1110",
@@ -32,5 +29,8 @@
     "^[A-Z]{2,6}1990$",
     "^[A-Z]{2,6}2990$"
   ],
-  "_universitywidePatterns": "Regex forms, applied to the same effect as the literal list. <SUBJ>1000 is the first-year seminar every college runs under its own subject code, EE**#### are the Experiential Learning courses, and <SUBJ>1990/2990 are transfer-credit placeholders. All appear in sample plans but are satisfied through Universitywide blocks the program pages link to rather than enumerate."
+  "_universitywidePatterns": "Regex forms, applied to the same effect as the literal list. <SUBJ>1000 is the first-year seminar every college runs under its own subject code, EE**#### are the Experiential Learning courses, and <SUBJ>1990/2990 are transfer-credit placeholders. All appear in sample plans but are satisfied through Universitywide blocks the program pages link to rather than enumerate.",
+  "planInSubjectHigh": 5,
+  "planInSubjectHighRatio": 0.25,
+  "_planInSubject": "A sample plan is an example, so a course in it that nothing requires may simply be a suggestion. Only unmatched courses in the program's OWN subjects are counted against it: a department filling a free-elective slot reaches for any subject, while a requirement we failed to read is almost always in-discipline. Red needs either 5+ such courses or a quarter of the plan — below that it is amber. Out-of-subject unmatched courses are info only. Safe because requirement-table-parity independently catches a genuinely dropped table and is graded high."
 }

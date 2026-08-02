@@ -8,6 +8,7 @@
     "tablesConsumed": 11,
     "tablesOnPage": 11,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/politics-philosophy-economics-bs/",
     "planOfStudyCourses": [
       "ECON1115",
       "ECON1116",
@@ -36,6 +37,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/politics-philosophy-economics-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -49,6 +51,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

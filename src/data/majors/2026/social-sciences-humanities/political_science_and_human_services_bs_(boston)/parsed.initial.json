@@ -8,6 +8,7 @@
     "tablesConsumed": 12,
     "tablesOnPage": 12,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-human-services-bs/",
     "planOfStudyCourses": [
       "EESH2000",
       "ENGW1111",
@@ -31,6 +32,7 @@
       "kind": "major",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-human-services-bs/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -44,6 +46,7 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
       "discrepancies": []

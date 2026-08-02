@@ -13,6 +13,22 @@ on:
     - cron: "0 8 1 1,3,5,7,9,11 *"   # 1st of odd months
   workflow_dispatch:
 
+# All data workflows share one concurrency group. They each commit straight to
+# main, so two running at once means two pushes from stale checkouts and the
+# loser's data is silently dropped until the next cycle — two months, for the
+# bimonthly majors jobs.
+#
+# The 06:00/08:00/09:00 stagger expresses the right ORDER (courses before
+# majors, because the majors verifier validates every course reference against
+# the course data — stale courses produce false "unknown course" findings).
+# But a stagger is not a guarantee: update-courses also runs a Banner
+# availability scrape with --prof, one call per section, plus ~700 RateMyHusky
+# requests, and can overrun two hours. This makes the ordering enforced rather
+# than hoped for.
+concurrency:
+  group: nu-map-data
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -86,6 +102,9 @@ jobs:
           Triggered by: scheduled run
           Workflow run: ${{ github.run_id }}"
 
+          # Rebase first: the concurrency group should prevent a race, but a
+          # rejected push would discard this run's data entirely.
+          git pull --rebase origin main
           git push origin main
 
       - name: No changes detected

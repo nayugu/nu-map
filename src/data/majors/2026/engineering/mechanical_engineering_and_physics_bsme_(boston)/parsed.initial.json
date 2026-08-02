@@ -8,6 +8,7 @@
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/mechanical-engineering-physics-bsme/",
     "planOfStudyCourses": [
       "CHEM1151",
       "CHEM1153",
@@ -68,10 +69,11 @@
       "PHYS5318"
     ],
     "verification": {
-      "level": "partial",
+      "level": "review",
       "kind": "major",
-      "score": 0.85,
+      "score": 0.6,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/mechanical-engineering-physics-bsme/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
@@ -85,13 +87,14 @@
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 9,
+        "planUnexplainedInSubject": 9,
         "impossibleSections": 0
       },
       "discrepancies": [
         {
           "check": "plan-witness-unaccounted",
-          "severity": "medium",
-          "message": "9 of 57 courses in the catalog's four-year plan aren't accounted for here",
+          "severity": "high",
+          "message": "9 courses in this program's own subject are in the catalog's four-year plan but required by nothing here",
           "detail": [
             {
               "key": "planMissingCourse",

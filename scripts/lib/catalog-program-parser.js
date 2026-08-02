@@ -101,8 +101,16 @@ function parseRangeText(raw) {
   const excMatch = text.match(/,?\s*(?:except|but\s+not)\s+(.*)/i);
   if (excMatch) {
     for (const chunk of excMatch[1].split(/,\s*|\s+(?:and|or)\s+/i)) {
+      // EXCLUDE, not COURSE. "MATH 3001 to MATH 4999 but not MATH 4000" says
+      // nothing about MATH 4000 existing — it is a number carved out of a
+      // range. Emitting it as a COURSE node made that an existence claim the
+      // catalog never made, and left it indistinguishable from a requirement
+      // to any generic tree walker: the verifier duly reported CS+Math as
+      // requiring MATH 4000 and DS 4900 and missing both, the exact inverse of
+      // what the page says. Every consumer reads only subject and classId, so
+      // the type is free to say what these actually are.
       const em = chunk.trim().match(/([A-Z]{2,6})\s+(\d+)/);
-      if (em) exceptions.push({ type: 'COURSE', subject: em[1], classId: parseInt(em[2], 10) });
+      if (em) exceptions.push({ type: 'EXCLUDE', subject: em[1], classId: parseInt(em[2], 10) });
     }
   }
   const clean = text.replace(/,?\s*(?:except|but\s+not).*/i, '').trim();

@@ -8,12 +8,14 @@
     "tablesConsumed": 2,
     "tablesOnPage": 2,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/music/music-minor/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/music/music-minor/",
       "sourcesAvailable": [
         "requirement-tables",
         "course-catalog"

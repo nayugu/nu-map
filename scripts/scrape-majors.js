@@ -165,6 +165,10 @@ async function scrapeProgram(url) {
       tablesConsumed,
       tablesOnPage,
       tablesExcluded,
+      // The catalog page this was read from. Stored so the UI can send an
+      // advisor straight to the source — the whole point of saying "we copied
+      // the catalog" is that they can go check the catalog.
+      sourceUrl: url,
       ...(unconsumedHeadings?.length ? { unconsumedHeadings } : {}),
       // Courses the department's own sample plan names. A one-directional
       // witness: anything here that matches no requirement means we dropped

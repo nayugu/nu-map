@@ -187,10 +187,19 @@ function parseSubjectPage(html, subjectCode) {
     const rawTitle = titleEl.textContent.replace(/\u00a0/g, " ").trim();
 
     // Parse "SUBJ 1234. Title. (N Hours)"  or  "SUBJ 1234 Title N SH"
+    // Credit hours come in four shapes, and only two were accepted:
+    //   (4 Hours)      fixed
+    //   (1-4 Hours)    a range
+    //   (2.5 Hours)    fractional — pharmacy labs and similar
+    //   (1,2 Hours)    a discrete choice between values
+    // The last two were rejected outright, silently dropping 106 courses from
+    // the catalog — including CS 4991, which several programs require. Found
+    // because verify-majors flagged those programs as requiring a course we
+    // had no record of.
     const titleMatch = rawTitle.match(
-      /^([A-Z]{2,6})\s+(\d{4}[A-Z]?)\.\s+(.+?)\.\s*\((\d+(?:[-–]\d+)?)\s+[Hh]ours?\)/
+      /^([A-Z]{2,6})\s+(\d{4}[A-Z]?)\.\s+(.+?)\.\s*\((\d+(?:\.\d+)?(?:\s*[-–,]\s*\d+(?:\.\d+)?)*)\s+[Hh]ours?\)/
     ) || rawTitle.match(
-      /^([A-Z]{2,6})\s+(\d{4}[A-Z]?)\s+(.+?)\s+(\d+)\s+SH/i
+      /^([A-Z]{2,6})\s+(\d{4}[A-Z]?)\s+(.+?)\s+(\d+(?:\.\d+)?)\s+SH/i
     );
 
     if (!titleMatch) continue;
@@ -200,9 +209,13 @@ function parseSubjectPage(html, subjectCode) {
 
     // Parse credits — preserve ranges: store min in `credits` (matching SearchNEU convention)
     // and `creditsMax` only when different (variable-credit course, e.g. "1-4 Hours").
-    const [cMin, cMax] = (credStr.includes("-") || credStr.includes("–"))
-      ? credStr.split(/[-–]/).map(n => parseInt(n, 10))
-      : [parseInt(credStr, 10), parseInt(credStr, 10)];
+    // Take the low and high of whatever the page listed: "1-4" and "1,2" and
+    // "2.5" all reduce to a min and a max. parseFloat, not parseInt — half-
+    // credit labs are real and truncating them to 0 would be worse than
+    // dropping the course.
+    const parts = credStr.split(/[-–,]/).map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+    const cMin = parts.length ? Math.min(...parts) : 0;
+    const cMax = parts.length ? Math.max(...parts) : 0;
     const credits    = cMin;
     const creditsMax = cMax !== cMin ? cMax : undefined;
 
@@ -649,6 +662,9 @@ console.log(`\nScraping ${subjects.length} subject(s)…\n`);
 
 const allCourses = [];
 const errors     = [];
+// Subjects whose page didn't load. Their previously-known courses are carried
+// forward rather than deleted — see the write guard below.
+const failedSubjects = new Set();
 
 for (let i = 0; i < subjects.length; i++) {
   const [slug, url] = subjects[i];
@@ -662,6 +678,7 @@ for (let i = 0; i < subjects.length; i++) {
   } catch (err) {
     process.stdout.write(`  ERROR: ${err.message}\n`);
     errors.push(`${slug}: ${err.message}`);
+    failedSubjects.add(slug.replace(/\s.*/, ""));
   }
 
   if (i < subjects.length - 1) await sleep(DELAY_MS);
@@ -704,13 +721,57 @@ if (existsSync(CATALOG_OUT)) {
   }
 }
 
-// --dry-run scrapes only the first 3 subjects, so writing here would replace
-// the full catalog with a ~90-course stub. Report instead of writing.
-if (DRY_RUN) {
-  console.log(`\n📋  DRY RUN — ${toWrite.length} courses scraped, catalog-courses.json left untouched.`);
+// ── Write guard ───────────────────────────────────────────────────────────
+//
+// This file is REPLACED, not merged, so anything absent from `toWrite` is
+// deleted. Two ways that silently destroyed data:
+//
+//   1. A partial run. --dry-run does 3 subjects and --subject does one; both
+//      used to write, replacing ~7,900 courses with a stub. (Observed: a
+//      `--subject SOC` run left the catalog with 14 courses.)
+//   2. A transient per-subject fetch failure on a FULL run. Every course in
+//      that subject vanished with no warning — two consecutive runs dropped
+//      14 SOC courses and 44 RGA/CMMN courses respectively, purely from
+//      whichever page happened to time out.
+//
+// So: partial runs never write, failed subjects keep their committed courses,
+// and a run that would still shrink the catalog materially is refused.
+const PARTIAL = DRY_RUN || SUBJECT || SUBJECTS;
+
+if (PARTIAL) {
+  console.log(`\n📋  Partial run (${toWrite.length} courses from a subset) — catalog-courses.json left untouched.`);
+  console.log(`    Use --merge, or run without --subject/--dry-run, to update it.`);
 } else {
-  writeFileSync(CATALOG_OUT, JSON.stringify(toWrite, null, 0), "utf8");
-  console.log(`\n✅  Wrote catalog snapshot → public/catalog-courses.json`);
+  let out = toWrite;
+
+  if (failedSubjects.size && existsSync(CATALOG_OUT)) {
+    try {
+      const prev = JSON.parse(readFileSync(CATALOG_OUT, "utf8"));
+      const rescued = prev.filter(c => failedSubjects.has(c.subject));
+      if (rescued.length) {
+        out = [...toWrite, ...rescued];
+        console.warn(`\n  ⚠  ${failedSubjects.size} subject(s) failed to load: ${[...failedSubjects].join(", ")}`);
+        console.warn(`     Carried ${rescued.length} previously-known courses forward rather than deleting them.`);
+      }
+    } catch { /* unreadable previous snapshot — fall through to the rail */ }
+  }
+
+  // Last line of defence: a full run that still loses a meaningful share of
+  // the catalog is upstream breakage, not an update.
+  if (existsSync(CATALOG_OUT)) {
+    try {
+      const prevCount = JSON.parse(readFileSync(CATALOG_OUT, "utf8")).length;
+      const floor = Math.floor(prevCount * 0.98);
+      if (prevCount > 0 && out.length < floor) {
+        console.error(`\n❌  Refusing to write: ${out.length} courses vs ${prevCount} committed (floor ${floor}).`);
+        console.error(`    The catalog is likely unreachable or its markup changed — nothing was written.\n`);
+        process.exit(1);
+      }
+    } catch { /* ignore */ }
+  }
+
+  writeFileSync(CATALOG_OUT, JSON.stringify(out, null, 0), "utf8");
+  console.log(`\n✅  Wrote catalog snapshot (${out.length} courses) → public/catalog-courses.json`);
 }
 
 if (WRITE && !MERGE) {

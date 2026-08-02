@@ -8,12 +8,14 @@
     "tablesConsumed": 2,
     "tablesOnPage": 2,
     "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge-mia/",
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
       "checkedAt": "2026-08-02",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge-mia/",
       "sourcesAvailable": [
         "requirement-tables",
         "stated-total",
