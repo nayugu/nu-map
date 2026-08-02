@@ -2,9 +2,13 @@ name: tests
 
 # Each layer is its own job so a red check localizes the break to a layer
 # before you open the logs. The three "pure" jobs need no npm install — the
-# unit/contract/invariant suites import only src/ + Node builtins (committed
-# data, no runtime deps), and keeping it that way is enforced here by omitting
-# the install step. The live job (real network) runs only on a schedule.
+# unit and invariant import only src/ + Node builtins (committed data, no
+# runtime deps), and keeping it that way is enforced here by omitting the
+# install step. CONTRACT is the one exception: it parses saved catalog HTML
+# fixtures, which needs node-html-parser, so that job alone runs npm ci. Do not
+# add an install step to unit or invariant — the dependency-free constraint is
+# what lets major-verify.js be a pure function the invariant suite can import.
+# The live job (real network) runs only on a schedule.
 
 on:
   push:
@@ -33,7 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: "24" }
+        with: { node-version: "24", cache: npm }
+      # Only job with an install: HTML fixtures need node-html-parser.
+      - run: npm ci
       - run: npm run test:contract
 
   invariant:

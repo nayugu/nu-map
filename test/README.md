@@ -11,7 +11,9 @@ test/
 ├── invariant/    Properties asserted over the committed data set (catalog,
 │                 locales, action surface). Catches silent drift.
 ├── live/         Hits the real NEU catalog. NON-deterministic. Never in `npm test`.
-├── fixtures/     Captured inputs for contract tests (e.g. banner/*.raw.json).
+├── fixtures/     Captured inputs for contract tests (banner/*.raw.json,
+│                catalog/*.html — trimmed program pages, refresh with
+│                scripts/capture-fixture.js).
 └── helpers/      Shared loaders (paths.js). Dependency-free.
 ```
 
@@ -46,6 +48,13 @@ their degree or corrupt a saved plan:
   (empties are dropped by design), URL-safe, v1 passthrough.
 - `scrape-catalog-merge` — rotate-mode catalog merge/diff logic mirrored from
   `scrape-catalog.js`.
+
+> **Dependency note.** unit and invariant import only `src/` + Node builtins —
+> CI enforces this by omitting the install step, and it is what lets
+> `scripts/lib/major-verify.js` be a pure function the invariant suite can
+> import. **contract is the one exception**: `major-parser.test.js` parses
+> saved catalog HTML, which needs `node-html-parser`, so that job alone runs
+> `npm ci`. Don't add an install to the other two.
 
 **contract/** — `courseNorm.normalizeCourse` / `mergeHistoryAndOffering`, the one
 transform the browser app, the Node MCP server, and the Cloudflare worker all
