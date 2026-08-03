@@ -1033,27 +1033,19 @@ export default function BankPanel() {
         {(!collapseSubstitutions || pvSubsTouched) && (
           <div style={{ padding: "0 8px 8px" }}>
 
-            {(() => {
-              // A grouped substitution is ONE decision, so only its head pair
-              // gets a row; the rest become a "+N" chip. Ungrouped pairs are
-              // unchanged, which is every substitution saved before this.
-              const seen = new Set();
-              const rows = [];
-              for (const sub of substitutions) {
-                if (sub.group) {
-                  if (seen.has(sub.group)) continue;
-                  seen.add(sub.group);
-                  const members = substitutions.filter(x => x.group === sub.group);
-                  rows.push({ ...sub, extra: members.length - 1, members });
-                } else rows.push({ ...sub, extra: 0 });
-              }
+            {[
+              // Every applied pair gets its own line. Collapsing a group to its
+              // head left the header counting 2 while the list showed 1, with
+              // nothing to explain the difference once the "+N" chip was
+              // dropped. Removing any member still removes the whole group, so
+              // a set rule cannot end up half-applied.
+              ...substitutions,
               // Preview-removed substitutions stay visible as ghosts.
-              for (const k of (claudePreview?.substitutions?.removed ?? [])) {
+              ...(claudePreview?.substitutions?.removed ?? []).map(k => {
                 const [from, to] = k.split("→");
-                rows.push({ from, to, pvRemoved: true, extra: 0 });
-              }
-              return rows;
-            })().map(({ from, to, pvRemoved, extra, members, approval }) => {
+                return { from, to, pvRemoved: true };
+              }),
+            ].map(({ from, to, pvRemoved, approval }) => {
               const fc = courseMap[from];
               const tc = courseMap[to];
               const fromPlaced = !!placements[from];
