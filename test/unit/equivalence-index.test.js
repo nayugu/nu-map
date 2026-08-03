@@ -287,3 +287,12 @@ test("set rule › footnote siblings are ONE decision, applied atomically", () =
   assert.equal(full["GE 1501"], "f1");
   assert.equal(full["GE 1502"], "s1");
 });
+
+test("applied › a swap already in the plan is not offered again", () => {
+  // Applying a set rule also adds its siblings. Offering one of those again
+  // produced a row whose click was a correct no-op, which reads as broken.
+  const applied = new Set(["GE 1111>GE 1502"]);
+  const notApplied = alt => !applied.has(`${alt.from}>${alt.to}`);
+  const alts = [{ from: "GE 1111", to: "GE 1502" }, { from: "GE 1110", to: "GE 1501" }];
+  assert.deepEqual(alts.filter(notApplied).map(a => a.from), ["GE 1110"]);
+});

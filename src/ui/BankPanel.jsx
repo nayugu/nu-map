@@ -495,6 +495,21 @@ export default function BankPanel() {
   // than propose, and "phys1163sp1153" simply finds nothing.
   const subTerms = useMemo(() => parseCodeTerms(subQuery), [subQuery]);
 
+  // Already-applied swaps must not be offered again. Applying a set rule also
+  // adds its siblings, so searching one of those found a row whose click was a
+  // correct no-op — addSubstitutionGroup refuses the duplicate — and therefore
+  // looked broken. A search is for what you can add; what you already have is
+  // listed directly above.
+  const appliedKeys = useMemo(() => {
+    const k = new Set();
+    for (const sub of substitutions) {
+      const f = courseMap[sub.from], t = courseMap[sub.to];
+      if (f && t) k.add(`${f.subject} ${f.number}>${t.subject} ${t.number}`);
+    }
+    return k;
+  }, [substitutions, courseMap]);
+  const notApplied = alt => !appliedKeys.has(`${alt.from}>${alt.to}`);
+
   // With the box empty, show what the student's own programs publish. They
   // should not have to guess a course code to find out what they are allowed to
   // do, and auto-adding these would assert a choice they have not made — a
@@ -503,11 +518,12 @@ export default function BankPanel() {
     if (!equivIndex || subTerms.length) return [];
     const isPlaced = id => !!placements[plannerIdOf.get(id)];
     return programAllowedSwaps(equivIndex, myProgramIx)
+      .filter(notApplied)
       .map(alt => ({ ...alt, ready: readyToApply(alt, isPlaced) }))
       // Actionable first: these are the ones where the plan currently shows a
       // gap that is not real.
       .sort((x, y) => (y.ready === true) - (x.ready === true) || y.score - x.score);
-  }, [equivIndex, subTerms, myProgramIx, placements, plannerIdOf]);
+  }, [equivIndex, subTerms, myProgramIx, placements, plannerIdOf, appliedKeys]);
 
   const subSuggestions = useMemo(() => {
     if (!equivIndex || !subTerms.length) return [];
@@ -519,12 +535,13 @@ export default function BankPanel() {
     for (const from of froms) {
       for (const alt of alternativesFor(equivIndex, from, myProgramIx)) {
         if (second && !alt.to.startsWith(second)) continue;
+        if (!notApplied(alt)) continue;
         out.push(alt);
         if (out.length >= 12) return out;
       }
     }
     return out;
-  }, [equivIndex, subTerms, myProgramIx]);
+  }, [equivIndex, subTerms, myProgramIx, appliedKeys]);
 
   // A complete 4-digit code that is not a real course is worth naming: with
   // prefix matching, "no results" is otherwise indistinguishable from a typo.
