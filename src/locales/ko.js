@@ -56,8 +56,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "동일한 후속 과목의 {pct}%를 직접 엽니다",
   "bank.sub.ev.scope":             "{scope}에만 해당",
   "bank.sub.ev.excludes":          "{scope}에는 해당되지 않음",
-  "bank.sub.bundle":                 "{list}도 함께 매핑됩니다",
-  "bank.sub.bundle.header":        "함께 적용됩니다",
   "bank.empty.saved":             "저장된 코스가 없습니다.",
   "bank.empty.search":            "일치하는 코스가 없습니다.",
   "bank.empty.saved.hint":        "코스 행의 ☆를 클릭하여 저장하세요.",

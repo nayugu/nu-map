@@ -3207,33 +3207,6 @@ export function PlannerProvider({ children }) {
     removeSubstitution: (fromId, toId) => setSubstitutions(prev =>
       prev.filter(s => !(s.from === fromId && s.to === toId))
     ),
-    // A bundle is ONE decision to the student, so lecture + lab + recitation
-    // are added and removed together under a shared `group` id. The group also
-    // makes application atomic in applySubstitutions: the swap is only granted
-    // when every `from` in it is placed, which is what the catalog actually
-    // says for a set-to-set rule like Cornerstone.
-    addSubstitutionGroup: (pairs, meta = {}) => setSubstitutions(prev => {
-      const list = (pairs ?? []).filter(p => p?.from && p?.to && p.from !== p.to);
-      if (!list.length) return prev;
-      // Re-adding the same head pair is a no-op rather than a duplicate group.
-      const head = list[0];
-      if (prev.some(s => s.from === head.from && s.to === head.to)) return prev;
-      const group = list.length > 1 ? `${head.from}>${head.to}` : undefined;
-      return [...prev, ...list.map(p => ({
-        from: p.from, to: p.to,
-        ...(group ? { group } : {}),
-        ...(meta.tier ? { tier: meta.tier } : {}),
-        ...(meta.approval ? { approval: true } : {}),
-      }))];
-    }),
-    // Removing any member of a group removes the whole group — a half-applied
-    // bundle would silently strip the student's lab.
-    removeSubstitutionGroup: (fromId, toId) => setSubstitutions(prev => {
-      const hit = prev.find(s => s.from === fromId && s.to === toId);
-      if (!hit) return prev;
-      return hit.group ? prev.filter(s => s.group !== hit.group)
-                       : prev.filter(s => !(s.from === fromId && s.to === toId));
-    }),
     palette: pv?.palette ?? palette, removeFromPalette, onDropPalette, showPalette, setShowPalette,
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard, onDropPlacedOut,
     canDropSem,

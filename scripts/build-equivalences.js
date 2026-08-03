@@ -442,14 +442,12 @@ function toWire(rows, meta) {
     if (r.ev.footnote) {
       e.s = "footnote";
       e.fn = r.ev.footnote.text.slice(0, 200);
-      // A footnote rule is set-to-set: "substitute GE 1110 AND GE 1111 for
-      // GE 1501 AND GE 1502". Emitting its pairs independently made it two rows
-      // with no link, so applying one alone would grant GE 1501 from GE 1110 —
-      // exactly the half-applied swap the atomic grouping exists to prevent.
-      // Point every non-head pair at the head via `f`, the same mechanism a lab
-      // uses to hang off its lecture, so the index returns ONE decision.
-      const head = r.ev.footnote.headKey;
-      if (head && head !== pairKey(r.a, r.b)) { e.f = head; e.r = "set"; }
+      // Substitutions are one-to-one. A footnote may state a set rule
+      // ("substitute GE 1110 AND GE 1111 for GE 1501 AND GE 1502"), but linking
+      // its pairs so they applied together meant adding one made two appear and
+      // removing one removed both — confusing in exchange for guarding an edge
+      // case. Each pair is emitted on its own; both are offered, so the normal
+      // path still adds both.
     }
     if (r.ev.stated) {
       e.s = r.ev.stated.kind;

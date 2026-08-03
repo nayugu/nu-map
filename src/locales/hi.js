@@ -56,8 +56,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "समान पाठ्यक्रमों में से {pct}% सीधे खोलते हैं",
   "bank.sub.ev.scope":             "केवल {scope} के लिए मान्य",
   "bank.sub.ev.excludes":          "{scope} के लिए मान्य नहीं",
-  "bank.sub.bundle":                 "{list} भी मैप होता है",
-  "bank.sub.bundle.header":        "साथ में लागू",
   "bank.empty.saved":             "अभी तक कोई सेव्ड कोर्स नहीं है।",
   "bank.empty.search":            "कोई कोर्स मेल नहीं खाता।",
   "bank.empty.saved.hint":        "किसी भी कोर्स पंक्ति पर ☆ क्लिक करें सेव करने के लिए।",

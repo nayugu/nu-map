@@ -220,7 +220,6 @@ export default function BankPanel() {
     selectedId, setSelectedId,
     setShowPanel,
     substitutions, addSubstitution, removeSubstitution,
-    addSubstitutionGroup, removeSubstitutionGroup,
     major, major2, minor1, minor2,
     studentType,
     claudePreview,
@@ -495,11 +494,9 @@ export default function BankPanel() {
   // than propose, and "phys1163sp1153" simply finds nothing.
   const subTerms = useMemo(() => parseCodeTerms(subQuery), [subQuery]);
 
-  // Already-applied swaps must not be offered again. Applying a set rule also
-  // adds its siblings, so searching one of those found a row whose click was a
-  // correct no-op — addSubstitutionGroup refuses the duplicate — and therefore
-  // looked broken. A search is for what you can add; what you already have is
-  // listed directly above.
+  // Already-applied swaps must not be offered again: clicking one would be a
+  // no-op, which reads as broken. A search is for what you can add; what you
+  // already have is listed directly above it.
   const appliedKeys = useMemo(() => {
     const k = new Set();
     for (const sub of substitutions) {
@@ -564,13 +561,12 @@ export default function BankPanel() {
   useEffect(() => { setSubHover(null); }, [subQuery, subsOpen, subSuggestions]);
 
   const applySuggestion = (alt) => {
-    const pairs = [{ from: alt.from, to: alt.to }, ...alt.components]
-      .map(x => ({ from: plannerIdOf.get(x.from), to: plannerIdOf.get(x.to) }))
-      .filter(x => x.from && x.to);
-    if (!pairs.length) return;
-    addSubstitutionGroup(pairs, { tier: alt.tier, approval: alt.approval });
+    const from = plannerIdOf.get(alt.from), to = plannerIdOf.get(alt.to);
+    if (!from || !to) return;
+    addSubstitution(from, to);
     setSubQuery("");
   };
+;
 
   const [hoveredSubId, setHoveredSubId] = useState(null);
   const [typeCollapsed, setTypeCollapsed] = useState({});
@@ -1092,7 +1088,7 @@ export default function BankPanel() {
                           style={{ fontSize: isPhone ? 6 : 9, flexShrink: 0 }}>⚠</span>
                   )}
                   <button
-                    onClick={e => { e.stopPropagation(); removeSubstitutionGroup(from, to); }}
+                    onClick={e => { e.stopPropagation(); removeSubstitution(from, to); }}
                     style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-4)", fontSize: isPhone ? 8 : 12, padding: "0 2px", lineHeight: 1, flexShrink: 0 }}
                     title="Remove substitution"
                   >✕</button>

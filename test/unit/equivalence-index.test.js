@@ -136,33 +136,7 @@ test("apply › an ungrouped pair behaves exactly as before", () => {
   assert.equal(ep["PHYS 1151"], "fall1");
 });
 
-test("apply › a group applies only when EVERY from is placed", () => {
-  // Cornerstone: GE 1110 + GE 1111 → GE 1501 + GE 1502. Placing one half
-  // earns nothing, because the catalog grants the swap for the whole set.
-  const sub = [
-    { from: "GE 1110", to: "GE 1501", group: "cornerstone" },
-    { from: "GE 1111", to: "GE 1502", group: "cornerstone" },
-  ];
-  const half = applySubstitutions({ "GE 1110": "fall1" }, sub);
-  assert.equal(half["GE 1501"], undefined);
-  assert.equal(half["GE 1502"], undefined);
 
-  const full = applySubstitutions({ "GE 1110": "fall1", "GE 1111": "spring1" }, sub);
-  assert.equal(full["GE 1501"], "fall1");
-  assert.equal(full["GE 1502"], "spring1");
-});
-
-test("apply › distinct groups are independent", () => {
-  const ep = applySubstitutions(
-    { "A 1000": "fall1", "B 1000": "fall1" },
-    [
-      { from: "A 1000", to: "A 2000", group: "g1" },
-      { from: "B 1000", to: "B 2000", group: "g2" },
-      { from: "C 1000", to: "C 2000", group: "g2" },   // C not placed → g2 blocked
-    ]);
-  assert.equal(ep["A 2000"], "fall1");
-  assert.equal(ep["B 2000"], undefined);
-});
 
 test("apply › identical ungrouped pairs never merge into one group", () => {
   // Two unrelated single substitutions must not gate each other.
@@ -196,40 +170,13 @@ test("allowed › a student in no publishing program sees nothing", () => {
 });
 
 
-test("ready › true only when every replaced course is placed", () => {
-  const alt = { from: "GE 1110", to: "GE 1501",
-                components: [{ from: "GE 1111", to: "GE 1502" }] };
-  assert.equal(readyToApply(alt, id => id === "GE 1110"), false);
-  assert.equal(readyToApply(alt, id => ["GE 1110", "GE 1111"].includes(id)), true);
+test("ready › true once the replaced course is placed", () => {
+  const alt = { from: "GE 1110", to: "GE 1501" };
+  assert.equal(readyToApply(alt, () => false), false);
+  assert.equal(readyToApply(alt, id => id === "GE 1110"), true);
   assert.equal(readyToApply(alt, undefined), false);
 });
 
-test("set rule › footnote siblings are ONE decision, applied atomically", () => {
-  // "substitute GE 1110 AND GE 1111 for GE 1501 AND GE 1502". Emitted as two
-  // independent pairs, applying one would grant GE 1501 from GE 1110 alone.
-  const wire = {
-    programs: ["bioe"],
-    pairs: [
-      { a: "GE 1110", b: "GE 1501", t: "A", s: 30, e: { p: [0], s: "footnote" } },
-      { a: "GE 1111", b: "GE 1502", t: "A", s: 29,
-        e: { p: [0], s: "footnote", f: "GE 1110|GE 1501", r: "set" } },
-    ],
-  };
-  const ix = buildEquivalenceIndex(wire);
-  const mine = programIndexSet(ix, ["bioe"]);
-  const got = programAllowedSwaps(ix, mine);
-  assert.equal(got.length, 1, "one decision, not two rows");
-  assert.deepEqual(got[0].components.map(c => `${c.from}>${c.to}`), ["GE 1111>GE 1502"]);
-
-  const group = "g";
-  const subs = [{ from: got[0].from, to: got[0].to, group },
-                ...got[0].components.map(c => ({ from: c.from, to: c.to, group }))];
-  assert.equal(applySubstitutions({ "GE 1110": "f1" }, subs)["GE 1501"], undefined,
-               "half the set earns nothing");
-  const full = applySubstitutions({ "GE 1110": "f1", "GE 1111": "s1" }, subs);
-  assert.equal(full["GE 1501"], "f1");
-  assert.equal(full["GE 1502"], "s1");
-});
 
 test("applied › a swap already in the plan is not offered again", () => {
   // Applying a set rule also adds its siblings. Offering one of those again
@@ -240,32 +187,30 @@ test("applied › a swap already in the plan is not offered again", () => {
   assert.deepEqual(alts.filter(notApplied).map(a => a.from), ["GE 1110"]);
 });
 
-test("standalone › a lab swap is its own decision, not a component", () => {
-  // 30 of 31 bundle links were lab/recitation propagation. A lab and its lecture
-  // are separate registrations, so the swap stands alone — which removes head
-  // resolution, side orientation and the component-lookup special case.
-  const wire = { programs: [], pairs: [
+test("one-to-one › nothing is ever grouped", () => {
+  // Substitutions are strictly 1:1. A lecture swap does not drag its lab along,
+  // and a footnote set rule is offered as its separate pairs — adding one used
+  // to make two appear and removing one removed both.
+  const wire = { programs: ["bioe"], pairs: [
+    { a: "GE 1110", b: "GE 1501", t: "A", s: 30, e: { p: [0], s: "footnote" } },
+    { a: "GE 1111", b: "GE 1502", t: "A", s: 29, e: { p: [0], s: "footnote" } },
     { a: "PHYS 1151", b: "PHYS 1161", t: "C", s: 62, e: { q: 12 } },
     { a: "PHYS 1152", b: "PHYS 1162", t: "C", s: 61, e: { q: 0 } },
   ]};
   const ix = buildEquivalenceIndex(wire);
-  const lab = alternativesFor(ix, "PHYS 1162", new Set());
-  assert.equal(lab.length, 1);
-  assert.equal(lab[0].to, "PHYS 1152");
-  assert.equal(lab[0].components.length, 0, "no grouping");
-  // and the lecture no longer drags it along
-  assert.equal(alternativesFor(ix, "PHYS 1161", new Set())[0].components.length, 0);
+  for (const id of ["GE 1110", "GE 1111", "PHYS 1151", "PHYS 1152"]) {
+    for (const alt of alternativesFor(ix, id, new Set()))
+      assert.equal(alt.components, undefined, `${id} must carry no components`);
+  }
+  // both halves of the footnote rule are offered separately
+  assert.deepEqual(programAllowedSwaps(ix, programIndexSet(ix, ["bioe"]))
+                     .map(a => `${a.from}>${a.to}`).sort(),
+                   ["GE 1110>GE 1501", "GE 1111>GE 1502"]);
 });
 
-test("set rule › a sibling still resolves to the head, applied atomically", () => {
-  const wire = { programs: ["bioe"], pairs: [
-    { a: "GE 1110", b: "GE 1501", t: "A", s: 30, e: { p: [0], s: "footnote" } },
-    { a: "GE 1111", b: "GE 1502", t: "A", s: 29,
-      e: { p: [0], s: "footnote", f: "GE 1110|GE 1501", r: "set" } },
-  ]};
-  const ix = buildEquivalenceIndex(wire);
-  const viaSibling = alternativesFor(ix, "GE 1111", new Set());
-  assert.equal(viaSibling.length, 1);
-  assert.equal(viaSibling[0].from, "GE 1110");
-  assert.deepEqual(viaSibling[0].components.map(c => `${c.from}>${c.to}`), ["GE 1111>GE 1502"]);
+test("one-to-one › applying a pair affects only that pair", () => {
+  const subs = [{ from: "GE 1110", to: "GE 1501" }];
+  const ep = applySubstitutions({ "GE 1110": "f1" }, subs);
+  assert.equal(ep["GE 1501"], "f1");
+  assert.equal(ep["GE 1502"], undefined, "the sibling is untouched");
 });

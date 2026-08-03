@@ -56,8 +56,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "يفتحان مباشرةً {pct}% من المقررات نفسها",
   "bank.sub.ev.scope":             "يُحتسب لـ {scope} فقط",
   "bank.sub.ev.excludes":          "لا يُحتسب لـ {scope}",
-  "bank.sub.bundle":                 "يربط أيضاً {list}",
-  "bank.sub.bundle.header":        "تُطبَّق معاً",
   "bank.empty.saved":             "لا توجد مقررات محفوظة بعد.",
   "bank.empty.search":            "لا توجد مقررات مطابقة.",
   "bank.empty.saved.hint":        "انقر على ☆ في أي صف لحفظ المقرر.",

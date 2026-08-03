@@ -55,8 +55,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "可直接解锁 {pct}% 相同的后续课程",
   "bank.sub.ev.scope":             "仅对{scope}有效",
   "bank.sub.ev.excludes":          "对{scope}无效",
-  "bank.sub.bundle":                 "同时对应 {list}",
-  "bank.sub.bundle.header":        "一并应用",
   "bank.sub.desc":                "\u653e\u7f6e\u8bfe\u7a0b A \u540c\u65f6\u6ee1\u8db3\u8bfe\u7a0b B \u7684\u8981\u6c42\u3002\u5b66\u5206\u4ec5\u8ba1\u4e00\u6b21\uff08\u4ec5 A\uff09\u3002\u5b66\u671f\u65f6\u95f4\u9002\u7528\u3002",
   "bank.empty.saved":             "\u5c1a\u672a\u6536\u85cf\u4efb\u4f55\u8bfe\u7a0b\u3002",
   "bank.empty.search":            "\u6ca1\u6709\u5339\u914d\u7684\u8bfe\u7a0b\u3002",

@@ -57,8 +57,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "Directly unlock {pct}% of the same courses",
   "bank.sub.ev.scope":             "Counts for {scope} only",
   "bank.sub.ev.excludes":          "Does not count for {scope}",
-  "bank.sub.bundle":                 "Also maps {list}",
-  "bank.sub.bundle.header":        "Applied together",
   "bank.empty.saved":             "No saved courses yet.",
   "bank.empty.search":            "No courses match.",
   "bank.empty.saved.hint":        "Click \u2606 on any course row to save it.",

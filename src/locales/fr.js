@@ -56,8 +56,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "Ouvrent directement {pct} % des mêmes cours",
   "bank.sub.ev.scope":             "Ne compte que pour {scope}",
   "bank.sub.ev.excludes":          "Ne compte pas pour {scope}",
-  "bank.sub.bundle":                 "Associe aussi {list}",
-  "bank.sub.bundle.header":        "Appliqués ensemble",
   "bank.empty.saved":             "Aucun cours enregistré pour l'instant.",
   "bank.empty.search":            "Aucun cours correspondant.",
   "bank.empty.saved.hint":        "Cliquez sur ☆ sur une ligne de cours pour l'enregistrer.",

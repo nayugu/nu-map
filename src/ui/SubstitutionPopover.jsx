@@ -100,24 +100,6 @@ export default function SubstitutionPopover({ alt, rect, courseName }) {
         </div>
       ))}
 
-      {/* The rest of the swap. Without a header these read as unrelated other
-          substitutions — the whole question a reader has is "why am I being shown
-          PHYS 1161 → PHYS 1151 when I asked about PHYS 1163?" */}
-      {alt.components?.length > 0 && (
-        <div style={{ marginTop: 7, paddingTop: 6, borderTop: "1px solid var(--border-2)" }}>
-          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-5)",
-                        letterSpacing: "0.05em", marginBottom: 3 }}>
-            {t("bank.sub.bundle.header")}
-          </div>
-          {alt.components.map((c, i) => (
-            <div key={i} style={{ ...row, display: "flex", gap: 5 }}>
-              <span style={{ color: "var(--text-5)", flexShrink: 0 }}>·</span>
-              <span>{c.from} → {c.to}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* the caveat, once, where the decision is being made */}
       {alt.approval && (
         <div style={{ ...row, marginTop: 7, paddingTop: 6, borderTop: "1px solid var(--border-2)",

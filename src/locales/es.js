@@ -56,8 +56,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "Habilitan directamente el {pct}% de los mismos cursos",
   "bank.sub.ev.scope":             "Solo cuenta para {scope}",
   "bank.sub.ev.excludes":          "No cuenta para {scope}",
-  "bank.sub.bundle":                 "También asigna {list}",
-  "bank.sub.bundle.header":        "Se aplican juntos",
   "bank.empty.saved":             "Aún no hay cursos guardados.",
   "bank.empty.search":            "No hay cursos que coincidan.",
   "bank.empty.saved.hint":        "Haz clic en ☆ en cualquier fila de curso para guardarlo.",

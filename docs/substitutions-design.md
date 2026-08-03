@@ -110,7 +110,7 @@ case-insensitive flag and every real statement begins a sentence. The phrase
 match is now case-insensitive while the course code must still be uppercase in
 the source, so prose like "counts as chemistry 1211" is not read as a reference.
 
-### 3.2 Reaching the labs — and why they are NOT grouped
+### 3.2 Reaching the labs
 
 NEU registers a science course as separate components, encoding the part in the
 units digit with the tens digit selecting the variant:
@@ -128,29 +128,29 @@ pair propagates to each component, matched by **slot** rather than exact role �
 `PHYS 1163` is a *Recitation* where its engineering counterpart `PHYS 1153` is an
 *Interactive Learning Seminar*.
 
-**They are emitted as standalone pairs, not as a bundle.** An earlier design made
-each one a component of its lecture pair, which required head resolution, side
-orientation, and a special walk-up path when a student asked about a component.
-Every one of those produced a bug: a cross-product that offered "PHYS 1153 as
-part of PHYS 1161 → PHYS 1171", labs applied backwards, one rule rendered as two
-rows, and a click that was a correct no-op on an already-applied sibling.
+### 3.3 Substitutions are strictly one-to-one
 
-Measured, that machinery covered **31 of 3,749 pairs, and 30 of those were this
-inference.** A lab and its lecture are separate registrations, so
-`PHYS 1163 → PHYS 1153` stands perfectly well alone; the student adds the parts
-they want. Only one thing still groups — see below.
+Propagation *generates* the lab and recitation pairs; it does not couple them.
+Every emitted pair stands alone.
 
-### 3.3 Set rules are the one thing that stays atomic
+An earlier design grouped them — a lecture swap carried its lab, and a footnote
+set rule ("substitute GE 1110 **and** GE 1111 for GE 1501 **and** GE 1502")
+applied as a unit. That required head resolution, side orientation, and a
+walk-up path for component lookups, and produced a bug at every step: a
+cross-product offering "PHYS 1153 as part of PHYS 1161 → PHYS 1171", labs
+oriented backwards, one rule rendered as two rows, a click that was a correct
+no-op on an already-applied sibling, and a header counting 2 beside a single
+visible row. Measured, it covered **31 of 3,749 pairs**.
 
-A footnote stating "substitute GE 1110 **and** GE 1111 for GE 1501 **and**
-GE 1502" is a set-to-set claim: the catalog grants it for the whole set, and half
-of it grants nothing. Those siblings link to a head through `e.f` with
-`r: "set"`, so the index returns one decision and `applySubstitutions` refuses to
-apply the group until every `from` is placed.
+It is also confusing in use: adding one swap made two appear, and removing one
+removed both.
 
-That is a correctness requirement rather than a convenience, which is why it
-survives while companion grouping did not. It currently covers exactly **one**
-pair.
+**Accepted cost.** A set rule can now be half-applied — a student may add
+`GE 1110 → GE 1501` without `GE 1111 → GE 1502`, and the plan will count
+GE 1501 on GE 1110 alone, which the catalog does not grant. Both pairs are
+offered, so the ordinary path adds both, and an advisor approves the real
+substitution regardless. This is the same trade the rest of the app makes:
+never block, and prefer a model the student can predict.
 
 ## 4. Rejected signal: "they satisfy the same prerequisites"
 

@@ -57,8 +57,6 @@ export const strings = {
   "bank.sub.ev.overlap":           "同じ後続科目の {pct}% を直接解放します",
   "bank.sub.ev.scope":             "{scope}のみ有効",
   "bank.sub.ev.excludes":          "{scope}には無効",
-  "bank.sub.bundle":                 "{list} も対応します",
-  "bank.sub.bundle.header":        "まとめて適用されます",
   "bank.empty.saved":             "まだ保存されたコースはありません。",
   "bank.empty.search":            "一致するコースがありません。",
   "bank.empty.saved.hint":        "任意のコース行の☆をクリックして保存します。",

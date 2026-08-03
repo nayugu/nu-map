@@ -51,8 +51,6 @@ export function buildEquivalenceIndex(wire) {
   const byCourse = new Map();
   // "a|b" -> record, for resolving a derived row's parent
   const byKey = new Map();
-  // parent "a|b" -> derived records that follow it
-  const children = new Map();
 
   for (const p of wire.pairs) {
     if (!p?.a || !p?.b) continue;
@@ -62,16 +60,11 @@ export function buildEquivalenceIndex(wire) {
       if (!byCourse.has(id)) byCourse.set(id, []);
       byCourse.get(id).push(p);
     }
-    const parent = p.e?.f;
-    if (parent) {
-      if (!children.has(parent)) children.set(parent, []);
-      children.get(parent).push(p);
-    }
   }
 
   return {
     generatedAt: wire.generatedAt ?? null,
-    programs, programSlugToIx, byCourse, byKey, children,
+    programs, programSlugToIx, byCourse, byKey,
     size: wire.pairs.length,
   };
 }
@@ -114,11 +107,11 @@ export function resolvePairTier(pair, myProgramIx) {
  *
  * Each returned suggestion is ONE decision:
  *
- *   { to, tier, scoped, score, approval, evidence, components: [{from, to, role}] }
+ *   { to, tier, scoped, score, approval, evidence }
  *
- * `to` is the course the student would take instead. `components` holds the
- * extra pairs a bundle drags along (lab, recitation) — empty for a plain swap,
- * and what the UI renders as `+N`.
+ * `to` is the course the student would take instead. Substitutions are strictly
+ * one-to-one: a lecture swap does not drag its lab along, and a set rule stated
+ * in a footnote is offered as its separate pairs.
  *
  * Asking about a bundle COMPONENT works too. A student who types PHYS 1163
  * (Recitation for PHYS 1161) is answered with PHYS 1153 carrying `viaBundle`,
@@ -132,30 +125,8 @@ export function alternativesFor(index, courseId, myProgramIx, opts = {}) {
   const out = [];
 
   for (const row of rows) {
-    if (row.e?.f) continue;                       // handled below, as a bundle
     const s = buildSuggestion(index, row, courseId, myProgramIx, opts);
     if (s) out.push(s);
-  }
-
-  // A *stated set rule* ("substitute A and B for X and Y") links its siblings to
-  // a head so the whole set applies together — the catalog grants it as a set,
-  // and half of it grants nothing. Asking about a sibling therefore resolves to
-  // the head, which is one decision covering both pairs.
-  //
-  // Nothing else is linked. Lab and recitation swaps used to hang off their
-  // lecture the same way, which is what required side orientation and made a
-  // component lookup a special case; they are now ordinary standalone pairs.
-  if (!out.length) {
-    for (const sib of rows) {
-      const headKey = sib.e?.f;
-      if (!headKey) continue;
-      const head = index.byKey.get(headKey);
-      if (!head) continue;
-      const mineIsA = sib.a === courseId;
-      const from = mineIsA ? head.a : head.b;
-      const alt = buildSuggestion(index, head, from, myProgramIx, opts);
-      if (alt) out.push(alt);
-    }
   }
 
   out.sort((x, y) => (TIER_RANK[x.tier] - TIER_RANK[y.tier]) || (y.score - x.score) ||
@@ -178,17 +149,6 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
   // on, so it may stand in FOR the other one, not the reverse.
   if (p.e?.d && p.e.d !== fromCourseId) return null;
 
-  // Component orientation follows the parent's. The builder emits a derived row
-  // with `a` a companion of the parent's `a` and `b` a companion of its `b`, so
-  // the side being substituted FROM carries straight down: a student swapping
-  // PHYS 1165 → 1155 gets 1166 → 1156, not the reverse.
-  const key = p.a <= p.b ? `${p.a}|${p.b}` : `${p.b}|${p.a}`;
-  const fromIsA = p.a === fromCourseId;
-  const components = (index.children.get(key) ?? []).map(c => ({
-    from: fromIsA ? c.a : c.b,
-    to:   fromIsA ? c.b : c.a,
-    role: c.e?.r ?? null,
-  }));
 
   return {
     from: fromCourseId,
@@ -205,7 +165,6 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
       scope: p.e?.sc ?? null,
       excludes: p.e?.ex ?? null,
     },
-    components,
   };
 }
 
@@ -222,16 +181,13 @@ export function hasAlternatives(index, courseId, myProgramIx) {
  * inference and no advisor flag. Sorted so the ones the student can act on now
  * come first (see `readyToApply`), then by score.
  *
- * Bundle components are skipped as entry points, exactly as in
- * `alternativesFor`: a lecture swap already carries its lab and recitation, and
- * listing those separately would offer the same decision several times.
+ * Every pair stands alone, so nothing is filtered here beyond direction.
  */
 export function programAllowedSwaps(index, myProgramIx, { limit = 24 } = {}) {
   if (!index || !myProgramIx?.size) return [];
   const out = [];
   const seen = new Set();
   for (const p of index.byKey.values()) {
-    if (p.e?.f) continue;                         // a component, not a decision
     const backing = p.e?.p;
     if (!Array.isArray(backing) || !backing.some(i => myProgramIx.has(i))) continue;
 
@@ -254,16 +210,13 @@ export function programAllowedSwaps(index, myProgramIx, { limit = 24 } = {}) {
 }
 
 /**
- * Is every course this swap replaces already in the plan?
+ * Is the course this swap replaces already in the plan?
  *
- * This is the case worth surfacing: with GE 1110 and GE 1111 both placed but the
- * substitution not applied, GE 1501 and GE 1502 still read as unmet and the plan
- * shows a gap that is not real. A group only takes effect once every `from` is
- * placed (see applySubstitutions), so this is exactly the threshold at which
- * applying it changes anything.
+ * A substitution only takes effect once its source course is placed, so this is
+ * exactly the threshold at which applying it changes anything: the course is in
+ * the plan, the requirement still reads as unmet, and one click closes it.
  */
 export function readyToApply(alt, isPlaced) {
   if (typeof isPlaced !== "function") return false;
-  const froms = [alt.from, ...(alt.components ?? []).map(c => c.from)];
-  return froms.every(id => isPlaced(id));
+  return isPlaced(alt.from);
 }
