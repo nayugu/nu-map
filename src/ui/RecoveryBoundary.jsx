@@ -82,6 +82,37 @@ function Emblem({ dark }) {
   );
 }
 
+// Petal drift over the whole screen — tints of the logo red, each petal
+// on its own clock (negative delays start them mid-flight), swaying and
+// tumbling as it falls. Deterministic pseudo-randomness from the index,
+// mirroring the index.html overlay exactly.
+const PETALS = Array.from({ length: 12 }, (_, i) => ({
+  left:    (i * 83 + 7) % 100,
+  size:    10 + ((i * 37) % 8),
+  fall:    9 + ((i * 53) % 70) / 10,
+  delay:   -(((i * 91) % 120) / 10),
+  sway:    2.4 + ((i * 29) % 20) / 10,
+  color:   i % 3 === 0 ? "#ef4444" : i % 3 === 1 ? "#f87171" : "#fca5a5",
+  opacity: 0.35 + ((i * 17) % 30) / 100,
+}));
+
+function Petals() {
+  return (
+    <div className="numap-petals" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+      {PETALS.map((p, i) => (
+        <div key={i} style={{ position: "absolute", top: "-6vh", left: `${p.left}%`,
+          animation: `numapFall ${p.fall}s linear ${p.delay}s infinite` }}>
+          <svg width={p.size} height={p.size} viewBox="0 0 12 12" aria-hidden="true"
+            style={{ display: "block", opacity: p.opacity,
+              animation: `numapSway ${p.sway}s ease-in-out ${p.delay / 2}s infinite alternate` }}>
+            <path d="M6 0 C 9.2 2.4, 9.2 7.2, 6 12 C 2.8 7.2, 2.8 2.4, 6 0" fill={p.color} />
+          </svg>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // Same theme resolution as index.html's pre-paint script: the saved app
 // theme wins, the OS preference is only the fallback.
 const isDark = () => {
@@ -133,9 +164,15 @@ export default class RecoveryBoundary extends Component {
           @keyframes numapCrashIn { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
           @keyframes numapFloat { from { transform: translateY(-2px) } to { transform: translateY(3px) } }
           @keyframes numapGlint { 0% { left: -45% } 55% { left: 125% } 100% { left: 125% } }
-          @media (prefers-reduced-motion: reduce) { .numap-crash * { animation: none !important } }
+          @keyframes numapFall { from { transform: translateY(0) } to { transform: translateY(112vh) } }
+          @keyframes numapSway { from { transform: translateX(-10px) rotate(-40deg) } to { transform: translateX(10px) rotate(40deg) } }
+          @media (prefers-reduced-motion: reduce) {
+            .numap-crash *, .numap-petals * { animation: none !important }
+            .numap-petals { display: none }
+          }
         `}</style>
-        <div className="numap-crash" style={{ animation: "numapCrashIn .35s ease-out" }}>
+        <Petals />
+        <div className="numap-crash" style={{ animation: "numapCrashIn .35s ease-out", position: "relative" }}>
           <Emblem dark={dark} />
           <div style={{ width: 260, height: 4, borderRadius: 99, overflow: "hidden",
             margin: "0 auto 20px", background: dark ? "#21262d" : "#e2e8f0" }}>
