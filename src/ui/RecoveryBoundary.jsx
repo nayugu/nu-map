@@ -19,14 +19,14 @@
 import { Component } from "react";
 
 const MSG = {
-  en: "Something went wrong. Reloading usually fixes it.",
-  es: "Algo salió mal. Recargar suele solucionarlo.",
-  fr: "Une erreur est survenue. Recharger règle généralement le problème.",
-  ar: "حدث خطأ ما. عادةً ما تحل إعادة التحميل المشكلة.",
-  hi: "कुछ गड़बड़ हुई। दोबारा लोड करने से अक्सर ठीक हो जाता है।",
-  ja: "問題が発生しました。再読み込みで直ることがほとんどです。",
-  ko: "문제가 발생했습니다. 새로고침하면 대부분 해결됩니다.",
-  zh: "出了点问题，重新加载通常可以解决。",
+  en: "Something went wrong. Fixing it…",
+  es: "Algo salió mal. Arreglándolo…",
+  fr: "Une erreur est survenue. Réparation en cours…",
+  ar: "حدث خطأ ما. جارٍ الإصلاح…",
+  hi: "कुछ गड़बड़ हुई। ठीक किया जा रहा है…",
+  ja: "問題が発生しました。復旧しています…",
+  ko: "문제가 발생했습니다. 복구 중…",
+  zh: "出了点问题，正在修复…",
 };
 const BTN = {
   en: "Reload", es: "Recargar", fr: "Recharger",
@@ -103,6 +103,36 @@ const PETALS = Array.from({ length: 14 }, (_, i) => {
   };
 });
 
+// The exit storm: the same petals, dense and wind-blown (mirrors the
+// index.html storm — phase-uniform with stride 5, coprime to 36).
+const STORM = Array.from({ length: 36 }, (_, i) => {
+  const dur = 0.9 + ((i * 53) % 80) / 100;
+  return {
+    left:    ((i * 83 + 11) % 130) - 25,
+    size:    8 + ((i * 37) % 9),
+    dur,
+    delay:   -(dur * ((i * 5) % 36) / 36),
+    color:   i % 3 === 0 ? "#ef4444" : i % 3 === 1 ? "#f87171" : "#fca5a5",
+    opacity: 0.4 + ((i * 17) % 40) / 100,
+  };
+});
+
+function Storm() {
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+      {STORM.map((p, i) => (
+        <div key={i} style={{ position: "absolute", top: "-16vh", left: `${p.left}%`,
+          animation: `numapStorm ${p.dur}s linear ${p.delay}s infinite` }}>
+          <svg width={p.size} height={p.size} viewBox="0 0 12 12" aria-hidden="true"
+            style={{ display: "block", opacity: p.opacity }}>
+            <path d="M6 0 C 9.2 2.4, 9.2 7.2, 6 12 C 2.8 7.2, 2.8 2.4, 6 0" fill={p.color} />
+          </svg>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Petals() {
   return (
     <div className="numap-petals" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
@@ -134,17 +164,40 @@ const isDark = () => {
 export default class RecoveryBoundary extends Component {
   // Design preview: ?preview=crash renders the fallback without a real
   // crash (and without the auto-reload, which only runs in didCatch).
-  state = { crashed: /[?&]preview=crash\b/.test(window.location.search) };
+  state = { crashed: /[?&]preview=crash\b/.test(window.location.search), leaving: false, showLink: false };
 
   static getDerivedStateFromError() { return { crashed: true }; }
 
+  // No button — recovery is automatic. But never a dead end: if the
+  // screen has sat for 25 s (auto-retry throttled or not helping), a
+  // quiet reload link fades in as the escape hatch.
+  scheduleGhost = () => {
+    if (this.ghostTimer) return;
+    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), 25_000);
+  };
+
+  componentDidMount() { if (this.state.crashed) this.scheduleGhost(); }
+  componentWillUnmount() { clearTimeout(this.ghostTimer); }
+
+  // Exit choreography shared by auto-retry and the button: the petal
+  // storm rises for 0.7 s, the reload happens inside it, and the next
+  // page boots under the reveal veil (index.html reads numap-reveal)
+  // that clears once the app is alive.
+  stormReload = () => {
+    if (this.state.leaving) return;
+    try { sessionStorage.setItem("numap-reveal", "1"); } catch { /* veil is a nicety */ }
+    this.setState({ leaving: true });
+    setTimeout(() => window.location.reload(), 700);
+  };
+
   componentDidCatch(error, info) {
     console.error("[nu-map] render crash:", error, info?.componentStack);
+    this.scheduleGhost();
     try {
       const last = parseInt(sessionStorage.getItem("numap-crash-retry") || "0", 10);
       if (Date.now() - last > 60_000) {
         sessionStorage.setItem("numap-crash-retry", String(Date.now()));
-        window.location.reload();
+        this.stormReload();
       }
     } catch { /* storage unavailable — the message below still shows */ }
   }
@@ -173,6 +226,7 @@ export default class RecoveryBoundary extends Component {
           @keyframes numapGlint { 0% { left: -45% } 55% { left: 125% } 100% { left: 125% } }
           @keyframes numapFall { from { transform: translateY(0) } to { transform: translateY(112vh) } }
           @keyframes numapSway { from { transform: translateX(-10px) rotate(-40deg) } to { transform: translateX(10px) rotate(40deg) } }
+          @keyframes numapStorm { from { transform: translate3d(0,-16vh,0) rotate(0deg) } to { transform: translate3d(44vw,116vh,0) rotate(300deg) } }
           @media (prefers-reduced-motion: reduce) {
             .numap-crash *, .numap-petals * { animation: none !important }
             .numap-petals { display: none }
@@ -190,14 +244,17 @@ export default class RecoveryBoundary extends Component {
           <div style={{ fontSize: 15, fontWeight: 600, maxWidth: 420, lineHeight: 1.5 }}>
             {MSG[lc] || MSG.en}
           </div>
-          <button onClick={() => window.location.reload()} style={{
-            marginTop: 16, fontSize: 13, fontWeight: 700, padding: "8px 20px",
-            borderRadius: 8, border: `1px solid ${dark ? "#3d444d" : "#cbd5e1"}`,
-            background: "transparent", color: "inherit", cursor: "pointer",
-          }}>
-            {BTN[lc] || BTN.en}
-          </button>
+          {this.state.showLink && (
+            <div onClick={this.stormReload} style={{
+              marginTop: 16, fontSize: 11, fontWeight: 600,
+              textDecoration: "underline", cursor: "pointer",
+              color: dark ? "#8b949e" : "#64748b",
+            }}>
+              {BTN[lc] || BTN.en}
+            </div>
+          )}
         </div>
+        {this.state.leaving && <Storm />}
       </div>
     );
   }
