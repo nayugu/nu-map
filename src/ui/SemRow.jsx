@@ -123,7 +123,7 @@ export default function SemRow({ sem }) {
   const gridCols  = isPhone ? Math.min(2, slotCount) : slotCount;
 
   // Collapsible other credits
-  const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo } = usePlanner();
+  const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo, privateCoop } = usePlanner();
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
   useEffect(() => { if (collapseOtherCredits) setShowOther(false); else setShowOther(true); }, [collapseOtherCredits]);
 
@@ -314,7 +314,7 @@ export default function SemRow({ sem }) {
                   textDecoration: g.moved ? "none" : "line-through" }}>
                   <TText>{gType?.label ?? g.instance.typeId}</TText>{g.moved ? " →" : ""}
                 </span>
-                {g.instance.company && (
+                {!privateCoop && g.instance.company && (
                   <span style={{ fontSize: isPhone ? 7 : 12, color: "var(--text-4)",
                     textDecoration: g.moved ? "none" : "line-through" }}>
                     {g.instance.company}
@@ -350,22 +350,33 @@ export default function SemRow({ sem }) {
                 <TText>{termStartType?.label ?? termStartData.typeId}</TText> {termNum(termStartData.typeId, termStartId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 10 : 20 }}>
-                <CompanySearch
-                  name={termStartData.company}
-                  color={companyColor}
-                  emptyColor={placeholderColor}
-                  fontSize={isPhone ? 7 : 14}
-                  placeholder={t("sem.work.company.placeholder")}
-                  onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
-                />
-                <input
-                  value={termStartData.subline ?? ""}
-                  onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))}
-                  onMouseDown={e => e.stopPropagation()}
-                  placeholder={t("sem.work.role.placeholder")}
-                  className="work-input"
-                  style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 10, fontWeight: 400, color: termStartData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
-                />
+                {privateCoop ? (
+                  // Company + role are hidden; show a muted marker and no inputs,
+                  // so a viewer can't read them and edits can't overwrite the
+                  // stored values (they return when the toggle is off).
+                  <span style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 7 : 14, fontWeight: 600, color: placeholderColor, fontStyle: "italic" }}>
+                    {t("sem.work.hidden")}
+                  </span>
+                ) : (
+                  <>
+                    <CompanySearch
+                      name={termStartData.company}
+                      color={companyColor}
+                      emptyColor={placeholderColor}
+                      fontSize={isPhone ? 7 : 14}
+                      placeholder={t("sem.work.company.placeholder")}
+                      onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
+                    />
+                    <input
+                      value={termStartData.subline ?? ""}
+                      onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))}
+                      onMouseDown={e => e.stopPropagation()}
+                      placeholder={t("sem.work.role.placeholder")}
+                      className="work-input"
+                      style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 5 : 10, fontWeight: 400, color: termStartData.subline ? companyColor : placeholderColor, background: "transparent", border: "none", outline: "none", padding: 0 }}
+                    />
+                  </>
+                )}
               </div>
               <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} size={isPhone ? 20 : 40} />
               <button

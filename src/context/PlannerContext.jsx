@@ -53,6 +53,21 @@ const STATS_MIN_SH       = 3;
 
 const EMPTY_GRADES = Object.freeze({});
 
+// The identifying detail of a co-op: the employer, its logo, and the role
+// line. The "hide co-op details" privacy toggle strips exactly these while
+// leaving the term's structure (type, semester, length) intact.
+const COOP_PRIVATE_FIELDS = ["company", "companyDomain", "subline"];
+function redactCoopDetails(stp) {
+  if (!stp) return stp;
+  const out = {};
+  for (const [id, entry] of Object.entries(stp)) {
+    const clean = { ...entry };
+    for (const f of COOP_PRIVATE_FIELDS) delete clean[f];
+    out[id] = clean;
+  }
+  return out;
+}
+
 export function PlannerProvider({ children }) {
   const { locale, setLocale, locales } = useLanguage();
   const institution    = usePort(IInstitution);
@@ -314,6 +329,27 @@ export function PlannerProvider({ children }) {
     setPrivateGrades(val);
     try { localStorage.setItem(key("private-grades"), String(val)); } catch {}
   };
+
+  // ── Privacy: hide co-op company / role ──
+  // Same shape and spirit as privateGrades: it hides, never deletes. The
+  // company, logo and role stay in storage and reappear when switched off.
+  // What it suppresses is the co-op's identity everywhere the plan is shown
+  // or sent — the board, exports, share links, PDFs and Claude — while the
+  // term itself (type, dates, length) stays visible.
+  const [privateCoop, setPrivateCoop] = useState(() => {
+    try { return localStorage.getItem(key("private-coop")) === "true"; } catch { return false; }
+  });
+  const updatePrivateCoop = (val) => {
+    setPrivateCoop(val);
+    try { localStorage.setItem(key("private-coop"), String(val)); } catch {}
+  };
+  // Single choke point for everything that READS the plan for display or
+  // export: consumers see this, never the raw specialTermPl, so there's no
+  // per-surface opt-in to forget. Storage keeps the raw values untouched.
+  const specialTermPlSafe = useMemo(
+    () => privateCoop ? redactCoopDetails(pvSpecialTerms) : pvSpecialTerms,
+    [privateCoop, pvSpecialTerms]
+  );
 
   // ── UI: Show logo on continuation rows ──
   const [showContLogo, setShowContLogo] = useState(() => {
@@ -2458,6 +2494,7 @@ export function PlannerProvider({ children }) {
       substitutions,
     };
     if (privateGrades) delete data.grades;
+    if (privateCoop) data.specialTermPl = redactCoopDetails(data.specialTermPl);
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -2526,6 +2563,9 @@ export function PlannerProvider({ children }) {
       planName,
       locale: targetLocale,
     };
+    // Share links carry co-op company/role by default; the privacy toggle
+    // strips them so a shared plan can't reveal where you worked.
+    if (privateCoop) data.specialTermPl = redactCoopDetails(data.specialTermPl);
     const encoded = await encodePlan(data);
     const url = buildShareUrl(encoded);
     await navigator.clipboard.writeText(url);
@@ -2729,7 +2769,7 @@ export function PlannerProvider({ children }) {
     gradSem: planGradSem, gradYear: planGradYear,
     placements,
     semOrders,
-    workExperience: specialTermPl,
+    workExperience: privateCoop ? redactCoopDetails(specialTermPl) : specialTermPl,
     placedOut: [...placedOut],
     substitutions,
     bonusSH,
@@ -2787,7 +2827,7 @@ export function PlannerProvider({ children }) {
     const snap = {
       placements, semOrders,
       placedOut: [...placedOut], substitutions,
-      workExperience: specialTermPl, shOverrides, offeredOverrides,
+      workExperience: privateCoop ? redactCoopDetails(specialTermPl) : specialTermPl, shOverrides, offeredOverrides,
       currentSemId, bonusSH,
       major, major2, concentration: conc, concentration2: conc2, minor1, minor2, studentType,
       entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear,
@@ -2990,7 +3030,7 @@ export function PlannerProvider({ children }) {
     placements: claudePreview ? claudePreview.placements : placements,
     effectivePlacements,
     substitutions: pvSubstitutions,
-    specialTermPl: pvSpecialTerms,
+    specialTermPl: specialTermPlSafe,
     currentSemId: pv?.currentSemId ?? currentSemId,
     persistEnabled,
     semOrders,
@@ -3014,6 +3054,7 @@ export function PlannerProvider({ children }) {
     showDonate, setShowDonate,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
     privateGrades, setPrivateGrades: updatePrivateGrades,
+    privateCoop, setPrivateCoop: updatePrivateCoop,
     showContLogo, setShowContLogo: updateShowContLogo,
     showUnlocks, setShowUnlocks: updateShowUnlocks,
     semTrackingMode, setSemTrackingMode: updateSemTrackingMode,

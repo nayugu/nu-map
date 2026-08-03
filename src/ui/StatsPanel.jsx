@@ -762,7 +762,7 @@ export default function StatsPanel() {
     showStats, setShowStats, setSelectedId, setShowPanel,
     placements, courseMap, effectiveCourseMap, SEMESTERS, SEM_INDEX,
     specialTermPl, specialTermStartMap, specialTermContMap, totalSHPlaced, bonusSH,
-    major, studentType, isPhone, grades,
+    major, studentType, isPhone, grades, privateCoop,
   } = usePlanner();
 
   const attributeSystem = usePort(IAttributeSystem);
@@ -1148,8 +1148,10 @@ export default function StatsPanel() {
                       <span><b style={{ color: "var(--text-2)", fontWeight: 800 }}>{work.items.length}</b> {t("stats.work.terms")}</span>
                       <span style={{ color: "var(--text-6)" }}>·</span>
                       <span><b style={{ color: "var(--text-2)", fontWeight: 800 }}>{work.months}</b> {t("stats.work.months")}</span>
-                      <span style={{ color: "var(--text-6)" }}>·</span>
-                      <span><b style={{ color: "var(--text-2)", fontWeight: 800 }}>{work.companies}</b> {t("stats.work.companies")}</span>
+                      {!privateCoop && <>
+                        <span style={{ color: "var(--text-6)" }}>·</span>
+                        <span><b style={{ color: "var(--text-2)", fontWeight: 800 }}>{work.companies}</b> {t("stats.work.companies")}</span>
+                      </>}
                     </div>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 8 }}>
                       {work.items.map(w => <WorkCard key={w.id} w={w} />)}

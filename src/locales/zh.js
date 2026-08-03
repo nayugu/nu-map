@@ -85,6 +85,7 @@ export const strings = {
   "sem.term.remove":           "\u79fb\u9664 {type}",
   "sem.work.company.placeholder": "\u516c\u53f8",
   "sem.work.role.placeholder": "\u804c\u4f4d",
+  "sem.work.hidden": "已隐藏",
   "sem.override.label":        "+ \u8986\u76d6\u9650\u5236",
 
   // ── Grad panel ─────────────────────────────────────────────────
@@ -268,6 +269,8 @@ export const strings = {
   "header.settings.collapse.off":  "\u6298\u53e0\u5176\u4ed6\u5b66\u5206\uff1a\u5173",
  "header.settings.privategrades.on":  "已隐藏成绩：开",
  "header.settings.privategrades.off": "隐藏成绩：关",
+  "header.settings.privatecoop.on": "已隐藏 co-op 详情：开",
+  "header.settings.privatecoop.off": "隐藏 co-op 详情：关",
   "header.settings.contlogo.on":   "Co-op \u5ef6\u7eed\u6807\u5fd7\uff1a\u5f00",
   "header.settings.contlogo.off":  "Co-op \u5ef6\u7eed\u6807\u5fd7\uff1a\u5173",
   "header.settings.unlocks.on":    "\u663e\u793a\u5b50\u8bfe\u7a0b\uff1a\u5f00",
@@ -410,6 +413,7 @@ export const strings = {
   "tip.violations": "开启时，在你排布课程的计划板上，凡是某门课排在其所需先修或同修课程之前的位置都会出现红线。关闭即可隐藏。",
   "tip.collapse": "开启时，2 学分及以下的课程（实验等小课程）会在计划板上每个学期的“其他学分”栏中默认折叠显示。点击该栏即可展开。",
   "tip.privategrades": "开启时，所有成绩和你的 GPA 会在课程卡和统计面板中隐藏，也会从你用“保存”下载的计划文件中排除，这样你就能在不泄露成绩的情况下把计划展示给别人。分享链接、PDF 和 Claude 无论如何都不会包含成绩。成绩不会被删除，关闭此设置后会重新出现。",
+  "tip.privatecoop": "开启时，你 co-op 的公司、logo 和职位会在计划板上隐藏，也会从分享链接、文件、PDF 和 Claude 中排除，这样你就能在不透露工作地点的情况下展示计划。co-op 区块本身（类型、日期、时长）保留，关闭此设置后详情会重新出现。",
   "tip.unlocks": "开启时，选中某门课会在该课程的详情面板（桌面端在右侧）中列出它的子课程（把它作为先修课要求的课程）。",
   "tip.sticky.slots": "课程保持其学期档位（第 1、第 2…），因此会移动以对齐你新的入学起点。",
   "tip.sticky.dates": "课程固定在其学期（时段），因此 2026 秋季的课程即使移动入学时间也仍在 2026 秋季。",

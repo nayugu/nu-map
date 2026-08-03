@@ -77,7 +77,7 @@ export default function Header() {
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
-    grades, privateGrades, setPrivateGrades,
+    grades, privateGrades, setPrivateGrades, privateCoop, setPrivateCoop,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -1149,6 +1149,19 @@ export default function Header() {
                   border: `1px solid ${privateGrades ? "var(--active)" : "var(--border-2)"}`,
                   color: privateGrades ? "var(--active)" : "var(--text-4)" }}>
                 {privateGrades ? t("header.settings.privategrades.on") : t("header.settings.privategrades.off")}
+              </button>
+              </HoverTip>
+
+              {/* Hide co-op details — company + role, for showing the plan
+                  to someone. Hides the identity everywhere the plan is shown
+                  or sent; the co-op term itself stays. Reversible. */}
+              <HoverTip tip={t("tip.privatecoop")}>
+              <button className="hdr-btn-dd" onClick={() => setPrivateCoop(!privateCoop)}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: `1px solid ${privateCoop ? "var(--active)" : "var(--border-2)"}`,
+                  color: privateCoop ? "var(--active)" : "var(--text-4)" }}>
+                {privateCoop ? t("header.settings.privatecoop.on") : t("header.settings.privatecoop.off")}
               </button>
               </HoverTip>
 
