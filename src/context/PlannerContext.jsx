@@ -698,7 +698,7 @@ export function PlannerProvider({ children }) {
     };
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, gradesRaw]);
+  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   // ── Effect: semester tracking (live) ─────────────────────────
   // Runs on mount and whenever the tracking mode, plan semesters, or clock changes.
@@ -2281,6 +2281,11 @@ export function PlannerProvider({ children }) {
     offeredOverrides, collapsedSubs,
     major, major2, conc, conc2, minor1, minor2, studentType,
     placedOut: [...placedOut],
+    // restorePlan reads `substitutions`, but capture never wrote it, so the
+    // slot — which is what a reload restores from — always came back without
+    // them and the restore wiped the list to []. Every applied substitution was
+    // lost on refresh.
+    substitutions,
     // Present in plan slots (localStorage) only. Share links go through
     // planShare's _KEYS allowlist, which deliberately omits grades.
     grades: gradesRaw,
@@ -2337,6 +2342,12 @@ export function PlannerProvider({ children }) {
     setStudentTypeRaw(st);
     try { localStorage.setItem(key("student-type"), st); } catch {}
     setPlacedOut(d.placedOut ? new Set(d.placedOut) : new Set());
+    // Same ABSENT ≠ EMPTY rule as grades below. restorePlan never touched
+    // substitutions at all, so switching plans carried the previous plan's
+    // list across, and the slot — which had no key, because capture omitted
+    // it — cleared them on reload.
+    if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
+    else if (!initial) setSubstitutions([]);
     // ABSENT ≠ EMPTY, and conflating them destroyed data.
     //
     // Every plan slot written before grades existed has no `grades` key at
@@ -2478,7 +2489,7 @@ export function PlannerProvider({ children }) {
     // saved to state-v2, never mirrored to the slot, and then overwritten
     // by the stale slot on the next reload — silent data loss that looks
     // like "it didn't save". That was live for grades and placedOut.
-  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -2520,7 +2531,11 @@ export function PlannerProvider({ children }) {
     setCollapsedSubs(prev => d.collapsedSubs ?? prev);
     setBonusSH(d.bonusSH ?? 0);
     setPlacedOut(new Set(Array.isArray(d.placedOut) ? d.placedOut : []));
-    setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
+    // Absent is not the same as empty. A slot written before substitutions were
+    // captured has no key at all, and treating that as "none" is what destroyed
+    // them; only an explicit empty array clears.
+    if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
+    else if (!initial) setSubstitutions([]);
     if (d.currentSemId) setCurrentSemId(d.currentSemId);
     if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem(key("ent-sem"),  d.entSem);  } catch {} }
     if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem(key("ent-year"), d.entYear); } catch {} }
@@ -2564,7 +2579,6 @@ export function PlannerProvider({ children }) {
     const planName = plans.find(p => p.id === activePlanId)?.name || "Plan";
     const data = {
       ...captureCurrentPlan(),
-      substitutions,
       planName,
       locale: targetLocale,
     };

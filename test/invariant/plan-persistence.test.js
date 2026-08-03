@@ -53,17 +53,53 @@ function blockAfter(marker) {
 function capturedFields() {
   const body = blockAfter("const captureCurrentPlan = ");
   const out = new Set();
-  for (const m of body.matchAll(/^\s*([a-zA-Z_$][\w$]*)\s*(?::|,)/gm)) out.add(m[1]);
+  // Split on commas, not lines. A line-anchored match saw only the FIRST name
+  // on `placements, specialTermPl, semOrders, shOverrides, bonusSH,` and the
+  // guard silently checked a fraction of the fields for as long as it existed.
+  for (const raw of body.split(/[,\n]/)) {
+    const t = raw.replace(/\/\/.*$/, "").trim();
+    if (!t || t === "{" || t === "}" || t === "});") continue;
+    const m = /^([a-zA-Z_$][\w$]*)\s*(?::|$)/.exec(t);
+    if (m) out.add(m[1]);
+  }
   for (const k of ["version", "exported"]) out.delete(k);
   return out;
 }
 
 test("persistence › every captured plan field is also restored", () => {
   const restore = blockAfter("const restorePlan = ");
-  const missing = [...capturedFields()].filter(f => !new RegExp(`\\bd\\.${f}\\b`).test(restore));
+  // specialTermPl is read through migrateSpecialTermPl(d), which also handles
+  // the legacy workPl/internPl shapes, so `d.specialTermPl` never appears
+  // literally in the body.
+  const VIA_HELPER = new Set(["specialTermPl"]);
+  const missing = [...capturedFields()]
+    .filter(f => !VIA_HELPER.has(f))
+    .filter(f => !new RegExp(`\\bd\\.${f}\\b`).test(restore));
   assert.deepEqual(missing, [],
     `captureCurrentPlan writes these but restorePlan never reads them, so they are ` +
     `lost on reload: ${missing.join(", ")}`);
+});
+
+test("persistence › every restored plan field is also captured", () => {
+  // The MIRROR of the test above, and the hole that let a real bug ship.
+  //
+  // restorePlan read `d.substitutions` and wiped the list to [] when the key
+  // was absent — but captureCurrentPlan never wrote it, so the slot ALWAYS
+  // lacked it. Every applied substitution vanished on refresh. The
+  // captured→restored direction could not see this, because the field simply
+  // was not captured; only the reverse direction catches it.
+  //
+  // A field restorePlan reads must be one capture writes, or the restore is
+  // guaranteed to read undefined from a slot the app itself produced.
+  const restore = blockAfter("const restorePlan = ");
+  const captured = capturedFields();
+  // Legacy shapes handled by migrateSpecialTermPl, never written by capture.
+  const LEGACY = new Set(["workPl", "internPl"]);
+  const read = new Set([...restore.matchAll(/\bd\.([a-zA-Z_$][\w$]*)/g)].map(m => m[1]));
+  const orphaned = [...read].filter(f => !captured.has(f) && !LEGACY.has(f)).sort();
+  assert.deepEqual(orphaned, [],
+    `restorePlan reads these but captureCurrentPlan never writes them, so the slot ` +
+    `never contains them and the restore clears the live value: ${orphaned.join(", ")}`);
 });
 
 test("persistence › every captured plan field is watched by the slot autosave", () => {
