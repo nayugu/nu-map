@@ -954,16 +954,16 @@ function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
   //   INTERACTION keys off isMobile (<1024px, phone AND tablet), because the
   //   deciding factor is that touch has no hover — a tablet can't reveal the
   //   explanation any more than a phone can.
-  //     desktop  hover shows the explanation, click opens the catalog page
-  //     touch    tap shows the explanation; the catalog link is deliberately
-  //              disabled, since a tap that navigated out of the app was
-  //              previously the badge's only behaviour and left its
-  //              explanation unreachable
+  //     desktop  hover shows the explanation
+  //     touch    tap shows the explanation
+  //   The badge no longer navigates: linking the catalog off a "checked" mark
+  //   read as if the checkmark itself were the way into the program. The
+  //   program name beside it is the catalog link now (see ProgramNameLink);
+  //   the badge is purely the "how thoroughly we checked this" footnote,
+  //   reachable the same way on desktop and touch.
   //
   //   LAYOUT keys off isPhone (<600px), because that is where the badge
   //   actually overflowed the card. A tablet has room to keep it inline.
-  const href = verification?.sourceUrl;
-
   const pill = (
     <span
       onMouseEnter={isMobile ? undefined : e => setOpen(e.currentTarget.getBoundingClientRect())}
@@ -991,12 +991,7 @@ function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
 
   return (
     <>
-      {!isMobile && href
-        ? <a href={href} target="_blank" rel="noopener noreferrer"
-             // The card header toggles expand/collapse; the link must not do both.
-             onClick={e => e.stopPropagation()}
-             style={{ textDecoration: "none", display: "inline-flex", alignItems: "center" }}>{pill}</a>
-        : pill}
+      {pill}
 
       {open && (
         <VerificationPopover
@@ -1105,7 +1100,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
             {isPhone && <VerificationPill verification={minor.metadata?.verification}
                                           verified={minor.metadata?.verified} t={t} isPhone isMobile={isMobile} />}
           </div>
-          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: isPhone ? 3 : 5 }}>{scaleLatinRuns(minorName)}</div>
+          <ProgramNameLink name={minorName} href={minor.metadata?.verification?.sourceUrl} nameColor={nameColor} isPhone={isPhone} />
         </div>
         {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{expanded ? "▼" : "▶"}</span>}
       </div>
@@ -1141,6 +1136,44 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
   );
 }
 
+// ── ProgramNameLink: the program's name, as the catalog link ─────────
+// The program name (e.g. "Industrial Engineering, BSIE (Boston)") is the
+// affordance for opening the catalog page — an underlined-on-hover link, the
+// thing a reader actually expects to click to reach the program. When there's
+// no source URL it degrades to plain text. stopPropagation keeps a click from
+// also toggling the card header it sits inside. inline-block so the underline
+// hugs the text (not the full row) and the vertical margin applies.
+function ProgramNameLink({ name, href, nameColor, isPhone }) {
+  const [hov, setHov] = useState(false);
+  const base = {
+    display: "inline-block",
+    fontWeight: nameColor ? 700 : 400,
+    color: nameColor ?? "var(--text-2)",
+    fontSize: isPhone ? 7 : 10,
+    marginTop: isPhone ? 3 : 5,
+  };
+  if (!href) return <div style={base}>{scaleLatinRuns(name)}</div>;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={e => e.stopPropagation()}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        ...base,
+        cursor: "pointer",
+        textDecoration: hov ? "underline" : "none",
+        textDecorationColor: nameColor ?? "var(--text-2)",
+        textUnderlineOffset: 2,
+      }}
+    >
+      {scaleLatinRuns(name)}
+    </a>
+  );
+}
+
 // ── MajorCard: framed collapsible card for a major's requirements ─
 // Frame is a subtle background tint (no border line) matching MinorBlock.
 function MajorCard({ label, name, subtitle, verified, verification, progress, expanded, onToggle, isPhone, isMobile, loading, loadingLabel, children, nameColor, subtitleColor }) {
@@ -1165,7 +1198,7 @@ function MajorCard({ label, name, subtitle, verified, verification, progress, ex
             </div>
             {isPhone && <VerificationPill verification={verification} verified={verified} t={t} isPhone isMobile={isMobile} />}
           </div>
-          <div style={{ fontWeight: nameColor ? 700 : 400, color: nameColor ?? "var(--text-2)", fontSize: isPhone ? 7 : 10, marginTop: isPhone ? 3 : 5 }}>{scaleLatinRuns(name)}</div>
+          <ProgramNameLink name={name} href={verification?.sourceUrl} nameColor={nameColor} isPhone={isPhone} />
           {subtitle && <div style={{ fontWeight: subtitleColor ? 700 : 400, color: subtitleColor ?? "var(--text-4)",
             fontSize: isPhone ? 7 : 9, marginTop: 1,
             /* Indented so it reads as belonging to the program above it
