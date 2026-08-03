@@ -536,6 +536,7 @@ export const strings = {
 
   "stats.dept.title":             "Credits by department",
   "stats.dept.value":             "{sh} {unit} \xb7 {n} classes",
+  "stats.dept.gpa":        "{gpa} GPA ({n} graded)",
   "stats.level.title":            "Level distribution",
   "stats.level.tier":             "{tier}-level",
   "stats.level.gradline":         "Graduate",

@@ -531,6 +531,7 @@ export const strings = {
   "stats.comp.dept":              "按院系",
   "stats.dept.title":             "各院系学分",
   "stats.dept.value":             "{sh} {unit} · {n} 门",
+  "stats.dept.gpa":        "GPA {gpa}（已评分 {n} 门）",
   "stats.level.title":            "级别分布",
   "stats.level.tier":             "{tier} 级",
   "stats.level.gradline":         "研究生",

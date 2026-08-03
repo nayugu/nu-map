@@ -532,6 +532,7 @@ export const strings = {
   "stats.comp.dept":              "学科別",
   "stats.dept.title":             "学科別の単位",
   "stats.dept.value":             "{sh} {unit} · {n}科目",
+  "stats.dept.gpa":        "GPA {gpa}（{n}科目）",
   "stats.level.title":            "レベル分布",
   "stats.level.tier":             "{tier}番台",
   "stats.level.gradline":         "大学院",

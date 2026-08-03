@@ -21,6 +21,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { subjectColor } from "../core/courseModel.js";
+import { enteredGPA, countsInGPA } from "../core/gradeSystem.js";
 import { getSemStudySH, inTimeline, filterInTimeline } from "../core/planModel.js";
 import { computeGrantedAttrs, resolveTermByDuration } from "../core/specialTermUtils.js";
 import {
@@ -654,7 +655,7 @@ export default function StatsPanel() {
     showStats, setShowStats, setSelectedId, setShowPanel,
     placements, courseMap, effectiveCourseMap, SEMESTERS, SEM_INDEX,
     specialTermPl, specialTermStartMap, specialTermContMap, totalSHPlaced, bonusSH,
-    major, studentType, isPhone,
+    major, studentType, isPhone, grades,
   } = usePlanner();
 
   const attributeSystem = usePort(IAttributeSystem);
@@ -750,11 +751,28 @@ export default function StatsPanel() {
       if (!g.has(subj)) g.set(subj, []);
       g.get(subj).push(id);
     }
-    return [...g.entries()].map(([subject, ids]) => ({
-      subject, ids: ids.sort(byNum), count: ids.length,
-      sh: ids.reduce((s, id) => s + (cmap[id]?.sh ?? 0), 0),
-    })).sort((a, b) => b.sh - a.sh || a.subject.localeCompare(b.subject));
-  }, [placedIds, cmap]);
+    return [...g.entries()].map(([subject, ids]) => {
+      const sorted = ids.sort(byNum);
+      // Per-subject GPA from ENTERED grades only — genuinely new
+      // information (nothing else in the app shows "how am I doing in CS
+      // versus everything else"), and the shape behind the subject-scoped
+      // catalog rules like Khoury's 2.000 across CS/CY/DS/IS.
+      //
+      // Same core helper the graduation panel uses, so the two can never
+      // disagree, and null whenever nothing in this subject is graded —
+      // which also makes it vanish under private mode, since the grades
+      // view is empty there.
+      const gpa = enteredGPA(sorted.map(id => ({
+        grade: grades[id] ?? null, credits: cmap[id]?.sh,
+      })));
+      const graded = sorted.filter(id => countsInGPA(grades[id])).length;
+      return {
+        subject, ids: sorted, count: sorted.length,
+        sh: sorted.reduce((s, id) => s + (cmap[id]?.sh ?? 0), 0),
+        gpa, graded,
+      };
+    }).sort((a, b) => b.sh - a.sh || a.subject.localeCompare(b.subject));
+  }, [placedIds, cmap, grades]);
 
   // Credit-load timeline: summers as one bucket, per-half co-op occupancy
   // (Summer A / B) from the start + continuation maps so spanning co-ops
@@ -943,7 +961,10 @@ export default function StatsPanel() {
                     {byDept.map(g => (
                       <CourseGroup key={g.subject}
                         title={g.subject}
-                        sub={t("stats.dept.value", { sh: g.sh, unit, n: g.count })}
+                        sub={t("stats.dept.value", { sh: g.sh, unit, n: g.count })
+                             + (g.gpa != null
+                                 ? " · " + t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded })
+                                 : "")}
                         ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}
                       />
                     ))}

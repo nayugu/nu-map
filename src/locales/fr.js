@@ -531,6 +531,7 @@ export const strings = {
   "stats.comp.dept":              "Par département",
   "stats.dept.title":             "Crédits par département",
   "stats.dept.value":             "{sh} {unit} · {n} cours",
+  "stats.dept.gpa":        "GPA {gpa} ({n} notés)",
   "stats.level.title":            "Répartition par niveau",
   "stats.level.tier":             "Niveau {tier}",
   "stats.level.gradline":         "Cycle supérieur",
