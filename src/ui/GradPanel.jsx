@@ -20,7 +20,7 @@ import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { filterInTimeline } from "../core/planModel.js";
-import { setConstraintStatus, effectiveGradeOfTakes } from "../core/gradeSystem.js";
+import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
@@ -539,6 +539,61 @@ function GpaRules({ program, programKind = "major" }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// ── GPA so far ───────────────────────────────────────────────────
+// The one place the overall number renders, and only from ENTERED letter
+// grades — with none entered this returns null and no GPA exists anywhere
+// in the app (the assumed ceiling must never be displayed as a GPA). Lives
+// in the graduation panel, a deliberate click from the board: the header
+// and the planner appear in every screenshot and screen-share, and this is
+// the most sensitive number in the app.
+function GpaSoFar() {
+  const { t } = useLanguage();
+  const { grades, placements, placedOut, courseMap, SEM_INDEX, isPhone } = usePlanner();
+
+  const stat = useMemo(() => {
+    const seen = new Set();
+    const entries = [];
+    const consider = (pid, inTL) => {
+      if (!inTL) return;
+      const base = baseId(pid);
+      if (seen.has(base)) return;
+      seen.add(base);
+      // Latest take counts (replacement rule).
+      const takes = [];
+      for (const [p2, sid] of Object.entries(placements)) {
+        if (baseId(p2) !== base) continue;
+        const fi = SEM_INDEX[sid];
+        if (fi !== undefined) takes.push({ fi, grade: grades[p2] ?? null });
+      }
+      for (const p2 of placedOut) if (baseId(p2) === base) takes.push({ fi: "out", grade: grades[p2] ?? null });
+      const g = takes.length ? effectiveGradeOfTakes(takes) : null;
+      if (g != null) entries.push({ grade: g, credits: courseMap[base]?.sh ?? 4 });
+    };
+    for (const [pid, sid] of Object.entries(placements)) consider(pid, SEM_INDEX[sid] !== undefined);
+    for (const pid of placedOut) consider(pid, true);
+    const gpa = enteredGPA(entries);
+    return gpa == null ? null : { gpa, n: entries.filter(e => e.grade != null).length };
+  }, [grades, placements, placedOut, courseMap, SEM_INDEX]);
+
+  if (!stat) return null;
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                  padding: "6px 10px", marginBottom: 8, borderRadius: 6,
+                  border: "1px solid var(--border-1)" }}>
+      <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
+                     letterSpacing: "0.05em" }}>
+        {t("grad.gpa.sofar")}
+      </span>
+      <span style={{ fontSize: isPhone ? 9 : 11, fontWeight: 700, color: "var(--text-2)" }}>
+        {stat.gpa.toFixed(3)}
+        <span style={{ fontSize: isPhone ? 7 : 8.5, fontWeight: 500, color: "var(--text-5)", marginLeft: 5 }}>
+          {t("grad.gpa.sofar.n", { n: stat.n })}
+        </span>
+      </span>
     </div>
   );
 }
@@ -1559,6 +1614,9 @@ export default function GradPanel({ wideCatalog = false }) {
             </>
           )}
         </div>
+
+        {/* ── GPA so far — renders ONLY once a letter grade is entered ── */}
+        <GpaSoFar />
 
         {/* ── Attribute grid — hidden for grad plans and when adapter has no attributes ── */}
         {!isGrad && attributeSystem.getGridCodes().length > 0 && (

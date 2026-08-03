@@ -104,6 +104,8 @@ export const strings = {
   "grad.gpa.scope.minor":         "पूरा माइनर",
   "grad.gpa.scope.subjects":      "{subjects} के सभी कोर्स",
   "grad.gpa.scope.courses":       "ये {n} कोर्स",
+  "grad.gpa.sofar":               "अब तक का GPA",
+  "grad.gpa.sofar.n":             "{n} ग्रेडेड कोर्स से",
   "grad.conc.search":       "⌕ विशेषज्ञता खोजें",
   "grad.minor1.label":      "माइनर 1",
   "grad.minor2.label":      "माइनर 2",

@@ -105,6 +105,8 @@ export const strings = {
   "grad.gpa.scope.minor":         "副専攻全体",
   "grad.gpa.scope.subjects":      "{subjects}の全科目",
   "grad.gpa.scope.courses":       "この{n}科目",
+  "grad.gpa.sofar":               "現在のGPA",
+  "grad.gpa.sofar.n":             "成績入力済み{n}科目より",
   "grad.conc.search":       "⌕ 集中分野を検索",
   "grad.minor1.label":      "副専攻1",
   "grad.minor2.label":      "副専攻2",

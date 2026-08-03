@@ -104,6 +104,8 @@ export const strings = {
   "grad.gpa.scope.minor":         "整个辅修",
   "grad.gpa.scope.subjects":      "所有 {subjects} 课程",
   "grad.gpa.scope.courses":       "这 {n} 门课程",
+  "grad.gpa.sofar":               "当前 GPA",
+  "grad.gpa.sofar.n":             "基于 {n} 门已评分课程",
   "grad.conc.search":        "\u2315 \u641c\u7d22\u65b9\u5411",
   "grad.minor1.label":       "\u8f85\u4fee 1",
   "grad.minor2.label":       "\u8f85\u4fee 2",

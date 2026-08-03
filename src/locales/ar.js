@@ -104,6 +104,8 @@ export const strings = {
   "grad.gpa.scope.minor":         "التخصص الفرعي بأكمله",
   "grad.gpa.scope.subjects":      "جميع مقررات {subjects}",
   "grad.gpa.scope.courses":       "هذه المقررات الـ{n}",
+  "grad.gpa.sofar":               "المعدل حتى الآن",
+  "grad.gpa.sofar.n":             "من {n} مقررات مُقيَّمة",
   "grad.conc.search":       "⌕ بحث عن التخصصات الفرعية",
   "grad.minor1.label":      "تخصص فرعي 1",
   "grad.minor2.label":      "تخصص فرعي 2",

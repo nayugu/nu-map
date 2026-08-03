@@ -104,6 +104,8 @@ export const strings = {
   "grad.gpa.scope.minor":         "부전공 전체",
   "grad.gpa.scope.subjects":      "{subjects} 전체 과목",
   "grad.gpa.scope.courses":       "이 {n}개 과목",
+  "grad.gpa.sofar":               "현재까지 GPA",
+  "grad.gpa.sofar.n":             "성적 입력 {n}과목 기준",
   "grad.conc.search":       "⌕ 세부 전공 검색",
   "grad.minor1.label":      "부전공 1",
   "grad.minor2.label":      "부전공 2",

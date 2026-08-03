@@ -104,6 +104,8 @@ export const strings = {
   "grad.gpa.scope.minor":         "toute la mineure",
   "grad.gpa.scope.subjects":      "tous les cours {subjects}",
   "grad.gpa.scope.courses":       "ces {n} cours",
+  "grad.gpa.sofar":               "GPA À CE JOUR",
+  "grad.gpa.sofar.n":             "sur {n} notés",
   "grad.conc.search":       "⌕ rechercher une concentration",
   "grad.minor1.label":      "MINEURE 1",
   "grad.minor2.label":      "MINEURE 2",
