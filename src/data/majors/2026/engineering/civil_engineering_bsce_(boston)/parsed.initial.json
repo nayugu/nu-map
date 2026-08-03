@@ -863,5 +863,18 @@
       "minRequirementCount": 2
     }
   ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CIVE"
+        ]
+      },
+      "text": "2.000 minimum GPA required in CIVE coursework"
+    }
+  ],
   "generalElectiveSH": 24
 }

@@ -569,7 +569,7 @@ function GpaRules({ program, programKind = "major" }) {
                 {r.threshold != null ? (
                   <span style={{ flexShrink: 0, fontSize: isPhone ? 8 : 9.5, fontWeight: 600,
                                  color: "var(--text-3)", letterSpacing: 0 }}>
-                    · ≥ {r.threshold.toFixed(3)}
+                    ≥ {r.threshold.toFixed(3)}
                   </span>
                 ) : (
                   <span style={{ minWidth: 0, fontSize: isPhone ? 8 : 9.5, lineHeight: 1.4,

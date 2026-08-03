@@ -560,8 +560,11 @@
       "title": "Science GPA Requirement (Environmental Studies)",
       "threshold": 2,
       "scope": {
-        "kind": "described",
-        "text": "ENVR, EEMB"
+        "kind": "subjects",
+        "subjects": [
+          "ENVR",
+          "EEMB"
+        ]
       },
       "text": "Minimum 2.000 GPA required in ENVR, EEMB"
     }

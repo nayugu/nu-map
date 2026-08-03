@@ -558,5 +558,18 @@
       "minRequirementCount": 2
     }
   ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "EECE"
+        ]
+      },
+      "text": "2.000 minimum GPA required in EECE courses"
+    }
+  ],
   "generalElectiveSH": 28
 }

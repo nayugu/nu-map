@@ -714,8 +714,10 @@
       "title": "Engineering GPA Requirement",
       "threshold": 2,
       "scope": {
-        "kind": "described",
-        "text": "all CIVE coursework"
+        "kind": "subjects",
+        "subjects": [
+          "CIVE"
+        ]
       },
       "text": "Minimum 2.000 GPA required in all CIVE coursework"
     },

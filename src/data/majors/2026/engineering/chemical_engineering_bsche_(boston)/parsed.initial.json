@@ -465,8 +465,10 @@
       "title": "Major GPA Requirement",
       "threshold": 2,
       "scope": {
-        "kind": "described",
-        "text": "CHME coursework"
+        "kind": "subjects",
+        "subjects": [
+          "CHME"
+        ]
       },
       "text": "Minimum 2.000 GPA required in CHME coursework"
     }

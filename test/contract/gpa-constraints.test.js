@@ -26,10 +26,22 @@ test('gpa grammar › every census phrasing lands in the right scope', () => {
     ["Minimum cumulative 2.000 GPA required in all CS, CY, DS, and IS courses", "subjects", 2],
     ["Minimum 2.000 GPA required in CS, CY, DS, and IS courses", "subjects", 2],
     ["Minimum 2.750 GPA required in all AMSL, INTP, and DEAF courses", "subjects", 2.75],
+    // The engineering phrasings the first recall audit missed:
+    ["Minimum 2.000 GPA required in CHME coursework", "subjects", 2],
+    ["Minimum 2.000 GPA required in all CIVE coursework", "subjects", 2],
+    ["Minimum 2.000 GPA required in ME/MEIE/EECE/ENCP coursework", "subjects", 2],
+    ["Minimum 2.000 GPA required in all CS, CY, DS, IS", "subjects", 2],   // no suffix
+    ["Minimum 2.000 GPA required in IE, ME,and MEIE courses", "subjects", 2], // missing space
+    // Inverted order (a few engineering pages) — and the co-op form that
+    // must NOT parse (an application bar, not a degree rule):
+    ["2.000 minimum GPA required in all BIOE coursework", "subjects", 2],
+    ["2.000 minimum GPA required in  CIVE coursework", "subjects", 2],       // double space
+    ["A minimum GPA of 3.000 is required in order to apply", null, null],
     ["Minimum 3.000 GPA required", "cumulative", 3],
     ["2.000 GPA required in the minor", "program", 2],          // the dominant minor form: no "Minimum"
     ["Minimum 3.000 GPA required in all major courses", "program", 3],
     ["Minimum 2.000 GPA required in all business courses", "described", 2],  // fuzzy: never guessed
+    ["Minimum 2.000 GPA required in anthropology and philosophy courses", "described", 2],
     ["cumulative 3.500 GPA is required for the core requirement", "described", 3.5], // "for": not a floor
     ["Minimum 2.000 GPA required in all courses completed", "cumulative", 2],
     ["Complete one of the following:", null, null],

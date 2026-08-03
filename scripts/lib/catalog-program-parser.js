@@ -899,7 +899,12 @@ export function parseGpaRule(text) {
   // bare "2.000 GPA required in the minor". A "for <x>" tail ("required for
   // the core requirement") is NOT a degree-wide floor — it stays described.
   m = /(?:[Mm]inimum )?(?:[Cc]umulative )?([0-9]\.[0-9]{1,3}) GPA(?: is)? required(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t)
-   || /[Mm]inimum [Cc]umulative ([0-9]\.[0-9]{1,3}) GPA(?: is)?(?: required)?(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t);
+   || /[Mm]inimum [Cc]umulative ([0-9]\.[0-9]{1,3}) GPA(?: is)?(?: required)?(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t)
+   // Inverted order: "2.000 minimum GPA required in CHME coursework"
+   // (a handful of engineering pages). NOT "minimum GPA of N" — that
+   // family is co-op/application prerequisites ("required in order to
+   // apply"), which are not degree rules.
+   || /([0-9]\.[0-9]{1,3}) [Mm]inimum GPA(?: is)? required(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t);
   if (!m) return null;
   const threshold = parseFloat(m[1]);
   const prep      = m[2] ?? null;
@@ -911,13 +916,19 @@ export function parseGpaRule(text) {
     return { threshold, scope: { kind: 'cumulative' } };
   if (/^(?:the (?:minor|major)|all (?:minor|major) courses)$/i.test(scopeText))
     return { threshold, scope: { kind: 'program' } };
-  // "[all] CS, CY, DS, and IS courses" — "all" and Oxford comma optional.
-  // "and" is normalized to a comma BEFORE splitting: splitting on the
-  // alternation directly left "and IS" fused into one token, because the
-  // Oxford ", and " was consumed by the comma branch first.
-  const sm = /^(?:all )?((?:[A-Z]{2,6}(?:\s*,\s*|,? and )?)+) ?courses$/.exec(scopeText);
+  // Subject lists, per the scope-phrasing census (docs/grades-design.md):
+  //   "all CS, CY, DS, and IS courses"   commas Oxford or not, "all" optional
+  //   "CHME coursework"                  engineering says "coursework"
+  //   "ME/MEIE/EECE/ENCP coursework"     slash-separated
+  //   "all CS, CY, DS, IS"               no suffix at all
+  //   "IE, ME,and MEIE courses"          missing space after the comma
+  // "and" is normalized to a comma BEFORE splitting — splitting on an
+  // alternation left "and IS" fused into one token. Every token must be a
+  // 2–6 letter uppercase subject code or the whole thing stays described
+  // ("business courses", "anthropology and philosophy courses").
+  const sm = /^(?:all )?([A-Z][A-Za-z\/,\s]*?)(?:\s+course(?:s|work))?$/.exec(scopeText);
   if (sm) {
-    const subjects = sm[1].replace(/\band\b/g, ',').split(/\s*,\s*/)
+    const subjects = sm[1].replace(/\band\b/g, ',').split(/\s*[,\/]\s*/)
       .map(s => s.trim()).filter(Boolean);
     if (subjects.length && subjects.every(s => /^[A-Z]{2,6}$/.test(s)))
       return { threshold, scope: { kind: 'subjects', subjects } };

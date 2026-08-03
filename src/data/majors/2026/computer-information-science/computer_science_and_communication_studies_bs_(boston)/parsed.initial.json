@@ -614,8 +614,13 @@
       "title": "Khoury College GPA Requirement",
       "threshold": 2,
       "scope": {
-        "kind": "described",
-        "text": "all CS, CY, DS, IS"
+        "kind": "subjects",
+        "subjects": [
+          "CS",
+          "CY",
+          "DS",
+          "IS"
+        ]
       },
       "text": "Minimum cumulative 2.000 GPA required in all CS, CY, DS, IS"
     },

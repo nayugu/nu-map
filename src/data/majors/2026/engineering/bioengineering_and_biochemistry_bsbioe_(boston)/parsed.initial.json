@@ -537,8 +537,10 @@
       "title": "Major GPA Requirement",
       "threshold": 2,
       "scope": {
-        "kind": "described",
-        "text": "BIOE coursework"
+        "kind": "subjects",
+        "subjects": [
+          "BIOE"
+        ]
       },
       "text": "Minimum 2.000 GPA required in BIOE coursework"
     }

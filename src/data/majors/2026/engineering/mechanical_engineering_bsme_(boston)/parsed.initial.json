@@ -530,5 +530,21 @@
       "minRequirementCount": 2
     }
   ],
+  "gpaRequirements": [
+    {
+      "title": "Program Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "ME",
+          "MEIE",
+          "EECE",
+          "ENCP"
+        ]
+      },
+      "text": "2.000 minimum GPA required in ME/MEIE/EECE/ENCP coursework"
+    }
+  ],
   "generalElectiveSH": 24
 }
