@@ -6,6 +6,8 @@
 // /plan-contents, /consent) and from optimistic applies after
 // apply_changes. Reads come from MCP tools.
 
+import { randomCode } from "./shareBox.js";
+
 const CHANGE_BUFFER_MAX = 50;
 
 const _sessions = new Map();
@@ -167,15 +169,11 @@ export function setConsent(sessionId, patch = {}) {
 // to the user → the user enters it in the NU Map Claude panel → the
 // browser POSTs /pair. Approval always happens IN the app.
 
-const PAIR_CODE_TTL_MS  = 10 * 60 * 1000;
-const PAIR_CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no 0/O/1/I/L
+const PAIR_CODE_TTL_MS = 10 * 60 * 1000;
 
 export function createPairingCode(sessionId) {
   const s = sess(sessionId);
-  let code = "";
-  for (let i = 0; i < 6; i++) {
-    code += PAIR_CODE_ALPHABET[Math.floor(Math.random() * PAIR_CODE_ALPHABET.length)];
-  }
+  const code = randomCode(); // crypto-random, no 0/O/1/I/L (shareBox alphabet)
   // Drop expired codes; keep at most 3 outstanding.
   const now = Date.now();
   for (const [c, exp] of s.pendingPairCodes) if (exp < now) s.pendingPairCodes.delete(c);
