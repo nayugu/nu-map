@@ -82,16 +82,24 @@ test("scoping › unknown program slugs are ignored, not fatal", () => {
 
 // ── directed statements ─────────────────────────────────────────────
 
-test("direction › a directed statement only licenses its own direction", () => {
-  // "ACCT 1209 counts as ACCT 1201" — 1209 may stand in for 1201, not reverse.
+test("direction › every pair is searchable from both sides", () => {
+  // The catalog prints "Counts as ACCT 1201" on ACCT 1209 only. That is where
+  // the sentence was typeset, not a restriction — 1201 is the majors' version
+  // of the same course — so enforcing it hid the pair from half its searches.
   const from1209 = alternativesFor(IX, "ACCT 1209", new Set());
   assert.equal(from1209.length, 1);
   assert.equal(from1209[0].to, "ACCT 1201");
-  assert.equal(from1209[0].tier, "A");
-  assert.equal(from1209[0].evidence.scope, "business minors");
-  assert.equal(from1209[0].evidence.excludes, "business majors");
 
-  assert.deepEqual(alternativesFor(IX, "ACCT 1201", new Set()), []);
+  const from1201 = alternativesFor(IX, "ACCT 1201", new Set());
+  assert.equal(from1201.length, 1, "the reverse direction must also resolve");
+  assert.equal(from1201[0].to, "ACCT 1209");
+
+  // The real restriction is the scope, and it survives in BOTH directions.
+  for (const a of [from1209[0], from1201[0]]) {
+    assert.equal(a.evidence.scope, "business minors");
+    assert.equal(a.evidence.excludes, "business majors");
+    assert.equal(a.evidence.statedOn, "ACCT 1209", "which course carried the sentence");
+  }
 });
 
 // ── tiers ───────────────────────────────────────────────────────────

@@ -122,10 +122,17 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
 
   const other = p.a === fromCourseId ? p.b : p.a;
 
-  // A directed statement ("ACCT 1209 counts as ACCT 1201") only licenses the
-  // swap in that direction. `e.d` names the course the statement was written
-  // on, so it may stand in FOR the other one, not the reverse.
-  if (p.e?.d && p.e.d !== fromCourseId) return null;
+  // Every pair is searchable from both sides. The catalog prints a "counts as"
+  // rule on one course only — ACCT 1209 says "Counts as ACCT 1201", never the
+  // reverse — but that is where the sentence was typeset, not a restriction:
+  // ACCT 1201 is the majors' version of the same course, so a requirement
+  // naming 1209 is plainly met by having taken 1201. Enforcing the printed
+  // direction hid five real equivalences from half their searches.
+  //
+  // The genuine restriction is the SCOPE ("business minors only", "does not
+  // count for business majors"), which travels separately in `evidence` and is
+  // shown in the popover either way round. `e.d` is kept so the popover can
+  // still say which course the catalog wrote the rule on.
 
 
   return {
@@ -140,6 +147,7 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
       overlap: p.e?.o ?? null,          // % of downstream courses shared
       crossList: p.e?.x ?? null,
       statement: p.e?.s ?? null,
+      statedOn: p.e?.d ?? null,        // which course the catalog printed it on
       scope: p.e?.sc ?? null,
       excludes: p.e?.ex ?? null,
       // Every course the stated rule requires, when it named more than one.
@@ -169,7 +177,8 @@ export function programAllowedSwaps(index, myProgramIx, { limit = 24 } = {}) {
     const backing = p.e?.p;
     if (!Array.isArray(backing) || !backing.some(i => myProgramIx.has(i))) continue;
 
-    // Direction: a directed statement only licenses its own way round.
+    // Both directions are valid; list the rule the way the catalog printed it
+    // when it said, else the stored order.
     const from = p.e?.d ?? p.a;
     const to = from === p.a ? p.b : p.a;
     const key = `${from}|${to}`;
