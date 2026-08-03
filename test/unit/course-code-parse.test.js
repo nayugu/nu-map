@@ -1,7 +1,7 @@
 // Course-code parsing — separators are irrelevant, subjects carry forward.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseCourseCodes, readSubstitutionIntent, normalizeCodeQuery,
+import { parseCourseCodes, normalizeCodeQuery,
          parseCodeTerms } from "../../src/core/courseCodeParse.js";
 
 const codes = s => parseCourseCodes(s).codes;
@@ -45,29 +45,9 @@ test("parse › empty and junk input is safe", () => {
   for (const s of ["", null, undefined, "   ", "!!!", "??"]) assert.deepEqual(codes(s), []);
 });
 
-test("intent › one code asks for suggestions", () => {
-  const i = readSubstitutionIntent("phys1163");
-  assert.equal(i.kind, "suggest");
-  assert.equal(i.from, "PHYS 1163");
-});
 
-test("intent › two codes state a substitution", () => {
-  const i = readSubstitutionIntent("phys1163 phys1173");
-  assert.equal(i.kind, "pair");
-  assert.equal(i.from, "PHYS 1163");
-  assert.deepEqual(i.to, ["PHYS 1173"]);
-});
 
-test("intent › three or more codes pair the first with each of the rest", () => {
-  const i = readSubstitutionIntent("ge1110 ge1501 ge1502");
-  assert.equal(i.kind, "pair");
-  assert.equal(i.from, "GE 1110");
-  assert.deepEqual(i.to, ["GE 1501", "GE 1502"]);
-});
 
-test("intent › no codes falls back to search", () => {
-  assert.equal(readSubstitutionIntent("organic chem").kind, "search");
-});
 
 test("normalize › a code typed without a space still matches the haystack", () => {
   assert.equal(normalizeCodeQuery("phys1111"), "phys 1111");

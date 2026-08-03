@@ -22,17 +22,9 @@
 // Wire format is documented in docs/substitutions-design.md §6.
 // ═══════════════════════════════════════════════════════════════════
 
-/** Tier order, strongest first. Mirrors TIERS in scripts/lib/equivalence.js. */
-const TIER_RANK = { A: 0, B: 1, C: 2, D: 3 };
-
-/** Only tier C carries a caveat; A and B are facts the catalog grants. */
-export function tierNeedsApproval(tier) {
-  return tier === "C";
-}
-
-export function tierIsOfferable(tier) {
-  return tier === "A" || tier === "B" || tier === "C";
-}
+import { tierRank, tierNeedsApproval, tierIsOfferable, resolveTier }
+  from "./equivalenceTiers.js";
+export { tierNeedsApproval, tierIsOfferable } from "./equivalenceTiers.js";
 
 /**
  * Build lookup structures from the raw wire object.
@@ -84,23 +76,9 @@ export function programIndexSet(index, slugs) {
   return out;
 }
 
-/**
- * The tier this student should see for one raw pair.
- *
- * Membership in a publishing program upgrades to A — an entitlement the
- * catalog already grants, needing no approval. Otherwise the stored tier
- * stands. Mirrors `resolveTier` in scripts/lib/equivalence.js; kept in both
- * places because that one runs at build time with no student context.
- */
-export function resolvePairTier(pair, myProgramIx) {
-  const backing = pair?.e?.p;
-  if (Array.isArray(backing) && myProgramIx?.size) {
-    for (const ix of backing) {
-      if (myProgramIx.has(ix)) return { tier: "A", scoped: true };
-    }
-  }
-  return { tier: pair?.t ?? "D", scoped: false };
-}
+/** Re-exported under the name the UI already uses. */
+export const resolvePairTier = resolveTier;
+
 
 /**
  * Alternatives to `courseId`, ranked, grouped into bundles, tier-resolved.
@@ -129,7 +107,7 @@ export function alternativesFor(index, courseId, myProgramIx, opts = {}) {
     if (s) out.push(s);
   }
 
-  out.sort((x, y) => (TIER_RANK[x.tier] - TIER_RANK[y.tier]) || (y.score - x.score) ||
+  out.sort((x, y) => (tierRank(x.tier) - tierRank(y.tier)) || (y.score - x.score) ||
                      x.to.localeCompare(y.to));
   return out;
 }
@@ -139,7 +117,7 @@ export function alternativesFor(index, courseId, myProgramIx, opts = {}) {
  * is not offerable to this student.
  */
 function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferable = false } = {}) {
-  const { tier, scoped } = resolvePairTier(p, myProgramIx);
+  const { tier, scoped } = resolveTier(p, myProgramIx);
   if (!includeUnofferable && !tierIsOfferable(tier)) return null;
 
   const other = p.a === fromCourseId ? p.b : p.a;
@@ -168,10 +146,7 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
   };
 }
 
-/** True when the course has anything worth showing. Cheap enough per render. */
-export function hasAlternatives(index, courseId, myProgramIx) {
-  return alternativesFor(index, courseId, myProgramIx).length > 0;
-}
+
 
 /**
  * Every swap the student's own programs publish — the answer to "what am I

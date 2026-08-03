@@ -14,9 +14,9 @@ import assert from "node:assert/strict";
 import {
   TIERS, TIER_C_MIN_EVIDENCE, TIER_C_MIN_STEM, MAX_CROSSLIST_CLUSTER,
   seqNum, titleStem, stemContainment, jaccard,
-  courseRole, roleSlot, companionParent, isCompanionTitle,
+  courseRole, roleSlot, companionParent,
   isGenericShell, crossesGradBoundary, numericAffinity,
-  parseStatedEquivalences, findVetoes, classifyPair, resolveTier, pairKey,
+  parseStatedEquivalences, findVetoes, classifyPair, pairKey,
 } from "../../scripts/lib/equivalence.js";
 
 // ── sequence detection ──────────────────────────────────────────────
@@ -88,10 +88,6 @@ test("companionParent › reads the parent out of the title", () => {
   assert.equal(companionParent("Physics 1"), null);
 });
 
-test("isCompanionTitle › agrees with courseRole", () => {
-  assert.equal(isCompanionTitle("Lab for PHYS 1151"), true);
-  assert.equal(isCompanionTitle("Physics 1"), false);
-});
 
 // ── numeric structure ───────────────────────────────────────────────
 
@@ -291,20 +287,8 @@ test("tier › a program-backed pair stays program-AGNOSTIC in the stored tier",
 
 // ── runtime scoping ─────────────────────────────────────────────────
 
-test("resolveTier › membership in a publishing program upgrades to A", () => {
-  const pair = { t: "C", e: { p: [3, 9] } };
-  assert.deepEqual(resolveTier(pair, new Set([9])), { tier: "A", scoped: true });
-});
 
-test("resolveTier › a non-member keeps the stored tier", () => {
-  const pair = { t: "C", e: { p: [3, 9] } };
-  assert.deepEqual(resolveTier(pair, new Set([4])), { tier: "C", scoped: false });
-});
 
-test("resolveTier › no program context is safe", () => {
-  assert.equal(resolveTier({ t: "B", e: {} }, new Set()).tier, "B");
-  assert.equal(resolveTier({ t: "D", e: { p: [1] } }, null).tier, "D");
-});
 
 // ── the tier contract ───────────────────────────────────────────────
 

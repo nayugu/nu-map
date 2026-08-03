@@ -67,22 +67,7 @@ export function parseCourseCodes(text) {
   };
 }
 
-/**
- * Interpret the parse as an intent for the substitutions panel.
- *
- *   0 codes  → "search"      fall back to fuzzy matching on code and title
- *   1 code   → "suggest"     show what can be taken instead
- *   2+ codes → "pair"        the student stated a substitution: first → rest
- *
- * With three or more codes the extras become additional pairs from the first
- * course, which is how a set-to-set rule gets typed in one go.
- */
-export function readSubstitutionIntent(text) {
-  const { codes, partialSubject } = parseCourseCodes(text);
-  if (codes.length === 0) return { kind: "search", codes, partialSubject };
-  if (codes.length === 1) return { kind: "suggest", from: codes[0], codes, partialSubject };
-  return { kind: "pair", from: codes[0], to: codes.slice(1), codes, partialSubject };
-}
+
 
 /**
  * Normalise a search query so a code typed without a space still matches.

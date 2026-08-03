@@ -64,30 +64,8 @@
  * cannot distinguish. Applying them moved every known-bad pair out of the top
  * 150 while keeping every known-good pair inside the top 40.
  */
-
-// ═══════════════════════════════════════════════════════════════════
-// TIERS — the contract with the UI. Order matters: A is strongest.
-// ═══════════════════════════════════════════════════════════════════
-
-/**
- * `offer` — may this tier be applied as a requirement substitution?
- * `approval` — must the applied substitution be marked as needing an advisor?
- *
- * Tier C is offerable but always `approval: true`. Northeastern's course
- * substitution policy is unambiguous that every substitution is a *request*
- * ("Students may request to substitute one course for another… **If
- * approved**, the substituted course will replace the originally designated
- * course"), reviewed by the advisor, the program director and the department
- * that owns the original course. Tiers A and B need no such flag because they
- * are not substitutions at all — A is a choice the program already publishes,
- * and B is the same course wearing a different subject code.
- */
-export const TIERS = {
-  A: { key: "A", label: "allowed",         offer: true,  approval: false, rank: 0 },
-  B: { key: "B", label: "same-course",     offer: true,  approval: false, rank: 1 },
-  C: { key: "C", label: "interchangeable", offer: true,  approval: true,  rank: 2 },
-  D: { key: "D", label: "related",         offer: false, approval: false, rank: 3 },
-};
+import { TIERS, tierRank } from "../../src/core/equivalenceTiers.js";
+export { TIERS } from "../../src/core/equivalenceTiers.js";
 
 /** Minimum distinct downstream courses asserting a prereq-OR for tier C. */
 export const TIER_C_MIN_EVIDENCE = 5;
@@ -189,16 +167,7 @@ export function jaccard(a, b) {
   return inter / (a.size + b.size - inter);
 }
 
-/**
- * A lab, recitation, seminar or supplement attached to a parent course.
- *
- * These are companions, never alternatives: `PSYC 2315` ("Statistics in
- * Psychological Research Supplement", 1 SH) shares a title stem with
- * `PSYC 2320` (4 SH) and reached rank 34 on positive signals alone.
- */
-export function isCompanionTitle(title) {
-  return courseRole(title) !== "lecture";
-}
+
 
 /**
  * What part a course plays in its bundle.
@@ -445,7 +414,7 @@ export function findVetoes(pair, ctx) {
 
 /** Weights for the ordering score. Tiering is decided separately, by evidence
  *  kind — this only ranks results *within* a tier. */
-export const WEIGHTS = {
+const WEIGHTS = {
   programs:    34,   // signal 6, log-saturating
   prereqOr:    26,   // signal 4, log-saturating
   stem:        18,   // title overlap
@@ -574,28 +543,11 @@ export function classifyPair(pair, ev = {}, ctx = {}) {
   };
 }
 
-/**
- * The tier a specific student should see, given the programs they are in.
- *
- * A pair published as a choice by the student's *own* program is tier A for
- * them — an entitlement, no approval needed — whatever the program-agnostic
- * tier says. For everybody else the stored tier stands.
- *
- * @param pair      an emitted record: { t, e: { p: number[] } }
- * @param mine      Set of program-slug **indices** the student is enrolled in
- * @returns         { tier, scoped } — `scoped` true when the upgrade applied
- */
-export function resolveTier(pair, mine) {
-  const backing = pair?.e?.p;
-  if (Array.isArray(backing) && mine?.size) {
-    for (const i of backing) if (mine.has(i)) return { tier: "A", scoped: true };
-  }
-  return { tier: pair?.t ?? "D", scoped: false };
-}
+
 
 /** Sort comparator: strongest tier first, then score, then id for stability. */
 export function comparePairs(x, y) {
-  const t = TIERS[x.tier].rank - TIERS[y.tier].rank;
+  const t = tierRank(x.tier) - tierRank(y.tier);
   if (t !== 0) return t;
   if (y.score !== x.score) return y.score - x.score;
   return `${x.a} ${x.b}`.localeCompare(`${y.a} ${y.b}`);

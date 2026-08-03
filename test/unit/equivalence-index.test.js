@@ -8,7 +8,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildEquivalenceIndex, programIndexSet, resolvePairTier,
-  alternativesFor, hasAlternatives, tierNeedsApproval, tierIsOfferable,
+  alternativesFor, tierNeedsApproval, tierIsOfferable,
   programAllowedSwaps, readyToApply,
 } from "../../src/core/equivalenceIndex.js";
 import { applySubstitutions } from "../../src/core/planModel.js";
@@ -39,7 +39,6 @@ test("index › absent or malformed input yields null, never a throw", () => {
 
 test("index › every lookup is safe against a null index", () => {
   assert.deepEqual(alternativesFor(null, "PHYS 1161", new Set()), []);
-  assert.equal(hasAlternatives(null, "PHYS 1161", new Set()), false);
   assert.deepEqual([...programIndexSet(null, ["x"])], []);
 });
 
@@ -213,4 +212,17 @@ test("one-to-one › applying a pair affects only that pair", () => {
   const ep = applySubstitutions({ "GE 1110": "f1" }, subs);
   assert.equal(ep["GE 1501"], "f1");
   assert.equal(ep["GE 1502"], undefined, "the sibling is untouched");
+});
+
+test("contract › the tier table has exactly one definition", async () => {
+  // It lived in scripts/lib/equivalence.js AND was hardcoded again here, so
+  // flipping tier C's approval in one left the other silently disagreeing.
+  const core = await import("../../src/core/equivalenceTiers.js");
+  const build = await import("../../scripts/lib/equivalence.js");
+  assert.equal(build.TIERS, core.TIERS, "the builder must reuse, not redefine");
+  assert.equal(core.tierNeedsApproval("C"), true);
+  for (const t of ["A", "B", "D"]) assert.equal(core.tierNeedsApproval(t), false);
+  assert.equal(core.tierIsOfferable("D"), false);
+  assert.equal(core.tierRank("A") < core.tierRank("C"), true);
+  assert.equal(Number.isFinite(core.tierRank("nonsense")), true, "unknown tiers must not crash");
 });
