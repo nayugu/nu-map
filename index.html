@@ -120,14 +120,47 @@
           booted = true;
           try { sessionStorage.removeItem('numap-boot-retry'); } catch (e) {}
         };
-        function recover() {
-          if (booted) return;
+        // Throttled reload. At most one per minute per KEY, so a persistent
+        // failure can never loop.
+        //
+        // The two paths use different keys on purpose. A successful boot
+        // clears the boot key (the problem is demonstrably gone), but that
+        // would also disarm the chunk guard — reload, boot fine, fail again,
+        // reload… So chunk recovery keeps its own key, which nothing clears.
+        function reloadOnce(key) {
           var now = Date.now(), last = 0;
-          try { last = parseInt(sessionStorage.getItem('numap-boot-retry') || '0', 10); } catch (e) {}
-          if (now - last < 60000) return; // at most one reload per minute — never loop
-          try { sessionStorage.setItem('numap-boot-retry', String(now)); } catch (e) {}
+          try { last = parseInt(sessionStorage.getItem(key) || '0', 10); } catch (e) {}
+          if (now - last < 60000) return;
+          try { sessionStorage.setItem(key, String(now)); } catch (e) {}
           window.location.reload();
         }
+        function recover() {
+          if (booted) return;
+          reloadOnce('numap-boot-retry');
+        }
+
+        // STALE BUILD IN A LIVE TAB — the other half of the post-deploy
+        // problem. The recovery above only guards BOOT: once the entry bundle
+        // has run, `booted` short-circuits it. But the app lazy-loads program
+        // data (import.meta.glob with eager:false — majors, grad-majors and
+        // minors, thousands of chunks), so a tab left open across a deploy
+        // asks for a hash that was deleted and the import simply rejects.
+        // Nothing was watching for that, which is why the page needed a
+        // manual hard refresh. `no-cache` on the HTML shell cannot help here:
+        // the shell already loaded, correctly, before the deploy happened.
+        window.addEventListener('vite:preloadError', function (e) {
+          if (e && e.preventDefault) e.preventDefault();  // we handle it by reloading
+          reloadOnce('numap-chunk-retry');
+        });
+        // Backstop for a dynamic import that rejects without going through
+        // Vite's preload helper. Matched on message rather than type, and
+        // deliberately narrow so ordinary app errors never trigger a reload.
+        window.addEventListener('unhandledrejection', function (e) {
+          var m = e && e.reason && (e.reason.message || String(e.reason));
+          if (m && /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i.test(m)) {
+            reloadOnce('numap-chunk-retry');
+          }
+        });
         // A module script that 404s or is served with a non-JS MIME fires a
         // resource 'error' (target is the <script>). Runtime exceptions after
         // the bundle loads have no SCRIPT target, so we never reload on app bugs.
