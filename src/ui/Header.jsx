@@ -212,7 +212,7 @@ export default function Header() {
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
     shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, importSharedPlan,
-    aiAssistantAvailable, claudePreview,
+    aiAssistantAvailable, claudePreview, claudePaired,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
@@ -1551,8 +1551,16 @@ export default function Header() {
               {/* Cohort dates moved out of Settings — the 🎓 button now shows on
                   every device (including phone) with its own date-picker popover. */}
 
-              {/* Claude — optional integration; a single quiet entry until linked */}
-              {aiAssistantAvailable && (
+              {/* Claude — optional integration; a single quiet entry until linked.
+                  Hidden from new users for now: the connector's browser channel
+                  runs on Durable Objects, and the free tier's daily duration
+                  quota can't sustain it (blowing the quota 1101s every DO route,
+                  which takes share-by-code down with it). Anyone ALREADY linked
+                  still sees the section — they need the On/Off and Disconnect
+                  controls, and stranding a live link with no off switch would be
+                  worse than showing it. Flip back to `aiAssistantAvailable &&`
+                  once duration is off the free tier. */}
+              {aiAssistantAvailable && claudePaired && (
                 <SettingsSection>
                   <ClaudeSettings onConnect={() => { setShowQuickSet(false); setShowClaudeConnect(true); }} />
                 </SettingsSection>
