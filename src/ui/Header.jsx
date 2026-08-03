@@ -19,7 +19,7 @@ import dataMeta from "../core/dataMeta.json";
 import YearStepper    from "./YearStepper.jsx";
 import { SemLabel }   from "./SemLabel.jsx";
 import NewPlanModal   from "./NewPlanModal.jsx";
-import InfoTip        from "./InfoTip.jsx";
+import HoverTip       from "./InfoTip.jsx";
 
 // Measured header-row width (logical px) below which the labeled buttons fold
 // to icon-only. Above it, labeled buttons wrap into two stacked groups
@@ -28,17 +28,6 @@ import InfoTip        from "./InfoTip.jsx";
 // look, and app/browser zoom drives the transition the same everywhere.
 const HEADER_FOLD_BP = 560;
 
-// A settings/IO row that keeps its full-width control and hangs a "?" InfoTip
-// off the right edge. The control stays width:100% inside the flex:1 slot, so
-// existing button styles need no change.
-function TipRow({ tip, children }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-      <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
-      <InfoTip content={tip} />
-    </div>
-  );
-}
 
 // Touch scroll-lock for header dropdown panels: consume touchmove at the
 // panel's scroll bounds so the gesture never chains into the planner's
@@ -951,24 +940,24 @@ export default function Header() {
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.export.pdf")}
               </button>
-              <TipRow tip={t("tip.export.json")}>
+              <HoverTip tip={t("tip.export.json")}>
               <button className="hdr-btn-dd" onClick={exportPlanJSON}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                   {t("header.io.export.json")}
               </button>
-              </TipRow>
+              </HoverTip>
               <input type="file" id="plan-import-input" accept=".json" style={{ display: "none" }}
                 onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
-              <TipRow tip={t("tip.import.json")}>
+              <HoverTip tip={t("tip.import.json")}>
               <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                   {t("header.io.import.json")}
               </button>
-              </TipRow>
+              </HoverTip>
             </div>
           )}
         </div>
@@ -1017,12 +1006,11 @@ export default function Header() {
                           style={{ marginTop: 1, flexShrink: 0, accentColor: "var(--active)" }}
                         />
                         <span style={{ flex: 1, minWidth: 0 }}>
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                          <HoverTip tip={t("tip.translate")} display="inline-block">
                             <span style={{ fontSize: 10, color: "var(--text-2)" }}>
                               {t("translation.toggle")}
                             </span>
-                            <InfoTip content={t("tip.translate")} />
-                          </span>
+                          </HoverTip>
                           {/* Hint line: changes based on engine + download + cache state */}
                           <span style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 2, flexWrap: "wrap" }}>
                             <span style={{ fontSize: 9, color: "var(--text-5)" }}>
@@ -1054,6 +1042,7 @@ export default function Header() {
                                 cached; for API/native engines it clears locally-cached
                                 translations (the escape hatch if a bad response was cached) */}
                             {engineTier && !modelProgress && (engineTier !== "wasm" || modelCached) && (
+                              <HoverTip tip={t("tip.clearcache")} display="inline-flex">
                               <button
                                 onMouseDown={e => e.preventDefault()}
                                 onClick={clearModelCache}
@@ -1065,9 +1054,7 @@ export default function Header() {
                                 onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--error)"; e.currentTarget.style.color = "var(--error)"; }}
                                 onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-5)"; }}
                               >{t("translation.clear.cache")}</button>
-                            )}
-                            {engineTier && !modelProgress && (engineTier !== "wasm" || modelCached) && (
-                              <InfoTip content={t("tip.clearcache")} />
+                              </HoverTip>
                             )}
                           </span>
                         </span>
@@ -1078,7 +1065,7 @@ export default function Header() {
               )}
 
               {/* Save toggle */}
-              <TipRow tip={t("tip.save")}>
+              <HoverTip tip={t("tip.save")}>
               <button
                 className="hdr-btn-dd"
                 onClick={e => {
@@ -1093,10 +1080,10 @@ export default function Header() {
                   color: persistEnabled ? "var(--success)" : "var(--text-4)" }}>
                 {persistEnabled ? t("header.settings.save.on") : t("header.settings.save.off")}
               </button>
-              </TipRow>
+              </HoverTip>
 
               {/* Error lines toggle */}
-              <TipRow tip={t("tip.violations")}>
+              <HoverTip tip={t("tip.violations")}>
               <button className="hdr-btn-dd" onClick={() => setShowViolLines(v => !v)}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -1104,7 +1091,7 @@ export default function Header() {
                   color: showViolLines ? "var(--error)" : "var(--text-4)" }}>
                 {showViolLines ? t("header.settings.violations.on") : t("header.settings.violations.off")}
               </button>
-              </TipRow>
+              </HoverTip>
 
               {/* Prereq-tree depth — how far the selection highlight expands.
                   Hidden for now: the multi-hop tree read as confusing. Drop the
@@ -1141,7 +1128,7 @@ export default function Header() {
               )}
 
               {/* Collapse other credits toggle */}
-              <TipRow tip={t("tip.collapse")}>
+              <HoverTip tip={t("tip.collapse")}>
               <button className="hdr-btn-dd" onClick={() => setCollapseOtherCredits(v => !v)}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -1149,13 +1136,13 @@ export default function Header() {
                   color: collapseOtherCredits ? "var(--active)" : "var(--text-4)" }}>
                 {collapseOtherCredits ? t("header.settings.collapse.on") : t("header.settings.collapse.off")}
               </button>
-              </TipRow>
+              </HoverTip>
 
               {/* Keep grades private — a presentation switch for showing the
                   plan to someone else. Hides grades, GPA and everything
                   derived from them, and drops grades from JSON exports.
                   Nothing is deleted; switching it off restores them. */}
-              <TipRow tip={t("tip.privategrades")}>
+              <HoverTip tip={t("tip.privategrades")}>
               <button className="hdr-btn-dd" onClick={() => setPrivateGrades(!privateGrades)}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -1163,7 +1150,7 @@ export default function Header() {
                   color: privateGrades ? "var(--active)" : "var(--text-4)" }}>
                 {privateGrades ? t("header.settings.privategrades.on") : t("header.settings.privategrades.off")}
               </button>
-              </TipRow>
+              </HoverTip>
 
               {/* Theme toggle */}
               <button className="hdr-btn-dd" onClick={cycleTheme}
@@ -1186,7 +1173,7 @@ export default function Header() {
               )}
 
               {/* Show unlocks toggle */}
-              <TipRow tip={t("tip.unlocks")}>
+              <HoverTip tip={t("tip.unlocks")}>
               <button className="hdr-btn-dd" onClick={() => setShowUnlocks(v => !v)}
                 style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 400, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -1194,7 +1181,7 @@ export default function Header() {
                   color: showUnlocks ? "var(--text-3)" : "var(--text-5)" }}>
                 {showUnlocks ? t("header.settings.unlocks.on") : t("header.settings.unlocks.off")}
               </button>
-              </TipRow>
+              </HoverTip>
 
               {/* Now tracking mode */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
@@ -1397,10 +1384,8 @@ export default function Header() {
               </div>
               {/* Sticky courses toggle */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 8 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 5 }}>
-                  <span style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em" }}>{t("header.cohort.sticky.label")}</span>
-                  <InfoTip content={t("tip.sticky")} />
-                </div>
+                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.cohort.sticky.label")}</div>
+                <HoverTip tip={t("tip.sticky")}>
                 <div style={{ display: "flex", borderRadius: 4, overflow: "hidden", border: "1px solid var(--border-2)" }}>
                   {[true, false].map(v => (
                     <button key={String(v)} onClick={() => setStickyCourses(v)}
@@ -1414,6 +1399,7 @@ export default function Header() {
                     </button>
                   ))}
                 </div>
+                </HoverTip>
               </div>
 
             </div>
