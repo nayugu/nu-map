@@ -2330,7 +2330,13 @@ export function PlannerProvider({ children }) {
       return;
     }
     saveCurrentPlanToSlot();
-  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear]); // eslint-disable-line react-hooks/exhaustive-deps
+    // EVERY field captureCurrentPlan() writes must appear here. The slot is
+    // the store the app RELOADS from (the activePlanId effect calls
+    // restorePlan with it), so a field that's captured but not watched is
+    // saved to state-v2, never mirrored to the slot, and then overwritten
+    // by the stale slot on the next reload — silent data loss that looks
+    // like "it didn't save". That was live for grades and placedOut.
+  }, [placements, specialTermPl, currentSemId, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
