@@ -134,6 +134,13 @@ test("enteredGPA › letters only, credit-weighted, F included", () => {
   assert.equal(enteredGPA([e("A", 4), e("S", 4)]), 4.0); // S out of the average
 });
 
+test("enteredGPA › the catalog's own worked example: B×4SH + A×1SH = 3.200", () => {
+  // Verbatim from the official "Grade Table and GPA" page: weight = grade
+  // points × semester hours; GPA = total weight ÷ total semester hours.
+  // (16 ÷ 5 = 3.200 — NOT the naive unweighted (3+4)/2 = 3.5.)
+  assert.equal(enteredGPA([e("B", 4), e("A", 1)]), 3.2);
+});
+
 test("enteredGPA › a real 0-credit course weighs nothing (recitations, 536 in catalog)", () => {
   // A graded recitation must not drag or lift the average.
   assert.equal(enteredGPA([e("A", 4), e("C", 0)]), 4.0);
