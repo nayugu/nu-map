@@ -248,6 +248,12 @@ export default class RecoveryBoundary extends Component {
           }
         `}</style>
         <Petals leaving={this.state.leaving} />
+        {/* Top-anchored positioner: identical offset to the index.html
+            overlay, so the emblem sits at the same viewport spot on both
+            recovery pages, in every state. */}
+        <div style={{ position: "absolute", top: "calc(50% - 118px)", left: "50%",
+          transform: "translateX(-50%)", width: "100%", maxWidth: 468,
+          padding: "0 24px", boxSizing: "border-box" }}>
         <div className="numap-crash" style={{
           // In the exit gusts the card flickers dimmer and brighter,
           // then dies away entirely as the storm takes over.
@@ -274,6 +280,7 @@ export default class RecoveryBoundary extends Component {
               {BTN[lc] || BTN.en}
             </div>
           )}
+        </div>
         </div>
         {this.state.leaving && <Storm />}
       </div>

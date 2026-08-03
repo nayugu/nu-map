@@ -274,6 +274,37 @@
         // user or the blunt once-a-minute retry.
         var probeTimer = null;
         function stopProbe() { if (probeTimer) { clearInterval(probeTimer); probeTimer = null; } }
+        // Detection outcome: the message fades and a quiet outlined
+        // button — localized, laid over the exact footprint the text
+        // held — offers the way back. The bar keeps sweeping and nothing
+        // moves: the card is top-anchored.
+        function offerReturn() {
+          if (exiting || document.getElementById('numap-back-link')) return;
+          var lc = 'en';
+          try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
+          var dark = resolveDark();
+          var m = document.getElementById('numap-recovery-msg');
+          var s2 = document.getElementById('numap-recovery-sub');
+          if (m) { m.style.transition = 'opacity .6s'; m.style.opacity = '0'; }
+          if (s2) { s2.style.transition = 'opacity .6s'; s2.style.opacity = '0'; }
+          setTimeout(function () {
+            var box = document.getElementById('numap-recovery-text');
+            if (!box || document.getElementById('numap-back-link')) return;
+            if (m) m.style.visibility = 'hidden';
+            if (s2) s2.style.visibility = 'hidden';
+            var a = document.createElement('button');
+            a.id = 'numap-back-link';
+            a.textContent = RECOVERY_BACK[lc] || RECOVERY_BACK.en;
+            a.style.cssText = 'position:absolute;inset:0;margin:auto;width:fit-content;height:fit-content;'
+              + 'font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;padding:9px 26px;border-radius:10px;'
+              + 'background:transparent;color:inherit;border:1px solid ' + (dark ? '#30363d' : '#e2e8f0') + ';'
+              + 'opacity:0;transition:opacity 1.6s ease;';
+            a.onclick = function () { window.__numapRecoveryExit(); };
+            box.appendChild(a);
+            // A breath after the old text is gone, then a slow arrival.
+            setTimeout(function () { a.style.opacity = '1'; }, 250);
+          }, 620);
+        }
         // onUp defaults to the storm exit; previews pass their own handler.
         // The second regex alternative matches the Vite dev shell so the
         // detection is testable on localhost.
@@ -286,7 +317,7 @@
                 var m = html.match(/\/assets\/index-[^"']+\.js|\/src\/main\.jsx/);
                 if (!m) return;
                 return fetch(m[0], { method: 'HEAD', cache: 'no-store' }).then(function (r2) {
-                  if (r2 && r2.ok) { stopProbe(); (onUp || window.__numapRecoveryExit)(); }
+                  if (r2 && r2.ok) { stopProbe(); (onUp || offerReturn)(); }
                 });
               })
               .catch(function () {});
@@ -375,12 +406,15 @@
           ko: '보통 1~2분 안에 해결됩니다.',
           zh: '通常一两分钟内即可恢复。'
         };
-        var RECOVERY_BTN = {
-          en: 'Reload', es: 'Recargar', fr: 'Recharger',
-          ar: 'إعادة التحميل',
-          hi: 'फिर से लोड करें',
-          ja: '再読み込み', ko: '새로고침',
-          zh: '重新加载'
+        var RECOVERY_BACK = {
+          en: 'Back to NU Map',
+          es: 'Volver a NU Map',
+          fr: 'Retour à NU Map',
+          ar: 'العودة إلى NU Map',
+          hi: 'NU Map पर वापस जाएँ',
+          ja: 'NU Map に戻る',
+          ko: 'NU Map으로 돌아가기',
+          zh: '返回 NU Map'
         };
         function showRecovery() {
           var make = function () {
@@ -389,7 +423,6 @@
             try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
             var msg = RECOVERY_MSG[lc] || RECOVERY_MSG.en;
             var sub = RECOVERY_SUB[lc] || RECOVERY_SUB.en;
-            var btn = RECOVERY_BTN[lc] || RECOVERY_BTN.en;
             // Same theme resolution as the pre-paint script above, so this
             // overlay blends with whatever background is already up. If a
             // reveal veil is mid-flight, the overlay replaces it — the app
@@ -446,6 +479,10 @@
               + '@media (prefers-reduced-motion:reduce){#numap-recovery *{animation:none !important}#numap-recovery .nmr-petals{display:none}}'
               + '</style>'
               + '<div class="nmr-petals" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;">' + petals + '</div>'
+              // Top-anchored positioner: the emblem sits at the same
+              // viewport spot on BOTH recovery pages and in every state —
+              // content changes below it can never move it.
+              + '<div style="position:absolute;top:calc(50% - 118px);left:50%;transform:translateX(-50%);width:100%;max-width:468px;padding:0 24px;box-sizing:border-box;">'
               + '<div id="numap-recovery-card" style="animation:numapRecoveryIn .35s ease-out;position:relative;">'
               + '<div style="position:relative;width:120px;height:120px;margin:0 auto 14px;">'
               + '<svg viewBox="0 0 120 120" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;" aria-hidden="true">'
@@ -466,12 +503,13 @@
               + '<div style="position:absolute;top:-20%;bottom:-20%;width:30%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent);animation:numapGlint 2.6s ease-in-out infinite;"></div>'
               + '</div></div>'
               + '</div>'
-              + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
+              + '<div id="numap-recovery-bar" style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
               + '<div style="width:40%;height:100%;border-radius:99px;background:' + rib1
               + ';animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
               + '<div id="numap-recovery-text" style="position:relative;">'
               + '<div id="numap-recovery-msg" style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
               + '<div id="numap-recovery-sub" style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
+              + '</div>'
               + '</div>'
               + '</div>';
             document.body.appendChild(el);
@@ -482,37 +520,11 @@
 
         // Design preview: ?preview=recovery shows the overlay without any
         // failure (nothing reloads), so it can be styled against reality.
+        // The preview exercises the REAL flow: overlay, probe, detection
+        // folding the bar into the localized return button, storm exit.
         if (/[?&]preview=recovery\b/.test(location.search)) {
           showRecovery();
-          // TEMP — remove after the storm-return flow is signed off.
-          // In preview, detection doesn't auto-exit; instead the message
-          // lines fade out and a "Back to NU Map" link fades in WHERE
-          // they were, firing the genuine exit: storm out, reload, boot
-          // under the veil, patches clear.
-          startProbe(function () {
-            var m = document.getElementById('numap-recovery-msg');
-            var s2 = document.getElementById('numap-recovery-sub');
-            if (m) { m.style.transition = 'opacity .6s'; m.style.opacity = '0'; }
-            if (s2) { s2.style.transition = 'opacity .6s'; s2.style.opacity = '0'; }
-            setTimeout(function () {
-              var box = document.getElementById('numap-recovery-text');
-              if (!box || document.getElementById('numap-back-link')) return;
-              // visibility (not display) keeps the lines' footprint, and
-              // the link is laid over that exact spot — the emblem, bar
-              // and ribbons above never move a pixel.
-              if (m) m.style.visibility = 'hidden';
-              if (s2) s2.style.visibility = 'hidden';
-              var a = document.createElement('div');
-              a.id = 'numap-back-link';
-              a.textContent = 'Back to NU Map';
-              a.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;'
-                + 'font-size:14px;font-weight:700;cursor:pointer;opacity:0;transition:opacity 1.6s ease;';
-              a.onclick = function () { window.__numapRecoveryExit(); };
-              box.appendChild(a);
-              // A breath after the old text is gone, then a slow arrival.
-              setTimeout(function () { a.style.opacity = '1'; }, 250);
-            }, 620);
-          });
+          startProbe();
         }
 
         function recover() {
