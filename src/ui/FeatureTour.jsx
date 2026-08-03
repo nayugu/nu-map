@@ -22,14 +22,21 @@ const BASE = import.meta.env.BASE_URL;
 // media fills the card edge to edge; the ratios range from 1.01 (04-prereqs)
 // to 1.78 (03-coop, 07-language), which is why one shared ratio won't do.
 // Keep these in sync when an asset is re-recorded.
+// Ordered for serious planners/advisors/international students. The degree
+// anchor opens; the language step follows immediately as an early
+// accessibility hook for international students (the rest of the tour is
+// theirs, in their language). Then the academic-correctness cluster runs
+// together (search → prereqs → course detail), then co-op, then the
+// share/export finale. Each entry pairs its own media with its own caption
+// key, so this is a pure reorder — media and captions travel together.
 const STEPS = [
   { img: "01-requirements.mp4", t: "tour.step.1", ar: 1200 / 966  },
+  { img: "07-language.mp4",     t: "tour.step.7", ar: 1200 / 676  },
   { img: "02-search.mp4",       t: "tour.step.2", ar: 1200 / 1058 },
-  { img: "03-coop.mp4",         t: "tour.step.3", ar: 1200 / 676  },
   { img: "04-prereqs.png",      t: "tour.step.4", ar: 1098 / 1090 },
   { img: "05-class.png",        t: "tour.step.5", ar: 1598 / 1290 },
+  { img: "03-coop.mp4",         t: "tour.step.3", ar: 1200 / 676  },
   { img: "06-plans.mp4",        t: "tour.step.6", ar: 1200 / 1158 },
-  { img: "07-language.mp4",     t: "tour.step.7", ar: 1200 / 676  },
 ];
 const DONE = STEPS.length; // step index of the celebratory completion screen
 const HOLD_MS = 1200;      // pause on the last frame before a video loops (clips are 6–12s)
