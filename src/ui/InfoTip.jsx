@@ -69,9 +69,11 @@ function TipCard({ title, rect, width, children }) {
  * @param {number} [props.width=232]       card width
  * @param {string} [props.display="block"] wrapper display (use "inline-flex"
  *                                         inside a flex row so flow is kept)
+ * @param {object} [props.style]           extra wrapper styles (e.g. flex: 1
+ *                                         so the wrapper sizes like the control)
  * @param {React.ReactNode} props.children the control to hover over
  */
-export default function HoverTip({ tip, title, width = 232, display = "block", children }) {
+export default function HoverTip({ tip, title, width = 232, display = "block", style, children }) {
   const { isMobile } = usePlanner();
   const [open, setOpen] = useState(null);   // control rect while shown
 
@@ -81,7 +83,7 @@ export default function HoverTip({ tip, title, width = 232, display = "block", c
     <span
       onMouseEnter={e => setOpen(e.currentTarget.getBoundingClientRect())}
       onMouseLeave={() => setOpen(null)}
-      style={{ display }}
+      style={{ display, ...style }}
     >
       {children}
       {open && <TipCard title={title} rect={open} width={width}>{tip}</TipCard>}

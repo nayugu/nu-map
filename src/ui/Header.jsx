@@ -1385,11 +1385,12 @@ export default function Header() {
               {/* Sticky courses toggle */}
               <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 8 }}>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.cohort.sticky.label")}</div>
-                <HoverTip tip={t("tip.sticky")}>
+                {/* Each side hovers to its own short definition: slots vs dates. */}
                 <div style={{ display: "flex", borderRadius: 4, overflow: "hidden", border: "1px solid var(--border-2)" }}>
                   {[true, false].map(v => (
-                    <button key={String(v)} onClick={() => setStickyCourses(v)}
-                      style={{ flex: 1, fontSize: 9, padding: "3px 6px", cursor: "pointer",
+                    <HoverTip key={String(v)} tip={t(v ? "tip.sticky.slots" : "tip.sticky.dates")} style={{ flex: 1, display: "flex" }}>
+                    <button onClick={() => setStickyCourses(v)}
+                      style={{ flex: 1, width: "100%", fontSize: 9, padding: "3px 6px", cursor: "pointer",
                         background: stickyCourses === v ? "var(--active-bg)" : "transparent",
                         border: "none",
                         borderRight: v === true ? "1px solid var(--border-2)" : "none",
@@ -1397,9 +1398,9 @@ export default function Header() {
                         fontWeight: stickyCourses === v ? 700 : 400 }}>
                       {v ? t("header.cohort.sticky.on") : t("header.cohort.sticky.off")}
                     </button>
+                    </HoverTip>
                   ))}
                 </div>
-                </HoverTip>
               </div>
 
             </div>
