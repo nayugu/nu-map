@@ -80,6 +80,116 @@ function usePopupTouchLock(ref, open) {
   }, [ref, open]);
 }
 
+// ── ⚙ Settings menu building blocks ───────────────────────────────────────
+// One labelled group inside the Settings dropdown. Every section after the
+// first carries a top divider, so the panel reads as consistent groups
+// instead of the old run of scattered borders. Pass `first` to the section
+// that renders at the very top so it has no divider above it.
+function SettingsSection({ label, first, children }) {
+  return (
+    <div style={{
+      // Rows sit tight together (1px) so a section reads as one list; the gap
+      // between sections is the divider + the panel's own gap, a clear step up.
+      display: "flex", flexDirection: "column", gap: 1,
+      ...(first ? {} : { borderTop: "1px solid var(--border-1)", paddingTop: 8 }),
+    }}>
+      {label && (
+        <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>
+          {label}
+        </div>
+      )}
+      {children}
+    </div>
+  );
+}
+
+// The three tones, borrowed straight from the planner's relationship legend on
+// the other side of the app (REL_STYLE) so the two read as one palette: coreq
+// blue, prereq green, wrong-order red — the app's nicest, most vibrant green/
+// red/blue. Blue is the neutral default; the two meaningful exceptions are
+// `success` (green, "safe / saving is on") and `error` (red, matching the error
+// markers it controls). Fixed hex on purpose — these are the same in both
+// themes, exactly like the lines they mirror.
+const SETTINGS_TONES = {
+  accent:  REL_STYLE.corequisite.color,            // #58a6ff — coreq blue
+  success: REL_STYLE.prerequisite.color,           // #3dd8a0 — prereq green
+  error:   REL_STYLE["prerequisite-order"].color,  // #f85149 — wrong-order red
+};
+// Shared ON/OFF fill for the segmented controls (Live/Manual, and the hidden
+// depth/zoom pickers): a soft 14% tint of the tone with a border blended 45%
+// toward it, so an active segment matches the switches above.
+function toneStyle(colorVar, on) {
+  return on
+    ? { background: `color-mix(in srgb, ${colorVar} 14%, var(--bg-surface))`,
+        border:     `1px solid color-mix(in srgb, ${colorVar} 45%, var(--border-2))`,
+        color:      colorVar }
+    : { background: "var(--bg-surface)", border: "1px solid var(--border-2)", color: "var(--text-4)" };
+}
+
+// The small switch that sits at the right of every toggle row. The tone colour
+// lives here and only here, so the three hues show as compact accents instead
+// of full-width colour — one language-free indicator that reads the same in
+// every locale (a text pill would blow out the row in es/fr).
+function ToggleSwitch({ on, color }) {
+  // ON is the tone at full vibrancy but flat (matte, no gloss): the knob is the
+  // solid planner colour, the track a soft tint of it, the border a blended line.
+  return (
+    <span aria-hidden="true" style={{
+      // 28×14 track — one size for every switch in the panel (theme included).
+      position: "relative", flexShrink: 0, width: 28, height: 14, borderRadius: 999,
+      transition: "background 120ms ease, border-color 120ms ease",
+      background: on ? `color-mix(in srgb, ${color} 20%, var(--bg-surface))` : "var(--bg-surface-2)",
+      border: `1px solid ${on ? `color-mix(in srgb, ${color} 55%, var(--border-2))` : "var(--border-2)"}`,
+    }}>
+      <span style={{
+        position: "absolute", top: 1, left: on ? 15 : 1, width: 10, height: 10, borderRadius: "50%",
+        transition: "left 130ms ease, background 130ms ease",
+        background: on ? color : "var(--text-5)",
+      }} />
+    </span>
+  );
+}
+
+// The sun/moon theme switch — a two-position pill with ☀ and 🌙 always visible
+// (the inactive one dimmed) and a knob that slides to the active side. Binary
+// because there are exactly two themes.
+function ThemeSwitch({ dark }) {
+  return (
+    <span aria-hidden="true" style={{
+      position: "relative", flexShrink: 0, width: 28, height: 14, borderRadius: 999,
+      background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+      display: "flex", alignItems: "center",
+    }}>
+      {/* a clean round knob, same as the toggles, highlighting the active side behind the emoji */}
+      <span style={{ position: "absolute", top: 1, left: dark ? 15 : 1, width: 10, height: 10, borderRadius: "50%",
+        background: "var(--bg-surface)", border: "1px solid var(--border-2)", transition: "left 140ms ease" }} />
+      {/* grayscale() renders the colour emoji as monotone gray so the two sides match */}
+      <span style={{ position: "relative", flex: 1, textAlign: "center", fontSize: 8, lineHeight: 1, filter: "grayscale(1)", opacity: dark ? 0.4 : 0.9 }}>☀</span>
+      <span style={{ position: "relative", flex: 1, textAlign: "center", fontSize: 8, lineHeight: 1, filter: "grayscale(1)", opacity: dark ? 0.9 : 0.4 }}>🌙</span>
+    </span>
+  );
+}
+
+// A boolean settings row: neutral, non-bold name on the left; the switch on the
+// right. Borderless until hover (`set-row`), so a section reads as one clean
+// list. `aria` carries the full "…: on/off" phrase for screen readers; the tip
+// keeps the explanatory hover. Section headings stay the only bold text.
+function SettingsToggle({ on, onClick, tone = "accent", tip, label, aria }) {
+  const c = SETTINGS_TONES[tone] || SETTINGS_TONES.accent;
+  const btn = (
+    <button className="set-row" onClick={onClick} role="switch" aria-checked={on} aria-label={aria}
+      style={{ width: "100%", display: "flex", alignItems: "center", gap: 8,
+        textAlign: "left", fontSize: 11.5, fontWeight: 400, cursor: "pointer",
+        padding: "2px 8px", borderRadius: 5,
+        background: "var(--bg-surface)", border: "1px solid var(--bg-surface)", color: "var(--text-3)" }}>
+      <span style={{ flex: 1, minWidth: 0 }}>{label}</span>
+      <ToggleSwitch on={on} color={c} />
+    </button>
+  );
+  // Tip to the side, so the panel's other rows stay visible while it shows.
+  return tip ? <HoverTip tip={tip} placement="side">{btn}</HoverTip> : btn;
+}
+
 export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
@@ -1203,14 +1313,13 @@ export default function Header() {
               display: "flex", flexDirection: "column", gap: 7,
               ...(phonePopFixed || {}),
             }}>
-              {/* Language picker + course translation toggle — moved to the top */}
+              {/* Language */}
               {locales.length > 1 && (
-                <div style={{ borderBottom: "1px solid var(--border-1)", paddingBottom: 12, marginBottom: 4 }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.language")}</div>
+                <SettingsSection first label={t("header.settings.language")}>
                   <LanguagePicker locale={locale} locales={locales} setLocale={setLocale} />
 
                   {locale !== catalogLocale && (
-                    <div style={{ marginTop: 7 }}>
+                    <div style={{ marginTop: 2 }}>
                       <label style={{ display: "flex", alignItems: "flex-start", gap: 6, cursor: "pointer", userSelect: "none" }}>
                         <input
                           type="checkbox"
@@ -1274,144 +1383,129 @@ export default function Header() {
                       </label>
                     </div>
                   )}
-                </div>
+                </SettingsSection>
               )}
 
-              {/* Save toggle */}
-              <HoverTip tip={t("tip.save")}>
-              <button
-                className="hdr-btn-dd"
-                onClick={e => {
-                  e.stopPropagation();
-                  const next = !persistEnabled;
-                  setPersistEnabled(next);
-                  if (!next) { try { localStorage.setItem(storageKey(institution.storagePrefix), JSON.stringify({ persist: false })); } catch {} }
-                }}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: `1px solid ${persistEnabled ? "var(--success-border)" : "var(--border-2)"}`,
-                  color: persistEnabled ? "var(--success)" : "var(--text-4)" }}>
-                {persistEnabled ? t("header.settings.save.on") : t("header.settings.save.off")}
-              </button>
-              </HoverTip>
+              {/* Display — appearance and what the map surfaces */}
+              <SettingsSection first={locales.length <= 1} label={t("header.settings.section.display")}>
+                {/* Theme — "Theme: Light/Dark" on the left, a sun/moon switch on
+                    the right that toggles it. The theme word is the localized
+                    label with its leading ☀/🌙 stripped (the switch shows those). */}
+                <button className="set-row" onClick={cycleTheme}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: 8,
+                    textAlign: "left", fontSize: 11.5, fontWeight: 400, cursor: "pointer",
+                    padding: "2px 8px", borderRadius: 5,
+                    background: "var(--bg-surface)", border: "1px solid var(--bg-surface)", color: "var(--text-3)" }}>
+                  <span style={{ flex: 1, minWidth: 0 }}>
+                    {t("header.settings.theme.name")}: {(t(`header.settings.theme.${themeName}`) || THEME_LABELS[themeName] || themeName).replace(/^[^\p{L}\p{N}]+/u, "").trim()}
+                  </span>
+                  <ThemeSwitch dark={themeName === "dark"} />
+                </button>
 
-              {/* Error lines toggle */}
-              <HoverTip tip={t("tip.violations")}>
-              <button className="hdr-btn-dd" onClick={() => setShowViolLines(v => !v)}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: `1px solid ${showViolLines ? "var(--error)" : "var(--border-2)"}`,
-                  color: showViolLines ? "var(--error)" : "var(--text-4)" }}>
-                {showViolLines ? t("header.settings.violations.on") : t("header.settings.violations.off")}
-              </button>
-              </HoverTip>
+                {/* Error lines — red switch, matching the markers it controls */}
+                <SettingsToggle on={showViolLines} tone="error" tip={t("tip.violations")}
+                  label={t("header.settings.violations.name")}
+                  aria={showViolLines ? t("header.settings.violations.on") : t("header.settings.violations.off")}
+                  onClick={() => setShowViolLines(v => !v)} />
 
-              {/* Prereq-tree depth — how far the selection highlight expands.
-                  Hidden for now: the multi-hop tree read as confusing. Drop the
-                  `false &&` to bring the depth control back (see PlannerContext). */}
-              {false && (
-              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.depth")}</div>
-                {[
-                  { label: t("header.settings.depth.prereq"), value: prereqDepth, set: setPrereqDepth },
-                  { label: t("header.settings.depth.unlock"), value: unlockDepth, set: setUnlockDepth },
-                ].map(({ label, value, set }) => (
-                  <div key={label} style={{ marginBottom: 5 }}>
-                    <div style={{ fontSize: 8.5, color: "var(--text-5)", marginBottom: 3 }}>{label}</div>
-                    <div style={{ display: "flex", gap: 3 }}>
-                      {[1, 2, 3, Infinity].map(d => {
-                        const active = value === d;
-                        return (
-                          <button key={d} onClick={() => set(d)} style={{
-                            flex: "1 1 auto", fontSize: 9, padding: "3px 4px", borderRadius: 4, cursor: "pointer",
-                            background: active ? "var(--active-bg)" : "transparent",
-                            border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
-                            color: active ? "var(--active)" : "var(--text-4)",
-                            fontWeight: active ? 700 : 400,
-                          }}>{d === Infinity ? t("header.settings.depth.max") : d}</button>
-                        );
-                      })}
+                {/* Collapse other credits */}
+                <SettingsToggle on={collapseOtherCredits} tip={t("tip.collapse")}
+                  label={t("header.settings.collapse.name")}
+                  aria={collapseOtherCredits ? t("header.settings.collapse.on") : t("header.settings.collapse.off")}
+                  onClick={() => setCollapseOtherCredits(v => !v)} />
+
+                {/* Show unlocks / children */}
+                <SettingsToggle on={showUnlocks} tip={t("tip.unlocks")}
+                  label={t("header.settings.unlocks.name")}
+                  aria={showUnlocks ? t("header.settings.unlocks.on") : t("header.settings.unlocks.off")}
+                  onClick={() => setShowUnlocks(v => !v)} />
+
+                {/* Prereq-tree depth — how far the selection highlight expands.
+                    Hidden for now: the multi-hop tree read as confusing. Drop the
+                    `false &&` to bring the depth control back (see PlannerContext). */}
+                {false && (
+                <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.depth")}</div>
+                  {[
+                    { label: t("header.settings.depth.prereq"), value: prereqDepth, set: setPrereqDepth },
+                    { label: t("header.settings.depth.unlock"), value: unlockDepth, set: setUnlockDepth },
+                  ].map(({ label, value, set }) => (
+                    <div key={label} style={{ marginBottom: 5 }}>
+                      <div style={{ fontSize: 8.5, color: "var(--text-5)", marginBottom: 3 }}>{label}</div>
+                      <div style={{ display: "flex", gap: 3 }}>
+                        {[1, 2, 3, Infinity].map(d => {
+                          const active = value === d;
+                          return (
+                            <button key={d} onClick={() => set(d)} style={{
+                              flex: "1 1 auto", fontSize: 9, padding: "3px 4px", borderRadius: 4, cursor: "pointer",
+                              background: active ? "var(--active-bg)" : "transparent",
+                              border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
+                              color: active ? "var(--active)" : "var(--text-4)",
+                              fontWeight: active ? 700 : 400,
+                            }}>{d === Infinity ? t("header.settings.depth.max") : d}</button>
+                          );
+                        })}
+                      </div>
                     </div>
+                  ))}
+                  <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 2, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
+                    {t("header.settings.depth.hint")}
                   </div>
-                ))}
-                <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 2, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
-                  {t("header.settings.depth.hint")}
                 </div>
-              </div>
-              )}
+                )}
 
-              {/* Collapse other credits toggle */}
-              <HoverTip tip={t("tip.collapse")}>
-              <button className="hdr-btn-dd" onClick={() => setCollapseOtherCredits(v => !v)}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: `1px solid ${collapseOtherCredits ? "var(--active)" : "var(--border-2)"}`,
-                  color: collapseOtherCredits ? "var(--active)" : "var(--text-4)" }}>
-                {collapseOtherCredits ? t("header.settings.collapse.on") : t("header.settings.collapse.off")}
-              </button>
-              </HoverTip>
+                {/* Co-op continuation logo toggle — hidden for now: the logo stays on by default
+                    and we like it that way. Drop the `false &&` to bring the toggle back. */}
+                {false && (
+                <button className="hdr-btn-dd" onClick={() => setShowContLogo(v => !v)}
+                  style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 400, cursor: "pointer",
+                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                    border: "1px solid var(--border-2)",
+                    color: showContLogo ? "var(--text-3)" : "var(--text-5)" }}>
+                  {showContLogo ? t("header.settings.contlogo.on") : t("header.settings.contlogo.off")}
+                </button>
+                )}
+              </SettingsSection>
 
-              {/* Keep grades private — a presentation switch for showing the
-                  plan to someone else. Hides grades, GPA and everything
-                  derived from them, and drops grades from JSON exports.
-                  Nothing is deleted; switching it off restores them. */}
-              <HoverTip tip={t("tip.privategrades")}>
-              <button className="hdr-btn-dd" onClick={() => setPrivateGrades(!privateGrades)}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: `1px solid ${privateGrades ? "var(--active)" : "var(--border-2)"}`,
-                  color: privateGrades ? "var(--active)" : "var(--text-4)" }}>
-                {privateGrades ? t("header.settings.privategrades.on") : t("header.settings.privategrades.off")}
-              </button>
-              </HoverTip>
+              {/* Privacy — presentation switches for showing your plan to someone */}
+              <SettingsSection label={t("header.settings.section.privacy")}>
+                {/* Keep grades private — a presentation switch for showing the
+                    plan to someone else. Hides grades, GPA and everything
+                    derived from them, and drops grades from JSON exports.
+                    Nothing is deleted; switching it off restores them. */}
+                <SettingsToggle on={privateGrades} tip={t("tip.privategrades")}
+                  label={t("header.settings.privategrades.name")}
+                  aria={privateGrades ? t("header.settings.privategrades.on") : t("header.settings.privategrades.off")}
+                  onClick={() => setPrivateGrades(!privateGrades)} />
 
-              {/* Hide co-op details — company + role, for showing the plan
-                  to someone. Hides the identity everywhere the plan is shown
-                  or sent; the co-op term itself stays. Reversible. */}
-              <HoverTip tip={t("tip.privatecoop")}>
-              <button className="hdr-btn-dd" onClick={() => setPrivateCoop(!privateCoop)}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: `1px solid ${privateCoop ? "var(--active)" : "var(--border-2)"}`,
-                  color: privateCoop ? "var(--active)" : "var(--text-4)" }}>
-                {privateCoop ? t("header.settings.privatecoop.on") : t("header.settings.privatecoop.off")}
-              </button>
-              </HoverTip>
+                {/* Hide co-op details — company + role, for showing the plan
+                    to someone. Hides the identity everywhere the plan is shown
+                    or sent; the co-op term itself stays. Reversible. */}
+                <SettingsToggle on={privateCoop} tip={t("tip.privatecoop")}
+                  label={t("header.settings.privatecoop.name")}
+                  aria={privateCoop ? t("header.settings.privatecoop.on") : t("header.settings.privatecoop.off")}
+                  onClick={() => setPrivateCoop(!privateCoop)} />
+              </SettingsSection>
 
-              {/* Theme toggle */}
-              <button className="hdr-btn-dd" onClick={cycleTheme}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 600, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                {t(`header.settings.theme.${themeName}`) || THEME_LABELS[themeName] || themeName}
-              </button>
+              {/* Saving — where this browser keeps your work */}
+              <SettingsSection label={t("header.settings.section.saving")}>
+                {/* green ON reads as "safe / your work is persisted" */}
+                <SettingsToggle
+                  on={persistEnabled}
+                  tone="success"
+                  tip={t("tip.save")}
+                  label={t("header.settings.save.name")}
+                  aria={persistEnabled ? t("header.settings.save.on") : t("header.settings.save.off")}
+                  onClick={e => {
+                    e.stopPropagation();
+                    const next = !persistEnabled;
+                    setPersistEnabled(next);
+                    if (!next) { try { localStorage.setItem(storageKey(institution.storagePrefix), JSON.stringify({ persist: false })); } catch {} }
+                  }} />
+              </SettingsSection>
 
-              {/* Co-op continuation logo toggle — hidden for now: the logo stays on by default
-                  and we like it that way. Drop the `false &&` to bring the toggle back. */}
-              {false && (
-              <button className="hdr-btn-dd" onClick={() => setShowContLogo(v => !v)}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 400, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)",
-                  color: showContLogo ? "var(--text-3)" : "var(--text-5)" }}>
-                {showContLogo ? t("header.settings.contlogo.on") : t("header.settings.contlogo.off")}
-              </button>
-              )}
-
-              {/* Show unlocks toggle */}
-              <HoverTip tip={t("tip.unlocks")}>
-              <button className="hdr-btn-dd" onClick={() => setShowUnlocks(v => !v)}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 400, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)",
-                  color: showUnlocks ? "var(--text-3)" : "var(--text-5)" }}>
-                {showUnlocks ? t("header.settings.unlocks.on") : t("header.settings.unlocks.off")}
-              </button>
-              </HoverTip>
-
-              {/* Now tracking mode */}
-              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 5 }}>{t("header.settings.tracking")}</div>
+              {/* Now tracking */}
+              <SettingsSection label={t("header.settings.tracking")}>
                 <div style={{ display: "flex", gap: 3 }}>
                   {[
                     { id: "live",   labelKey: "header.settings.tracking.live" },
@@ -1420,20 +1514,16 @@ export default function Header() {
                     const active = semTrackingMode === id;
                     return (
                       <button key={id} onClick={() => setSemTrackingMode(id)} style={{
-                        flex: "1 1 auto", fontSize: 9, padding: "3px 4px", borderRadius: 4, cursor: "pointer",
-                        background: active ? "var(--active-bg)" : "transparent",
-                        border: `1px solid ${active ? "var(--active)" : "var(--border-2)"}`,
-                        color: active ? "var(--active)" : "var(--text-4)",
-                        fontWeight: active ? 700 : 400,
+                        flex: "1 1 auto", fontSize: 10, padding: "3px 4px", borderRadius: 4, cursor: "pointer",
+                        fontWeight: 400, ...toneStyle(SETTINGS_TONES.accent, active),
                       }}>{t(labelKey)}</button>
                     );
                   })}
                 </div>
-                <div style={{ fontSize: 8, color: "var(--text-5)", marginTop: 4, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
-                  {semTrackingMode === "live"   && t("header.settings.tracking.live.hint")}
-                  {semTrackingMode === "manual" && t("header.settings.tracking.manual.hint")}
+                <div style={{ fontSize: 9, color: "var(--text-5)", marginTop: 4, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
+                  {t("header.settings.tracking.desc")}
                 </div>
-              </div>
+              </SettingsSection>
 
               {/* Zoom — hidden for now: the buttons mislabel the actual scale (browser zoom
                   often defaults to 125%, so "100%" here is wrong) and browser ⌘+/- covers it. */}
@@ -1463,48 +1553,29 @@ export default function Header() {
 
               {/* Claude — optional integration; a single quiet entry until linked */}
               {aiAssistantAvailable && (
-                <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7, display: "flex", flexDirection: "column", gap: 5 }}>
+                <SettingsSection>
                   <ClaudeSettings onConnect={() => { setShowQuickSet(false); setShowClaudeConnect(true); }} />
-                </div>
+                </SettingsSection>
               )}
 
-              {/* Links */}
-              <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: 7, display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 1 }}>{t("header.links.title")}</div>
-                <a href={`${import.meta.env.BASE_URL}northeastern/dev.html`} target="_blank" rel="noreferrer"
-                  style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
-                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-4)",
-                    textDecoration: "none", boxSizing: "border-box",
-                    fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
-                >
-                  /dev
-                </a>
-                <a href="https://github.com/nayugu/nu-map" target="_blank" rel="noreferrer"
-                  style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
-                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-4)",
-                    textDecoration: "none", boxSizing: "border-box",
-                    fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
-                >
-                  /github
-                </a>
-                <a href={`${import.meta.env.BASE_URL}privacy.html`} target="_blank" rel="noreferrer"
-                  style={{ display: "block", width: "100%", textAlign: "left", fontSize: 10,
-                    background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--text-4)",
-                    textDecoration: "none", boxSizing: "border-box",
-                    fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--text-4)"}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border-2)"}
-                >
-                  /privacy
-                </a>
-              </div>
+              {/* About — short links, laid out as a row instead of a stack */}
+              <SettingsSection label={t("header.links.title")}>
+                <div style={{ display: "flex", gap: 4 }}>
+                  {[
+                    { href: `${import.meta.env.BASE_URL}northeastern/dev.html`, label: "/dev" },
+                    { href: "https://github.com/nayugu/nu-map",                label: "/github" },
+                    { href: `${import.meta.env.BASE_URL}privacy.html`,          label: "/privacy" },
+                  ].map(({ href, label }) => (
+                    <a key={label} href={href} target="_blank" rel="noreferrer" className="set-row"
+                      style={{ flex: "1 1 auto", whiteSpace: "nowrap", textAlign: "center", fontSize: 11.5,
+                        background: "var(--bg-surface)", padding: "4px 6px", borderRadius: 5,
+                        border: "1px solid var(--bg-surface)", color: "var(--text-4)",
+                        textDecoration: "none", boxSizing: "border-box",
+                        fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
+                    >{label}</a>
+                  ))}
+                </div>
+              </SettingsSection>
             </div>
           )}
         </div>

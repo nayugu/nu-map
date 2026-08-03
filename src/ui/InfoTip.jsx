@@ -20,7 +20,7 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 const GAP  = 10;   // clearance between the control and the card
 const EDGE = 8;    // min clearance from any viewport edge
 
-function TipCard({ title, rect, width, children }) {
+function TipCard({ title, rect, width, placement, children }) {
   const ref = useRef(null);
   const [placed, setPlaced] = useState(null);
 
@@ -28,13 +28,24 @@ function TipCard({ title, rect, width, children }) {
     const el = ref.current;
     if (!el) return;
     const w = el.offsetWidth, h = el.offsetHeight;
-    let left = rect.left + rect.width / 2 - w / 2;                 // centred over the control
-    left = Math.min(Math.max(EDGE, left), window.innerWidth - w - EDGE);
-    let top = rect.top - GAP - h;                                  // above the control…
-    if (top < EDGE) top = rect.bottom + GAP;                       // …or below if it'd clip
-    top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
+    let left, top;
+    if (placement === "side") {
+      // Beside the control — left of it (or right if that would clip), so a
+      // panel pinned to the screen edge stays readable while the tip shows.
+      left = rect.left - GAP - w;
+      if (left < EDGE) left = rect.right + GAP;
+      left = Math.min(Math.max(EDGE, left), window.innerWidth - w - EDGE);
+      top = rect.top + rect.height / 2 - h / 2;                    // vertically centred on the row
+      top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
+    } else {
+      left = rect.left + rect.width / 2 - w / 2;                   // centred over the control
+      left = Math.min(Math.max(EDGE, left), window.innerWidth - w - EDGE);
+      top = rect.top - GAP - h;                                    // above the control…
+      if (top < EDGE) top = rect.bottom + GAP;                     // …or below if it'd clip
+      top = Math.min(Math.max(EDGE, top), window.innerHeight - h - EDGE);
+    }
     setPlaced({ top: Math.round(top), left: Math.round(left) });
-  }, [rect, children]);
+  }, [rect, children, placement]);
 
   return createPortal(
     <div ref={ref} style={{
@@ -71,9 +82,12 @@ function TipCard({ title, rect, width, children }) {
  *                                         inside a flex row so flow is kept)
  * @param {object} [props.style]           extra wrapper styles (e.g. flex: 1
  *                                         so the wrapper sizes like the control)
+ * @param {"top"|"side"} [props.placement="top"] where the card appears — "top"
+ *                                         above the control, "side" to its left
+ *                                         (right on clip), for edge-pinned panels
  * @param {React.ReactNode} props.children the control to hover over
  */
-export default function HoverTip({ tip, title, width = 232, display = "block", style, children }) {
+export default function HoverTip({ tip, title, width = 232, display = "block", placement = "top", style, children }) {
   const { isMobile } = usePlanner();
   const [open, setOpen] = useState(null);   // control rect while shown
 
@@ -86,7 +100,7 @@ export default function HoverTip({ tip, title, width = 232, display = "block", s
       style={{ display, ...style }}
     >
       {children}
-      {open && <TipCard title={title} rect={open} width={width}>{tip}</TipCard>}
+      {open && <TipCard title={title} rect={open} width={width} placement={placement}>{tip}</TipCard>}
     </span>
   );
 }
