@@ -136,14 +136,20 @@ app.post("/plan-contents/:sessionId/:requestId", (req, res) => {
 // needs no pairing and touches no per-session state. See src/shareBox.js.
 const shareBox = createMemoryShareBox();
 
+const shareStatus = (r) =>
+  r.ok ? 200
+  : r.reason === "rate_limited" || r.reason === "too_many_live" ? 429
+  : r.reason === "not_found" ? 404
+  : 400;
+
 app.post("/share", async (req, res) => {
   const result = await shareBox.create(req.body?.payload, req.ip);
-  res.status(result.ok ? 200 : 400).json(result);
+  res.status(shareStatus(result)).json(result);
 });
 
 app.post("/claim/:code", async (req, res) => {
   const result = await shareBox.claim(req.params.code, req.ip);
-  res.status(result.ok ? 200 : 404).json(result);
+  res.status(shareStatus(result)).json(result);
 });
 
 // ── Health ───────────────────────────────────────────────────────────

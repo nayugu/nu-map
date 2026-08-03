@@ -23,14 +23,19 @@ import { decodePlan } from "../../src/core/planShare.js";
 export const SHARE_TTL_MS = 10 * 60 * 1000;
 export const MAX_PAYLOAD_CHARS = 4096;   // generous for a v2 plan, useless as a pastebin
 export const MAX_OUTSTANDING = 500;      // hard cap on simultaneously parked shares
+export const MAX_LIVE_PER_IP = 5;        // concurrency cap: one IP can't hog the box
 
 export const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no 0/O/1/I/L
 export const CODE_LENGTH = 6;
 
-// Per-IP budget within a rolling window: enough for any human retrying,
-// hopeless for scanning a ~30-bit code space.
-export const RATE_WINDOW_MS = 10 * 60 * 1000;
-const RATE_MAX = { create: 10, claim: 30 };
+// Token buckets per IP: the burst covers every honest pattern (a class
+// rep sharing with ten classmates back-to-back), the trickle caps what
+// one IP can sustain forever. Every refusal carries retryAfterSeconds
+// so the UI can say when the block lifts instead of looking broken.
+const RATE = {
+  create: { capacity: 10, refillMs: 60_000 }, // 10 burst, then 1/min
+  claim:  { capacity: 30, refillMs: 20_000 }, // 30 burst, then 3/min (scan defense)
+};
 
 /** Crypto-random code, rejection-sampled so every character is uniform. */
 export function randomCode(len = CODE_LENGTH) {
@@ -74,21 +79,27 @@ export async function validateSharePayload(payload) {
 }
 
 /**
- * Rolling per-IP counters. In-memory on purpose: losing them (restart,
+ * Per-IP token buckets. In-memory on purpose: losing them (restart,
  * DO eviction) merely resets a budget that honest users never exhaust.
+ * Returns { ok: true } or { ok: false, retryAfterSeconds } — the seconds
+ * until the next token accrues.
  */
 export function createRateLimiter(now = Date.now) {
-  const hits = new Map(); // ip → { windowStart, create, claim }
-  return function allow(ip, kind) {
+  const buckets = new Map(); // `${ip}|${kind}` → { tokens, at }
+  return function take(ip, kind) {
+    const { capacity, refillMs } = RATE[kind];
+    const key = `${ip}|${kind}`;
     const t = now();
-    let entry = hits.get(ip);
-    if (!entry || t - entry.windowStart > RATE_WINDOW_MS) {
-      entry = { windowStart: t, create: 0, claim: 0 };
-      hits.set(ip, entry);
+    let b = buckets.get(key);
+    if (!b) { b = { tokens: capacity, at: t }; buckets.set(key, b); }
+    if (buckets.size > 20_000) buckets.clear(); // memory guard; forfeits budgets, keeps the process
+    const refilled = Math.floor((t - b.at) / refillMs);
+    if (refilled > 0) {
+      b.tokens = Math.min(capacity, b.tokens + refilled);
+      b.at = b.tokens === capacity ? t : b.at + refilled * refillMs;
     }
-    if (hits.size > 10_000) hits.clear(); // memory guard; forfeits budgets, keeps the process
-    entry[kind] += 1;
-    return entry[kind] <= RATE_MAX[kind];
+    if (b.tokens >= 1) { b.tokens -= 1; return { ok: true }; }
+    return { ok: false, retryAfterSeconds: Math.max(1, Math.ceil((b.at + refillMs - t) / 1000)) };
   };
 }
 
@@ -97,8 +108,8 @@ export function createRateLimiter(now = Date.now) {
  * tests. API mirrors ShareBoxDO: { create(payload, ip), claim(code, ip) }.
  */
 export function createMemoryShareBox({ now = Date.now } = {}) {
-  const shares = new Map(); // code → { payload, expiresAt }
-  const allow = createRateLimiter(now);
+  const shares = new Map(); // code → { payload, expiresAt, ip }
+  const take = createRateLimiter(now);
 
   const purge = () => {
     const t = now();
@@ -107,19 +118,33 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
 
   return {
     async create(payload, ip) {
-      if (!allow(ip, "create")) return { ok: false, reason: "rate_limited" };
+      const gate = take(ip, "create");
+      if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
       const valid = await validateSharePayload(payload);
       if (!valid.ok) return valid;
       purge();
+      // Concurrency cap: claimed/canceled/expired shares free their slot
+      // immediately, so sequential use is never limited — only hogging.
+      let mine = 0, earliest = null;
+      for (const s of shares.values()) {
+        if (s.ip !== ip) continue;
+        mine += 1;
+        if (earliest === null || s.expiresAt < earliest) earliest = s.expiresAt;
+      }
+      if (mine >= MAX_LIVE_PER_IP) {
+        return { ok: false, reason: "too_many_live",
+                 retryAfterSeconds: Math.max(1, Math.ceil((earliest - now()) / 1000)) };
+      }
       if (shares.size >= MAX_OUTSTANDING) return { ok: false, reason: "busy" };
       let code = randomCode();
       while (shares.has(code)) code = randomCode();
-      shares.set(code, { payload, expiresAt: now() + SHARE_TTL_MS });
+      shares.set(code, { payload, expiresAt: now() + SHARE_TTL_MS, ip });
       return { ok: true, code, expiresInSeconds: SHARE_TTL_MS / 1000 };
     },
 
     async claim(rawCode, ip) {
-      if (!allow(ip, "claim")) return { ok: false, reason: "rate_limited" };
+      const gate = take(ip, "claim");
+      if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
       purge();
       const share = shares.get(normalizeCode(rawCode));
       if (!share) return { ok: false, reason: "not_found" };

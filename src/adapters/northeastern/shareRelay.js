@@ -30,7 +30,13 @@ async function post(path, body) {
     throw new Error("network");
   }
   const json = await res.json().catch(() => null);
-  if (!json?.ok) throw new Error(json?.reason ?? "network");
+  if (!json?.ok) {
+    const err = new Error(json?.reason ?? "network");
+    // Rate/concurrency refusals say when the block lifts — the UI counts
+    // it down instead of showing a dead-end error.
+    if (typeof json?.retryAfterSeconds === "number") err.retryAfterSeconds = json.retryAfterSeconds;
+    throw err;
+  }
   return json;
 }
 

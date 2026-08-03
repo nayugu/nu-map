@@ -14,7 +14,7 @@
 
 import {
   validateSharePayload, randomCode, normalizeCode, createRateLimiter,
-  SHARE_TTL_MS, MAX_OUTSTANDING,
+  SHARE_TTL_MS, MAX_OUTSTANDING, MAX_LIVE_PER_IP,
 } from "../../../mcp-server/src/shareBox.js";
 
 const CORS = {
@@ -35,7 +35,15 @@ export class ShareBoxDO {
     this.env = env;
     // In-memory on purpose — eviction resets budgets honest users never
     // exhaust, and a scanner keeping the DO hot keeps its budget alive.
-    this.allow = createRateLimiter();
+    this.take = createRateLimiter();
+  }
+
+  /** 200 ok · 429 rate/concurrency · 404 unknown code · 400 the rest. */
+  static statusOf(result) {
+    if (result.ok) return 200;
+    if (result.reason === "rate_limited" || result.reason === "too_many_live") return 429;
+    if (result.reason === "not_found") return 404;
+    return 400;
   }
 
   async fetch(request) {
@@ -47,11 +55,11 @@ export class ShareBoxDO {
       if (seg[0] === "share" && request.method === "POST") {
         const body = await request.json().catch(() => ({}));
         const result = await this.create(body?.payload, ip);
-        return json(result, result.ok ? 200 : 400);
+        return json(result, ShareBoxDO.statusOf(result));
       }
       if (seg[0] === "claim" && seg[1] && request.method === "POST") {
         const result = await this.claim(seg[1], ip);
-        return json(result, result.ok ? 200 : 404);
+        return json(result, ShareBoxDO.statusOf(result));
       }
       return json({ error: "Not found" }, 404);
     } catch (err) {
@@ -60,24 +68,36 @@ export class ShareBoxDO {
   }
 
   async create(payload, ip) {
-    if (!this.allow(ip, "create")) return { ok: false, reason: "rate_limited" };
+    const gate = this.take(ip, "create");
+    if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
     const valid = await validateSharePayload(payload);
     if (!valid.ok) return valid;
 
-    // Sweep + count in one pass; at ≤ MAX_OUTSTANDING keys this is cheap.
+    // Sweep + count (global and this IP's) in one pass; at
+    // ≤ MAX_OUTSTANDING keys this is cheap.
     const all = await this.ctx.storage.list({ prefix: "share:" });
     const now = Date.now();
-    let live = 0;
+    let live = 0, mine = 0, earliestMine = null;
     for (const [key, share] of all) {
-      if (share.expiresAt <= now) await this.ctx.storage.delete(key);
-      else live += 1;
+      if (share.expiresAt <= now) { await this.ctx.storage.delete(key); continue; }
+      live += 1;
+      if (share.ip === ip) {
+        mine += 1;
+        if (earliestMine === null || share.expiresAt < earliestMine) earliestMine = share.expiresAt;
+      }
+    }
+    // Concurrency cap: claimed/canceled/expired shares free their slot
+    // immediately, so sequential use is never limited — only hogging.
+    if (mine >= MAX_LIVE_PER_IP) {
+      return { ok: false, reason: "too_many_live",
+               retryAfterSeconds: Math.max(1, Math.ceil((earliestMine - now) / 1000)) };
     }
     if (live >= MAX_OUTSTANDING) return { ok: false, reason: "busy" };
 
     let code = randomCode();
     while (all.has(`share:${code}`)) code = randomCode();
     const expiresAt = now + SHARE_TTL_MS;
-    await this.ctx.storage.put(`share:${code}`, { payload, expiresAt });
+    await this.ctx.storage.put(`share:${code}`, { payload, expiresAt, ip });
 
     // Arm the sweep for this expiry unless an earlier one is already set.
     const alarm = await this.ctx.storage.getAlarm();
@@ -87,7 +107,8 @@ export class ShareBoxDO {
   }
 
   async claim(rawCode, ip) {
-    if (!this.allow(ip, "claim")) return { ok: false, reason: "rate_limited" };
+    const gate = this.take(ip, "claim");
+    if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
     const key = `share:${normalizeCode(rawCode)}`;
     const share = await this.ctx.storage.get(key);
     if (!share || share.expiresAt <= Date.now()) return { ok: false, reason: "not_found" };

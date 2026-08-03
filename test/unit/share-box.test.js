@@ -101,17 +101,62 @@ test("shareBox › unclaimed shares expire at the TTL", async () => {
   assert.deepEqual(await box.claim(code2, "5.6.7.8"), { ok: false, reason: "not_found" });
 });
 
-test("shareBox › per-IP budgets cut off scanners, not other users", async () => {
-  const box = createMemoryShareBox();
+test("shareBox › concurrency cap: an IP holds at most 5 live codes, slots free on claim", async () => {
+  let t = 1_000_000;
+  const box = createMemoryShareBox({ now: () => t });
   const payload = await encodePlan(plan);
 
-  for (let i = 0; i < 10; i++) {
-    assert.equal((await box.create(payload, "6.6.6.6")).ok, true, `create #${i + 1}`);
+  const codes = [];
+  for (let i = 0; i < 5; i++) {
+    const r = await box.create(payload, "6.6.6.6");
+    assert.equal(r.ok, true, `create #${i + 1}`);
+    codes.push(r.code);
   }
-  assert.deepEqual(await box.create(payload, "6.6.6.6"), { ok: false, reason: "rate_limited" });
+  const capped = await box.create(payload, "6.6.6.6");
+  assert.equal(capped.reason, "too_many_live");
+  // the countdown points at the oldest code's expiry
+  assert.ok(capped.retryAfterSeconds > 0 && capped.retryAfterSeconds <= SHARE_TTL_MS / 1000);
+
+  // a claim frees the slot immediately — sequential sharing is unlimited
+  await box.claim(codes[0], "9.9.9.9");
+  assert.equal((await box.create(payload, "6.6.6.6")).ok, true);
+});
+
+test("shareBox › token bucket: burst then trickle, with a retry countdown", async () => {
+  let t = 1_000_000;
+  const box = createMemoryShareBox({ now: () => t });
+  const payload = await encodePlan(plan);
+
+  // Drain the 10-token burst (claim each code so the concurrency cap
+  // never interferes — this test is about rate only).
+  for (let i = 0; i < 10; i++) {
+    const r = await box.create(payload, "6.6.6.6");
+    assert.equal(r.ok, true, `create #${i + 1}`);
+    await box.claim(r.code, "9.9.9.9");
+  }
+  const limited = await box.create(payload, "6.6.6.6");
+  assert.equal(limited.reason, "rate_limited");
+  assert.ok(limited.retryAfterSeconds >= 1 && limited.retryAfterSeconds <= 60);
+
   // an unrelated IP is unaffected
   assert.equal((await box.create(payload, "7.7.7.7")).ok, true);
 
-  for (let i = 0; i < 30; i++) await box.claim("AAAAAA", "6.6.6.6");
-  assert.deepEqual(await box.claim("AAAAAA", "6.6.6.6"), { ok: false, reason: "rate_limited" });
+  // a minute later one token has trickled back
+  t += 61_000;
+  assert.equal((await box.create(payload, "6.6.6.6")).ok, true);
+});
+
+test("shareBox › claim budget cuts off scanners and recovers by trickle", async () => {
+  let t = 1_000_000;
+  const box = createMemoryShareBox({ now: () => t });
+
+  for (let i = 0; i < 30; i++) {
+    assert.equal((await box.claim("AAAAAA", "6.6.6.6")).reason, "not_found", `claim #${i + 1}`);
+  }
+  const limited = await box.claim("AAAAAA", "6.6.6.6");
+  assert.equal(limited.reason, "rate_limited");
+  assert.ok(limited.retryAfterSeconds >= 1 && limited.retryAfterSeconds <= 20);
+
+  t += 21_000; // one claim token trickles back
+  assert.equal((await box.claim("AAAAAA", "6.6.6.6")).reason, "not_found");
 });

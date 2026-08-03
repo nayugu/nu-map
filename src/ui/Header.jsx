@@ -36,6 +36,26 @@ const IO_GROUP_RULED = { ...IO_GROUP, borderTop: "1px solid var(--border-2)", pa
 const IO_GROUP_LABEL = { fontSize: 8, fontWeight: 800, letterSpacing: 0.6,
   textTransform: "uppercase", color: "var(--text-5)", userSelect: "none" };
 
+/** m:ss for the share-code clock and retry countdowns. */
+const mmss = (ms) => {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+};
+
+// Server refusal → locale key (+ countdown until the block lifts, when
+// the server said so). Every block explains itself.
+const shareErrorOf = (err) => {
+  const until = typeof err?.retryAfterSeconds === "number"
+    ? Date.now() + err.retryAfterSeconds * 1000 : null;
+  switch (err?.message) {
+    case "rate_limited":  return { key: "header.io.code.ratelimited", until: until ?? Date.now() + 60_000 };
+    case "too_many_live": return { key: "header.io.code.toomanylive", until: until ?? Date.now() + 60_000 };
+    case "busy":          return { key: "header.io.code.busy" };
+    case "not_found":     return { key: "header.io.code.notfound" };
+    default:              return { key: "header.io.code.error" };
+  }
+};
+
 
 // Touch scroll-lock for header dropdown panels: consume touchmove at the
 // panel's scroll bounds so the gesture never chains into the planner's
@@ -170,17 +190,19 @@ export default function Header() {
   const [shareCodeBusy, setShareCodeBusy]     = useState(false);
   const [claimInput, setClaimInput]           = useState("");
   const [claimBusy, setClaimBusy]             = useState(false);
-  const [shareCodeError, setShareCodeError]   = useState(null); // locale key
+  const [shareCodeError, setShareCodeError]   = useState(null); // { key, until? }
   const [clockHover, setClockHover]           = useState(false); // red = click cancels
   const [codeNow, setCodeNow]                 = useState(Date.now());
   useEffect(() => {
-    if (!shareCode) return;
+    if (!shareCode && !shareCodeError?.until) return;
     const tick = setInterval(() => setCodeNow(Date.now()), 1000);
     return () => clearInterval(tick);
-  }, [shareCode]);
+  }, [shareCode, shareCodeError]);
   useEffect(() => {
     if (shareCode && shareCode.expiresAt <= codeNow) setShareCode(null);
-  }, [shareCode, codeNow]);
+    // A timed block clears itself the moment it lifts — visible unblocking.
+    if (shareCodeError?.until && shareCodeError.until <= codeNow) setShareCodeError(null);
+  }, [shareCode, shareCodeError, codeNow]);
 
   // No code → mint one. Code live (the button shows the countdown) →
   // cancel it: the code is revoked server-side and the button returns to
@@ -201,9 +223,8 @@ export default function Header() {
       setShareCode({ code, expiresAt: Date.now() + expiresInSeconds * 1000 });
       setCodeNow(Date.now());
     } catch (err) {
-      setShareCodeError(err?.message === "rate_limited"
-        ? "header.io.code.ratelimited"
-        : "header.io.code.error");
+      setShareCodeError(shareErrorOf(err));
+      setCodeNow(Date.now());
     } finally {
       setShareCodeBusy(false);
     }
@@ -235,11 +256,8 @@ export default function Header() {
       }
       setClaimInput("");
     } catch (err) {
-      setShareCodeError(err?.message === "not_found"
-        ? "header.io.code.notfound"
-        : err?.message === "rate_limited"
-          ? "header.io.code.ratelimited"
-          : "header.io.code.error");
+      setShareCodeError(shareErrorOf(err));
+      setCodeNow(Date.now());
     } finally {
       setClaimBusy(false);
     }
@@ -1068,7 +1086,7 @@ export default function Header() {
                         alignItems: "center", justifyContent: "center",
                         fontVariantNumeric: "tabular-nums", transition: "color 0.15s",
                         color: clockHover ? "var(--red, #ef4444)" : "var(--text-5)" }}>
-                        {`${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`}
+                        {mmss(shareCode.expiresAt - codeNow)}
                       </span>
                     )}
                   </button>
@@ -1098,7 +1116,8 @@ export default function Header() {
                   {shareCodeError && (
                     <div style={{ gridColumn: "1 / -1", fontSize: 9, fontWeight: 600,
                       color: "var(--red, #ef4444)", textAlign: "center" }}>
-                      {t(shareCodeError)}
+                      {t(shareCodeError.key, shareCodeError.until
+                        ? { time: mmss(shareCodeError.until - codeNow) } : undefined)}
                     </div>
                   )}
                 </div>
