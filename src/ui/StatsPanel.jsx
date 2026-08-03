@@ -146,7 +146,11 @@ function StackBar({ segments, unit }) {
   const [ref, w] = useContainerWidth();
   const total = segments.reduce((s, x) => s + x.value, 0) || 1;
   return (
-    <div ref={ref} style={{ marginBottom: 12 }}>
+    // 22px below, a touch more than the 20px between the groups that follow:
+    // the bar is a summary of the whole list, so it has to sit apart from it
+    // rather than look like the first row's decoration. Both Composition
+    // views (by level, by department) share this component and this gap.
+    <div ref={ref} style={{ marginBottom: 22 }}>
       {/* labels above, aligned to each segment, in the segment's colour */}
       <div style={{ display: "flex", marginBottom: 3 }}>
         {segments.map((s, i) => {
