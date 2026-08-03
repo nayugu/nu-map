@@ -1203,20 +1203,25 @@ function ExpandToggleBar({ expanded, onToggle }) {
       style={{
         width: "100%",
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: hov ? "var(--bg-surface-2)" : "var(--bg-surface)",
+        // Blend into the card: transparent by default, only a faint fill on
+        // hover so the target is confirmable without ever looking like a
+        // heavy button.
+        background: hov ? "var(--bg-surface)" : "transparent",
         border: "1px solid var(--border-2)",
         borderRadius: 99,
-        padding: "4px 0",
+        padding: "2px 0",
         cursor: "pointer",
-        color: "var(--text-4)",
-        transition: "background 0.15s",
+        // The chevron sits at border strength — present, not prominent —
+        // and nudges toward text on hover.
+        color: hov ? "var(--text-4)" : "var(--border-2)",
+        transition: "background 0.15s, color 0.15s",
       }}
     >
       {/* One chevron path, rotated 180° when open — down means "expand", up means "collapse". */}
-      <svg width="15" height="9" viewBox="0 0 15 9" aria-hidden="true"
+      <svg width="13" height="8" viewBox="0 0 13 8" aria-hidden="true"
            style={{ display: "block", transform: expanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-        <path d="M1.5 2 L7.5 7 L13.5 2" fill="none" stroke="currentColor"
-              strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M1.5 2 L6.5 6 L11.5 2" fill="none" stroke="currentColor"
+              strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>
   );
