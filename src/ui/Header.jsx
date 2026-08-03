@@ -1094,7 +1094,7 @@ export default function Header() {
                       opacity: shareCodeBusy ? 0.6 : 1,
                       transition: "border-color 0.15s" }}>
                     <span style={{ visibility: shareCode ? "hidden" : "visible", whiteSpace: "nowrap" }}>
-                      {t("header.io.code.send")}
+                      {t("header.io.code.share")}
                     </span>
                     {shareCode && (
                       <span style={{ position: "absolute", inset: 0, display: "flex",
