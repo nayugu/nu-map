@@ -11,18 +11,6 @@ import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
 import GradePopover from "./GradePopover.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
-
-// A definitively failed take (F/U/W) is VOID — the slot is spent and the
-// attempt earns nothing. Its colour collapses to 85% grey (keeping 15% of
-// the hue so the card stays recognizable), which reads as "used up" without
-// competing with opacity-dimming (unrelated-to-selection) or red (violation).
-function voidGrey(hex) {
-  const n = parseInt(hex.slice(1), 16);
-  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-  const l = Math.round(0.3 * r + 0.59 * g + 0.11 * b);
-  const mix = c => Math.round(l + (c - l) * 0.15);
-  return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
-}
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -224,11 +212,17 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
       codeColor   = fadeSubjectColor(course.color, isMinor ? 0.1 : 0.175, isDark);
     }
   }
-  // Void takes (entered F/U/W) collapse to grey — wins over relevance fade.
+  // A definitively failed take (F/U/W) is VOID — the slot is spent, the
+  // attempt earns nothing. Same fade motif as relevance, at much higher
+  // strength: light mode lifts toward white with saturation pinned
+  // (lighter AND softer), dark mode scales toward black. Wins over the
+  // relevance fade; distinct from opacity-dimming (unrelated-to-selection)
+  // and from red (violation).
   const voidTake = inSem && grades[course.id] != null && !takeConsumesSlot(grades[course.id]);
   if (voidTake) {
-    stripeColor = voidGrey(course.color);
-    codeColor   = voidGrey(course.color);
+    const isDark = themeName === "dark";
+    stripeColor = fadeSubjectColor(course.color, 0.8, isDark);
+    codeColor   = fadeSubjectColor(course.color, 0.65, isDark);
   }
 
   // Selection glow — tinted with the course's own subject colour. Only the

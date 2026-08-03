@@ -508,7 +508,7 @@ function GpaRules({ program, programKind = "major" }) {
 
   if (!rows.length) return null;
   return (
-    <div style={{ marginTop: 10 }}>
+    <div style={{ marginTop: 10, borderTop: "1px solid var(--border-2)", paddingTop: 9 }}>
       <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
                     letterSpacing: "0.05em", marginBottom: 4 }}>
         {t("grad.gpa.title")}
