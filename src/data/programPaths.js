@@ -69,6 +69,24 @@ export function pickCatalogYear(availableYears, cohortYear) {
 }
 
 /**
+ * Rewrite a program id/path onto a different catalog edition, leaving every
+ * other segment (including a leading "grad/") untouched. Returns the input
+ * unchanged when it carries no year or the year is not finite.
+ *
+ *   withCatalogYear("2029/khoury/cs_bscs_(boston)", 2026)
+ *     → "2026/khoury/cs_bscs_(boston)"
+ *
+ * Used where an id arrives from a source that doesn't know the student's
+ * cohort (notably MCP list_programs, which is a catalog tool with no plan).
+ * If the rewritten path doesn't exist, resolveInMap's tiers take over — and
+ * they now prefer the closest edition at or below the requested one.
+ */
+export function withCatalogYear(id, year) {
+  if (!id || !Number.isFinite(year)) return id;
+  return String(id).replace(/(^|\/)\d{4}(\/)/, `$1${year}$2`);
+}
+
+/**
  * Normalize a program folder slug so cosmetic catalog renames still match:
  * lowercases, maps "&"→"and", and strips everything but the alphanumeric core
  * (underscores, parentheses, the "_(boston)" campus suffix, spacing, commas).
@@ -105,20 +123,32 @@ export function resolveInMap(map, path, parse) {
     .map(p => ({ p, pp: parse(p) }))
     .filter(e => e.pp);
 
-  const newestWhere = (pred) => {
-    let best = null, bestYear = -Infinity;
+  // Within a tier, prefer the saved id's OWN catalog edition, then the
+  // closest older one, and only then the newest.
+  //
+  // This used to take the newest unconditionally, which was harmless while
+  // one edition existed. Now that editions are frozen and retained, a saved
+  // 2026 plan whose exact path stopped resolving (a folder rename, or its
+  // edition aged out of retention) would have been silently relocated onto
+  // the CURRENT year's requirements — the exact failure the freeze exists to
+  // prevent, arriving through the back door.
+  const bestWhere = (pred) => {
+    let exact = null, older = null, olderYear = -Infinity, newest = null, newestYear = -Infinity;
     for (const { p, pp } of entries) {
-      if (pred(pp) && pp.year > bestYear) { bestYear = pp.year; best = p; }
+      if (!pred(pp)) continue;
+      if (pp.year === want.year) exact ??= p;
+      if (pp.year <= want.year && pp.year > olderYear) { olderYear = pp.year; older = p; }
+      if (pp.year > newestYear) { newestYear = pp.year; newest = p; }
     }
-    return best;
+    return exact ?? older ?? newest;
   };
 
   const wantNorm = normalizeFolder(want.folder);
   return (
-    newestWhere(pp => pp.college === want.college && pp.folder === want.folder) ||
-    newestWhere(pp => pp.folder === want.folder) ||
-    newestWhere(pp => pp.college === want.college && normalizeFolder(pp.folder) === wantNorm) ||
-    newestWhere(pp => normalizeFolder(pp.folder) === wantNorm) ||
+    bestWhere(pp => pp.college === want.college && pp.folder === want.folder) ||
+    bestWhere(pp => pp.folder === want.folder) ||
+    bestWhere(pp => pp.college === want.college && normalizeFolder(pp.folder) === wantNorm) ||
+    bestWhere(pp => normalizeFolder(pp.folder) === wantNorm) ||
     null
   );
 }

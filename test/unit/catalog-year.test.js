@@ -6,7 +6,8 @@
 // requirements and being silently moved onto 2027's.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cohortCatalogYear, pickCatalogYear } from "../../src/data/programPaths.js";
+import { cohortCatalogYear, pickCatalogYear, withCatalogYear, resolveInMap, parseMajorPathParts }
+  from "../../src/data/programPaths.js";
 
 // ── cohort → edition ────────────────────────────────────────────────
 // An edition runs fall → summer and is labelled by its ENDING year, so
@@ -55,6 +56,47 @@ test("pick › empty/unsorted input is safe", () => {
   assert.equal(pickCatalogYear([], 2026), undefined);
   assert.equal(pickCatalogYear(undefined, 2026), undefined);
   assert.equal(pickCatalogYear([2028, 2026, 2027], 2027), 2027);  // order-independent
+});
+
+// ── pinning an id onto a cohort's edition ───────────────────────────
+// MCP list_programs is a catalog tool with no plan, so it offers newest-
+// edition ids; SET_MAJOR pins them before storing.
+
+test("pin › rewrites the year, preserving college, folder and the grad/ prefix", () => {
+  assert.equal(withCatalogYear("2029/khoury/cs_bscs_(boston)", 2026), "2026/khoury/cs_bscs_(boston)");
+  assert.equal(withCatalogYear("grad/2029/khoury/cs_ms_(boston)", 2026), "grad/2026/khoury/cs_ms_(boston)");
+});
+
+test("pin › a missing year or cohort leaves the id untouched", () => {
+  assert.equal(withCatalogYear("khoury/cs_bscs", 2026), "khoury/cs_bscs");
+  assert.equal(withCatalogYear("2029/khoury/cs", NaN), "2029/khoury/cs");
+  assert.equal(withCatalogYear("", 2026), "");
+});
+
+// ── stale-path resolution must not jump editions ────────────────────
+// resolveInMap is the fallback for every loader. It used to take the
+// NEWEST match at each tier, which would silently relocate a frozen plan
+// onto current requirements whenever its exact path stopped resolving.
+
+test("resolve › an exact path always wins", () => {
+  const map = { "2026/khoury/cs": 1, "2029/khoury/cs": 1 };
+  assert.equal(resolveInMap(map, "2026/khoury/cs", parseMajorPathParts), "2026/khoury/cs");
+});
+
+test("resolve › a renamed folder resolves within the SAME edition, not the newest", () => {
+  const map = { "2026/khoury/cs_bscs": 1, "2029/khoury/cs_bscs": 1 };
+  // saved id used a cosmetic variant that no longer exists verbatim
+  assert.equal(resolveInMap(map, "2026/khoury/cs-bscs", parseMajorPathParts), "2026/khoury/cs_bscs");
+});
+
+test("resolve › when the cohort's edition is gone, prefer the closest OLDER one", () => {
+  const map = { "2025/khoury/cs": 1, "2029/khoury/cs": 1 };
+  assert.equal(resolveInMap(map, "2026/khoury/cs", parseMajorPathParts), "2025/khoury/cs");
+});
+
+test("resolve › only when nothing older exists does it fall forward", () => {
+  const map = { "2028/khoury/cs": 1, "2029/khoury/cs": 1 };
+  assert.equal(resolveInMap(map, "2026/khoury/cs", parseMajorPathParts), "2029/khoury/cs");
 });
 
 // ── the property that matters ───────────────────────────────────────

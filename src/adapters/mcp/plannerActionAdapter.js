@@ -16,6 +16,7 @@
 
 import { evalPrereqTree } from "../../core/prereqEval.js";
 import { baseId, resolveAddId } from "../../core/repeatInstances.js";
+import { cohortCatalogYear, withCatalogYear } from "../../data/programPaths.js";
 
 // ── Semester ordering ─────────────────────────────────────────────
 
@@ -140,6 +141,12 @@ export function checkViolations(plan, courseMap) {
   return violations;
 }
 
+/** Pin a program id to the catalog edition this plan's cohort follows. */
+function pinToCohort(plan, programId) {
+  if (!programId) return "";
+  return withCatalogYear(programId, cohortCatalogYear(plan?.entSem, plan?.entYear));
+}
+
 // ── Action registry ───────────────────────────────────────────────
 // One entry per action type: a mutator over the (cloned) plan that FIRST
 // validates its arguments — returning an error string rejects the action
@@ -246,8 +253,13 @@ const APPLIERS = {
     if (a.subline       != null) wt.subline       = a.subline;
   },
 
-  SET_MAJOR:         (plan, a) => { plan.major         = a.programId ?? ""; },
-  SET_MAJOR2:        (plan, a) => { plan.major2        = a.programId ?? ""; },
+  // Program ids come from list_programs, which is a CATALOG tool with no
+  // plan and so lists the newest catalog edition. A student follows the
+  // edition they entered under, so pin the incoming id to their cohort's
+  // year before storing it; if that exact edition isn't held, the loaders'
+  // resolveInMap falls back to the closest one at or below it.
+  SET_MAJOR:         (plan, a) => { plan.major         = pinToCohort(plan, a.programId); },
+  SET_MAJOR2:        (plan, a) => { plan.major2        = pinToCohort(plan, a.programId); },
   SET_STUDENT_TYPE:  (plan, a) => {
     if (a.studentType !== "undergrad" && a.studentType !== "graduate")
       return `studentType must be "undergrad" or "graduate", got: ${a.studentType}`;
@@ -258,8 +270,8 @@ const APPLIERS = {
     plan.major = ""; plan.major2 = ""; plan.concentration = "";
   },
   SET_CONCENTRATION: (plan, a) => { plan.concentration = a.label ?? ""; },
-  SET_MINOR1:        (plan, a) => { plan.minor1        = a.programId ?? ""; },
-  SET_MINOR2:        (plan, a) => { plan.minor2        = a.programId ?? ""; },
+  SET_MINOR1:        (plan, a) => { plan.minor1        = pinToCohort(plan, a.programId); },
+  SET_MINOR2:        (plan, a) => { plan.minor2        = pinToCohort(plan, a.programId); },
   SET_BONUS_SH:      (plan, a) => {
     if (typeof a.amount !== "number" || a.amount < 0) return `amount must be a non-negative number, got: ${a.amount}`;
     plan.bonusSH = a.amount;
