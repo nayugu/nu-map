@@ -164,6 +164,53 @@ test("note › ordinary prose in the prereq field is NOT captured (no over-captu
   assert.deepEqual(parsePrereqText("See department for details"), []);
 });
 
+// ── named-score gates & the (Graduate) qualifier ───────────────────────────
+// Verbatim catalog text, 2026-08. These are the two malformed-tree classes an
+// all-subjects audit surfaced: a score gate dropped from the last OR-branch
+// left a dangling operator, and the "(Graduate)" grade-scope qualifier became
+// an empty "( )" group. Both now parse clean.
+
+test("note › a named-score gate on the last OR-branch is a note, not a dangling Or", () => {
+  // 30 PhD dissertation-continuation courses have exactly this shape.
+  const t = parse("BIOE 9991 with a minimum grade of S  or  Dissertation Check with a score of REQ");
+  assert.deepEqual(t, [
+    { subject: "BIOE", number: "9991", minGrade: "S" }, "Or",
+    { note: "Dissertation Check with a score of REQ" },
+  ]);
+});
+
+test("note › a placement-test score gate is captured", () => {
+  const t = parse("FRNH 2102 with a minimum grade of C-  or  FRNH 2302 with a minimum grade of C-  or  French Placement Test with a score of 411");
+  assert.deepEqual(t[4], { note: "French Placement Test with a score of 411" });
+});
+
+test("note › 'Placement in SUBJ NNNN' stays an alternative course ref, not a note", () => {
+  // The embedded course code must survive as a real (OR) alternative; the
+  // "with a score of NNNN" fragment beside it must NOT become a stray note.
+  const t = parse("SPNS 2102 with a minimum grade of C-  or  Placement in SPNS 3101 with a score of 3101 or  SPNS 3101 with a minimum grade of C-");
+  assert.deepEqual(t, [
+    { subject: "SPNS", number: "2102", minGrade: "C-" }, "Or",
+    { subject: "SPNS", number: "3101" }, "Or",
+    { subject: "SPNS", number: "3101", minGrade: "C-" },
+  ]);
+  assert.ok(!t.some(x => x && typeof x === "object" && x.note), "no stray note");
+});
+
+test("note › the '(Graduate)' grade-scope qualifier leaves no empty group", () => {
+  const t = parse("IE 5374 with a minimum grade of D  or  IE 5374 with a minimum grade of C  (Graduate) or  IE 6200 with a minimum grade of C");
+  assert.deepEqual(t, [
+    { subject: "IE", number: "5374", minGrade: "D" }, "Or",
+    { subject: "IE", number: "5374", minGrade: "C" }, "Or",
+    { subject: "IE", number: "6200", minGrade: "C" },
+  ]);
+});
+
+test("note › a phrase-only score gate is parse-worthy and captured", () => {
+  assert.equal(hasPrereqSignal("Biotechnology Lab Skills with a score of 80"), true);
+  assert.deepEqual(parsePrereqText("Biotechnology Lab Skills with a score of 80"),
+    [{ note: "Biotechnology Lab Skills with a score of 80" }]);
+});
+
 test("coreqs › unchanged: bare refs, no grades", () => {
   assert.deepEqual(parseCoreqText("PHYS 1151 and PHYS 1152"), [
     { subject: "PHYS", number: "1151" }, { subject: "PHYS", number: "1152" },

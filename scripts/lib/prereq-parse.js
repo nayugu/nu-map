@@ -45,6 +45,14 @@ export function parsePrereqText(text) {
     .replace(/with a minimum grade of ([A-FS][+-]?)(?![a-z])/gi,
              (_, g) => `[MIN:${g.toUpperCase()}]`)
     .replace(/with a minimum grade of [A-Z][+-]?/gi, '')
+    // Drop the catalog's grade-scope qualifier "(Graduate)" (and its
+    // "(Undergraduate)" twin). It trails a grade on ~30 courses — "IE 5374
+    // with a minimum grade of C (Graduate)" — to say which student level the
+    // gate applies to, which we don't model. Left in, it became an empty "( )"
+    // group joined by a spurious "And". It is the ONLY non-course parenthetical
+    // in the catalog (verified 2026-08 across all subjects), so stripping the
+    // literal token is safe and removes the empty-group artifact at its source.
+    .replace(/\((?:Graduate|Undergraduate)\)/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -57,7 +65,7 @@ export function parsePrereqText(text) {
   // below treats and/or as boolean operators.
   if (!COURSE_CODE.test(cleaned)) {
     const note = cleanNote(cleaned);
-    return note && NOTE_SIGNAL.test(note) ? [{ note }] : [];
+    return note && isCondition(note) ? [{ note }] : [];
   }
 
   // Tokenize: split on "and"/"or" while preserving them, and handle parens.
@@ -118,6 +126,23 @@ export function parsePrereqText(text) {
 // word they pair with ("consent of the department" → consent).
 const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|professor|program\s+director|advis|coordinator|standing|candidacy|enrollment)/i;
 
+// Some gating conditions are stated as a named check/test with a required
+// score rather than a keyword — "Dissertation Check with a score of REQ" (the
+// PhD dissertation-continuation gate on ~30 courses), "French Placement Test
+// with a score of 411", "Biotechnology Lab Skills with a score of 80". They
+// carry no NOTE_SIGNAL word, so they used to drop; and when one was the last
+// OR-branch ("BIOE 9991 … or Dissertation Check with a score of REQ") that
+// left a dangling "Or" in the tree. Capture the whole phrase as a note.
+// Anchored (^…$) and with a letters-only name so it matches ONLY a standalone
+// score gate: an embedded course code ("Placement in SPNS 3101 with a score
+// of 3101") keeps SPNS 3101 as a real alternative course ref, and the bare
+// "with a score of 3101" fragment left beside it is not itself captured.
+const SCORE_GATE = /^[A-Za-z][A-Za-z '&/-]*\s+with a score of\s+\S+$/i;
+
+// A phrase worth keeping as an informational { note } leaf: a recognized
+// gating keyword, or a whole named-score gate.
+const isCondition = (note) => NOTE_SIGNAL.test(note) || SCORE_GATE.test(note);
+
 // Whether a prereq string is worth parsing at all. The catalog scraper used to
 // gate ONLY on a course-code pattern, so a prereq that is nothing but a
 // non-course condition — very common for grad courses whose sole prerequisite
@@ -126,7 +151,7 @@ const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|
 // text names a course OR carries a recognized non-course phrase.
 const COURSE_CODE = /[A-Z]{2,6}\s+\d{4}/;
 export function hasPrereqSignal(text) {
-  return !!text && (COURSE_CODE.test(text) || NOTE_SIGNAL.test(text));
+  return !!text && (COURSE_CODE.test(text) || NOTE_SIGNAL.test(text) || /with a score of/i.test(text));
 }
 
 function cleanNote(raw) {
@@ -150,7 +175,7 @@ function extractOperators(text, parts) {
   let last = 0;
   const emitNote = chunk => {
     const note = cleanNote(chunk);
-    if (note && NOTE_SIGNAL.test(note)) parts.push({ note });
+    if (note && isCondition(note)) parts.push({ note });
   };
   while ((m = opPattern.exec(normalized)) !== null) {
     emitNote(normalized.slice(last, m.index));   // non-course words before this operator
