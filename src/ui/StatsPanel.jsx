@@ -257,22 +257,60 @@ function ClassChip({ id, cmap, onOpen, faded, fz = 11 }) {
 }
 
 // Header + wrapped clickable chips for one group (a level tier or a dept).
-function CourseGroup({ title, sub, badge, ids, cmap, onOpen, fadedIds }) {
+// A per-subject GPA on a FIXED 0–4 scale, so rows are comparable at a
+// glance rather than by reading digits.
+//
+// Two deliberate choices:
+//  · Fixed-width and right-aligned. The chip used to sit straight after a
+//    variable-width subject name, so no two numbers shared an x position
+//    and comparison meant reading every one. Aligning the column does more
+//    for comparability than any encoding.
+//  · A reference tick at 2.000, the threshold nearly every catalog GPA
+//    rule uses. A bare 0–4 bar wastes most of its range — real GPAs sit
+//    between 2 and 4, where 3.000 and 3.500 differ by an eighth of the
+//    width and look alike. The tick restores the comparison that matters
+//    (above or below the line, and by how far) without truncating the axis
+//    and exaggerating small gaps.
+const GPA_SCALE_MAX = 4;
+const GPA_REF = 2;
+function GpaMeter({ value, title }) {
+  const pct = Math.max(0, Math.min(1, value / GPA_SCALE_MAX)) * 100;
+  const below = value < GPA_REF;
+  return (
+    <span title={title} style={{ display: "inline-flex", alignItems: "center", gap: 6,
+      flexShrink: 0, cursor: "default", letterSpacing: 0 }}>
+      <span style={{ position: "relative", width: 46, height: 5, borderRadius: 3,
+        background: "var(--border-2)", overflow: "hidden", display: "inline-block" }}>
+        <span style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${pct}%`,
+          background: below ? "var(--warn-bright)" : "var(--success)", borderRadius: 3 }} />
+        {/* the 2.000 line, drawn over the fill so it stays visible */}
+        <span style={{ position: "absolute", left: `${(GPA_REF / GPA_SCALE_MAX) * 100}%`, top: -1, bottom: -1,
+          width: 1, background: "var(--bg-surface)", opacity: 0.9 }} />
+      </span>
+      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)",
+        width: 34, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
+        {value.toFixed(2)}
+      </span>
+    </span>
+  );
+}
+
+function CourseGroup({ title, sub, badge, badgeSlot = false, ids, cmap, onOpen, fadedIds }) {
   return (
     <div style={{ marginBottom: 11 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-        <span style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-2)" }}>{title}</span>
-        {/* Optional numeric badge (a per-subject GPA) sits beside the
-            title, so the right-hand subline keeps carrying exactly the
-            credits + class count it always has. */}
-        {badge && (
-          <span title={badge.title}
-            style={{ fontSize: 10.5, fontWeight: 700, color: "var(--text-4)",
-              background: "var(--badge-bg)", border: "1px solid var(--border-2)",
-              borderRadius: 4, padding: "0 5px", marginLeft: 7, flexShrink: 0,
-              letterSpacing: 0, cursor: "default" }}>{badge.text}</span>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5, gap: 8 }}>
+        <span style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-2)", flexShrink: 0 }}>{title}</span>
+        <span style={{ fontSize: 12, color: "var(--text-4)", flex: 1, textAlign: "right", minWidth: 0 }}>{sub}</span>
+        {/* Fixed-width GPA slot, LAST so every row's meter and digits
+            share an x position — reserved even where a row has no GPA, or
+            graded and ungraded rows would misalign against each other.
+            Omitted entirely when no row in the group has one, so views
+            without GPAs (by level) don't carry dead space. */}
+        {badgeSlot && (
+          <span style={{ width: 86, display: "inline-flex", justifyContent: "flex-end", flexShrink: 0 }}>
+            {badge && <GpaMeter value={badge.value} title={badge.title} />}
+          </span>
         )}
-        <span style={{ fontSize: 12, color: "var(--text-4)", flexShrink: 0, marginLeft: 8, flex: 1, textAlign: "right" }}>{sub}</span>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
         {ids.map(id => <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} faded={fadedIds?.has(id)} fz={12.5} />)}
@@ -784,6 +822,11 @@ export default function StatsPanel() {
     }).sort((a, b) => b.sh - a.sh || a.subject.localeCompare(b.subject));
   }, [placedIds, cmap, grades]);
 
+  // Reserve the GPA column only when at least one subject actually has
+  // one, so an ungraded plan sees the same layout it always did.
+  const anyDeptGpa = useMemo(
+    () => byDept.some(g => g.gpa != null && g.graded >= 2), [byDept]);
+
   // Credit-load timeline: summers as one bucket, per-half co-op occupancy
   // (Summer A / B) from the start + continuation maps so spanning co-ops
   // shade the terms they actually run through.
@@ -971,6 +1014,7 @@ export default function StatsPanel() {
                     {byDept.map(g => (
                       <CourseGroup key={g.subject}
                         title={g.subject}
+                        badgeSlot={anyDeptGpa}
                         sub={t("stats.dept.value", { sh: g.sh, unit, n: g.count })}
                         // A quiet chip beside the title, not a fourth
                         // "·"-separated clause on the subline — the row
@@ -986,7 +1030,7 @@ export default function StatsPanel() {
                         // is supposed to avoid. The basis (2 of 15) lives
                         // in the tooltip: it is a caveat, not a headline.
                         badge={g.gpa != null && g.graded >= 2 ? {
-                          text: g.gpa.toFixed(3),
+                          value: g.gpa,
                           title: t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded, total: g.count }),
                         } : null}
                         ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}
