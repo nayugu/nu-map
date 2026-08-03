@@ -30,7 +30,7 @@ import { fileURLToPath } from "url";
 import { parse as parseHTML } from "node-html-parser";
 import { parseRepeatability } from "../src/adapters/northeastern/repeatability.js";
 import { parseNUPath, findAttributeText, reconcileNuPath, SOURCE_POLICY } from "./lib/nupath.js";
-import { extractConcurrentCourses, parsePrereqText, parseCoreqText } from "./lib/prereq-parse.js";
+import { extractConcurrentCourses, parsePrereqText, parseCoreqText, hasPrereqSignal } from "./lib/prereq-parse.js";
 import { parseDescriptionGpaGate } from "../src/adapters/northeastern/gpaGate.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
@@ -214,8 +214,11 @@ function parseSubjectPage(html, subjectCode) {
       ...(parseDescriptionGpaGate(description) != null
         ? { minGPA: parseDescriptionGpaGate(description) } : {}),
       coreqs:  [...(coreqText ? parseCoreqText(coreqText) : []), ...concurrent],
-      // Only parse cleanedPrereq if it still contains course references after concurrent extraction
-      prereqs: (cleanedPrereq && /[A-Z]{2,6}\s+\d{4}/.test(cleanedPrereq)) ? parsePrereqText(cleanedPrereq) : [],
+      // Parse when the prereq names a course OR carries a recognized non-course
+      // phrase (e.g. a grad course whose only prereq is "Graduate program
+      // admission") — otherwise a phrase-only prereq is dropped before it can
+      // become a { note } leaf.
+      prereqs: hasPrereqSignal(cleanedPrereq) ? parsePrereqText(cleanedPrereq) : [],
     });
   }
 

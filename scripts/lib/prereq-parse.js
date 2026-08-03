@@ -103,6 +103,17 @@ export function parsePrereqText(text) {
 // gate capture so ordinary connective text isn't turned into noise.
 const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|professor|faculty|department|program\s+director|dean|advis|coordinator|standing|enrollment)/i;
 
+// Whether a prereq string is worth parsing at all. The catalog scraper used to
+// gate ONLY on a course-code pattern, so a prereq that is nothing but a
+// non-course condition — very common for grad courses whose sole prerequisite
+// is "Graduate program admission" — was discarded before it could reach the
+// { note } path, leaving those courses with no prereq shown. Parse when the
+// text names a course OR carries a recognized non-course phrase.
+const COURSE_CODE = /[A-Z]{2,6}\s+\d{4}/;
+export function hasPrereqSignal(text) {
+  return !!text && (COURSE_CODE.test(text) || NOTE_SIGNAL.test(text));
+}
+
 function cleanNote(raw) {
   const s = (raw || '')
     .replace(/\[(?:CONC|MIN:[^\]]*)\]/g, ' ')   // stray parse markers

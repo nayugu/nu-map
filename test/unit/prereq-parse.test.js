@@ -3,7 +3,7 @@
 // not invented: CS/MATH/CHEM/PHYS/BIOL course-description pages, 2026-08.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { extractConcurrentCourses, parsePrereqText, parseCoreqText }
+import { extractConcurrentCourses, parsePrereqText, parseCoreqText, hasPrereqSignal }
   from "../../scripts/lib/prereq-parse.js";
 import { parseDescriptionGpaGate } from "../../src/adapters/northeastern/gpaGate.js";
 
@@ -126,6 +126,17 @@ test("note › plain course-only prereqs gain no spurious note", () => {
   assert.deepEqual(t, [
     { subject: "CS", number: "2500" }, "And", { subject: "CS", number: "2510" },
   ]);
+});
+
+test("note › phrase-only prereq is worth parsing (the grad-admission case)", () => {
+  // The scraper's gate must let a course-less phrase through, or grad courses
+  // whose only prereq is "Graduate program admission" get dropped entirely.
+  assert.equal(hasPrereqSignal("Graduate program admission"), true);
+  assert.equal(hasPrereqSignal("CS 2500 and CS 2510"), true);          // course code
+  assert.equal(hasPrereqSignal("Requires junior standing"), true);      // non-course signal
+  assert.equal(hasPrereqSignal("Offers an overview of the field."), false); // plain prose
+  assert.equal(hasPrereqSignal(""), false);
+  assert.deepEqual(parsePrereqText("Graduate program admission"), [{ note: "Graduate program admission" }]);
 });
 
 test("coreqs › unchanged: bare refs, no grades", () => {
