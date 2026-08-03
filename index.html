@@ -274,15 +274,31 @@
         // user or the blunt once-a-minute retry.
         var probeTimer = null;
         function stopProbe() { if (probeTimer) { clearInterval(probeTimer); probeTimer = null; } }
-        // Detection outcome: the message fades and a quiet outlined
-        // button — localized, laid over the exact footprint the text
-        // held — offers the way back. The bar keeps sweeping and nothing
-        // moves: the card is top-anchored.
+        // Detection outcome, all in one smooth breath: the loading bar
+        // folds away (its job is done), the streamer closes its gap into
+        // a complete ring around the logo (the dash grows to swallow the
+        // gap — same period, so the morph is seamless), the message
+        // fades, and a quiet outlined localized button arrives in the
+        // text's footprint. The emblem itself never moves.
         function offerReturn() {
           if (exiting || document.getElementById('numap-back-link')) return;
           var lc = 'en';
           try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
           var dark = resolveDark();
+          var bar = document.getElementById('numap-recovery-bar');
+          if (bar) {
+            bar.style.transition = 'opacity .7s ease, height .7s ease, margin-bottom .7s ease';
+            bar.style.opacity = '0';
+            bar.style.height = '0';
+            bar.style.marginBottom = '0';
+          }
+          var rib = document.getElementById('numap-ribbon');
+          if (rib) {
+            rib.style.strokeDasharray = '150 90';
+            void rib.getBoundingClientRect(); // pin the start value, then transition
+            rib.style.transition = 'stroke-dasharray 1.1s ease';
+            rib.style.strokeDasharray = '240 0';
+          }
           var m = document.getElementById('numap-recovery-msg');
           var s2 = document.getElementById('numap-recovery-sub');
           if (m) { m.style.transition = 'opacity .6s'; m.style.opacity = '0'; }
@@ -491,7 +507,7 @@
               // period, so the flow loops seamlessly) while the loop
               // itself slowly turns.
               + '<g opacity="0.9"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="16s" repeatCount="indefinite"/>'
-              + '<path d="M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8" stroke="' + rib1 + '" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="150 90">'
+              + '<path id="numap-ribbon" d="M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8" stroke="' + rib1 + '" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="150 90">'
               + '<animate attributeName="stroke-dashoffset" from="0" to="-240" dur="3.2s" repeatCount="indefinite"/></path></g>'
               + '</svg>'
               // The logo itself: floating, with a diagonal glint sweeping
