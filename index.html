@@ -196,8 +196,20 @@
             el.dir = lc === 'ar' ? 'rtl' : 'ltr';
             el.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:system-ui,-apple-system,sans-serif;'
               + (dark ? 'background:#0d1117;color:#e2e8f0;' : 'background:#fefefe;color:#1e293b;');
+            // The sweeping bar is the app's own loading-screen bar (same
+            // size, radius and active→link gradient), just indeterminate —
+            // it says "alive and working", not "static page".
             el.innerHTML =
-              '<div><div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
+              '<style>'
+              + '@keyframes numapRecoverySweep{from{transform:translateX(' + (lc === 'ar' ? '250%' : '-100%') + ')}to{transform:translateX(' + (lc === 'ar' ? '-100%' : '250%') + ')}}'
+              + '@keyframes numapRecoveryIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}'
+              + '</style>'
+              + '<div style="animation:numapRecoveryIn .35s ease-out;">'
+              + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
+              + '<div style="width:40%;height:100%;border-radius:99px;background:linear-gradient(90deg,'
+              + (dark ? '#58a6ff,#a78bfa' : '#2563eb,#7c3aed')
+              + ');animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
+              + '<div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
               + '<div style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
               + '<button onclick="window.location.reload()" style="margin-top:16px;font-size:13px;font-weight:700;padding:8px 20px;'
               + 'border-radius:8px;border:1px solid ' + (dark ? '#3d444d' : '#cbd5e1') + ';background:transparent;color:inherit;cursor:pointer;">'

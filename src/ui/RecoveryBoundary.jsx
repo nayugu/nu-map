@@ -72,8 +72,9 @@ export default class RecoveryBoundary extends Component {
     if (!this.state.crashed) return this.props.children;
     const lc = localeOf();
     const dark = isDark();
+    const rtl = lc === "ar";
     return (
-      <div dir={lc === "ar" ? "rtl" : "ltr"} style={{
+      <div dir={rtl ? "rtl" : "ltr"} style={{
         position: "fixed", inset: 0, zIndex: 99999,
         display: "flex", alignItems: "center", justifyContent: "center",
         textAlign: "center", padding: 24,
@@ -81,7 +82,20 @@ export default class RecoveryBoundary extends Component {
         background: dark ? "#0d1117" : "#fefefe",
         color: dark ? "#e2e8f0" : "#1e293b",
       }}>
-        <div>
+        {/* Same sweeping bar as the index.html overlay (the app's own
+            loading-bar vocabulary): the auto-reload IS working on it,
+            and a moving element says so better than static text. */}
+        <style>{`
+          @keyframes numapCrashSweep { from { transform: translateX(${rtl ? "250%" : "-100%"}) } to { transform: translateX(${rtl ? "-100%" : "250%"}) } }
+          @keyframes numapCrashIn { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
+        `}</style>
+        <div style={{ animation: "numapCrashIn .35s ease-out" }}>
+          <div style={{ width: 260, height: 4, borderRadius: 99, overflow: "hidden",
+            margin: "0 auto 20px", background: dark ? "#21262d" : "#e2e8f0" }}>
+            <div style={{ width: "40%", height: "100%", borderRadius: 99,
+              background: `linear-gradient(90deg, ${dark ? "#58a6ff, #a78bfa" : "#2563eb, #7c3aed"})`,
+              animation: "numapCrashSweep 1.3s ease-in-out infinite alternate" }} />
+          </div>
           <div style={{ fontSize: 15, fontWeight: 600, maxWidth: 420, lineHeight: 1.5 }}>
             {MSG[lc] || MSG.en}
           </div>
