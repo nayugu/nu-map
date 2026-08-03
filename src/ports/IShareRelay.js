@@ -36,4 +36,9 @@ export const IShareRelay = "shareRelay";
  *   Redeem a code for its payload (single use). Rejects with
  *   Error(reason) — reason ∈ "not_found" | "rate_limited" | "disabled" |
  *   "network".
+ *
+ * @property {(code: string) => void} [abandonShareCode]
+ *   Fire-and-forget revoke that survives tab unload (sendBeacon). A code
+ *   lives only while its sender's tab does; the server TTL is merely the
+ *   backstop for crashes and clients that never say goodbye.
  */

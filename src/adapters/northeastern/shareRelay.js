@@ -51,4 +51,13 @@ export default {
     const { payload } = await post(`/claim/${encodeURIComponent(code)}`);
     return payload;
   },
+
+  /**
+   * Farewell cancel: revoke a code while the tab is unloading. Claiming
+   * your own code burns it, and sendBeacon is the one request browsers
+   * guarantee to attempt during pagehide — fetch would be dropped.
+   */
+  abandonShareCode(code) {
+    try { navigator.sendBeacon?.(`${SERVER}/claim/${encodeURIComponent(code)}`); } catch {}
+  },
 };

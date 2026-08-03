@@ -101,7 +101,7 @@ export default function Header() {
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
-    shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, importSharedPlan,
+    shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, importSharedPlan,
     aiAssistantAvailable, claudePreview,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
@@ -185,22 +185,17 @@ export default function Header() {
   // ── Share by code ──────────────────────────────────────────────
   // shareCode = { code, expiresAt } while a code is live; a 1 s tick
   // drives the countdown and clears the code when the relay would.
-  // Persisted so a reload can't orphan a live code on the server: the
-  // tab restores the ticking clock and cancel keeps working (same
-  // literal-key convention as the aiAssistant adapter).
-  const [shareCode, setShareCode]             = useState(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem("nu-map-share-code") || "null");
-      if (saved?.code && saved.expiresAt > Date.now()) return saved;
-    } catch {}
-    return null;
-  });
+  // A code lives only as long as this tab: pagehide fires the farewell
+  // cancel (sendBeacon survives unload; fetch would be dropped), so a
+  // closed or reloaded tab never leaves an unclaimed code behind. The
+  // server's 10-minute TTL remains only as the crash backstop.
+  const [shareCode, setShareCode]             = useState(null);
   useEffect(() => {
-    try {
-      if (shareCode) localStorage.setItem("nu-map-share-code", JSON.stringify(shareCode));
-      else localStorage.removeItem("nu-map-share-code");
-    } catch {}
-  }, [shareCode]);
+    if (!shareCode) return;
+    const revoke = () => abandonShareCode(shareCode.code);
+    window.addEventListener("pagehide", revoke);
+    return () => window.removeEventListener("pagehide", revoke);
+  }, [shareCode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [shareCodeCopied, setShareCodeCopied] = useState(false);
   const [shareCodeBusy, setShareCodeBusy]     = useState(false);
   const [claimInput, setClaimInput]           = useState("");

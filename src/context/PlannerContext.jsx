@@ -2593,6 +2593,10 @@ export function PlannerProvider({ children }) {
     try { await shareRelay.claimShareCode(code); } catch { /* already gone — same outcome */ }
   };
 
+  // Unload-safe flavor: revoke the code as the tab disappears, so a
+  // closed tab never leaves a ticket parked on the server.
+  const abandonShareCode = (code) => shareRelay.abandonShareCode?.(code);
+
   // Redeem a code and decode — the caller confirms with the user before
   // importSharedPlan actually touches any state.
   const claimShareCode = async (code) => {
@@ -3179,7 +3183,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, importSharedPlan,
+    shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,
