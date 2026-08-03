@@ -375,6 +375,10 @@ function toWire(rows, meta) {
     if (r.ev.programSlugs?.length) e.p = r.ev.programSlugs.map(intern).sort((x, y) => x - y);
     if (r.ev.prereqOr) e.q = r.ev.prereqOr;
     if (r.ev.crossListCluster) e.x = r.ev.crossListCluster;
+    // `f` links a derived companion row to the lecture pair it follows, so the
+    // UI can present a bundle as ONE decision with a +N chip rather than as
+    // three unrelated rows appearing at once.
+    if (r.ev.derivedFrom) { e.f = r.ev.derivedFrom; e.r = r.ev.derivedRole; }
     if (r.ev.stated) {
       e.s = r.ev.stated.kind;
       if (r.ev.stated.directed) e.d = r.ev.stated.from;        // direction: from → to

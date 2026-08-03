@@ -15,13 +15,37 @@ import { resolveTermByDuration, termSpans } from "./specialTermUtils.js";
  * satisfaction and is never counted toward total SH. Returns `placements`
  * unchanged (same reference) when there are no substitutions.
  *
+ * ## Groups are atomic
+ *
+ * An optional `group` id ties several pairs into one substitution. This is how
+ * bundles and set-to-set rules are expressed:
+ *
+ *   Cornerstone  GE 1110 + GE 1111  →  GE 1501 + GE 1502
+ *   Physics      PHYS 1161 → 1151, plus its lab 1162 → 1152 and 1163 → 1153
+ *
+ * A group applies **only when every `from` in it is placed**, because the
+ * catalog grants the swap for the whole set, not pair by pair — placing just
+ * GE 1110 does not earn GE 1501. Ungrouped pairs keep exactly today's
+ * behaviour, so existing saved plans, share links and MCP payloads are
+ * unaffected and need no migration.
+ *
  * Pure: does not mutate `placements`.
  */
 export function applySubstitutions(placements, substitutions = []) {
   if (!substitutions.length) return placements;
   const ep = { ...placements };
-  for (const { from, to } of substitutions) {
-    if (placements[from]) ep[to] = placements[from];
+
+  // Ungrouped pairs are their own group, keyed uniquely so they never merge.
+  const groups = new Map();
+  substitutions.forEach((s, i) => {
+    const key = s.group ? `g:${s.group}` : `s:${i}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(s);
+  });
+
+  for (const pairs of groups.values()) {
+    if (!pairs.every(({ from }) => placements[from])) continue;
+    for (const { from, to } of pairs) ep[to] = placements[from];
   }
   return ep;
 }

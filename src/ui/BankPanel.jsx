@@ -7,6 +7,9 @@ import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
 import { takesUsed } from "../core/repeatInstances.js";
+import { alternativesFor, programIndexSet } from "../core/equivalenceIndex.js";
+import { readSubstitutionIntent, normalizeCodeQuery } from "../core/courseCodeParse.js";
+import { useEquivalences } from "./useEquivalences.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAttributeSystem } from "../ports/IAttributeSystem.js";
@@ -47,7 +50,9 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
   const [rect,  setRect]  = useState(null);
   const inputRef = useRef(null);
 
-  const q = query.trim().toLowerCase();
+  // "phys1111" must match a haystack built as "phys 1111" — the same tolerance
+  // parseCourseCodes has, so both spellings behave identically here too.
+  const q = normalizeCodeQuery(query).toLowerCase();
   const filtered = useMemo(() => {
     if (!q) return [];
     const tokens = q.split(/\s+/).filter(Boolean);
@@ -134,6 +139,65 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
   );
 }
 
+// ── Suggested-substitution row ───────────────────────────────────
+//
+// Deliberately in the DROPDOWN idiom (code bold + title beneath, like
+// CourseSearchRow) rather than the committed-row idiom, which is code-only.
+// The tier carries no chrome of its own: A and B are entitlements the catalog
+// already grants, so there is nothing to say, and only C shows the same "⚠"
+// the panel already uses for an unplaced course. The reason lives in the
+// tooltip, so the row stays one line of text.
+function SuggestionRow({ alt, course, onApply, t, isPhone }) {
+  // `course` is resolved by the caller. The index keys courses as "PHYS 1151"
+  // while courseMap keys them as "PHYS1151", so looking up alt.to in courseMap
+  // silently yields undefined and every title renders blank.
+  const to    = course;
+  const title = useTranslatedText(to?.title ?? "");
+  const why   = alt.tier === "A" ? (alt.evidence.statement ? t("bank.sub.why.stated") : t("bank.sub.why.a"))
+              : alt.tier === "B" ? t("bank.sub.why.b")
+              : t("bank.sub.why.c");
+  const scope = alt.evidence.scope ? ` (${alt.evidence.scope})` : "";
+  const parts = [alt.tier === "A" && alt.evidence.statement ? why : why + scope];
+  if (alt.evidence.prereqOr) parts.push(`${alt.evidence.prereqOr}×`);
+  if (alt.components.length)
+    parts.push(t("bank.sub.bundle", { list: alt.components.map(c => c.to).join(", ") }));
+
+  return (
+    <div
+      onMouseDown={onApply}
+      onTouchStart={e => { e.preventDefault(); onApply(); }}
+      title={parts.join(" · ")}
+      style={{
+        display: "flex", alignItems: "center", gap: 5,
+        padding: isPhone ? "2px 4px" : "4px 6px", marginBottom: 2,
+        borderRadius: 4, cursor: "pointer", background: "var(--bg-surface-2)",
+        fontSize: isPhone ? 5 : 10,
+      }}
+      onMouseEnter={e => e.currentTarget.style.background = "var(--bg-surface)"}
+      onMouseLeave={e => e.currentTarget.style.background = "var(--bg-surface-2)"}
+    >
+      <span style={{ fontWeight: 700, color: "var(--link-1)", flexShrink: 0 }}>{alt.from}</span>
+      <span style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", flexShrink: 0 }}>→</span>
+      <span style={{ fontWeight: 700, color: "var(--text-2)", flexShrink: 0 }}>
+        {to ? `${to.subject} ${to.number}` : alt.to}
+      </span>
+      <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)", flex: 1, minWidth: 0,
+                     overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        {scaleLatinRuns(title)}
+      </span>
+      {alt.components.length > 0 && (
+        <span style={{ fontSize: isPhone ? 5 : 8, fontWeight: 700, color: "var(--text-5)",
+                       flexShrink: 0 }}>+{alt.components.length}</span>
+      )}
+      {alt.approval && (
+        <span style={{ fontSize: isPhone ? 6 : 9, flexShrink: 0 }}>⚠</span>
+      )}
+      <span style={{ fontSize: isPhone ? 7 : 11, color: "var(--link-1)", fontWeight: 700,
+                     flexShrink: 0, lineHeight: 1 }}>+</span>
+    </div>
+  );
+}
+
 // ────────────────────────────────────────────────────────────────
 
 export default function BankPanel() {
@@ -157,6 +221,8 @@ export default function BankPanel() {
     selectedId, setSelectedId,
     setShowPanel,
     substitutions, addSubstitution, removeSubstitution,
+    addSubstitutionGroup, removeSubstitutionGroup,
+    major, major2, minor1, minor2,
     studentType,
     claudePreview,
   } = usePlanner();
@@ -384,8 +450,72 @@ export default function BankPanel() {
   // the previewed chip/row would sit invisible behind a collapsed header.
   const pvPlacedOutTouched = !!(claudePreview?.placedOut?.added?.length || claudePreview?.placedOut?.removed?.length);
   const pvSubsTouched      = !!(claudePreview?.substitutions?.added?.length || claudePreview?.substitutions?.removed?.length);
+  // One free-text box serves both jobs. Letters and digits delimit each other,
+  // so "phys1163", "phys 1163 phys1173" and "PHYS1163,PHYS1173" all parse — and
+  // typing two codes states a substitution outright, which is what the old
+  // two-field form existed to collect. Nothing has to be picked from a dropdown
+  // before results appear, which was the friction in the first version.
+  const [subQuery, setSubQuery] = useState("");
+  // Manual entry stays available, collapsed by default: the index covers 553 of
+  // ~8,000 courses and an advisor can approve anything the corpus never saw.
+  const [subManual, setSubManual] = useState(false);
   const [subFromId, setSubFromId] = useState(null);
   const [subToId,   setSubToId]   = useState(null);
+
+  // The equivalence index is ~293 KB and only this section reads it, so it is
+  // fetched on first expand. A null index means "no suggestions" everywhere,
+  // which is exactly the old manual-only behaviour.
+  const subsOpen = !collapseSubstitutions || pvSubsTouched;
+  const equivIndex = useEquivalences(subsOpen);
+
+  // Tier A means "a program publishes this choice", which is only an answer for
+  // a student IN that program — 72% of program-backed pairs come from exactly
+  // one. Programs are identified here by the last path segment of the planner's
+  // program id ("2026/science/physics_bs" -> "physics_bs"), which is what
+  // build-equivalences.js interns. With no program selected the set is empty and
+  // every pair reads at its conservative stored tier, which is the honest default.
+  const myProgramIx = useMemo(
+    () => programIndexSet(equivIndex,
+      [major, major2, minor1, minor2].filter(Boolean).map(id => String(id).split("/").pop())),
+    [equivIndex, major, major2, minor1, minor2]);
+
+  const subIntent = useMemo(() => readSubstitutionIntent(subQuery), [subQuery]);
+
+  const subSuggestions = useMemo(() => {
+    if (!equivIndex || subIntent.kind !== "suggest") return [];
+    return alternativesFor(equivIndex, subIntent.from, myProgramIx);
+  }, [equivIndex, subIntent, myProgramIx]);
+
+
+  // Map an index course id ("PHYS 1151") back to a planner course id.
+  const plannerIdOf = useMemo(() => {
+    const m = new Map();
+    for (const c of courses) m.set(`${c.subject} ${c.number}`, c.id);
+    return m;
+  }, [courses]);
+
+  const applySuggestion = (alt) => {
+    const pairs = [{ from: alt.from, to: alt.to }, ...alt.components]
+      .map(x => ({ from: plannerIdOf.get(x.from), to: plannerIdOf.get(x.to) }))
+      .filter(x => x.from && x.to);
+    if (!pairs.length) return;
+    addSubstitutionGroup(pairs, { tier: alt.tier, approval: alt.approval });
+    setSubQuery("");
+  };
+
+  // Two or more codes typed straight in. Unknown codes are dropped rather than
+  // invented; an all-unknown entry simply adds nothing.
+  const applyTypedPair = () => {
+    if (subIntent.kind !== "pair") return;
+    const from = plannerIdOf.get(subIntent.from);
+    if (!from) return;
+    const pairs = subIntent.to
+      .map(code => ({ from, to: plannerIdOf.get(code) }))
+      .filter(x => x.to);
+    if (!pairs.length) return;
+    addSubstitutionGroup(pairs);
+    setSubQuery("");
+  };
   const [hoveredSubId, setHoveredSubId] = useState(null);
   const [typeCollapsed, setTypeCollapsed] = useState({});
   const { themeName } = useTheme();
@@ -838,27 +968,36 @@ export default function BankPanel() {
             cursor: "pointer", userSelect: "none", borderTop: "1px solid var(--border-1)",
           }}
         >
-          <span style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: pvSubsTouched ? "#fb923c" : "var(--text-5)", letterSpacing: "0.05em" }}>
+          <span title={t("bank.sub.desc")}
+                style={{ fontSize: isPhone ? 5 : 9, fontWeight: 700, color: pvSubsTouched ? "#fb923c" : "var(--text-5)", letterSpacing: "0.05em" }}>
             {t("bank.section.substitutions")}{substitutions.length > 0 ? ` (${substitutions.length})` : ""}
           </span>
           <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapseSubstitutions && !pvSubsTouched ? "▶" : "▼"}</span>
         </div>
         {(!collapseSubstitutions || pvSubsTouched) && (
           <div style={{ padding: "0 8px 8px" }}>
-            {!isPhone && (
-              <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 5, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
-                {t("bank.sub.desc")}
-              </div>
-            )}
 
-            {[
-              ...substitutions,
+            {(() => {
+              // A grouped substitution is ONE decision, so only its head pair
+              // gets a row; the rest become a "+N" chip. Ungrouped pairs are
+              // unchanged, which is every substitution saved before this.
+              const seen = new Set();
+              const rows = [];
+              for (const sub of substitutions) {
+                if (sub.group) {
+                  if (seen.has(sub.group)) continue;
+                  seen.add(sub.group);
+                  const members = substitutions.filter(x => x.group === sub.group);
+                  rows.push({ ...sub, extra: members.length - 1, members });
+                } else rows.push({ ...sub, extra: 0 });
+              }
               // Preview-removed substitutions stay visible as ghosts.
-              ...(claudePreview?.substitutions?.removed ?? []).map(k => {
+              for (const k of (claudePreview?.substitutions?.removed ?? [])) {
                 const [from, to] = k.split("→");
-                return { from, to, pvRemoved: true };
-              }),
-            ].map(({ from, to, pvRemoved }) => {
+                rows.push({ from, to, pvRemoved: true, extra: 0 });
+              }
+              return rows;
+            })().map(({ from, to, pvRemoved, extra, members, approval }) => {
               const fc = courseMap[from];
               const tc = courseMap[to];
               const fromPlaced = !!placements[from];
@@ -900,8 +1039,23 @@ export default function BankPanel() {
                   >
                     {tc ? `${tc.subject} ${tc.number}` : to}
                   </span>
+                  {extra > 0 && (
+                    <span
+                      title={t("bank.sub.bundle", {
+                        list: (members ?? []).slice(1)
+                          .map(m => { const c = courseMap[m.to]; return c ? `${c.subject} ${c.number}` : m.to; })
+                          .join(", "),
+                      })}
+                      style={{ fontSize: isPhone ? 5 : 8, fontWeight: 700, color: "var(--text-5)",
+                               flexShrink: 0, cursor: "help" }}
+                    >+{extra}</span>
+                  )}
+                  {approval && (
+                    <span title={t("bank.sub.approval")}
+                          style={{ fontSize: isPhone ? 6 : 9, flexShrink: 0 }}>⚠</span>
+                  )}
                   <button
-                    onClick={e => { e.stopPropagation(); removeSubstitution(from, to); }}
+                    onClick={e => { e.stopPropagation(); removeSubstitutionGroup(from, to); }}
                     style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-4)", fontSize: isPhone ? 8 : 12, padding: "0 2px", lineHeight: 1, flexShrink: 0 }}
                     title="Remove substitution"
                   >✕</button>
@@ -910,27 +1064,105 @@ export default function BankPanel() {
             })}
 
             <div style={{ marginTop: substitutions.length ? 6 : 0 }}>
-              <div style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)", marginBottom: 4 }}>{t("bank.sub.add.label")}</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
-                <CourseSearch courses={courses} value={subFromId} onChange={setSubFromId} placeholder={t("bank.sub.courseA.placeholder")} isPhone={isPhone} />
-                <span style={{ fontSize: 10, color: "var(--text-5)", flexShrink: 0 }}>→</span>
-                <CourseSearch courses={courses} value={subToId} onChange={setSubToId} placeholder={t("bank.sub.courseB.placeholder")} isPhone={isPhone} />
-              </div>
-              <button
-                onClick={() => {
-                  if (!subFromId || !subToId || subFromId === subToId) return;
-                  addSubstitution(subFromId, subToId);
-                  setSubFromId(null);
-                  setSubToId(null);
-                }}
-                disabled={!subFromId || !subToId || subFromId === subToId}
+              {/* ONE box. Type a code to see what can replace it, or type two
+                  codes to state the substitution yourself — letters and digits
+                  delimit each other, so commas and spaces are optional. This
+                  subsumes the old two-field form, so there is nothing to
+                  disclose and nothing to press: picking a row is the action. */}
+              <input
+                type="text"
+                value={subQuery}
+                onChange={e => setSubQuery(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter") applyTypedPair(); }}
+                placeholder={t("bank.sub.query.placeholder")}
                 style={{
-                  width: "100%", padding: "4px 0", fontSize: isPhone ? 7 : 10, borderRadius: 4,
-                  background: subFromId && subToId && subFromId !== subToId ? "var(--link-1)" : "var(--bg-surface-2)",
-                  color: subFromId && subToId && subFromId !== subToId ? "#fff" : "var(--text-4)",
-                  border: "1px solid var(--border-2)", cursor: subFromId && subToId && subFromId !== subToId ? "pointer" : "not-allowed",
+                  width: "100%", fontSize: isPhone ? 8 : 10, padding: "4px 6px",
+                  background: "var(--bg-surface-2)", color: "var(--text-2)",
+                  border: "1px solid var(--border-2)", borderRadius: 4, outline: "none",
                 }}
-              >{t("bank.sub.add.button")}</button>
+              />
+
+              {subQuery.trim() && (
+                <div style={{ marginTop: 4 }}>
+                  {/* Two codes typed: the student stated the pair. */}
+                  {subIntent.kind === "pair" && (
+                    <div
+                      onMouseDown={applyTypedPair}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 5,
+                        padding: isPhone ? "2px 4px" : "4px 6px", marginBottom: 2,
+                        borderRadius: 4, cursor: "pointer", background: "var(--bg-surface-2)",
+                        fontSize: isPhone ? 5 : 10,
+                      }}
+                    >
+                      <span style={{ fontWeight: 700, color: "var(--link-1)", flexShrink: 0 }}>{subIntent.from}</span>
+                      <span style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", flexShrink: 0 }}>→</span>
+                      <span style={{ fontWeight: 700, color: "var(--text-2)", flex: 1, minWidth: 0 }}>
+                        {subIntent.to.join(", ")}
+                      </span>
+                      <span style={{ fontSize: isPhone ? 7 : 11, color: "var(--link-1)", fontWeight: 700, flexShrink: 0, lineHeight: 1 }}>+</span>
+                    </div>
+                  )}
+
+                  {/* One code: what the catalog and the corpus offer instead. */}
+                  {subIntent.kind === "suggest" && subSuggestions.map(alt => (
+                    <SuggestionRow
+                      key={`${alt.from}-${alt.to}`}
+                      alt={alt}
+                      course={courseMap[plannerIdOf.get(alt.to)]}
+                      onApply={() => applySuggestion(alt)}
+                      t={t}
+                      isPhone={isPhone}
+                    />
+                  ))}
+
+
+                  {/* This box searches SUBSTITUTIONS, not the catalog. Until the
+                      text parses to a course code there is nothing to say, so a
+                      half-typed subject shows nothing rather than a course list. */}
+                  {subIntent.kind === "suggest" && subSuggestions.length === 0 && (
+                    <div style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", padding: "3px 5px" }}>
+                      {t("bank.sub.none")}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Manual entry: collapsed by default, unchanged in behaviour. The
+                  box above covers the common cases, but an advisor can approve a
+                  swap the corpus has no evidence for, so this must stay. */}
+              <div
+                onClick={() => setSubManual(v => !v)}
+                style={{ marginTop: 5, fontSize: isPhone ? 6 : 9, color: "var(--text-5)",
+                         cursor: "pointer", userSelect: "none" }}
+              >
+                {subManual ? "▾" : "▸"} {t("bank.sub.manual")}
+              </div>
+
+              {subManual && (
+                <div style={{ marginTop: 4 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
+                    <CourseSearch courses={courses} value={subFromId} onChange={setSubFromId} placeholder={t("bank.sub.courseA.placeholder")} isPhone={isPhone} />
+                    <span style={{ fontSize: 10, color: "var(--text-5)", flexShrink: 0 }}>→</span>
+                    <CourseSearch courses={courses} value={subToId} onChange={setSubToId} placeholder={t("bank.sub.courseB.placeholder")} isPhone={isPhone} />
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (!subFromId || !subToId || subFromId === subToId) return;
+                      addSubstitution(subFromId, subToId);
+                      setSubFromId(null);
+                      setSubToId(null);
+                    }}
+                    disabled={!subFromId || !subToId || subFromId === subToId}
+                    style={{
+                      width: "100%", padding: "4px 0", fontSize: isPhone ? 7 : 10, borderRadius: 4,
+                      background: subFromId && subToId && subFromId !== subToId ? "var(--link-1)" : "var(--bg-surface-2)",
+                      color: subFromId && subToId && subFromId !== subToId ? "#fff" : "var(--text-4)",
+                      border: "1px solid var(--border-2)", cursor: subFromId && subToId && subFromId !== subToId ? "pointer" : "not-allowed",
+                    }}
+                  >{t("bank.sub.add.button")}</button>
+                </div>
+              )}
             </div>
           </div>
         )}
