@@ -346,15 +346,15 @@ export const strings = {
 
   // ── Info-tip popovers (the "?" explanations on non-obvious controls) ──
   "tip.translate": "Turn on to machine-translate course titles and descriptions into your language across the catalog and course panels. Some languages run instantly in the browser; others need a one-time ~890 MB download or an online service, then cache results.",
-  "tip.clearcache": "Click to delete cached translation data — the downloaded model or already-translated text — to free space. The next translation is fetched fresh, so it also fixes a result that looked wrong.",
-  "tip.save": "When on, your plan is saved in this browser and reopens automatically next visit. When off, nothing is saved — closing the tab discards it.",
+  "tip.clearcache": "Click to delete cached translation data (the downloaded model or already-translated text) and free space. The next translation is fetched fresh, so it also fixes a result that looked wrong.",
+  "tip.save": "When on, your plan is saved in this browser and reopens automatically next visit. When off, nothing is saved, so closing the tab discards it.",
   "tip.violations": "When on, red lines appear on the board wherever a course sits before a prerequisite or corequisite it needs. Turn off to hide them.",
-  "tip.collapse": "When on, the board hides “other credits” rows — placed courses that count toward none of your programs — so each semester shows only what meets your requirements.",
-  "tip.privategrades": "When on, all grades and your GPA are hidden across the stats panel and course cards, and left out of shared links and exports — for showing your plan to others. Nothing is deleted; turn off to restore them.",
-  "tip.unlocks": "When on, selecting a course highlights the ones it unlocks on the board — courses that require it — so you can see where a class leads.",
+  "tip.collapse": "When on, the board hides “other credits” rows, the placed courses that count toward none of your programs, so each semester shows only what meets your requirements.",
+  "tip.privategrades": "When on, all grades and your GPA are hidden across the stats panel and course cards, and left out of shared links and exports, so you can show your plan to others. Nothing is deleted; turn off to restore them.",
+  "tip.unlocks": "When on, selecting a course highlights the ones it unlocks on the board, the courses that require it, so you can see where a class leads.",
   "tip.sticky": "When you change your entry or graduation term, this sets whether placed courses keep their semester slot (1st, 2nd…) or their calendar date (e.g. Fall 2026).",
   "tip.export.json": "Click to download your whole plan as a .json file, to back up or move to another device. Grades are included unless “Keep grades private” is on. Reopen it later with Load.",
-  "tip.import.json": "Click to open a .json file saved with Save. It loads as a new plan alongside your current ones — nothing you have is replaced.",
+  "tip.import.json": "Click to open a .json file saved with Save. It loads as a new plan alongside your current ones, so nothing you have is replaced.",
 
   // ── Claude integration (settings, dot, pairing modal, proposal card) ──
   "claude.oauth.title": "Claude is requesting access",

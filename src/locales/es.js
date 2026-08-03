@@ -406,12 +406,12 @@ export const strings = {
 
   // ── Info-tip popovers (the "?" explanations on non-obvious controls) ──
   "tip.translate": "Actívalo para traducir automáticamente los títulos y descripciones de los cursos en todo el catálogo y los paneles de curso a tu idioma. Algunos idiomas funcionan al instante en el navegador; otros descargan una vez un modelo de ~890 MB o usan un servicio en línea, y los resultados se guardan en caché.",
-  "tip.clearcache": "Haz clic para borrar los datos de traducción en caché —el modelo descargado o el texto ya traducido— y liberar espacio. La siguiente traducción se obtiene de nuevo, lo que además corrige un resultado que salió mal.",
+  "tip.clearcache": "Haz clic para borrar los datos de traducción en caché (el modelo descargado o el texto ya traducido) y liberar espacio. La siguiente traducción se obtiene de nuevo, lo que además corrige un resultado que salió mal.",
   "tip.save": "Cuando está activado, tu plan se guarda en este navegador y se vuelve a abrir automáticamente la próxima vez. Cuando está desactivado, no se guarda nada y al cerrar la pestaña se descarta.",
   "tip.violations": "Cuando está activado, aparecen líneas rojas en el tablero donde un curso queda antes de un prerrequisito o correquisito que necesita. Desactívalo para ocultarlas y tener un tablero más limpio.",
-  "tip.collapse": "Cuando está activado, el tablero oculta las filas de «otros créditos» —cursos colocados que no cuentan para ninguno de tus programas— para que cada semestre muestre solo lo que corresponde a tus requisitos.",
+  "tip.collapse": "Cuando está activado, el tablero oculta las filas de «otros créditos» (cursos colocados que no cuentan para ninguno de tus programas) para que cada semestre muestre solo lo que corresponde a tus requisitos.",
   "tip.privategrades": "Cuando está activado, todas las calificaciones y tu promedio se ocultan en el panel de estadísticas y en las tarjetas de curso, y se excluyen de los enlaces compartidos y los archivos exportados, para mostrar tu plan a otra persona. No se borra nada; desactívalo para recuperarlas.",
-  "tip.unlocks": "Cuando está activado, al seleccionar un curso se resaltan en el tablero los que este desbloquea —los que lo tienen como prerrequisito— para ver a qué conduce una asignatura.",
+  "tip.unlocks": "Cuando está activado, al seleccionar un curso se resaltan en el tablero los que este desbloquea (los que lo tienen como prerrequisito) para ver a qué conduce una asignatura.",
   "tip.sticky": "Cuando cambias tu término de ingreso o graduación, esto define si los cursos colocados mantienen su posición de semestre (1.º, 2.º…) o su fecha de calendario (p. ej., Otoño 2026).",
   "tip.export.json": "Haz clic para descargar todo tu plan como un archivo .json para respaldarlo o llevarlo a otro dispositivo. Las calificaciones se incluyen salvo que «Mantener calificaciones privadas» esté activado; vuelve a abrir el archivo con Cargar.",
   "tip.import.json": "Haz clic para abrir un archivo .json guardado con Guardar. Se carga como un plan nuevo junto a los actuales en el selector de planes; no se reemplaza nada de lo que ya tienes.",
