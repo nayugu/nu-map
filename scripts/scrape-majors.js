@@ -222,7 +222,14 @@ async function scrapeProgram(url) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 /** Every committed program file in this tree, so the rails can see removals. */
-function listCommittedPrograms() {
+/**
+ * Committed programs for ONE catalog edition (defaults to the edition this
+ * run writes). Editions are frozen, so the rails must compare this year
+ * against ITSELF: walking every year made the first scrape of a new edition
+ * see all ~1,000 previous-edition files as "vanished", which would trip the
+ * rails and refuse to write — blocking the roll entirely.
+ */
+function listCommittedPrograms(year = YEAR) {
   const out = [];
   const walk = dir => {
     if (!existsSync(dir)) return;
@@ -232,8 +239,18 @@ function listCommittedPrograms() {
       else if (e === 'parsed.initial.json') out.push(p);
     }
   };
-  walk(OUT_ROOT);
+  walk(join(OUT_ROOT, String(year)));
   return out;
+}
+
+/** Program count of the newest OTHER edition — the discovery-floor baseline
+ *  when this edition is brand new and has nothing committed yet. */
+function priorEditionCount() {
+  if (!existsSync(OUT_ROOT)) return 0;
+  const years = readdirSync(OUT_ROOT)
+    .filter(n => /^\d{4}$/.test(n) && Number(n) !== YEAR)
+    .map(Number).sort((a, b) => b - a);
+  return years.length ? listCommittedPrograms(years[0]).length : 0;
 }
 
 async function main() {
@@ -309,6 +326,7 @@ async function main() {
     }
     const { ok, failures, stats } = checkScrapeRails({
       discovered: programs.length, failed, results: pending, previous,
+      baselineCount: priorEditionCount(),
     });
     console.log(`\nRails: ${stats.nowCount} parsed vs ${stats.prevCount} committed, ` +
                 `${stats.nowSections} sections vs ${stats.prevSections}, ${stats.vanished} vanished.`);

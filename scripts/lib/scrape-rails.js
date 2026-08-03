@@ -36,11 +36,18 @@ export const DEFAULT_LIMITS = {
  * @param {object} [args.limits]
  * @returns {{ok: boolean, failures: string[], stats: object}}
  */
-export function checkScrapeRails({ discovered, failed, results, previous, limits = {} }) {
+export function checkScrapeRails({ discovered, failed, results, previous, baselineCount, limits = {} }) {
   const L = { ...DEFAULT_LIMITS, ...limits };
   const failures = [];
 
   const prevCount = previous.size;
+  // The discovery floor must survive an EDITION ROLL. `previous` is scoped to
+  // the edition being written, so the first scrape of a new catalog year has
+  // none — and every prevCount-guarded rail would silently switch itself off
+  // during the riskiest run of the cycle. The sitemap's size is edition-
+  // independent, so the caller passes the prior edition's program count as a
+  // baseline and the floor keeps applying.
+  const floorBase = prevCount > 0 ? prevCount : (baselineCount ?? 0);
   const sectionsOf = p => (p?.requirementSections?.length ?? 0)
                         + (p?.concentrations?.concentrationOptions?.length ?? 0);
 
@@ -58,9 +65,9 @@ export function checkScrapeRails({ discovered, failed, results, previous, limits
     prevSections, nowSections, vanished: vanished.length,
   };
 
-  if (prevCount > 0 && discovered > 0 && discovered < prevCount * L.minDiscoveryRatio) {
-    failures.push(`only ${discovered} program URLs discovered, against ${prevCount} previously committed ` +
-                  `(floor ${Math.ceil(prevCount * L.minDiscoveryRatio)}) — the index or sitemap is likely broken`);
+  if (floorBase > 0 && discovered > 0 && discovered < floorBase * L.minDiscoveryRatio) {
+    failures.push(`only ${discovered} program URLs discovered, against ${floorBase} previously committed ` +
+                  `(floor ${Math.ceil(floorBase * L.minDiscoveryRatio)}) — the index or sitemap is likely broken`);
   }
   if (discovered > 0 && failed > discovered * L.maxFetchFailRatio) {
     failures.push(`${failed} of ${discovered} pages failed to fetch ` +
