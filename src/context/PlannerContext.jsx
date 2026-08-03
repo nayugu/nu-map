@@ -637,7 +637,15 @@ export function PlannerProvider({ children }) {
   }, [showPalette]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw });
+    // NOTE the storagePrefix: this call was missing it, so saveState read
+    // (prefix=persistEnabled, persist=<the data object>, obj=undefined) and
+    // wrote {"persist":true} to a junk key on every unload. The last-moment
+    // safety net has never actually saved anything.
+    const h = () => {
+      saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw });
+      // The SLOT is what the app reloads from, so it needs the same net.
+      saveCurrentPlanToSlot();
+    };
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
   }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, gradesRaw]);
