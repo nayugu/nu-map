@@ -1017,8 +1017,8 @@ export default function Header() {
                   <div
                     onClick={handleCopyCode}
                     title={shareCode ? t("header.io.code.copy.title") : undefined}
-                    style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6,
-                      minWidth: 0, fontSize: 10, fontWeight: 700,
+                    style={{ display: "flex", alignItems: "center", justifyContent: "center",
+                      position: "relative", minWidth: 0, fontSize: 10, fontWeight: 700,
                       fontFamily: "ui-monospace, monospace", letterSpacing: 2,
                       background: shareCodeCopied ? "var(--active)" : "var(--bg-surface)",
                       color: shareCodeCopied ? "#fff" : shareCode ? "var(--text-2)" : "var(--text-5)",
@@ -1029,9 +1029,12 @@ export default function Header() {
                     <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {shareCode ? shareCode.code : "······"}
                     </span>
+                    {/* Countdown floats at the edge so the code itself sits
+                        dead-center, mirroring the centered entry below. */}
                     {shareCode && (
-                      <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: 0,
-                        color: shareCodeCopied ? "#fff" : "var(--text-5)", flexShrink: 0 }}>
+                      <span style={{ position: "absolute", insetInlineEnd: 8, top: "50%",
+                        transform: "translateY(-50%)", fontSize: 9, fontWeight: 600, letterSpacing: 0,
+                        color: shareCodeCopied ? "#fff" : "var(--text-5)" }}>
                         {`${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`}
                       </span>
                     )}
@@ -1051,7 +1054,7 @@ export default function Header() {
                     onKeyDown={e => { if (e.key === "Enter") handleClaimCode(); }}
                     placeholder={t("header.io.code.placeholder")}
                     title={t("header.io.code.load.title")}
-                    style={{ minWidth: 0, fontSize: 10, fontWeight: 700,
+                    style={{ minWidth: 0, fontSize: 10, fontWeight: 700, textAlign: "center",
                       fontFamily: "ui-monospace, monospace", letterSpacing: 2,
                       background: "var(--bg-surface)", color: "var(--text-2)",
                       border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 8px" }} />
