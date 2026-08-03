@@ -40,6 +40,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "المقرر A (مضاف)",
   "bank.sub.courseB.placeholder": "المقرر B (مستوفى)",
   "bank.sub.none":                   "لا توجد بدائل معروفة",
+  "bank.sub.yours":                "يسمح برنامجك بما يلي",
+  "bank.sub.ready":                "المقررات مضافة بالفعل — طبّقه لإغلاق الفجوة",
   "bank.sub.unknown":              "مقرر غير معروف: {codes}",
   "bank.sub.hint":                 "اكتب رمز مقرر كاملاً، مثال PHYS 1163",
   "bank.sub.unavailable":          "بيانات البدائل غير متوفرة",

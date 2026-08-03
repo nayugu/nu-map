@@ -39,6 +39,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "\u8bfe\u7a0b A\uff08\u5df2\u9009\uff09",
   "bank.sub.courseB.placeholder": "\u8bfe\u7a0b B\uff08\u88ab\u6ee1\u8db3\uff09",
   "bank.sub.none":                   "暂无已知的可替代课程",
+  "bank.sub.yours":                "你的专业允许",
+  "bank.sub.ready":                "课程已安排 — 应用以消除缺口",
   "bank.sub.unknown":              "未知课程：{codes}",
   "bank.sub.hint":                 "请输入完整课程代码，例如 PHYS 1163",
   "bank.sub.unavailable":          "替代课程数据不可用",

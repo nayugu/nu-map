@@ -41,6 +41,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "Course A (placed)",
   "bank.sub.courseB.placeholder": "Course B (satisfied)",
   "bank.sub.none":                   "No known alternatives",
+  "bank.sub.yours":                "Your program allows",
+  "bank.sub.ready":                "Courses already placed — apply to close the gap",
   "bank.sub.unknown":              "Unknown course: {codes}",
   "bank.sub.hint":                 "Type a full course code, e.g. PHYS 1163",
   "bank.sub.unavailable":          "Substitution data unavailable",

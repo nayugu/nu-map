@@ -7,7 +7,8 @@ import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
 import { takesUsed } from "../core/repeatInstances.js";
-import { alternativesFor, programIndexSet } from "../core/equivalenceIndex.js";
+import { alternativesFor, programIndexSet, programAllowedSwaps, readyToApply }
+  from "../core/equivalenceIndex.js";
 import { parseCodeTerms, parseCourseCodes, normalizeCodeQuery } from "../core/courseCodeParse.js";
 import { useEquivalences } from "./useEquivalences.js";
 import SubstitutionPopover from "./SubstitutionPopover.jsx";
@@ -148,7 +149,7 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
 // already grants, so there is nothing to say, and only C shows the same "⚠"
 // the panel already uses for an unplaced course. The reason lives in the
 // tooltip, so the row stays one line of text.
-function SuggestionRow({ alt, course, onApply, onHoverPlus, t, isPhone }) {
+function SuggestionRow({ alt, course, onApply, onHoverPlus, ready = false, t, isPhone }) {
   // `course` is resolved by the caller. The index keys courses as "PHYS 1151"
   // while courseMap keys them as "PHYS1151", so looking up alt.to in courseMap
   // silently yields undefined and every title renders blank.
@@ -177,6 +178,12 @@ function SuggestionRow({ alt, course, onApply, onHoverPlus, t, isPhone }) {
                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {scaleLatinRuns(title)}
       </span>
+      {/* Actionable now: every course this replaces is already placed, so the
+          plan is showing a gap that applying this would close. */}
+      {ready && (
+        <span title={t("bank.sub.ready")}
+              style={{ fontSize: isPhone ? 6 : 9, color: "var(--link-1)", flexShrink: 0 }}>●</span>
+      )}
       {/* No per-row "⚠": tier C is the common case, so the glyph appeared on
           essentially every row and stopped carrying information. The caveat and
           the reasoning live in the popover on hover of this "+". */}
@@ -487,6 +494,20 @@ export default function BankPanel() {
   // them. "phys1151phys1161" and "phys1151, phys1161" therefore narrow rather
   // than propose, and "phys1163sp1153" simply finds nothing.
   const subTerms = useMemo(() => parseCodeTerms(subQuery), [subQuery]);
+
+  // With the box empty, show what the student's own programs publish. They
+  // should not have to guess a course code to find out what they are allowed to
+  // do, and auto-adding these would assert a choice they have not made — a
+  // substitution is inert until its source courses are placed anyway.
+  const subAllowed = useMemo(() => {
+    if (!equivIndex || subTerms.length) return [];
+    const isPlaced = id => !!placements[plannerIdOf.get(id)];
+    return programAllowedSwaps(equivIndex, myProgramIx)
+      .map(alt => ({ ...alt, ready: readyToApply(alt, isPlaced) }))
+      // Actionable first: these are the ones where the plan currently shows a
+      // gap that is not real.
+      .sort((x, y) => (y.ready === true) - (x.ready === true) || y.score - x.score);
+  }, [equivIndex, subTerms, myProgramIx, placements, plannerIdOf]);
 
   const subSuggestions = useMemo(() => {
     if (!equivIndex || !subTerms.length) return [];
@@ -1087,6 +1108,27 @@ export default function BankPanel() {
                   border: "1px solid var(--border-2)", borderRadius: 4, outline: "none",
                 }}
               />
+
+              {!subQuery.trim() && subAllowed.length > 0 && (
+                <div style={{ marginTop: 5 }} onMouseLeave={() => setSubHover(null)}>
+                  <div style={{ fontSize: isPhone ? 6 : 9, fontWeight: 700, color: "var(--text-5)",
+                                letterSpacing: "0.05em", marginBottom: 3 }}>
+                    {t("bank.sub.yours")}
+                  </div>
+                  {subAllowed.map(alt => (
+                    <SuggestionRow
+                      key={`allow-${alt.from}-${alt.to}`}
+                      alt={alt}
+                      course={courseMap[plannerIdOf.get(alt.to)]}
+                      onApply={() => applySuggestion(alt)}
+                      onHoverPlus={(a, rect) => setSubHover(a ? { alt: a, rect } : null)}
+                      ready={alt.ready}
+                      t={t}
+                      isPhone={isPhone}
+                    />
+                  ))}
+                </div>
+              )}
 
               {subQuery.trim() && (
                 <div style={{ marginTop: 4 }} onMouseLeave={() => setSubHover(null)}>

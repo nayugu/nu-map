@@ -40,6 +40,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "कोर्स A (रखा गया)",
   "bank.sub.courseB.placeholder": "कोर्स B (पूरा किया)",
   "bank.sub.none":                   "कोई ज्ञात विकल्प नहीं",
+  "bank.sub.yours":                "आपका कार्यक्रम अनुमति देता है",
+  "bank.sub.ready":                "पाठ्यक्रम पहले से रखे हैं — कमी दूर करने हेतु लागू करें",
   "bank.sub.unknown":              "अज्ञात पाठ्यक्रम: {codes}",
   "bank.sub.hint":                 "पूरा पाठ्यक्रम कोड लिखें, उदा. PHYS 1163",
   "bank.sub.unavailable":          "प्रतिस्थापन डेटा अनुपलब्ध",

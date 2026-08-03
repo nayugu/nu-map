@@ -40,6 +40,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "Cours A (placé)",
   "bank.sub.courseB.placeholder": "Cours B (satisfait)",
   "bank.sub.none":                   "Aucune équivalence connue",
+  "bank.sub.yours":                "Votre programme autorise",
+  "bank.sub.ready":                "Cours déjà placés — appliquez pour combler l’écart",
   "bank.sub.unknown":              "Cours inconnu : {codes}",
   "bank.sub.hint":                 "Saisissez un code complet, ex. PHYS 1163",
   "bank.sub.unavailable":          "Données d’équivalences indisponibles",

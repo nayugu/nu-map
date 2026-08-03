@@ -235,3 +235,57 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
 export function hasAlternatives(index, courseId, myProgramIx) {
   return alternativesFor(index, courseId, myProgramIx).length > 0;
 }
+
+/**
+ * Every swap the student's own programs publish — the answer to "what am I
+ * allowed to do?" without them having to guess a course code first.
+ *
+ * These are tier A by definition: the program states the choice, so there is no
+ * inference and no advisor flag. Sorted so the ones the student can act on now
+ * come first (see `readyToApply`), then by score.
+ *
+ * Bundle components are skipped as entry points, exactly as in
+ * `alternativesFor`: a lecture swap already carries its lab and recitation, and
+ * listing those separately would offer the same decision several times.
+ */
+export function programAllowedSwaps(index, myProgramIx, { limit = 24 } = {}) {
+  if (!index || !myProgramIx?.size) return [];
+  const out = [];
+  const seen = new Set();
+  for (const p of index.byKey.values()) {
+    if (p.e?.f) continue;                         // a component, not a decision
+    const backing = p.e?.p;
+    if (!Array.isArray(backing) || !backing.some(i => myProgramIx.has(i))) continue;
+
+    // Direction: a directed statement only licenses its own way round.
+    const from = p.e?.d ?? p.a;
+    const to = from === p.a ? p.b : p.a;
+    const key = `${from}|${to}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    for (const alt of alternativesFor(index, from, myProgramIx)) {
+      if (alt.to !== to) continue;
+      out.push(alt);
+      break;
+    }
+    if (out.length >= limit * 2) break;
+  }
+  out.sort((x, y) => (y.score - x.score) || x.from.localeCompare(y.from));
+  return out.slice(0, limit);
+}
+
+/**
+ * Is every course this swap replaces already in the plan?
+ *
+ * This is the case worth surfacing: with GE 1110 and GE 1111 both placed but the
+ * substitution not applied, GE 1501 and GE 1502 still read as unmet and the plan
+ * shows a gap that is not real. A group only takes effect once every `from` is
+ * placed (see applySubstitutions), so this is exactly the threshold at which
+ * applying it changes anything.
+ */
+export function readyToApply(alt, isPlaced) {
+  if (typeof isPlaced !== "function") return false;
+  const froms = [alt.from, ...(alt.components ?? []).map(c => c.from)];
+  return froms.every(id => isPlaced(id));
+}

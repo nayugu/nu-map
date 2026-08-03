@@ -41,6 +41,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "コースA（配置済み）",
   "bank.sub.courseB.placeholder": "コースB（満たす）",
   "bank.sub.none":                   "代替可能な科目はありません",
+  "bank.sub.yours":                "あなたのプログラムで可能な代替",
+  "bank.sub.ready":                "科目は配置済み — 適用すると不足が解消します",
   "bank.sub.unknown":              "不明な科目: {codes}",
   "bank.sub.hint":                 "完全な科目コードを入力してください（例: PHYS 1163）",
   "bank.sub.unavailable":          "代替科目のデータを取得できません",

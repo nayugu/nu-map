@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 import {
   buildEquivalenceIndex, programIndexSet, resolvePairTier,
   alternativesFor, hasAlternatives, tierNeedsApproval, tierIsOfferable,
+  programAllowedSwaps, readyToApply,
 } from "../../src/core/equivalenceIndex.js";
 import { applySubstitutions } from "../../src/core/planModel.js";
 
@@ -226,4 +227,63 @@ test("apply › identical ungrouped pairs never merge into one group", () => {
 test("apply › no substitutions returns the SAME reference", () => {
   const p = { "A 1000": "fall1" };
   assert.equal(applySubstitutions(p, []), p);
+});
+
+// ── what my program allows, and when it is actionable ───────────────
+
+test("allowed › lists only swaps the student's own programs publish", () => {
+  const mine = programIndexSet(IX, ["science_writing_minor"]);
+  const got = programAllowedSwaps(IX, mine);
+  assert.equal(got.length, 1);
+  assert.equal(got[0].from, "PHYS 1151");
+  assert.equal(got[0].to, "PHYS 1161");
+  assert.equal(got[0].tier, "A");
+  assert.equal(got[0].approval, false);
+});
+
+test("allowed › a student in no publishing program sees nothing", () => {
+  assert.deepEqual(programAllowedSwaps(IX, programIndexSet(IX, ["chemical_engineering_bsche"])), []);
+  assert.deepEqual(programAllowedSwaps(IX, new Set()), []);
+  assert.deepEqual(programAllowedSwaps(null, new Set([1])), []);
+});
+
+test("allowed › bundle components are not offered as separate decisions", () => {
+  const mine = programIndexSet(IX, ["science_writing_minor"]);
+  const froms = programAllowedSwaps(IX, mine).map(a => a.from);
+  assert.ok(!froms.includes("PHYS 1152"), "the lab is part of the lecture decision");
+});
+
+test("ready › true only when every replaced course is placed", () => {
+  const alt = { from: "GE 1110", to: "GE 1501",
+                components: [{ from: "GE 1111", to: "GE 1502" }] };
+  assert.equal(readyToApply(alt, id => id === "GE 1110"), false);
+  assert.equal(readyToApply(alt, id => ["GE 1110", "GE 1111"].includes(id)), true);
+  assert.equal(readyToApply(alt, undefined), false);
+});
+
+test("set rule › footnote siblings are ONE decision, applied atomically", () => {
+  // "substitute GE 1110 AND GE 1111 for GE 1501 AND GE 1502". Emitted as two
+  // independent pairs, applying one would grant GE 1501 from GE 1110 alone.
+  const wire = {
+    programs: ["bioe"],
+    pairs: [
+      { a: "GE 1110", b: "GE 1501", t: "A", s: 30, e: { p: [0], s: "footnote" } },
+      { a: "GE 1111", b: "GE 1502", t: "A", s: 29,
+        e: { p: [0], s: "footnote", f: "GE 1110|GE 1501", r: "set" } },
+    ],
+  };
+  const ix = buildEquivalenceIndex(wire);
+  const mine = programIndexSet(ix, ["bioe"]);
+  const got = programAllowedSwaps(ix, mine);
+  assert.equal(got.length, 1, "one decision, not two rows");
+  assert.deepEqual(got[0].components.map(c => `${c.from}>${c.to}`), ["GE 1111>GE 1502"]);
+
+  const group = "g";
+  const subs = [{ from: got[0].from, to: got[0].to, group },
+                ...got[0].components.map(c => ({ from: c.from, to: c.to, group }))];
+  assert.equal(applySubstitutions({ "GE 1110": "f1" }, subs)["GE 1501"], undefined,
+               "half the set earns nothing");
+  const full = applySubstitutions({ "GE 1110": "f1", "GE 1111": "s1" }, subs);
+  assert.equal(full["GE 1501"], "f1");
+  assert.equal(full["GE 1502"], "s1");
 });

@@ -198,7 +198,7 @@ function build() {
   // A rule is set-to-set, so it is emitted as a fully-connected mapping between
   // the two sides and carries `footnoteGroup` so applying one applies all of it
   // -- the catalog grants the swap for the whole set, not pair by pair.
-  const footnoteSubs = new Map();   // pairKey -> { text, slug, from, to }
+  const footnoteSubs = new Map();   // pairKey -> { text, slugs:Set, from, to }
   for (const f of files) {
     const slug = f.split("/").slice(-2, -1)[0];
     let j;
@@ -213,7 +213,17 @@ function build() {
         for (const to of targets) {
           const pk = pairKey(sub.from[i], to);
           if (!footnoteSubs.has(pk))
-            footnoteSubs.set(pk, { text: note.text, slug, from: sub.from, to: sub.to });
+            footnoteSubs.set(pk, {
+              text: note.text, slugs: new Set(), from: sub.from, to: sub.to,
+              // The head is the pair built from the first source course; the
+              // others become its components.
+              headKey: pairKey(sub.from[0],
+                               sub.from.length === sub.to.length ? sub.to[0] : sub.to[0]),
+            });
+          // Cornerstone is stated by 35 programs. All of them publish it, so all
+          // of them must appear in the pair's program list — otherwise scoping
+          // cannot tell a student in one of them that their program allows it.
+          footnoteSubs.get(pk).slugs.add(slug);
         }
       }
     }
@@ -294,8 +304,11 @@ function build() {
     const [a, b] = pk.split("|");
     if (!titleOf[a] || !titleOf[b]) continue;              // unknown code
     const ev = {
-      programs: programPairs.get(pk)?.size ?? 0,
-      programSlugs: [...(programPairs.get(pk) ?? [])].sort(),
+      ...(() => {
+        const slugs = new Set(programPairs.get(pk) ?? []);
+        for (const s of footnoteSubs.get(pk)?.slugs ?? []) slugs.add(s);
+        return { programs: slugs.size, programSlugs: [...slugs].sort() };
+      })(),
       prereqOr: prereqOr.get(pk)?.size ?? 0,
       stated: stated.get(pk) ?? null,
       crossListCluster: crossList.get(pk) ?? null,
@@ -417,7 +430,18 @@ function toWire(rows, meta) {
     // UI can present a bundle as ONE decision with a +N chip rather than as
     // three unrelated rows appearing at once.
     if (r.ev.derivedFrom) { e.f = r.ev.derivedFrom; e.r = r.ev.derivedRole; }
-    if (r.ev.footnote) { e.s = "footnote"; e.fn = r.ev.footnote.text.slice(0, 200); }
+    if (r.ev.footnote) {
+      e.s = "footnote";
+      e.fn = r.ev.footnote.text.slice(0, 200);
+      // A footnote rule is set-to-set: "substitute GE 1110 AND GE 1111 for
+      // GE 1501 AND GE 1502". Emitting its pairs independently made it two rows
+      // with no link, so applying one alone would grant GE 1501 from GE 1110 —
+      // exactly the half-applied swap the atomic grouping exists to prevent.
+      // Point every non-head pair at the head via `f`, the same mechanism a lab
+      // uses to hang off its lecture, so the index returns ONE decision.
+      const head = r.ev.footnote.headKey;
+      if (head && head !== pairKey(r.a, r.b)) { e.f = head; e.r = "set"; }
+    }
     if (r.ev.stated) {
       e.s = r.ev.stated.kind;
       if (r.ev.stated.directed) e.d = r.ev.stated.from;        // direction: from → to
