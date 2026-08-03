@@ -469,25 +469,10 @@
               + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
               + '<div style="width:40%;height:100%;border-radius:99px;background:' + rib1
               + ';animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
-              + '<div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
-              + '<div style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
+              + '<div id="numap-recovery-msg" style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
+              + '<div id="numap-recovery-sub" style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
               + '</div>';
             document.body.appendChild(el);
-            // No button — recovery is automatic now. But never a dead end:
-            // if the screen has sat for 25 s (probe not landing, throttle
-            // holding), a quiet reload link fades in as the escape hatch.
-            setTimeout(function () {
-              if (exiting || !document.getElementById('numap-recovery')) return;
-              var card = document.getElementById('numap-recovery-card');
-              if (!card || document.getElementById('numap-recovery-ghost')) return;
-              var g = document.createElement('div');
-              g.id = 'numap-recovery-ghost';
-              g.textContent = btn;
-              g.style.cssText = 'margin-top:16px;font-size:11px;font-weight:600;text-decoration:underline;cursor:pointer;opacity:0;transition:opacity .6s;color:' + (dark ? '#8b949e' : '#64748b') + ';';
-              g.onclick = function () { window.__numapRecoveryExit(); };
-              card.appendChild(g);
-              setTimeout(function () { g.style.opacity = '1'; }, 30);
-            }, 25000);
           };
           if (document.body) make();
           else document.addEventListener('DOMContentLoaded', make);
@@ -498,28 +483,29 @@
         if (/[?&]preview=recovery\b/.test(location.search)) {
           showRecovery();
           // TEMP — remove after the storm-return flow is signed off.
-          // A test button that arms ONLY once the real probe confirms the
-          // main page is reachable, then plays the genuine exit: storm out,
-          // reload, boot under the veil, storm clears.
-          var mkBtn = setInterval(function () {
-            var card = document.getElementById('numap-recovery-card');
-            if (!card) return;
-            clearInterval(mkBtn);
-            var b = document.createElement('button');
-            b.id = 'numap-test-return';
-            b.disabled = true;
-            b.textContent = 'Waiting for main page…';
-            b.style.cssText = 'margin-top:18px;font-size:12px;font-weight:700;padding:8px 18px;border-radius:8px;border:1px dashed currentColor;background:transparent;color:inherit;opacity:.55;cursor:default;';
-            b.onclick = function () { if (!b.disabled) window.__numapRecoveryExit(); };
-            card.appendChild(b);
-            startProbe(function () {
-              b.disabled = false;
-              b.textContent = '▶ Storm back to the app';
-              b.style.opacity = '1';
-              b.style.cursor = 'pointer';
-              b.style.borderStyle = 'solid';
-            });
-          }, 30);
+          // In preview, detection doesn't auto-exit; instead the message
+          // lines fade out and a "Back to NU Map" link fades in WHERE
+          // they were, firing the genuine exit: storm out, reload, boot
+          // under the veil, patches clear.
+          startProbe(function () {
+            var m = document.getElementById('numap-recovery-msg');
+            var s2 = document.getElementById('numap-recovery-sub');
+            if (m) { m.style.transition = 'opacity .6s'; m.style.opacity = '0'; }
+            if (s2) { s2.style.transition = 'opacity .6s'; s2.style.opacity = '0'; }
+            setTimeout(function () {
+              var card = document.getElementById('numap-recovery-card');
+              if (!card || document.getElementById('numap-back-link')) return;
+              if (m) m.style.display = 'none';
+              if (s2) s2.style.display = 'none';
+              var a = document.createElement('div');
+              a.id = 'numap-back-link';
+              a.textContent = 'Back to NU Map';
+              a.style.cssText = 'font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline;opacity:0;transition:opacity .6s;';
+              a.onclick = function () { window.__numapRecoveryExit(); };
+              card.appendChild(a);
+              setTimeout(function () { a.style.opacity = '1'; }, 30);
+            }, 620);
+          });
         }
 
         function recover() {
