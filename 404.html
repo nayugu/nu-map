@@ -484,8 +484,11 @@
               + '<div style="width:40%;height:100%;border-radius:99px;background:' + rib1
               + ';animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
               + '<div id="numap-recovery-text" style="position:relative;">'
-              + '<div id="numap-recovery-msg" style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
-              + '<div id="numap-recovery-sub" style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
+              // One line per line, always: nowrap, and the font yields via
+              // min(…, vw) on narrow screens instead of the text wrapping
+              // (CJK messages are wider than the 420px card).
+              + '<div id="numap-recovery-msg" style="font-size:min(15px,3.4vw);font-weight:600;line-height:1.5;white-space:nowrap;">' + msg + '</div>'
+              + '<div id="numap-recovery-sub" style="margin-top:6px;font-size:min(12px,2.9vw);font-weight:500;white-space:nowrap;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
               + '</div>'
               + '</div>'
               + '</div>';
@@ -545,7 +548,7 @@
         setTimeout(recover, 10000);
       })();
     </script>
-    <script type="module" crossorigin src="./assets/index-BtTmIHUt.js"></script>
+    <script type="module" crossorigin src="./assets/index-C5CfPsyt.js"></script>
   </head>
   <body>
     <div id="root">
