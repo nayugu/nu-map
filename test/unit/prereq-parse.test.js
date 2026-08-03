@@ -139,6 +139,31 @@ test("note › phrase-only prereq is worth parsing (the grad-admission case)", (
   assert.deepEqual(parsePrereqText("Graduate program admission"), [{ note: "Graduate program admission" }]);
 });
 
+test("note › a phrase-only prereq with internal and/or stays one note", () => {
+  // "junior or senior standing" must NOT split on the phrase-internal "or".
+  assert.deepEqual(parsePrereqText("junior or senior standing"), [{ note: "junior or senior standing" }]);
+  assert.deepEqual(parsePrereqText("sophomore standing or higher"), [{ note: "sophomore standing or higher" }]);
+  assert.deepEqual(parsePrereqText("graduate standing or permission of instructor"),
+    [{ note: "graduate standing or permission of instructor" }]);
+});
+
+test("note › candidacy and other exception terms are recognized", () => {
+  assert.deepEqual(parsePrereqText("PhD candidacy"), [{ note: "PhD candidacy" }]);
+  assert.deepEqual(parsePrereqText("Consent of the department"), [{ note: "Consent of the department" }]);
+});
+
+test("note › a leading field label is stripped", () => {
+  assert.deepEqual(parsePrereqText("Prerequisite: Graduate program admission"),
+    [{ note: "Graduate program admission" }]);
+});
+
+test("note › ordinary prose in the prereq field is NOT captured (no over-capture)", () => {
+  // Bare "department"/"faculty" are not signals, so these produce nothing.
+  assert.equal(hasPrereqSignal("See department for details"), false);
+  assert.equal(hasPrereqSignal("Offers an overview of departmental policy"), false);
+  assert.deepEqual(parsePrereqText("See department for details"), []);
+});
+
 test("coreqs › unchanged: bare refs, no grades", () => {
   assert.deepEqual(parseCoreqText("PHYS 1151 and PHYS 1152"), [
     { subject: "PHYS", number: "1151" }, { subject: "PHYS", number: "1152" },

@@ -51,6 +51,15 @@ export function parsePrereqText(text) {
   // Strip trailing period if present
   cleaned = cleaned.replace(/\.\s*$/, '');
 
+  // Phrase-only prereq (no course code): keep the whole thing as ONE note.
+  // Splitting on "and"/"or" here would fragment a natural phrase — "junior or
+  // senior standing" would lose "junior" — so only the course-bearing path
+  // below treats and/or as boolean operators.
+  if (!COURSE_CODE.test(cleaned)) {
+    const note = cleanNote(cleaned);
+    return note && NOTE_SIGNAL.test(note) ? [{ note }] : [];
+  }
+
   // Tokenize: split on "and"/"or" while preserving them, and handle parens.
   // [CONC] (from extractConcurrentCourses) sets concurrent:true on the ref;
   // [MIN:X] sets minGrade.
@@ -101,7 +110,13 @@ export function parsePrereqText(text) {
 // director)"). We now keep them as informational { note } leaves so the
 // expression stays balanced and the condition is shown. The signal words
 // gate capture so ordinary connective text isn't turned into noise.
-const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|professor|faculty|department|program\s+director|dean|advis|coordinator|standing|enrollment)/i;
+// Words that reliably mark a non-course GATING condition. Deliberately the
+// action/status vocabulary (permission/consent/approval/admission/standing/
+// candidacy/…), NOT loose nouns like bare "department" or "faculty" — those
+// appear in ordinary prose ("See department for details") and caused false
+// notes. Real department/dean/faculty conditions still match via the action
+// word they pair with ("consent of the department" → consent).
+const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|professor|program\s+director|advis|coordinator|standing|candidacy|enrollment)/i;
 
 // Whether a prereq string is worth parsing at all. The catalog scraper used to
 // gate ONLY on a course-code pattern, so a prereq that is nothing but a
@@ -120,6 +135,8 @@ function cleanNote(raw) {
     .replace(/[;,]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
+    // Drop a leading field label if the catalog text carried one through.
+    .replace(/^(?:prerequisites?|prereqs?|corequisites?|coreqs?)\s*:?\s*/i, '')
     .replace(/^[-–—:.\s]+/, '')
     .replace(/[-–—:.\s]+$/, '');
   return /[a-z]{3,}/i.test(s) ? s : null;       // needs real words, not punctuation
