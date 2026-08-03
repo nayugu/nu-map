@@ -5,9 +5,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   GRADE_POINTS, GRADE_SYMBOLS, yieldsCredit, countsInGPA, satisfiesGate,
-  setConstraintStatus, enteredGPA, effectiveGradeOfTakes, buildTakesResolver,
+  setConstraintStatus, enteredGPA, effectiveGradeOfTakes,
   dropVoidTakes, dropUnearnedTakes,
 } from "../../src/core/gradeSystem.js";
+import { buildTakesResolver } from "../../src/core/repeatInstances.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
 
 // ── the two axes ────────────────────────────────────────────────────

@@ -1623,9 +1623,6 @@ export default function GradPanel({ wideCatalog = false }) {
           )}
         </div>
 
-        {/* ── GPA so far — renders ONLY once a letter grade is entered ── */}
-        <GpaSoFar />
-
         {/* ── Attribute grid — hidden for grad plans and when adapter has no attributes ── */}
         {!isGrad && attributeSystem.getGridCodes().length > 0 && (
         <div style={{ marginBottom: 8 }}>
@@ -1701,6 +1698,10 @@ export default function GradPanel({ wideCatalog = false }) {
         {/* ── Minor requirement sections — undergrad only ─────── */}
         {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
         {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
+
+        {/* ── GPA so far — always BELOW every major/minor card; renders
+               only once a letter grade is entered ── */}
+        <GpaSoFar />
 
                 {/* ── Empty state ──────────────────────────────────────── */}
         {!major && !major2Data && !minor1 && !minor2 && !fetching && !loadErr && !majorGone && !major2Gone && (

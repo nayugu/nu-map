@@ -51,6 +51,50 @@ export function takesUsed(base, placements, placedOut, semIndex, grades) {
 }
 
 /**
+ * Build the `takesOf` resolver evalPrereqTree consumes: base course id →
+ * every take of it, with semester index and entered grade. Lives here —
+ * takes and instance ids are this module's domain — so the core grade
+ * modules form a DAG (prereqEval → gradeSystem ← repeatInstances), not a
+ * cycle.
+ *
+ * Returns NULL when no grades are entered — the caller passes that straight
+ * through, the evaluator runs its legacy path bit-for-bit, and the default
+ * experience cannot change. The whole feature hangs off this line.
+ *
+ * Placement filtering is EXACTLY the legacy lookup's: membership in
+ * `semIndex`, nothing else. semIndex includes "incoming" (transfer credits
+ * satisfy prereqs — planModel.js "Timeline scope"); a cleverer filter here
+ * once sprayed phantom grade violations across every transfer-satisfied
+ * course the moment a single unrelated grade was entered. Any divergence
+ * from what `semIndex[placements[id]]` would yield is a bug in this
+ * function, and there is a test asserting the equivalence.
+ *
+ * @param {Record<string,string>} placements  effective placements (incl.
+ *   substitution-virtual entries)
+ * @param {Iterable<string>} placedOut
+ * @param {Record<string,string>} grades      { placementId → symbol }
+ * @param {Record<string,number>} semIndex
+ * @returns {null | (baseCourseId: string) => {fi: number|"out", grade: string|null}[]}
+ */
+export function buildTakesResolver(placements, placedOut, grades, semIndex) {
+  if (!grades || !Object.keys(grades).length) return null;
+  const byBase = new Map();
+  for (const [pid, sid] of Object.entries(placements ?? {})) {
+    const fi = semIndex[sid];
+    if (fi === undefined) continue; // parked off-timeline
+    const b = baseId(pid);
+    if (!byBase.has(b)) byBase.set(b, []);
+    byBase.get(b).push({ fi, grade: grades[pid] ?? null });
+  }
+  for (const pid of placedOut ?? []) {
+    const b = baseId(pid);
+    if (!byBase.has(b)) byBase.set(b, []);
+    byBase.get(b).push({ fi: "out", grade: grades[pid] ?? null });
+  }
+  return id => byBase.get(id) ?? [];
+}
+
+/**
  * Retake availability — the OTHER reason a second take can exist.
  *
  * The counter rule (takeConsumesSlot): a take occupies its slot unless it
