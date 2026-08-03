@@ -963,6 +963,148 @@ export function parseGpaRule(text) {
   return { threshold, scope: { kind: 'described', text: scopeText } };
 }
 
+
+/**
+ * Requirement-table footnotes, and the substitutions stated in them.
+ *
+ * CourseLeaf hangs footnotes off a requirement table as a definition list:
+ * `<dl><dt><sup>2</sup></dt><dd><p>Students can substitute …</p></dd></dl>`.
+ * These were discarded entirely, which is why the single most-repeated explicit
+ * substitution in the catalog was invisible to us — Cornerstone of Engineering:
+ *
+ *   "Students can substitute Engineering Design (GE 1110) and Engineering
+ *    Problem Solving and Computation (GE 1111) for Cornerstone of Engineering 1
+ *    (GE 1501) and Cornerstone of Engineering 2 (GE 1502)."
+ *
+ * ~32 footnotes across 14 engineering programs, stated in plain language with
+ * clean `a.code[title]` anchors. Nothing else reaches it: no program lists the
+ * pair as an `OR` choice, and prereq co-occurrence only links GE 1111/GE 1502
+ * at a title overlap below the choice-pool gate.
+ *
+ * Codes come from anchors, with an `?P=` href fallback — measured, 18 of the 32
+ * Cornerstone instances render without the class/title attributes, so
+ * anchor-only extraction silently misses more than half.
+ *
+ * The **direction** matters and is legible in the grammar: "substitute X for Y"
+ * means X replaces Y. Counts on each side are kept as parsed rather than zipped
+ * pairwise here, because a 2-for-2 rule is a set-to-set claim — the catalog
+ * grants it for the whole set, not pair by pair.
+ */
+const FOOTNOTE_CODE = /\b([A-Z]{2,5})\s?(\d{4})\b/g;
+
+function footnoteCodes(dd) {
+  const out = [];
+  for (const a of dd.querySelectorAll('a')) {
+    const title = a.getAttribute('title');
+    const href = a.getAttribute('href') || '';
+    let code = null;
+    if (title && /^[A-Z]{2,5}\s?\d{4}$/.test(title.replace(/\u00a0/g, ' ').trim())) code = title;
+    else if (/[?&]P=/.test(href)) {
+      try { code = decodeURIComponent(href.split('P=')[1].split('&')[0]); } catch { code = null; }
+    }
+    if (code) out.push(code.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim().toUpperCase());
+  }
+  if (out.length) return [...new Set(out)];
+  const text = dd.text.replace(/\u00a0/g, ' ');
+  FOOTNOTE_CODE.lastIndex = 0;
+  const found = [];
+  let m;
+  while ((m = FOOTNOTE_CODE.exec(text))) found.push(`${m[1]} ${m[2]}`);
+  return [...new Set(found)];
+}
+
+/**
+ * "substitute A (and B) for X (and Y)" → `{ from: [A,B], to: [X,Y] }`.
+ *
+ * ## The split cannot be the first " for "
+ *
+ * Course titles are full of it — *Physics **for** Engineering 1*, *General
+ * Chemistry **for** Engineers*, *Calculus 1 **for** Science and Engineering* —
+ * so splitting on the first occurrence lands inside a title and drops every code
+ * off the left side. The Cornerstone footnote passes only by luck: neither
+ * "Engineering Design" nor "Engineering Problem Solving and Computation"
+ * contains "for". A rule naming any *for*-titled course silently returned null.
+ *
+ * So every " for " is tried, and a split is kept only when both sides name a
+ * course. The leftmost valid split wins — the most conservative reading, giving
+ * the smallest source set. Where several are valid they agree in practice,
+ * because the extra candidates only move title text across the boundary, not
+ * codes.
+ *
+ * ## Deliberately not handled
+ *
+ * - **"substitute X with Y"** reverses the direction ("for" means X replaces Y;
+ *   "with" means Y replaces X). No footnote in the corpus states it with codes
+ *   on both sides, so supporting it would be unvalidated guesswork — and a
+ *   backwards substitution is far worse than a missed one. Returns null.
+ * - **"For X, students may substitute Y"** — clause-reversed, zero instances.
+ * - **Discretionary language** — "with approval of", "may petition" — is
+ *   advisory, not a rule we can offer, and is rejected outright.
+ */
+export function parseFootnoteSubstitution(text, codes) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!/\bsubstitut/i.test(t)) return null;
+  if (/\b(?:approval|permission|petition|consult|discretion)\b/i.test(t)) return null;
+
+  const head = /substitutes?\s+(?:with\s+)?/i.exec(t);
+  if (!head) return null;
+  const body = t.slice(head.index + head[0].length);
+
+  const codesIn = part => {
+    const out = [];
+    const re = /\b([A-Z]{2,5})\s?(\d{4})\b/g;
+    let m;
+    while ((m = re.exec(part))) out.push(`${m[1]} ${m[2]}`);
+    return [...new Set(out)];
+  };
+
+  const known = new Set(codes);
+  const SPLIT = /\s+for\s+/gi;
+  SPLIT.lastIndex = 0;
+  let m;
+  while ((m = SPLIT.exec(body))) {
+    const from = codesIn(body.slice(0, m.index));
+    const to   = codesIn(body.slice(m.index + m[0].length));
+    if (!from.length || !to.length) continue;
+    // Every code named must be one the footnote's own anchors agree exists.
+    if (![...from, ...to].every(c => known.has(c))) continue;
+    // A course cannot substitute for itself.
+    if (from.some(c => to.includes(c))) continue;
+    return { from, to };
+  }
+  return null;
+}
+
+
+/**
+ * Extract footnotes from a page, with any substitution each one states.
+ * Returns `[{ marker, text, codes, substitution }]`.
+ */
+export function parseFootnotes(pageRoot) {
+  const out = [];
+  const seen = new Set();
+  for (const dl of pageRoot.querySelectorAll('dl')) {
+    const dts = dl.querySelectorAll('dt');
+    const dds = dl.querySelectorAll('dd');
+    if (!dts.length || dts.length !== dds.length) continue;
+    for (let i = 0; i < dts.length; i++) {
+      const text = dds[i].text.replace(/\s+/g, ' ').trim();
+      if (text.length < 8) continue;
+      const key = text.slice(0, 160);
+      if (seen.has(key)) continue;            // the same note repeats per pane
+      seen.add(key);
+      const codes = footnoteCodes(dds[i]);
+      out.push({
+        marker: dts[i].text.replace(/\s+/g, ''),
+        text,
+        codes,
+        substitution: parseFootnoteSubstitution(text, codes),
+      });
+    }
+  }
+  return out;
+}
+
 export function parseRequirements(pageRoot, profile, ctx = {}) {
   const { included: roots, excluded: excludedPanes } = partitionPanes(pageRoot);
   const blocks = roots.flatMap(r => blockStream(r));
@@ -1218,6 +1360,10 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
 
   return { requirementSections, concentrations, generalElectiveSH,
            gpaConstraints,
+           // Footnotes state substitutions no other source carries — see
+           // parseFootnotes. Kept whole so a later reader can audit the prose,
+           // not just the extracted pair.
+           footnotes: parseFootnotes(pageRoot),
            tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
            excludedPanes, unconsumedHeadings, warnings,
            // Concentrations hosted on their own pages. Parsing is synchronous

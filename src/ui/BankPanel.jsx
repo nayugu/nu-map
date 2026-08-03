@@ -474,6 +474,13 @@ export default function BankPanel() {
     [equivIndex, major, major2, minor1, minor2]);
 
 
+  // Map an index course id ("PHYS 1151") to a planner course id ("PHYS1151").
+  const plannerIdOf = useMemo(() => {
+    const m = new Map();
+    for (const c of courses) m.set(`${c.subject} ${c.number}`, c.id);
+    return m;
+  }, [courses]);
+
   // The box is a SEARCH over substitutions, never a creator — the manual form
   // below is where an arbitrary pair gets made. So each typed code is a filter:
   // one term finds every swap touching that course, two find the swap between
