@@ -336,7 +336,7 @@ export const strings = {
   "header.io.code.load.title":    "コードで共有されたプランを読み込む",
   "header.io.code.notfound":      "コードが見つからないか期限切れです。",
   "header.io.code.ratelimited":   "少しゆっくりお願いします。{time} 後に次のコードを作成できます。",
-  "header.io.code.toomanylive":   "未使用のコードがすでに 5 件あります。最も古いものは {time} 後に期限切れになります。",
+  "header.io.code.toomanylive":   "未使用のコードが多すぎます。最も古いものは {time} 後に期限切れになります。",
   "header.io.code.busy":          "共有が満杯です。しばらくしてからお試しください。",
   "header.io.code.confirm":       "共有されたプラン「{name}」を読み込みますか？既存のプランの隣に新しいプランとして開きます。",
   "header.io.copy.title":         "人間が読めるプランをクリップボードにコピー",

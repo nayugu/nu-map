@@ -335,7 +335,7 @@ export const strings = {
   "header.io.code.load.title":    "कोड से साझा किया गया प्लान लोड करें",
   "header.io.code.notfound":      "कोड नहीं मिला या समाप्त हो गया।",
   "header.io.code.ratelimited":   "थोड़ा धीरे। आप {time} में एक और कोड बना सकते हैं।",
-  "header.io.code.toomanylive":   "आपके 5 कोड अभी भी बिना उपयोग के हैं। सबसे पुराना {time} में समाप्त होगा।",
+  "header.io.code.toomanylive":   "आपके बहुत सारे कोड अभी भी बिना उपयोग के हैं। सबसे पुराना {time} में समाप्त होगा।",
   "header.io.code.busy":          "साझाकरण अभी पूरी क्षमता पर है। बाद में फिर कोशिश करें।",
   "header.io.code.confirm":       "साझा किया गया प्लान “{name}” लोड करें? यह आपके मौजूदा प्लान के साथ एक नए प्लान के रूप में खुलेगा।",
   "header.io.copy.title":         "प्लान को क्लिपबोर्ड पर कॉपी करें",

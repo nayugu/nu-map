@@ -22,19 +22,22 @@ import { decodePlan } from "../../src/core/planShare.js";
 
 export const SHARE_TTL_MS = 10 * 60 * 1000;
 export const MAX_PAYLOAD_CHARS = 4096;   // generous for a v2 plan, useless as a pastebin
-export const MAX_OUTSTANDING = 500;      // hard cap on simultaneously parked shares
-export const MAX_LIVE_PER_IP = 5;        // concurrency cap: one IP can't hog the box
+export const MAX_OUTSTANDING = 2000;     // global peak-concurrency cap (~2 MB of DO storage)
+export const MAX_LIVE_PER_IP = 25;       // a classroom behind one NAT IP, not one person
 
 export const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no 0/O/1/I/L
 export const CODE_LENGTH = 6;
 
-// Token buckets per IP: the burst covers every honest pattern (a class
-// rep sharing with ten classmates back-to-back), the trickle caps what
-// one IP can sustain forever. Every refusal carries retryAfterSeconds
-// so the UI can say when the block lifts instead of looking broken.
+// Token buckets per IP — sized for campus NAT, where one public IP can
+// front a whole lecture hall: "per IP" must fit a crowd's honest burst,
+// not one person's. Scan defense doesn't come from these numbers anyway
+// (it's the ~30-bit code space, one-use burn, and the small live set);
+// the buckets only cap what a single address can sustain forever. Every
+// refusal carries retryAfterSeconds so the UI can say when the block
+// lifts instead of looking broken.
 const RATE = {
-  create: { capacity: 10, refillMs: 60_000 }, // 10 burst, then 1/min
-  claim:  { capacity: 30, refillMs: 20_000 }, // 30 burst, then 3/min (scan defense)
+  create: { capacity: 30,  refillMs: 10_000 }, // 30 burst, then 6/min
+  claim:  { capacity: 100, refillMs: 5_000 },  // 100 burst, then 12/min
 };
 
 /** Crypto-random code, rejection-sampled so every character is uniform. */

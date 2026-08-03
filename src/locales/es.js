@@ -335,7 +335,7 @@ export const strings = {
   "header.io.code.load.title":    "Cargar un plan compartido con código",
   "header.io.code.notfound":      "Código no encontrado o caducado.",
   "header.io.code.ratelimited":   "Ve más despacio. Podrás crear otro código en {time}.",
-  "header.io.code.toomanylive":   "Ya tienes 5 códigos sin reclamar. El más antiguo caduca en {time}.",
+  "header.io.code.toomanylive":   "Demasiados códigos tuyos siguen sin reclamar. El más antiguo caduca en {time}.",
   "header.io.code.busy":          "Compartir está al máximo de su capacidad. Inténtalo más tarde.",
   "header.io.code.confirm":       "¿Cargar el plan compartido «{name}»? Se abrirá como un plan nuevo junto a tus planes existentes.",
   "header.io.copy.title":         "Copiar plan legible al portapapeles",

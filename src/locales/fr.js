@@ -335,7 +335,7 @@ export const strings = {
   "header.io.code.load.title":    "Charger un plan partagé par code",
   "header.io.code.notfound":      "Code introuvable ou expiré.",
   "header.io.code.ratelimited":   "Ralentissez un peu. Vous pourrez créer un autre code dans {time}.",
-  "header.io.code.toomanylive":   "Vous avez déjà 5 codes non réclamés. Le plus ancien expire dans {time}.",
+  "header.io.code.toomanylive":   "Trop de vos codes ne sont pas encore réclamés. Le plus ancien expire dans {time}.",
   "header.io.code.busy":          "Le partage est à pleine capacité. Réessayez plus tard.",
   "header.io.code.confirm":       "Charger le plan partagé « {name} » ? Il s'ouvrira comme un nouveau plan à côté de vos plans existants.",
   "header.io.copy.title":         "Copier le plan lisible dans le presse-papiers",
