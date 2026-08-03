@@ -531,7 +531,7 @@ export const strings = {
   "stats.comp.dept":              "विभाग अनुसार",
   "stats.dept.title":             "विभाग अनुसार क्रेडिट",
   "stats.dept.value":             "{sh} {unit} · {n} पाठ्यक्रम",
-  "stats.dept.gpa":        "{gpa} GPA ({n} ग्रेडेड)",
+  "stats.dept.gpa":        "{gpa} GPA, {total} में से {n} कोर्स ग्रेडेड",
   "stats.level.title":            "स्तर वितरण",
   "stats.level.tier":             "{tier} स्तर",
   "stats.level.gradline":         "स्नातकोत्तर",

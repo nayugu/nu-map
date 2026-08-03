@@ -532,7 +532,7 @@ export const strings = {
   "stats.comp.dept":              "Por departamento",
   "stats.dept.title":             "Créditos por departamento",
   "stats.dept.value":             "{sh} {unit} · {n} cursos",
-  "stats.dept.gpa":        "GPA {gpa} ({n} con nota)",
+  "stats.dept.gpa":        "GPA {gpa}, de {n} de {total} cursos con nota",
   "stats.level.title":            "Distribución por nivel",
   "stats.level.tier":             "Nivel {tier}",
   "stats.level.gradline":         "Posgrado",

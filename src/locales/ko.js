@@ -531,7 +531,7 @@ export const strings = {
   "stats.comp.dept":              "학과별",
   "stats.dept.title":             "학과별 학점",
   "stats.dept.value":             "{sh} {unit} · {n}과목",
-  "stats.dept.gpa":        "GPA {gpa} ({n}과목)",
+  "stats.dept.gpa":        "GPA {gpa} ({total}과목 중 {n}과목 성적 입력)",
   "stats.level.title":            "레벨 분포",
   "stats.level.tier":             "{tier} 레벨",
   "stats.level.gradline":         "대학원",

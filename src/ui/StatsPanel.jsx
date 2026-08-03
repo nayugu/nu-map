@@ -257,12 +257,22 @@ function ClassChip({ id, cmap, onOpen, faded, fz = 11 }) {
 }
 
 // Header + wrapped clickable chips for one group (a level tier or a dept).
-function CourseGroup({ title, sub, ids, cmap, onOpen, fadedIds }) {
+function CourseGroup({ title, sub, badge, ids, cmap, onOpen, fadedIds }) {
   return (
     <div style={{ marginBottom: 11 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
         <span style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-2)" }}>{title}</span>
-        <span style={{ fontSize: 12, color: "var(--text-4)", flexShrink: 0, marginLeft: 8 }}>{sub}</span>
+        {/* Optional numeric badge (a per-subject GPA) sits beside the
+            title, so the right-hand subline keeps carrying exactly the
+            credits + class count it always has. */}
+        {badge && (
+          <span title={badge.title}
+            style={{ fontSize: 10.5, fontWeight: 700, color: "var(--text-4)",
+              background: "var(--badge-bg)", border: "1px solid var(--border-2)",
+              borderRadius: 4, padding: "0 5px", marginLeft: 7, flexShrink: 0,
+              letterSpacing: 0, cursor: "default" }}>{badge.text}</span>
+        )}
+        <span style={{ fontSize: 12, color: "var(--text-4)", flexShrink: 0, marginLeft: 8, flex: 1, textAlign: "right" }}>{sub}</span>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
         {ids.map(id => <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} faded={fadedIds?.has(id)} fz={12.5} />)}
@@ -961,10 +971,24 @@ export default function StatsPanel() {
                     {byDept.map(g => (
                       <CourseGroup key={g.subject}
                         title={g.subject}
-                        sub={t("stats.dept.value", { sh: g.sh, unit, n: g.count })
-                             + (g.gpa != null
-                                 ? " · " + t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded })
-                                 : "")}
+                        sub={t("stats.dept.value", { sh: g.sh, unit, n: g.count })}
+                        // A quiet chip beside the title, not a fourth
+                        // "·"-separated clause on the subline — the row
+                        // already carries credits and a class count, and a
+                        // fourth fact made it unreadable.
+                        //
+                        // Requires TWO graded courses. "4.000 GPA (1
+                        // graded)" beside 15 CS classes reads as "my CS
+                        // GPA is 4.0" when fourteen courses have no grade
+                        // at all; the average of a single number is not an
+                        // average, and presenting it as one is the kind of
+                        // confident-but-hollow figure this whole feature
+                        // is supposed to avoid. The basis (2 of 15) lives
+                        // in the tooltip: it is a caveat, not a headline.
+                        badge={g.gpa != null && g.graded >= 2 ? {
+                          text: g.gpa.toFixed(3),
+                          title: t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded, total: g.count }),
+                        } : null}
                         ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}
                       />
                     ))}
