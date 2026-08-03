@@ -139,8 +139,129 @@
           try { sessionStorage.setItem(key, String(now)); } catch (e) {}
           window.location.reload();
         }
+
+        // Recovery overlay — the reloads above used to be silent, so during
+        // a deploy (or inside the once-a-minute throttle) the page just sat
+        // white. This tells the user what is happening and gives them a
+        // manual Reload for the throttled case. Standalone on purpose: no
+        // app CSS/JS, so it works precisely when the bundle doesn't.
+        // Strings mirror src/ui/RecoveryBoundary.jsx — they can't live in
+        // src/locales because none of that has loaded when this runs.
+        var RECOVERY_MSG = {
+          en: 'NU Map just updated. Loading the new version…',
+          es: 'NU Map se acaba de actualizar. Cargando la nueva versión…',
+          fr: "NU Map vient d'être mis à jour. Chargement de la nouvelle version…",
+          ar: 'تم تحديث NU Map للتو. جارٍ تحميل النسخة الجديدة…',
+          hi: 'NU Map अभी अपडेट हुआ है। नया संस्करण लोड हो रहा है…',
+          ja: 'NU Map が更新されました。新しいバージョンを読み込んでいます…',
+          ko: 'NU Map이 방금 업데이트되었습니다. 새 버전을 불러오는 중…',
+          zh: 'NU Map 刚刚更新，正在加载新版本…'
+        };
+        var RECOVERY_SUB = {
+          en: 'This usually resolves within a minute or two.',
+          es: 'Esto suele resolverse en uno o dos minutos.',
+          fr: 'Cela se résout généralement en une à deux minutes.',
+          ar: 'عادةً ما يُحل هذا خلال دقيقة أو دقيقتين.',
+          hi: 'यह आमतौर पर एक-दो मिनट में ठीक हो जाता है।',
+          ja: '通常は 1〜2 分ほどで復旧します。',
+          ko: '보통 1~2분 안에 해결됩니다.',
+          zh: '通常一两分钟内即可恢复。'
+        };
+        var RECOVERY_BTN = {
+          en: 'Reload', es: 'Recargar', fr: 'Recharger',
+          ar: 'إعادة التحميل',
+          hi: 'फिर से लोड करें',
+          ja: '再読み込み', ko: '새로고침',
+          zh: '重新加载'
+        };
+        function showRecovery() {
+          var make = function () {
+            if (document.getElementById('numap-recovery') || !document.body) return;
+            var lc = 'en';
+            try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
+            var msg = RECOVERY_MSG[lc] || RECOVERY_MSG.en;
+            var sub = RECOVERY_SUB[lc] || RECOVERY_SUB.en;
+            var btn = RECOVERY_BTN[lc] || RECOVERY_BTN.en;
+            // Same theme resolution as the pre-paint script above: the saved
+            // app theme wins, the OS preference is only the fallback — so
+            // this overlay blends with whatever background is already up.
+            var theme;
+            try { theme = localStorage.getItem('ncp-theme') || localStorage.getItem('map-theme'); } catch (e) {}
+            if (theme !== 'light' && theme !== 'dark') {
+              theme = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            var dark = theme === 'dark';
+            var el = document.createElement('div');
+            el.id = 'numap-recovery';
+            el.dir = lc === 'ar' ? 'rtl' : 'ltr';
+            el.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:system-ui,-apple-system,sans-serif;'
+              + (dark ? 'background:#0d1117;color:#e2e8f0;' : 'background:#fefefe;color:#1e293b;');
+            // The sweeping bar is the app's own loading-screen bar (same
+            // size, radius and active→link gradient), just indeterminate —
+            // it says "alive and working", not "static page". Above it, the
+            // emblem: the logo floating between two counter-rotating ribbon
+            // arcs and four bobbing paper-ribbon strips (SMIL, so no CSS
+            // transform-box juggling). Confetti bobs use nested <g>: outer
+            // animates translate, inner holds the static placement.
+            // Ribbon palette: the logo red's own family (color theory:
+            // monochromatic tint + shade around the brand hue). Pink on
+            // both themes; the second ribbon is maroon on light and a
+            // soft white on dark, where maroon would vanish.
+            var rib1 = '#fb7185';
+            var rib2 = dark ? '#fecdd3' : '#881337';
+            el.innerHTML =
+              '<style>'
+              + '@keyframes numapRecoverySweep{from{transform:translateX(' + (lc === 'ar' ? '250%' : '-100%') + ')}to{transform:translateX(' + (lc === 'ar' ? '-100%' : '250%') + ')}}'
+              + '@keyframes numapRecoveryIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}'
+              + '@keyframes numapFloat{from{transform:translateY(-2px)}to{transform:translateY(3px)}}'
+              + '@keyframes numapGlint{0%{left:-45%}55%{left:125%}100%{left:125%}}'
+              + '@media (prefers-reduced-motion:reduce){#numap-recovery *{animation:none !important}}'
+              + '</style>'
+              + '<div style="animation:numapRecoveryIn .35s ease-out;">'
+              + '<div style="position:relative;width:120px;height:120px;margin:0 auto 14px;">'
+              + '<svg viewBox="0 0 120 120" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;" aria-hidden="true">'
+              // Two ribbon streamers: long dash segments flowing along
+              // slightly eccentric loops (dashoffset shifts one dash+gap
+              // period, so the flow loops seamlessly) while each loop
+              // slowly turns in its own direction.
+              + '<g opacity="0.9"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="16s" repeatCount="indefinite"/>'
+              + '<path d="M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8" stroke="' + rib1 + '" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="150 90">'
+              + '<animate attributeName="stroke-dashoffset" from="0" to="-240" dur="3.2s" repeatCount="indefinite"/></path></g>'
+              + '<g opacity="0.85"><animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="20s" repeatCount="indefinite"/>'
+              + '<path d="M60 19 C 84 18, 102 37, 100 60 C 98 84, 80 102, 58 101 C 36 100, 18 82, 20 58 C 22 37, 38 20, 60 19" stroke="' + rib2 + '" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="110 110">'
+              + '<animate attributeName="stroke-dashoffset" from="0" to="-220" dur="2.6s" repeatCount="indefinite"/></path></g>'
+              + '</svg>'
+              // The logo itself: floating, with a diagonal glint sweeping
+              // INSIDE the letterform — the PNG doubles as a CSS mask, so
+              // the sheen travels only through the N and matches its slant.
+              + '<div style="position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;animation:numapFloat 3s ease-in-out infinite alternate;">'
+              + '<img src="/logo.png" alt="" onerror="this.parentNode.style.display=\'none\'" style="width:100%;height:100%;display:block;"/>'
+              + '<div style="position:absolute;inset:0;overflow:hidden;-webkit-mask-image:url(/logo.png);-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;mask-image:url(/logo.png);mask-size:contain;mask-repeat:no-repeat;">'
+              + '<div style="position:absolute;top:-20%;bottom:-20%;width:30%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent);animation:numapGlint 2.6s ease-in-out infinite;"></div>'
+              + '</div></div>'
+              + '</div>'
+              + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
+              + '<div style="width:40%;height:100%;border-radius:99px;background:linear-gradient(90deg,'
+              + (dark ? '#58a6ff,#a78bfa' : '#2563eb,#7c3aed')
+              + ');animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
+              + '<div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
+              + '<div style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
+              + '<button onclick="window.location.reload()" style="margin-top:16px;font-size:13px;font-weight:700;padding:8px 20px;'
+              + 'border-radius:8px;border:1px solid ' + (dark ? '#3d444d' : '#cbd5e1') + ';background:transparent;color:inherit;cursor:pointer;">'
+              + btn + '</button></div>';
+            document.body.appendChild(el);
+          };
+          if (document.body) make();
+          else document.addEventListener('DOMContentLoaded', make);
+        }
+
+        // Design preview: ?preview=recovery shows the overlay without any
+        // failure (nothing reloads), so it can be styled against reality.
+        if (/[?&]preview=recovery\b/.test(location.search)) showRecovery();
+
         function recover() {
           if (booted) return;
+          showRecovery();
           reloadOnce('numap-boot-retry');
         }
 
@@ -155,6 +276,7 @@
         // the shell already loaded, correctly, before the deploy happened.
         window.addEventListener('vite:preloadError', function (e) {
           if (e && e.preventDefault) e.preventDefault();  // we handle it by reloading
+          showRecovery();
           reloadOnce('numap-chunk-retry');
         });
         // Backstop for a dynamic import that rejects without going through
@@ -163,6 +285,7 @@
         window.addEventListener('unhandledrejection', function (e) {
           var m = e && e.reason && (e.reason.message || String(e.reason));
           if (m && /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i.test(m)) {
+            showRecovery();
             reloadOnce('numap-chunk-retry');
           }
         });
@@ -177,7 +300,7 @@
         setTimeout(recover, 10000);
       })();
     </script>
-    <script type="module" crossorigin src="./assets/index-BnjxMCZy.js"></script>
+    <script type="module" crossorigin src="./assets/index-CFQ9wowh.js"></script>
   </head>
   <body>
     <div id="root">
