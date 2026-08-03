@@ -107,8 +107,14 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     isPhone, shOverrides, setShOverride,
     claudePreview,
     placements, placedOut,
-    grades, setGrade, enteredGpaStat,
+    grades, setGrade, enteredGpaStat, privateGrades,
   } = usePlanner();
+
+  // Private mode is READ-ONLY for grades. The chip would otherwise still
+  // appear on hover showing "–" (the view is empty), so a click could
+  // silently overwrite a real grade with no way to see what you did —
+  // editing blind over data you deliberately hid.
+  const canEditGrades = !privateGrades;
 
   // A GPA gate stated in the course description (3 courses corpus-wide,
   // e.g. BNSC 4971 "Requires a 3.500 GPA"). Flags only when the entered
@@ -357,7 +363,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         {/* Grade entry (phone): completed semesters only, and only once
             selected or already graded — the 17px card row has no room for
             a resting affordance on every card */}
-        {isDone && (isSel || grades[course.id] != null || gradePop) && (
+        {canEditGrades && isDone && (isSel || grades[course.id] != null || gradePop) && (
           <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t}
                      pop={gradePop} setPop={closeGradePop} compact />
         )}
@@ -516,7 +522,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             it to selection left a stray "–" chip after Clear grade), and
             stays mounted while its popover is open so the popover survives
             the pointer leaving the card — and vanishes with the dismiss. */}
-        {inSem && isDone && (grades[course.id] != null || isMouseHov || gradePop) && (
+        {canEditGrades && inSem && isDone && (grades[course.id] != null || isMouseHov || gradePop) && (
           <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t}
                      pop={gradePop} setPop={closeGradePop} />
         )}

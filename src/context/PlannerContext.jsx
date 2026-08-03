@@ -2110,6 +2110,11 @@ export function PlannerProvider({ children }) {
   // ── Grades ───────────────────────────────────────────────────
   // Entered per placement instance from the course card; null clears.
   const setGrade = (pid, symbol) => {
+    // Private mode is read-only for grades: the UI hides the entry chip,
+    // and this is the backstop so no other path (a stale render, a
+    // keyboard route, anything added later) can write a value the user
+    // cannot see. Refusing beats writing blind over hidden data.
+    if (privateGrades) return;
     setGrades(g => {
       if (symbol == null) {
         if (!(pid in g)) return g;
