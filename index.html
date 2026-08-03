@@ -500,7 +500,7 @@
               var a = document.createElement('div');
               a.id = 'numap-back-link';
               a.textContent = 'Back to NU Map';
-              a.style.cssText = 'font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline;opacity:0;transition:opacity .6s;';
+              a.style.cssText = 'font-size:14px;font-weight:700;cursor:pointer;opacity:0;transition:opacity .6s;';
               a.onclick = function () { window.__numapRecoveryExit(); };
               card.appendChild(a);
               setTimeout(function () { a.style.opacity = '1'; }, 30);
