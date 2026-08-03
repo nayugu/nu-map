@@ -40,6 +40,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "Cours A (placé)",
   "bank.sub.courseB.placeholder": "Cours B (satisfait)",
   "bank.sub.none":                   "Aucune équivalence connue",
+  "bank.sub.hint":                 "Saisissez un code complet, ex. PHYS 1163",
+  "bank.sub.unavailable":          "Données d’équivalences indisponibles",
   "bank.sub.why.a":                  "Votre programme accepte l’un ou l’autre cours.",
   "bank.sub.why.stated":             "Le catalogue indique que ces cours sont équivalents.",
   "bank.sub.why.b":                  "Le même cours sous deux codes de matière.",

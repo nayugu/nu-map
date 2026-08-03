@@ -40,6 +40,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "المقرر A (مضاف)",
   "bank.sub.courseB.placeholder": "المقرر B (مستوفى)",
   "bank.sub.none":                   "لا توجد بدائل معروفة",
+  "bank.sub.hint":                 "اكتب رمز مقرر كاملاً، مثال PHYS 1163",
+  "bank.sub.unavailable":          "بيانات البدائل غير متوفرة",
   "bank.sub.why.a":                  "برنامجك يقبل أياً من المقررين.",
   "bank.sub.why.stated":             "ينص الدليل على أنهما متكافئان.",
   "bank.sub.why.b":                  "المقرر نفسه برمزين مختلفين.",

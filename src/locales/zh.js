@@ -39,6 +39,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "\u8bfe\u7a0b A\uff08\u5df2\u9009\uff09",
   "bank.sub.courseB.placeholder": "\u8bfe\u7a0b B\uff08\u88ab\u6ee1\u8db3\uff09",
   "bank.sub.none":                   "暂无已知的可替代课程",
+  "bank.sub.hint":                 "请输入完整课程代码，例如 PHYS 1163",
+  "bank.sub.unavailable":          "替代课程数据不可用",
   "bank.sub.why.a":                  "你的专业接受这两门课程中的任一门。",
   "bank.sub.why.stated":             "课程目录注明二者等效。",
   "bank.sub.why.b":                  "同一门课程，两个课程代码。",

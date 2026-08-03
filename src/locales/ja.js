@@ -41,6 +41,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "コースA（配置済み）",
   "bank.sub.courseB.placeholder": "コースB（満たす）",
   "bank.sub.none":                   "代替可能な科目はありません",
+  "bank.sub.hint":                 "完全な科目コードを入力してください（例: PHYS 1163）",
+  "bank.sub.unavailable":          "代替科目のデータを取得できません",
   "bank.sub.why.a":                  "あなたのプログラムはどちらの科目でも認めています。",
   "bank.sub.why.stated":             "カタログに同等と明記されています。",
   "bank.sub.why.b":                  "二つの科目コードを持つ同一科目です。",

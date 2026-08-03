@@ -40,6 +40,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "कोर्स A (रखा गया)",
   "bank.sub.courseB.placeholder": "कोर्स B (पूरा किया)",
   "bank.sub.none":                   "कोई ज्ञात विकल्प नहीं",
+  "bank.sub.hint":                 "पूरा पाठ्यक्रम कोड लिखें, उदा. PHYS 1163",
+  "bank.sub.unavailable":          "प्रतिस्थापन डेटा अनुपलब्ध",
   "bank.sub.why.a":                  "आपका कार्यक्रम दोनों में से किसी भी पाठ्यक्रम को स्वीकार करता है।",
   "bank.sub.why.stated":             "कैटलॉग इन्हें समकक्ष बताता है।",
   "bank.sub.why.b":                  "दो विषय कोड वाला वही पाठ्यक्रम।",

@@ -1117,12 +1117,19 @@ export default function BankPanel() {
                   ))}
 
 
-                  {/* This box searches SUBSTITUTIONS, not the catalog. Until the
-                      text parses to a course code there is nothing to say, so a
-                      half-typed subject shows nothing rather than a course list. */}
+                  {/* This box searches SUBSTITUTIONS, not the catalog — but it must
+                      never look dead. Mid-typing ("phys116") parses to no code at
+                      all, and rendering nothing there reads as a broken dropdown.
+                      And with no index loaded, "no alternatives" would be a lie:
+                      that is "we could not find out", which is a different thing. */}
+                  {subIntent.kind === "search" && (
+                    <div style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", padding: "3px 5px" }}>
+                      {t("bank.sub.hint")}
+                    </div>
+                  )}
                   {subIntent.kind === "suggest" && subSuggestions.length === 0 && (
                     <div style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", padding: "3px 5px" }}>
-                      {t("bank.sub.none")}
+                      {equivIndex ? t("bank.sub.none") : t("bank.sub.unavailable")}
                     </div>
                   )}
                 </div>

@@ -40,6 +40,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "코스 A (배치됨)",
   "bank.sub.courseB.placeholder": "코스 B (충족)",
   "bank.sub.none":                   "알려진 대체 과목이 없습니다",
+  "bank.sub.hint":                 "전체 과목 코드를 입력하세요 (예: PHYS 1163)",
+  "bank.sub.unavailable":          "대체 과목 데이터를 사용할 수 없습니다",
   "bank.sub.why.a":                  "소속 프로그램은 두 과목 중 어느 것이든 인정합니다.",
   "bank.sub.why.stated":             "요람에 두 과목이 동등하다고 명시되어 있습니다.",
   "bank.sub.why.b":                  "두 개의 과목 코드를 가진 동일한 과목입니다.",

@@ -41,6 +41,8 @@ export const strings = {
   "bank.sub.courseA.placeholder": "Course A (placed)",
   "bank.sub.courseB.placeholder": "Course B (satisfied)",
   "bank.sub.none":                   "No known alternatives",
+  "bank.sub.hint":                 "Type a full course code, e.g. PHYS 1163",
+  "bank.sub.unavailable":          "Substitution data unavailable",
   "bank.sub.why.a":                  "Your program accepts either course.",
   "bank.sub.why.stated":             "The catalog states these are equivalent.",
   "bank.sub.why.b":                  "The same course under two subject codes.",
