@@ -209,8 +209,22 @@ Accepted gaps, documented deliberately (revisit only with cause):
 - **Grad-course access GPA gates** (the "3.0 to take Khoury grad courses"
   folk rule): not published in the catalog anywhere — colleges keep them
   on advising sites / petition forms. Not modeled; do not fake it.
-- **Co-op eligibility (cumulative 2.000 to search; grad 3.000 at
-  application)** — the one published, computable rule not yet surfaced;
-  candidate for a soft note on co-op placements.
-- **Course-level GPA gates in description prose** — exactly 3 of 7,966
-  courses; the description is already visible on the card.
+Both of the "candidate" gaps above were closed on 2026-08-03:
+
+- **Co-op eligibility** — `COOP_GPA` (undergrad 2.000, graduate 3.000, both
+  verified from the cooperative-education policy pages). Surfaces as one
+  line under GPA SO FAR, and only when the plan actually contains a co-op
+  AND the entered GPA is provably below the bar. The `U`-on-a-past-co-op
+  re-eligibility rule stays advisor territory: we state the GPA bar only.
+- **Course-level GPA gates** — `parseDescriptionGpaGate` lifts them out of
+  the description into `course.minGPA`; exactly 3 courses carry one
+  (BNSC 4971 → 3.500, ECON 4965 and PSYC 4965 → 3.333, which is B+ on
+  NEU's scale and NOT a misparse). A `! GPA` badge appears only when the
+  entered GPA provably misses the bar. The companion "and a grade of A− or
+  better in <course>" clause on the two 4965s is left to the description —
+  it gates on a specific other course, which the ref-level `minGrade`
+  model doesn't express.
+
+One number, one place: `enteredGpaStat` is computed once in PlannerContext
+so the panel readout, co-op eligibility and per-course gates can never
+disagree about what the GPA is.

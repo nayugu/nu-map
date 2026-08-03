@@ -107,8 +107,15 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     isPhone, shOverrides, setShOverride,
     claudePreview,
     placements, placedOut,
-    grades, setGrade,
+    grades, setGrade, enteredGpaStat,
   } = usePlanner();
+
+  // A GPA gate stated in the course description (3 courses corpus-wide,
+  // e.g. BNSC 4971 "Requires a 3.500 GPA"). Flags only when the entered
+  // GPA provably misses it — silent with no grades, like every other
+  // grade-derived warning.
+  const gpaGateMissed = inSem && course.minGPA != null
+    && enteredGpaStat != null && enteredGpaStat.gpa < course.minGPA - 1e-9;
 
   // Claude proposal ghost: this card is added/moved (orange dashed ring),
   // removed (strike-through, faded), or has a credit change in the
@@ -529,6 +536,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           <span title={t("course.tooltip.prereq.grade")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
             {t("course.badge.prereq.grade")}
+          </span>
+        )}
+        {gpaGateMissed && (
+          <span title={t("course.tooltip.gpa.gate", { gpa: course.minGPA.toFixed(3) })}
+            style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
+            {t("course.badge.gpa.gate")}
           </span>
         )}
         {coreqViol === "alone" && (

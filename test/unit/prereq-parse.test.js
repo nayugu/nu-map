@@ -5,6 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { extractConcurrentCourses, parsePrereqText, parseCoreqText }
   from "../../scripts/lib/prereq-parse.js";
+import { parseDescriptionGpaGate } from "../../src/adapters/northeastern/gpaGate.js";
 
 const parse = (text) => parsePrereqText(extractConcurrentCourses(text).cleaned);
 
@@ -66,6 +67,35 @@ test("legacy › implicit And between adjacent groups is preserved", () => {
     "(", { subject: "CS", number: "2100", minGrade: "D-" }, ")", "And",
     "(", { subject: "ENGW", number: "1111", minGrade: "C" }, ")",
   ]);
+});
+
+// ── description GPA gates (exactly 3 courses corpus-wide) ────────────────────
+// Verbatim catalog text. Note 3.333 is real (B+ on NEU's scale), not a
+// misparse — verified against the live descriptions.
+
+test("description GPA › the three real catalog sentences", () => {
+  assert.equal(parseDescriptionGpaGate(
+    "…related to the student’s major field. Requires a 3.500 GPA. May be repeated without limit."), 3.5);
+  assert.equal(parseDescriptionGpaGate(
+    "…leading class discussions. Requires minimum overall GPA of 3.333 and grade of A– or better in…"), 3.333);
+  assert.equal(parseDescriptionGpaGate(
+    "…(only under faculty supervision). Requires minimum overall GPA of 3.333, and grade of A–or higher in…"), 3.333);
+});
+
+test("description GPA › prose without a GPA never yields one", () => {
+  for (const s of [
+    "Offers 3 credits of study in the field.",
+    "Requires permission of the instructor.",
+    "Requires various assignments closely directed by the course instructor.",
+    "Covers GPA calculation methods in applied statistics.",
+    "",
+    null,
+  ]) assert.equal(parseDescriptionGpaGate(s), null, JSON.stringify(s));
+});
+
+test("description GPA › out-of-range numbers are rejected as misparses", () => {
+  assert.equal(parseDescriptionGpaGate("Requires 8.000 GPA"), null);
+  assert.equal(parseDescriptionGpaGate("Requires a 0.5 GPA"), null);
 });
 
 test("coreqs › unchanged: bare refs, no grades", () => {

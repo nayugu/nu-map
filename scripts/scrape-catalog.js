@@ -31,6 +31,7 @@ import { parse as parseHTML } from "node-html-parser";
 import { parseRepeatability } from "../src/adapters/northeastern/repeatability.js";
 import { parseNUPath, findAttributeText, reconcileNuPath, SOURCE_POLICY } from "./lib/nupath.js";
 import { extractConcurrentCourses, parsePrereqText, parseCoreqText } from "./lib/prereq-parse.js";
+import { parseDescriptionGpaGate } from "../src/adapters/northeastern/gpaGate.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -208,6 +209,10 @@ function parseSubjectPage(html, subjectCode) {
       nuPath,
       sections: [],      // catalog has no section/term data
       description,
+      // A GPA gate stated in the description (3 courses corpus-wide) —
+      // evaluated only against grades the user entered, like minGrade.
+      ...(parseDescriptionGpaGate(description) != null
+        ? { minGPA: parseDescriptionGpaGate(description) } : {}),
       coreqs:  [...(coreqText ? parseCoreqText(coreqText) : []), ...concurrent],
       // Only parse cleanedPrereq if it still contains course references after concurrent extraction
       prereqs: (cleanedPrereq && /[A-Z]{2,6}\s+\d{4}/.test(cleanedPrereq)) ? parsePrereqText(cleanedPrereq) : [],
@@ -247,7 +252,7 @@ async function getSubjectURLs() {
 }
 
 // ── Field-level diff between two course objects ───────────────────────────────────
-const DIFF_FIELDS = ["title", "credits", "creditsMax", "scheduleType", "description", "nuPath", "prereqs", "coreqs", "repeatable", "repeatMax", "repeatMaxSH"];
+const DIFF_FIELDS = ["title", "credits", "creditsMax", "scheduleType", "description", "nuPath", "prereqs", "coreqs", "repeatable", "repeatMax", "repeatMaxSH", "minGPA"];
 
 function diffCourse(prev, next) {
   const changes = [];

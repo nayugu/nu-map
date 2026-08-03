@@ -20,7 +20,7 @@ import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
-import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes } from "../core/gradeSystem.js";
+import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes, COOP_GPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
@@ -658,36 +658,19 @@ function GpaRules({ program, programKind = "major" }) {
 // the most sensitive number in the app.
 function GpaSoFar() {
   const { t } = useLanguage();
-  const { grades, placements, placedOut, courseMap, SEM_INDEX, isPhone } = usePlanner();
+  const { courseMap, isPhone, enteredGpaStat: stat, specialTermPl, studentType } = usePlanner();
   const [open, setOpen] = useState(false);
 
-  const stat = useMemo(() => {
-    const seen = new Set();
-    const entries = [];
-    const consider = (pid, inTL) => {
-      if (!inTL) return;
-      const base = baseId(pid);
-      if (seen.has(base)) return;
-      seen.add(base);
-      // Latest take counts (replacement rule).
-      const takes = [];
-      for (const [p2, sid] of Object.entries(placements)) {
-        if (baseId(p2) !== base) continue;
-        const fi = SEM_INDEX[sid];
-        if (fi !== undefined) takes.push({ fi, grade: grades[p2] ?? null });
-      }
-      for (const p2 of placedOut) if (baseId(p2) === base) takes.push({ fi: "out", grade: grades[p2] ?? null });
-      const g = takes.length ? effectiveGradeOfTakes(takes) : null;
-      if (g != null) entries.push({ base, grade: g, credits: courseMap[base]?.sh ?? 4 });
-    };
-    for (const [pid, sid] of Object.entries(placements)) consider(pid, SEM_INDEX[sid] !== undefined);
-    for (const pid of placedOut) consider(pid, true);
-    const gpa = enteredGPA(entries);
-    if (gpa == null) return null;
-    // Provenance list: only what actually entered the average (letters).
-    const counted = entries.filter(e => countsInGPA(e.grade));
-    return { gpa, n: counted.length, counted };
-  }, [grades, placements, placedOut, courseMap, SEM_INDEX]);
+  // Co-op search eligibility (catalog policy): undergrad 2.000, grad 3.000.
+  // Only when the plan actually contains a co-op AND the entered GPA is
+  // provably below the bar — same no-false-alarm rule as everything else.
+  const coopBar = useMemo(() => {
+    if (!stat) return null;
+    const hasCoop = Object.values(specialTermPl ?? {}).some(v => v?.typeId === "coop");
+    if (!hasCoop) return null;
+    const bar = COOP_GPA[studentType === "graduate" ? "graduate" : "undergrad"];
+    return stat.gpa < bar - 1e-9 ? bar : null;
+  }, [stat, specialTermPl, studentType]);
 
   if (!stat) return null;
   return (
@@ -708,6 +691,12 @@ function GpaSoFar() {
           <span style={{ fontSize: 7, color: "var(--text-5)", marginLeft: 5 }}>{open ? "▼" : "▶"}</span>
         </span>
       </div>
+      {coopBar && (
+        <div style={{ marginTop: 4, fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4,
+                      color: REL_STYLE["corequisite-viol"].color }}>
+          {t("grad.gpa.coop", { gpa: coopBar.toFixed(3) })}
+        </div>
+      )}
       {open && (
         <div style={{ marginTop: 5, paddingLeft: 8, borderLeft: "2px solid var(--border-2)",
                       display: "flex", flexDirection: "column", gap: 2 }}>

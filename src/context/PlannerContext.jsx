@@ -16,7 +16,8 @@ import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
-import { takeConsumesSlot, yieldsCredit, satisfiesGate } from "../core/gradeSystem.js";
+import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
+         effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -477,6 +478,36 @@ export function PlannerProvider({ children }) {
     }
     return out;
   }, [gradesRaw, placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, gradSemId]);
+
+  // The plan's GPA from ENTERED letter grades — computed ONCE here so every
+  // consumer (the graduation panel's readout, co-op eligibility, per-course
+  // GPA gates) reads the same number. null while nothing is graded, which is
+  // what keeps every GPA-derived warning silent by default.
+  // { gpa, n, counted:[{base,grade,credits}] } | null
+  const enteredGpaStat = useMemo(() => {
+    if (!Object.keys(grades).length) return null;
+    const seen = new Set(), entries = [];
+    const consider = (pid, inTL) => {
+      if (!inTL) return;
+      const base = baseId(pid);
+      if (seen.has(base)) return;
+      seen.add(base);
+      const takes = [];
+      for (const [p2, sid] of Object.entries(placements)) {
+        if (baseId(p2) !== base) continue;
+        const fi = SEM_INDEX[sid];
+        if (fi !== undefined) takes.push({ fi, grade: grades[p2] ?? null });
+      }
+      for (const p2 of placedOut) if (baseId(p2) === base) takes.push({ fi: "out", grade: grades[p2] ?? null });
+      const g = takes.length ? effectiveGradeOfTakes(takes) : null;
+      if (g != null) entries.push({ base, grade: g, credits: courseMap[base]?.sh ?? 4 });
+    };
+    for (const [pid, sid] of Object.entries(placements)) consider(pid, SEM_INDEX[sid] !== undefined);
+    for (const pid of placedOut) consider(pid, true);
+    const gpa = enteredGPA(entries);
+    if (gpa == null) return null;
+    return { gpa, counted: entries.filter(e => countsInGPA(e.grade)), n: entries.filter(e => countsInGPA(e.grade)).length };
+  }, [grades, placements, placedOut, courseMap, SEM_INDEX]);
 
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides
   // applied, and with GRADE consequences folded in: a take whose entered
@@ -2887,7 +2918,7 @@ export function PlannerProvider({ children }) {
     gradSemId, coopGradConflicts,
     isGraduated, setIsGraduated,
     prereqViolations, coreqViolations, connectedIds,
-    grades, setGrade,
+    grades, setGrade, enteredGpaStat,
     totalSHPlaced, totalSHDone,
     bonusSH: pvBonusSH, setBonusSH,
     major:  pv?.major  ?? major,  setMajor,

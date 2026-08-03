@@ -37,6 +37,16 @@ export const GRADE_POINTS = {
 /** The assumed grade for an unentered course — the scale's ceiling. */
 export const ASSUMED_POINTS = GRADE_POINTS["A"];
 
+/**
+ * Co-op search eligibility, from the catalog's cooperative-education
+ * policy (verified 2026-08-03): undergraduates need a cumulative 2.000,
+ * graduate students 3.000, "to be eligible to search for a co-op
+ * position". A `U` on a past co-op additionally requires working with a
+ * co-op coordinator to re-establish eligibility — advisor territory, so
+ * NU Map states the GPA bar and nothing more.
+ */
+export const COOP_GPA = { undergrad: 2.0, graduate: 3.0 };
+
 /** Everything the dropdown offers, in display order. `X` (final-exam
     absence) is handled by the logic but too rare to offer. */
 export const GRADE_SYMBOLS = [

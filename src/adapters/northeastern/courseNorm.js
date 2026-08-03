@@ -9,6 +9,7 @@
 import { subjectColor } from "../../core/courseModel.js";
 import calendar from "./calendar.js";
 import { parseRepeatability } from "./repeatability.js";
+import { parseDescriptionGpaGate } from "./gpaGate.js";
 
 /**
  * Earliest term code (numeric) where the course was ever confirmed offered.
@@ -109,6 +110,7 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
   const rep = raw.repeatable !== undefined
     ? { max: raw.repeatMax ?? null, maxSH: raw.repeatMaxSH ?? null }
     : parseRepeatability(raw.description);
+  const gpaGate = raw.minGPA ?? parseDescriptionGpaGate(raw.description);
 
   return {
     id, subject, number,
@@ -124,6 +126,13 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     scheduleType: raw.scheduleType || "",
     prereqs:      raw.prereqs ?? raw.prerequisites ?? [],
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],
+    // A GPA gate stated in the description (3 courses corpus-wide). Same
+    // pattern as repeatability above: prefer the scraper's field, else
+    // derive it from the description. The fallback matters because a
+    // subject whose fetch fails is carried forward wholesale, so a newly
+    // added field would stay missing there until a later run succeeded.
+    // Only ever compared against grades the user entered.
+    ...(gpaGate != null ? { minGPA: gpaGate } : {}),
     termHistory,
     birthTermCode,
     terms:        uniqueTerms,
