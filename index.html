@@ -198,13 +198,47 @@
               + (dark ? 'background:#0d1117;color:#e2e8f0;' : 'background:#fefefe;color:#1e293b;');
             // The sweeping bar is the app's own loading-screen bar (same
             // size, radius and active→link gradient), just indeterminate —
-            // it says "alive and working", not "static page".
+            // it says "alive and working", not "static page". Above it, the
+            // emblem: the logo floating between two counter-rotating ribbon
+            // arcs and four bobbing paper-ribbon strips (SMIL, so no CSS
+            // transform-box juggling). Confetti bobs use nested <g>: outer
+            // animates translate, inner holds the static placement.
+            var g1a = dark ? '#58a6ff' : '#2563eb', g1b = dark ? '#a78bfa' : '#7c3aed';
             el.innerHTML =
               '<style>'
               + '@keyframes numapRecoverySweep{from{transform:translateX(' + (lc === 'ar' ? '250%' : '-100%') + ')}to{transform:translateX(' + (lc === 'ar' ? '-100%' : '250%') + ')}}'
               + '@keyframes numapRecoveryIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}'
+              + '@keyframes numapFloat{from{transform:translateY(-2px)}to{transform:translateY(3px)}}'
+              + '@keyframes numapGlint{0%{left:-45%}55%{left:125%}100%{left:125%}}'
+              + '@media (prefers-reduced-motion:reduce){#numap-recovery *{animation:none !important}}'
               + '</style>'
               + '<div style="animation:numapRecoveryIn .35s ease-out;">'
+              + '<div style="position:relative;width:120px;height:120px;margin:0 auto 14px;">'
+              + '<svg viewBox="0 0 120 120" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;" aria-hidden="true">'
+              + '<defs>'
+              + '<linearGradient id="nmr-g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + g1a + '"/><stop offset="1" stop-color="' + g1b + '"/></linearGradient>'
+              + '<linearGradient id="nmr-g2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#f87171"/><stop offset="1" stop-color="#fb923c"/></linearGradient>'
+              + '</defs>'
+              + '<g><path d="M60 12 A48 48 0 0 1 101.6 36" stroke="url(#nmr-g1)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.9"/>'
+              + '<path d="M60 108 A48 48 0 0 1 18.4 84" stroke="url(#nmr-g1)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.9"/>'
+              + '<animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="7s" repeatCount="indefinite"/></g>'
+              + '<g><path d="M14 60 A46 46 0 0 1 33 22.5" stroke="url(#nmr-g2)" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>'
+              + '<path d="M106 60 A46 46 0 0 1 87 97.5" stroke="url(#nmr-g2)" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>'
+              + '<animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="11s" repeatCount="indefinite"/></g>'
+              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -7;0 0" dur="2.8s" begin="-0.4s" repeatCount="indefinite"/><g transform="translate(98 30) rotate(-63)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#f9a8d4"/></g></g>'
+              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 6;0 0" dur="3.4s" begin="-1.6s" repeatCount="indefinite"/><g transform="translate(18 84) rotate(-63)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#86efac"/></g></g>'
+              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -6;0 0" dur="3.1s" begin="-0.9s" repeatCount="indefinite"/><g transform="translate(92 94) rotate(24)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#fcd34d"/></g></g>'
+              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 5;0 0" dur="2.5s" begin="-2.0s" repeatCount="indefinite"/><g transform="translate(24 26) rotate(-63)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#c4b5fd"/></g></g>'
+              + '</svg>'
+              // The logo itself: floating, with a diagonal glint sweeping
+              // INSIDE the letterform — the PNG doubles as a CSS mask, so
+              // the sheen travels only through the N and matches its slant.
+              + '<div style="position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;animation:numapFloat 3s ease-in-out infinite alternate;">'
+              + '<img src="/logo.png" alt="" onerror="this.parentNode.style.display=\'none\'" style="width:100%;height:100%;display:block;"/>'
+              + '<div style="position:absolute;inset:0;overflow:hidden;-webkit-mask-image:url(/logo.png);-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;mask-image:url(/logo.png);mask-size:contain;mask-repeat:no-repeat;">'
+              + '<div style="position:absolute;top:-20%;bottom:-20%;width:30%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,0.8),transparent);animation:numapGlint 2.6s ease-in-out infinite;"></div>'
+              + '</div></div>'
+              + '</div>'
               + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
               + '<div style="width:40%;height:100%;border-radius:99px;background:linear-gradient(90deg,'
               + (dark ? '#58a6ff,#a78bfa' : '#2563eb,#7c3aed')

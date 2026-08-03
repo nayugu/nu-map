@@ -39,6 +39,66 @@ const localeOf = () => {
   catch { return "en"; }
 };
 
+// The animated emblem, mirrored from the index.html overlay: the logo
+// floats with a diagonal glint sweeping inside the letterform (the PNG
+// doubles as a CSS mask), between two counter-rotating ribbon arcs and
+// four bobbing paper-ribbon strips aligned to the N's stroke angles.
+function Emblem({ dark }) {
+  const strip = (bob, dur, begin, place, fill) => (
+    <g>
+      <animateTransform attributeName="transform" type="translate"
+        values={`0 0;0 ${bob};0 0`} dur={dur} begin={begin} repeatCount="indefinite" />
+      <g transform={place}>
+        <rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill={fill} />
+      </g>
+    </g>
+  );
+  return (
+    <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto 14px" }}>
+      <svg viewBox="0 0 120 120" aria-hidden="true"
+        style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", overflow: "visible" }}>
+        <defs>
+          <linearGradient id="nmc-g1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor={dark ? "#58a6ff" : "#2563eb"} />
+            <stop offset="1" stopColor={dark ? "#a78bfa" : "#7c3aed"} />
+          </linearGradient>
+          <linearGradient id="nmc-g2" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stopColor="#f87171" />
+            <stop offset="1" stopColor="#fb923c" />
+          </linearGradient>
+        </defs>
+        <g>
+          <path d="M60 12 A48 48 0 0 1 101.6 36" stroke="url(#nmc-g1)" strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.9" />
+          <path d="M60 108 A48 48 0 0 1 18.4 84" stroke="url(#nmc-g1)" strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.9" />
+          <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="7s" repeatCount="indefinite" />
+        </g>
+        <g>
+          <path d="M14 60 A46 46 0 0 1 33 22.5" stroke="url(#nmc-g2)" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.85" />
+          <path d="M106 60 A46 46 0 0 1 87 97.5" stroke="url(#nmc-g2)" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.85" />
+          <animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="11s" repeatCount="indefinite" />
+        </g>
+        {strip(-7, "2.8s", "-0.4s", "translate(98 30) rotate(-63)", "#f9a8d4")}
+        {strip(6,  "3.4s", "-1.6s", "translate(18 84) rotate(-63)", "#86efac")}
+        {strip(-6, "3.1s", "-0.9s", "translate(92 94) rotate(24)",  "#fcd34d")}
+        {strip(5,  "2.5s", "-2.0s", "translate(24 26) rotate(-63)", "#c4b5fd")}
+      </svg>
+      <div style={{ position: "absolute", left: "50%", top: "50%", width: 56, height: 56,
+        margin: "-28px 0 0 -28px", animation: "numapFloat 3s ease-in-out infinite alternate" }}>
+        <img src="/logo.png" alt="" onError={e => { e.currentTarget.parentNode.style.display = "none"; }}
+          style={{ width: "100%", height: "100%", display: "block" }} />
+        <div style={{ position: "absolute", inset: 0, overflow: "hidden",
+          WebkitMaskImage: "url(/logo.png)", WebkitMaskSize: "contain", WebkitMaskRepeat: "no-repeat",
+          maskImage: "url(/logo.png)", maskSize: "contain", maskRepeat: "no-repeat" }}>
+          <div style={{ position: "absolute", top: "-20%", bottom: "-20%", width: "30%",
+            transform: "skewX(-20deg)",
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)",
+            animation: "numapGlint 2.6s ease-in-out infinite" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Same theme resolution as index.html's pre-paint script: the saved app
 // theme wins, the OS preference is only the fallback.
 const isDark = () => {
@@ -88,8 +148,12 @@ export default class RecoveryBoundary extends Component {
         <style>{`
           @keyframes numapCrashSweep { from { transform: translateX(${rtl ? "250%" : "-100%"}) } to { transform: translateX(${rtl ? "-100%" : "250%"}) } }
           @keyframes numapCrashIn { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
+          @keyframes numapFloat { from { transform: translateY(-2px) } to { transform: translateY(3px) } }
+          @keyframes numapGlint { 0% { left: -45% } 55% { left: 125% } 100% { left: 125% } }
+          @media (prefers-reduced-motion: reduce) { .numap-crash * { animation: none !important } }
         `}</style>
-        <div style={{ animation: "numapCrashIn .35s ease-out" }}>
+        <div className="numap-crash" style={{ animation: "numapCrashIn .35s ease-out" }}>
+          <Emblem dark={dark} />
           <div style={{ width: 260, height: 4, borderRadius: 99, overflow: "hidden",
             margin: "0 auto 20px", background: dark ? "#21262d" : "#e2e8f0" }}>
             <div style={{ width: "40%", height: "100%", borderRadius: 99,
