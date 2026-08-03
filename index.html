@@ -299,6 +299,18 @@
             rib.style.transition = 'stroke-dasharray 1.1s ease';
             rib.style.strokeDasharray = '240 0';
           }
+          // The closed ring IS the way back: the whole emblem becomes a
+          // button (alongside the text one), with a gentle hover swell.
+          var emb = document.getElementById('numap-emblem');
+          if (emb) {
+            emb.style.cursor = 'pointer';
+            emb.style.transition = 'transform .35s ease';
+            emb.setAttribute('role', 'button');
+            emb.title = RECOVERY_BACK[lc] || RECOVERY_BACK.en;
+            emb.onclick = function () { window.__numapRecoveryExit(); };
+            emb.onmouseenter = function () { emb.style.transform = 'scale(1.05)'; };
+            emb.onmouseleave = function () { emb.style.transform = ''; };
+          }
           var m = document.getElementById('numap-recovery-msg');
           var s2 = document.getElementById('numap-recovery-sub');
           if (m) { m.style.transition = 'opacity .6s'; m.style.opacity = '0'; }
@@ -500,7 +512,7 @@
               // content changes below it can never move it.
               + '<div style="position:absolute;top:calc(50% - 118px);left:50%;transform:translateX(-50%);width:100%;max-width:468px;padding:0 24px;box-sizing:border-box;">'
               + '<div id="numap-recovery-card" style="animation:numapRecoveryIn .35s ease-out;position:relative;">'
-              + '<div style="position:relative;width:120px;height:120px;margin:0 auto 14px;">'
+              + '<div id="numap-emblem" style="position:relative;width:120px;height:120px;margin:0 auto 14px;">'
               + '<svg viewBox="0 0 120 120" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;" aria-hidden="true">'
               // One ribbon streamer: a long dash segment flowing along a
               // slightly eccentric loop (dashoffset shifts one dash+gap
