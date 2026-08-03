@@ -81,7 +81,7 @@ export default function Header() {
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
-    shareRelayAvailable, createShareCode, claimShareCode, importSharedPlan,
+    shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, importSharedPlan,
     aiAssistantAvailable, claudePreview,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
@@ -171,6 +171,7 @@ export default function Header() {
   const [claimInput, setClaimInput]           = useState("");
   const [claimBusy, setClaimBusy]             = useState(false);
   const [shareCodeError, setShareCodeError]   = useState(null); // locale key
+  const [clockHover, setClockHover]           = useState(false); // red = click cancels
   const [codeNow, setCodeNow]                 = useState(Date.now());
   useEffect(() => {
     if (!shareCode) return;
@@ -181,10 +182,19 @@ export default function Header() {
     if (shareCode && shareCode.expiresAt <= codeNow) setShareCode(null);
   }, [shareCode, codeNow]);
 
-  // Always generates — clicking again while a code is live just mints a
-  // fresh one (the old one stays claimable server-side until it expires).
+  // No code → mint one. Code live (the button shows the countdown) →
+  // cancel it: the code is revoked server-side and the button returns to
+  // Share. Want a fresh code? Cancel, then share again — two honest
+  // clicks instead of one ambiguous regenerate.
   const handleShareCode = async () => {
     setShareCodeError(null);
+    if (shareCode) {
+      const dead = shareCode.code;
+      setShareCode(null);
+      setClockHover(false);
+      cancelShareCode(dead); // fire-and-forget; expired/claimed no-ops
+      return;
+    }
     setShareCodeBusy(true);
     try {
       const { code, expiresInSeconds } = await createShareCode(shareLinkLocale);
@@ -1031,25 +1041,29 @@ export default function Header() {
                     </span>
                   </div>
                   {/* While a code is live the countdown takes over this
-                      button's slot (clicking still mints a fresh code —
-                      codes are one-use, so back-to-back shares are legit).
+                      button's slot, and clicking CANCELS the code (revoked
+                      server-side) — hovering turns the clock red to say so.
                       The invisible Share label keeps the width pinned, so
                       the swap never shifts the column in any locale. */}
                   <button className="hdr-btn-dd" onClick={handleShareCode}
-                    title={t("header.io.code.share.title")}
+                    onMouseEnter={() => setClockHover(true)}
+                    onMouseLeave={() => setClockHover(false)}
+                    title={shareCode ? t("header.io.code.cancel.title") : t("header.io.code.share.title")}
                     disabled={shareCodeBusy}
                     style={{ position: "relative", fontSize: 10, fontWeight: 700, cursor: "pointer",
                       background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                      border: `1px solid ${shareCode ? "var(--active)" : "var(--border-2)"}`,
+                      border: `1px solid ${shareCode ? (clockHover ? "var(--red, #ef4444)" : "var(--active)") : "var(--border-2)"}`,
                       color: "var(--text-4)",
-                      opacity: shareCodeBusy ? 0.6 : 1 }}>
+                      opacity: shareCodeBusy ? 0.6 : 1,
+                      transition: "border-color 0.15s" }}>
                     <span style={{ visibility: shareCode ? "hidden" : "visible", whiteSpace: "nowrap" }}>
                       {t("header.io.code.share")}
                     </span>
                     {shareCode && (
                       <span style={{ position: "absolute", inset: 0, display: "flex",
                         alignItems: "center", justifyContent: "center",
-                        fontVariantNumeric: "tabular-nums", color: "var(--text-5)" }}>
+                        fontVariantNumeric: "tabular-nums", transition: "color 0.15s",
+                        color: clockHover ? "var(--red, #ef4444)" : "var(--text-5)" }}>
                         {`${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`}
                       </span>
                     )}

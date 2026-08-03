@@ -328,6 +328,7 @@ export const strings = {
   "header.io.code.share":         "साझा करें",
   "header.io.code.share.title":   "छोटे कोड से साझा करें, जिसे प्राप्तकर्ता अपने NU Map में लिखता है। एक बार उपयोग, 10 मिनट तक मान्य",
   "header.io.code.copy.title":    "कोड कॉपी करने के लिए क्लिक करें",
+  "header.io.code.cancel.title":  "यह कोड रद्द करें",
   "header.io.code.error":         "कुछ गड़बड़ हुई। फिर से कोशिश करें।",
   "header.io.code.placeholder":   "कोड दर्ज करें",
   "header.io.code.load":          "लोड करें",

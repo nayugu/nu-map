@@ -328,6 +328,7 @@ export const strings = {
   "header.io.code.share":         "Partager",
   "header.io.code.share.title":   "Partagez avec un code court que le destinataire saisit dans son propre NU Map. Usage unique, valable 10 minutes",
   "header.io.code.copy.title":    "Cliquez pour copier le code",
+  "header.io.code.cancel.title":  "Annuler ce code",
   "header.io.code.error":         "Une erreur est survenue. Réessayez.",
   "header.io.code.placeholder":   "Saisir le code",
   "header.io.code.load":          "Charger",

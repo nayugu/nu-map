@@ -329,6 +329,7 @@ export const strings = {
   "header.io.code.share":         "共有",
   "header.io.code.share.title":   "受け取る相手が自分の NU Map に入力する短いコードで共有します。1回限り、10分間有効",
   "header.io.code.copy.title":    "クリックしてコードをコピー",
+  "header.io.code.cancel.title":  "このコードを取り消す",
   "header.io.code.error":         "問題が発生しました。もう一度お試しください。",
   "header.io.code.placeholder":   "コードを入力",
   "header.io.code.load":          "読み込む",

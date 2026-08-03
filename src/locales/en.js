@@ -329,6 +329,7 @@ export const strings = {
   "header.io.code.share":         "Share",
   "header.io.code.share.title":   "Share with a short code the recipient types into their own NU Map. One use, valid 10 minutes",
   "header.io.code.copy.title":    "Click to copy the code",
+  "header.io.code.cancel.title":  "Cancel this code",
   "header.io.code.error":         "Something went wrong. Try again.",
   "header.io.code.placeholder":   "Enter code",
   "header.io.code.load":          "Load",

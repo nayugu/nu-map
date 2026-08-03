@@ -327,6 +327,7 @@ export const strings = {
   "header.io.code.share":         "مشاركة",
   "header.io.code.share.title":   "شارك برمز قصير يكتبه المستلم في NU Map الخاص به. استخدام واحد، صالح لمدة 10 دقائق",
   "header.io.code.copy.title":    "انقر لنسخ الرمز",
+  "header.io.code.cancel.title":  "إلغاء هذا الرمز",
   "header.io.code.error":         "حدث خطأ ما. حاول مرة أخرى.",
   "header.io.code.placeholder":   "أدخل الرمز",
   "header.io.code.load":          "تحميل",

@@ -2586,6 +2586,13 @@ export function PlannerProvider({ children }) {
     return shareRelay.createShareCode(await encodeSharePayload(targetLocale));
   };
 
+  // Cancel = claim your own code and discard the payload. Burns it
+  // atomically with zero extra server surface; already-claimed/expired
+  // codes just no-op.
+  const cancelShareCode = async (code) => {
+    try { await shareRelay.claimShareCode(code); } catch { /* already gone — same outcome */ }
+  };
+
   // Redeem a code and decode — the caller confirms with the user before
   // importSharedPlan actually touches any state.
   const claimShareCode = async (code) => {
@@ -3172,7 +3179,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, importSharedPlan,
+    shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,
