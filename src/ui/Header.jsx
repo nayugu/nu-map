@@ -1029,24 +1029,30 @@ export default function Header() {
                     <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {shareCode ? shareCode.code : "······"}
                     </span>
-                    {/* Countdown floats at the edge so the code itself sits
-                        dead-center, mirroring the centered entry below. */}
-                    {shareCode && (
-                      <span style={{ position: "absolute", insetInlineEnd: 8, top: "50%",
-                        transform: "translateY(-50%)", fontSize: 9, fontWeight: 600, letterSpacing: 0,
-                        color: shareCodeCopied ? "#fff" : "var(--text-5)" }}>
-                        {`${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`}
-                      </span>
-                    )}
                   </div>
+                  {/* While a code is live the countdown takes over this
+                      button's slot (clicking still mints a fresh code —
+                      codes are one-use, so back-to-back shares are legit).
+                      The invisible Share label keeps the width pinned, so
+                      the swap never shifts the column in any locale. */}
                   <button className="hdr-btn-dd" onClick={handleShareCode}
                     title={t("header.io.code.share.title")}
                     disabled={shareCodeBusy}
-                    style={{ fontSize: 10, fontWeight: 700, cursor: "pointer",
+                    style={{ position: "relative", fontSize: 10, fontWeight: 700, cursor: "pointer",
                       background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                      border: "1px solid var(--border-2)", color: "var(--text-4)",
+                      border: `1px solid ${shareCode ? "var(--active)" : "var(--border-2)"}`,
+                      color: "var(--text-4)",
                       opacity: shareCodeBusy ? 0.6 : 1 }}>
-                    {t("header.io.code.share")}
+                    <span style={{ visibility: shareCode ? "hidden" : "visible", whiteSpace: "nowrap" }}>
+                      {t("header.io.code.share")}
+                    </span>
+                    {shareCode && (
+                      <span style={{ position: "absolute", inset: 0, display: "flex",
+                        alignItems: "center", justifyContent: "center",
+                        fontVariantNumeric: "tabular-nums", color: "var(--text-5)" }}>
+                        {`${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`}
+                      </span>
+                    )}
                   </button>
                   <input
                     value={claimInput}
