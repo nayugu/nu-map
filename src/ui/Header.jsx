@@ -185,7 +185,22 @@ export default function Header() {
   // ── Share by code ──────────────────────────────────────────────
   // shareCode = { code, expiresAt } while a code is live; a 1 s tick
   // drives the countdown and clears the code when the relay would.
-  const [shareCode, setShareCode]             = useState(null);
+  // Persisted so a reload can't orphan a live code on the server: the
+  // tab restores the ticking clock and cancel keeps working (same
+  // literal-key convention as the aiAssistant adapter).
+  const [shareCode, setShareCode]             = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("nu-map-share-code") || "null");
+      if (saved?.code && saved.expiresAt > Date.now()) return saved;
+    } catch {}
+    return null;
+  });
+  useEffect(() => {
+    try {
+      if (shareCode) localStorage.setItem("nu-map-share-code", JSON.stringify(shareCode));
+      else localStorage.removeItem("nu-map-share-code");
+    } catch {}
+  }, [shareCode]);
   const [shareCodeCopied, setShareCodeCopied] = useState(false);
   const [shareCodeBusy, setShareCodeBusy]     = useState(false);
   const [claimInput, setClaimInput]           = useState("");
@@ -1070,7 +1085,7 @@ export default function Header() {
                   <button className="hdr-btn-dd" onClick={handleShareCode}
                     onMouseEnter={() => setClockHover(true)}
                     onMouseLeave={() => setClockHover(false)}
-                    title={shareCode ? t("header.io.code.cancel.title") : t("header.io.code.share.title")}
+                    title={shareCode ? t("header.io.code.cancel.title") : t("header.io.code.send.title")}
                     disabled={shareCodeBusy}
                     style={{ position: "relative", fontSize: 10, fontWeight: 700, cursor: "pointer",
                       background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -1079,7 +1094,7 @@ export default function Header() {
                       opacity: shareCodeBusy ? 0.6 : 1,
                       transition: "border-color 0.15s" }}>
                     <span style={{ visibility: shareCode ? "hidden" : "visible", whiteSpace: "nowrap" }}>
-                      {t("header.io.code.share")}
+                      {t("header.io.code.send")}
                     </span>
                     {shareCode && (
                       <span style={{ position: "absolute", inset: 0, display: "flex",
