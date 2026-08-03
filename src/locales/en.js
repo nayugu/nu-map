@@ -344,6 +344,18 @@ export const strings = {
   "header.settings.claude.auto.hint": "review required",
   "header.settings.claude.auto.title": "Off (default): Claude can only propose changes for your review. On: Claude may apply changes directly (single undo entry).",
 
+  // ── Info-tip popovers (the "?" explanations on non-obvious controls) ──
+  "tip.translate": "Machine-translates catalog course titles and descriptions into your language. Some languages run instantly in your browser; others download a one-time ~890 MB model or use an online service, and results are cached so you only pay the cost once.",
+  "tip.clearcache": "Deletes cached translation data — the downloaded model or previously translated text. Use it to free space, or to force a fresh translation if a result looked wrong.",
+  "tip.save": "When on, your plan is saved in this browser and reopens automatically next time. When off, nothing is stored and the plan is lost once you close the tab.",
+  "tip.violations": "Draws the red lines that flag prerequisite and corequisite problems — like a course placed before something it requires. Turn it off for a cleaner board.",
+  "tip.collapse": "Hides the “other credits” rows — placements that don't count toward any of your programs — so the board shows only what applies to your requirements.",
+  "tip.privategrades": "Hides every grade and your GPA, and leaves grades out of shared links and exported files — for showing your plan to someone else. Nothing is deleted; turn it off to bring them back.",
+  "tip.unlocks": "Marks the courses a selected course unlocks — the ones that list it as a prerequisite — so you can see what a class leads to.",
+  "tip.sticky": "When your entry or graduation term changes, choose whether courses keep their semester slot (1st, 2nd…) or their calendar date (e.g. Fall 2026).",
+  "tip.export.json": "Downloads your whole plan as a .json file to back up or move to another device. Grades are included unless “Keep grades private” is on. Reopen it later with Load.",
+  "tip.import.json": "Opens a .json file saved with Save. It comes in as a new plan alongside your current ones — nothing you have now is replaced.",
+
   // ── Claude integration (settings, dot, pairing modal, proposal card) ──
   "claude.oauth.title": "Claude is requesting access",
   "claude.oauth.body": "A Claude conversation wants to connect to NU Map. Choose what it can access. You can pause or disconnect at any time in settings.",

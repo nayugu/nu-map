@@ -403,6 +403,18 @@ export const strings = {
   "header.settings.claude.auto.off": "Aplicación automática: desactivada",
   "header.settings.claude.auto.hint": "requiere revisión",
   "header.settings.claude.auto.title": "Desactivado (predeterminado): Claude solo puede proponer cambios para tu revisión. Activado: Claude puede aplicar cambios directamente (una sola entrada de deshacer).",
+
+  // ── Info-tip popovers (the "?" explanations on non-obvious controls) ──
+  "tip.translate": "Traduce automáticamente los títulos y descripciones de los cursos del catálogo a tu idioma. Algunos idiomas funcionan al instante en el navegador; otros descargan una vez un modelo de ~890 MB o usan un servicio en línea, y los resultados se guardan en caché para pagar el coste una sola vez.",
+  "tip.clearcache": "Elimina los datos de traducción en caché: el modelo descargado o el texto ya traducido. Úsalo para liberar espacio o para forzar una traducción nueva si un resultado se veía mal.",
+  "tip.save": "Cuando está activado, tu plan se guarda en este navegador y se vuelve a abrir automáticamente la próxima vez. Cuando está desactivado, no se guarda nada y el plan se pierde al cerrar la pestaña.",
+  "tip.violations": "Dibuja las líneas rojas que señalan problemas de prerrequisitos y correquisitos, como un curso colocado antes de algo que requiere. Desactívalo para un tablero más limpio.",
+  "tip.collapse": "Oculta las filas de «otros créditos» —asignaciones que no cuentan para ninguno de tus programas— para que el tablero muestre solo lo que corresponde a tus requisitos.",
+  "tip.privategrades": "Oculta todas las calificaciones y tu promedio, y las deja fuera de los enlaces compartidos y los archivos exportados, para mostrar tu plan a otra persona. No se borra nada; desactívalo para recuperarlas.",
+  "tip.unlocks": "Marca los cursos que desbloquea un curso seleccionado —los que lo tienen como prerrequisito— para ver a qué conduce una asignatura.",
+  "tip.sticky": "Cuando cambia tu término de ingreso o graduación, elige si los cursos mantienen su posición de semestre (1.º, 2.º…) o su fecha de calendario (p. ej., Otoño 2026).",
+  "tip.export.json": "Descarga todo tu plan como un archivo .json para respaldarlo o llevarlo a otro dispositivo. Las calificaciones se incluyen salvo que «Mantener calificaciones privadas» esté activado. Vuelve a abrirlo con Cargar.",
+  "tip.import.json": "Abre un archivo .json guardado con Guardar. Entra como un plan nuevo junto a los que ya tienes; no se reemplaza nada de lo actual.",
   "claude.oauth.title": "Claude solicita acceso",
   "claude.oauth.body": "Una conversación de Claude quiere conectarse a NU Map. Elige a qué puede acceder; puedes pausar o desconectar en cualquier momento desde los ajustes.",
   "claude.oauth.approve": "Aprobar",
