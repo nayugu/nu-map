@@ -100,6 +100,16 @@ export default function SubstitutionPopover({ alt, rect, courseName }) {
         </div>
       ))}
 
+      {/* A stated set rule applies one-to-one like everything else, so this
+          pair can be added alone — but the catalog grants the rule for the
+          whole set, so say what else it names. */}
+      {ev.setRequires?.length > 1 && (
+        <div style={{ ...row, marginTop: 7, paddingTop: 6,
+                      borderTop: "1px solid var(--border-2)" }}>
+          {t("bank.sub.setgap", { codes: ev.setRequires.join(", ") })}
+        </div>
+      )}
+
       {/* the caveat, once, where the decision is being made */}
       {alt.approval && (
         <div style={{ ...row, marginTop: 7, paddingTop: 6, borderTop: "1px solid var(--border-2)",

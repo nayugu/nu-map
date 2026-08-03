@@ -442,6 +442,12 @@ function toWire(rows, meta) {
     if (r.ev.footnote) {
       e.s = "footnote";
       e.fn = r.ev.footnote.text.slice(0, 200);
+      // The full set the footnote states, carried on every pair it produced.
+      // This is metadata, NOT a link: the pairs stay independent — adding or
+      // removing one does nothing to the others — but each knows the rule it
+      // came from, so a plan that satisfies GE 1501 from GE 1110 alone can be
+      // flagged instead of silently reading as met.
+      if (r.ev.footnote.from.length > 1) e.set = r.ev.footnote.from;
       // Substitutions are one-to-one. A footnote may state a set rule
       // ("substitute GE 1110 AND GE 1111 for GE 1501 AND GE 1502"), but linking
       // its pairs so they applied together meant adding one made two appear and

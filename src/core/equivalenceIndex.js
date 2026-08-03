@@ -142,6 +142,9 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
       statement: p.e?.s ?? null,
       scope: p.e?.sc ?? null,
       excludes: p.e?.ex ?? null,
+      // Every course the stated rule requires, when it named more than one.
+      // Informational: the pair still applies on its own.
+      setRequires: Array.isArray(p.e?.set) ? p.e.set : null,
     },
   };
 }
@@ -194,4 +197,19 @@ export function programAllowedSwaps(index, myProgramIx, { limit = 24 } = {}) {
 export function readyToApply(alt, isPlaced) {
   if (typeof isPlaced !== "function") return false;
   return isPlaced(alt.from);
+}
+
+/**
+ * A stated set rule is only fully earned when every course it names is placed.
+ *
+ * Substitutions apply one-to-one, so a student can add "GE 1110 -> GE 1501"
+ * alone and have GE 1501 read as satisfied — which the catalog, stating
+ * "substitute GE 1110 AND GE 1111 for GE 1501 AND GE 1502", does not grant.
+ * Rather than re-couple the pairs, the shortfall is reported so the UI can flag
+ * it. Returns the missing courses, or [] when there is nothing to say.
+ */
+export function unmetSetRequirement(alt, isPlaced) {
+  const req = alt?.evidence?.setRequires;
+  if (!Array.isArray(req) || typeof isPlaced !== "function") return [];
+  return req.filter(id => !isPlaced(id));
 }

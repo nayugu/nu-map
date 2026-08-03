@@ -50,6 +50,7 @@ export const strings = {
   "bank.sub.why.b":                  "El mismo curso con dos códigos de materia.",
   "bank.sub.why.c":                  "Suelen ser intercambiables: confirma con tu asesor.",
   "bank.sub.approval":               "Requiere aprobación del asesor",
+  "bank.sub.setgap":               "También requiere {codes} — el catálogo lo indica como una sola regla",
   "bank.sub.ev.programs":          "{n} programas ofrecen esta opción",
   "bank.sub.ev.crosslist":         "Descripción y título idénticos",
   "bank.sub.ev.prereq":            "{n} cursos aceptan cualquiera como requisito",

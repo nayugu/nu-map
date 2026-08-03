@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import {
   buildEquivalenceIndex, programIndexSet, resolvePairTier,
   alternativesFor, tierNeedsApproval, tierIsOfferable,
-  programAllowedSwaps, readyToApply,
+  programAllowedSwaps, readyToApply, unmetSetRequirement,
 } from "../../src/core/equivalenceIndex.js";
 import { applySubstitutions } from "../../src/core/planModel.js";
 
@@ -225,4 +225,29 @@ test("contract › the tier table has exactly one definition", async () => {
   assert.equal(core.tierIsOfferable("D"), false);
   assert.equal(core.tierRank("A") < core.tierRank("C"), true);
   assert.equal(Number.isFinite(core.tierRank("nonsense")), true, "unknown tiers must not crash");
+});
+
+test("set gap › a stated rule reports what is still missing, without coupling", () => {
+  // Pairs stay 1:1 — adding one does not add the other — but each knows the
+  // rule it came from, so a plan satisfying GE 1501 from GE 1110 alone can be
+  // flagged rather than reading as met.
+  const wire = { programs: [], pairs: [
+    { a: "GE 1110", b: "GE 1501", t: "A", s: 30, e: { s: "footnote", set: ["GE 1110", "GE 1111"] } },
+    { a: "GE 1111", b: "GE 1502", t: "A", s: 29, e: { s: "footnote", set: ["GE 1110", "GE 1111"] } },
+  ]};
+  const ix = buildEquivalenceIndex(wire);
+  const alt = alternativesFor(ix, "GE 1110", new Set())[0];
+  assert.equal(alt.components, undefined, "still no coupling");
+  assert.deepEqual(alt.evidence.setRequires, ["GE 1110", "GE 1111"]);
+
+  assert.deepEqual(unmetSetRequirement(alt, id => id === "GE 1110"), ["GE 1111"]);
+  assert.deepEqual(unmetSetRequirement(alt, () => true), []);
+});
+
+test("set gap › an ordinary pair reports nothing", () => {
+  const wire = { programs: [], pairs: [{ a: "PHYS 1151", b: "PHYS 1161", t: "C", s: 62, e: { q: 12 } }] };
+  const ix = buildEquivalenceIndex(wire);
+  const alt = alternativesFor(ix, "PHYS 1151", new Set())[0];
+  assert.deepEqual(unmetSetRequirement(alt, () => false), []);
+  assert.deepEqual(unmetSetRequirement(null, () => false), []);
 });

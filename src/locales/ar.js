@@ -50,6 +50,7 @@ export const strings = {
   "bank.sub.why.b":                  "المقرر نفسه برمزين مختلفين.",
   "bank.sub.why.c":                  "قابلان للتبادل عادةً — أكّد مع مرشدك.",
   "bank.sub.approval":               "يتطلب موافقة المرشد",
+  "bank.sub.setgap":               "يتطلب أيضاً {codes} — ينص الدليل على ذلك كقاعدة واحدة",
   "bank.sub.ev.programs":          "{n} برامج تتيح هذا الخيار",
   "bank.sub.ev.crosslist":         "الوصف والعنوان متطابقان",
   "bank.sub.ev.prereq":            "{n} مقرراً يقبل أياً منهما كمتطلب سابق",

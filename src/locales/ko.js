@@ -50,6 +50,7 @@ export const strings = {
   "bank.sub.why.b":                  "두 개의 과목 코드를 가진 동일한 과목입니다.",
   "bank.sub.why.c":                  "보통 상호 대체가 가능합니다 — 지도교수와 확인하세요.",
   "bank.sub.approval":               "지도교수 승인 필요",
+  "bank.sub.setgap":               "{codes}도 배치해야 합니다 — 요람은 이를 하나의 규칙으로 명시합니다",
   "bank.sub.ev.programs":          "{n}개 프로그램이 이 선택을 인정합니다",
   "bank.sub.ev.crosslist":         "설명과 과목명이 동일합니다",
   "bank.sub.ev.prereq":            "{n}개 과목이 둘 중 어느 것이든 선수과목으로 인정합니다",

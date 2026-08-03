@@ -145,12 +145,17 @@ visible row. Measured, it covered **31 of 3,749 pairs**.
 It is also confusing in use: adding one swap made two appear, and removing one
 removed both.
 
-**Accepted cost.** A set rule can now be half-applied — a student may add
-`GE 1110 → GE 1501` without `GE 1111 → GE 1502`, and the plan will count
-GE 1501 on GE 1110 alone, which the catalog does not grant. Both pairs are
-offered, so the ordinary path adds both, and an advisor approves the real
-substitution regardless. This is the same trade the rest of the app makes:
-never block, and prefer a model the student can predict.
+**The cost, and how it is covered.** A set rule can be half-applied — a student
+may add `GE 1110 → GE 1501` without `GE 1111 → GE 1502`, and the plan would
+count GE 1501 on GE 1110 alone, which the catalog does not grant.
+
+Rather than re-couple the pairs, each one **carries the set it came from** as
+metadata (`e.set`). Nothing links behaviourally: adding, removing or applying one
+pair still does nothing to the other. But `unmetSetRequirement` can report which
+named courses are still unplaced, so the applied row carries a warning and the
+suggestion popover names the rest of the rule before it is applied. The plan is
+never silently optimistic, and the model stays one that a student can predict:
+never block, always flag.
 
 ## 4. Rejected signal: "they satisfy the same prerequisites"
 

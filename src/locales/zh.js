@@ -49,6 +49,7 @@ export const strings = {
   "bank.sub.why.b":                  "同一门课程，两个课程代码。",
   "bank.sub.why.c":                  "通常可以互换 — 请与学业顾问确认。",
   "bank.sub.approval":               "需学业顾问批准",
+  "bank.sub.setgap":               "还需安排 {codes} — 课程目录将其列为同一条规则",
   "bank.sub.ev.programs":          "{n} 个专业提供此选择",
   "bank.sub.ev.crosslist":         "课程简介与名称完全相同",
   "bank.sub.ev.prereq":            "{n} 门课程接受任一门作为先修课",

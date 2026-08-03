@@ -7,7 +7,8 @@ import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
 import { takesUsed } from "../core/repeatInstances.js";
-import { alternativesFor, programIndexSet, programAllowedSwaps, readyToApply }
+import { alternativesFor, programIndexSet, programAllowedSwaps, readyToApply,
+         unmetSetRequirement }
   from "../core/equivalenceIndex.js";
 import { parseCodeTerms, parseCourseCodes, normalizeCodeQuery } from "../core/courseCodeParse.js";
 import { useEquivalences } from "./useEquivalences.js";
@@ -506,6 +507,27 @@ export default function BankPanel() {
     return k;
   }, [substitutions, courseMap]);
   const notApplied = alt => !appliedKeys.has(`${alt.from}>${alt.to}`);
+
+  // An applied pair from a stated set rule can leave the plan optimistic: the
+  // catalog grants "GE 1110 AND GE 1111 for GE 1501 AND GE 1502" as one rule,
+  // but pairs apply individually, so GE 1501 can read as satisfied on GE 1110
+  // alone. Report the shortfall rather than re-coupling the pairs.
+  const setGapOf = useMemo(() => {
+    const gaps = new Map();
+    if (!equivIndex) return gaps;
+    const isPlaced = id => !!placements[plannerIdOf.get(id)];
+    for (const sub of substitutions) {
+      const f = courseMap[sub.from], t2 = courseMap[sub.to];
+      if (!f || !t2) continue;
+      const from = `${f.subject} ${f.number}`;
+      const alt = alternativesFor(equivIndex, from, myProgramIx, { includeUnofferable: true })
+        .find(a => a.to === `${t2.subject} ${t2.number}`);
+      if (!alt) continue;
+      const missing = unmetSetRequirement(alt, isPlaced);
+      if (missing.length) gaps.set(`${sub.from}>${sub.to}`, missing);
+    }
+    return gaps;
+  }, [equivIndex, substitutions, courseMap, placements, plannerIdOf, myProgramIx]);
 
   // With the box empty, show what the student's own programs publish. They
   // should not have to guess a course code to find out what they are allowed to
@@ -1086,6 +1108,10 @@ export default function BankPanel() {
                   {approval && (
                     <span title={t("bank.sub.approval")}
                           style={{ fontSize: isPhone ? 6 : 9, flexShrink: 0 }}>⚠</span>
+                  )}
+                  {setGapOf.has(`${from}>${to}`) && (
+                    <span title={t("bank.sub.setgap", { codes: setGapOf.get(`${from}>${to}`).join(", ") })}
+                          style={{ fontSize: isPhone ? 6 : 9, flexShrink: 0, cursor: "help" }}>⚠</span>
                   )}
                   <button
                     onClick={e => { e.stopPropagation(); removeSubstitution(from, to); }}

@@ -51,6 +51,7 @@ export const strings = {
   "bank.sub.why.b":                  "二つの科目コードを持つ同一科目です。",
   "bank.sub.why.c":                  "通常は代替可能です — アドバイザーに確認してください。",
   "bank.sub.approval":               "アドバイザーの承認が必要",
+  "bank.sub.setgap":               "{codes} の配置も必要です — カタログは一つの規則として記載しています",
   "bank.sub.ev.programs":          "{n} 件のプログラムがこの選択を認めています",
   "bank.sub.ev.crosslist":         "説明と科目名が同一です",
   "bank.sub.ev.prereq":            "{n} 科目がどちらでも前提条件として認めています",
