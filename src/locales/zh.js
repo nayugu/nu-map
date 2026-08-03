@@ -300,6 +300,7 @@ export const strings = {
   // ── Relationship legend ───────────────────────────────────────
   "legend.prerequisite":              "\u5148\u4fee",
   "legend.prerequisite-order":        "\u5148\u4fee\uff08\u987a\u5e8f\u9519\u8bef\uff09",
+  "legend.prerequisite-grade":       "先修课程（成绩）",
   "legend.corequisite":               "\u540c\u4fee",
   "legend.substitution-prereq":       "\u66ff\u6362\u5148\u4fee",
   "legend.substitution-prereq-order": "\u66ff\u6362\u5148\u4fee\uff08\u987a\u5e8f\u9519\u8bef\uff09",

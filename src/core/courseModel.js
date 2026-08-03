@@ -33,6 +33,8 @@ export function extractEdges(courseId, prereqs, coreqs) {
         to:   courseId,
         type: "prerequisite",
         ...(node.concurrent ? { concurrent: true } : {}),
+        // the edge's own gate — the grade-violation line check needs it
+        ...(node.minGrade ? { minGrade: node.minGrade } : {}),
       });
   }
 

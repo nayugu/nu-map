@@ -475,6 +475,7 @@ export const strings = {
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "Prereq",
   "legend.prerequisite-order":        "Prereq (wrong order)",
+  "legend.prerequisite-grade":       "Prereq (grade)",
   "legend.corequisite":               "Coreq",
   "legend.substitution-prereq":       "Substituted prereq",
   "legend.substitution-prereq-order": "Substituted prereq (wrong order)",

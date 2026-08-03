@@ -16,7 +16,7 @@ import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked } from "../core/repeatInstances.js";
-import { buildTakesResolver, takeConsumesSlot, yieldsCredit } from "../core/gradeSystem.js";
+import { buildTakesResolver, takeConsumesSlot, yieldsCredit, satisfiesGate } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -324,10 +324,21 @@ export function PlannerProvider({ children }) {
   const [clockOverride, setClockOverride] = useState(null);
   const clockNow = () => clockOverride ?? clock.now();
 
-  // effectiveCourseMap — same as courseMap but with per-plan sh overrides applied.
+  // effectiveCourseMap — same as courseMap but with per-plan sh overrides
+  // applied, and with GRADE consequences folded in: a take whose entered
+  // grade earns no credit (F/U/W/X — takeConsumesSlot) carries sh: 0 here.
+  //
+  // This is the choke point that makes grades flow downstream AUTOMATICALLY:
+  // every credit summation in the app (semester chips, totals, stats,
+  // export, general electives) multiplies placements × this map's sh, so
+  // one zeroed entry fixes all of them — including consumers not written
+  // yet. Patching summers one by one is how the per-semester chip was
+  // missed. An I keeps its sh (resolves in place; assumed pass) — only
+  // the EARNED views (totalSHDone/doneSet) exclude it, via yieldsCredit.
+  // shVoided marks the zeroing for any UI that wants to explain it.
   const effectiveCourseMap = useMemo(() => {
-    if (!Object.keys(pvShOverrides).length) return courseMap;
-    return Object.fromEntries(
+    if (!Object.keys(pvShOverrides).length && !Object.keys(grades).length) return courseMap;
+    const out = Object.fromEntries(
       Object.entries(courseMap).map(([id, c]) => {
         const ov = pvShOverrides[id];
         if (ov == null || !c.shMax) return [id, c];
@@ -335,7 +346,13 @@ export function PlannerProvider({ children }) {
         return [id, { ...c, sh: ov, shMin: c.shMin ?? c.sh }];
       })
     );
-  }, [courseMap, pvShOverrides]);
+    for (const [pid, g] of Object.entries(grades)) {
+      if (takeConsumesSlot(g)) continue;
+      const c = out[pid];
+      if (c) out[pid] = { ...c, sh: 0, shVoided: true };
+    }
+    return out;
+  }, [courseMap, pvShOverrides, grades]);
 
   // ── UI interaction state ──────────────────────────────────────
   const [selectedId,    setSelectedId]    = useState(null);
@@ -760,6 +777,27 @@ export function PlannerProvider({ children }) {
             if (!toCourse || !toCourse.prereqs?.length) return;
             const ti = SEM_INDEX[placements[rel.to]];
             const prereqResult = evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut);
+
+            // Grade-blocked: placement satisfied, but an entered grade vetoes
+            // the tree. Draw a dotted red from every take of this prereq whose
+            // ENTERED grade fails this edge's gate — the line disappears when
+            // the grade is cleared or a satisfying retake is placed (the
+            // grade-aware result flips back to satisfied). Dead until a grade
+            // exists: takesOf is null with none entered.
+            if (prereqResult === "satisfied" && takesOf &&
+                evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, takesOf) !== "satisfied") {
+              for (const [pid, sid] of Object.entries(placements)) {
+                if (baseId(pid) !== rel.from) continue;
+                if (SEM_INDEX[sid] === undefined || sid === "incoming") continue;
+                const g = grades[pid];
+                if (g == null || satisfiesGate(g, rel.minGrade)) continue;
+                const fp = getCenter(pid);
+                const tp = getCenter(rel.to);
+                if (fp && tp) newLines.push({ from: pid, to: rel.to, type: "prerequisite-grade", fp, tp });
+              }
+              return;
+            }
+
             if (prereqResult !== "order") return; // Only draw if unsatisfied due to order
             // Now, check if THIS edge is the one out of order
             const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
@@ -802,7 +840,7 @@ export function PlannerProvider({ children }) {
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, connectionEdges, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut]);
+  }, [selectedId, connectionEdges, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut, takesOf, grades]);
 
   // ── MCP action applier ───────────────────────────────────────────
   // Applies a batch of IPlannerAction actions dispatched by Claude via APPLY events.
@@ -1396,16 +1434,15 @@ export function PlannerProvider({ children }) {
     return out;
   }, [pvPlacements, courseMap, SEM_INDEX]);
 
-  // Grade axis (registrar's grade table): F/U/W/X earn NO credit — a failed
-  // take contributes nothing to either total. The PLACED projection keeps I
-  // (resolves in place, assumed pass); the DONE/earned total excludes I too
-  // (an incomplete has earned nothing yet). Unentered grades change nothing.
+  // Grade axis: F/U/W/X takes already carry sh 0 in effectiveCourseMap (the
+  // choke point — see its comment), so the projection needs no grade filter
+  // of its own. The DONE/earned total additionally excludes I via
+  // yieldsCredit: an incomplete has earned nothing yet but stays projected.
   const totalSHPlaced = useMemo(
     () => pvBonusSH + Object.entries(pvPlacements)
-      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id)
-        && !supersededTakes.has(id) && takeConsumesSlot(grades[id]))
+      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id) && !supersededTakes.has(id))
       .reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
-    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX, supersededTakes, grades]
+    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX, supersededTakes]
   );
 
   const totalSHDone = useMemo(

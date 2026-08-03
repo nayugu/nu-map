@@ -359,6 +359,7 @@ export const strings = {
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "पूर्व-आवश्यकता",
   "legend.prerequisite-order":        "पूर्व-आवश्यकता (गलत क्रम)",
+  "legend.prerequisite-grade":       "पूर्वापेक्षा (ग्रेड)",
   "legend.corequisite":               "सह-आवश्यकता",
   "legend.substitution-prereq":       "प्रतिस्थापित पूर्व-आवश्यकता",
   "legend.substitution-prereq-order": "प्रतिस्थापित पूर्व-आवश्यकता (गलत क्रम)",

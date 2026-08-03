@@ -37,6 +37,10 @@ export const TYPE_BG = {
 export const REL_STYLE = {
   prerequisite:            { color: "#3dd8a0", dash: "",      label: "Prereq",               arrow: true  },
   "prerequisite-order":    { color: "#f85149", dash: "",      label: "Prereq (wrong order)",  arrow: true  },
+  // Same red as wrong-order, dotted: the prereq is placed EARLY ENOUGH but
+  // its entered grade fails the gate — resolved by clearing the grade or
+  // placing a retake. Legend shows it only once a grade has been entered.
+  "prerequisite-grade":    { color: "#f85149", dash: "2 3",   label: "Prereq (grade)",        arrow: true  },
   corequisite:             { color: "#58a6ff", dash: "5 4",   label: "Coreq",                arrow: false },
   "corequisite-viol":      { color: "#ffd600", dash: "5 4",   label: "Misplaced",             arrow: false },
   "substitution-prereq":         { color: "#3dd8a0", dash: "4 3", label: "Substituted prereq",              arrow: true },

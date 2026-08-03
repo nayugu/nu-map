@@ -97,8 +97,11 @@ export default function SemRow({ sem }) {
   // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
   // the term (via the start/continuation maps).
   const sh         = getSemStudySH(sem.id, placements, effectiveCourseMap, specialTermStartMap, specialTermContMap);
-  const main4      = crs.filter(c => c.sh >= 3);
-  const others     = crs.filter(c => c.sh <= 2);
+  // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
+  // as full cards — vanishing into the low-credit subline would hide the
+  // very course whose failure the user just recorded.
+  const main4      = crs.filter(c => c.sh >= 3 || c.shVoided);
+  const others     = crs.filter(c => c.sh <= 2 && !c.shVoided);
   const isGrad      = studentType === "graduate";
   const isDragging  = dragInfo?.type === "course";
   // Undergrad: fixed slots always visible (4 for fall/spring, 2 for summer).

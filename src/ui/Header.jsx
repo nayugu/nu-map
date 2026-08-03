@@ -75,6 +75,7 @@ export default function Header() {
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
+    grades,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -1399,7 +1400,13 @@ export default function Header() {
 
       {/* ── Relationship legend ── */}
       <div style={{ display: "flex", gap: isPhone ? 6 : 10, marginBottom: 8, flexWrap: "nowrap", alignItems: "center", overflow: "hidden" }}>
-        {Object.entries(REL_STYLE).filter(([type]) => type !== "corequisite-viol" && !(isPhone && (type === "substitution-prereq" || type === "substitution-prereq-order"))).map(([type, s]) => (
+        {Object.entries(REL_STYLE).filter(([type]) =>
+          type !== "corequisite-viol"
+          && !(isPhone && (type === "substitution-prereq" || type === "substitution-prereq-order"))
+          // grade lines exist only once a grade is entered — until then the
+          // legend entry would explain a line that cannot appear
+          && !(type === "prerequisite-grade" && !Object.keys(grades ?? {}).length)
+        ).map(([type, s]) => (
             <div key={type} style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isPhone ? 8 : 9, color: "var(--text-4)", flexShrink: 0 }}>
             <svg width={isPhone ? 14 : 18} height="6">
               <line x1="0" y1="3" x2={isPhone ? 14 : 18} y2="3" stroke={s.color} strokeWidth="1.5" strokeDasharray={s.dash || ""} />

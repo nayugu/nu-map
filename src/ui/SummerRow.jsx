@@ -161,8 +161,9 @@ export default function SummerRow({ semA, semB }) {
     // ── Normal course session ─────────────────────────────────────
     const courseIds  = getOrderedCourses(sem.id, placements, semOrders, effectiveCourseMap);
     const crs        = courseIds.map(id => effectiveCourseMap[id]).filter(Boolean);
-    const main4      = crs.filter(c => c.sh >= 3);
-    const others     = crs.filter(c => c.sh <= 2);
+    // shVoided: failed takes keep their card despite sh 0 — see SemRow.
+    const main4      = crs.filter(c => c.sh >= 3 || c.shVoided);
+    const others     = crs.filter(c => c.sh <= 2 && !c.shVoided);
     const isGrad     = studentType === "graduate";
     const isDragging = dragInfo?.type === "course";
     // Grad: 1 slot at rest (default summer load), expand to 2 while dragging.

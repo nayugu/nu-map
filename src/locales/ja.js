@@ -360,6 +360,7 @@ export const strings = {
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "履修条件",
   "legend.prerequisite-order":        "履修条件（順序違い）",
+  "legend.prerequisite-grade":       "先修科目（成績）",
   "legend.corequisite":               "同時履修",
   "legend.substitution-prereq":       "代替履修条件",
   "legend.substitution-prereq-order": "代替履修条件（順序違い）",

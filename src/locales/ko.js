@@ -359,6 +359,7 @@ export const strings = {
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "선수 과목",
   "legend.prerequisite-order":        "선수 과목 (순서 위반)",
+  "legend.prerequisite-grade":       "선수 과목 (성적)",
   "legend.corequisite":               "동시 수강",
   "legend.substitution-prereq":       "대체 선수 과목",
   "legend.substitution-prereq-order": "대체 선수 과목 (순서 위반)",

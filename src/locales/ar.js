@@ -358,6 +358,7 @@ export const strings = {
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "متطلب سابق",
   "legend.prerequisite-order":        "متطلب سابق (ترتيب خاطئ)",
+  "legend.prerequisite-grade":       "متطلب سابق (الدرجة)",
   "legend.corequisite":               "متطلب متزامن",
   "legend.substitution-prereq":       "متطلب سابق بديل",
   "legend.substitution-prereq-order": "متطلب سابق بديل (ترتيب خاطئ)",
