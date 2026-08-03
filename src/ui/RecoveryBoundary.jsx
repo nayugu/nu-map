@@ -58,24 +58,15 @@ function Emblem({ dark }) {
   );
   return (
     <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto 14px" }}>
+      {/* Ribbon palette: the logo red's own family — pink tint on both
+          themes; maroon shade on light, soft white on dark where maroon
+          would vanish. */}
       <svg viewBox="0 0 120 120" aria-hidden="true"
         style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", overflow: "visible" }}>
-        <defs>
-          <linearGradient id="nmc-g1" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor={dark ? "#58a6ff" : "#2563eb"} />
-            <stop offset="1" stopColor={dark ? "#a78bfa" : "#7c3aed"} />
-          </linearGradient>
-          <linearGradient id="nmc-g2" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0" stopColor="#f87171" />
-            <stop offset="1" stopColor="#fb923c" />
-          </linearGradient>
-        </defs>
         {ribbon("M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8",
-          "url(#nmc-g1)", 6, "150 90", 240, "3.2s", 16, 0.9)}
+          "#fb7185", 6, "150 90", 240, "3.2s", 16, 0.9)}
         {ribbon("M60 19 C 84 18, 102 37, 100 60 C 98 84, 80 102, 58 101 C 36 100, 18 82, 20 58 C 22 37, 38 20, 60 19",
-          "url(#nmc-g2)", 4.5, "110 110", 220, "2.6s", -20, 0.85)}
-        {ribbon("M60 2 C 96 2, 120 30, 116 62 C 112 94, 86 118, 54 116 C 22 114, 0 86, 4 54 C 8 26, 28 2, 60 2",
-          "#f9a8d4", 3, "60 150", 210, "2.2s", 26, 0.8)}
+          dark ? "#fecdd3" : "#881337", 4, "110 110", 220, "2.6s", -20, 0.85)}
       </svg>
       <div style={{ position: "absolute", left: "50%", top: "50%", width: 56, height: 56,
         margin: "-28px 0 0 -28px", animation: "numapFloat 3s ease-in-out infinite alternate" }}>
