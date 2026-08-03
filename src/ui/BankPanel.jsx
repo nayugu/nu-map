@@ -516,6 +516,15 @@ export default function BankPanel() {
 
   // Map an index course id ("PHYS 1151") back to a planner course id.
 
+  // A hovered row can unmount before it ever sees mouseleave — applying a
+  // suggestion clears the query, the list disappears, and the popover is left
+  // pinned to a rect that no longer has anything under it. Tie its lifetime to
+  // the results instead of relying on the pointer leaving.
+  // Keyed on the results themselves, not just the query: collapsing the section
+  // unmounts the list without changing the query and without firing mouseleave,
+  // which left the popover pinned over nothing.
+  useEffect(() => { setSubHover(null); }, [subQuery, subsOpen, subSuggestions]);
+
   const applySuggestion = (alt) => {
     const pairs = [{ from: alt.from, to: alt.to }, ...alt.components]
       .map(x => ({ from: plannerIdOf.get(x.from), to: plannerIdOf.get(x.to) }))
@@ -1080,7 +1089,7 @@ export default function BankPanel() {
               />
 
               {subQuery.trim() && (
-                <div style={{ marginTop: 4 }}>
+                <div style={{ marginTop: 4 }} onMouseLeave={() => setSubHover(null)}>
                   {/* Two codes typed: the student stated the pair. */}
                   {/* Partial or complete code: what the corpus offers instead. */}
                   {subSuggestions.map(alt => (
