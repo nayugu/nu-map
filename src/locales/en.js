@@ -350,7 +350,7 @@ export const strings = {
   "tip.save": "When on, your plan is saved in this browser and reopens automatically next visit. When off, nothing is saved, so closing the tab discards it.",
   "tip.violations": "When on, red lines appear on the planner board (where you slot your courses) wherever a course sits before a prerequisite or corequisite it needs. Turn off to hide them.",
   "tip.collapse": "When on, courses worth 2 credits or fewer (labs and other small courses) start collapsed into the \"other credits\" strip in each semester on the board. Click that strip to expand them.",
-  "tip.privategrades": "When on, all grades and your GPA are hidden on course cards, the stats panel, shared links, and exports. The grades aren't deleted and reappear when you turn this off.",
+  "tip.privategrades": "When on, all grades and your GPA are hidden on course cards and the stats panel, and left out of the plan file you download with Save, so you can show your plan to someone without revealing them. Share links, PDFs, and Claude never include grades either way. Grades aren't deleted and reappear when you turn this off.",
   "tip.unlocks": "When on, selecting a course lists its children (the courses that require it) in that course's details panel, on the right on desktop.",
   "tip.sticky": "When you shift your cohort, this sets whether placed courses follow their semester slot (moving to your new start) or their date (a class in Fall 2026 stays in Fall 2026 even if your cohort moves a year later).",
   "tip.export.json": "Click to download your whole plan as a .json file, to back up or move to another device. Grades are included unless “Keep grades private” is on. Reopen it later with Load.",
