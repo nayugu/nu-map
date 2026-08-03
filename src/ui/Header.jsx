@@ -28,6 +28,14 @@ import HoverTip       from "./InfoTip.jsx";
 // look, and app/browser zoom drives the transition the same everywhere.
 const HEADER_FOLD_BP = 560;
 
+// Subtle subsections inside the ⇅ I/O popover: Share / Export / File.
+// A whisper of a caption plus a hairline above the later groups — the
+// buttons themselves stay exactly as they were.
+const IO_GROUP       = { display: "flex", flexDirection: "column", gap: 5 };
+const IO_GROUP_RULED = { ...IO_GROUP, borderTop: "1px solid var(--border-2)", paddingTop: 8 };
+const IO_GROUP_LABEL = { fontSize: 8, fontWeight: 800, letterSpacing: 0.6,
+  textTransform: "uppercase", color: "var(--text-5)", userSelect: "none" };
+
 
 // Touch scroll-lock for header dropdown panels: consume touchmove at the
 // panel's scroll bounds so the gesture never chains into the planner's
@@ -73,6 +81,7 @@ export default function Header() {
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
+    shareRelayAvailable, createShareCode, claimShareCode, importSharedPlan,
     aiAssistantAvailable, claudePreview,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
@@ -152,6 +161,71 @@ export default function Header() {
 
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [shareLinkLocale, setShareLinkLocale] = useState(locale);
+
+  // ── Share by code ──────────────────────────────────────────────
+  // shareCode = { code, expiresAt } while a code is live; a 1 s tick
+  // drives the countdown and clears the code when the relay would.
+  const [shareCode, setShareCode]             = useState(null);
+  const [shareCodeCopied, setShareCodeCopied] = useState(false);
+  const [shareCodeBusy, setShareCodeBusy]     = useState(false);
+  const [claimInput, setClaimInput]           = useState("");
+  const [claimBusy, setClaimBusy]             = useState(false);
+  const [shareCodeError, setShareCodeError]   = useState(null); // locale key
+  const [codeNow, setCodeNow]                 = useState(Date.now());
+  useEffect(() => {
+    if (!shareCode) return;
+    const tick = setInterval(() => setCodeNow(Date.now()), 1000);
+    return () => clearInterval(tick);
+  }, [shareCode]);
+  useEffect(() => {
+    if (shareCode && shareCode.expiresAt <= codeNow) setShareCode(null);
+  }, [shareCode, codeNow]);
+
+  const handleShareCode = async () => {
+    if (shareCode) {
+      // The button IS the code once one exists — clicking copies it.
+      try { await navigator.clipboard.writeText(shareCode.code); } catch { return; }
+      setShareCodeCopied(true);
+      setTimeout(() => setShareCodeCopied(false), 1500);
+      return;
+    }
+    setShareCodeError(null);
+    setShareCodeBusy(true);
+    try {
+      const { code, expiresInSeconds } = await createShareCode(shareLinkLocale);
+      setShareCode({ code, expiresAt: Date.now() + expiresInSeconds * 1000 });
+      setCodeNow(Date.now());
+    } catch {
+      setShareCodeError("header.io.code.error");
+    } finally {
+      setShareCodeBusy(false);
+    }
+  };
+
+  const handleClaimCode = async () => {
+    const code = claimInput.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (code.length < 6 || claimBusy) return;
+    setShareCodeError(null);
+    setClaimBusy(true);
+    try {
+      const d = await claimShareCode(code);
+      // The claim already burned the code server-side, so a declined
+      // confirm discards the plan — it can't be re-fetched. That's the
+      // right failure direction: nothing imports without a yes.
+      const name = d.planName || "Plan";
+      if (window.confirm(t("header.io.code.confirm", { name }))) {
+        importSharedPlan(d);
+        setShowIO(false);
+      }
+      setClaimInput("");
+    } catch (err) {
+      setShareCodeError(err?.message === "not_found"
+        ? "header.io.code.notfound"
+        : "header.io.code.error");
+    } finally {
+      setClaimBusy(false);
+    }
+  };
   const [planSearch, setPlanSearch] = useState("");
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -892,9 +966,12 @@ export default function Header() {
               position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 100,
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "10px 12px", minWidth: 170, boxShadow: "var(--shadow-modal)",
-              display: "flex", flexDirection: "column", gap: 7,
+              display: "flex", flexDirection: "column", gap: 8,
               ...(phonePopFixed || {}),
             }}>
+              {/* ── Share: snapshot link + share by code ── */}
+              <div style={IO_GROUP}>
+              <div style={IO_GROUP_LABEL}>{t("header.io.group.share")}</div>
               <div style={{ display: "flex", gap: 4 }}>
                 <button className="hdr-btn-dd"
                   title={t("header.io.share.title")}
@@ -928,6 +1005,59 @@ export default function Header() {
                   ))}
                 </select>
               </div>
+              {shareRelayAvailable && (
+                <>
+                  <button className="hdr-btn-dd"
+                    title={shareCode ? t("header.io.code.copy.title") : t("header.io.code.share.title")}
+                    onClick={handleShareCode}
+                    disabled={shareCodeBusy}
+                    style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                      background: shareCodeCopied ? "var(--active)" : "var(--bg-surface)",
+                      padding: "4px 8px", borderRadius: 5,
+                      border: `1px solid ${shareCode || shareCodeCopied ? "var(--active)" : "var(--border-2)"}`,
+                      color: shareCodeCopied ? "#fff" : shareCode ? "var(--text-2)" : "var(--text-4)",
+                      opacity: shareCodeBusy ? 0.6 : 1,
+                      transition: "background 0.2s, color 0.2s, border-color 0.2s",
+                      ...(shareCode ? { fontFamily: "ui-monospace, monospace", letterSpacing: 2 } : {}) }}>
+                    {shareCodeCopied
+                      ? t("header.io.code.copied")
+                      : shareCode
+                        ? `${shareCode.code} · ${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`
+                        : t("header.io.code.share")}
+                  </button>
+                  <div style={{ display: "flex", gap: 4 }}>
+                    <input
+                      value={claimInput}
+                      onChange={e => { setShareCodeError(null); setClaimInput(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)); }}
+                      onKeyDown={e => { if (e.key === "Enter") handleClaimCode(); }}
+                      placeholder={t("header.io.code.placeholder")}
+                      title={t("header.io.code.load.title")}
+                      style={{ flex: 1, minWidth: 0, fontSize: 10, fontWeight: 700,
+                        fontFamily: "ui-monospace, monospace", letterSpacing: 2,
+                        background: "var(--bg-surface)", color: "var(--text-2)",
+                        border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 8px" }} />
+                    <button className="hdr-btn-dd" onClick={handleClaimCode}
+                      title={t("header.io.code.load.title")}
+                      disabled={claimInput.length < 6 || claimBusy}
+                      style={{ fontSize: 10, fontWeight: 700,
+                        cursor: claimInput.length < 6 ? "default" : "pointer",
+                        background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                        border: "1px solid var(--border-2)", color: "var(--text-4)", flexShrink: 0,
+                        opacity: claimInput.length < 6 || claimBusy ? 0.5 : 1 }}>
+                      {t("header.io.code.load")}
+                    </button>
+                  </div>
+                  {shareCodeError && (
+                    <div style={{ fontSize: 9, fontWeight: 600, color: "var(--red, #ef4444)", textAlign: "center" }}>
+                      {t(shareCodeError)}
+                    </div>
+                  )}
+                </>
+              )}
+              </div>
+              {/* ── Export: human-readable summary + PDF ── */}
+              <div style={IO_GROUP_RULED}>
+              <div style={IO_GROUP_LABEL}>{t("header.io.group.export")}</div>
               <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title={t("header.io.copy.title")}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -940,6 +1070,10 @@ export default function Header() {
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.export.pdf")}
               </button>
+              </div>
+              {/* ── File: save / load JSON backups ── */}
+              <div style={IO_GROUP_RULED}>
+              <div style={IO_GROUP_LABEL}>{t("header.io.group.file")}</div>
               <HoverTip tip={t("tip.export.json")}>
               <button className="hdr-btn-dd" onClick={exportPlanJSON}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
@@ -958,6 +1092,7 @@ export default function Header() {
                   {t("header.io.import.json")}
               </button>
               </HoverTip>
+              </div>
             </div>
           )}
         </div>

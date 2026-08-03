@@ -58,6 +58,7 @@ const KNOWN_PORTS = new Set([
   "plannerQuery",   // driving port — external actors (MCP, CLI) query plan data
   "plannerAction",  // driving port — external actors propose and apply plan changes
   "aiAssistant",    // driven port  — app pushes plan context to an AI assistant
+  "shareRelay",     // driven port  — one-shot share-by-code plan relay
 ]);
 
 /**

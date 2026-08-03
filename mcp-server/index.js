@@ -35,6 +35,7 @@ import { createPlannerQuery } from "../src/adapters/mcp/plannerQueryAdapter.js";
 
 import { addClient, broadcast, clientCount } from "./src/events.js";
 import * as planState from "./src/planState.js";
+import { createMemoryShareBox } from "./src/shareBox.js";
 import { createServer, SYNC_PAYLOAD_VERSION } from "./src/server.js";
 
 // Node flavor of the injected deps: module singletons.
@@ -127,6 +128,22 @@ app.post("/plan-contents/:sessionId/:requestId", (req, res) => {
     req.params.sessionId, req.params.requestId, req.body ?? null
   );
   res.json({ ok });
+});
+
+// ── Share by code (browser ↔ browser, this server is just the coat check) ──
+// One-shot relay for plan snapshots: park under a short code, first claim
+// takes it and burns it, unclaimed shares expire. Session-free — sharing
+// needs no pairing and touches no per-session state. See src/shareBox.js.
+const shareBox = createMemoryShareBox();
+
+app.post("/share", async (req, res) => {
+  const result = await shareBox.create(req.body?.payload, req.ip);
+  res.status(result.ok ? 200 : 400).json(result);
+});
+
+app.post("/claim/:code", async (req, res) => {
+  const result = await shareBox.claim(req.params.code, req.ip);
+  res.status(result.ok ? 200 : 404).json(result);
 });
 
 // ── Health ───────────────────────────────────────────────────────────

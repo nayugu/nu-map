@@ -24,6 +24,13 @@ DATA_ORIGIN = "https://raw.githubusercontent.com/nayugu/nu-map/main/public"
 name = "SESSION"
 class_name = "SessionDO"
 
+# Share-by-code coat check (one global instance; shares live ≤ 10 min).
+# Kill switch: define SHARE_DISABLED (any value) under [vars] or in the
+# dashboard to 503 the /share and /claim routes without a deploy.
+[[durable_objects.bindings]]
+name = "SHAREBOX"
+class_name = "ShareBoxDO"
+
 # OAuth token/client storage for @cloudflare/workers-oauth-provider
 [[kv_namespaces]]
 binding = "OAUTH_KV"
@@ -32,3 +39,7 @@ id = "4a12f332a27146c9996769ebc5e6f837"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["SessionDO"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["ShareBoxDO"]

@@ -29,6 +29,7 @@ import { IClock }         from "../ports/IClock.js";
 import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAIAssistant }   from "../ports/IAIAssistant.js";
+import { IShareRelay }    from "../ports/IShareRelay.js";
 // Shared pure dry-run — the same applier the MCP server validates with,
 // reused here for the proposal ghost preview.
 import { applyChangeset as dryRunChangeset } from "../adapters/mcp/plannerActionAdapter.js";
@@ -76,6 +77,7 @@ export function PlannerProvider({ children }) {
   const courseCatalog  = usePort(ICourseCatalog);
   const specialTerms   = usePort(ISpecialTerms);
   const aiAssistant    = usePort(IAIAssistant);
+  const shareRelay     = usePort(IShareRelay);
 
   // ── Claude access (pairing + kill switch) ──────────────────────
   // DEFAULT OFF: no sync and no plan access until the user pairs — Claude
@@ -2555,7 +2557,10 @@ export function PlannerProvider({ children }) {
     reader.readAsText(file);
   };
 
-  const copyPlanLink = async (targetLocale) => {
+  // ONE encoder for everything that leaves the browser as a snapshot —
+  // the URL fragment and the share-by-code relay carry the identical
+  // artifact, so the _KEYS allowlist (no grades, ever) governs both.
+  const encodeSharePayload = async (targetLocale) => {
     const planName = plans.find(p => p.id === activePlanId)?.name || "Plan";
     const data = {
       ...captureCurrentPlan(),
@@ -2566,9 +2571,28 @@ export function PlannerProvider({ children }) {
     // Share links carry co-op company/role by default; the privacy toggle
     // strips them so a shared plan can't reveal where you worked.
     if (privateCoop) data.specialTermPl = redactCoopDetails(data.specialTermPl);
-    const encoded = await encodePlan(data);
-    const url = buildShareUrl(encoded);
+    return encodePlan(data);
+  };
+
+  const copyPlanLink = async (targetLocale) => {
+    const url = buildShareUrl(await encodeSharePayload(targetLocale));
     await navigator.clipboard.writeText(url);
+  };
+
+  // ── Share by code (one-shot relay — see ports/IShareRelay) ────
+  // Park the snapshot payload under a short code the sender can just say
+  // out loud; the recipient redeems it once and it burns server-side.
+  const createShareCode = async (targetLocale) => {
+    return shareRelay.createShareCode(await encodeSharePayload(targetLocale));
+  };
+
+  // Redeem a code and decode — the caller confirms with the user before
+  // importSharedPlan actually touches any state.
+  const claimShareCode = async (code) => {
+    const payload = await shareRelay.claimShareCode(code);
+    const d = await decodePlan(payload);
+    if (d.version !== 1 && d.version !== 2) throw new Error("bad_payload");
+    return d;
   };
 
   // Create a new plan slot pre-populated with shared data, then switch to it.
@@ -3148,6 +3172,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
+    shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,

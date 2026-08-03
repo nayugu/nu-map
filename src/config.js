@@ -22,6 +22,7 @@ import majorRequirements from './adapters/northeastern/majorRequirements.js';
 import courseCatalog     from './adapters/northeastern/courseCatalog.js';
 import localization      from './adapters/northeastern/localization.js';
 import aiAssistant       from './adapters/northeastern/aiAssistant.js'; // MCP integration (defaults to localhost:27182; set VITE_MCP_SERVER_URL when hosted)
+import shareRelay        from './adapters/northeastern/shareRelay.js';  // share-by-code relay on the same server
 
 // Comment out any line to fall back to the generic default for that port.
 export const institutionAdapter = wire({
@@ -33,8 +34,9 @@ export const institutionAdapter = wire({
   majorRequirements,
   courseCatalog,
   localization,
-  // Claude integration: active in dev (localhost MCP server) or when a
-  // hosted server URL is baked into the build. Excluded otherwise so
-  // production never shows a Connect flow pointing at localhost.
-  ...(import.meta.env.DEV || import.meta.env.VITE_MCP_SERVER_URL ? { aiAssistant } : {}),
+  // Claude integration + share-by-code: active in dev (localhost MCP
+  // server) or when a hosted server URL is baked into the build. Excluded
+  // otherwise so production never shows a Connect flow (or a share-code
+  // UI) pointing at localhost.
+  ...(import.meta.env.DEV || import.meta.env.VITE_MCP_SERVER_URL ? { aiAssistant, shareRelay } : {}),
 });

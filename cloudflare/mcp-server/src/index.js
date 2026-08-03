@@ -22,10 +22,14 @@
 // Browser channel (both paths):
 //   GET  /events/:sid · POST /sync-plan/:sid · /pair/:sid · /consent/:sid
 //   POST /confirm-proposal/:sid/:id · /plan-contents/:sid/:reqId · GET /health
+//
+// Share by code (session-free, one-shot plan relay — ShareBoxDO):
+//   POST /share · POST /claim/:code
 
 import { OAuthProvider } from "@cloudflare/workers-oauth-provider";
 import { getQuery } from "./loadData.js";
 export { SessionDO } from "./sessionDO.js";
+export { ShareBoxDO } from "./shareBoxDO.js";
 
 const APP_ORIGIN = "https://numap.app";
 
@@ -147,6 +151,15 @@ const defaultHandler = {
         redirectTo = u.href;
       }
       return json({ redirectTo });
+    }
+
+    // Share by code: one-shot plan relay, session-free (no pairing, no
+    // OAuth — the payload is the grade-free snapshot-link artifact and
+    // burns on first claim). SHARE_DISABLED is the kill switch: set it
+    // to any value in the dashboard to 503 these routes without a deploy.
+    if (pathname === "/share" || pathname.startsWith("/claim/")) {
+      if (env.SHARE_DISABLED) return json({ ok: false, reason: "disabled" }, 503);
+      return env.SHAREBOX.get(env.SHAREBOX.idFromName("global")).fetch(request);
     }
 
     if (pathname === "/health") {
