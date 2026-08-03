@@ -1127,11 +1127,16 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
 
       {/* Sections — collapsible */}
       {expanded && (
-        <div style={{ padding: "0 10px 10px" }}>
+        <div style={{ padding: "0 10px 6px" }}>
           {sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
           <GpaRules program={minor} programKind="minor" />
         </div>
       )}
+
+      {/* Full-width expand/collapse bar — a big target for this long card. */}
+      <div style={{ padding: "0 10px 10px" }}>
+        <ExpandToggleBar expanded={expanded} onToggle={() => setExpanded(v => !v)} />
+      </div>
     </div>
   );
 }
@@ -1175,6 +1180,45 @@ function ProgramNameLink({ name, href, nameColor, isPhone }) {
     >
       {scaleLatinRuns(name)}
     </a>
+  );
+}
+
+// ── ExpandToggleBar: full-width expand/collapse control for long cards ─
+// A whole-program card (a major or minor) is a lot to open, so the tiny
+// header caret is easy to miss. This is a big, obvious, horizontally-long
+// rounded target: a down chevron when collapsed (click to expand) that flips
+// to an up chevron when open (click to collapse). When open it sits at the
+// BOTTOM of the expanded content, so a long list can be closed without
+// scrolling back up to the header. The header caret is kept as the compact
+// affordance alongside it.
+function ExpandToggleBar({ expanded, onToggle }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={e => { e.stopPropagation(); onToggle(); }}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      aria-expanded={expanded}
+      style={{
+        width: "100%",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        background: hov ? "var(--bg-surface-2)" : "var(--bg-surface)",
+        border: "1px solid var(--border-2)",
+        borderRadius: 99,
+        padding: "4px 0",
+        cursor: "pointer",
+        color: "var(--text-4)",
+        transition: "background 0.15s",
+      }}
+    >
+      {/* One chevron path, rotated 180° when open — down means "expand", up means "collapse". */}
+      <svg width="15" height="9" viewBox="0 0 15 9" aria-hidden="true"
+           style={{ display: "block", transform: expanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+        <path d="M1.5 2 L7.5 7 L13.5 2" fill="none" stroke="currentColor"
+              strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
   );
 }
 
@@ -1233,13 +1277,18 @@ function MajorCard({ label, name, subtitle, verified, verification, progress, ex
 
       {/* Requirement sections — collapsible */}
       {expanded && (
-        <div style={{ padding: "0 10px 10px" }}>
+        <div style={{ padding: "0 10px 6px" }}>
           {loading
             ? <div style={{ fontSize: 9, color: "var(--text-5)", padding: "6px 0", textAlign: "center" }}>{loadingLabel}</div>
             : children
           }
         </div>
       )}
+
+      {/* Full-width expand/collapse bar — a big target for this long card. */}
+      <div style={{ padding: "0 10px 10px" }}>
+        <ExpandToggleBar expanded={expanded} onToggle={onToggle} />
+      </div>
     </div>
   );
 }
