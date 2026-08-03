@@ -334,6 +334,7 @@ export const strings = {
   "header.io.code.load":          "लोड करें",
   "header.io.code.load.title":    "कोड से साझा किया गया प्लान लोड करें",
   "header.io.code.notfound":      "कोड नहीं मिला या समाप्त हो गया।",
+  "header.io.code.ratelimited":   "अभी बहुत सारे कोड बन गए हैं। कुछ मिनट प्रतीक्षा करें।",
   "header.io.code.confirm":       "साझा किया गया प्लान “{name}” लोड करें? यह आपके मौजूदा प्लान के साथ एक नए प्लान के रूप में खुलेगा।",
   "header.io.copy.title":         "प्लान को क्लिपबोर्ड पर कॉपी करें",
   "header.io.copy":               "सारांश कॉपी करें",

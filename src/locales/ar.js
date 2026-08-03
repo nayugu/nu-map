@@ -333,6 +333,7 @@ export const strings = {
   "header.io.code.load":          "تحميل",
   "header.io.code.load.title":    "تحميل خطة تمت مشاركتها برمز",
   "header.io.code.notfound":      "الرمز غير موجود أو منتهي الصلاحية.",
+  "header.io.code.ratelimited":   "عدد كبير جدًا من الرموز الآن. انتظر بضع دقائق.",
   "header.io.code.confirm":       "هل تريد تحميل الخطة المشتركة «{name}»؟ ستُفتح كخطة جديدة إلى جانب خططك الحالية.",
   "header.io.copy.title":         "نسخ الخطة إلى الحافظة",
   "header.io.copy":               "نسخ الملخص",

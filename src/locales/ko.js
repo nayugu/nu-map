@@ -334,6 +334,7 @@ export const strings = {
   "header.io.code.load":          "불러오기",
   "header.io.code.load.title":    "코드로 공유된 계획 불러오기",
   "header.io.code.notfound":      "코드를 찾을 수 없거나 만료되었습니다.",
+  "header.io.code.ratelimited":   "지금은 코드가 너무 많습니다. 몇 분 후에 다시 시도하세요.",
   "header.io.code.confirm":       "공유된 계획 “{name}”을(를) 불러올까요? 기존 계획 옆에 새 계획으로 열립니다.",
   "header.io.copy.title":         "읽기 쉬운 계획을 클립보드에 복사",
   "header.io.copy":               "요약 복사",

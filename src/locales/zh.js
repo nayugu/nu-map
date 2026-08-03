@@ -275,6 +275,7 @@ export const strings = {
   "header.io.code.load":           "\u52a0\u8f7d",
   "header.io.code.load.title":     "\u52a0\u8f7d\u901a\u8fc7\u4ee3\u7801\u5206\u4eab\u7684\u8ba1\u5212",
   "header.io.code.notfound":       "\u4ee3\u7801\u4e0d\u5b58\u5728\u6216\u5df2\u8fc7\u671f\u3002",
+  "header.io.code.ratelimited":    "\u5f53\u524d\u751f\u6210\u7684\u4ee3\u7801\u8fc7\u591a\uff0c\u8bf7\u7a0d\u7b49\u51e0\u5206\u949f\u3002",
   "header.io.code.confirm":        "\u52a0\u8f7d\u5206\u4eab\u7684\u8ba1\u5212\u201c{name}\u201d\uff1f\u5c06\u4f5c\u4e3a\u65b0\u8ba1\u5212\u5728\u60a8\u73b0\u6709\u8ba1\u5212\u65c1\u6253\u5f00\u3002",
   "header.io.copy.title":          "\u590d\u5236\u53ef\u8bfb\u8ba1\u5212\u5230\u526a\u8d34\u677f",
   "header.io.export.pdf":          "\u5bfc\u51fa PDF",

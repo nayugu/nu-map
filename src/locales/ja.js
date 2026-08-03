@@ -335,6 +335,7 @@ export const strings = {
   "header.io.code.load":          "読み込む",
   "header.io.code.load.title":    "コードで共有されたプランを読み込む",
   "header.io.code.notfound":      "コードが見つからないか期限切れです。",
+  "header.io.code.ratelimited":   "コードの発行が多すぎます。数分待ってからお試しください。",
   "header.io.code.confirm":       "共有されたプラン「{name}」を読み込みますか？既存のプランの隣に新しいプランとして開きます。",
   "header.io.copy.title":         "人間が読めるプランをクリップボードにコピー",
   "header.io.copy":               "概要をコピー",

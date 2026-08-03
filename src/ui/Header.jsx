@@ -200,8 +200,10 @@ export default function Header() {
       const { code, expiresInSeconds } = await createShareCode(shareLinkLocale);
       setShareCode({ code, expiresAt: Date.now() + expiresInSeconds * 1000 });
       setCodeNow(Date.now());
-    } catch {
-      setShareCodeError("header.io.code.error");
+    } catch (err) {
+      setShareCodeError(err?.message === "rate_limited"
+        ? "header.io.code.ratelimited"
+        : "header.io.code.error");
     } finally {
       setShareCodeBusy(false);
     }
@@ -235,7 +237,9 @@ export default function Header() {
     } catch (err) {
       setShareCodeError(err?.message === "not_found"
         ? "header.io.code.notfound"
-        : "header.io.code.error");
+        : err?.message === "rate_limited"
+          ? "header.io.code.ratelimited"
+          : "header.io.code.error");
     } finally {
       setClaimBusy(false);
     }
@@ -1032,7 +1036,7 @@ export default function Header() {
                       fontFamily: "ui-monospace, monospace", letterSpacing: 2,
                       background: shareCodeCopied ? "var(--active)" : "var(--bg-surface)",
                       color: shareCodeCopied ? "#fff" : shareCode ? "var(--text-2)" : "var(--text-5)",
-                      border: `1px solid ${shareCode || shareCodeCopied ? "var(--active)" : "var(--border-2)"}`,
+                      border: `1px solid ${shareCodeCopied ? "var(--active)" : "var(--border-2)"}`,
                       borderRadius: 5, padding: "4px 8px",
                       cursor: shareCode ? "pointer" : "default", userSelect: "none",
                       transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
@@ -1052,7 +1056,7 @@ export default function Header() {
                     disabled={shareCodeBusy}
                     style={{ position: "relative", fontSize: 10, fontWeight: 700, cursor: "pointer",
                       background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                      border: `1px solid ${shareCode ? (clockHover ? "var(--red, #ef4444)" : "var(--active)") : "var(--border-2)"}`,
+                      border: `1px solid ${shareCode && clockHover ? "var(--red, #ef4444)" : "var(--border-2)"}`,
                       color: "var(--text-4)",
                       opacity: shareCodeBusy ? 0.6 : 1,
                       transition: "border-color 0.15s" }}>
@@ -1075,9 +1079,12 @@ export default function Header() {
                     placeholder={t("header.io.code.placeholder")}
                     title={t("header.io.code.load.title")}
                     style={{ minWidth: 0, fontSize: 10, fontWeight: 700, textAlign: "center",
-                      fontFamily: "ui-monospace, monospace", letterSpacing: 2,
+                      // Spacing only once there's a code being typed — the
+                      // localized placeholder is longer than 6 chars and
+                      // overflowed the box with letter-spacing applied.
+                      fontFamily: "ui-monospace, monospace", letterSpacing: claimInput ? 2 : "normal",
                       background: "var(--bg-surface)", color: "var(--text-2)",
-                      border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 8px" }} />
+                      border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 6px" }} />
                   <button className="hdr-btn-dd" onClick={handleClaimCode}
                     title={t("header.io.code.load.title")}
                     disabled={claimInput.length < 6 || claimBusy}

@@ -335,6 +335,7 @@ export const strings = {
   "header.io.code.load":          "Load",
   "header.io.code.load.title":    "Load a plan shared with a code",
   "header.io.code.notfound":      "Code not found or expired.",
+  "header.io.code.ratelimited":   "Too many codes right now. Wait a few minutes.",
   "header.io.code.confirm":       "Load shared plan “{name}”? It will open as a new plan alongside your existing ones.",
   "header.io.copy.title":         "Copy human-readable plan to clipboard",
   "header.io.copy":               "Copy summary",

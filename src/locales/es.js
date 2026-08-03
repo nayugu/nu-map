@@ -334,6 +334,7 @@ export const strings = {
   "header.io.code.load":          "Cargar",
   "header.io.code.load.title":    "Cargar un plan compartido con código",
   "header.io.code.notfound":      "Código no encontrado o caducado.",
+  "header.io.code.ratelimited":   "Demasiados códigos por ahora. Espera unos minutos.",
   "header.io.code.confirm":       "¿Cargar el plan compartido «{name}»? Se abrirá como un plan nuevo junto a tus planes existentes.",
   "header.io.copy.title":         "Copiar plan legible al portapapeles",
   "header.io.copy":               "Copiar resumen",
