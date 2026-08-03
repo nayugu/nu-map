@@ -469,8 +469,10 @@
               + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
               + '<div style="width:40%;height:100%;border-radius:99px;background:' + rib1
               + ';animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
+              + '<div id="numap-recovery-text" style="position:relative;">'
               + '<div id="numap-recovery-msg" style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
               + '<div id="numap-recovery-sub" style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
+              + '</div>'
               + '</div>';
             document.body.appendChild(el);
           };
@@ -493,16 +495,20 @@
             if (m) { m.style.transition = 'opacity .6s'; m.style.opacity = '0'; }
             if (s2) { s2.style.transition = 'opacity .6s'; s2.style.opacity = '0'; }
             setTimeout(function () {
-              var card = document.getElementById('numap-recovery-card');
-              if (!card || document.getElementById('numap-back-link')) return;
-              if (m) m.style.display = 'none';
-              if (s2) s2.style.display = 'none';
+              var box = document.getElementById('numap-recovery-text');
+              if (!box || document.getElementById('numap-back-link')) return;
+              // visibility (not display) keeps the lines' footprint, and
+              // the link is laid over that exact spot — the emblem, bar
+              // and ribbons above never move a pixel.
+              if (m) m.style.visibility = 'hidden';
+              if (s2) s2.style.visibility = 'hidden';
               var a = document.createElement('div');
               a.id = 'numap-back-link';
               a.textContent = 'Back to NU Map';
-              a.style.cssText = 'font-size:14px;font-weight:700;cursor:pointer;opacity:0;transition:opacity 1.6s ease;';
+              a.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;'
+                + 'font-size:14px;font-weight:700;cursor:pointer;opacity:0;transition:opacity 1.6s ease;';
               a.onclick = function () { window.__numapRecoveryExit(); };
-              card.appendChild(a);
+              box.appendChild(a);
               // A breath after the old text is gone, then a slow arrival.
               setTimeout(function () { a.style.opacity = '1'; }, 250);
             }, 620);
