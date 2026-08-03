@@ -214,7 +214,9 @@ export function PlannerProvider({ children }) {
   // retaken course carries its own grade. localStorage only: grades are
   // deliberately NOT in planShare's _KEYS allowlist and never reach share
   // links, QR codes, or MCP payloads.
-  const [grades, setGrades] = useState(() => {
+  // RAW storage — the app consumes the filtered `grades` view derived
+  // below (after SEM_INDEX), never this directly. Persistence saves raw.
+  const [gradesRaw, setGrades] = useState(() => {
     const saved = _saved?.persist && _saved.grades;
     return saved && typeof saved === "object" ? saved : {};
   });
@@ -324,35 +326,8 @@ export function PlannerProvider({ children }) {
   const [clockOverride, setClockOverride] = useState(null);
   const clockNow = () => clockOverride ?? clock.now();
 
-  // effectiveCourseMap — same as courseMap but with per-plan sh overrides
-  // applied, and with GRADE consequences folded in: a take whose entered
-  // grade earns no credit (F/U/W/X — takeConsumesSlot) carries sh: 0 here.
-  //
-  // This is the choke point that makes grades flow downstream AUTOMATICALLY:
-  // every credit summation in the app (semester chips, totals, stats,
-  // export, general electives) multiplies placements × this map's sh, so
-  // one zeroed entry fixes all of them — including consumers not written
-  // yet. Patching summers one by one is how the per-semester chip was
-  // missed. An I keeps its sh (resolves in place; assumed pass) — only
-  // the EARNED views (totalSHDone/doneSet) exclude it, via yieldsCredit.
-  // shVoided marks the zeroing for any UI that wants to explain it.
-  const effectiveCourseMap = useMemo(() => {
-    if (!Object.keys(pvShOverrides).length && !Object.keys(grades).length) return courseMap;
-    const out = Object.fromEntries(
-      Object.entries(courseMap).map(([id, c]) => {
-        const ov = pvShOverrides[id];
-        if (ov == null || !c.shMax) return [id, c];
-        // Preserve the data-minimum as shMin so the edit UI knows the valid range.
-        return [id, { ...c, sh: ov, shMin: c.shMin ?? c.sh }];
-      })
-    );
-    for (const [pid, g] of Object.entries(grades)) {
-      if (takeConsumesSlot(g)) continue;
-      const c = out[pid];
-      if (c) out[pid] = { ...c, sh: 0, shVoided: true };
-    }
-    return out;
-  }, [courseMap, pvShOverrides, grades]);
+  // effectiveCourseMap — moved below the active-grades view (which it
+  // consumes and which needs SEM_INDEX/currentSemIdx first).
 
   // ── UI interaction state ──────────────────────────────────────
   const [selectedId,    setSelectedId]    = useState(null);
@@ -471,6 +446,68 @@ export function PlannerProvider({ children }) {
   );
   const { SEM_INDEX, SEM_NEXT, SEM_PREV } = useMemo(() => deriveSemMaps(SEMESTERS), [SEMESTERS]);
 
+  // When graduated and the live semester has drifted past the plan boundary, treat it as
+  // one past the last plan semester so all plan semesters render as completed.
+  // (Lives here, not with the other derived plan state below: the active-
+  // grades view needs it before takesOf/effectiveCourseMap are derived.)
+  const currentSemIdx = SEM_INDEX[pv?.currentSemId ?? currentSemId] ?? (isGraduated ? SEMESTERS.length : 1);
+  const _gradSemType = calendar.getSemesterTypes().find(t => t.id === planGradSem);
+  const gradSemId    = `${_gradSemType?.idPrefix ?? _gradSemType?.id ?? planGradSem}${planGradYear}`;
+
+  // ── The ACTIVE grade view ─────────────────────────────────────
+  // Raw entries (gradesRaw) are STORAGE — they persist untouched. What the
+  // rest of the app consumes is this filtered view: only takes that are
+  // placed out (transfer) or sit in a COMPLETED semester. Grades are facts
+  // about the past; when the user moves "Now in" backward, the affected
+  // grades simply stop applying — and return, intact, when it moves forward
+  // again. The previous design DELETED them on status change: silent data
+  // loss for what should be a reversible act. An invisible grade must never
+  // steer the evaluation, but hidden ≠ destroyed.
+  const grades = useMemo(() => {
+    const keys = Object.keys(gradesRaw);
+    if (!keys.length) return gradesRaw;
+    const out = {};
+    for (const pid of keys) {
+      if (placedOut.has(pid)) { out[pid] = gradesRaw[pid]; continue; }
+      const sid = placements[pid];
+      if (sid === undefined) continue;                    // no longer placed
+      const idx = SEM_INDEX[sid];
+      if (idx === undefined) continue;                    // parked off-timeline
+      if (idx < currentSemIdx || (isGraduated && sid === gradSemId)) out[pid] = gradesRaw[pid];
+    }
+    return out;
+  }, [gradesRaw, placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, gradSemId]);
+
+  // effectiveCourseMap — same as courseMap but with per-plan sh overrides
+  // applied, and with GRADE consequences folded in: a take whose entered
+  // grade earns no credit (F/U/W/X — takeConsumesSlot) carries sh: 0 here.
+  //
+  // This is the choke point that makes grades flow downstream AUTOMATICALLY:
+  // every credit summation in the app (semester chips, totals, stats,
+  // export, general electives) multiplies placements × this map's sh, so
+  // one zeroed entry fixes all of them — including consumers not written
+  // yet. Patching summers one by one is how the per-semester chip was
+  // missed. An I keeps its sh (resolves in place; assumed pass) — only
+  // the EARNED views (totalSHDone/doneSet) exclude it, via yieldsCredit.
+  // shVoided marks the zeroing for any UI that wants to explain it.
+  const effectiveCourseMap = useMemo(() => {
+    if (!Object.keys(pvShOverrides).length && !Object.keys(grades).length) return courseMap;
+    const out = Object.fromEntries(
+      Object.entries(courseMap).map(([id, c]) => {
+        const ov = pvShOverrides[id];
+        if (ov == null || !c.shMax) return [id, c];
+        // Preserve the data-minimum as shMin so the edit UI knows the valid range.
+        return [id, { ...c, sh: ov, shMin: c.shMin ?? c.sh }];
+      })
+    );
+    for (const [pid, g] of Object.entries(grades)) {
+      if (takeConsumesSlot(g)) continue;
+      const c = out[pid];
+      if (c) out[pid] = { ...c, sh: 0, shVoided: true };
+    }
+    return out;
+  }, [courseMap, pvShOverrides, grades]);
+
   // Ordinal helpers to enforce grad > entry (institution-agnostic)
   const _semTypes = calendar.getSemesterTypes();
   const _semOrd   = (typeId, year) => year * 100 + Math.max(0, _semTypes.findIndex(t => t.id === typeId));
@@ -528,8 +565,8 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades });
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, grades]);
+    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw });
+  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   useEffect(() => {
     try { localStorage.setItem(key("graduated"), String(isGraduated)); } catch {}
@@ -543,10 +580,10 @@ export function PlannerProvider({ children }) {
   }, [showPalette]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades });
+    const h = () => saveState(persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, grades]);
+  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, gradesRaw]);
 
   // ── Effect: semester tracking (live) ─────────────────────────
   // Runs on mount and whenever the tracking mode, plan semesters, or clock changes.
@@ -1186,9 +1223,8 @@ export function PlannerProvider({ children }) {
   }, []);
 
   // ── Derived plan state ────────────────────────────────────────
-  // When graduated and the live semester has drifted past the plan boundary, treat it as
-  // one past the last plan semester so all plan semesters render as completed.
-  const currentSemIdx = SEM_INDEX[pv?.currentSemId ?? currentSemId] ?? (isGraduated ? SEMESTERS.length : 1);
+  // (currentSemIdx moved up next to SEM_INDEX — the active-grades view
+  // needs it before takesOf/effectiveCourseMap are derived.)
   // Only takes INSIDE the timeline count as placed. Entries parked outside
   // it (the cohort shrank) stay in state — so they come back when it widens —
   // but they return to the bank and never join any calculation.
@@ -1245,8 +1281,6 @@ export function PlannerProvider({ children }) {
       isOccupied: (sid) => isSlotOccupied(sid, excludeId),
     });
 
-  const _gradSemType = calendar.getSemesterTypes().find(t => t.id === planGradSem);
-  const gradSemId    = `${_gradSemType?.idPrefix ?? _gradSemType?.id ?? planGradSem}${planGradYear}`;
   const coopGradConflicts = useMemo(() => {
     const types = specialTerms?.getTypes() ?? [];
     return Object.entries(specialTermPl)
@@ -1362,25 +1396,18 @@ export function PlannerProvider({ children }) {
   // Grades follow their course out of the plan: when a placement (or
   // placed-out entry) disappears, its grade entry goes with it — otherwise
   // removing and re-adding a course would silently resurrect an old grade.
-  // Same for a graded course dragged into a non-completed semester: grades
-  // are facts about the past (entry is gated on completed semesters), and a
-  // grade that no longer renders must not keep steering the evaluation.
-  // (Lives after getSemStatus/currentSemIdx/gradSemId — TDZ, see above.)
+  // That is the ONLY destructive pruning. A grade whose semester merely
+  // stopped being "completed" is filtered by the active `grades` view, not
+  // deleted — moving "Now in" back and forth must be reversible.
   useEffect(() => {
     setGrades(g => {
-      const stale = Object.keys(g).filter(k => {
-        if (placedOut.has(k)) return false;             // transfer credit: completed by definition
-        const sid = placements[k];
-        if (sid === undefined) return true;             // removed from the plan
-        if (SEM_INDEX[sid] === undefined) return false; // parked off-timeline: keep, it may come back
-        return getSemStatus(sid) !== "completed";       // moved into the present/future
-      });
+      const stale = Object.keys(g).filter(k => placements[k] === undefined && !placedOut.has(k));
       if (!stale.length) return g;
       const next = { ...g };
       for (const k of stale) delete next[k];
       return next;
     });
-  }, [placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, gradSemId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, placedOut]);
 
   // ── Effect: auto-graduate / auto-ungraduate ───────────────────
   // Must live after gradSemId is declared (line above) to avoid a TDZ ReferenceError in
@@ -2128,7 +2155,7 @@ export function PlannerProvider({ children }) {
     placedOut: [...placedOut],
     // Present in plan slots (localStorage) only. Share links go through
     // planShare's _KEYS allowlist, which deliberately omits grades.
-    grades,
+    grades: gradesRaw,
   });
 
   // Restore a plan data object into all state
@@ -2810,6 +2837,7 @@ export function PlannerProvider({ children }) {
     // persistence, undo) keeps using the actual state vars.
     placements: claudePreview ? claudePreview.placements : placements,
     effectivePlacements,
+    substitutions: pvSubstitutions,
     specialTermPl: pvSpecialTerms,
     currentSemId: pv?.currentSemId ?? currentSemId,
     persistEnabled,

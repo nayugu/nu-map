@@ -175,3 +175,42 @@ No policy links coreq grades — each registration earns its own grade (the
 grade table is per-course; the prerequisite policy names only prereq
 grades). So grades are NOT shared between coreq partners: fail the lecture,
 the lab keeps its own entry. The coreq *placement* warning is unaffected.
+
+## Audit record (2026-08-03) — found & fixed / accepted gaps
+
+Full adversarial audit of the grade layer against policy research and every
+consumer. Found and fixed:
+
+1. **NUPath coverage counted failed courses** — an F still lit its NUPath
+   tiles. Coverage now runs over `dropVoidTakes`.
+2. **Destructive grade pruning** — moving "Now in" backward DELETED grades
+   whose semesters stopped being completed. Restructured: `gradesRaw` is
+   storage (persists untouched); the app consumes a derived ACTIVE view
+   (completed/placed-out takes only). Reversible: grades go dormant and
+   return, and an invisible grade still never steers anything.
+3. **Substitutions smuggled failed courses back in** — the virtual target
+   of a substitution carries its own ungraded id, so dropping voids AFTER
+   `applySubstitutions` couldn't remove it. Order fixed in placedSet and
+   doneSet: voids drop first, then substitutions re-apply.
+4. **IP hardening** — not offered by the dropdown, but if it enters the
+   data it now behaves like I (registrar's exclusion list names both).
+
+Accepted gaps, documented deliberately (revisit only with cause):
+
+- **Export report & MCP audits are grade-blind for requirement
+  satisfaction** (grades never leave the browser; the export is a
+  plan-shape artifact). Asymmetry: their SH numbers ARE grade-aware,
+  because they read effectiveCourseMap.
+- **S/U in a requirement slot** doesn't yet render its "may only count as
+  an open elective — ask your advisor" note (policy verified, UI pending).
+- **College retake limits** (Khoury grad ×2, COE ×1/≤8 SH, grad-wide ≤2
+  courses/6 SH) are not enforced or flagged — NU Map trusts the user and
+  the limits vary by college.
+- **Grad-course access GPA gates** (the "3.0 to take Khoury grad courses"
+  folk rule): not published in the catalog anywhere — colleges keep them
+  on advising sites / petition forms. Not modeled; do not fake it.
+- **Co-op eligibility (cumulative 2.000 to search; grad 3.000 at
+  application)** — the one published, computable rule not yet surfaced;
+  candidate for a soft note on co-op placements.
+- **Course-level GPA gates in description prose** — exactly 3 of 7,966
+  courses; the description is already visible on the card.

@@ -44,7 +44,10 @@ export const GRADE_SYMBOLS = [
   "S", "U", "I", "W",
 ];
 
-const NO_CREDIT = new Set(["F", "U", "I", "W", "X"]);
+// IP ("in progress") isn't offered by the dropdown, but if it ever enters
+// the data it must behave like I — pending, no credit yet, excluded from
+// averages (the registrar's exclusion list is "I, IP, S, U, and X").
+const NO_CREDIT = new Set(["F", "U", "I", "IP", "W", "X"]);
 
 export function isLetterGrade(g) {
   return g != null && Object.prototype.hasOwnProperty.call(GRADE_POINTS, g);

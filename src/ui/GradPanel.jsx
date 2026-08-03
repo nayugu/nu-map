@@ -19,7 +19,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
-import { filterInTimeline } from "../core/planModel.js";
+import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
 import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
@@ -1254,7 +1254,7 @@ export default function GradPanel({ wideCatalog = false }) {
     try { const v = localStorage.getItem(`${pfx}-grad-show-program`); return v === null ? true : v !== "false"; } catch { return true; }
   });
   const {
-    placements, placedOut, effectivePlacements, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile,
+    placements, placedOut, effectivePlacements, substitutions, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile,
     specialTermPl, SEM_INDEX,
     major: majorPath, setMajor: setMajorPath,
     major2: major2Path, setMajor2: setMajor2Path,
@@ -1380,9 +1380,13 @@ export default function GradPanel({ wideCatalog = false }) {
   // Grade-scoped too: a definitively failed take (entered F/U/W) satisfies
   // nothing — dropVoidTakes removes it, and a placed retake restores the
   // course key through its instance id. Identity while no grades exist.
+  // ORDER MATTERS: voids drop BEFORE substitutions re-apply — a failed
+  // substituting course must not smuggle its virtual target back in
+  // (effectivePlacements has the target under its own ungraded id, which
+  // dropVoidTakes alone could never remove).
   const placedSet = useMemo(
-    () => buildPlacedKeySet(filterInTimeline(dropVoidTakes(effectivePlacements, grades), SEM_INDEX), placedOut, courseMap),
-    [effectivePlacements, placedOut, courseMap, SEM_INDEX, grades]
+    () => buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), substitutions), SEM_INDEX), placedOut, courseMap),
+    [placements, substitutions, placedOut, courseMap, SEM_INDEX, grades]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
@@ -1396,12 +1400,13 @@ export default function GradPanel({ wideCatalog = false }) {
     // Earned view: F/U/W and I have earned nothing (registrar's grade
     // table) — a completed-semester course only counts as DONE when its
     // entered grade yields credit, or no grade is entered (assumed).
+    // Same order as placedSet: voids drop before substitutions re-apply.
     const donePlacements = Object.fromEntries(
-      Object.entries(dropUnearnedTakes(effectivePlacements, grades))
+      Object.entries(applySubstitutions(dropUnearnedTakes(placements, grades), substitutions))
         .filter(([, semId]) => getSemStatus(semId) === "completed")
     );
     return buildPlacedKeySet(donePlacements, placedOut, courseMap);
-  }, [effectivePlacements, placedOut, courseMap, getSemStatus, grades]);
+  }, [placements, substitutions, placedOut, courseMap, getSemStatus, grades]);
 
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));
@@ -1422,7 +1427,10 @@ export default function GradPanel({ wideCatalog = false }) {
     else if (still.title !== selConc2) setSelConc2(still.title);
   }, [major2Data]);
 
-  const npCovered  = useMemo(() => attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)), [attributeSystem, placements, courseMap, specialTermPl, specialTerms, SEM_INDEX]);
+  // Grade-aware: a failed course (entered F/U/W) earns nothing, NUPath
+  // attributes included — dropVoidTakes removes it from coverage until a
+  // retake restores the base course through its instance id.
+  const npCovered  = useMemo(() => attributeSystem.getCoverage(filterInTimeline(dropVoidTakes(placements, grades), SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)), [attributeSystem, placements, grades, courseMap, specialTermPl, specialTerms, SEM_INDEX]);
   // Which placed classes satisfy each NUPath code → { [code]: [{id, code}] }.
   // Drives the grid's hover tooltip / click-to-reveal ("which class satisfies it").
   const npSources  = useMemo(() => {
