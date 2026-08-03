@@ -21,8 +21,11 @@
 // registration (a retake slot).
 // ═══════════════════════════════════════════════════════════════════
 
-/** Letter → quality points. NEU's ceiling is A = 4.000 (no A+ found in any
-    published scale — revisit if a transcript proves otherwise). */
+/** Letter → quality points — VERIFIED against the catalog's official
+    "Grade Table and GPA" page (undergrad → student records policies,
+    2026-08-02): A = 4.000 is the ceiling, there is no A+, and every value
+    below matches the published table exactly. The table also marks D+/D/D-
+    "Undergraduate only" — graduate students cannot earn Ds. */
 export const GRADE_POINTS = {
   "A": 4.0, "A-": 3.667,
   "B+": 3.333, "B": 3.0, "B-": 2.667,

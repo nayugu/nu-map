@@ -54,9 +54,45 @@ Policy facts the model encodes:
 - S/U courses "can be used only to satisfy open electives" (normally outside
   major/minor/NUPath) — a requirements-audit interaction, surfaced as a note.
 
-Unverified (do not hard-code beyond the constant): whether an A+ above 4.000
-exists at NEU (no public grading-scale page; assumed **A = 4.000 max**), and
-the exact per-college S/U course inventory.
+### The official grade table (verified 2026-08-02)
+
+Found at undergrad → Academic Policies → **"Grade Table and GPA"**
+(`student-records-transcripts-related-policies/`). Settles what was open:
+
+- **A = 4.000 is the ceiling. There is no A+.** Full scale matches
+  `GRADE_POINTS` exactly (A- 3.667 … D- 0.667, F 0.000).
+- **D+, D, D- are "Undergraduate only"** — graduate students cannot earn Ds.
+- `S` = "Satisfactory (counts toward total degree requirements)"; `U`
+  Unsatisfactory; `I`/`X` Incomplete; `W` Withdrawal; plus admin symbols we
+  don't model (IP, NE, NG, L audit, T transfer, AD/AW) and the Law scale
+  (HH/H/P/MP/CR).
+
+### Overall and per-college GPA rules (verified 2026-08-02)
+
+**Graduate, university-wide (G4):** cumulative **3.000** to earn any degree
+(policy "Minimum GPA"). Every college restates it — Khoury, COE, COS, Mills,
+CAMD, Bouvé, CPS all converge on 3.000 cumulative; they differ only in
+probation mechanics (Khoury: one semester to recover; COE: probation after
+8 SH below, 8 more to recover; CPS: adds a 66%-of-attempted-credits rule;
+Bouvé: per-semester 3.000 while on probation) and retake limits (G6).
+
+**Undergraduate:** there is **no published numeric overall graduation GPA**
+in the catalog — graduation requires "good standing", which routes through
+progression standards (below 1.000 → dismissal at college discretion;
+probation is college-run). The 2.000 figures on the degrees-majors-minors
+page govern *change of major*, not graduation. Do not invent a 2.000
+cumulative constraint for undergrads; the real undergrad rules are the
+program-scoped ones below.
+
+**Program-page census** (1,372 cached catalog pages, all phrasings):
+
+| Shape | Count | Example | GPA_CONSTRAINT scope |
+|---|---|---|---|
+| Unscoped restatement | 74 | "Minimum 3.000 GPA required" (grad) | `cumulative` |
+| Subject-scoped | ~35 | "Minimum cumulative 2.000 GPA required in all CS, CY, DS, and IS courses" (4 phrasing variants!), "2.750 … all AMSL, INTP, and DEAF courses", "all JRNL courses" | `subjects: [...]` |
+| Program-scoped | 12 | "Minimum 2.000 GPA required in the minor" / "in all minor courses" / "in all major courses" | `program-courses` |
+| Course-set average | 21 | "Grades in the following … must average to a minimum of C (2.000)" + table | `courses: [...]` |
+| Fuzzy scope | ~7 | "in all business courses", "in anthropology and philosophy courses" | `described` (display only — no mechanical subject resolution; never guess) |
 
 ## Architecture
 
