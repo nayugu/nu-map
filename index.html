@@ -139,8 +139,58 @@
           try { sessionStorage.setItem(key, String(now)); } catch (e) {}
           window.location.reload();
         }
+
+        // Recovery overlay — the reloads above used to be silent, so during
+        // a deploy (or inside the once-a-minute throttle) the page just sat
+        // white. This tells the user what is happening and gives them a
+        // manual Reload for the throttled case. Standalone on purpose: no
+        // app CSS/JS, so it works precisely when the bundle doesn't.
+        // Strings mirror src/ui/RecoveryBoundary.jsx — they can't live in
+        // src/locales because none of that has loaded when this runs.
+        var RECOVERY_MSG = {
+          en: 'NU Map just updated. Loading the new version…',
+          es: 'NU Map se acaba de actualizar. Cargando la nueva versión…',
+          fr: "NU Map vient d'être mis à jour. Chargement de la nouvelle version…",
+          ar: 'تم تحديث NU Map للتو. جارٍ تحميل النسخة الجديدة…',
+          hi: 'NU Map अभी अपडेट हुआ है। नया संस्करण लोड हो रहा है…',
+          ja: 'NU Map が更新されました。新しいバージョンを読み込んでいます…',
+          ko: 'NU Map이 방금 업데이트되었습니다. 새 버전을 불러오는 중…',
+          zh: 'NU Map 刚刚更新，正在加载新版本…'
+        };
+        var RECOVERY_BTN = {
+          en: 'Reload', es: 'Recargar', fr: 'Recharger',
+          ar: 'إعادة التحميل',
+          hi: 'फिर से लोड करें',
+          ja: '再読み込み', ko: '새로고침',
+          zh: '重新加载'
+        };
+        function showRecovery() {
+          var make = function () {
+            if (document.getElementById('numap-recovery') || !document.body) return;
+            var lc = 'en';
+            try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
+            var msg = RECOVERY_MSG[lc] || RECOVERY_MSG.en;
+            var btn = RECOVERY_BTN[lc] || RECOVERY_BTN.en;
+            var dark = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+            var el = document.createElement('div');
+            el.id = 'numap-recovery';
+            el.dir = lc === 'ar' ? 'rtl' : 'ltr';
+            el.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:system-ui,-apple-system,sans-serif;'
+              + (dark ? 'background:#0f172a;color:#e2e8f0;' : 'background:#f8fafc;color:#1e293b;');
+            el.innerHTML =
+              '<div><div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
+              + '<button onclick="window.location.reload()" style="margin-top:16px;font-size:13px;font-weight:700;padding:8px 20px;'
+              + 'border-radius:8px;border:1px solid ' + (dark ? '#475569' : '#cbd5e1') + ';background:transparent;color:inherit;cursor:pointer;">'
+              + btn + '</button></div>';
+            document.body.appendChild(el);
+          };
+          if (document.body) make();
+          else document.addEventListener('DOMContentLoaded', make);
+        }
+
         function recover() {
           if (booted) return;
+          showRecovery();
           reloadOnce('numap-boot-retry');
         }
 
@@ -155,6 +205,7 @@
         // the shell already loaded, correctly, before the deploy happened.
         window.addEventListener('vite:preloadError', function (e) {
           if (e && e.preventDefault) e.preventDefault();  // we handle it by reloading
+          showRecovery();
           reloadOnce('numap-chunk-retry');
         });
         // Backstop for a dynamic import that rejects without going through
@@ -163,6 +214,7 @@
         window.addEventListener('unhandledrejection', function (e) {
           var m = e && e.reason && (e.reason.message || String(e.reason));
           if (m && /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i.test(m)) {
+            showRecovery();
             reloadOnce('numap-chunk-retry');
           }
         });

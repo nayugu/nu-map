@@ -9,6 +9,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
+import RecoveryBoundary from "./ui/RecoveryBoundary.jsx";
 import { applyMigrationIfPresent } from "./migration.js";
 
 // Import localStorage data from old domain before React starts.
@@ -16,7 +17,9 @@ import { applyMigrationIfPresent } from "./migration.js";
 if (!applyMigrationIfPresent()) {
   createRoot(document.getElementById("root")).render(
     <StrictMode>
-      <App />
+      <RecoveryBoundary>
+        <App />
+      </RecoveryBoundary>
     </StrictMode>
   );
   // Tell the boot-failure recovery in index.html the bundle loaded and ran, so
