@@ -187,6 +187,38 @@ function build() {
     }
   }
 
+  // ── signal 7: substitutions stated in program footnotes ──────────
+  //
+  // The strongest source there is: plain language, written by the department,
+  // with clean course anchors. It is also the only one that reaches Cornerstone
+  // (GE 1110 + GE 1111 -> GE 1501 + GE 1502, 35 footnotes across the
+  // engineering programs), which no OR node, description or prereq group
+  // expresses. Footnotes were discarded entirely before this.
+  //
+  // A rule is set-to-set, so it is emitted as a fully-connected mapping between
+  // the two sides and carries `footnoteGroup` so applying one applies all of it
+  // -- the catalog grants the swap for the whole set, not pair by pair.
+  const footnoteSubs = new Map();   // pairKey -> { text, slug, from, to }
+  for (const f of files) {
+    const slug = f.split("/").slice(-2, -1)[0];
+    let j;
+    try { j = JSON.parse(readFileSync(f, "utf8")); } catch { continue; }
+    for (const note of j.footnotes ?? []) {
+      const sub = note.substitution;
+      if (!sub?.from?.length || !sub?.to?.length) continue;
+      for (let i = 0; i < sub.from.length; i++) {
+        // Pair each side positionally where the counts line up (the 2-for-2
+        // case), else connect every from to every to.
+        const targets = sub.from.length === sub.to.length ? [sub.to[i]] : sub.to;
+        for (const to of targets) {
+          const pk = pairKey(sub.from[i], to);
+          if (!footnoteSubs.has(pk))
+            footnoteSubs.set(pk, { text: note.text, slug, from: sub.from, to: sub.to });
+        }
+      }
+    }
+  }
+
   // ── signal 1: stated equivalences ────────────────────────────────
   const stated = new Map();        // pairKey -> statement (+ direction)
   for (const c of courses) {
@@ -252,7 +284,7 @@ function build() {
   // ── classify every candidate ──────────────────────────────────────
   const candidates = new Set([
     ...prereqOr.keys(), ...programPairs.keys(), ...stated.keys(),
-    ...crossList.keys(), ...numbering,
+    ...crossList.keys(), ...numbering, ...footnoteSubs.keys(),
   ]);
 
   const ctx = { titleOf, creditsOf, prereqEdges, bundleCreditsOf };
@@ -268,6 +300,7 @@ function build() {
       stated: stated.get(pk) ?? null,
       crossListCluster: crossList.get(pk) ?? null,
       numbering: numbering.has(pk),
+      footnote: footnoteSubs.get(pk) ?? null,
       gateOverlap: jaccard(gates.get(a), gates.get(b)),
       nuPathOverlap: jaccard(nuPathOf[a], nuPathOf[b]),
     };
@@ -384,6 +417,7 @@ function toWire(rows, meta) {
     // UI can present a bundle as ONE decision with a +N chip rather than as
     // three unrelated rows appearing at once.
     if (r.ev.derivedFrom) { e.f = r.ev.derivedFrom; e.r = r.ev.derivedRole; }
+    if (r.ev.footnote) { e.s = "footnote"; e.fn = r.ev.footnote.text.slice(0, 200); }
     if (r.ev.stated) {
       e.s = r.ev.stated.kind;
       if (r.ev.stated.directed) e.d = r.ev.stated.from;        // direction: from → to

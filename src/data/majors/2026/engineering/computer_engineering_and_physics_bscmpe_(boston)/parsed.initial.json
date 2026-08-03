@@ -740,5 +740,27 @@
       "text": "A 2.000 minimum GPA is required in EECE courses."
     }
   ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students can substitute Engineering Design (GE 1110) and Engineering Problem Solving and Computation (GE 1111) for Cornerstone of Engineering 1 (GE 1501) and Cornerstone of Engineering 2 (GE 1502).",
+      "codes": [
+        "GE 1110",
+        "GE 1111",
+        "GE 1501",
+        "GE 1502"
+      ],
+      "substitution": {
+        "from": [
+          "GE 1110",
+          "GE 1111"
+        ],
+        "to": [
+          "GE 1501",
+          "GE 1502"
+        ]
+      }
+    }
+  ],
   "generalElectiveSH": 8
 }

@@ -2,7 +2,7 @@
   "name": "Mechanical Engineering with Concentration in Mechatronics, MSME (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/2/2026",
+    "lastEdited": "8/3/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
@@ -400,6 +400,25 @@
         "kind": "cumulative"
       },
       "text": "32 total semester hours required (33 with optional co-op) Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "PlusOne students who have already successfully completed System Analysis and Control (ME 4555) may substitute Robot Mechanics and Control (ME 5250) for Control Systems Engineering (ME 5659). In such cases a different course must be taken to satisfy the mechanics competency.",
+      "codes": [
+        "ME 4555",
+        "ME 5250",
+        "ME 5659"
+      ],
+      "substitution": {
+        "from": [
+          "ME 5250"
+        ],
+        "to": [
+          "ME 5659"
+        ]
+      }
     }
   ]
 }

@@ -166,6 +166,7 @@ async function scrapeProgram(url) {
 
   const { value: totalCreditsRequired, source: totalCreditsSource } = parseTotalCredits(root, PROFILE);
   const { requirementSections, concentrations, generalElectiveSH, gpaConstraints,
+          footnotes,
           tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
           unconsumedHeadings } = await parseRequirementsResolvingExternals(root);
 
@@ -208,6 +209,12 @@ async function scrapeProgram(url) {
     // they render as info in the graduation panel and are evaluated only
     // against grades the user chose to enter (src/core/gradeSystem.js).
     ...(gpaConstraints?.length ? { gpaRequirements: gpaConstraints } : {}),
+    // Only footnotes that state something machine-readable are kept — the ones
+    // carrying a substitution, or naming courses a reader may want to check.
+    // The rest is prose we would store and never use.
+    ...(footnotes?.some(f => f.substitution)
+        ? { footnotes: footnotes.filter(f => f.substitution) }
+        : {}),
     ...(concentrations ? { concentrations } : {}),
     ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
   };

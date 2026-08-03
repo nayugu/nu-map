@@ -529,7 +529,12 @@ export function classifyPair(pair, ev = {}, ctx = {}) {
   const reasons = [];
   let tier = "D";
 
-  if (ev.stated) {
+  if (ev.footnote) {
+    // A program footnote is the department stating the rule in its own words —
+    // the same standing as any other catalog statement, and not inference.
+    tier = "A";
+    reasons.push("stated in a program footnote");
+  } else if (ev.stated) {
     tier = ev.stated.kind === "cross-list" ? "B" : "A";
     reasons.push(`catalog states: ${ev.stated.kind}`);
   } else if (ev.crossListCluster && ev.crossListCluster <= MAX_CROSSLIST_CLUSTER) {

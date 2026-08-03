@@ -1,6 +1,42 @@
 {
   "runs": [
     {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-03T17:40:21.130Z",
+      "done": 485,
+      "written": 485,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-03T17:40:18.890Z",
+      "done": 532,
+      "written": 532,
+      "skipped": 126,
+      "failed": 0
+    },
+    {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-03T17:39:47.371Z",
+      "done": 485,
+      "written": 485,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-03T17:39:31.111Z",
+      "done": 532,
+      "written": 532,
+      "skipped": 126,
+      "failed": 0
+    },
+    {
       "type": "majors",
       "subject": "🎓 Major Requirements",
       "timestamp": "2026-08-03T05:17:07.606Z",
