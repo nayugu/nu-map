@@ -219,16 +219,20 @@
               + '<linearGradient id="nmr-g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + g1a + '"/><stop offset="1" stop-color="' + g1b + '"/></linearGradient>'
               + '<linearGradient id="nmr-g2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#f87171"/><stop offset="1" stop-color="#fb923c"/></linearGradient>'
               + '</defs>'
-              + '<g><path d="M60 12 A48 48 0 0 1 101.6 36" stroke="url(#nmr-g1)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.9"/>'
-              + '<path d="M60 108 A48 48 0 0 1 18.4 84" stroke="url(#nmr-g1)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.9"/>'
-              + '<animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="7s" repeatCount="indefinite"/></g>'
-              + '<g><path d="M14 60 A46 46 0 0 1 33 22.5" stroke="url(#nmr-g2)" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>'
-              + '<path d="M106 60 A46 46 0 0 1 87 97.5" stroke="url(#nmr-g2)" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>'
-              + '<animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="11s" repeatCount="indefinite"/></g>'
-              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -7;0 0" dur="2.8s" begin="-0.4s" repeatCount="indefinite"/><g transform="translate(98 30) rotate(-63)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#f9a8d4"/></g></g>'
-              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 6;0 0" dur="3.4s" begin="-1.6s" repeatCount="indefinite"/><g transform="translate(18 84) rotate(-63)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#86efac"/></g></g>'
-              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -6;0 0" dur="3.1s" begin="-0.9s" repeatCount="indefinite"/><g transform="translate(92 94) rotate(24)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#fcd34d"/></g></g>'
-              + '<g><animateTransform attributeName="transform" type="translate" values="0 0;0 5;0 0" dur="2.5s" begin="-2.0s" repeatCount="indefinite"/><g transform="translate(24 26) rotate(-63)"><rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill="#c4b5fd"/></g></g>'
+              // Ribbons, not sprinkles: three long streamers on slightly
+              // eccentric loops. The dash pattern flows along each path
+              // (dashoffset shifts by exactly one dash+gap period, so the
+              // flow loops seamlessly) while the loop itself slowly turns —
+              // together they read as ribbons swirling around the logo.
+              + '<g opacity="0.9"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="16s" repeatCount="indefinite"/>'
+              + '<path d="M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8" stroke="url(#nmr-g1)" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="150 90">'
+              + '<animate attributeName="stroke-dashoffset" from="0" to="-240" dur="3.2s" repeatCount="indefinite"/></path></g>'
+              + '<g opacity="0.85"><animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="20s" repeatCount="indefinite"/>'
+              + '<path d="M60 19 C 84 18, 102 37, 100 60 C 98 84, 80 102, 58 101 C 36 100, 18 82, 20 58 C 22 37, 38 20, 60 19" stroke="url(#nmr-g2)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-dasharray="110 110">'
+              + '<animate attributeName="stroke-dashoffset" from="0" to="-220" dur="2.6s" repeatCount="indefinite"/></path></g>'
+              + '<g opacity="0.8"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="26s" repeatCount="indefinite"/>'
+              + '<path d="M60 2 C 96 2, 120 30, 116 62 C 112 94, 86 118, 54 116 C 22 114, 0 86, 4 54 C 8 26, 28 2, 60 2" stroke="#f9a8d4" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="60 150">'
+              + '<animate attributeName="stroke-dashoffset" from="0" to="-210" dur="2.2s" repeatCount="indefinite"/></path></g>'
               + '</svg>'
               // The logo itself: floating, with a diagonal glint sweeping
               // INSIDE the letterform — the PNG doubles as a CSS mask, so

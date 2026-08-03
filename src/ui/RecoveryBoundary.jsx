@@ -41,16 +41,19 @@ const localeOf = () => {
 
 // The animated emblem, mirrored from the index.html overlay: the logo
 // floats with a diagonal glint sweeping inside the letterform (the PNG
-// doubles as a CSS mask), between two counter-rotating ribbon arcs and
-// four bobbing paper-ribbon strips aligned to the N's stroke angles.
+// doubles as a CSS mask), wrapped in three ribbon streamers — long
+// dash segments flowing along slowly-turning eccentric loops.
 function Emblem({ dark }) {
-  const strip = (bob, dur, begin, place, fill) => (
-    <g>
-      <animateTransform attributeName="transform" type="translate"
-        values={`0 0;0 ${bob};0 0`} dur={dur} begin={begin} repeatCount="indefinite" />
-      <g transform={place}>
-        <rect x="-6" y="-2.2" width="12" height="4.4" rx="2.2" fill={fill} />
-      </g>
+  const ribbon = (d, stroke, width, dash, period, flowDur, spin, opacity) => (
+    <g opacity={opacity}>
+      <animateTransform attributeName="transform" type="rotate"
+        from={spin < 0 ? "360 60 60" : "0 60 60"} to={spin < 0 ? "0 60 60" : "360 60 60"}
+        dur={`${Math.abs(spin)}s`} repeatCount="indefinite" />
+      <path d={d} stroke={stroke} strokeWidth={width} fill="none"
+        strokeLinecap="round" strokeDasharray={dash}>
+        <animate attributeName="stroke-dashoffset" from="0" to={`-${period}`}
+          dur={flowDur} repeatCount="indefinite" />
+      </path>
     </g>
   );
   return (
@@ -67,20 +70,12 @@ function Emblem({ dark }) {
             <stop offset="1" stopColor="#fb923c" />
           </linearGradient>
         </defs>
-        <g>
-          <path d="M60 12 A48 48 0 0 1 101.6 36" stroke="url(#nmc-g1)" strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.9" />
-          <path d="M60 108 A48 48 0 0 1 18.4 84" stroke="url(#nmc-g1)" strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.9" />
-          <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="7s" repeatCount="indefinite" />
-        </g>
-        <g>
-          <path d="M14 60 A46 46 0 0 1 33 22.5" stroke="url(#nmc-g2)" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.85" />
-          <path d="M106 60 A46 46 0 0 1 87 97.5" stroke="url(#nmc-g2)" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.85" />
-          <animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="11s" repeatCount="indefinite" />
-        </g>
-        {strip(-7, "2.8s", "-0.4s", "translate(98 30) rotate(-63)", "#f9a8d4")}
-        {strip(6,  "3.4s", "-1.6s", "translate(18 84) rotate(-63)", "#86efac")}
-        {strip(-6, "3.1s", "-0.9s", "translate(92 94) rotate(24)",  "#fcd34d")}
-        {strip(5,  "2.5s", "-2.0s", "translate(24 26) rotate(-63)", "#c4b5fd")}
+        {ribbon("M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8",
+          "url(#nmc-g1)", 6, "150 90", 240, "3.2s", 16, 0.9)}
+        {ribbon("M60 19 C 84 18, 102 37, 100 60 C 98 84, 80 102, 58 101 C 36 100, 18 82, 20 58 C 22 37, 38 20, 60 19",
+          "url(#nmc-g2)", 4.5, "110 110", 220, "2.6s", -20, 0.85)}
+        {ribbon("M60 2 C 96 2, 120 30, 116 62 C 112 94, 86 118, 54 116 C 22 114, 0 86, 4 54 C 8 26, 28 2, 60 2",
+          "#f9a8d4", 3, "60 150", 210, "2.2s", 26, 0.8)}
       </svg>
       <div style={{ position: "absolute", left: "50%", top: "50%", width: 56, height: 56,
         margin: "-28px 0 0 -28px", animation: "numapFloat 3s ease-in-out infinite alternate" }}>
