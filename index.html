@@ -232,16 +232,19 @@
         // user or the blunt once-a-minute retry.
         var probeTimer = null;
         function stopProbe() { if (probeTimer) { clearInterval(probeTimer); probeTimer = null; } }
-        function startProbe() {
+        // onUp defaults to the storm exit; previews pass their own handler.
+        // The second regex alternative matches the Vite dev shell so the
+        // detection is testable on localhost.
+        function startProbe(onUp) {
           if (probeTimer || !window.fetch) return;
           probeTimer = setInterval(function () {
             fetch('/', { cache: 'no-store' })
               .then(function (r) { return r.text(); })
               .then(function (html) {
-                var m = html.match(/\/assets\/index-[^"']+\.js/);
+                var m = html.match(/\/assets\/index-[^"']+\.js|\/src\/main\.jsx/);
                 if (!m) return;
                 return fetch(m[0], { method: 'HEAD', cache: 'no-store' }).then(function (r2) {
-                  if (r2 && r2.ok) window.__numapRecoveryExit();
+                  if (r2 && r2.ok) { stopProbe(); (onUp || window.__numapRecoveryExit)(); }
                 });
               })
               .catch(function () {});
@@ -257,7 +260,10 @@
           overlayStorm();
           setTimeout(function () {
             try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
-            window.location.reload();
+            // Leaving a preview drops the preview param, so the storm
+            // genuinely returns to the real app instead of the preview.
+            if (/[?&]preview=/.test(location.search)) location.href = location.pathname;
+            else window.location.reload();
           }, 700);
         };
         function overlayStorm() {
@@ -430,7 +436,32 @@
 
         // Design preview: ?preview=recovery shows the overlay without any
         // failure (nothing reloads), so it can be styled against reality.
-        if (/[?&]preview=recovery\b/.test(location.search)) showRecovery();
+        if (/[?&]preview=recovery\b/.test(location.search)) {
+          showRecovery();
+          // TEMP — remove after the storm-return flow is signed off.
+          // A test button that arms ONLY once the real probe confirms the
+          // main page is reachable, then plays the genuine exit: storm out,
+          // reload, boot under the veil, storm clears.
+          var mkBtn = setInterval(function () {
+            var card = document.getElementById('numap-recovery-card');
+            if (!card) return;
+            clearInterval(mkBtn);
+            var b = document.createElement('button');
+            b.id = 'numap-test-return';
+            b.disabled = true;
+            b.textContent = 'Waiting for main page…';
+            b.style.cssText = 'margin-top:18px;font-size:12px;font-weight:700;padding:8px 18px;border-radius:8px;border:1px dashed currentColor;background:transparent;color:inherit;opacity:.55;cursor:default;';
+            b.onclick = function () { if (!b.disabled) window.__numapRecoveryExit(); };
+            card.appendChild(b);
+            startProbe(function () {
+              b.disabled = false;
+              b.textContent = '▶ Storm back to the app';
+              b.style.opacity = '1';
+              b.style.cursor = 'pointer';
+              b.style.borderStyle = 'solid';
+            });
+          }, 30);
+        }
 
         function recover() {
           if (booted) return;

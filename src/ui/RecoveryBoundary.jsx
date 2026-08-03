@@ -187,7 +187,12 @@ export default class RecoveryBoundary extends Component {
     if (this.state.leaving) return;
     try { sessionStorage.setItem("numap-reveal", "1"); } catch { /* veil is a nicety */ }
     this.setState({ leaving: true });
-    setTimeout(() => window.location.reload(), 700);
+    setTimeout(() => {
+      // Leaving a preview drops the preview param, so the storm genuinely
+      // returns to the real app instead of the preview.
+      if (/[?&]preview=/.test(window.location.search)) window.location.href = window.location.pathname;
+      else window.location.reload();
+    }, 700);
   };
 
   componentDidCatch(error, info) {
