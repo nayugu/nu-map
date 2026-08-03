@@ -14,6 +14,8 @@
 // replaying the same changeset against the same placements snapshot.
 // ═══════════════════════════════════════════════════════════════════
 
+import { takeConsumesSlot } from "./gradeSystem.js";
+
 /** "MUS1990#2" → "MUS1990"; plain ids pass through unchanged. */
 export function baseId(id) {
   const i = String(id).indexOf("#");
@@ -27,49 +29,47 @@ export function isInstanceId(id) {
 /** How many takes of `base` the plan holds (placements plus placed-out).
     Pass `semIndex` (SEM_INDEX) to count only takes INSIDE the plan's
     timeline — the display rule; id-assignment (resolveAddId) stays
-    unscoped so parked takes keep their ids reserved. */
-export function takesUsed(base, placements, placedOut, semIndex) {
+    unscoped so parked takes keep their ids reserved.
+    Pass `grades` to count EFFECTIVE takes: a definitively failed take
+    (F/U/W — see takeConsumesSlot) hands its slot back and is not
+    counted. Omit it to count raw placements (display: the ↻ marker
+    should still say a course appears twice). */
+export function takesUsed(base, placements, placedOut, semIndex, grades) {
   let n = 0;
   for (const [id, sid] of Object.entries(placements ?? {})) {
     if (baseId(id) !== base) continue;
     if (semIndex && semIndex[sid] === undefined) continue; // parked off-timeline
+    if (grades && !takeConsumesSlot(grades[id])) continue;
     n++;
   }
-  if (placedOut) for (const id of placedOut) if (baseId(id) === base) n++;
+  if (placedOut) for (const id of placedOut) {
+    if (baseId(id) !== base) continue;
+    if (grades && !takeConsumesSlot(grades[id])) continue;
+    n++;
+  }
   return n;
 }
 
 /**
  * Retake availability — the OTHER reason a second take can exist.
  *
- * `repeatable` courses accumulate: every take earns credit (MUS 1990).
- * A RETAKE is different: NEU lets any nonrepeatable course be retaken
- * "to earn a better grade" — the latest grade replaces the earlier one,
- * credits count once. A retake becomes available the moment every
- * existing take carries an ENTERED terminal grade (any symbol but I —
- * an incomplete resolves in place, no new registration). Without a
- * grade entered there is nothing to retake *from*, so ungraded courses
- * keep today's semantics exactly: drag moves, re-add relocates.
+ * The counter rule (takeConsumesSlot): a take occupies its slot unless it
+ * DEFINITIVELY FAILED — F/U/W hand the slot back, an I occupies it
+ * (resolves in place, no new registration), a passing grade LOCKS it (no
+ * duplicates of a course you already have credit for; NEU technically
+ * permits retaking a passed course for a better grade, but a planner has
+ * no business offering that). So for a nonrepeatable course a retake is
+ * available exactly when it has takes and every one of them failed —
+ * "failing resets the counter to zero".
  *
  * No instance flag needed anywhere: an instance id on a nonrepeatable
  * course IS a retake, by construction.
  */
 export function retakeUnlocked(course, placements, placedOut, grades) {
   if (!course || course.repeatable || !grades) return false;
-  let takes = 0;
-  for (const id of Object.keys(placements ?? {})) {
-    if (baseId(id) !== course.id) continue;
-    takes++;
-    const g = grades[id];
-    if (g == null || g === "I") return false;
-  }
-  if (placedOut) for (const id of placedOut) {
-    if (baseId(id) !== course.id) continue;
-    takes++;
-    const g = grades[id];
-    if (g == null || g === "I") return false;
-  }
-  return takes > 0;
+  const raw = takesUsed(course.id, placements, placedOut);
+  if (raw === 0) return false;
+  return takesUsed(course.id, placements, placedOut, null, grades) === 0;
 }
 
 /**
@@ -100,7 +100,9 @@ export function resolveAddId(course, placements, placedOut, grades) {
   const retake = !course.repeatable && retakeUnlocked(course, placements, placedOut, grades);
   if (!course.repeatable && !retake) return { id: base, overLimit: false };
 
-  const used = takesUsed(base, placements, placedOut);
+  // Effective takes: failed ones handed their slot back, so they don't
+  // count against repeatMax either.
+  const used = takesUsed(base, placements, placedOut, null, grades);
   const max  = retake ? Infinity : (course.repeatMax ?? Infinity);
   for (let n = 2; ; n++) {
     const cand = `${base}#${n}`;

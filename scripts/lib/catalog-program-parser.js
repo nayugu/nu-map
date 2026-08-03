@@ -691,6 +691,10 @@ function blockStream(container) {
       if (tag === 'P') {
         const ids = anchorIds(el);
         if (ids.length) { blocks.push({ kind: 'anchor', ids }); continue; }
+        // Prose paragraphs join the stream for the GPA-rule scan. Additive:
+        // every existing consumer switches on `kind` and ignores these.
+        const text = el.text.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+        if (text) { blocks.push({ kind: 'para', el, text }); continue; }
       }
 
       visit(el);
@@ -842,6 +846,52 @@ function uniquify(title, used) {
  * @returns {{requirementSections, concentrations, generalElectiveSH,
  *            tablesPresent, tablesConsumed, warnings}}
  */
+// ── GPA rules ─────────────────────────────────────────────────────────
+// Grammar from a census of all 1,372 cached catalog pages (docs/
+// grades-design.md): 74 unscoped grad restatements, ~35 subject-scoped
+// (four phrasing variants for Khoury alone), 12 program-scoped minor/major
+// rules, 21 course-set averages, ~7 fuzzy scopes. These are CONSTRAINTS
+// over grades, not requirements a course can satisfy — the old parser
+// coerced the tabled ones into "pick 1 of N" OR sections, which both
+// misstated the rule and added a phantom requirement to progress counts.
+
+const GPA_HEADING = /GPA|grade[\s-]?point/i;
+
+/**
+ * Parse one prose sentence into { threshold, scope } or null.
+ * scope: {kind:'cumulative'} | {kind:'subjects', subjects:[...]} |
+ *        {kind:'program'} | {kind:'described', text}
+ * Fuzzy scopes ("all business courses") stay 'described' — display only,
+ * never guessed into a subject list.
+ */
+export function parseGpaRule(text) {
+  const t = text.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+
+  // "Grades in the following … must average to a minimum of C (2.000)"
+  let m = /must average to a minimum of [A-DF][+-]? \(([0-9.]+)\)/.exec(t);
+  if (m) return { threshold: parseFloat(m[1]), scope: { kind: 'courses' } };
+
+  // "Minimum [cumulative] 2.000 GPA [is] required [in <scope>]"
+  m = /[Mm]inimum(?: cumulative)? ([0-9]\.[0-9]{1,3}) GPA(?: is)? required(?: in ([^.;]+?))?[.;]?$/.exec(t)
+   || /[Mm]inimum cumulative ([0-9]\.[0-9]{1,3}) GPA(?: is)?(?: required)?(?: in ([^.;]+?))?[.;]?$/.exec(t);
+  if (!m) return null;
+  const threshold = parseFloat(m[1]);
+  const scopeText = (m[2] ?? '').trim();
+
+  if (!scopeText || /^all courses completed/.test(scopeText))
+    return { threshold, scope: { kind: 'cumulative' } };
+  if (/^(?:the (?:minor|major)|all (?:minor|major) courses)$/i.test(scopeText))
+    return { threshold, scope: { kind: 'program' } };
+  // "all CS, CY, DS, and IS courses" — commas Oxford or not, "and" optional
+  const sm = /^all ((?:[A-Z]{2,6}(?:\s*,\s*|,? and )?)+) ?courses$/.exec(scopeText);
+  if (sm) {
+    const subjects = sm[1].split(/\s*,\s*|,? and /).map(s => s.trim()).filter(Boolean);
+    if (subjects.length && subjects.every(s => /^[A-Z]{2,6}$/.test(s)))
+      return { threshold, scope: { kind: 'subjects', subjects } };
+  }
+  return { threshold, scope: { kind: 'described', text: scopeText } };
+}
+
 export function parseRequirements(pageRoot, profile, ctx = {}) {
   const { included: roots, excluded: excludedPanes } = partitionPanes(pageRoot);
   const blocks = roots.flatMap(r => blockStream(r));

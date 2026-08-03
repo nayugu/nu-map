@@ -118,6 +118,30 @@ program-scoped ones below.
   as "pick 1 of 4 courses" and count it as a satisfiable requirement.
   The verifier must count their tables as consumed (table parity).
 
+## The counter rule (retakes and duplicates)
+
+A take **consumes its slot** unless it definitively failed (`takeConsumesSlot`):
+ungraded (assumed pass), any credit-yielding grade, and `I` (resolves in
+place) all occupy; **F/U/W hand the slot back**. Consequences, uniformly:
+
+- Nonrepeatable + passed/ungraded → locked, no duplicate can be dragged in.
+- Nonrepeatable + all takes failed → takeable again ("the counter resets").
+- Repeatable → failed takes don't count against `repeatMax`.
+- NEU technically allows retaking a passed course "to earn a better grade";
+  the planner deliberately doesn't offer it — no duplicates of earned credit.
+
+## S/U against major/minor/NUPath (policy, verified)
+
+"Satisfactory/unsatisfactory graded courses are normally restricted to
+electives outside the major, outside any minor, or outside NUpath
+requirements … can be used only to satisfy open electives." Faculty may adopt
+S/U for required courses where "pedagogically sound" (co-op). Whether an S
+earned *before switching into* a major counts afterward is **not published**
+— petition/advisor territory. Therefore: an S sitting in a requirement slot
+renders as a soft "may only count as an open elective — ask your advisor"
+note (GradPanel, with the GPA-constraint work), never a hard red and never a
+silent pass.
+
 ## Never do
 
 - Treat the assumed maximum as a displayable GPA. The derived number is a

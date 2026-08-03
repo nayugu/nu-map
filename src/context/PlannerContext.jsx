@@ -1958,13 +1958,15 @@ export function PlannerProvider({ children }) {
 
   // ── Bank helpers ─────────────────────────────────────────────
   const bankCourseIds = useMemo(
-    // A repeatable course stays in the bank while it has unused takes left
-    // (limit reached → it disappears, exactly like a placed one-shot course).
-    // A nonrepeatable course REAPPEARS once every take has an entered
-    // terminal grade — that's how a retake gets back onto the board.
+    // A repeatable course stays in the bank while it has unused EFFECTIVE
+    // takes left — failed takes hand their slot back, so an F doesn't
+    // consume repeatMax. (Limit reached → it disappears, exactly like a
+    // placed one-shot course.) A nonrepeatable course REAPPEARS only once
+    // every take has definitively failed (F/U/W) — a passed course is
+    // locked, and an ungraded or Incomplete one still occupies its slot.
     () => new Set(courses.filter(c =>
       !placedIds.has(c.id) ||
-      (c.repeatable && takesUsed(c.id, placements, placedOut, SEM_INDEX) < (c.repeatMax ?? Infinity)) ||
+      (c.repeatable && takesUsed(c.id, placements, placedOut, SEM_INDEX, grades) < (c.repeatMax ?? Infinity)) ||
       retakeUnlocked(c, placements, placedOut, grades)
     ).map(c => c.id)),
     [courses, placedIds, placements, placedOut, SEM_INDEX, grades]

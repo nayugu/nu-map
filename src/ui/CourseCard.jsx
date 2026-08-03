@@ -475,9 +475,10 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           </span>
         )}
         {/* Grade entry (desktop): completed semesters only. Entered grades
-            always show; the empty affordance appears on hover/selection
-            only, so an ungraded plan renders exactly as it always has */}
-        {inSem && isDone && (grades[course.id] != null || isMouseHov || isSel) && (
+            always show; the empty affordance appears on HOVER only — tying
+            it to selection left a stray "–" chip sitting on the selected
+            card after Clear grade */}
+        {inSem && isDone && (grades[course.id] != null || isMouseHov) && (
           <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t} />
         )}
         {isViolated && violationType === "order" && (

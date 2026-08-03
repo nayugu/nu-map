@@ -56,6 +56,19 @@ export function yieldsCredit(g) {
   return !NO_CREDIT.has(g);
 }
 
+/**
+ * Does this take CONSUME a repeat/placement slot?  The counter rule:
+ * ungraded (assumed pass), credit-yielding, and pending (I — resolves in
+ * place) takes all occupy their slot; definitively failed outcomes
+ * (F, U, W, X) hand it back. Failing resets the counter — a failed take
+ * of a once-only course leaves it takeable again, and a failed take of a
+ * repeatable course doesn't count against repeatMax. A PASSED course is
+ * locked: no duplicates of something you already have credit for.
+ */
+export function takeConsumesSlot(g) {
+  return g == null || g === "I" || yieldsCredit(g);
+}
+
 /** Points axis. Only letters (including F at 0.000) enter an average;
     S/U/I/W/X carry no quality points. Unentered courses are excluded
     from ENTERED averages — they only appear in feasibility bounds. */
