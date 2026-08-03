@@ -478,11 +478,56 @@ function DescriptionWithLinks({ text, courseMap, placements, navTo, onDragStart 
   );
 }
 
+// Display-time cleanup for scraped prereq token arrays. A dropped non-course
+// phrase historically left an empty "( )" group (sometimes with a dangling
+// And/Or) that rendered as a stray "(". The scraper now keeps such phrases as
+// { note } leaves, making this a no-op there — but shipped data still carries
+// the empty groups until the next scrape, so we prune them here: remove any
+// parenthetical group with no operand, then drop operators left hanging at an
+// end or against a paren / another operator.
+function cleanPrereqNodes(nodes) {
+  if (!Array.isArray(nodes)) return nodes;
+  const isOp = t => t === "And" || t === "Or";
+  const isOperand = t => t && typeof t === "object"; // course ref, { note }, nested array
+  const arr = nodes.slice();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    // 1) remove a group whose interior holds no operand
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] !== "(") continue;
+      let depth = 1, hasOperand = false, j = i + 1;
+      for (; j < arr.length; j++) {
+        if (arr[j] === "(") depth++;
+        else if (arr[j] === ")") { if (--depth === 0) break; }
+        else if (isOperand(arr[j])) hasOperand = true;
+      }
+      if (depth === 0 && !hasOperand) { arr.splice(i, j - i + 1); changed = true; break; }
+    }
+    if (changed) continue;
+    // 2) trim leading / trailing operators
+    while (arr.length && isOp(arr[0]))               { arr.shift(); changed = true; }
+    while (arr.length && isOp(arr[arr.length - 1]))   { arr.pop();   changed = true; }
+    if (changed) continue;
+    // 3) drop an operator missing an operand on one side
+    for (let i = 0; i < arr.length; i++) {
+      if (!isOp(arr[i])) continue;
+      const prev = arr[i - 1], next = arr[i + 1];
+      if (prev === undefined || prev === "(" || isOp(prev) ||
+          next === undefined || next === ")" || isOp(next)) {
+        arr.splice(i, 1); changed = true; break;
+      }
+    }
+  }
+  return arr;
+}
+
 function PrereqChips({ nodes, courseMap, navTo, onDragStart }) {
-  if (!Array.isArray(nodes) || nodes.length === 0) return <span>—</span>;
+  const clean = cleanPrereqNodes(nodes);
+  if (!Array.isArray(clean) || clean.length === 0) return <span>—</span>;
   return (
     <span>
-      {nodes.map((item, i) => (
+      {clean.map((item, i) => (
         <PrereqNode key={i} item={item} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
       ))}
     </span>
@@ -502,6 +547,11 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
         ))}
       </span>
     );
+  }
+  // Informational, non-course condition (e.g. "permission of instructor",
+  // "graduate program admission") — plain italic text, not a draggable chip.
+  if (item && typeof item === "object" && item.note) {
+    return <span style={{ color: "var(--text-4)", fontStyle: "italic", padding: "0 3px" }}>{item.note}</span>;
   }
   if (item && item.subject && item.number) {
     const id = `${item.subject.toUpperCase()}${item.number}`;

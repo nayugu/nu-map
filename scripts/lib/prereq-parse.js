@@ -93,18 +93,47 @@ export function parsePrereqText(text) {
   return result;
 }
 
+// A prereq clause is often satisfiable by something that is NOT a course —
+// "permission of instructor", "instructor's approval", "graduate program
+// admission", "consent of the department". These used to be dropped, which
+// is exactly what left an empty "( )" group when the phrase sat inside
+// parens (e.g. "ACCT 6230 and (permission of the graduate program
+// director)"). We now keep them as informational { note } leaves so the
+// expression stays balanced and the condition is shown. The signal words
+// gate capture so ordinary connective text isn't turned into noise.
+const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|professor|faculty|department|program\s+director|dean|advis|coordinator|standing|enrollment)/i;
+
+function cleanNote(raw) {
+  const s = (raw || '')
+    .replace(/\[(?:CONC|MIN:[^\]]*)\]/g, ' ')   // stray parse markers
+    .replace(/[;,]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^[-–—:.\s]+/, '')
+    .replace(/[-–—:.\s]+$/, '');
+  return /[a-z]{3,}/i.test(s) ? s : null;       // needs real words, not punctuation
+}
+
 function extractOperators(text, parts) {
   const normalized = text.replace(/;/g, ' ').trim();
   if (!normalized) return;
   const opPattern = /(\(|\)|(?:^|\s)(and|or)(?:\s|$))/gi;
   let m;
+  let last = 0;
+  const emitNote = chunk => {
+    const note = cleanNote(chunk);
+    if (note && NOTE_SIGNAL.test(note)) parts.push({ note });
+  };
   while ((m = opPattern.exec(normalized)) !== null) {
+    emitNote(normalized.slice(last, m.index));   // non-course words before this operator
     const token = (m[2] || m[1]).trim();
     if (token === '(') parts.push('(');
     else if (token === ')') parts.push(')');
     else if (/^or$/i.test(token)) parts.push('Or');
     else if (/^and$/i.test(token)) parts.push('And');
+    last = opPattern.lastIndex;
   }
+  emitNote(normalized.slice(last));              // …and any trailing phrase
 }
 
 export function parseCoreqText(text) {

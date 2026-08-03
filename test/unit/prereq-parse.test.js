@@ -98,6 +98,36 @@ test("description GPA › out-of-range numbers are rejected as misparses", () =>
   assert.equal(parseDescriptionGpaGate("Requires a 0.5 GPA"), null);
 });
 
+test("note › a parenthesized approval phrase becomes a { note } leaf, not an empty group", () => {
+  // The ACCT 6231 bug: the dropped phrase used to collapse "( … )" to "( )".
+  const t = parse("ACCT 6230 with a minimum grade of C- and (permission of the graduate program director)");
+  assert.deepEqual(t, [
+    { subject: "ACCT", number: "6230", minGrade: "C-" }, "And",
+    "(", { note: "permission of the graduate program director" }, ")",
+  ]);
+});
+
+test("note › trailing 'or permission of instructor' is kept", () => {
+  const t = parse("CHEM 1211 or CHEM 1214 or permission of instructor");
+  assert.deepEqual(t, [
+    { subject: "CHEM", number: "1211" }, "Or",
+    { subject: "CHEM", number: "1214" }, "Or",
+    { note: "permission of instructor" },
+  ]);
+});
+
+test("note › 'graduate program admission' is captured", () => {
+  const t = parse("BIOL 2301 and graduate program admission");
+  assert.deepEqual(t[2], { note: "graduate program admission" });
+});
+
+test("note › plain course-only prereqs gain no spurious note", () => {
+  const t = parse("CS 2500 and CS 2510");
+  assert.deepEqual(t, [
+    { subject: "CS", number: "2500" }, "And", { subject: "CS", number: "2510" },
+  ]);
+});
+
 test("coreqs › unchanged: bare refs, no grades", () => {
   assert.deepEqual(parseCoreqText("PHYS 1151 and PHYS 1152"), [
     { subject: "PHYS", number: "1151" }, { subject: "PHYS", number: "1152" },
