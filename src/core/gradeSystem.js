@@ -156,7 +156,12 @@ export function satisfiesGate(g, minGrade) {
 export function setConstraintStatus(entries, threshold) {
   let enteredPts = 0, enteredCr = 0, openCr = 0;
   for (const e of entries ?? []) {
-    const cr = Number.isFinite(e.credits) && e.credits > 0 ? e.credits : 4;
+    // 4 only when credits are UNKNOWN. A real 0 stays 0: recitations and
+    // zero-credit labs (536 in the catalog) receive grades but contribute
+    // zero quality points — credit × points — exactly as the registrar
+    // computes it. Substituting 4 made a graded recitation weigh like a
+    // full course.
+    const cr = Number.isFinite(e.credits) ? e.credits : 4;
     if (e.grade == null) { openCr += cr; continue; }
     if (!countsInGPA(e.grade)) continue;          // S/U/I/W: out of the average
     enteredPts += GRADE_POINTS[e.grade] * cr;
@@ -201,7 +206,8 @@ export function enteredGPA(entries) {
   let pts = 0, cr = 0;
   for (const e of entries ?? []) {
     if (!countsInGPA(e.grade)) continue;
-    const c = Number.isFinite(e.credits) && e.credits > 0 ? e.credits : 4;
+    // 4 only when UNKNOWN; a real 0 (recitations) weighs nothing.
+    const c = Number.isFinite(e.credits) ? e.credits : 4;
     pts += GRADE_POINTS[e.grade] * c;
     cr  += c;
   }

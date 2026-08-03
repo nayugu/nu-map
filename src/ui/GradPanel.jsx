@@ -426,6 +426,14 @@ function GpaRules({ program, programKind = "major" }) {
     }
   };
 
+  const [open, setOpen] = useState(true);            // whole-section accordion
+  const [openRows, setOpenRows] = useState(() => new Set());
+  const toggleRow = (i) => setOpenRows(s => {
+    const n = new Set(s);
+    n.has(i) ? n.delete(i) : n.add(i);
+    return n;
+  });
+
   const rows = useMemo(() => {
     if (!rules.length) return [];
 
@@ -455,11 +463,14 @@ function GpaRules({ program, programKind = "major" }) {
       return keys;
     })();
 
+    // Entries carry their identity so the expansion can show exactly what
+    // was (and wasn't) counted — the whole point of a computed number is
+    // that its provenance is one click away.
     const entriesFor = (rule) => {
       if (rule.scope.kind === "courses") {
         return (rule.courses ?? []).map(c => {
           const base = `${c.subject}${c.classId}`;
-          return { grade: gradeOfBase(base), credits: courseMap[base]?.sh ?? 4 };
+          return { base, grade: gradeOfBase(base), credits: courseMap[base]?.sh ?? 4 };
         });
       }
       const subjOk = rule.scope.kind === "subjects" ? new Set(rule.scope.subjects) : null;
@@ -473,7 +484,7 @@ function GpaRules({ program, programKind = "major" }) {
         if (!c) return;
         if (subjOk && !subjOk.has(c.subject)) return;
         if (rule.scope.kind === "program" && !programKeys.has(base)) return;
-        out.push({ grade: gradeOfBase(base), credits: c.sh ?? 4 });
+        out.push({ base, grade: gradeOfBase(base), credits: c.sh ?? 4 });
       };
       for (const [pid, sid] of Object.entries(placements)) consider(pid, SEM_INDEX[sid] !== undefined);
       for (const pid of placedOut) consider(pid, true);
@@ -484,32 +495,33 @@ function GpaRules({ program, programKind = "major" }) {
       const label = rule.text ?? rule.title ?? "";
       const chip  = scopeChip(rule);
       if (rule.threshold == null || rule.scope.kind === "described") {
-        return { mark: "·", color: "var(--text-5)", label, chip, sub: null };
+        return { mark: "·", color: "var(--text-5)", label, chip,
+                 threshold: null, sub: null, cur: null, entries: null };
       }
       const entries = entriesFor(rule);
       const st = setConstraintStatus(entries, rule.threshold);
       const anyEntered = entries.some(e => e.grade != null);
       // The scoped average of ENTERED letters — real typed data, so it may
-      // render (unlike the assumed ceiling, which never may). Labelled with
+      // render (unlike the assumed ceiling, which never may). Shown with
       // the graded count so a 2-course average can't read as a transcript
       // GPA. Null while nothing in scope is entered.
       const scopedGpa = enteredGPA(entries);
       const nGraded   = entries.filter(e => countsInGPA(e.grade)).length;
-      const cur = scopedGpa != null
-        ? t("grad.gpa.current", { gpa: scopedGpa.toFixed(3), n: nGraded }) : null;
+      const cur = scopedGpa != null ? { gpa: scopedGpa, n: nGraded } : null;
+      const base = { label, chip, threshold: rule.threshold, cur, entries };
       if (st.status === "impossible") {
-        return { mark: "✕", color: REL_STYLE["prerequisite-order"].color, label, chip, cur,
+        return { ...base, mark: "✕", color: REL_STYLE["prerequisite-order"].color,
                  sub: t("grad.gpa.impossible", { gpa: rule.threshold.toFixed(3) }) };
       }
       if (st.status === "atRisk" && anyEntered) {
-        return { mark: "!", color: REL_STYLE["corequisite-viol"].color, label, chip, cur,
+        return { ...base, mark: "!", color: REL_STYLE["corequisite-viol"].color,
                  sub: t("grad.gpa.needed", { grade: st.neededGrade }) };
       }
       if (anyEntered && st.status === "met") {
-        return { mark: "✓", color: REL_STYLE.prerequisite.color, label, chip, cur,
+        return { ...base, mark: "✓", color: REL_STYLE.prerequisite.color,
                  sub: t("grad.gpa.met") };
       }
-      return { mark: "·", color: "var(--text-5)", label, chip, cur,
+      return { ...base, mark: "·", color: "var(--text-5)",
                sub: anyEntered && st.neededGrade ? t("grad.gpa.needed", { grade: st.neededGrade }) : null };
     });
   }, [rules, grades, placements, placedOut, courseMap, SEM_INDEX, program, programKind, t]);
@@ -517,42 +529,116 @@ function GpaRules({ program, programKind = "major" }) {
   if (!rows.length) return null;
   return (
     <div style={{ marginTop: 10, borderTop: "1px solid var(--border-2)", paddingTop: 9 }}>
-      <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
-                    letterSpacing: "0.05em", marginBottom: 4 }}>
-        {t("grad.gpa.title")}
+      {/* Section header — same accordion affordance as requirement sections */}
+      <div onClick={() => setOpen(v => !v)}
+           style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+                    cursor: "pointer", userSelect: "none", marginBottom: open ? 6 : 0 }}>
+        <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
+                       letterSpacing: "0.05em" }}>
+          {t("grad.gpa.title")}
+        </span>
+        <span style={{ fontSize: 8, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        {rows.map((r, i) => (
-          <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start" }}>
-            <span style={{ flexShrink: 0, width: 10, textAlign: "center", fontSize: 9,
-                           fontWeight: 800, color: r.color, lineHeight: "14px" }}>{r.mark}</span>
-            <div style={{ minWidth: 0 }}>
-              {r.chip && (
-                <span style={{ display: "inline-block", fontSize: isPhone ? 6.5 : 8, fontWeight: 700,
-                               color: "var(--text-4)", background: "var(--badge-bg)",
-                               border: "1px solid var(--border-2)", borderRadius: 3,
-                               padding: "0px 4px", marginBottom: 2 }}>
-                  {r.chip}
-                </span>
-              )}
-              <div style={{ fontSize: isPhone ? 8 : 9.5, lineHeight: 1.45, color: "var(--text-4)" }}>
-                {scaleLatinRuns(r.label)}
+
+      {open && (
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {rows.map((r, i) => {
+          const expandable = r.entries != null;
+          const isOpen = openRows.has(i);
+          return (
+            <div key={i}>
+              {/* Compact header: mark · scope chip · the bar · the number.
+                  The catalog's own sentence lives in the expansion — prose
+                  by default is what made the block feel heavy. */}
+              <div onClick={expandable ? () => toggleRow(i) : undefined}
+                   style={{ display: "flex", gap: 6, alignItems: "center",
+                            cursor: expandable ? "pointer" : "default", userSelect: "none" }}>
+                {/* Mark only when it SAYS something — a neutral dot next to a
+                    boxed chip was chrome without information */}
+                {r.mark !== "·" && (
+                  <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800,
+                                 color: r.color, lineHeight: "14px" }}>{r.mark}</span>
+                )}
+                {r.chip && (
+                  <span style={{ flexShrink: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis",
+                                 whiteSpace: "nowrap", fontSize: isPhone ? 8 : 9.5, fontWeight: 600,
+                                 color: "var(--text-4)" }}>
+                    {r.chip}
+                  </span>
+                )}
+                {r.threshold != null ? (
+                  <span style={{ flexShrink: 0, fontSize: isPhone ? 8 : 9.5, fontWeight: 600,
+                                 color: "var(--text-3)", letterSpacing: 0 }}>
+                    · ≥ {r.threshold.toFixed(3)}
+                  </span>
+                ) : (
+                  <span style={{ minWidth: 0, fontSize: isPhone ? 8 : 9.5, lineHeight: 1.4,
+                                 color: "var(--text-4)" }}>
+                    {scaleLatinRuns(r.label)}
+                  </span>
+                )}
+                <span style={{ flex: 1 }} />
+                {r.cur && (
+                  <span title={t("grad.gpa.current", { gpa: r.cur.gpa.toFixed(3), n: r.cur.n })}
+                        style={{ flexShrink: 0, fontSize: isPhone ? 8.5 : 10, fontWeight: 700,
+                                 color: "var(--text-2)", letterSpacing: 0 }}>
+                    {r.cur.gpa.toFixed(3)}
+                    <span style={{ fontSize: isPhone ? 6.5 : 8, fontWeight: 500,
+                                   color: "var(--text-5)", marginLeft: 3 }}>({r.cur.n})</span>
+                  </span>
+                )}
+                {expandable && (
+                  <span style={{ flexShrink: 0, fontSize: 7, color: "var(--text-5)" }}>
+                    {isOpen ? "▼" : "▶"}
+                  </span>
+                )}
               </div>
-              {r.cur && (
-                <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, fontWeight: 600,
-                              color: "var(--text-3)", marginTop: 1, letterSpacing: 0 }}>
-                  {r.cur}
-                </div>
-              )}
+
+              {/* Status line, in the mark's colour */}
               {r.sub && (
-                <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: r.color, marginTop: 1 }}>
+                <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: r.color,
+                              margin: "2px 0 0 0" }}>
                   {r.sub}
                 </div>
               )}
+
+              {/* Provenance: the catalog's own sentence + exactly what was
+                  counted. Graded courses full-strength, ungraded dimmed. */}
+              {isOpen && expandable && (
+                <div style={{ margin: "5px 0 2px 0", paddingLeft: 8,
+                              borderLeft: "2px solid var(--border-2)" }}>
+                  <div style={{ fontSize: isPhone ? 7 : 8.5, lineHeight: 1.5, color: "var(--text-5)",
+                                marginBottom: 4 }}>
+                    {scaleLatinRuns(r.label)}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    {r.entries.map((e, j) => {
+                      const c = courseMap[e.base];
+                      const graded = countsInGPA(e.grade);
+                      return (
+                        <div key={j} style={{ display: "flex", gap: 8, alignItems: "baseline",
+                                              fontSize: isPhone ? 7.5 : 9, letterSpacing: 0,
+                                              color: graded ? "var(--text-3)" : "var(--text-5)" }}>
+                          <span style={{ fontWeight: 700, width: isPhone ? 52 : 64, flexShrink: 0 }}>
+                            {c?.code ?? e.base}
+                          </span>
+                          <span style={{ fontWeight: graded ? 700 : 400, width: 18, flexShrink: 0 }}>
+                            {e.grade ?? "–"}
+                          </span>
+                          <span style={{ color: "var(--text-5)" }}>
+                            {Number.isFinite(e.credits) ? e.credits : "?"} SH
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
+      )}
     </div>
   );
 }
@@ -567,6 +653,7 @@ function GpaRules({ program, programKind = "major" }) {
 function GpaSoFar() {
   const { t } = useLanguage();
   const { grades, placements, placedOut, courseMap, SEM_INDEX, isPhone } = usePlanner();
+  const [open, setOpen] = useState(false);
 
   const stat = useMemo(() => {
     const seen = new Set();
@@ -585,29 +672,53 @@ function GpaSoFar() {
       }
       for (const p2 of placedOut) if (baseId(p2) === base) takes.push({ fi: "out", grade: grades[p2] ?? null });
       const g = takes.length ? effectiveGradeOfTakes(takes) : null;
-      if (g != null) entries.push({ grade: g, credits: courseMap[base]?.sh ?? 4 });
+      if (g != null) entries.push({ base, grade: g, credits: courseMap[base]?.sh ?? 4 });
     };
     for (const [pid, sid] of Object.entries(placements)) consider(pid, SEM_INDEX[sid] !== undefined);
     for (const pid of placedOut) consider(pid, true);
     const gpa = enteredGPA(entries);
-    return gpa == null ? null : { gpa, n: entries.filter(e => e.grade != null).length };
+    if (gpa == null) return null;
+    // Provenance list: only what actually entered the average (letters).
+    const counted = entries.filter(e => countsInGPA(e.grade));
+    return { gpa, n: counted.length, counted };
   }, [grades, placements, placedOut, courseMap, SEM_INDEX]);
 
   if (!stat) return null;
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline",
-                  padding: "6px 10px", marginBottom: 8, borderRadius: 6,
+    <div style={{ padding: "6px 10px", marginBottom: 8, borderRadius: 6,
                   border: "1px solid var(--border-1)" }}>
-      <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
-                     letterSpacing: "0.05em" }}>
-        {t("grad.gpa.sofar")}
-      </span>
-      <span style={{ fontSize: isPhone ? 9 : 11, fontWeight: 700, color: "var(--text-2)" }}>
-        {stat.gpa.toFixed(3)}
-        <span style={{ fontSize: isPhone ? 7 : 8.5, fontWeight: 500, color: "var(--text-5)", marginLeft: 5 }}>
-          {t("grad.gpa.sofar.n", { n: stat.n })}
+      <div onClick={() => setOpen(v => !v)}
+           style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline",
+                    cursor: "pointer", userSelect: "none" }}>
+        <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
+                       letterSpacing: "0.05em" }}>
+          {t("grad.gpa.sofar")}
         </span>
-      </span>
+        <span style={{ fontSize: isPhone ? 9 : 11, fontWeight: 700, color: "var(--text-2)", letterSpacing: 0 }}>
+          {stat.gpa.toFixed(3)}
+          <span style={{ fontSize: isPhone ? 7 : 8.5, fontWeight: 500, color: "var(--text-5)", marginLeft: 5 }}>
+            {t("grad.gpa.sofar.n", { n: stat.n })}
+          </span>
+          <span style={{ fontSize: 7, color: "var(--text-5)", marginLeft: 5 }}>{open ? "▼" : "▶"}</span>
+        </span>
+      </div>
+      {open && (
+        <div style={{ marginTop: 5, paddingLeft: 8, borderLeft: "2px solid var(--border-2)",
+                      display: "flex", flexDirection: "column", gap: 2 }}>
+          {stat.counted.map((e, i) => (
+            <div key={i} style={{ display: "flex", gap: 8, alignItems: "baseline",
+                                  fontSize: isPhone ? 7.5 : 9, letterSpacing: 0, color: "var(--text-3)" }}>
+              <span style={{ fontWeight: 700, width: isPhone ? 52 : 64, flexShrink: 0 }}>
+                {courseMap[e.base]?.code ?? e.base}
+              </span>
+              <span style={{ fontWeight: 700, width: 18, flexShrink: 0 }}>{e.grade}</span>
+              <span style={{ color: "var(--text-5)" }}>
+                {Number.isFinite(e.credits) ? e.credits : "?"} SH
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

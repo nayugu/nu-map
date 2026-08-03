@@ -134,6 +134,19 @@ test("enteredGPA › letters only, credit-weighted, F included", () => {
   assert.equal(enteredGPA([e("A", 4), e("S", 4)]), 4.0); // S out of the average
 });
 
+test("enteredGPA › a real 0-credit course weighs nothing (recitations, 536 in catalog)", () => {
+  // A graded recitation must not drag or lift the average.
+  assert.equal(enteredGPA([e("A", 4), e("C", 0)]), 4.0);
+  assert.equal(enteredGPA([e("C", 0)]), null);            // nothing weighted → no GPA
+  // …but UNKNOWN credits still default to 4
+  assert.equal(enteredGPA([e("A", 4), { grade: "C" }]), 3.0);
+});
+
+test("constraint › 0-credit entries don't count toward the bar either way", () => {
+  const r = setConstraintStatus([e("D", 4), e("A", 0)], 2.0);
+  assert.equal(r.status, "impossible"); // the A weighs nothing; D alone decides
+});
+
 // ── replacement rule ────────────────────────────────────────────────
 
 test("replacement › the latest take's grade counts; earlier attempts excluded", () => {
