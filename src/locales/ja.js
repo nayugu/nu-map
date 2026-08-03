@@ -534,6 +534,7 @@ export const strings = {
   "stats.dept.title":             "学科別の単位",
   "stats.dept.value":             "{sh} {unit} · {n}科目",
   "stats.dept.gpa":        "GPA {gpa}（{total}科目のうち{n}科目に成績）",
+  "stats.dept.gpa.scale":  "目盛 {min}–{max}",
   "stats.level.title":            "レベル分布",
   "stats.level.tier":             "{tier}番台",
   "stats.level.gradline":         "大学院",

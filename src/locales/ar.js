@@ -532,6 +532,7 @@ export const strings = {
   "stats.dept.title":             "الساعات حسب القسم",
   "stats.dept.value":             "{sh} {unit} · {n} مقررات",
   "stats.dept.gpa":        "معدل {gpa}، من {n} من {total} مقررات مُقيَّمة",
+  "stats.dept.gpa.scale":  "المقياس {min}–{max}",
   "stats.level.title":            "توزيع المستويات",
   "stats.level.tier":             "مستوى {tier}",
   "stats.level.gradline":         "دراسات عليا",

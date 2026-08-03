@@ -278,9 +278,33 @@ function ClassChip({ id, cmap, onOpen, faded, fz = 11 }) {
 const GPA_SCALE_MAX = 4;
 const GPA_REF = 2;
 const GPA_BAR_W = 92;      // long enough that a 0.3 difference is visible
-function GpaMeter({ value, title, color, provisional = false }) {
-  const pct = Math.max(0, Math.min(1, value / GPA_SCALE_MAX)) * 100;
+
+/**
+ * The shared floor for every meter in the list. A 0-anchored axis wastes
+ * most of its length — a plan whose subjects all sit between 3.2 and 3.9
+ * renders as five nearly-identical bars in the right quarter.
+ *
+ * The floor is therefore the highest of 3 / 2 / 0 that still sits at or
+ * below EVERY value, so nothing is ever clamped: a single 1.17 drops the
+ * whole list to 0 rather than pinning that subject to the left edge where
+ * it would be indistinguishable from a 2.000.
+ *
+ * One floor for the whole list, never per row — a bar length has to mean
+ * the same thing on every line or the comparison it exists for is a lie.
+ * Because a truncated axis does exaggerate differences, the range is
+ * always stated in each meter's tooltip.
+ */
+function gpaFloor(values) {
+  if (!values.length) return 0;
+  const min = Math.min(...values);
+  return min >= 3 ? 3 : min >= 2 ? 2 : 0;
+}
+
+function GpaMeter({ value, title, color, provisional = false, floor = 0 }) {
+  const span = GPA_SCALE_MAX - floor;
+  const pct = Math.max(0, Math.min(1, (value - floor) / span)) * 100;
   const below = value < GPA_REF;
+  const showRef = floor < GPA_REF;   // the 2.000 line, when it is on-scale
   return (
     // A single graded course is dimmed rather than hidden. Suppressing it
     // entirely meant a student who had finished one course in a subject
@@ -301,9 +325,15 @@ function GpaMeter({ value, title, color, provisional = false }) {
             which would fight the palette. */}
         <span style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${pct}%`,
           background: color ?? "var(--text-4)", borderRadius: 3 }} />
-        {/* the 2.000 reference, over the fill so it stays legible */}
-        <span style={{ position: "absolute", left: `${(GPA_REF / GPA_SCALE_MAX) * 100}%`, top: -1, bottom: -1,
-          width: 1, background: "var(--bg-surface)", opacity: 0.95 }} />
+        {/* The 2.000 reference, over the fill so it stays legible — drawn
+            only while it is inside the range. Once the floor rises to 2 or
+            3 every subject is above it and the line would just pin itself
+            to the left edge, implying a threshold that is no longer in
+            play. */}
+        {showRef && (
+          <span style={{ position: "absolute", left: `${((GPA_REF - floor) / span) * 100}%`, top: -1, bottom: -1,
+            width: 1, background: "var(--bg-surface)", opacity: 0.95 }} />
+        )}
       </span>
       <span style={{ fontSize: 11, fontWeight: 700,
         color: below ? "var(--warn)" : "var(--text-3)",
@@ -336,7 +366,7 @@ function CourseGroup({ title, sub, badge, badgeSlot = false, ids, cmap, onOpen, 
             subline, and reads as nothing at all. */}
         {badgeSlot && (
           <span style={{ width: GPA_BAR_W + 37, display: "inline-flex", flexShrink: 0 }}>
-            {badge && <GpaMeter value={badge.value} title={badge.title} color={badge.color} provisional={badge.provisional} />}
+            {badge && <GpaMeter value={badge.value} title={badge.title} color={badge.color} provisional={badge.provisional} floor={badge.floor ?? 0} />}
           </span>
         )}
         <span style={{ fontSize: 12, color: "var(--text-4)", flex: 1, textAlign: "right", minWidth: 0 }}>{sub}</span>
@@ -861,6 +891,10 @@ export default function StatsPanel() {
   // one, so an ungraded plan sees the same layout it always did.
   const anyDeptGpa = useMemo(
     () => byDept.some(g => g.gpa != null && g.graded >= 1), [byDept]);
+  // One floor for every meter, derived from the whole visible set.
+  const gpaScaleFloor = useMemo(
+    () => gpaFloor(byDept.filter(g => g.gpa != null && g.graded >= 1).map(g => g.gpa)),
+    [byDept]);
 
   // Credit-load timeline: summers as one bucket, per-half co-op occupancy
   // (Summer A / B) from the start + continuation maps so spanning co-ops
@@ -1070,7 +1104,9 @@ export default function StatsPanel() {
                           value: g.gpa,
                           color: subjectColor(g.subject),
                           provisional: g.graded < 2,
-                          title: t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded, total: g.count }),
+                          floor: gpaScaleFloor,
+                          title: t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded, total: g.count })
+                                 + " · " + t("stats.dept.gpa.scale", { min: gpaScaleFloor.toFixed(1), max: "4.0" }),
                         } : null}
                         ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}
                       />
