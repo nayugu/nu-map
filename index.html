@@ -123,32 +123,16 @@
         var booted = false;
         window.__numapBooted = function () {
           booted = true;
-          try { sessionStorage.removeItem('numap-boot-retry'); } catch (e) {}
           // If this load arrived under the reveal veil, the app is up —
           // let the storm clear.
           if (window.__numapVeilDone) window.__numapVeilDone();
         };
-        // Throttled reload. At most one per minute per KEY, so a persistent
-        // failure can never loop.
-        //
-        // The two paths use different keys on purpose. A successful boot
-        // clears the boot key (the problem is demonstrably gone), but that
-        // would also disarm the chunk guard — reload, boot fine, fail again,
-        // reload… So chunk recovery keeps its own key, which nothing clears.
-        function canReload(key) {
-          var last = 0;
-          try { last = parseInt(sessionStorage.getItem(key) || '0', 10); } catch (e) {}
-          return Date.now() - last >= 60000;
-        }
-        function reloadOnce(key) {
-          if (!canReload(key)) return false;
-          try { sessionStorage.setItem(key, String(Date.now())); } catch (e) {}
-          // Every recovery reload announces itself to the NEXT page, which
-          // boots under the storm veil and clears it once alive.
-          try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
-          window.location.reload();
-          return true;
-        }
+        // Reload policy: there are NO blind reloads. The page watches
+        // (the probe below) until it can PROVE the deployment is whole
+        // again, then offers the way back — and only returns on its own
+        // if nothing is pressed for five minutes. A page that never
+        // recovers never reload-loops, because nothing fires without
+        // proof.
         function resolveDark() {
           var theme;
           try { theme = localStorage.getItem('ncp-theme') || localStorage.getItem('map-theme'); } catch (e) {}
@@ -204,27 +188,12 @@
           stormStyle();
           var dark = resolveDark();
           var bg = dark ? '#0d1117' : '#fefefe';
-          var bgT = dark ? 'rgba(13,17,23,0)' : 'rgba(254,254,254,0)';
           var v = document.createElement('div');
           v.id = 'numap-veil';
-          v.style.cssText = 'position:fixed;inset:0;z-index:999999;overflow:hidden;pointer-events:none;';
-          // A solid base plus twenty overlapping soft-edged patches
-          // (radial gradients). Dissolving clears the base first — the
-          // whole app shows through faintly — then each patch fades on
-          // its own clock, so the page surfaces part by part.
-          var base = document.createElement('div');
-          base.style.cssText = 'position:absolute;inset:0;background:' + bg + ';';
-          v.appendChild(base);
-          var tiles = [];
-          for (var r = 0; r < 4; r++) {
-            for (var c = 0; c < 5; c++) {
-              var t = document.createElement('div');
-              t.style.cssText = 'position:absolute;left:' + (c * 25 - 9) + '%;top:' + (r * 25 - 9) + '%;width:43%;height:43%;'
-                + 'background:radial-gradient(ellipse at center,' + bg + ' 52%,' + bgT + ' 78%);';
-              v.appendChild(t);
-              tiles.push(t);
-            }
-          }
+          // A solid theme sheet with the gusting storm blowing across it,
+          // and the whole thing fades as one — the mirror image of the
+          // error page's exit, so both directions speak the same weather.
+          v.style.cssText = 'position:fixed;inset:0;z-index:999999;overflow:hidden;pointer-events:none;background:' + bg + ';';
           var storm = document.createElement('div');
           storm.style.cssText = 'position:absolute;inset:0;animation:numapGust 2.6s ease-in-out infinite;';
           addStorm(storm, 36);
@@ -235,17 +204,9 @@
             if (done) return;
             done = true;
             setTimeout(function () {
-              base.style.animation = 'numapTileOut .7s ease forwards';
-              for (var i = 0; i < tiles.length; i++) {
-                // Stride 7 is coprime to 20 → the patch order is scattered,
-                // never a sweep.
-                var dl = ((i * 7) % 20) * 0.06;
-                var du = 0.5 + ((i * 11) % 5) * 0.09;
-                tiles[i].style.animation = 'numapTileOut ' + du + 's ease ' + dl + 's forwards';
-              }
-              storm.style.transition = 'opacity 1.2s ease .6s';
-              storm.style.opacity = '0';
-              setTimeout(function () { if (v.parentNode) v.parentNode.removeChild(v); }, 2300);
+              v.style.transition = 'opacity 1.2s ease';
+              v.style.opacity = '0';
+              setTimeout(function () { if (v.parentNode) v.parentNode.removeChild(v); }, 1350);
             }, 250);
           };
           if (booted) window.__numapVeilDone();
@@ -282,6 +243,8 @@
         // text's footprint. The emblem itself never moves.
         function offerReturn() {
           if (exiting || document.getElementById('numap-back-link')) return;
+          // Not pressed? Return on our own after five minutes.
+          setTimeout(function () { window.__numapRecoveryExit(); }, 300000);
           var lc = 'en';
           try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
           var dark = resolveDark();
@@ -365,14 +328,6 @@
           var amb = document.querySelector('#numap-recovery .nmr-petals');
           if (amb) amb.style.animation = 'numapBlowoff 2.4s cubic-bezier(.5,0,.85,.5) forwards';
         }
-        function undoChoreo() {
-          var layer = document.getElementById('numap-overlay-storm');
-          if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
-          var card = document.getElementById('numap-recovery-card');
-          if (card) card.style.animation = '';
-          var amb = document.querySelector('#numap-recovery .nmr-petals');
-          if (amb) amb.style.animation = '';
-        }
         var exiting = false;
         window.__numapRecoveryExit = function () {
           if (exiting) return;
@@ -397,16 +352,6 @@
           addStorm(layer, 36);
           host.appendChild(layer);
         }
-        // Throttled reload with the same choreography; if the throttle
-        // holds when the moment comes, the storm dies back down.
-        function stormReload(key) {
-          if (exiting || !canReload(key)) return;
-          exitChoreo();
-          setTimeout(function () {
-            if (!exiting && !reloadOnce(key)) undoChoreo();
-          }, 2300);
-        }
-
         // Recovery overlay — the reloads above used to be silent, so during
         // a deploy (or inside the once-a-minute throttle) the page just sat
         // white. This tells the user what is happening and gives them a
@@ -559,7 +504,6 @@
           if (booted) return;
           showRecovery();
           startProbe();
-          stormReload('numap-boot-retry');
         }
 
         // STALE BUILD IN A LIVE TAB — the other half of the post-deploy
@@ -572,10 +516,9 @@
         // manual hard refresh. `no-cache` on the HTML shell cannot help here:
         // the shell already loaded, correctly, before the deploy happened.
         window.addEventListener('vite:preloadError', function (e) {
-          if (e && e.preventDefault) e.preventDefault();  // we handle it by reloading
+          if (e && e.preventDefault) e.preventDefault();  // handled: watch, offer, return
           showRecovery();
           startProbe();
-          stormReload('numap-chunk-retry');
         });
         // Backstop for a dynamic import that rejects without going through
         // Vite's preload helper. Matched on message rather than type, and
@@ -585,7 +528,6 @@
           if (m && /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i.test(m)) {
             showRecovery();
             startProbe();
-            stormReload('numap-chunk-retry');
           }
         });
         // A module script that 404s or is served with a non-JS MIME fires a
