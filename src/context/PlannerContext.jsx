@@ -15,7 +15,8 @@ import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
-import { baseId, isInstanceId, takesUsed, resolveAddId } from "../core/repeatInstances.js";
+import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked } from "../core/repeatInstances.js";
+import { buildTakesResolver } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -205,6 +206,17 @@ export function PlannerProvider({ children }) {
   const [placedOut, setPlacedOut] = useState(() => {
     const saved = _saved?.persist && _saved.placedOut;
     return saved ? new Set(saved) : new Set();
+  });
+
+  // Grades: { placementInstanceId → "A"|"B+"|…|"F"|"S"|"U"|"I"|"W" }.
+  // Entirely optional — an absent entry means "assumed to fulfil everything"
+  // (see src/core/gradeSystem.js). Keyed by INSTANCE id so each take of a
+  // retaken course carries its own grade. localStorage only: grades are
+  // deliberately NOT in planShare's _KEYS allowlist and never reach share
+  // links, QR codes, or MCP payloads.
+  const [grades, setGrades] = useState(() => {
+    const saved = _saved?.persist && _saved.grades;
+    return saved && typeof saved === "object" ? saved : {};
   });
 
   // Substitutions: [{from: courseId, to: courseId}, ...]
@@ -499,12 +511,13 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions]);
+    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades });
+  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, grades]);
 
   useEffect(() => {
     try { localStorage.setItem(key("graduated"), String(isGraduated)); } catch {}
   }, [isGraduated]); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     try { localStorage.setItem(key("palette"), JSON.stringify(palette)); } catch {}
   }, [palette]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -513,10 +526,10 @@ export function PlannerProvider({ children }) {
   }, [showPalette]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const h = () => saveState(persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions });
+    const h = () => saveState(persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades });
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH]);
+  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, grades]);
 
   // ── Effect: semester tracking (live) ─────────────────────────
   // Runs on mount and whenever the tracking mode, plan semesters, or clock changes.
@@ -624,6 +637,19 @@ export function PlannerProvider({ children }) {
   const effectivePlacements = useMemo(
     () => applySubstitutions(pvPlacements, pvSubstitutions),
     [pvPlacements, pvSubstitutions]
+  );
+
+  // takesOf: base course id → every take of it in the plan, with semester
+  // index and entered grade — the resolver evalPrereqTree uses for grade-
+  // and retake-aware evaluation. Built over effectivePlacements so
+  // substitution-virtual placements keep satisfying prereqs (they carry no
+  // grade → assumed). NULL while no grades are entered, so the legacy
+  // evaluator path runs bit-for-bit and the default experience cannot
+  // change. The construction rules (and why "incoming" must be included)
+  // live with the pure builder in gradeSystem.js, where they are testable.
+  const takesOf = useMemo(
+    () => buildTakesResolver(effectivePlacements, pvPlacedOut, grades, SEM_INDEX),
+    [grades, effectivePlacements, pvPlacedOut, SEM_INDEX]
   );
 
   // Edges of the selected course's prereq tree, expanded to the configured
@@ -1217,10 +1243,19 @@ export function PlannerProvider({ children }) {
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[pvPlacements[c.id]];
       const result = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut);
-      if (result !== "satisfied") v.set(c.id, result);
+      if (result !== "satisfied") { v.set(c.id, result); return; }
+      // Grade layer: placement says satisfied, but an ENTERED grade may veto
+      // (an F/U/I/W attempt, or a letter under the ref's minGrade). Only the
+      // comparison of the two results can say "blocked by grade" — the
+      // evaluator's enum has no such state on purpose. takesOf is null until
+      // a grade is entered, so this branch is dead by default.
+      if (takesOf) {
+        const graded = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, takesOf);
+        if (graded !== "satisfied") v.set(c.id, "grade");
+      }
     });
     return v;
-  }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX]);
+  }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX, takesOf]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
@@ -1286,6 +1321,29 @@ export function PlannerProvider({ children }) {
     return "future";
   };
 
+  // Grades follow their course out of the plan: when a placement (or
+  // placed-out entry) disappears, its grade entry goes with it — otherwise
+  // removing and re-adding a course would silently resurrect an old grade.
+  // Same for a graded course dragged into a non-completed semester: grades
+  // are facts about the past (entry is gated on completed semesters), and a
+  // grade that no longer renders must not keep steering the evaluation.
+  // (Lives after getSemStatus/currentSemIdx/gradSemId — TDZ, see above.)
+  useEffect(() => {
+    setGrades(g => {
+      const stale = Object.keys(g).filter(k => {
+        if (placedOut.has(k)) return false;             // transfer credit: completed by definition
+        const sid = placements[k];
+        if (sid === undefined) return true;             // removed from the plan
+        if (SEM_INDEX[sid] === undefined) return false; // parked off-timeline: keep, it may come back
+        return getSemStatus(sid) !== "completed";       // moved into the present/future
+      });
+      if (!stale.length) return g;
+      const next = { ...g };
+      for (const k of stale) delete next[k];
+      return next;
+    });
+  }, [placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, gradSemId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Effect: auto-graduate / auto-ungraduate ───────────────────
   // Must live after gradSemId is declared (line above) to avoid a TDZ ReferenceError in
   // the dependency array. Compares semester IDs by calendar order so a live semester
@@ -1311,20 +1369,47 @@ export function PlannerProvider({ children }) {
   // Iterate placement keys (not the catalog array) so repeat instances
   // ("BASE#n") each contribute their credits; unknown ids resolve to 0,
   // matching the old courses-array filter.
+
+  // Retakes: a NONREPEATABLE base placed more than once (a failed course
+  // being retaken) earns its credits ONCE — the registrar's replacement
+  // rule. Degree totals exclude every take but the latest; per-semester
+  // load still counts each take (the student sits in the seat both times).
+  // Repeatable courses are untouched — their takes accumulate by design.
+  const supersededTakes = useMemo(() => {
+    const byBase = new Map();
+    for (const pid of Object.keys(pvPlacements)) {
+      if (!isInstanceId(pid)) continue;
+      const b = baseId(pid);
+      if (courseMap[b]?.repeatable) continue;
+      byBase.set(b, []);
+    }
+    const out = new Set();
+    if (!byBase.size) return out;
+    for (const [pid, sid] of Object.entries(pvPlacements)) {
+      const b = baseId(pid);
+      if (byBase.has(b)) byBase.get(b).push([pid, SEM_INDEX[sid] ?? -1]);
+    }
+    for (const takes of byBase.values()) {
+      takes.sort((a, b) => a[1] - b[1]);
+      for (let i = 0; i < takes.length - 1; i++) out.add(takes[i][0]);
+    }
+    return out;
+  }, [pvPlacements, courseMap, SEM_INDEX]);
+
   const totalSHPlaced = useMemo(
     () => pvBonusSH + Object.entries(pvPlacements)
-      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id))
+      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id) && !supersededTakes.has(id))
       .reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
-    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX]
+    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX, supersededTakes]
   );
 
   const totalSHDone = useMemo(
     () => pvBonusSH + Object.entries(pvPlacements).filter(([id, sid]) => {
-      if (pvPlacedOut.has(id)) return false;
+      if (pvPlacedOut.has(id) || supersededTakes.has(id)) return false;
       const sidx = SEM_INDEX[sid] ?? 99;
       return isGraduated ? sidx <= currentSemIdx : sidx < currentSemIdx;
     }).reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
-    [pvBonusSH, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap]
+    [pvBonusSH, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap, supersededTakes]
   );
 
   // ── Stats tab gating ──────────────────────────────────────────
@@ -1464,10 +1549,15 @@ export function PlannerProvider({ children }) {
       // fresh instance id; grid drags (fromSem set) keep move semantics.
       // The repeat limit is never enforced (NU Map trusts the user) — takes
       // beyond it just render with the warn treatment.
+      // Same call also resolves RETAKES: a nonrepeatable course whose every
+      // take carries an entered terminal grade gets a fresh instance id too
+      // (NEU allows retaking any course "to earn a better grade"); with no
+      // grades entered resolveAddId returns the base id and this is a move,
+      // exactly as before.
       let dropId = id;
       if (dragInfo.fromSem == null && placements[id] != null) {
         const course = courseMap[baseId(id)];
-        if (course?.repeatable) dropId = resolveAddId(course, placements, placedOut).id;
+        if (course) dropId = resolveAddId(course, placements, placedOut, grades).id;
       }
       const fromSem = placements[dropId];
       if (fromSem === semId) { setDragInfo(null); return; }
@@ -1870,12 +1960,29 @@ export function PlannerProvider({ children }) {
   const bankCourseIds = useMemo(
     // A repeatable course stays in the bank while it has unused takes left
     // (limit reached → it disappears, exactly like a placed one-shot course).
+    // A nonrepeatable course REAPPEARS once every take has an entered
+    // terminal grade — that's how a retake gets back onto the board.
     () => new Set(courses.filter(c =>
       !placedIds.has(c.id) ||
-      (c.repeatable && takesUsed(c.id, placements, placedOut, SEM_INDEX) < (c.repeatMax ?? Infinity))
+      (c.repeatable && takesUsed(c.id, placements, placedOut, SEM_INDEX) < (c.repeatMax ?? Infinity)) ||
+      retakeUnlocked(c, placements, placedOut, grades)
     ).map(c => c.id)),
-    [courses, placedIds, placements, placedOut, SEM_INDEX]
+    [courses, placedIds, placements, placedOut, SEM_INDEX, grades]
   );
+
+  // ── Grades ───────────────────────────────────────────────────
+  // Entered per placement instance from the course card; null clears.
+  const setGrade = (pid, symbol) => {
+    setGrades(g => {
+      if (symbol == null) {
+        if (!(pid in g)) return g;
+        const next = { ...g };
+        delete next[pid];
+        return next;
+      }
+      return g[pid] === symbol ? g : { ...g, [pid]: symbol };
+    });
+  };
 
   // ── Reset ────────────────────────────────────────────────────
   const resetPlanToDefaults = () => {
@@ -1892,6 +1999,7 @@ export function PlannerProvider({ children }) {
     setStudentTypeRaw("undergrad");
     try { localStorage.setItem(key("student-type"), "undergrad"); } catch {}
     setPlacedOut(new Set());
+    setGrades({});
     setPalette([]);
     // Reset cohort to defaults
     setPlanEntSem(_defEntSem);
@@ -1973,6 +2081,9 @@ export function PlannerProvider({ children }) {
     offeredOverrides, collapsedSubs,
     major, major2, conc, conc2, minor1, minor2, studentType,
     placedOut: [...placedOut],
+    // Present in plan slots (localStorage) only. Share links go through
+    // planShare's _KEYS allowlist, which deliberately omits grades.
+    grades,
   });
 
   // Restore a plan data object into all state
@@ -2007,6 +2118,7 @@ export function PlannerProvider({ children }) {
     setStudentTypeRaw(st);
     try { localStorage.setItem(key("student-type"), st); } catch {}
     setPlacedOut(d.placedOut ? new Set(d.placedOut) : new Set());
+    setGrades(d.grades && typeof d.grades === "object" ? d.grades : {});
   };
 
   useEffect(() => {
@@ -2403,7 +2515,13 @@ export function PlannerProvider({ children }) {
     totalSHDone,
     prereqViolationCount: prereqViolations.size,
     coreqViolationCount:  coreqViolations.size,
-    prereqViolations: Object.fromEntries(prereqViolations),
+    // Grades never leave the browser (see docs/grades-design.md) — that
+    // includes the derived "grade" violation state, which would disclose
+    // that a grade was entered and was bad. "missing" is what the grade-
+    // aware evaluator itself returns for a vetoed take (the requirement
+    // needs another attempt), so the remap stays literally true.
+    prereqViolations: Object.fromEntries(
+      [...prereqViolations].map(([k, v]) => [k, v === "grade" ? "missing" : v])),
     coreqViolations:  Object.fromEntries(coreqViolations),
     starredIds: [...starredIds],
     palette,
@@ -2690,6 +2808,7 @@ export function PlannerProvider({ children }) {
     gradSemId, coopGradConflicts,
     isGraduated, setIsGraduated,
     prereqViolations, coreqViolations, connectedIds,
+    grades, setGrade,
     totalSHPlaced, totalSHDone,
     bonusSH: pvBonusSH, setBonusSH,
     major:  pv?.major  ?? major,  setMajor,

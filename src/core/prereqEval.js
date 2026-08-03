@@ -13,9 +13,17 @@
 //   "satisfied" : all prereqs are placed in earlier semesters
 //   "order"     : a prereq is placed but in the same or a later semester
 //   "missing"   : a prereq is not placed in the plan at all
+//
+// Optional `takesOf(baseId) → [{fi: number|"out", grade: string|null}]`
+// makes the evaluation grade- and retake-aware: a ref is satisfied iff
+// SOME take of it is placed early enough AND its grade clears the ref's
+// minGrade gate (unentered grades clear everything — see gradeSystem).
+// Absent, the legacy placement-only path below runs bit-for-bit; the
+// call sites derive "blocked by grade" by comparing the two results.
 // ═══════════════════════════════════════════════════════════════════
+import { satisfiesGate } from "./gradeSystem.js";
 
-export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new Set()) {
+export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new Set(), takesOf = null) {
   if (!tree || !tree.length) return "satisfied";
   let pos = 0;
 
@@ -71,12 +79,30 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
 
     if (Array.isArray(tok)) {
       pos++;
-      return tok.length ? evalPrereqTree(tok, placements, semIndex, ti, placedOut) : null;
+      return tok.length ? evalPrereqTree(tok, placements, semIndex, ti, placedOut, takesOf) : null;
     }
 
     if (tok && typeof tok === "object" && tok.subject && tok.number) {
       pos++;
       const id = `${tok.subject.toUpperCase()}${tok.number}`;
+
+      // Grade/retake-aware path: consider every take of the course. A take
+      // whose grade fails the gate (F/U/I/W, or a letter below minGrade)
+      // contributes nothing — as if that attempt weren't there. This is how
+      // a failed first take plus a well-placed retake evaluates clean, and
+      // a failed take with no retake evaluates "missing" (needs another).
+      if (takesOf) {
+        let best = "missing";
+        for (const t of takesOf(id) ?? []) {
+          if (!satisfiesGate(t.grade, tok.minGrade)) continue;
+          if (t.fi === "out") return "satisfied";
+          if (!Number.isFinite(t.fi)) continue;
+          if (tok.concurrent ? t.fi <= ti : t.fi < ti) return "satisfied";
+          best = "order";
+        }
+        return best;
+      }
+
       // If the prerequisite course is placed out, it's satisfied regardless of semester.
       if (placedOut.has(id)) {
         return "satisfied";

@@ -30,6 +30,7 @@ import { fileURLToPath } from "url";
 import { parse as parseHTML } from "node-html-parser";
 import { parseRepeatability } from "../src/adapters/northeastern/repeatability.js";
 import { parseNUPath, findAttributeText, reconcileNuPath, SOURCE_POLICY } from "./lib/nupath.js";
+import { extractConcurrentCourses, parsePrereqText, parseCoreqText } from "./lib/prereq-parse.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -64,96 +65,11 @@ const SUBJECTS = (() => {
 // scripts/lib/nupath.js, shared with fetch-nupath.js so the two paths can't
 // disagree about what the catalog's attribute wording means.
 
-// ── Mark "(may be taken concurrently)" prereqs inline ────────────────────────
-// Concurrent prereqs stay in the prereq tree (not coreqs) but get flagged with
-// concurrent:true so the evaluator allows same-semester co-placement.
-// Returns { cleaned: string, concurrent: [] }  (concurrent[] kept for call-site compat)
-function extractConcurrentCourses(text) {
-  // Replace "SUBJ 1234 (may be taken concurrently)" → "SUBJ 1234[CONC]"
-  // The [CONC] marker is picked up by parsePrereqText's course regex.
-  const cleaned = text
-    .replace(/([A-Z]{2,6}\s+\d{4}[A-Z]?)\s*\(may be taken concurrently\)/gi, '$1[CONC]')
-    .replace(/\s+/g, ' ').trim();
-  return { cleaned, concurrent: [] };
-}
-
-// ── Prerequisite text → structured array (best-effort) ───────────────────────
-function parsePrereqText(text) {
-    if (!text) return [];
-
-    // Remove grade requirements (concurrent courses are handled before this call)
-    let cleaned = text
-      .replace(/with a minimum grade of [A-Z][+-]?/gi, '')
-      .replace(/\s+/g, ' ')
-      .trim();
-
-    // Strip trailing period if present
-    cleaned = cleaned.replace(/\.\s*$/, '');
-
-    // Tokenize: split on "and"/"or" while preserving them, and handle parens.
-    // [CONC] marker (from extractConcurrentCourses) sets concurrent:true on the ref.
-    const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)(\[CONC\])?/g;
-    const parts = [];
-    let lastIndex = 0;
-    let match;
-
-    while ((match = coursePattern.exec(cleaned)) !== null) {
-      // Check text between last match and this match for operators and parens
-      const between = cleaned.slice(lastIndex, match.index);
-      extractOperators(between, parts);
-
-      const ref = { subject: match[1], number: match[2] };
-      if (match[3]) ref.concurrent = true;
-      parts.push(ref);
-      lastIndex = coursePattern.lastIndex;
-    }
-
-    // Check for trailing operators after last course ref
-    if (lastIndex < cleaned.length) {
-      extractOperators(cleaned.slice(lastIndex), parts);
-    }
-
-    // Post-process: insert implicit "And" between adjacent ) and ( with no operator
-    const result = [];
-    for (let i = 0; i < parts.length; i++) {
-      result.push(parts[i]);
-      if (i < parts.length - 1) {
-        const cur  = parts[i];
-        const next = parts[i + 1];
-        const curIsEnd  = cur === ')' || (typeof cur === 'object' && cur.subject);
-        const nextIsStart = next === '(' || (typeof next === 'object' && next.subject);
-        if (curIsEnd && nextIsStart) {
-          result.push('And');
-        }
-      }
-    }
-    return result;
-  }
-
-  function extractOperators(text, parts) {
-      const normalized = text.replace(/;/g, ' ').trim();
-      if (!normalized) return;
-      const opPattern = /(\(|\)|(?:^|\s)(and|or)(?:\s|$))/gi;
-      let m;
-      while ((m = opPattern.exec(normalized)) !== null) {
-        const token = (m[2] || m[1]).trim();
-        if (token === '(') parts.push('(');
-        else if (token === ')') parts.push(')');
-        else if (/^or$/i.test(token)) parts.push('Or');
-        else if (/^and$/i.test(token)) parts.push('And');
-      }
-  }
-
-  function parseCoreqText(text) {
-    if (!text) return [];
-    const refs = [];
-    const coursePattern = /([A-Z]{2,6})\s+(\d{4}[A-Z]?)/g;
-    let match;
-    while ((match = coursePattern.exec(text)) !== null) {
-      refs.push({ subject: match[1], number: match[2] });
-    }
-    return refs;
-}
+// ── Prereq/coreq text parsing ─────────────────────────────────────────────────
+// Lives in scripts/lib/prereq-parse.js (pure text, importable by tests — a
+// mirrored inline copy would drift, the nupath.js lesson). That's also where
+// minimum-grade capture happens: refs carry `minGrade`, evaluated only
+// against user-entered grades. See docs/grades-design.md.
 
 // ── HTML fetch with basic error handling ─────────────────────────────────────
 async function fetchPage(url) {

@@ -9,6 +9,7 @@ import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
+import GradePopover from "./GradePopover.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -44,6 +45,46 @@ function fadeSubjectColor(hex, k, isDark) {
   return `rgb(${Math.round((rr + m) * 255)},${Math.round((gg + m) * 255)},${Math.round((bb + m) * 255)})`;
 }
 
+// Optional grade entry — a badge chip that opens the dedicated GradePopover
+// (the schedule-popover shape) on click. Rendered only on courses in
+// COMPLETED semesters: grades are facts about the past. The rect is
+// captured eagerly at click time — reading it inside a state updater from
+// a pooled event was a real crash in the verification pill.
+function GradeChip({ pid, grade, setGrade, t, compact = false }) {
+  const [pop, setPop] = useState(null); // anchor DOMRect while open
+  return (
+    <>
+      <span
+        draggable={false}
+        title={t("course.grade.tooltip")}
+        aria-label={t("course.grade.tooltip")}
+        onPointerDown={e => e.stopPropagation()}
+        onClick={e => {
+          e.stopPropagation();
+          const r = e.currentTarget.getBoundingClientRect();
+          setPop(p => (p ? null : r));
+        }}
+        style={{
+          fontSize: compact ? 7 : 9, fontWeight: 700,
+          // one grey lighter than the course title (--text-3): present but quiet
+          color: grade ? "var(--text-4)" : "var(--text-5)",
+          background: "var(--badge-bg)",
+          border: grade ? "1px solid var(--border-card)" : "1px dashed var(--text-5)",
+          borderRadius: 3, padding: compact ? "0 3px" : "1px 4px",
+          cursor: "pointer", lineHeight: 1.2, textAlign: "center", flexShrink: 0,
+          minWidth: compact ? 8 : 12, display: "inline-block",
+        }}
+      >
+        {grade ?? "–"}
+      </span>
+      {pop && (
+        <GradePopover pid={pid} grade={grade} rect={pop}
+                      setGrade={setGrade} onDismiss={() => setPop(null)} />
+      )}
+    </>
+  );
+}
+
 /**
  * @param {object} course   - normalised course object
  * @param {boolean} inSem   - true when rendered inside the timeline
@@ -60,6 +101,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     isPhone, shOverrides, setShOverride,
     claudePreview,
     placements, placedOut,
+    grades, setGrade,
   } = usePlanner();
 
   // Claude proposal ghost: this card is added/moved (orange dashed ring),
@@ -84,7 +126,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // every appearance reads as one course. multiTake = one of several placed
   // takes (gets a ↻ glyph — an intentional duplicate, not a data bug).
   const isSibling  = !isSel && selectedId != null && baseId(selectedId) === baseId(course.id);
-  const takeCount  = inSem && course.repeatable ? takesUsed(baseId(course.id), placements, placedOut, SEM_INDEX) : 0;
+  // Counted for nonrepeatable courses too: a retake (unlocked by an entered
+  // grade) is also multiple takes and earns the same ↻ marker.
+  const takeCount  = inSem ? takesUsed(baseId(course.id), placements, placedOut, SEM_INDEX) : 0;
   const multiTake  = takeCount > 1;
   // More takes than the catalog allows: permitted (trust the user), warned.
   const overTakes  = multiTake && course.repeatMax != null && takeCount > course.repeatMax;
@@ -274,6 +318,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
           {shOverrides[course.id] ?? course.sh}
         </span>
+        {/* Grade entry (phone): completed semesters only, and only once
+            selected or already graded — the 17px card row has no room for
+            a resting affordance on every card */}
+        {isDone && (isSel || grades[course.id] != null) && (
+          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t} compact />
+        )}
         {(isViolated || notOffered || coreqViol) && (
           isViolated && violationType === "order" ? (
             <span title={t("course.tooltip.prereq.order")}
@@ -424,6 +474,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             {course.sh} {creditSystem.getUnitName()}
           </span>
         )}
+        {/* Grade entry (desktop): completed semesters only. Entered grades
+            always show; the empty affordance appears on hover/selection
+            only, so an ungraded plan renders exactly as it always has */}
+        {inSem && isDone && (grades[course.id] != null || isMouseHov || isSel) && (
+          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t} />
+        )}
         {isViolated && violationType === "order" && (
           <span title={t("course.tooltip.prereq.order")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--error-bg)", background: "var(--error-text)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
@@ -434,6 +490,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           <span title={t("course.tooltip.prereq.missing")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
             {t("course.badge.prereq")}
+          </span>
+        )}
+        {isViolated && violationType === "grade" && (
+          <span title={t("course.tooltip.prereq.grade")}
+            style={{ fontSize: 9, fontWeight: 700, color: "var(--error-text)", background: "var(--error-bg)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
+            {t("course.badge.prereq.grade")}
           </span>
         )}
         {coreqViol === "alone" && (
