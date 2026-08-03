@@ -181,14 +181,9 @@ export default function Header() {
     if (shareCode && shareCode.expiresAt <= codeNow) setShareCode(null);
   }, [shareCode, codeNow]);
 
+  // Always generates — clicking again while a code is live just mints a
+  // fresh one (the old one stays claimable server-side until it expires).
   const handleShareCode = async () => {
-    if (shareCode) {
-      // The button IS the code once one exists — clicking copies it.
-      try { await navigator.clipboard.writeText(shareCode.code); } catch { return; }
-      setShareCodeCopied(true);
-      setTimeout(() => setShareCodeCopied(false), 1500);
-      return;
-    }
     setShareCodeError(null);
     setShareCodeBusy(true);
     try {
@@ -200,6 +195,15 @@ export default function Header() {
     } finally {
       setShareCodeBusy(false);
     }
+  };
+
+  // The code lives in a box styled exactly like the entry field below it
+  // — clicking the box copies it (a color flash confirms).
+  const handleCopyCode = async () => {
+    if (!shareCode) return;
+    try { await navigator.clipboard.writeText(shareCode.code); } catch { return; }
+    setShareCodeCopied(true);
+    setTimeout(() => setShareCodeCopied(false), 1500);
   };
 
   const handleClaimCode = async () => {
@@ -1006,53 +1010,68 @@ export default function Header() {
                 </select>
               </div>
               {shareRelayAvailable && (
-                <>
-                  <button className="hdr-btn-dd"
-                    title={shareCode ? t("header.io.code.copy.title") : t("header.io.code.share.title")}
-                    onClick={handleShareCode}
-                    disabled={shareCodeBusy}
-                    style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                // Two mirrored rows on one grid: code box ↔ entry field,
+                // Share ↔ Load. The auto column sizes to the wider button,
+                // so the pair stays width-matched in every locale.
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: 4, alignItems: "stretch" }}>
+                  <div
+                    onClick={handleCopyCode}
+                    title={shareCode ? t("header.io.code.copy.title") : undefined}
+                    style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6,
+                      minWidth: 0, fontSize: 10, fontWeight: 700,
+                      fontFamily: "ui-monospace, monospace", letterSpacing: 2,
                       background: shareCodeCopied ? "var(--active)" : "var(--bg-surface)",
-                      padding: "4px 8px", borderRadius: 5,
+                      color: shareCodeCopied ? "#fff" : shareCode ? "var(--text-2)" : "var(--text-5)",
                       border: `1px solid ${shareCode || shareCodeCopied ? "var(--active)" : "var(--border-2)"}`,
-                      color: shareCodeCopied ? "#fff" : shareCode ? "var(--text-2)" : "var(--text-4)",
-                      opacity: shareCodeBusy ? 0.6 : 1,
-                      transition: "background 0.2s, color 0.2s, border-color 0.2s",
-                      ...(shareCode ? { fontFamily: "ui-monospace, monospace", letterSpacing: 2 } : {}) }}>
-                    {shareCodeCopied
-                      ? t("header.io.code.copied")
-                      : shareCode
-                        ? `${shareCode.code} · ${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`
-                        : t("header.io.code.share")}
-                  </button>
-                  <div style={{ display: "flex", gap: 4 }}>
-                    <input
-                      value={claimInput}
-                      onChange={e => { setShareCodeError(null); setClaimInput(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)); }}
-                      onKeyDown={e => { if (e.key === "Enter") handleClaimCode(); }}
-                      placeholder={t("header.io.code.placeholder")}
-                      title={t("header.io.code.load.title")}
-                      style={{ flex: 1, minWidth: 0, fontSize: 10, fontWeight: 700,
-                        fontFamily: "ui-monospace, monospace", letterSpacing: 2,
-                        background: "var(--bg-surface)", color: "var(--text-2)",
-                        border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 8px" }} />
-                    <button className="hdr-btn-dd" onClick={handleClaimCode}
-                      title={t("header.io.code.load.title")}
-                      disabled={claimInput.length < 6 || claimBusy}
-                      style={{ fontSize: 10, fontWeight: 700,
-                        cursor: claimInput.length < 6 ? "default" : "pointer",
-                        background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                        border: "1px solid var(--border-2)", color: "var(--text-4)", flexShrink: 0,
-                        opacity: claimInput.length < 6 || claimBusy ? 0.5 : 1 }}>
-                      {t("header.io.code.load")}
-                    </button>
+                      borderRadius: 5, padding: "4px 8px",
+                      cursor: shareCode ? "pointer" : "default", userSelect: "none",
+                      transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
+                    <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {shareCode ? shareCode.code : "······"}
+                    </span>
+                    {shareCode && (
+                      <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: 0,
+                        color: shareCodeCopied ? "#fff" : "var(--text-5)", flexShrink: 0 }}>
+                        {`${Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 60000))}:${String(Math.max(0, Math.floor((shareCode.expiresAt - codeNow) / 1000) % 60)).padStart(2, "0")}`}
+                      </span>
+                    )}
                   </div>
+                  <button className="hdr-btn-dd" onClick={handleShareCode}
+                    title={t("header.io.code.share.title")}
+                    disabled={shareCodeBusy}
+                    style={{ fontSize: 10, fontWeight: 700, cursor: "pointer",
+                      background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                      border: "1px solid var(--border-2)", color: "var(--text-4)",
+                      opacity: shareCodeBusy ? 0.6 : 1 }}>
+                    {t("header.io.code.share")}
+                  </button>
+                  <input
+                    value={claimInput}
+                    onChange={e => { setShareCodeError(null); setClaimInput(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)); }}
+                    onKeyDown={e => { if (e.key === "Enter") handleClaimCode(); }}
+                    placeholder={t("header.io.code.placeholder")}
+                    title={t("header.io.code.load.title")}
+                    style={{ minWidth: 0, fontSize: 10, fontWeight: 700,
+                      fontFamily: "ui-monospace, monospace", letterSpacing: 2,
+                      background: "var(--bg-surface)", color: "var(--text-2)",
+                      border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 8px" }} />
+                  <button className="hdr-btn-dd" onClick={handleClaimCode}
+                    title={t("header.io.code.load.title")}
+                    disabled={claimInput.length < 6 || claimBusy}
+                    style={{ fontSize: 10, fontWeight: 700,
+                      cursor: claimInput.length < 6 ? "default" : "pointer",
+                      background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                      border: "1px solid var(--border-2)", color: "var(--text-4)",
+                      opacity: claimInput.length < 6 || claimBusy ? 0.5 : 1 }}>
+                    {t("header.io.code.load")}
+                  </button>
                   {shareCodeError && (
-                    <div style={{ fontSize: 9, fontWeight: 600, color: "var(--red, #ef4444)", textAlign: "center" }}>
+                    <div style={{ gridColumn: "1 / -1", fontSize: 9, fontWeight: 600,
+                      color: "var(--red, #ef4444)", textAlign: "center" }}>
                       {t(shareCodeError)}
                     </div>
                   )}
-                </>
+                </div>
               )}
               </div>
               {/* ── Export: human-readable summary + PDF ── */}
