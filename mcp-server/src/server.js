@@ -429,6 +429,10 @@ export function createServer({ query, sessionId, state, channel }) {
       const { requestId, promise } = state.createPlanRequest(sessionId);
       channel.broadcast(sessionId, { type: "REQUEST_PLAN", requestId, planId });
       const contents = await promise;
+      // Defense in depth: the browser already scrubs its reply, but a
+      // stale client build must not be able to leak grades through this
+      // tool — grades never ride an MCP payload.
+      if (contents && typeof contents === "object") delete contents.grades;
       return respond(contents ?? { error: `Browser did not return plan ${planId} (timeout). It may not exist.` });
     }
   );

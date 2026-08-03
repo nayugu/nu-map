@@ -3005,11 +3005,24 @@ export function PlannerProvider({ children }) {
   // current state (same pattern as onDropPaletteRef).
   const readPlanContentsRef = useRef(null);
   readPlanContentsRef.current = (planId) => {
-    if (!planId || planId === activePlanId) return captureCurrentPlan();
-    try {
-      const raw = localStorage.getItem(key(`plan-data-${planId}`));
-      return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
+    let d;
+    if (!planId || planId === activePlanId) d = captureCurrentPlan();
+    else {
+      try {
+        const raw = localStorage.getItem(key(`plan-data-${planId}`));
+        d = raw ? JSON.parse(raw) : null;
+      } catch { d = null; }
+    }
+    if (!d) return null;
+    // This reply leaves the browser (→ MCP → Claude), so it gets the
+    // same scrubbing as the live sync: grades NEVER ride an MCP payload
+    // (unconditional — grades-design.md "Never do"), and the co-op
+    // privacy toggle applies. Both slot data and captureCurrentPlan
+    // carry the raw values, so scrub here, at the exit.
+    d = { ...d };
+    delete d.grades;
+    if (privateCoop) d.specialTermPl = redactCoopDetails(d.specialTermPl);
+    return d;
   };
 
   useEffect(() => {
