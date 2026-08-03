@@ -305,7 +305,12 @@ function GpaMeter({ value, title, color }) {
 
 function CourseGroup({ title, sub, badge, badgeSlot = false, ids, cmap, onOpen, fadedIds }) {
   return (
-    <div style={{ marginBottom: 11 }}>
+    // Deliberately asymmetric spacing: the header stays tight to its OWN
+    // chips (5px below), while the gap to the NEXT group is wide. Proximity
+    // is what makes each subject read as one block — at a uniform 11px the
+    // last IE chip sat as close to the CS header as to its own, so the eye
+    // had to use the bold weight alone to find the boundaries.
+    <div style={{ marginBottom: 20 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5, gap: 8 }}>
         {/* With a GPA column the subject name takes a fixed width, so every
             meter starts at the SAME left edge — reading down the column is
