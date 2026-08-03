@@ -171,7 +171,12 @@ const isDark = () => {
 export default class RecoveryBoundary extends Component {
   // Design preview: ?preview=crash renders the fallback without a real
   // crash (and without the auto-reload, which only runs in didCatch).
-  state = { crashed: /[?&]preview=crash\b/.test(window.location.search), leaving: false, showLink: false };
+  // Dev-only, like the index.html previews.
+  state = {
+    crashed: import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search),
+    leaving: false,
+    showLink: false,
+  };
 
   static getDerivedStateFromError() { return { crashed: true }; }
 

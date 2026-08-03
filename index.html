@@ -120,6 +120,10 @@
       // if that never happens, reload ONCE to pull the current shell. Guarded by
       // a per-session timestamp so a persistent failure can never reload-loop.
       (function () {
+        // Design previews (?preview=recovery / ?preview=reveal) work only
+        // in local dev — sharpening stays possible forever, production
+        // users can never summon these screens by URL.
+        var PREVIEW_OK = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
         var booted = false;
         window.__numapBooted = function () {
           booted = true;
@@ -218,7 +222,7 @@
           sessionStorage.removeItem('numap-reveal');
         } catch (e) {}
         // Design preview: ?preview=reveal plays the ending on a normal load.
-        if (!wantReveal && /[?&]preview=reveal\b/.test(location.search)) wantReveal = true;
+        if (!wantReveal && PREVIEW_OK && /[?&]preview=reveal\b/.test(location.search)) wantReveal = true;
         if (wantReveal) {
           var vIv = setInterval(function () {
             if (!document.body) return;
@@ -495,7 +499,7 @@
         // failure (nothing reloads), so it can be styled against reality.
         // The preview exercises the REAL flow: overlay, probe, detection
         // folding the bar into the localized return button, storm exit.
-        if (/[?&]preview=recovery\b/.test(location.search)) {
+        if (PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search)) {
           showRecovery();
           startProbe();
         }
