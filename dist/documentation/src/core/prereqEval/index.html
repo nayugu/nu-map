@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>prereqEval.js — Nu-Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/prereqEval">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>prereqEval.js</strong>
+    </div>
+
+    <h1>prereqEval.js <span class="badge green">Core logic</span></h1>
+    <p class="lead">Evaluates whether a course's prerequisites are satisfied given the current placement state. Returns not just pass/fail but <em>why</em> it fails: missing entirely, or placed in the wrong order.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (for every placed course, on every state change)</div></div>
+      <div class="nb-group"><div class="nb-label">Result feeds</div><div class="nb-value">prereqViolations Map → CourseCard warning icons, RelationLines SVG</div></div>
+    </div>
+
+    <h2>evalPrereqTree algorithm</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["evalPrereqTree(tree, placements, semIndex, ti, placedOut)"] --> B{node type?}
+    B -->|"And"| C["eval each child"]
+    C --> D{worst result?}
+    D -->|all satisfied| R1["'satisfied'"]
+    D -->|any 'order'| R2["'order'"]
+    D -->|any 'missing'| R3["'missing'"]
+    B -->|"Or"| E["eval each child"]
+    E --> F{best result?}
+    F -->|any satisfied| R4["'satisfied'"]
+    F -->|any 'order'| R5["'order'"]
+    F -->|all 'missing'| R6["'missing'"]
+    B -->|"leaf course ref"| G{"in placedOut?"}
+    G -->|yes| R8["'satisfied'"]
+    G -->|no| H{"in placements?"}
+    H -->|no| R7["'missing'"]
+    H -->|yes| I{"concurrent flag?"}
+    I -->|yes: fi &lt;= ti| R9a["'satisfied' (same sem ok)"]
+    I -->|no: fi &lt; ti| R9b["'satisfied' or 'order'"]
+      </div>
+      <div class="caption">Worst-case propagates up And; best-case propagates up Or. "order" = placed but too late. "missing" = not in the plan at all. Placed-out courses are always satisfied.</div>
+    </div>
+
+    <h2>Exported function</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">evalPrereqTree(tree, placements, semIndex, ti, placedOut?) → "satisfied" | "order" | "missing"</div>
+      <div class="fn-desc">
+        Walks the prerequisite tree recursively. For each leaf course reference (<code>{ subject, number }</code>), checks if it's placed and whether it's in a <em>prior</em> semester.
+        <ul style="margin-top:8px;margin-bottom:0">
+          <li><strong>"satisfied"</strong>: prereq is placed in an earlier semester (or same semester if <code>concurrent: true</code>, or placed out)</li>
+          <li><strong>"order"</strong>: prereq is placed but in the same or a later semester (ordering violation)</li>
+          <li><strong>"missing"</strong>: prereq is not placed in the plan at all</li>
+        </ul>
+        And nodes return the <em>worst</em> child result (missing &gt; order &gt; satisfied).<br>
+        Or nodes return the <em>best</em> child result (satisfied &gt; order &gt; missing).
+      </div>
+      <div class="fn-returns">Returns: <span>"satisfied" | "order" | "missing"</span></div>
+      <div class="fn-meta">Parameters: tree = prereq token array, placements = {courseId→semId}, semIndex = {semId→ordinal}, ti = ordinal of course being checked, placedOut = Set of placed-out courseIds (defaults to empty)</div>
+    </div>
+
+    <h3>Concurrent prerequisites</h3>
+    <p>Some courses are marked <code>concurrent: true</code> on their leaf reference — the catalog phrase is "may be taken concurrently." For these, the check allows same-semester co-placement: <code>fi &lt;= ti</code> instead of <code>fi &lt; ti</code>. The <code>concurrent</code> flag is set by <code>scrape-catalog.js</code> when it sees "(may be taken concurrently)" in the prerequisite text.</p>
+
+    <h2>How PlannerContext uses this</h2>
+    <pre><code><span class="cmt">// PlannerContext.jsx — violation computation (simplified)</span>
+<span class="kw">const</span> violations = <span class="kw">new</span> Map();
+<span class="kw">for</span> (<span class="kw">const</span> [courseId, semId] <span class="kw">of</span> Object.entries(placements)) {
+  <span class="kw">const</span> course = courseMap[courseId];
+  <span class="kw">if</span> (!course?.prereqs) <span class="kw">continue</span>;
+  <span class="kw">const</span> semIdx = SEM_INDEX[semId] ?? 0;
+  <span class="kw">const</span> result = <span class="fn-name">evalPrereqTree</span>(course.prereqs, placements, SEM_INDEX, semIdx);
+  <span class="kw">if</span> (result !== <span class="str">'satisfied'</span>) violations.set(courseId, { type: result });
+}</code></pre>
+
+    <p>This runs after every placement change. The resulting <code>prereqViolations</code> Map is read by <code>CourseCard</code> (warning icons) and <code>RelationLines</code> (draws red lines for violated edges).</p>
+
+    <h2>Corequisite violations (not in this module)</h2>
+    <p>Corequisite checking is handled inline in PlannerContext — a coreq violation occurs when the required course is not placed in the <em>same</em> semester as the course that requires it. The check is simpler: just look up if <code>placements[coreqId] === placements[courseId]</code>.</p>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
