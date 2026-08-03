@@ -203,12 +203,9 @@
             // arcs and four bobbing paper-ribbon strips (SMIL, so no CSS
             // transform-box juggling). Confetti bobs use nested <g>: outer
             // animates translate, inner holds the static placement.
-            // Ribbon palette: the thick ribbon carries the logo's red, the
-            // thin one is white with a whisper of blue (a step deeper on
-            // the light theme so it doesn't dissolve into the white page).
-            // The sweeping bar below reuses the same pair.
+            // One color: the logo's red carries the whole screen — the
+            // single ribbon and the sweeping bar segment both wear it.
             var rib1 = '#ef4444';
-            var rib2 = dark ? '#dbeafe' : '#bfdbfe';
             el.innerHTML =
               '<style>'
               + '@keyframes numapRecoverySweep{from{transform:translateX(' + (lc === 'ar' ? '250%' : '-100%') + ')}to{transform:translateX(' + (lc === 'ar' ? '-100%' : '250%') + ')}}'
@@ -220,16 +217,13 @@
               + '<div style="animation:numapRecoveryIn .35s ease-out;">'
               + '<div style="position:relative;width:120px;height:120px;margin:0 auto 14px;">'
               + '<svg viewBox="0 0 120 120" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;" aria-hidden="true">'
-              // Two ribbon streamers: long dash segments flowing along
-              // slightly eccentric loops (dashoffset shifts one dash+gap
-              // period, so the flow loops seamlessly) while each loop
-              // slowly turns in its own direction.
+              // One ribbon streamer: a long dash segment flowing along a
+              // slightly eccentric loop (dashoffset shifts one dash+gap
+              // period, so the flow loops seamlessly) while the loop
+              // itself slowly turns.
               + '<g opacity="0.9"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="16s" repeatCount="indefinite"/>'
               + '<path d="M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8" stroke="' + rib1 + '" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="150 90">'
               + '<animate attributeName="stroke-dashoffset" from="0" to="-240" dur="3.2s" repeatCount="indefinite"/></path></g>'
-              + '<g opacity="0.85"><animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="20s" repeatCount="indefinite"/>'
-              + '<path d="M60 19 C 84 18, 102 37, 100 60 C 98 84, 80 102, 58 101 C 36 100, 18 82, 20 58 C 22 37, 38 20, 60 19" stroke="' + rib2 + '" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="110 110">'
-              + '<animate attributeName="stroke-dashoffset" from="0" to="-220" dur="2.6s" repeatCount="indefinite"/></path></g>'
               + '</svg>'
               // The logo itself: floating, with a diagonal glint sweeping
               // INSIDE the letterform — the PNG doubles as a CSS mask, so
@@ -241,9 +235,8 @@
               + '</div></div>'
               + '</div>'
               + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
-              + '<div style="width:40%;height:100%;border-radius:99px;background:linear-gradient(90deg,'
-              + rib1 + ',' + rib2
-              + ');animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
+              + '<div style="width:40%;height:100%;border-radius:99px;background:' + rib1
+              + ';animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
               + '<div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
               + '<div style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
               + '<button onclick="window.location.reload()" style="margin-top:16px;font-size:13px;font-weight:700;padding:8px 20px;'
