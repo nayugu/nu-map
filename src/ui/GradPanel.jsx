@@ -1148,11 +1148,14 @@ function ProgramNameLink({ name, href, nameColor, isPhone }) {
   const base = {
     display: "inline-block",
     fontWeight: nameColor ? 700 : 400,
-    color: nameColor ?? "var(--text-2)",
     fontSize: isPhone ? 7 : 10,
     marginTop: isPhone ? 3 : 5,
   };
-  if (!href) return <div style={base}>{scaleLatinRuns(name)}</div>;
+  if (!href) return <div style={{ ...base, color: nameColor ?? "var(--text-2)" }}>{scaleLatinRuns(name)}</div>;
+  // Muted light-grey, the way an inline UI link reads — it's a secondary
+  // affordance, not the loud thing on the card. The claude-preview override
+  // (nameColor) still wins so a pending change stays orange.
+  const linkColor = nameColor ?? "var(--text-4)";
   return (
     <a
       href={href}
@@ -1163,9 +1166,10 @@ function ProgramNameLink({ name, href, nameColor, isPhone }) {
       onMouseLeave={() => setHov(false)}
       style={{
         ...base,
+        color: linkColor,
         cursor: "pointer",
         textDecoration: hov ? "underline" : "none",
-        textDecorationColor: nameColor ?? "var(--text-2)",
+        textDecorationColor: linkColor,
         textUnderlineOffset: 2,
       }}
     >
