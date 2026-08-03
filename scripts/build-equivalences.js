@@ -359,6 +359,14 @@ function build() {
       // since the parent's own evidence is what is really being cited.
       const res = classifyPair({ a: ka, b: kb }, ev, ctx);
       const tier = row.tier === "A" ? "A" : row.tier === "B" ? "B" : "C";
+      // Emitted as a STANDALONE pair, not a component. Grouping these was 30 of
+      // the 31 bundle links in the index and bought nothing the catalog asks
+      // for: a lab and its lecture are separate registrations at NEU, so
+      // "PHYS 1163 -> PHYS 1153" stands perfectly well on its own. Treating it
+      // as a component of the lecture pair is what required head resolution,
+      // side orientation and a walk-up path for component lookups — and each of
+      // those produced a bug. Only a *stated* set rule keeps its link, because
+      // there atomicity is what the catalog actually grants.
       derived.push({
         a: ka, b: kb, ...res, tier,
         score: Math.round(Math.max(0, row.score - 0.1) * 10) / 10,
@@ -366,7 +374,8 @@ function build() {
         approval: tier === "C",
         programBacked: row.programBacked,
         reasons: [`follows ${row.a} ⇄ ${row.b} (${slotA})`],
-        ev: { ...ev, programSlugs: row.ev.programSlugs, programs: row.ev.programs },
+        ev: { ...ev, derivedFrom: null, derivedRole: null,
+              programSlugs: row.ev.programSlugs, programs: row.ev.programs },
       });
       byPair.set(pk, derived[derived.length - 1]);
     }

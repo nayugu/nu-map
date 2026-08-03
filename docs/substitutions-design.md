@@ -110,10 +110,10 @@ case-insensitive flag and every real statement begins a sentence. The phrase
 match is now case-insensitive while the course code must still be uppercase in
 the source, so prose like "counts as chemistry 1211" is not read as a reference.
 
-### 3.2 Bundle propagation — the only way to reach labs
+### 3.2 Reaching the labs — and why they are NOT grouped
 
-NEU registers a science course as separate components and encodes the part in the
-**units digit**, with the tens digit selecting the variant:
+NEU registers a science course as separate components, encoding the part in the
+units digit with the tens digit selecting the variant:
 
 ```
 PHYS 115x "for Engineering"        PHYS 116x standard
@@ -121,26 +121,36 @@ PHYS 115x "for Engineering"        PHYS 116x standard
   1153 seminar                      1163 recitation
 ```
 
-A student substituting the lecture needs the whole column:
-
-```
-PHYS 1161 → PHYS 1151      PHYS 1165 → PHYS 1155
-PHYS 1162 → PHYS 1152      PHYS 1166 → PHYS 1156
-PHYS 1163 → PHYS 1153      PHYS 1167 → PHYS 1157
-```
-
 Labs and recitations essentially never appear in prereq `OR` groups or program
-choice tables, so no direct signal reaches them — without propagation, applying a
-substitution would silently strip the student's lab. `companionParent` reads the
-parent off the companion's own title ("Lab for PHYS 1151"), which is more
-reliable than trusting the units-digit convention, and a proven lecture pair
-propagates to each component.
+choice tables, so no direct signal reaches them. `companionParent` reads the
+parent off the companion's own title ("Lab for PHYS 1151") and a proven lecture
+pair propagates to each component, matched by **slot** rather than exact role —
+`PHYS 1163` is a *Recitation* where its engineering counterpart `PHYS 1153` is an
+*Interactive Learning Seminar*.
 
-Matching is by **slot**, not by exact role: `PHYS 1163` is a *Recitation* while
-its engineering counterpart `PHYS 1153` is an *Interactive Learning Seminar*.
-Requiring identical role words silently dropped two of the six rows. Derived rows
-inherit the parent's tier and rank immediately below it, so the bundle stays
-together in a ranked list.
+**They are emitted as standalone pairs, not as a bundle.** An earlier design made
+each one a component of its lecture pair, which required head resolution, side
+orientation, and a special walk-up path when a student asked about a component.
+Every one of those produced a bug: a cross-product that offered "PHYS 1153 as
+part of PHYS 1161 → PHYS 1171", labs applied backwards, one rule rendered as two
+rows, and a click that was a correct no-op on an already-applied sibling.
+
+Measured, that machinery covered **31 of 3,749 pairs, and 30 of those were this
+inference.** A lab and its lecture are separate registrations, so
+`PHYS 1163 → PHYS 1153` stands perfectly well alone; the student adds the parts
+they want. Only one thing still groups — see below.
+
+### 3.3 Set rules are the one thing that stays atomic
+
+A footnote stating "substitute GE 1110 **and** GE 1111 for GE 1501 **and**
+GE 1502" is a set-to-set claim: the catalog grants it for the whole set, and half
+of it grants nothing. Those siblings link to a head through `e.f` with
+`r: "set"`, so the index returns one decision and `applySubstitutions` refuses to
+apply the group until every `from` is placed.
+
+That is a correctness requirement rather than a convenience, which is why it
+survives while companion grouping did not. It currently covers exactly **one**
+pair.
 
 ## 4. Rejected signal: "they satisfy the same prerequisites"
 

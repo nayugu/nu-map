@@ -137,46 +137,24 @@ export function alternativesFor(index, courseId, myProgramIx, opts = {}) {
     if (s) out.push(s);
   }
 
-  // If `courseId` is itself a bundle component — a lab or recitation — it is not
-  // a decision on its own, but answering "no known alternatives" is wrong and
-  // looks broken: PHYS 1163 (Recitation for PHYS 1161) plainly does have one,
-  // PHYS 1153. Follow the link up to the lecture pair and answer with that whole
-  // swap, re-centred on the course the student asked about — they see
-  // "PHYS 1153 +2", and applying it maps the lecture and lab too, so the bundle
-  // stays atomic.
+  // A *stated set rule* ("substitute A and B for X and Y") links its siblings to
+  // a head so the whole set applies together — the catalog grants it as a set,
+  // and half of it grants nothing. Asking about a sibling therefore resolves to
+  // the head, which is one decision covering both pairs.
   //
-  // Each component row is resolved against ITS OWN parent. Looking up every
-  // decision the parent has instead produced a cross-product: PHYS 1163 offered
-  // "PHYS 1153 as part of PHYS 1161 → PHYS 1171", mixing two different variant
-  // families, because 1163 belongs to two component rows and 1161 has two
-  // alternatives.
+  // Nothing else is linked. Lab and recitation swaps used to hang off their
+  // lecture the same way, which is what required side orientation and made a
+  // component lookup a special case; they are now ordinary standalone pairs.
   if (!out.length) {
-    for (const comp of rows) {
-      const parentKey = comp.e?.f;
-      if (!parentKey) continue;
-      const parent = index.byKey.get(parentKey);
-      if (!parent) continue;
-
-      // A derived row keeps its parent's side ordering: comp.a pairs with
-      // parent.a, so the student's side of the lecture pair is the side their
-      // own component sits on.
-      const mineIsA = comp.a === courseId;
-      const head = mineIsA ? parent.a : parent.b;
-      const counterpart = mineIsA ? comp.b : comp.a;
-
-      const alt = buildSuggestion(index, parent, head, myProgramIx, opts);
-      if (!alt) continue;
-
-      out.push({
-        ...alt,
-        from: courseId,
-        to: counterpart,
-        components: [
-          { from: head, to: alt.to, role: "lecture" },
-          ...alt.components.filter(c => c.from !== courseId),
-        ],
-        viaBundle: { head, headTo: alt.to },
-      });
+    for (const sib of rows) {
+      const headKey = sib.e?.f;
+      if (!headKey) continue;
+      const head = index.byKey.get(headKey);
+      if (!head) continue;
+      const mineIsA = sib.a === courseId;
+      const from = mineIsA ? head.a : head.b;
+      const alt = buildSuggestion(index, head, from, myProgramIx, opts);
+      if (alt) out.push(alt);
     }
   }
 

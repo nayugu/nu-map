@@ -75,63 +75,11 @@ test("scoping › unknown program slugs are ignored, not fatal", () => {
   assert.equal(alternativesFor(IX, "PHYS 1161", mine)[0].tier, "C");
 });
 
-// ── bundles ─────────────────────────────────────────────────────────
+// ── set rules: the only thing still grouped ──────────────────────────
 
-test("bundle › components ride along as ONE suggestion, not three", () => {
-  const alts = alternativesFor(IX, "PHYS 1161", new Set());
-  assert.equal(alts.length, 1, "one decision, not three rows");
-  assert.equal(alts[0].to, "PHYS 1151");
-  assert.equal(alts[0].components.length, 2);
-  assert.deepEqual(alts[0].components.map(c => c.role).sort(), ["discussion", "lab"]);
-});
 
-test("bundle › components are oriented to follow the parent", () => {
-  // Substituting FROM 1161 means the lab pair reads 1162 → 1152.
-  const from1161 = alternativesFor(IX, "PHYS 1161", new Set())[0];
-  const lab = from1161.components.find(c => c.role === "lab");
-  assert.equal(lab.from, "PHYS 1162");
-  assert.equal(lab.to, "PHYS 1152");
 
-  // And from the other side it reverses.
-  const from1151 = alternativesFor(IX, "PHYS 1151", new Set())[0];
-  const lab2 = from1151.components.find(c => c.role === "lab");
-  assert.equal(lab2.from, "PHYS 1152");
-  assert.equal(lab2.to, "PHYS 1162");
-});
 
-test("bundle › asking about a COMPONENT answers with the whole swap", () => {
-  // Refusing here was the first design, and it reported "no known alternatives"
-  // for PHYS 1163 — a course whose counterpart, PHYS 1153, is published.
-  const alts = alternativesFor(IX, "PHYS 1163", new Set());
-  assert.equal(alts.length, 1);
-  assert.equal(alts[0].to, "PHYS 1153");
-  assert.deepEqual(alts[0].viaBundle, { head: "PHYS 1161", headTo: "PHYS 1151" });
-  // The lecture pair and the sibling lab ride along; the asked-about row does not
-  // appear twice.
-  assert.deepEqual(alts[0].components.map(c => `${c.from}>${c.to}`).sort(),
-                   ["PHYS 1161>PHYS 1151", "PHYS 1162>PHYS 1152"]);
-});
-
-test("bundle › a component resolves against ITS OWN parent, no cross-product", () => {
-  // PHYS 1163 belongs to two component rows once 1171 exists, and 1161 has two
-  // alternatives. Pairing every row with every decision produced nonsense like
-  // "PHYS 1153 as part of PHYS 1161 -> PHYS 1171", mixing variant families.
-  const wire = {
-    programs: [],
-    pairs: [
-      { a: "PHYS 1151", b: "PHYS 1161", t: "C", s: 62, e: { q: 12 } },
-      { a: "PHYS 1161", b: "PHYS 1171", t: "C", s: 52, e: { q: 7 } },
-      { a: "PHYS 1153", b: "PHYS 1163", t: "C", s: 61, e: { f: "PHYS 1151|PHYS 1161", r: "discussion" } },
-      { a: "PHYS 1163", b: "PHYS 1173", t: "C", s: 51, e: { f: "PHYS 1161|PHYS 1171", r: "discussion" } },
-    ],
-  };
-  const ix = buildEquivalenceIndex(wire);
-  const alts = alternativesFor(ix, "PHYS 1163", new Set());
-  assert.equal(alts.length, 2);
-  const map = Object.fromEntries(alts.map(a => [a.to, a.viaBundle.headTo]));
-  assert.equal(map["PHYS 1153"], "PHYS 1151");   // 1153 belongs to the 1151 family
-  assert.equal(map["PHYS 1173"], "PHYS 1171");   // 1173 to the 1171 family
-});
 
 // ── directed statements ─────────────────────────────────────────────
 
@@ -247,11 +195,6 @@ test("allowed › a student in no publishing program sees nothing", () => {
   assert.deepEqual(programAllowedSwaps(null, new Set([1])), []);
 });
 
-test("allowed › bundle components are not offered as separate decisions", () => {
-  const mine = programIndexSet(IX, ["science_writing_minor"]);
-  const froms = programAllowedSwaps(IX, mine).map(a => a.from);
-  assert.ok(!froms.includes("PHYS 1152"), "the lab is part of the lecture decision");
-});
 
 test("ready › true only when every replaced course is placed", () => {
   const alt = { from: "GE 1110", to: "GE 1501",
@@ -295,4 +238,34 @@ test("applied › a swap already in the plan is not offered again", () => {
   const notApplied = alt => !applied.has(`${alt.from}>${alt.to}`);
   const alts = [{ from: "GE 1111", to: "GE 1502" }, { from: "GE 1110", to: "GE 1501" }];
   assert.deepEqual(alts.filter(notApplied).map(a => a.from), ["GE 1110"]);
+});
+
+test("standalone › a lab swap is its own decision, not a component", () => {
+  // 30 of 31 bundle links were lab/recitation propagation. A lab and its lecture
+  // are separate registrations, so the swap stands alone — which removes head
+  // resolution, side orientation and the component-lookup special case.
+  const wire = { programs: [], pairs: [
+    { a: "PHYS 1151", b: "PHYS 1161", t: "C", s: 62, e: { q: 12 } },
+    { a: "PHYS 1152", b: "PHYS 1162", t: "C", s: 61, e: { q: 0 } },
+  ]};
+  const ix = buildEquivalenceIndex(wire);
+  const lab = alternativesFor(ix, "PHYS 1162", new Set());
+  assert.equal(lab.length, 1);
+  assert.equal(lab[0].to, "PHYS 1152");
+  assert.equal(lab[0].components.length, 0, "no grouping");
+  // and the lecture no longer drags it along
+  assert.equal(alternativesFor(ix, "PHYS 1161", new Set())[0].components.length, 0);
+});
+
+test("set rule › a sibling still resolves to the head, applied atomically", () => {
+  const wire = { programs: ["bioe"], pairs: [
+    { a: "GE 1110", b: "GE 1501", t: "A", s: 30, e: { p: [0], s: "footnote" } },
+    { a: "GE 1111", b: "GE 1502", t: "A", s: 29,
+      e: { p: [0], s: "footnote", f: "GE 1110|GE 1501", r: "set" } },
+  ]};
+  const ix = buildEquivalenceIndex(wire);
+  const viaSibling = alternativesFor(ix, "GE 1111", new Set());
+  assert.equal(viaSibling.length, 1);
+  assert.equal(viaSibling[0].from, "GE 1110");
+  assert.deepEqual(viaSibling[0].components.map(c => `${c.from}>${c.to}`), ["GE 1111>GE 1502"]);
 });
