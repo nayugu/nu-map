@@ -203,33 +203,53 @@
             // arcs and four bobbing paper-ribbon strips (SMIL, so no CSS
             // transform-box juggling). Confetti bobs use nested <g>: outer
             // animates translate, inner holds the static placement.
-            // Ribbon palette: the thick ribbon carries the logo's red, the
-            // thin one is white with a whisper of blue (a step deeper on
-            // the light theme so it doesn't dissolve into the white page).
-            // The sweeping bar below reuses the same pair.
+            // One color: the logo's red carries the whole screen — the
+            // single ribbon and the sweeping bar segment both wear it.
             var rib1 = '#ef4444';
-            var rib2 = dark ? '#dbeafe' : '#bfdbfe';
+            // Petal drift over the whole screen: a dozen petals in tints of
+            // the logo red, each falling on its own clock (negative delays
+            // start them mid-flight) while an inner sway tumbles them.
+            // Deterministic pseudo-randomness from the index — no RNG, so
+            // every load looks the same and nothing needs storing. Behind
+            // the card (earlier in the DOM), pointer-events off.
+            var petals = '';
+            for (var i = 0; i < 14; i++) {
+              var pl = (i * 83 + 7) % 100;
+              var ps = 10 + ((i * 37) % 8);
+              var pf = 9 + ((i * 53) % 70) / 10;
+              // Phase-uniform: each petal starts at an evenly spaced
+              // fraction of its own fall (5 is coprime to 14, so the
+              // fractions cover the whole cycle) — the shower is steady
+              // at every height, never bunches, never leaves gaps.
+              var pd = -(pf * ((i * 5) % 14) / 14);
+              var pw = 2.4 + ((i * 29) % 20) / 10;
+              var pc = i % 3 === 0 ? '#ef4444' : i % 3 === 1 ? '#f87171' : '#fca5a5';
+              var po = 0.35 + ((i * 17) % 30) / 100;
+              petals += '<div style="position:absolute;top:-6vh;left:' + pl + '%;animation:numapFall ' + pf + 's linear ' + pd + 's infinite;">'
+                + '<svg width="' + ps + '" height="' + ps + '" viewBox="0 0 12 12" style="display:block;opacity:' + po + ';animation:numapSway ' + pw + 's ease-in-out ' + (pd / 2) + 's infinite alternate;" aria-hidden="true">'
+                + '<path d="M6 0 C 9.2 2.4, 9.2 7.2, 6 12 C 2.8 7.2, 2.8 2.4, 6 0" fill="' + pc + '"/></svg></div>';
+            }
             el.innerHTML =
               '<style>'
               + '@keyframes numapRecoverySweep{from{transform:translateX(' + (lc === 'ar' ? '250%' : '-100%') + ')}to{transform:translateX(' + (lc === 'ar' ? '-100%' : '250%') + ')}}'
               + '@keyframes numapRecoveryIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}'
               + '@keyframes numapFloat{from{transform:translateY(-2px)}to{transform:translateY(3px)}}'
               + '@keyframes numapGlint{0%{left:-45%}55%{left:125%}100%{left:125%}}'
-              + '@media (prefers-reduced-motion:reduce){#numap-recovery *{animation:none !important}}'
+              + '@keyframes numapFall{from{transform:translateY(0)}to{transform:translateY(112vh)}}'
+              + '@keyframes numapSway{from{transform:translateX(-10px) rotate(-40deg)}to{transform:translateX(10px) rotate(40deg)}}'
+              + '@media (prefers-reduced-motion:reduce){#numap-recovery *{animation:none !important}#numap-recovery .nmr-petals{display:none}}'
               + '</style>'
-              + '<div style="animation:numapRecoveryIn .35s ease-out;">'
+              + '<div class="nmr-petals" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;">' + petals + '</div>'
+              + '<div style="animation:numapRecoveryIn .35s ease-out;position:relative;">'
               + '<div style="position:relative;width:120px;height:120px;margin:0 auto 14px;">'
               + '<svg viewBox="0 0 120 120" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;" aria-hidden="true">'
-              // Two ribbon streamers: long dash segments flowing along
-              // slightly eccentric loops (dashoffset shifts one dash+gap
-              // period, so the flow loops seamlessly) while each loop
-              // slowly turns in its own direction.
+              // One ribbon streamer: a long dash segment flowing along a
+              // slightly eccentric loop (dashoffset shifts one dash+gap
+              // period, so the flow loops seamlessly) while the loop
+              // itself slowly turns.
               + '<g opacity="0.9"><animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="16s" repeatCount="indefinite"/>'
               + '<path d="M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8" stroke="' + rib1 + '" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="150 90">'
               + '<animate attributeName="stroke-dashoffset" from="0" to="-240" dur="3.2s" repeatCount="indefinite"/></path></g>'
-              + '<g opacity="0.85"><animateTransform attributeName="transform" type="rotate" from="360 60 60" to="0 60 60" dur="20s" repeatCount="indefinite"/>'
-              + '<path d="M60 19 C 84 18, 102 37, 100 60 C 98 84, 80 102, 58 101 C 36 100, 18 82, 20 58 C 22 37, 38 20, 60 19" stroke="' + rib2 + '" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="110 110">'
-              + '<animate attributeName="stroke-dashoffset" from="0" to="-220" dur="2.6s" repeatCount="indefinite"/></path></g>'
               + '</svg>'
               // The logo itself: floating, with a diagonal glint sweeping
               // INSIDE the letterform — the PNG doubles as a CSS mask, so
@@ -241,9 +261,8 @@
               + '</div></div>'
               + '</div>'
               + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
-              + '<div style="width:40%;height:100%;border-radius:99px;background:linear-gradient(90deg,'
-              + rib1 + ',' + rib2
-              + ');animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
+              + '<div style="width:40%;height:100%;border-radius:99px;background:' + rib1
+              + ';animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
               + '<div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
               + '<div style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
               + '<button onclick="window.location.reload()" style="margin-top:16px;font-size:13px;font-weight:700;padding:8px 20px;'
@@ -300,7 +319,7 @@
         setTimeout(recover, 10000);
       })();
     </script>
-    <script type="module" crossorigin src="./assets/index-DZXEa6oX.js"></script>
+    <script type="module" crossorigin src="./assets/index-BJqXl5C7.js"></script>
   </head>
   <body>
     <div id="root">
