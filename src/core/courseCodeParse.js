@@ -103,3 +103,57 @@ export function normalizeCodeQuery(text) {
     .replace(/\s+/g, " ")
     .trim();
 }
+
+/**
+ * Split input into course-code PREFIX terms, one per course mentioned.
+ *
+ * This is what lets the substitutions box be a pure search: each term is a
+ * filter, and a suggestion matches only if every term matches a different side
+ * of the pair. One term finds every swap touching that course; two find the swap
+ * between them.
+ *
+ *   "phys"                -> ["PHYS"]
+ *   "phys116"             -> ["PHYS 116"]        partial number, still a prefix
+ *   "phys1151phys1161"    -> ["PHYS 1151", "PHYS 1161"]
+ *   "phys1151, phys1161"  -> ["PHYS 1151", "PHYS 1161"]
+ *   "phys 1151 1161"      -> ["PHYS 1151", "PHYS 1161"]   subject carries forward
+ *   "phys115 phys116"     -> ["PHYS 115", "PHYS 116"]     both partial
+ *
+ * Whitespace splitting cannot do this — it separates a subject from its number —
+ * and `parseCourseCodes` cannot either, because it only emits complete 4-digit
+ * codes and a student typing "phys116" has not finished yet.
+ */
+export function parseCodeTerms(text) {
+  const src = String(text ?? "");
+  const terms = [];
+  let subject = null;
+
+  // A course number is EXACTLY four digits. That is the invariant that makes
+  // separator-free input unambiguous, so a digit run is chunked in fours rather
+  // than taken whole: "phys11511161" is PHYS 1151 + PHYS 1161, not PHYS
+  // 11511161. A trailing chunk shorter than four is a partial the student is
+  // still typing, and stays a prefix.
+  const RUN = /([A-Za-z]+)|(\d+)/g;
+  RUN.lastIndex = 0;
+  let m;
+  let pendingSubjectOnly = false;
+
+  while ((m = RUN.exec(src))) {
+    if (m[1]) {
+      if (pendingSubjectOnly) terms.push(subject);      // a bare subject, then another
+      subject = m[1].toUpperCase();
+      pendingSubjectOnly = true;
+      continue;
+    }
+    if (!subject) continue;                             // leading bare number: ambiguous
+    const digits = m[2];
+    for (let i = 0; i < digits.length; i += 4) {
+      terms.push(`${subject} ${digits.slice(i, i + 4)}`);
+    }
+    pendingSubjectOnly = false;
+  }
+  if (pendingSubjectOnly) terms.push(subject);
+
+  return terms.filter((v, i, a) => a.indexOf(v) === i);
+}
+

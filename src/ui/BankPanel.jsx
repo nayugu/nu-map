@@ -8,8 +8,9 @@ import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
 import { takesUsed } from "../core/repeatInstances.js";
 import { alternativesFor, programIndexSet } from "../core/equivalenceIndex.js";
-import { readSubstitutionIntent, normalizeCodeQuery } from "../core/courseCodeParse.js";
+import { parseCodeTerms, parseCourseCodes, normalizeCodeQuery } from "../core/courseCodeParse.js";
 import { useEquivalences } from "./useEquivalences.js";
+import SubstitutionPopover from "./SubstitutionPopover.jsx";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAttributeSystem } from "../ports/IAttributeSystem.js";
@@ -147,26 +148,17 @@ function CourseSearch({ courses, value, onChange, placeholder, isPhone = false }
 // already grants, so there is nothing to say, and only C shows the same "⚠"
 // the panel already uses for an unplaced course. The reason lives in the
 // tooltip, so the row stays one line of text.
-function SuggestionRow({ alt, course, onApply, t, isPhone }) {
+function SuggestionRow({ alt, course, onApply, onHoverPlus, t, isPhone }) {
   // `course` is resolved by the caller. The index keys courses as "PHYS 1151"
   // while courseMap keys them as "PHYS1151", so looking up alt.to in courseMap
   // silently yields undefined and every title renders blank.
   const to    = course;
   const title = useTranslatedText(to?.title ?? "");
-  const why   = alt.tier === "A" ? (alt.evidence.statement ? t("bank.sub.why.stated") : t("bank.sub.why.a"))
-              : alt.tier === "B" ? t("bank.sub.why.b")
-              : t("bank.sub.why.c");
-  const scope = alt.evidence.scope ? ` (${alt.evidence.scope})` : "";
-  const parts = [alt.tier === "A" && alt.evidence.statement ? why : why + scope];
-  if (alt.evidence.prereqOr) parts.push(`${alt.evidence.prereqOr}×`);
-  if (alt.components.length)
-    parts.push(t("bank.sub.bundle", { list: alt.components.map(c => c.to).join(", ") }));
-
   return (
     <div
       onMouseDown={onApply}
       onTouchStart={e => { e.preventDefault(); onApply(); }}
-      title={parts.join(" · ")}
+
       style={{
         display: "flex", alignItems: "center", gap: 5,
         padding: isPhone ? "2px 4px" : "4px 6px", marginBottom: 2,
@@ -185,15 +177,15 @@ function SuggestionRow({ alt, course, onApply, t, isPhone }) {
                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {scaleLatinRuns(title)}
       </span>
-      {alt.components.length > 0 && (
-        <span style={{ fontSize: isPhone ? 5 : 8, fontWeight: 700, color: "var(--text-5)",
-                       flexShrink: 0 }}>+{alt.components.length}</span>
-      )}
-      {alt.approval && (
-        <span style={{ fontSize: isPhone ? 6 : 9, flexShrink: 0 }}>⚠</span>
-      )}
-      <span style={{ fontSize: isPhone ? 7 : 11, color: "var(--link-1)", fontWeight: 700,
-                     flexShrink: 0, lineHeight: 1 }}>+</span>
+      {/* No per-row "⚠": tier C is the common case, so the glyph appeared on
+          essentially every row and stopped carrying information. The caveat and
+          the reasoning live in the popover on hover of this "+". */}
+      <span
+        onMouseEnter={e => onHoverPlus?.(alt, e.currentTarget.getBoundingClientRect())}
+        onMouseLeave={() => onHoverPlus?.(null, null)}
+        style={{ fontSize: isPhone ? 7 : 11, color: "var(--link-1)", fontWeight: 700,
+                 flexShrink: 0, lineHeight: 1, padding: "0 2px", cursor: "pointer" }}
+      >+</span>
     </div>
   );
 }
@@ -456,6 +448,8 @@ export default function BankPanel() {
   // two-field form existed to collect. Nothing has to be picked from a dropdown
   // before results appear, which was the friction in the first version.
   const [subQuery, setSubQuery] = useState("");
+  // Hovering a suggestion's "+" explains how we got to it.
+  const [subHover, setSubHover] = useState(null);   // { alt, rect }
   // Manual entry stays available, collapsed by default: the index covers 553 of
   // ~8,000 courses and an advisor can approve anything the corpus never saw.
   const [subManual, setSubManual] = useState(false);
@@ -479,20 +473,41 @@ export default function BankPanel() {
       [major, major2, minor1, minor2].filter(Boolean).map(id => String(id).split("/").pop())),
     [equivIndex, major, major2, minor1, minor2]);
 
-  const subIntent = useMemo(() => readSubstitutionIntent(subQuery), [subQuery]);
+
+  // The box is a SEARCH over substitutions, never a creator — the manual form
+  // below is where an arbitrary pair gets made. So each typed code is a filter:
+  // one term finds every swap touching that course, two find the swap between
+  // them. "phys1151phys1161" and "phys1151, phys1161" therefore narrow rather
+  // than propose, and "phys1163sp1153" simply finds nothing.
+  const subTerms = useMemo(() => parseCodeTerms(subQuery), [subQuery]);
 
   const subSuggestions = useMemo(() => {
-    if (!equivIndex || subIntent.kind !== "suggest") return [];
-    return alternativesFor(equivIndex, subIntent.from, myProgramIx);
-  }, [equivIndex, subIntent, myProgramIx]);
+    if (!equivIndex || !subTerms.length) return [];
+    const [first, second] = subTerms;
+    const froms = [];
+    for (const id of equivIndex.byCourse.keys()) if (id.startsWith(first)) froms.push(id);
+    froms.sort();
+    const out = [];
+    for (const from of froms) {
+      for (const alt of alternativesFor(equivIndex, from, myProgramIx)) {
+        if (second && !alt.to.startsWith(second)) continue;
+        out.push(alt);
+        if (out.length >= 12) return out;
+      }
+    }
+    return out;
+  }, [equivIndex, subTerms, myProgramIx]);
+
+  // A complete 4-digit code that is not a real course is worth naming: with
+  // prefix matching, "no results" is otherwise indistinguishable from a typo.
+  const subUnknownCodes = useMemo(() => {
+    if (!subQuery.trim()) return [];
+    return parseCourseCodes(subQuery).codes.filter(c => !plannerIdOf.has(c));
+  }, [subQuery, plannerIdOf]);
+
 
 
   // Map an index course id ("PHYS 1151") back to a planner course id.
-  const plannerIdOf = useMemo(() => {
-    const m = new Map();
-    for (const c of courses) m.set(`${c.subject} ${c.number}`, c.id);
-    return m;
-  }, [courses]);
 
   const applySuggestion = (alt) => {
     const pairs = [{ from: alt.from, to: alt.to }, ...alt.components]
@@ -503,19 +518,6 @@ export default function BankPanel() {
     setSubQuery("");
   };
 
-  // Two or more codes typed straight in. Unknown codes are dropped rather than
-  // invented; an all-unknown entry simply adds nothing.
-  const applyTypedPair = () => {
-    if (subIntent.kind !== "pair") return;
-    const from = plannerIdOf.get(subIntent.from);
-    if (!from) return;
-    const pairs = subIntent.to
-      .map(code => ({ from, to: plannerIdOf.get(code) }))
-      .filter(x => x.to);
-    if (!pairs.length) return;
-    addSubstitutionGroup(pairs);
-    setSubQuery("");
-  };
   const [hoveredSubId, setHoveredSubId] = useState(null);
   const [typeCollapsed, setTypeCollapsed] = useState({});
   const { themeName } = useTheme();
@@ -1039,17 +1041,6 @@ export default function BankPanel() {
                   >
                     {tc ? `${tc.subject} ${tc.number}` : to}
                   </span>
-                  {extra > 0 && (
-                    <span
-                      title={t("bank.sub.bundle", {
-                        list: (members ?? []).slice(1)
-                          .map(m => { const c = courseMap[m.to]; return c ? `${c.subject} ${c.number}` : m.to; })
-                          .join(", "),
-                      })}
-                      style={{ fontSize: isPhone ? 5 : 8, fontWeight: 700, color: "var(--text-5)",
-                               flexShrink: 0, cursor: "help" }}
-                    >+{extra}</span>
-                  )}
                   {approval && (
                     <span title={t("bank.sub.approval")}
                           style={{ fontSize: isPhone ? 6 : 9, flexShrink: 0 }}>⚠</span>
@@ -1073,7 +1064,6 @@ export default function BankPanel() {
                 type="text"
                 value={subQuery}
                 onChange={e => setSubQuery(e.target.value)}
-                onKeyDown={e => { if (e.key === "Enter") applyTypedPair(); }}
                 placeholder={t("bank.sub.query.placeholder")}
                 style={{
                   width: "100%", fontSize: isPhone ? 8 : 10, padding: "4px 6px",
@@ -1085,32 +1075,14 @@ export default function BankPanel() {
               {subQuery.trim() && (
                 <div style={{ marginTop: 4 }}>
                   {/* Two codes typed: the student stated the pair. */}
-                  {subIntent.kind === "pair" && (
-                    <div
-                      onMouseDown={applyTypedPair}
-                      style={{
-                        display: "flex", alignItems: "center", gap: 5,
-                        padding: isPhone ? "2px 4px" : "4px 6px", marginBottom: 2,
-                        borderRadius: 4, cursor: "pointer", background: "var(--bg-surface-2)",
-                        fontSize: isPhone ? 5 : 10,
-                      }}
-                    >
-                      <span style={{ fontWeight: 700, color: "var(--link-1)", flexShrink: 0 }}>{subIntent.from}</span>
-                      <span style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", flexShrink: 0 }}>→</span>
-                      <span style={{ fontWeight: 700, color: "var(--text-2)", flex: 1, minWidth: 0 }}>
-                        {subIntent.to.join(", ")}
-                      </span>
-                      <span style={{ fontSize: isPhone ? 7 : 11, color: "var(--link-1)", fontWeight: 700, flexShrink: 0, lineHeight: 1 }}>+</span>
-                    </div>
-                  )}
-
-                  {/* One code: what the catalog and the corpus offer instead. */}
-                  {subIntent.kind === "suggest" && subSuggestions.map(alt => (
+                  {/* Partial or complete code: what the corpus offers instead. */}
+                  {subSuggestions.map(alt => (
                     <SuggestionRow
                       key={`${alt.from}-${alt.to}`}
                       alt={alt}
                       course={courseMap[plannerIdOf.get(alt.to)]}
                       onApply={() => applySuggestion(alt)}
+                      onHoverPlus={(a, rect) => setSubHover(a ? { alt: a, rect } : null)}
                       t={t}
                       isPhone={isPhone}
                     />
@@ -1122,17 +1094,23 @@ export default function BankPanel() {
                       all, and rendering nothing there reads as a broken dropdown.
                       And with no index loaded, "no alternatives" would be a lie:
                       that is "we could not find out", which is a different thing. */}
-                  {subIntent.kind === "search" && (
+                  {subSuggestions.length === 0 && (
                     <div style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", padding: "3px 5px" }}>
-                      {t("bank.sub.hint")}
-                    </div>
-                  )}
-                  {subIntent.kind === "suggest" && subSuggestions.length === 0 && (
-                    <div style={{ fontSize: isPhone ? 6 : 9, color: "var(--text-5)", padding: "3px 5px" }}>
-                      {equivIndex ? t("bank.sub.none") : t("bank.sub.unavailable")}
+                      {!equivIndex ? t("bank.sub.unavailable")
+                        : subUnknownCodes.length ? t("bank.sub.unknown", { codes: subUnknownCodes.join(", ") })
+                        : !subTerms.length ? t("bank.sub.hint")
+                        : t("bank.sub.none")}
                     </div>
                   )}
                 </div>
+              )}
+
+              {subHover && (
+                <SubstitutionPopover
+                  alt={subHover.alt}
+                  rect={subHover.rect}
+                  courseName={courseMap[plannerIdOf.get(subHover.alt.to)]?.title ?? ""}
+                />
               )}
 
               {/* Manual entry: collapsed by default, unchanged in behaviour. The

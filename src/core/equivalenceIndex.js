@@ -221,6 +221,7 @@ function buildSuggestion(index, p, fromCourseId, myProgramIx, { includeUnofferab
     evidence: {
       programs: p.e?.p?.length ?? 0,
       prereqOr: p.e?.q ?? 0,
+      overlap: p.e?.o ?? null,          // % of downstream courses shared
       crossList: p.e?.x ?? null,
       statement: p.e?.s ?? null,
       scope: p.e?.sc ?? null,

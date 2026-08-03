@@ -375,6 +375,11 @@ function toWire(rows, meta) {
     if (r.ev.programSlugs?.length) e.p = r.ev.programSlugs.map(intern).sort((x, y) => x - y);
     if (r.ev.prereqOr) e.q = r.ev.prereqOr;
     if (r.ev.crossListCluster) e.x = r.ev.crossListCluster;
+    // `o` is the share of downstream courses the two unlock in common, as a
+    // percent. A raw count of "N courses accept either" reads as a magnitude
+    // when what matters is proportion — 12 of 14 is a strong signal, 12 of 200
+    // is not, and the count alone cannot tell them apart.
+    if (r.ev.gateOverlap > 0) e.o = Math.round(r.ev.gateOverlap * 100);
     // `f` links a derived companion row to the lecture pair it follows, so the
     // UI can present a bundle as ONE decision with a +N chip rather than as
     // three unrelated rows appearing at once.

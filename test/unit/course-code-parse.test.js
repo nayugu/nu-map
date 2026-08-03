@@ -1,7 +1,8 @@
 // Course-code parsing — separators are irrelevant, subjects carry forward.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseCourseCodes, readSubstitutionIntent, normalizeCodeQuery } from "../../src/core/courseCodeParse.js";
+import { parseCourseCodes, readSubstitutionIntent, normalizeCodeQuery,
+         parseCodeTerms } from "../../src/core/courseCodeParse.js";
 
 const codes = s => parseCourseCodes(s).codes;
 
@@ -74,4 +75,46 @@ test("normalize › a code typed without a space still matches the haystack", ()
   assert.equal(normalizeCodeQuery("  phys  1111 "), "phys 1111");
   assert.equal(normalizeCodeQuery("organic chem"), "organic chem");
   assert.equal(normalizeCodeQuery(""), "");
+});
+
+// ── prefix terms: the substitutions box is a search, so each code is a filter ──
+
+test("terms › one course, complete or partial", () => {
+  assert.deepEqual(parseCodeTerms("phys"), ["PHYS"]);
+  assert.deepEqual(parseCodeTerms("phys116"), ["PHYS 116"]);
+  assert.deepEqual(parseCodeTerms("phys1163"), ["PHYS 1163"]);
+});
+
+test("terms › two courses, any separator or none", () => {
+  for (const s of ["phys1151phys1161", "phys1151, phys1161", "phys 1151 phys 1161",
+                   "PHYS1151/PHYS1161"]) {
+    assert.deepEqual(parseCodeTerms(s), ["PHYS 1151", "PHYS 1161"], s);
+  }
+});
+
+test("terms › subject carries forward to a bare number", () => {
+  assert.deepEqual(parseCodeTerms("phys 1151 1161"), ["PHYS 1151", "PHYS 1161"]);
+});
+
+test("terms › both sides may be partial", () => {
+  assert.deepEqual(parseCodeTerms("phys115 phys116"), ["PHYS 115", "PHYS 116"]);
+});
+
+test("terms › a leading bare number is ignored", () => {
+  assert.deepEqual(parseCodeTerms("1163"), []);
+});
+
+test("terms › a run of digits is chunked in FOURS, the real invariant", () => {
+  // No separators at all. Taking the digit run whole gave "PHYS 11511161".
+  assert.deepEqual(parseCodeTerms("phys11511161"), ["PHYS 1151", "PHYS 1161"]);
+  assert.deepEqual(parseCodeTerms("PHYS 1151 1161"), ["PHYS 1151", "PHYS 1161"]);
+});
+
+test("terms › a trailing short chunk stays a prefix", () => {
+  assert.deepEqual(parseCodeTerms("phys1151116"), ["PHYS 1151", "PHYS 116"]);
+  assert.deepEqual(parseCodeTerms("phys11"), ["PHYS 11"]);
+});
+
+test("terms › two bare subjects both survive", () => {
+  assert.deepEqual(parseCodeTerms("phys chem"), ["PHYS", "CHEM"]);
 });
