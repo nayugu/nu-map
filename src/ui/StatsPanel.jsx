@@ -273,22 +273,30 @@ function ClassChip({ id, cmap, onOpen, faded, fz = 11 }) {
 //    and exaggerating small gaps.
 const GPA_SCALE_MAX = 4;
 const GPA_REF = 2;
-function GpaMeter({ value, title }) {
+const GPA_BAR_W = 92;      // long enough that a 0.3 difference is visible
+function GpaMeter({ value, title, color }) {
   const pct = Math.max(0, Math.min(1, value / GPA_SCALE_MAX)) * 100;
   const below = value < GPA_REF;
   return (
-    <span title={title} style={{ display: "inline-flex", alignItems: "center", gap: 6,
+    <span title={title} style={{ display: "inline-flex", alignItems: "center", gap: 7,
       flexShrink: 0, cursor: "default", letterSpacing: 0 }}>
-      <span style={{ position: "relative", width: 46, height: 5, borderRadius: 3,
+      <span style={{ position: "relative", width: GPA_BAR_W, height: 6, borderRadius: 3,
         background: "var(--border-2)", overflow: "hidden", display: "inline-block" }}>
+        {/* The SUBJECT's colour, not a semantic green: this bar is part of
+            the row's identity, and every other subject mark in the panel
+            (chips, stripes, StackBar segments) is already keyed that way.
+            Below/above the threshold is carried by position against the
+            tick, and by the figure's colour — not by recolouring the fill,
+            which would fight the palette. */}
         <span style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${pct}%`,
-          background: below ? "var(--warn-bright)" : "var(--success)", borderRadius: 3 }} />
-        {/* the 2.000 line, drawn over the fill so it stays visible */}
+          background: color ?? "var(--text-4)", borderRadius: 3 }} />
+        {/* the 2.000 reference, over the fill so it stays legible */}
         <span style={{ position: "absolute", left: `${(GPA_REF / GPA_SCALE_MAX) * 100}%`, top: -1, bottom: -1,
-          width: 1, background: "var(--bg-surface)", opacity: 0.9 }} />
+          width: 1, background: "var(--bg-surface)", opacity: 0.95 }} />
       </span>
-      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)",
-        width: 34, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
+      <span style={{ fontSize: 11, fontWeight: 700,
+        color: below ? "var(--warn)" : "var(--text-3)",
+        width: 30, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
         {value.toFixed(2)}
       </span>
     </span>
@@ -299,18 +307,23 @@ function CourseGroup({ title, sub, badge, badgeSlot = false, ids, cmap, onOpen, 
   return (
     <div style={{ marginBottom: 11 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5, gap: 8 }}>
-        <span style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-2)", flexShrink: 0 }}>{title}</span>
-        <span style={{ fontSize: 12, color: "var(--text-4)", flex: 1, textAlign: "right", minWidth: 0 }}>{sub}</span>
-        {/* Fixed-width GPA slot, LAST so every row's meter and digits
-            share an x position — reserved even where a row has no GPA, or
-            graded and ungraded rows would misalign against each other.
-            Omitted entirely when no row in the group has one, so views
-            without GPAs (by level) don't carry dead space. */}
+        {/* With a GPA column the subject name takes a fixed width, so every
+            meter starts at the SAME left edge — reading down the column is
+            the whole point. Only in that mode: the by-level view's titles
+            ("2000-level") are far longer and must stay free-width. */}
+        <span style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-2)", flexShrink: 0,
+                       ...(badgeSlot ? { width: 52 } : {}) }}>{title}</span>
+        {/* LEFT of the subline, not right of it. Reserving a right-hand slot
+            left a ragged hole on every ungraded subject — which is most of
+            them — so the absence was louder than the data. Here an empty
+            meter just widens the gap that already separates label from
+            subline, and reads as nothing at all. */}
         {badgeSlot && (
-          <span style={{ width: 86, display: "inline-flex", justifyContent: "flex-end", flexShrink: 0 }}>
-            {badge && <GpaMeter value={badge.value} title={badge.title} />}
+          <span style={{ width: GPA_BAR_W + 37, display: "inline-flex", flexShrink: 0 }}>
+            {badge && <GpaMeter value={badge.value} title={badge.title} color={badge.color} />}
           </span>
         )}
+        <span style={{ fontSize: 12, color: "var(--text-4)", flex: 1, textAlign: "right", minWidth: 0 }}>{sub}</span>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
         {ids.map(id => <ClassChip key={id} id={id} cmap={cmap} onOpen={onOpen} faded={fadedIds?.has(id)} fz={12.5} />)}
@@ -1031,6 +1044,7 @@ export default function StatsPanel() {
                         // in the tooltip: it is a caveat, not a headline.
                         badge={g.gpa != null && g.graded >= 2 ? {
                           value: g.gpa,
+                          color: subjectColor(g.subject),
                           title: t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded, total: g.count }),
                         } : null}
                         ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}
