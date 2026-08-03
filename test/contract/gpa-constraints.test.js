@@ -9,8 +9,28 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse } from 'node-html-parser';
-import { parseRequirements, parseGpaRule, UNDERGRAD_PROFILE, GRAD_PROFILE }
+import { parseRequirements, parseGpaRule, parseCatalogEdition, UNDERGRAD_PROFILE, GRAD_PROFILE }
   from '../../scripts/lib/catalog-program-parser.js';
+
+// ── catalog edition year ─────────────────────────────────────────────────────
+// Programs are frozen per catalog year, so the year a scrape writes into must
+// come from the page, never the clock: a January run would invent a phantom
+// year, and a run after NEU rolls the edition would overwrite the previous
+// year's snapshot — destroying the requirements older cohorts follow.
+
+test('edition › "2025-2026 Edition" is stored as its ENDING year', () => {
+  assert.equal(parseCatalogEdition(parse('<html><body><div>2025-2026 Edition</div></body></html>')), 2026);
+  assert.equal(parseCatalogEdition(parse('<html><body>Catalog 2031-2032 Edition here</body></html>')), 2032);
+});
+
+test('edition › junk never yields a year (the scraper falls back loudly)', () => {
+  for (const html of [
+    '<html><body>no edition label</body></html>',
+    '<html><body>2025-2030 Edition</body></html>',   // not consecutive
+    '<html><body>1899-1900 Edition</body></html>',   // outside the window
+    '<html><body>2026 Edition</body></html>',        // single year
+  ]) assert.equal(parseCatalogEdition(parse(html)), null, html);
+});
 
 const page = body => parse(`<html><body><div id="programrequirementstextcontainer">${body}</div></body></html>`);
 

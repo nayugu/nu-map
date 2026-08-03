@@ -35,7 +35,7 @@ const _gradMap = import.meta.glob(
 
 // Path parsing/resolution helpers live in programPaths.js (pure, shared
 // with the Node program registry). Re-exported for existing importers.
-import { parseMajorPathParts, normalizeFolder, resolveInMap } from './programPaths.js';
+import { parseMajorPathParts, normalizeFolder, resolveInMap, pickCatalogYear } from './programPaths.js';
 export { normalizeFolder, resolveInMap };
 
 // ── Public API ───────────────────────────────────────────────────
@@ -45,6 +45,8 @@ export { normalizeFolder, resolveInMap };
 
 let _cachedOptions      = null;
 let _cachedMajorReqs    = null;
+let _cachedCohort       = undefined;   // cohort catalog year the cache was built for
+let _cachedGradCohort   = undefined;
 let _cachedGradOptions  = null;
 let _cachedGradMajorReqs = null;
 
@@ -57,9 +59,10 @@ let _cachedGradMajorReqs = null;
  *
  * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
  */
-export function getMajorOptions(majorRequirements) {
-  // Re-derive if the adapter changed (different institution)
-  if (_cachedOptions && _cachedMajorReqs === majorRequirements) return _cachedOptions;
+export function getMajorOptions(majorRequirements, cohortYear) {
+  // Re-derive if the adapter changed (different institution) or the cohort did
+  if (_cachedOptions && _cachedMajorReqs === majorRequirements && _cachedCohort === cohortYear) return _cachedOptions;
+  _cachedCohort = cohortYear;
 
   const { fmtLabel, parseProgram } = majorRequirements;
   _cachedMajorReqs = majorRequirements;
@@ -91,9 +94,15 @@ export function getMajorOptions(majorRequirements) {
       a.college.localeCompare(b.college) ||
       a.label.localeCompare(b.label)
     )
-    .filter((opt, _, arr) =>
-      arr.findIndex(o => o.college === opt.college && o.folder === opt.folder) === arr.indexOf(opt)
-    );
+    // One row per program, choosing the CATALOG YEAR THE COHORT FOLLOWS —
+    // not simply the newest. Requirements are frozen at the edition a
+    // student entered under, so a 2026 entrant must keep seeing 2026 after
+    // the 2027 edition lands. Search stays exactly as short as before: this
+    // picks which year survives the dedupe, never how many rows there are.
+    .filter((opt, _, arr) => {
+      const years = arr.filter(o => o.college === opt.college && o.folder === opt.folder).map(o => o.year);
+      return opt.year === pickCatalogYear(years, cohortYear);
+    });
 
   return _cachedOptions;
 }
@@ -104,9 +113,9 @@ export function getMajorOptions(majorRequirements) {
  *
  * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
  */
-export function getMajorOptionGroups(majorRequirements) {
+export function getMajorOptionGroups(majorRequirements, cohortYear) {
   const map = new Map();
-  for (const opt of getMajorOptions(majorRequirements)) {
+  for (const opt of getMajorOptions(majorRequirements, cohortYear)) {
     const key = `${opt.year} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
@@ -170,8 +179,9 @@ export async function loadMajor(path) {
  *
  * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
  */
-export function getGradMajorOptions(majorRequirements) {
-  if (_cachedGradOptions && _cachedGradMajorReqs === majorRequirements) return _cachedGradOptions;
+export function getGradMajorOptions(majorRequirements, cohortYear) {
+  if (_cachedGradOptions && _cachedGradMajorReqs === majorRequirements && _cachedGradCohort === cohortYear) return _cachedGradOptions;
+  _cachedGradCohort = cohortYear;
 
   const { fmtLabel, parseProgram } = majorRequirements;
   _cachedGradMajorReqs = majorRequirements;
@@ -199,9 +209,15 @@ export function getGradMajorOptions(majorRequirements) {
       a.college.localeCompare(b.college) ||
       a.label.localeCompare(b.label)
     )
-    .filter((opt, _, arr) =>
-      arr.findIndex(o => o.college === opt.college && o.folder === opt.folder) === arr.indexOf(opt)
-    );
+    // One row per program, choosing the CATALOG YEAR THE COHORT FOLLOWS —
+    // not simply the newest. Requirements are frozen at the edition a
+    // student entered under, so a 2026 entrant must keep seeing 2026 after
+    // the 2027 edition lands. Search stays exactly as short as before: this
+    // picks which year survives the dedupe, never how many rows there are.
+    .filter((opt, _, arr) => {
+      const years = arr.filter(o => o.college === opt.college && o.folder === opt.folder).map(o => o.year);
+      return opt.year === pickCatalogYear(years, cohortYear);
+    });
 
   return _cachedGradOptions;
 }
@@ -211,9 +227,9 @@ export function getGradMajorOptions(majorRequirements) {
  *
  * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
  */
-export function getGradMajorOptionGroups(majorRequirements) {
+export function getGradMajorOptionGroups(majorRequirements, cohortYear) {
   const map = new Map();
-  for (const opt of getGradMajorOptions(majorRequirements)) {
+  for (const opt of getGradMajorOptions(majorRequirements, cohortYear)) {
     const key = `${opt.year} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);

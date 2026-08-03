@@ -869,6 +869,33 @@ function uniquify(title, used) {
  * @returns {{requirementSections, concentrations, generalElectiveSH,
  *            tablesPresent, tablesConsumed, warnings}}
  */
+/**
+ * The catalog edition a page belongs to, as its ENDING year — every page
+ * carries "2025-2026 Edition", which we store as 2026.
+ *
+ * This must come from the page, never from `new Date().getFullYear()`.
+ * The catalog edition runs fall→summer while the clock rolls over in
+ * January, so the clock is wrong in both directions:
+ *   · a January run would invent a phantom next-year directory holding a
+ *     duplicate of the current edition;
+ *   · a run after NEU publishes the next edition (they roll in ~summer)
+ *     would write the NEW requirements into the OLD year's directory,
+ *     silently destroying the frozen snapshot older cohorts depend on.
+ * Since a student follows the catalog they entered under, that second
+ * failure is the one that quietly corrupts history.
+ *
+ * @returns {number|null} the edition's ending year, or null if absent
+ */
+export function parseCatalogEdition(pageRoot) {
+  const text = pageRoot?.text ?? '';
+  const m = /\b(\d{4})-(\d{4})\s+Edition\b/.exec(text);
+  if (!m) return null;
+  const start = parseInt(m[1], 10), end = parseInt(m[2], 10);
+  // Sanity: consecutive years inside a plausible window.
+  if (end !== start + 1 || start < 2000 || start > 2100) return null;
+  return end;
+}
+
 // ── GPA rules ─────────────────────────────────────────────────────────
 // Grammar from a census of all 1,372 cached catalog pages (docs/
 // grades-design.md): 74 unscoped grad restatements, ~35 subject-scoped

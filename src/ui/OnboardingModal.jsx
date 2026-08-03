@@ -19,6 +19,7 @@ import { useLanguage }        from "../context/LanguageContext.jsx";
 import { SearchCombo }        from "./GradPanel.jsx";
 import YearStepper            from "./YearStepper.jsx";
 import { NUM_YEARS }          from "../core/constants.js";
+import { cohortCatalogYear } from "../data/programPaths.js";
 
 const MAX_GRAD_YEAR = 2040;
 const GRAD_YEARS    = 2;
@@ -53,10 +54,11 @@ export default function OnboardingModal() {
   const maxEntYear = new Date().getFullYear() + 1;
 
   const majorGroups = useMemo(
-    () => isGrad ? majorRequirements.getGradMajorOptionGroups() : majorRequirements.getMajorOptionGroups(),
-    [majorRequirements, isGrad]
+    () => isGrad ? majorRequirements.getGradMajorOptionGroups(cohortCatalogYear(entSem, entYear))
+                 : majorRequirements.getMajorOptionGroups(cohortCatalogYear(entSem, entYear)),
+    [majorRequirements, isGrad, entSem, entYear]
   );
-  const minorGroups = useMemo(() => majorRequirements.getMinorOptionGroups(), [majorRequirements]);
+  const minorGroups = useMemo(() => majorRequirements.getMinorOptionGroups(cohortCatalogYear(entSem, entYear)), [majorRequirements, entSem, entYear]);
 
   const dialogRef = useRef(null);
   const skipRef   = useRef(() => {});

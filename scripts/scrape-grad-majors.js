@@ -34,7 +34,7 @@ import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails }          from './lib/scrape-rails.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
          extractPlanOfStudyCourses,
-         normalizeConcentrationHref,
+         normalizeConcentrationHref, parseCatalogEdition,
          GRAD_PROFILE as PROFILE } from './lib/catalog-program-parser.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -46,7 +46,28 @@ const BASE      = 'https://catalog.northeastern.edu';
 // /azindex/ is Disallow'd in the catalog's robots.txt; the sitemap is not.
 const SITEMAP_URL = `${BASE}/sitemap.xml`;
 const DELAY_MS  = parseInt(process.env.GRAD_DELAY_MS ?? '600', 10);
-const YEAR      = parseInt(process.env.GRAD_YEAR ?? String(new Date().getFullYear()), 10);
+// The catalog EDITION year, resolved from the first page fetched (see
+// parseCatalogEdition) — never the system clock. The clock is wrong in
+// both directions: a January run would invent a phantom year, and a run
+// after NEU rolls the edition would overwrite the previous year's frozen
+// snapshot, destroying the requirements older cohorts follow. The env var
+// still forces it for backfills; the clock is only a last resort.
+const YEAR_OVERRIDE = process.env.GRAD_YEAR ? parseInt(process.env.GRAD_YEAR, 10) : null;
+let YEAR = YEAR_OVERRIDE ?? new Date().getFullYear();
+let YEAR_RESOLVED = YEAR_OVERRIDE != null;
+
+/** Latch the edition year from a parsed page, once, before any write. */
+function resolveYearFrom(root) {
+  if (YEAR_RESOLVED) return;
+  const y = parseCatalogEdition(root);
+  if (y != null) {
+    if (y !== YEAR) console.log(`  Catalog edition: ${y} (clock said ${YEAR}) — writing to ${y}/`);
+    YEAR = y;
+  } else {
+    console.warn(`  ⚠  No edition label found; falling back to ${YEAR}/`);
+  }
+  YEAR_RESOLVED = true;
+}
 
 const WRITE   = process.argv.includes('--write');
 const DRY_RUN = process.argv.includes('--dry-run');
@@ -137,6 +158,7 @@ async function parseRequirementsResolvingExternals(root) {
 async function scrapeProgram(url) {
   const html = await fetchPage(url);
   const root = parseHTML(html);
+  resolveYearFrom(root);   // edition year, before any outPath() call
 
   const name = root.querySelector('#page-title h1, h1.page-title, h1')
     ?.text?.trim()

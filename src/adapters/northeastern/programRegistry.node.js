@@ -98,16 +98,23 @@ export function loadPrograms() {
     a.label.localeCompare(b.label)
   );
 
-  // Flag programs that have a newer catalog-year version of the same folder.
-  const byFolder = new Map();
+  // programData keeps EVERY catalog year (getProgram resolves by id, and an
+  // id carries its year, so a student's frozen edition stays reachable).
+  // The browsable LIST is deduped to one row per program, newest edition —
+  // otherwise list_programs would grow by ~1,000 rows per year retained and
+  // bury the model in near-identical entries.
+  //
+  // The old `newerVersionYear` flag is deliberately gone: once editions are
+  // retained on purpose it is true for every student not in the current
+  // year, so it would read as "your program is out of date" when in fact
+  // they are on exactly the edition they must follow. Moving to a newer
+  // catalog is a petition, not a suggestion an audit tool should make.
+  const newestOf = new Map();
   for (const p of programs) {
-    const key = p.id.split("/").slice(1).join("/"); // college/folder
-    byFolder.set(key, Math.max(byFolder.get(key) ?? 0, p.year));
+    const key = p.id.replace(/(^|\/)\d{4}\//, "$1"); // id minus its year
+    newestOf.set(key, Math.max(newestOf.get(key) ?? 0, p.year));
   }
-  for (const p of programs) {
-    const key = p.id.split("/").slice(1).join("/");
-    p.newerVersionYear = byFolder.get(key) > p.year ? byFolder.get(key) : null;
-  }
+  const listed = programs.filter(p => p.year === newestOf.get(p.id.replace(/(^|\/)\d{4}\//, "$1")));
 
   // Registry keyed by compact id for stale-path resolution. Incoming ids may
   // be full Vite module paths ("./majors/2026/khoury/…/parsed.initial.json")
@@ -124,5 +131,5 @@ export function loadPrograms() {
     return resolveInMap(registry, compact, parseMajorPathParts);
   }
 
-  return { programs, programData, resolveProgramId };
+  return { programs: listed, programData, resolveProgramId };
 }

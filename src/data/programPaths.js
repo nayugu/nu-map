@@ -22,6 +22,53 @@ export function parseMajorPathParts(path) {
 }
 
 /**
+ * The catalog edition a cohort follows, as its ENDING year — the same
+ * label the program directories use ("2025-2026 Edition" → 2026).
+ *
+ * A NEU catalog edition runs fall → summer, so the entry SEMESTER matters,
+ * not just the year: a fall-2025 entrant and a spring-2026 entrant are both
+ * under the 2025-2026 edition (2026). Only fall shifts the label forward.
+ *
+ * Students follow the catalog they entered under — the catalog says so on
+ * every page ("Students who enrolled in their programs prior to fall 2025
+ * should consult previous versions"). We do NOT model change-of-major:
+ * NEU publishes no rule for which edition a later-declared major follows,
+ * and inventing one would be worse than the entry-year default, which is
+ * right for every student who never switched. A student who did switch can
+ * pick the other year explicitly; that stays their (and their advisor's)
+ * call, and the choice is pinned by the saved program id, which carries
+ * its year.
+ *
+ * @param {string} entSem   "fall" | "spring" | "sumA" | …
+ * @param {number} entYear
+ * @returns {number} the catalog edition year to prefer
+ */
+export function cohortCatalogYear(entSem, entYear) {
+  const y = parseInt(entYear, 10);
+  if (!Number.isFinite(y)) return NaN;
+  return /^fall/i.test(entSem ?? '') ? y + 1 : y;
+}
+
+/**
+ * Choose which available catalog year a cohort should see: the newest
+ * edition that is not NEWER than the cohort's own, else the oldest we
+ * hold (a student older than our archive gets the earliest we have, which
+ * is the closest honest answer — never the current one).
+ *
+ * @param {number[]} availableYears
+ * @param {number} cohortYear
+ * @returns {number|undefined}
+ */
+export function pickCatalogYear(availableYears, cohortYear) {
+  if (!availableYears?.length) return undefined;
+  const sorted = [...new Set(availableYears)].sort((a, b) => a - b);
+  if (!Number.isFinite(cohortYear)) return sorted[sorted.length - 1];
+  let best;
+  for (const y of sorted) if (y <= cohortYear) best = y;
+  return best ?? sorted[0];
+}
+
+/**
  * Normalize a program folder slug so cosmetic catalog renames still match:
  * lowercases, maps "&"→"and", and strips everything but the alphanumeric core
  * (underscores, parentheses, the "_(boston)" campus suffix, spacing, commas).

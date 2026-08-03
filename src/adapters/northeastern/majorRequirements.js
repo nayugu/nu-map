@@ -43,16 +43,16 @@ export default {
   parseProgram,
 
   /** @returns {import('../../ports/IMajorRequirements.js').ProgramOption[]} */
-  getMajorOptions() { return _getMajorOptions(_self); },
+  getMajorOptions(cohortYear) { return _getMajorOptions(_self, cohortYear); },
 
   /** @returns {import('../../ports/IMajorRequirements.js').ProgramOption[]} */
-  getMinorOptions() { return _getMinorOptions(_self); },
+  getMinorOptions(cohortYear) { return _getMinorOptions(_self, cohortYear); },
 
   /** @returns {Map<string, import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
-  getMajorOptionGroups() { return _getMajorOptionGroups(_self); },
+  getMajorOptionGroups(cohortYear) { return _getMajorOptionGroups(_self, cohortYear); },
 
   /** @returns {Map<string, import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
-  getMinorOptionGroups() { return _getMinorOptionGroups(_self); },
+  getMinorOptionGroups(cohortYear) { return _getMinorOptionGroups(_self, cohortYear); },
 
   /** @returns {Promise<object>} Raw graduatenu Major2 JSON */
   loadMajor(path) { return _loadMajor(path); },
@@ -61,10 +61,10 @@ export default {
   loadMinor(path) { return _loadMinor(path); },
 
   /** @returns {import('../../ports/IMajorRequirements.js').ProgramOption[]} */
-  getGradMajorOptions() { return _getGradMajorOptions(_self); },
+  getGradMajorOptions(cohortYear) { return _getGradMajorOptions(_self, cohortYear); },
 
   /** @returns {Map<string, import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
-  getGradMajorOptionGroups() { return _getGradMajorOptionGroups(_self); },
+  getGradMajorOptionGroups(cohortYear) { return _getGradMajorOptionGroups(_self, cohortYear); },
 
   /** @returns {Promise<object>} Raw graduate program JSON */
   loadGradMajor(path) { return _loadGradMajor(path); },

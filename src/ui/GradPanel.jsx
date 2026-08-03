@@ -19,6 +19,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
+import { cohortCatalogYear } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
 import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes, COOP_GPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
@@ -1256,6 +1257,7 @@ export default function GradPanel({ wideCatalog = false }) {
     setShowNewPlanModal, setNewPlanInitialType,
     claudePreview,
     grades,
+    planEntSem, planEntYear,
   } = usePlanner();
 
   const isGrad = studentType === "graduate";
@@ -1283,13 +1285,17 @@ export default function GradPanel({ wideCatalog = false }) {
   const unitName          = creditSystem.getUnitName();
   const { t } = useLanguage();
 
+  // Programs are frozen per catalog edition, so the search list shows the
+  // edition THIS cohort follows — not simply the newest. One row per
+  // program either way; this only decides which year that row is.
+  const cohortYear = cohortCatalogYear(planEntSem, planEntYear);
   const majorGroups  = useMemo(
-    () => isGrad ? majorRequirements.getGradMajorOptionGroups() : majorRequirements.getMajorOptionGroups(),
-    [majorRequirements, isGrad]
+    () => isGrad ? majorRequirements.getGradMajorOptionGroups(cohortYear) : majorRequirements.getMajorOptionGroups(cohortYear),
+    [majorRequirements, isGrad, cohortYear]
   );
 
   // Translated major name + concentration (no-ops when translation disabled or in source locale).
-  const minorGroups  = useMemo(() => majorRequirements.getMinorOptionGroups(), [majorRequirements]);
+  const minorGroups  = useMemo(() => majorRequirements.getMinorOptionGroups(cohortYear), [majorRequirements, cohortYear]);
 
   const [major,          setMajor]          = useState(null);
   const [loadErr,        setLoadErr]        = useState(null);

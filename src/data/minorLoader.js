@@ -10,6 +10,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { resolveInMap } from './majorLoader.js';
+import { pickCatalogYear } from './programPaths.js';
 
 // Scraped minors live alongside scraped majors; folder names end with _minor.
 const _moduleMap = import.meta.glob(
@@ -39,12 +40,14 @@ function parseMinorPathParts(path) {
 
 let _cachedOptions   = null;
 let _cachedMajorReqs = null;
+let _cachedCohort    = undefined;
 
 /**
  * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
  */
-export function getMinorOptions(majorRequirements) {
-  if (_cachedOptions && _cachedMajorReqs === majorRequirements) return _cachedOptions;
+export function getMinorOptions(majorRequirements, cohortYear) {
+  if (_cachedOptions && _cachedMajorReqs === majorRequirements && _cachedCohort === cohortYear) return _cachedOptions;
+  _cachedCohort = cohortYear;
 
   const { fmtLabel, parseProgram } = majorRequirements;
   _cachedMajorReqs = majorRequirements;
@@ -71,7 +74,14 @@ export function getMinorOptions(majorRequirements) {
       b.year - a.year ||
       a.college.localeCompare(b.college) ||
       a.label.localeCompare(b.label)
-    );
+    )
+    // Minors had NO year dedupe at all — harmless while one edition
+    // existed, but with several it would list every minor once per year.
+    // Same rule as majors: keep the edition this cohort follows.
+    .filter((opt, _, arr) => {
+      const years = arr.filter(o => o.college === opt.college && o.folder === opt.folder).map(o => o.year);
+      return opt.year === pickCatalogYear(years, cohortYear);
+    });
 
   return _cachedOptions;
 }
@@ -79,9 +89,9 @@ export function getMinorOptions(majorRequirements) {
 /**
  * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
  */
-export function getMinorOptionGroups(majorRequirements) {
+export function getMinorOptionGroups(majorRequirements, cohortYear) {
   const map = new Map();
-  for (const opt of getMinorOptions(majorRequirements)) {
+  for (const opt of getMinorOptions(majorRequirements, cohortYear)) {
     const key = `${opt.year} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
