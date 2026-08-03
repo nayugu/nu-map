@@ -84,7 +84,6 @@ export const strings = {
   "sem.term.remove":        "Eliminar {type}",
   "sem.work.company.placeholder": "Empresa",
   "sem.work.role.placeholder": "Rol",
-  "sem.work.hidden": "Oculto",
   "sem.override.label":     "+ sobrescribir límite",
   "sem.intern.petition":    "requiere petición por no asistencia",
 

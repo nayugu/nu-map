@@ -350,14 +350,10 @@ export default function SemRow({ sem }) {
                 <TText>{termStartType?.label ?? termStartData.typeId}</TText> {termNum(termStartData.typeId, termStartId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 10 : 20 }}>
-                {privateCoop ? (
-                  // Company + role are hidden; show a muted marker and no inputs,
+                {privateCoop ? null : (
+                  // Company + role are hidden by omitting the inputs entirely,
                   // so a viewer can't read them and edits can't overwrite the
                   // stored values (they return when the toggle is off).
-                  <span style={{ textAlign: "right", width: "100%", fontFamily: "'Inter', sans-serif", fontSize: isPhone ? 7 : 14, fontWeight: 600, color: placeholderColor, fontStyle: "italic" }}>
-                    {t("sem.work.hidden")}
-                  </span>
-                ) : (
                   <>
                     <CompanySearch
                       name={termStartData.company}

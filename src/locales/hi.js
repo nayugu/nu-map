@@ -84,7 +84,6 @@ export const strings = {
   "sem.term.remove":        "{type} हटाएँ",
   "sem.work.company.placeholder": "कंपनी",
   "sem.work.role.placeholder": "भूमिका",
-  "sem.work.hidden": "छिपा हुआ",
   "sem.override.label":     "+ सीमा ओवरराइड करें",
   "sem.intern.petition":    "गैर-हाजिरी के लिए याचिका आवश्यक",
 

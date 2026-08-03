@@ -84,7 +84,6 @@ export const strings = {
   "sem.term.remove":        "إزالة {type}",
   "sem.work.company.placeholder": "الشركة",
   "sem.work.role.placeholder": "الدور",
-  "sem.work.hidden": "مخفي",
   "sem.override.label":     "+ تجاوز الحد",
   "sem.intern.petition":    "يتطلب طلب استثناء للغياب",
 

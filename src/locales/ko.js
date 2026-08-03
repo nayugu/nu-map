@@ -84,7 +84,6 @@ export const strings = {
   "sem.term.remove":        "{type} 삭제",
   "sem.work.company.placeholder": "회사",
   "sem.work.role.placeholder": "직책",
-  "sem.work.hidden": "숨김",
   "sem.override.label":     "+ 상한 재정의",
   "sem.intern.petition":    "무출석 신청 필요",
 

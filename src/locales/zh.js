@@ -85,7 +85,6 @@ export const strings = {
   "sem.term.remove":           "\u79fb\u9664 {type}",
   "sem.work.company.placeholder": "\u516c\u53f8",
   "sem.work.role.placeholder": "\u804c\u4f4d",
-  "sem.work.hidden": "已隐藏",
   "sem.override.label":        "+ \u8986\u76d6\u9650\u5236",
 
   // ── Grad panel ─────────────────────────────────────────────────

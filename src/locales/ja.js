@@ -85,7 +85,6 @@ export const strings = {
   "sem.term.remove":        "{type} を削除",
   "sem.work.company.placeholder": "会社",
   "sem.work.role.placeholder": "役割",
-  "sem.work.hidden": "非表示",
   "sem.override.label":     "+ 上限を上書き",
   "sem.intern.petition":    "出席不要の申請が必要",
 
