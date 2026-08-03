@@ -188,6 +188,10 @@
           else document.addEventListener('DOMContentLoaded', make);
         }
 
+        // Design preview: ?preview=recovery shows the overlay without any
+        // failure (nothing reloads), so it can be styled against reality.
+        if (/[?&]preview=recovery\b/.test(location.search)) showRecovery();
+
         function recover() {
           if (booted) return;
           showRecovery();
