@@ -273,7 +273,9 @@ export default class RecoveryBoundary extends Component {
               background: "#ef4444",
               animation: "numapCrashSweep 1.3s ease-in-out infinite alternate" }} />
           </div>
-          <div style={{ fontSize: 15, fontWeight: 600, maxWidth: 420, lineHeight: 1.5 }}>
+          {/* One line, always — the font yields on narrow screens
+              instead of the text wrapping. */}
+          <div style={{ fontSize: "min(15px, 3.4vw)", fontWeight: 600, lineHeight: 1.5, whiteSpace: "nowrap" }}>
             {MSG[lc] || MSG.en}
           </div>
           {this.state.showLink && (
