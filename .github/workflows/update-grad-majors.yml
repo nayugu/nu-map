@@ -84,6 +84,13 @@ jobs:
       #   src/data that can drift. It sat six weeks stale once, so production
       #   MCP answered from data predating a whole parser rewrite. Rebuilding
       #   it here, in the job that changed the data, is what stops that.
+      # Program OR/XOM nodes are one of the inputs to the course-equivalence
+      # index, so a requirements change can add or remove published choices.
+      # Rebuild it here as well as in update-courses, or the index goes stale
+      # against the very data it cites.
+      - name: Rebuild course equivalences
+        run: node scripts/build-equivalences.js --write 2>&1 | tee /tmp/equivalences-log.txt
+
       - name: Rebuild programs bundle
         run: node scripts/build-programs-bundle.js
 
@@ -106,6 +113,7 @@ jobs:
           # and baseline are the human/machine record of this run's fidelity.
           git add docs/verification-report.md scripts/major-verify-baseline.json
           git add public/northeastern/programs-bundle.json
+          git add public/northeastern/course-equivalences.json
           git diff --cached --quiet || git commit -m "data: update graduate major requirements ($ADDED programs) [$DATE]
 
           Source: catalog.northeastern.edu

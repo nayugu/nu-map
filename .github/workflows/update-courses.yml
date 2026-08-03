@@ -100,6 +100,15 @@ jobs:
       - name: Apply patches
         run: node scripts/apply-patches.js --write 2>&1 | tee /tmp/patches-log.txt
 
+      # ── Step 4: Derive the course-equivalence index ───────────────────────────
+      # Must run AFTER patches: it reads the finished catalog-courses.json (for
+      # prereq trees, titles, credits and descriptions) plus the committed
+      # program requirement files. Pure derivation, no network. Its own write
+      # rails refuse to emit if the result looks like upstream breakage, so a
+      # failure here should stop the run rather than ship a gutted index.
+      - name: Build course equivalences
+        run: node scripts/build-equivalences.js --write 2>&1 | tee /tmp/equivalences-log.txt
+
       # ── Commit and push directly to main ──────────────────────────────────────
       - name: Check for changes
         id: changes
@@ -120,6 +129,7 @@ jobs:
             public/northeastern/offering-summary.json \
             public/northeastern/ratemyhusky.json \
             public/northeastern/change-log.json \
+            public/northeastern/course-equivalences.json \
             src/core/dataMeta.json \
             public/data-meta.json
           git diff --cached --quiet || git commit -m "data: update courses (catalog + availability) [$DATE]
