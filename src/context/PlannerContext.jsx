@@ -51,6 +51,8 @@ const STATS_KEEP_COURSES = 6;
 const STATS_KEEP_TERMS   = 2;
 const STATS_MIN_SH       = 3;
 
+const EMPTY_GRADES = Object.freeze({});
+
 export function PlannerProvider({ children }) {
   const { locale, setLocale, locales } = useLanguage();
   const institution    = usePort(IInstitution);
@@ -294,6 +296,25 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("collapse-other-credits"), String(val)); } catch {}
   };
 
+  // ── Privacy: hide grades ──
+  // A presentation switch for showing the plan to someone else. OFF by
+  // default (the feature is opt-in enough already), and deliberately NOT
+  // part of the plan: it is per-device, so turning it on to share a screen
+  // can never travel into a saved plan, a share link, or an export as a
+  // silent setting someone later forgets is active.
+  //
+  // It hides — it never deletes. Entered grades stay in storage untouched
+  // and reappear the moment it's switched off. What it suppresses is every
+  // grade-DERIVED surface too (GPA, "! grade" badges, the void fade), so a
+  // shoulder-surfer can't reconstruct a failure from its consequences.
+  const [privateGrades, setPrivateGrades] = useState(() => {
+    try { return localStorage.getItem(key("private-grades")) === "true"; } catch { return false; }
+  });
+  const updatePrivateGrades = (val) => {
+    setPrivateGrades(val);
+    try { localStorage.setItem(key("private-grades"), String(val)); } catch {}
+  };
+
   // ── UI: Show logo on continuation rows ──
   const [showContLogo, setShowContLogo] = useState(() => {
     try { const v = localStorage.getItem(key("show-cont-logo")); return v === null ? true : v !== "false"; } catch { return true; }
@@ -465,6 +486,11 @@ export function PlannerProvider({ children }) {
   // loss for what should be a reversible act. An invisible grade must never
   // steer the evaluation, but hidden ≠ destroyed.
   const grades = useMemo(() => {
+    // Private mode short-circuits here, at the single point every grade
+    // consumer reads from — so the GPA block, the badges, the void fade,
+    // the retake unlock and the exports all go quiet together, with no
+    // per-surface opt-in to forget. Storage (gradesRaw) is untouched.
+    if (privateGrades) return EMPTY_GRADES;
     const keys = Object.keys(gradesRaw);
     if (!keys.length) return gradesRaw;
     const out = {};
@@ -477,7 +503,7 @@ export function PlannerProvider({ children }) {
       if (idx < currentSemIdx || (isGraduated && sid === gradSemId)) out[pid] = gradesRaw[pid];
     }
     return out;
-  }, [gradesRaw, placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, gradSemId]);
+  }, [privateGrades, gradesRaw, placements, placedOut, SEM_INDEX, currentSemIdx, isGraduated, gradSemId]);
 
   // The plan's GPA from ENTERED letter grades — computed ONCE here so every
   // consumer (the graduation panel's readout, co-op eligibility, per-course
@@ -2344,11 +2370,16 @@ export function PlannerProvider({ children }) {
     // is how grades were silently missing from JSON backups (round-trip
     // data loss). A plan FILE is a local, user-initiated backup — unlike
     // share links it carries grades on purpose; restorePlan reads them back.
+    //
+    // …unless private mode is on, which is exactly the case where the file
+    // is going to someone else. The export is the leak the toggle exists to
+    // prevent, so it drops grades even though the local slot keeps them.
     const data = {
       ...captureCurrentPlan(),
       planName: plans.find(p => p.id === activePlanId)?.name || "Plan",
       substitutions,
     };
+    if (privateGrades) delete data.grades;
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -2904,6 +2935,7 @@ export function PlannerProvider({ children }) {
     statsVisible, statsJustUnlocked, ackStatsUnlockFlash: () => setStatsJustUnlocked(false),
     showDonate, setShowDonate,
     collapseOtherCredits, setCollapseOtherCredits: updateCollapseOtherCredits,
+    privateGrades, setPrivateGrades: updatePrivateGrades,
     showContLogo, setShowContLogo: updateShowContLogo,
     showUnlocks, setShowUnlocks: updateShowUnlocks,
     semTrackingMode, setSemTrackingMode: updateSemTrackingMode,

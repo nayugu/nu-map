@@ -327,6 +327,8 @@ export const strings = {
   "header.settings.depth.hint":     "과목을 선택할 때 위쪽(선수과목)과 아래쪽(후속과목)으로 강조를 확장할 단계 수입니다.",
   "header.settings.collapse.on":  "기타 학점 접기: 켜짐",
   "header.settings.collapse.off": "기타 학점 접기: 꺼짐",
+ "header.settings.privategrades.on":  "성적 숨김: 켜짐",
+ "header.settings.privategrades.off": "성적 비공개: 꺼짐",
   "header.settings.contlogo.on":  "코업 연속 로고: 표시",
   "header.settings.contlogo.off": "코업 연속 로고: 숨김",
   "header.settings.unlocks.on":   "하위 과목: 표시",

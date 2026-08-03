@@ -327,6 +327,8 @@ export const strings = {
   "header.settings.depth.hint":     "Nombre de sauts que le surlignage suit depuis un cours sélectionné : en amont (prérequis) et en aval (cours débloqués).",
   "header.settings.collapse.on":  "Réduire autres crédits : activé",
   "header.settings.collapse.off": "Réduire autres crédits : désactivé",
+ "header.settings.privategrades.on":  "Notes masquées : oui",
+ "header.settings.privategrades.off": "Garder les notes privées : non",
   "header.settings.contlogo.on":  "Logo de continuation de co-op : activé",
   "header.settings.contlogo.off": "Logo de continuation de co-op : désactivé",
   "header.settings.unlocks.on":   "Afficher les enfants : activé",

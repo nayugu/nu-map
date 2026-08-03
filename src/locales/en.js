@@ -328,6 +328,8 @@ export const strings = {
   "header.settings.depth.hint":     "How many hops the highlight follows from a selected course: upstream (prerequisites) and downstream (unlocks).",
   "header.settings.collapse.on":  "Collapse other credits: on",
   "header.settings.collapse.off": "Collapse other credits: off",
+ "header.settings.privategrades.on":  "Grades hidden: on",
+ "header.settings.privategrades.off": "Keep grades private: off",
   "header.settings.contlogo.on":  "Co-op continuation logo: on",
   "header.settings.contlogo.off": "Co-op continuation logo: off",
   "header.settings.unlocks.on":   "Show children: on",

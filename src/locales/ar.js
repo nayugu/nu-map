@@ -326,6 +326,8 @@ export const strings = {
   "header.settings.depth.hint":     "عدد الخطوات التي يمتد إليها التمييز عند اختيار مقرر: صعودًا (المتطلبات السابقة) ونزولًا (المقررات التي يفتحها).",
   "header.settings.collapse.on":  "طي الساعات الأخرى: مفعل",
   "header.settings.collapse.off": "طي الساعات الأخرى: معطل",
+ "header.settings.privategrades.on":  "إخفاء الدرجات: مُفعّل",
+ "header.settings.privategrades.off": "إبقاء الدرجات خاصة: مُعطّل",
   "header.settings.contlogo.on":  "شعار استمرارية التدريب التعاوني: مفعل",
   "header.settings.contlogo.off": "شعار استمرارية التدريب التعاوني: معطل",
   "header.settings.unlocks.on":   "عرض الأبناء: مفعل",

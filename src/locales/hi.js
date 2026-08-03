@@ -327,6 +327,8 @@ export const strings = {
   "header.settings.depth.hint":     "किसी कोर्स को चुनने पर हाइलाइट कितने चरण ऊपर (पूर्वापेक्षाएँ) और नीचे (अनलॉक) तक फैलता है।",
   "header.settings.collapse.on":  "अन्य क्रेडिट्स छुपाएँ: चालू",
   "header.settings.collapse.off": "अन्य क्रेडिट्स छुपाएँ: बंद",
+ "header.settings.privategrades.on":  "ग्रेड छिपे: चालू",
+ "header.settings.privategrades.off": "ग्रेड निजी रखें: बंद",
   "header.settings.contlogo.on":  "को-ऑप जारी लोगो: चालू",
   "header.settings.contlogo.off": "को-ऑप जारी लोगो: बंद",
   "header.settings.unlocks.on":   "चाइल्ड कोर्स दिखाएं: चालू",

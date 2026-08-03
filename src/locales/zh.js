@@ -266,6 +266,8 @@ export const strings = {
   "header.settings.depth.hint":     "\u70b9\u51fb\u8bfe\u7a0b\u65f6\uff0c\u9ad8\u4eae\u5411\u4e0a\uff08\u5148\u4fee\u8bfe\u7a0b\uff09\u548c\u5411\u4e0b\uff08\u89e3\u9501\u8bfe\u7a0b\uff09\u5ef6\u4f38\u7684\u5c42\u6570\u3002",
   "header.settings.collapse.on":   "\u6298\u53e0\u5176\u4ed6\u5b66\u5206\uff1a\u5f00",
   "header.settings.collapse.off":  "\u6298\u53e0\u5176\u4ed6\u5b66\u5206\uff1a\u5173",
+ "header.settings.privategrades.on":  "已隐藏成绩：开",
+ "header.settings.privategrades.off": "隐藏成绩：关",
   "header.settings.contlogo.on":   "Co-op \u5ef6\u7eed\u6807\u5fd7\uff1a\u5f00",
   "header.settings.contlogo.off":  "Co-op \u5ef6\u7eed\u6807\u5fd7\uff1a\u5173",
   "header.settings.unlocks.on":    "\u663e\u793a\u5b50\u8bfe\u7a0b\uff1a\u5f00",

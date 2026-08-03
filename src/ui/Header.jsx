@@ -75,7 +75,7 @@ export default function Header() {
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
-    grades,
+    grades, privateGrades, setPrivateGrades,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -1120,6 +1120,18 @@ export default function Header() {
                   border: `1px solid ${collapseOtherCredits ? "var(--active)" : "var(--border-2)"}`,
                   color: collapseOtherCredits ? "var(--active)" : "var(--text-4)" }}>
                 {collapseOtherCredits ? t("header.settings.collapse.on") : t("header.settings.collapse.off")}
+              </button>
+
+              {/* Keep grades private — a presentation switch for showing the
+                  plan to someone else. Hides grades, GPA and everything
+                  derived from them, and drops grades from JSON exports.
+                  Nothing is deleted; switching it off restores them. */}
+              <button className="hdr-btn-dd" onClick={() => setPrivateGrades(!privateGrades)}
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: `1px solid ${privateGrades ? "var(--active)" : "var(--border-2)"}`,
+                  color: privateGrades ? "var(--active)" : "var(--text-4)" }}>
+                {privateGrades ? t("header.settings.privategrades.on") : t("header.settings.privategrades.off")}
               </button>
 
               {/* Theme toggle */}

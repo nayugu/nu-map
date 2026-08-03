@@ -327,6 +327,8 @@ export const strings = {
   "header.settings.depth.hint":     "Cuántos saltos sigue el resaltado desde un curso seleccionado: hacia arriba (prerrequisitos) y hacia abajo (desbloqueos).",
   "header.settings.collapse.on":  "Colapsar otros créditos: activado",
   "header.settings.collapse.off": "Colapsar otros créditos: desactivado",
+ "header.settings.privategrades.on":  "Notas ocultas: sí",
+ "header.settings.privategrades.off": "Mantener notas privadas: no",
   "header.settings.contlogo.on":  "Logo de continuación de co-op: activado",
   "header.settings.contlogo.off": "Logo de continuación de co-op: desactivado",
   "header.settings.unlocks.on":   "Mostrar hijos: activado",

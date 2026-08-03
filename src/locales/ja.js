@@ -328,6 +328,8 @@ export const strings = {
   "header.settings.depth.hint":     "科目を選択したときに、上流（前提科目）と下流（解除科目）へ何段までハイライトを広げるか。",
   "header.settings.collapse.on":  "その他の単位を折りたたむ：有効",
   "header.settings.collapse.off": "その他の単位を折りたたむ：無効",
+ "header.settings.privategrades.on":  "成績を非表示: オン",
+ "header.settings.privategrades.off": "成績を非公開に: オフ",
   "header.settings.contlogo.on":  "コーオプ継続ロゴ：表示",
   "header.settings.contlogo.off": "コーオプ継続ロゴ：非表示",
   "header.settings.unlocks.on":  "子コース表示：表示",
