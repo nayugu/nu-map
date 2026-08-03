@@ -39,6 +39,17 @@ const localeOf = () => {
   catch { return "en"; }
 };
 
+// Same theme resolution as index.html's pre-paint script: the saved app
+// theme wins, the OS preference is only the fallback.
+const isDark = () => {
+  let theme = null;
+  try { theme = localStorage.getItem("ncp-theme") || localStorage.getItem("map-theme"); } catch { /* fall through */ }
+  if (theme === "dark") return true;
+  if (theme === "light") return false;
+  return typeof window !== "undefined"
+    && !!window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+};
+
 export default class RecoveryBoundary extends Component {
   // Design preview: ?preview=crash renders the fallback without a real
   // crash (and without the auto-reload, which only runs in didCatch).
@@ -60,15 +71,14 @@ export default class RecoveryBoundary extends Component {
   render() {
     if (!this.state.crashed) return this.props.children;
     const lc = localeOf();
-    const dark = typeof window !== "undefined"
-      && window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+    const dark = isDark();
     return (
       <div dir={lc === "ar" ? "rtl" : "ltr"} style={{
         position: "fixed", inset: 0, zIndex: 99999,
         display: "flex", alignItems: "center", justifyContent: "center",
         textAlign: "center", padding: 24,
         fontFamily: "system-ui, -apple-system, sans-serif",
-        background: dark ? "#0f172a" : "#f8fafc",
+        background: dark ? "#0d1117" : "#fefefe",
         color: dark ? "#e2e8f0" : "#1e293b",
       }}>
         <div>
@@ -77,7 +87,7 @@ export default class RecoveryBoundary extends Component {
           </div>
           <button onClick={() => window.location.reload()} style={{
             marginTop: 16, fontSize: 13, fontWeight: 700, padding: "8px 20px",
-            borderRadius: 8, border: `1px solid ${dark ? "#475569" : "#cbd5e1"}`,
+            borderRadius: 8, border: `1px solid ${dark ? "#3d444d" : "#cbd5e1"}`,
             background: "transparent", color: "inherit", cursor: "pointer",
           }}>
             {BTN[lc] || BTN.en}

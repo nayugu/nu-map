@@ -157,6 +157,16 @@
           ko: 'NU Map이 방금 업데이트되었습니다. 새 버전을 불러오는 중…',
           zh: 'NU Map 刚刚更新，正在加载新版本…'
         };
+        var RECOVERY_SUB = {
+          en: 'This usually takes just a few seconds.',
+          es: 'Esto suele tardar solo unos segundos.',
+          fr: 'Cela ne prend généralement que quelques secondes.',
+          ar: 'عادةً ما يستغرق هذا بضع ثوانٍ فقط.',
+          hi: 'इसमें आमतौर पर बस कुछ सेकंड लगते हैं।',
+          ja: '通常は数秒で完了します。',
+          ko: '보통 몇 초면 완료됩니다.',
+          zh: '通常只需几秒钟。'
+        };
         var RECOVERY_BTN = {
           en: 'Reload', es: 'Recargar', fr: 'Recharger',
           ar: 'إعادة التحميل',
@@ -170,17 +180,27 @@
             var lc = 'en';
             try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
             var msg = RECOVERY_MSG[lc] || RECOVERY_MSG.en;
+            var sub = RECOVERY_SUB[lc] || RECOVERY_SUB.en;
             var btn = RECOVERY_BTN[lc] || RECOVERY_BTN.en;
-            var dark = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+            // Same theme resolution as the pre-paint script above: the saved
+            // app theme wins, the OS preference is only the fallback — so
+            // this overlay blends with whatever background is already up.
+            var theme;
+            try { theme = localStorage.getItem('ncp-theme') || localStorage.getItem('map-theme'); } catch (e) {}
+            if (theme !== 'light' && theme !== 'dark') {
+              theme = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            var dark = theme === 'dark';
             var el = document.createElement('div');
             el.id = 'numap-recovery';
             el.dir = lc === 'ar' ? 'rtl' : 'ltr';
             el.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:system-ui,-apple-system,sans-serif;'
-              + (dark ? 'background:#0f172a;color:#e2e8f0;' : 'background:#f8fafc;color:#1e293b;');
+              + (dark ? 'background:#0d1117;color:#e2e8f0;' : 'background:#fefefe;color:#1e293b;');
             el.innerHTML =
               '<div><div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
+              + '<div style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
               + '<button onclick="window.location.reload()" style="margin-top:16px;font-size:13px;font-weight:700;padding:8px 20px;'
-              + 'border-radius:8px;border:1px solid ' + (dark ? '#475569' : '#cbd5e1') + ';background:transparent;color:inherit;cursor:pointer;">'
+              + 'border-radius:8px;border:1px solid ' + (dark ? '#3d444d' : '#cbd5e1') + ';background:transparent;color:inherit;cursor:pointer;">'
               + btn + '</button></div>';
             document.body.appendChild(el);
           };
