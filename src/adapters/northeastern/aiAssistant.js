@@ -9,10 +9,14 @@
 //
 // Outbound: POSTs live plan state to POST /sync-plan/:sessionId.
 //
-// Inbound:  Subscribes to GET /events/:sessionId SSE stream.
+// Inbound:  WebSocket at /ws/:sessionId — one JSON event per message
+//           (the same frames the retired SSE stream carried in data:).
 //           Dispatches PROPOSAL, APPLY, COMMAND, PROPOSAL_RESOLVED to
 //           any handlers registered with onEvent().
 //           PlannerContext registers a handler on mount.
+//           WebSocket rather than SSE so the production Durable Object
+//           can hibernate between messages (an open SSE stream pinned it
+//           awake 24/7 and burned through the DO duration quota).
 //
 // getMCPUrl(): returns the MCP endpoint URL the user pastes into
 //              claude.ai → Settings → Integrations.
@@ -52,14 +56,36 @@ function dispatch(event) {
   }
 }
 
-// ── SSE connection ────────────────────────────────────────────────
+// ── WebSocket connection ──────────────────────────────────────────
 
-let _sse = null;
+// ws:// or wss:// flavor of the server origin.
+const WS_SERVER = SERVER.replace(/^http/, "ws");
+
+// Keepalive: we send PING_FRAME, the server answers PONG_FRAME. On the
+// Cloudflare worker the pong comes from setWebSocketAutoResponse, i.e.
+// WITHOUT waking the hibernated Durable Object — never change these
+// frames without changing sessionDO.js and mcp-server/src/events.js.
+// Liveness: if a whole ping cycle passes after a ping with no traffic at
+// all (≈2× the interval, detection is relative to our own timer ticks so
+// background-tab throttling can't produce false positives), the socket is
+// declared dead and reopened.
+const PING_FRAME    = "ping";
+const PONG_FRAME    = "pong";
+const PING_INTERVAL = 30_000; // ≥ 25 s, under typical proxy idle timeouts
+
+const RECONNECT_MIN = 1_000;
+const RECONNECT_MAX = 30_000;
+
+let _ws = null;
 let _connected = false;
 let _reconnectTimer = null;
+let _reconnectDelay = RECONNECT_MIN;
+let _pingTimer = null;
+let _lastTraffic = 0;   // last time ANY frame arrived
+let _lastPingAt = 0;    // when the most recent ping went out
 
 // Returning from Claude via the Back button restores this page from the
-// back/forward cache with a dead SSE channel — the status dot would show
+// back/forward cache with a dead channel — the status dot would show
 // link-down (or stale consent) until a manual refresh. Reload on bfcache
 // restore so the page always comes back live.
 if (typeof window !== "undefined") {
@@ -82,31 +108,57 @@ if (typeof window !== "undefined") {
 }
 
 function connect() {
-  if (_sse) return;
+  if (_ws) return;
+  let ws;
   try {
-    _sse = new EventSource(`${SERVER}/events/${SESSION_ID}`);
+    ws = new WebSocket(`${WS_SERVER}/ws/${SESSION_ID}`);
   } catch {
     scheduleReconnect();
     return;
   }
+  _ws = ws;
 
-  _sse.onopen = () => {
+  ws.onopen = () => {
+    if (_ws !== ws) return; // superseded while connecting
     _connected = true;
-    // Re-assert pairing/consent — covers server restarts that wiped the
-    // in-memory session state.
+    _reconnectDelay = RECONNECT_MIN;
+    _lastTraffic = Date.now();
+    _lastPingAt = 0;
+    // Re-assert pairing/consent — covers server restarts (and DO
+    // hibernation wake-ups) that wiped the in-memory session state.
     if (_consent.paired) pushConsent();
+
+    _pingTimer = setInterval(() => {
+      // Dead-socket check first: the previous ping got no answer (nor any
+      // other frame) within a full cycle → the connection is gone even if
+      // the browser hasn't noticed (e.g. network changed under it).
+      if (_lastPingAt && _lastTraffic < _lastPingAt) {
+        try { ws.close(); } catch {}
+        handleDown(ws);
+        return;
+      }
+      _lastPingAt = Date.now();
+      try { ws.send(PING_FRAME); } catch {}
+    }, PING_INTERVAL);
   };
 
-  _sse.onerror = () => {
-    _connected = false;
-    _sse?.close();
-    _sse = null;
-    scheduleReconnect();
-  };
-
-  _sse.onmessage = (e) => {
+  ws.onmessage = (e) => {
+    _lastTraffic = Date.now();
+    if (e.data === PONG_FRAME) return; // keepalive only
     try { dispatch(JSON.parse(e.data)); } catch { /* malformed event — skip */ }
   };
+
+  // onerror is always followed by onclose — one recovery path is enough.
+  ws.onclose = () => handleDown(ws);
+}
+
+// Tear down a (possibly already superseded) socket and queue a retry.
+function handleDown(ws) {
+  if (_ws !== ws) return;
+  _ws = null;
+  _connected = false;
+  if (_pingTimer) { clearInterval(_pingTimer); _pingTimer = null; }
+  scheduleReconnect();
 }
 
 function scheduleReconnect() {
@@ -114,14 +166,18 @@ function scheduleReconnect() {
   _reconnectTimer = setTimeout(() => {
     _reconnectTimer = null;
     if (_consent.paired) connect();
-  }, 5_000);
+  }, _reconnectDelay);
+  _reconnectDelay = Math.min(_reconnectDelay * 2, RECONNECT_MAX);
 }
 
-function disconnectSSE() {
+function disconnectChannel() {
   if (_reconnectTimer) { clearTimeout(_reconnectTimer); _reconnectTimer = null; }
-  _sse?.close();
-  _sse = null;
+  if (_pingTimer) { clearInterval(_pingTimer); _pingTimer = null; }
+  const ws = _ws;
+  _ws = null; // cleared first so the onclose that follows won't reconnect
   _connected = false;
+  _reconnectDelay = RECONNECT_MIN;
+  try { ws?.close(); } catch {}
 }
 
 // ── Adapter ───────────────────────────────────────────────────────
@@ -152,9 +208,9 @@ function readConsentState() {
 
 let _consent = readConsentState();
 
-// The SSE channel (and its Durable Object server-side) exists ONLY for
-// paired sessions — unpaired visitors never open a connection, so casual
-// traffic costs nothing and touches nothing.
+// The WebSocket channel (and its Durable Object server-side) exists ONLY
+// for paired sessions — unpaired visitors never open a connection, so
+// casual traffic costs nothing and touches nothing.
 if (_consent.paired) connect();
 
 function saveConsentState() {
@@ -308,7 +364,7 @@ export default {
    */
   disconnect() {
     _consent = { paired: false, enabled: false, autoApply: false };
-    disconnectSSE(); // close the channel; the session DO can idle out
+    disconnectChannel(); // close the channel; the session DO can idle out
     fetch(`${SERVER}/consent/${SESSION_ID}`, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },

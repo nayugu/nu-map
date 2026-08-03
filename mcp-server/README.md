@@ -40,7 +40,8 @@ The server starts on **port 27182** by default. Set `PORT` to override.
 ```
 NU Map MCP server listening on http://localhost:27182
   MCP endpoint:  http://localhost:27182/mcp
-  SSE → browser: http://localhost:27182/events
+  WS → browser:  ws://localhost:27182/ws
+  SSE → browser: http://localhost:27182/events (legacy)
   Plan sync:     POST http://localhost:27182/sync-plan
 ```
 
@@ -82,7 +83,7 @@ Then use the tunnel URL instead of localhost.
 
 The MCP server needs a live plan snapshot to answer plan-related questions and to push proposals/apply events to the browser. This is done by the **IAIAssistant** adapter in NU Map.
 
-> The browser adapter (`src/adapters/northeastern/aiAssistant.js`) is a separate piece to implement — it POSTs the plan to `/sync-plan` on every meaningful change and listens to `/events` for incoming proposals and apply events.
+> The browser adapter (`src/adapters/northeastern/aiAssistant.js`) is a separate piece to implement — it POSTs the plan to `/sync-plan` on every meaningful change and listens on the `/ws` WebSocket for incoming proposals and apply events.
 
 Until that adapter is wired up you can still use all **read-only** tools (`search_courses`, `get_course`, `get_offered_in`, `list_programs`, `check_prereqs`). Plan-dependent tools (`get_plan`, `audit_requirements`, `validate_changeset`, etc.) will return an error asking you to open NU Map.
 
@@ -91,7 +92,8 @@ Until that adapter is wired up you can still use all **read-only** tools (`searc
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET/POST` | `/mcp` | MCP Streamable HTTP transport |
-| `GET` | `/events` | SSE stream — browser subscribes here |
+| `GET` | `/ws` | WebSocket — browser subscribes here (one JSON event per message; `ping`→`pong` keepalive) |
+| `GET` | `/events` | SSE stream — legacy transport, same events in `data:` frames |
 | `POST` | `/sync-plan` | Browser POSTs `PlanContext` JSON on every plan change |
 | `POST` | `/confirm-proposal/:id` | Browser confirms (`{ accepted: true }`) or rejects a proposal |
 

@@ -315,3 +315,70 @@ test("planState: plan-contents request resolves or times out", async () => {
   const t = planState.createPlanRequest(sid, 30);
   assert.equal(await t.promise, null); // timeout → null
 });
+
+// ── events.js — the browser channel registry (WebSocket + legacy SSE) ─
+
+import { addSocket, broadcast, clientCount, PING_FRAME, PONG_FRAME } from "../src/events.js";
+
+// Minimal ws-shaped fake: on()/send()/close() plus a way to fire events.
+function fakeSocket() {
+  const handlers = {};
+  return {
+    sent: [],
+    closed: false,
+    on(ev, fn) { handlers[ev] = fn; },
+    emit(ev, ...args) { handlers[ev]?.(...args); },
+    send(data) {
+      if (this.closed) throw new Error("socket closed");
+      this.sent.push(data);
+    },
+    close() { this.closed = true; this.emit("close"); },
+  };
+}
+
+test("events: sockets receive broadcasts as bare JSON frames and count as clients", () => {
+  const sid = "events-test-1";
+  const ws = fakeSocket();
+  assert.equal(clientCount(sid), 0);
+  addSocket(sid, ws);
+  assert.equal(clientCount(sid), 1);
+
+  broadcast(sid, { type: "COMMAND", command: { kind: "x" } });
+  assert.equal(ws.sent.length, 1);
+  assert.deepEqual(JSON.parse(ws.sent[0]), { type: "COMMAND", command: { kind: "x" } });
+
+  ws.close();
+  assert.equal(clientCount(sid), 0);
+  broadcast(sid, { type: "COMMAND" }); // nothing listening — must not throw
+  assert.equal(ws.sent.length, 1);
+});
+
+test("events: ping frames get a pong, anything else is ignored (one-way channel)", () => {
+  const sid = "events-test-2";
+  const ws = fakeSocket();
+  addSocket(sid, ws);
+
+  ws.emit("message", Buffer.from(PING_FRAME));
+  assert.deepEqual(ws.sent, [PONG_FRAME]);
+
+  ws.emit("message", Buffer.from('{"type":"NOT_A_THING"}'));
+  assert.deepEqual(ws.sent, [PONG_FRAME]); // no reply, no crash
+  ws.close();
+});
+
+test("events: a socket whose send() throws is dropped, others keep receiving", () => {
+  const sid = "events-test-3";
+  const dead = fakeSocket();
+  const live = fakeSocket();
+  addSocket(sid, dead);
+  addSocket(sid, live);
+  dead.closed = true; // dies without emitting "close" (network vanished)
+
+  broadcast(sid, { type: "PROPOSAL_RESOLVED", proposalId: "p1", accepted: true });
+  assert.equal(clientCount(sid), 1);
+  assert.equal(live.sent.length, 1);
+
+  broadcast(sid, { type: "APPLY" });
+  assert.equal(live.sent.length, 2);
+  live.close();
+});

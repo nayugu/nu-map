@@ -20,7 +20,8 @@
 //     ALL  /session/:sid/mcp
 //
 // Browser channel (both paths):
-//   GET  /events/:sid · POST /sync-plan/:sid · /pair/:sid · /consent/:sid
+//   GET  /ws/:sid (WebSocket, hibernatable) · GET /events/:sid (legacy SSE)
+//   POST /sync-plan/:sid · /pair/:sid · /consent/:sid
 //   POST /confirm-proposal/:sid/:id · /plan-contents/:sid/:reqId · GET /health
 //
 // Share by code (session-free, one-shot plan relay — ShareBoxDO):
@@ -46,7 +47,7 @@ const json = (data, status = 200) =>
 /** Session id from any of the supported route shapes, or null. */
 function sessionIdOf(pathname) {
   const seg = pathname.split("/").filter(Boolean);
-  if (["events", "sync-plan", "pair", "consent"].includes(seg[0]) && seg[1]) return seg[1];
+  if (["ws", "events", "sync-plan", "pair", "consent"].includes(seg[0]) && seg[1]) return seg[1];
   if (["confirm-proposal", "plan-contents"].includes(seg[0]) && seg[1] && seg[2]) return seg[1];
   if (seg[0] === "session" && seg[1] && seg[2] === "mcp") return seg[1];
   return null;

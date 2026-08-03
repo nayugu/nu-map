@@ -5,9 +5,21 @@
 // instances sharing an isolate can't collide) and adds:
 //   • durability: pairing/consent + the latest plan snapshot survive
 //     eviction via DO storage (proposals/changes are ephemeral)
-//   • the SSE channel to the browser tab(s)
+//   • the browser channel: hibernatable WebSockets (/ws) with an SSE
+//     fallback (/events) for clients built before the WS migration
 //   • the MCP endpoint, served stateless-per-request through
 //     SingleRequestTransport (JSON-mode Streamable HTTP)
+//
+// WebSockets use the DO Hibernation API on purpose: an SSE stream pins
+// this object in memory for the life of the tab (25 s heartbeat forever),
+// which bills 128 MB × wall-clock seconds and exhausted the free tier
+// with two all-day tabs. A hibernated WebSocket keeps the connection
+// alive while the object is evicted; ping/pong is answered by the
+// runtime via setWebSocketAutoResponse without ever waking us, so idle
+// duration cost is ~zero. In-memory state (planState's ephemeral
+// proposals/changes) dies with each hibernation exactly as it already
+// died with eviction — the constructor's blockConcurrencyWhile restores
+// the durable parts (consent + plan) on every wake.
 
 import * as planState from "../../../mcp-server/src/planState.js";
 import { createServer, SYNC_PAYLOAD_VERSION } from "../../../mcp-server/src/server.js";
@@ -15,6 +27,13 @@ import { SingleRequestTransport } from "./transport.js";
 import { getQuery } from "./loadData.js";
 
 const enc = new TextEncoder();
+
+// App-level keepalive frames. Must match the browser adapter
+// (src/adapters/northeastern/aiAssistant.js) and the Node dev server
+// (mcp-server/src/events.js): the browser sends PING_FRAME, the runtime
+// answers PONG_FRAME on our behalf while we hibernate.
+const PING_FRAME = "ping";
+const PONG_FRAME = "pong";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -33,8 +52,15 @@ export class SessionDO {
     this.ctx = ctx;
     this.env = env;
     this.sid = ctx.id.name;          // DO is addressed by idFromName(sessionId)
-    this.sseClients = new Set();     // { controller } per open browser tab
+    this.sseClients = new Set();     // { controller } per open browser tab (legacy SSE)
     this.heartbeat = null;
+
+    // Keepalive answered by the runtime WITHOUT waking a hibernated DO —
+    // the whole point of the WS migration. Cheap and idempotent to re-set
+    // on every wake (the constructor reruns after each hibernation).
+    this.ctx.setWebSocketAutoResponse(
+      new WebSocketRequestResponsePair(PING_FRAME, PONG_FRAME)
+    );
 
     // Restore durable state (pairing/consent + last plan snapshot) so a
     // paired session survives eviction/redeploys without re-pairing.
@@ -71,19 +97,69 @@ export class SessionDO {
 
     this.channel = {
       broadcast: (_sid, event) => this.broadcast(event),
-      clientCount: () => this.sseClients.size,
+      clientCount: () => this.sseClients.size + this.ctx.getWebSockets().length,
     };
   }
 
-  // ── SSE (server → browser) ──────────────────────────────────────
+  // ── Browser channel (server → browser) ──────────────────────────
 
   broadcast(event) {
-    const chunk = enc.encode(`data: ${JSON.stringify(event)}\n\n`);
+    const frame = JSON.stringify(event);
+    // Hibernation-aware: getWebSockets() returns every socket accepted via
+    // acceptWebSocket, including ones taken while a previous incarnation of
+    // this object was alive — send() wakes nothing extra, the DO is already
+    // awake to be running this.
+    for (const ws of this.ctx.getWebSockets()) {
+      try { ws.send(frame); } catch { /* runtime reaps broken sockets */ }
+    }
+    const chunk = enc.encode(`data: ${frame}\n\n`);
     for (const client of [...this.sseClients]) {
       try { client.controller.enqueue(chunk); }
       catch { this.dropClient(client); }
     }
   }
+
+  // ── WebSocket (hibernatable — the current transport) ────────────
+
+  openWebSocket(request) {
+    if (request.headers.get("Upgrade")?.toLowerCase() !== "websocket") {
+      return json({ error: "Expected a WebSocket upgrade" }, 426);
+    }
+    const pair = new WebSocketPair();
+    const [client, server] = Object.values(pair);
+
+    // acceptWebSocket (NOT server.accept()) hands the socket to the
+    // runtime so this object can hibernate while it stays open.
+    this.ctx.acceptWebSocket(server);
+
+    // Replay pending proposals so a tab that connects after the broadcast
+    // still shows the review card (browser dedupes by proposal id).
+    for (const p of planState.listProposals(this.sid)) {
+      if (p.status === "pending") {
+        try {
+          server.send(JSON.stringify({ type: "PROPOSAL", proposalId: p.id, changeset: p.changeset, meta: p.meta }));
+        } catch {}
+      }
+    }
+
+    return new Response(null, { status: 101, webSocket: client });
+  }
+
+  // Hibernation handlers. The channel is one-way (server → browser; the
+  // browser talks back over plain POSTs), and ping/pong is auto-answered
+  // without waking us — so a message here is unexpected but harmless.
+  webSocketMessage(_ws, _message) {}
+
+  webSocketClose(ws, code, _reason, _wasClean) {
+    // 1006 is not a valid code to send; normalize like the runtime does.
+    try { ws.close(code === 1006 ? 1000 : code); } catch {}
+  }
+
+  webSocketError(ws) {
+    try { ws.close(1011); } catch {}
+  }
+
+  // ── SSE (legacy transport — kept for pre-WS client builds) ──────
 
   dropClient(client) {
     this.sseClients.delete(client);
@@ -157,6 +233,7 @@ export class SessionDO {
     const seg = pathname.split("/").filter(Boolean); // e.g. ["sync-plan", sid] or ["session", sid, "mcp"]
 
     try {
+      if (seg[0] === "ws")       return this.openWebSocket(request);
       if (seg[0] === "events")   return this.openSSE();
 
       if (seg[0] === "session" && seg[2] === "mcp") return this.handleMcp(request);

@@ -12,7 +12,8 @@
 // directory — it all comes from src/adapters and src/core.
 //
 // HTTP surface:
-//   GET  /events/:sessionId               SSE stream  → browser  (proposals, apply, commands, plan requests)
+//   GET  /ws/:sessionId                   WebSocket   → browser  (proposals, apply, commands, plan requests)
+//   GET  /events/:sessionId               SSE stream  → browser  (legacy transport, same frames)
 //   POST /sync-plan/:sessionId            browser     → server   (live plan state; {v, plan} envelope or bare plan)
 //   POST /confirm-proposal/:sid/:id       browser     → server   (user approved / rejected a proposal)
 //   POST /consent/:sessionId              browser     → server   ({enabled} — the in-app kill switch)
@@ -22,6 +23,7 @@
 
 import express from "express";
 import cors from "cors";
+import { WebSocketServer } from "ws";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 
 import { loadCatalog, courseUrl } from "../src/adapters/northeastern/courseCatalog.node.js";
@@ -33,7 +35,7 @@ import creditSystem from "../src/adapters/northeastern/creditSystem.js";
 import * as offeringStats from "../src/adapters/northeastern/offeringStats.js";
 import { createPlannerQuery } from "../src/adapters/mcp/plannerQueryAdapter.js";
 
-import { addClient, broadcast, clientCount } from "./src/events.js";
+import { addClient, addSocket, broadcast, clientCount } from "./src/events.js";
 import * as planState from "./src/planState.js";
 import { createMemoryShareBox } from "./src/shareBox.js";
 import { createServer, SYNC_PAYLOAD_VERSION } from "./src/server.js";
@@ -62,16 +64,21 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json({ limit: "2mb" }));
 
-// ── SSE  (server → browser) ─────────────────────────────────────────
+// Replay pending proposals on connect: a proposal broadcast while the
+// tab's channel was still connecting would otherwise never show its
+// review card (Claude keeps waiting on a decision the user can't see).
+// The browser dedupes by proposal id, so replays are idempotent.
+function pendingProposalEvents(sessionId) {
+  return planState.listProposals(sessionId)
+    .filter(p => p.status === "pending")
+    .map(p => ({ type: "PROPOSAL", proposalId: p.id, changeset: p.changeset, meta: p.meta }));
+}
+
+// ── SSE  (server → browser; legacy transport, kept for old clients) ─
 app.get("/events/:sessionId", (req, res) => {
   addClient(req.params.sessionId, res);
-  // Replay pending proposals: a proposal broadcast while the tab's SSE was
-  // still connecting would otherwise never show its review card (Claude
-  // keeps waiting on a decision the user can't see).
-  for (const p of planState.listProposals(req.params.sessionId)) {
-    if (p.status === "pending") {
-      res.write(`data: ${JSON.stringify({ type: "PROPOSAL", proposalId: p.id, changeset: p.changeset, meta: p.meta })}\n\n`);
-    }
+  for (const ev of pendingProposalEvents(req.params.sessionId)) {
+    res.write(`data: ${JSON.stringify(ev)}\n\n`);
   }
 });
 
@@ -174,10 +181,28 @@ app.all("/session/:sessionId/mcp", async (req, res) => {
 });
 
 // ── Start ────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
   console.log(`\nNU Map MCP server listening on http://localhost:${PORT}`);
   console.log(`  MCP endpoint:  /session/:sessionId/mcp`);
-  console.log(`  SSE → browser: /events/:sessionId`);
+  console.log(`  WS → browser:  /ws/:sessionId`);
+  console.log(`  SSE → browser: /events/:sessionId (legacy)`);
   console.log(`  Plan sync:     POST /sync-plan/:sessionId`);
   console.log(`  Consent:       POST /consent/:sessionId`);
+});
+
+// ── WebSocket  (server → browser; same JSON frames as the SSE data) ──
+// Mirrors the Cloudflare worker's /ws/:sessionId hibernation endpoint so
+// VITE_MCP_SERVER_URL can point at either. `ws` lives only in this
+// package — the browser bundle never sees it.
+const wss = new WebSocketServer({ noServer: true });
+httpServer.on("upgrade", (req, socket, head) => {
+  const m = /^\/ws\/([^/?#]+)/.exec(req.url ?? "");
+  if (!m) { socket.destroy(); return; }
+  const sessionId = decodeURIComponent(m[1]);
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    addSocket(sessionId, ws);
+    for (const ev of pendingProposalEvents(sessionId)) {
+      try { ws.send(JSON.stringify(ev)); } catch {}
+    }
+  });
 });
