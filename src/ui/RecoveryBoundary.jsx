@@ -58,15 +58,16 @@ function Emblem({ dark }) {
   );
   return (
     <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto 14px" }}>
-      {/* Ribbon palette: the logo red's own family — pink tint on both
-          themes; maroon shade on light, soft white on dark where maroon
-          would vanish. */}
+      {/* Ribbon palette: the thick ribbon carries the logo's red, the thin
+          one is white with a whisper of blue (a step deeper on the light
+          theme so it doesn't dissolve into the white page). The sweeping
+          bar below reuses the same pair. */}
       <svg viewBox="0 0 120 120" aria-hidden="true"
         style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", overflow: "visible" }}>
         {ribbon("M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8",
-          "#fb7185", 6, "150 90", 240, "3.2s", 16, 0.9)}
+          "#ef4444", 6, "150 90", 240, "3.2s", 16, 0.9)}
         {ribbon("M60 19 C 84 18, 102 37, 100 60 C 98 84, 80 102, 58 101 C 36 100, 18 82, 20 58 C 22 37, 38 20, 60 19",
-          dark ? "#fecdd3" : "#881337", 4, "110 110", 220, "2.6s", -20, 0.85)}
+          dark ? "#dbeafe" : "#bfdbfe", 4, "110 110", 220, "2.6s", -20, 0.85)}
       </svg>
       <div style={{ position: "absolute", left: "50%", top: "50%", width: 56, height: 56,
         margin: "-28px 0 0 -28px", animation: "numapFloat 3s ease-in-out infinite alternate" }}>
@@ -143,7 +144,7 @@ export default class RecoveryBoundary extends Component {
           <div style={{ width: 260, height: 4, borderRadius: 99, overflow: "hidden",
             margin: "0 auto 20px", background: dark ? "#21262d" : "#e2e8f0" }}>
             <div style={{ width: "40%", height: "100%", borderRadius: 99,
-              background: `linear-gradient(90deg, ${dark ? "#58a6ff, #a78bfa" : "#2563eb, #7c3aed"})`,
+              background: `linear-gradient(90deg, #ef4444, ${dark ? "#dbeafe" : "#bfdbfe"})`,
               animation: "numapCrashSweep 1.3s ease-in-out infinite alternate" }} />
           </div>
           <div style={{ fontSize: 15, fontWeight: 600, maxWidth: 420, lineHeight: 1.5 }}>

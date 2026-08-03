@@ -203,12 +203,12 @@
             // arcs and four bobbing paper-ribbon strips (SMIL, so no CSS
             // transform-box juggling). Confetti bobs use nested <g>: outer
             // animates translate, inner holds the static placement.
-            // Ribbon palette: the logo red's own family (color theory:
-            // monochromatic tint + shade around the brand hue). Pink on
-            // both themes; the second ribbon is maroon on light and a
-            // soft white on dark, where maroon would vanish.
-            var rib1 = '#fb7185';
-            var rib2 = dark ? '#fecdd3' : '#881337';
+            // Ribbon palette: the thick ribbon carries the logo's red, the
+            // thin one is white with a whisper of blue (a step deeper on
+            // the light theme so it doesn't dissolve into the white page).
+            // The sweeping bar below reuses the same pair.
+            var rib1 = '#ef4444';
+            var rib2 = dark ? '#dbeafe' : '#bfdbfe';
             el.innerHTML =
               '<style>'
               + '@keyframes numapRecoverySweep{from{transform:translateX(' + (lc === 'ar' ? '250%' : '-100%') + ')}to{transform:translateX(' + (lc === 'ar' ? '-100%' : '250%') + ')}}'
@@ -242,7 +242,7 @@
               + '</div>'
               + '<div style="width:260px;height:4px;border-radius:99px;overflow:hidden;margin:0 auto 20px;background:' + (dark ? '#21262d' : '#e2e8f0') + ';">'
               + '<div style="width:40%;height:100%;border-radius:99px;background:linear-gradient(90deg,'
-              + (dark ? '#58a6ff,#a78bfa' : '#2563eb,#7c3aed')
+              + rib1 + ',' + rib2
               + ');animation:numapRecoverySweep 1.3s ease-in-out infinite alternate;"></div></div>'
               + '<div style="font-size:15px;font-weight:600;max-width:420px;line-height:1.5;">' + msg + '</div>'
               + '<div style="margin-top:6px;font-size:12px;font-weight:500;color:' + (dark ? '#8b949e' : '#64748b') + ';">' + sub + '</div>'
