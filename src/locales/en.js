@@ -98,6 +98,7 @@ export const strings = {
   "grad.conc.label":        "CONCENTRATION",
   "grad.gpa.title":               "GPA requirements",
   "grad.gpa.met":                 "met with the grades entered",
+  "grad.gpa.current":             "{gpa} so far ({n} graded)",
   "grad.gpa.needed":              "needs at least a {grade} average in the remaining courses",
   "grad.gpa.impossible":          "can't reach {gpa} with the grades entered — talk to your advisor",
   "grad.gpa.scope.cumulative":    "overall GPA",

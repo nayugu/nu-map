@@ -97,6 +97,7 @@ export const strings = {
   "grad.conc.label":        "세부 전공",
   "grad.gpa.title":               "GPA 요건",
   "grad.gpa.met":                 "입력한 성적으로 충족됨",
+  "grad.gpa.current":             "현재 {gpa} ({n}과목 입력)",
   "grad.gpa.needed":              "남은 과목에서 평균 {grade} 이상이 필요합니다",
   "grad.gpa.impossible":          "입력한 성적으로는 {gpa}에 도달할 수 없습니다 — 지도교수와 상담하세요",
   "grad.gpa.scope.cumulative":    "전체 GPA",

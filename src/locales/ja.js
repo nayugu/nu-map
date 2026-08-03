@@ -98,6 +98,7 @@ export const strings = {
   "grad.conc.label":        "集中分野",
   "grad.gpa.title":               "GPA要件",
   "grad.gpa.met":                 "入力済みの成績で達成",
+  "grad.gpa.current":             "現在 {gpa}（{n}科目入力済み）",
   "grad.gpa.needed":              "残りの科目で平均{grade}以上が必要です",
   "grad.gpa.impossible":          "入力済みの成績では{gpa}に到達できません — アドバイザーに相談してください",
   "grad.gpa.scope.cumulative":    "全体のGPA",

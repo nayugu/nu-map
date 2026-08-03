@@ -97,6 +97,7 @@ export const strings = {
   "grad.conc.label":        "التركيز",
   "grad.gpa.title":               "متطلبات المعدل التراكمي",
   "grad.gpa.met":                 "تحقق بالدرجات المُدخلة",
+  "grad.gpa.current":             "{gpa} حتى الآن ({n} مُقيَّمة)",
   "grad.gpa.needed":              "تحتاج إلى متوسط {grade} على الأقل في المقررات المتبقية",
   "grad.gpa.impossible":          "لا يمكن الوصول إلى {gpa} بالدرجات المُدخلة — راجع مرشدك الأكاديمي",
   "grad.gpa.scope.cumulative":    "المعدل التراكمي العام",

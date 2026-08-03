@@ -97,6 +97,7 @@ export const strings = {
   "grad.conc.label":         "\u65b9\u5411",
   "grad.gpa.title":               "GPA 要求",
   "grad.gpa.met":                 "按已输入的成绩已达标",
+  "grad.gpa.current":             "当前 {gpa}（已评分 {n} 门）",
   "grad.gpa.needed":              "剩余课程平均成绩需至少达到 {grade}",
   "grad.gpa.impossible":          "按已输入的成绩无法达到 {gpa} — 请咨询你的导师",
   "grad.gpa.scope.cumulative":    "总 GPA",

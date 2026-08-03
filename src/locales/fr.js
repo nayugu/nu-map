@@ -97,6 +97,7 @@ export const strings = {
   "grad.conc.label":        "CONCENTRATION",
   "grad.gpa.title":               "Exigences de GPA",
   "grad.gpa.met":                 "atteint avec les notes saisies",
+  "grad.gpa.current":             "{gpa} à ce jour ({n} notés)",
   "grad.gpa.needed":              "il faut au moins une moyenne de {grade} dans les cours restants",
   "grad.gpa.impossible":          "impossible d'atteindre {gpa} avec les notes saisies — parlez-en à votre conseiller",
   "grad.gpa.scope.cumulative":    "GPA global",

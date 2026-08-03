@@ -97,6 +97,7 @@ export const strings = {
   "grad.conc.label":        "विशेषज्ञता",
   "grad.gpa.title":               "GPA आवश्यकताएँ",
   "grad.gpa.met":                 "दर्ज किए गए ग्रेड से पूरा हुआ",
+  "grad.gpa.current":             "अब तक {gpa} ({n} ग्रेडेड)",
   "grad.gpa.needed":              "शेष कोर्सों में कम से कम {grade} औसत चाहिए",
   "grad.gpa.impossible":          "दर्ज ग्रेड से {gpa} तक पहुँचना संभव नहीं — अपने सलाहकार से बात करें",
   "grad.gpa.scope.cumulative":    "समग्र GPA",

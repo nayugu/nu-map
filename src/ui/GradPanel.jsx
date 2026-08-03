@@ -20,7 +20,7 @@ import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { filterInTimeline } from "../core/planModel.js";
-import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, dropVoidTakes, dropUnearnedTakes } from "../core/gradeSystem.js";
+import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
@@ -489,19 +489,27 @@ function GpaRules({ program, programKind = "major" }) {
       const entries = entriesFor(rule);
       const st = setConstraintStatus(entries, rule.threshold);
       const anyEntered = entries.some(e => e.grade != null);
+      // The scoped average of ENTERED letters — real typed data, so it may
+      // render (unlike the assumed ceiling, which never may). Labelled with
+      // the graded count so a 2-course average can't read as a transcript
+      // GPA. Null while nothing in scope is entered.
+      const scopedGpa = enteredGPA(entries);
+      const nGraded   = entries.filter(e => countsInGPA(e.grade)).length;
+      const cur = scopedGpa != null
+        ? t("grad.gpa.current", { gpa: scopedGpa.toFixed(3), n: nGraded }) : null;
       if (st.status === "impossible") {
-        return { mark: "✕", color: REL_STYLE["prerequisite-order"].color, label, chip,
+        return { mark: "✕", color: REL_STYLE["prerequisite-order"].color, label, chip, cur,
                  sub: t("grad.gpa.impossible", { gpa: rule.threshold.toFixed(3) }) };
       }
       if (st.status === "atRisk" && anyEntered) {
-        return { mark: "!", color: REL_STYLE["corequisite-viol"].color, label, chip,
+        return { mark: "!", color: REL_STYLE["corequisite-viol"].color, label, chip, cur,
                  sub: t("grad.gpa.needed", { grade: st.neededGrade }) };
       }
       if (anyEntered && st.status === "met") {
-        return { mark: "✓", color: REL_STYLE.prerequisite.color, label, chip,
+        return { mark: "✓", color: REL_STYLE.prerequisite.color, label, chip, cur,
                  sub: t("grad.gpa.met") };
       }
-      return { mark: "·", color: "var(--text-5)", label, chip,
+      return { mark: "·", color: "var(--text-5)", label, chip, cur,
                sub: anyEntered && st.neededGrade ? t("grad.gpa.needed", { grade: st.neededGrade }) : null };
     });
   }, [rules, grades, placements, placedOut, courseMap, SEM_INDEX, program, programKind, t]);
@@ -530,6 +538,12 @@ function GpaRules({ program, programKind = "major" }) {
               <div style={{ fontSize: isPhone ? 8 : 9.5, lineHeight: 1.45, color: "var(--text-4)" }}>
                 {scaleLatinRuns(r.label)}
               </div>
+              {r.cur && (
+                <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, fontWeight: 600,
+                              color: "var(--text-3)", marginTop: 1, letterSpacing: 0 }}>
+                  {r.cur}
+                </div>
+              )}
               {r.sub && (
                 <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: r.color, marginTop: 1 }}>
                   {r.sub}
