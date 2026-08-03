@@ -69,6 +69,36 @@ export function takeConsumesSlot(g) {
   return g == null || g === "I" || yieldsCredit(g);
 }
 
+/**
+ * Placements minus takes that no longer consume their slot (entered
+ * F/U/W/X) — the PROJECTION view: what the plan still counts toward the
+ * degree. An I stays (it resolves in place; assumed pass), unentered stays.
+ * Identity when no grades are entered, so default behaviour is unchanged.
+ */
+export function dropVoidTakes(placements, grades) {
+  if (!grades || !Object.keys(grades).length) return placements;
+  const out = {};
+  for (const [pid, sid] of Object.entries(placements ?? {})) {
+    if (takeConsumesSlot(grades[pid])) out[pid] = sid;
+  }
+  return out;
+}
+
+/**
+ * Placements minus takes that have EARNED no credit (entered F/U/W/X and
+ * I) — the EARNED view: the registrar's "semester hours earned". An
+ * incomplete has earned nothing yet; it re-enters this view when its real
+ * grade replaces the I. Identity when no grades are entered.
+ */
+export function dropUnearnedTakes(placements, grades) {
+  if (!grades || !Object.keys(grades).length) return placements;
+  const out = {};
+  for (const [pid, sid] of Object.entries(placements ?? {})) {
+    if (yieldsCredit(grades[pid])) out[pid] = sid;
+  }
+  return out;
+}
+
 /** Points axis. Only letters (including F at 0.000) enter an average;
     S/U/I/W/X carry no quality points. Unentered courses are excluded
     from ENTERED averages — they only appear in feasibility bounds. */

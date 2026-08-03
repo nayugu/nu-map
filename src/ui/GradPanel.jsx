@@ -20,7 +20,7 @@ import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { filterInTimeline } from "../core/planModel.js";
-import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA } from "../core/gradeSystem.js";
+import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, dropVoidTakes, dropUnearnedTakes } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
@@ -1135,6 +1135,7 @@ export default function GradPanel({ wideCatalog = false }) {
     studentType,
     setShowNewPlanModal, setNewPlanInitialType,
     claudePreview,
+    grades,
   } = usePlanner();
 
   const isGrad = studentType === "graduate";
@@ -1245,24 +1246,31 @@ export default function GradPanel({ wideCatalog = false }) {
 
   // Timeline-scoped: courses parked outside the cohort range never satisfy
   // requirements (they stay in state, uncounted, until the cohort widens).
+  // Grade-scoped too: a definitively failed take (entered F/U/W) satisfies
+  // nothing — dropVoidTakes removes it, and a placed retake restores the
+  // course key through its instance id. Identity while no grades exist.
   const placedSet = useMemo(
-    () => buildPlacedKeySet(filterInTimeline(effectivePlacements, SEM_INDEX), placedOut, courseMap),
-    [effectivePlacements, placedOut, courseMap, SEM_INDEX]
+    () => buildPlacedKeySet(filterInTimeline(dropVoidTakes(effectivePlacements, grades), SEM_INDEX), placedOut, courseMap),
+    [effectivePlacements, placedOut, courseMap, SEM_INDEX, grades]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
   // Used for GE display so substituted courses don't appear twice with doubled SH.
   const realPlacedSet = useMemo(
-    () => buildPlacedKeySet(filterInTimeline(placements, SEM_INDEX), placedOut, courseMap),
-    [placements, placedOut, courseMap, SEM_INDEX]
+    () => buildPlacedKeySet(filterInTimeline(dropVoidTakes(placements, grades), SEM_INDEX), placedOut, courseMap),
+    [placements, placedOut, courseMap, SEM_INDEX, grades]
   );
 
   const doneSet = useMemo(() => {
+    // Earned view: F/U/W and I have earned nothing (registrar's grade
+    // table) — a completed-semester course only counts as DONE when its
+    // entered grade yields credit, or no grade is entered (assumed).
     const donePlacements = Object.fromEntries(
-      Object.entries(effectivePlacements).filter(([, semId]) => getSemStatus(semId) === "completed")
+      Object.entries(dropUnearnedTakes(effectivePlacements, grades))
+        .filter(([, semId]) => getSemStatus(semId) === "completed")
     );
     return buildPlacedKeySet(donePlacements, placedOut, courseMap);
-  }, [effectivePlacements, placedOut, courseMap, getSemStatus]);
+  }, [effectivePlacements, placedOut, courseMap, getSemStatus, grades]);
 
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));

@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import {
   GRADE_POINTS, GRADE_SYMBOLS, yieldsCredit, countsInGPA, satisfiesGate,
   setConstraintStatus, enteredGPA, effectiveGradeOfTakes, buildTakesResolver,
+  dropVoidTakes, dropUnearnedTakes,
 } from "../../src/core/gradeSystem.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
 
@@ -247,6 +248,26 @@ test("resolver › entering a grade on X changes nothing for courses not dependi
 test("resolver › placed-out takes resolve as 'out' and carry their grade", () => {
   const takesOf = buildTakesResolver({}, new Set(["CS2500"]), { CS2500: "U" }, fullIndex);
   assert.deepEqual(takesOf("CS2500"), [{ fi: "out", grade: "U" }]);
+});
+
+// ── credit views: the registrar's "earned" vs the plan's projection ─
+
+const PLACEMENTS = { A1: "fall", B2: "fall", C3: "spring", D4: "spring", E5: "summer" };
+
+test("credit views › no grades entered → identity, byte-for-byte", () => {
+  assert.equal(dropVoidTakes(PLACEMENTS, {}), PLACEMENTS);
+  assert.equal(dropUnearnedTakes(PLACEMENTS, null), PLACEMENTS);
+});
+
+test("credit views › projection drops F/U/W but keeps I (resolves in place)", () => {
+  const g = { A1: "F", B2: "U", C3: "W", D4: "I", E5: "B" };
+  assert.deepEqual(Object.keys(dropVoidTakes(PLACEMENTS, g)), ["D4", "E5"]);
+});
+
+test("credit views › earned drops I too — an incomplete has earned nothing yet", () => {
+  const g = { A1: "F", D4: "I", E5: "S" };
+  // S earns credit; unentered assumed; F and I do not
+  assert.deepEqual(Object.keys(dropUnearnedTakes(PLACEMENTS, g)), ["B2", "C3", "E5"]);
 });
 
 test("resolver › off-timeline placements stay invisible, like the legacy lookup", () => {

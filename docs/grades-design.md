@@ -149,3 +149,29 @@ silent pass.
 - Let a missing grade behave differently from today's app in any way.
 - Put grades in a share link, QR code, or MCP payload.
 - Render W as a failure, or I as satisfied.
+
+## Credit views (semester-hour totals and requirement audits)
+
+Two pure filters implement the registrar's credit rules, both identity when
+no grades are entered:
+
+- `dropVoidTakes` — the PROJECTION: F/U/W/X takes are removed (no credit,
+  slot refunded); `I` stays (resolves in place, assumed pass). Drives
+  `totalSHPlaced` and requirement satisfaction (`placedSet`) — a failed
+  course satisfies nothing until its retake instance restores the key.
+- `dropUnearnedTakes` — the EARNED view: F/U/W/X **and I** removed (an
+  incomplete has earned nothing yet). Drives `totalSHDone` and `doneSet`.
+
+Verified live: F → done/placed both drop; I → done drops, placed holds;
+W → both drop; S → both hold (credit, no GPA effect).
+
+Deliberately grade-blind surfaces: the MCP `audit_requirements` (grades
+never leave the browser) and the exported report — both documented as
+plan-shape audits, not transcript audits.
+
+## Corequisites
+
+No policy links coreq grades — each registration earns its own grade (the
+grade table is per-course; the prerequisite policy names only prereq
+grades). So grades are NOT shared between coreq partners: fail the lecture,
+the lab keeps its own entry. The coreq *placement* warning is unaffected.

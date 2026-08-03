@@ -16,7 +16,7 @@ import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked } from "../core/repeatInstances.js";
-import { buildTakesResolver } from "../core/gradeSystem.js";
+import { buildTakesResolver, takeConsumesSlot, yieldsCredit } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
@@ -1396,20 +1396,26 @@ export function PlannerProvider({ children }) {
     return out;
   }, [pvPlacements, courseMap, SEM_INDEX]);
 
+  // Grade axis (registrar's grade table): F/U/W/X earn NO credit — a failed
+  // take contributes nothing to either total. The PLACED projection keeps I
+  // (resolves in place, assumed pass); the DONE/earned total excludes I too
+  // (an incomplete has earned nothing yet). Unentered grades change nothing.
   const totalSHPlaced = useMemo(
     () => pvBonusSH + Object.entries(pvPlacements)
-      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id) && !supersededTakes.has(id))
+      .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id)
+        && !supersededTakes.has(id) && takeConsumesSlot(grades[id]))
       .reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
-    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX, supersededTakes]
+    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX, supersededTakes, grades]
   );
 
   const totalSHDone = useMemo(
     () => pvBonusSH + Object.entries(pvPlacements).filter(([id, sid]) => {
       if (pvPlacedOut.has(id) || supersededTakes.has(id)) return false;
+      if (!yieldsCredit(grades[id])) return false;
       const sidx = SEM_INDEX[sid] ?? 99;
       return isGraduated ? sidx <= currentSemIdx : sidx < currentSemIdx;
     }).reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
-    [pvBonusSH, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap, supersededTakes]
+    [pvBonusSH, pvPlacements, pvPlacedOut, SEM_INDEX, currentSemIdx, isGraduated, effectiveCourseMap, supersededTakes, grades]
   );
 
   // ── Stats tab gating ──────────────────────────────────────────
