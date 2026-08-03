@@ -62,6 +62,7 @@ export const strings = {
   "bank.empty.search":            "一致するコースがありません。",
   "bank.empty.saved.hint":        "任意のコース行の☆をクリックして保存します。",
   "bank.placedout.hint":          "ここにコースをドラッグして免除にします（単位は付与されませんが、要件は満たします）",
+  "bank.placedout.search.placeholder": "⌕ 検索して免除にする",
   "bank.search.empty.typing":     "検索語を入力…",
   "bank.search.empty.none":       "結果がありません",
   "bank.colors.button":           "色分け",

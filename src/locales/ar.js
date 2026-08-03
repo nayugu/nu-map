@@ -61,6 +61,7 @@ export const strings = {
   "bank.empty.search":            "لا توجد مقررات مطابقة.",
   "bank.empty.saved.hint":        "انقر على ☆ في أي صف لحفظ المقرر.",
   "bank.placedout.hint":          "اسحب المقررات هنا لمعادلتها (بدون ساعات، لكن تحقق المتطلبات)",
+  "bank.placedout.search.placeholder": "⌕ ابحث للمعادلة",
   "bank.search.empty.typing":     "اكتب للبحث…",
   "bank.search.empty.none":       "لا توجد نتائج",
   "bank.colors.button":           "الألوان",

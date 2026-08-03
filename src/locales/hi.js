@@ -61,6 +61,7 @@ export const strings = {
   "bank.empty.search":            "कोई कोर्स मेल नहीं खाता।",
   "bank.empty.saved.hint":        "किसी भी कोर्स पंक्ति पर ☆ क्लिक करें सेव करने के लिए।",
   "bank.placedout.hint":          "यहाँ कोर्स ड्रैग करें छूट के लिए (कोई क्रेडिट नहीं, लेकिन आवश्यकताएँ पूरी होती हैं)",
+  "bank.placedout.search.placeholder": "⌕ छूट के लिए खोजें",
   "bank.search.empty.typing":     "खोजने के लिए टाइप करें…",
   "bank.search.empty.none":       "कोई परिणाम नहीं",
   "bank.colors.button":           "रंग",

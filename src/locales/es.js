@@ -61,6 +61,7 @@ export const strings = {
   "bank.empty.search":            "No hay cursos que coincidan.",
   "bank.empty.saved.hint":        "Haz clic en ☆ en cualquier fila de curso para guardarlo.",
   "bank.placedout.hint":          "Arrastra cursos aquí para convalidarlos (sin crédito, pero cumplen requisitos)",
+  "bank.placedout.search.placeholder": "⌕ busca para convalidar",
   "bank.search.empty.typing":     "Escribe para buscar…",
   "bank.search.empty.none":       "Sin resultados",
   "bank.colors.button":           "colores",

@@ -61,6 +61,7 @@ export const strings = {
   "bank.empty.search":            "Aucun cours correspondant.",
   "bank.empty.saved.hint":        "Cliquez sur ☆ sur une ligne de cours pour l'enregistrer.",
   "bank.placedout.hint":          "Faites glisser les cours ici pour les valider (pas de crédit, mais exigences remplies)",
+  "bank.placedout.search.placeholder": "⌕ rechercher pour valider",
   "bank.search.empty.typing":     "Tapez pour rechercher…",
   "bank.search.empty.none":       "Aucun résultat",
   "bank.colors.button":           "couleurs",

@@ -61,6 +61,7 @@ export const strings = {
   "bank.empty.search":            "일치하는 코스가 없습니다.",
   "bank.empty.saved.hint":        "코스 행의 ☆를 클릭하여 저장하세요.",
   "bank.placedout.hint":          "여기에 코스를 드래그하여 면제 처리합니다 (학점은 없지만 요건을 충족합니다)",
+  "bank.placedout.search.placeholder": "⌕ 검색하여 면제 처리",
   "bank.search.empty.typing":     "검색어를 입력하세요…",
   "bank.search.empty.none":       "결과 없음",
   "bank.colors.button":           "색상",

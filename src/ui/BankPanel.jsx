@@ -933,7 +933,19 @@ export default function BankPanel() {
             </span>
             <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-5)" }}>{collapsePlacedOut && !pvPlacedOutTouched ? "▶" : "▼"}</span>
           </div>
-          {(!collapsePlacedOut || pvPlacedOutTouched) && (
+          {(!collapsePlacedOut || pvPlacedOutTouched) && (<>
+            {/* Search-to-place-out: same mechanism as drag-and-drop (both
+                funnel through onDropPlacedOut), for when the course isn't
+                already on screen to drag. */}
+            <div style={{ padding: "0 8px 6px" }}>
+              <CourseSearch
+                courses={courses}
+                value={null}
+                onChange={id => { if (id) onDropPlacedOut({ id, type: "course", fromSem: null }); }}
+                placeholder={t("bank.placedout.search.placeholder")}
+                isPhone={isPhone}
+              />
+            </div>
             <div
               data-drop-placedout="true"
               onDragOver={e => {
@@ -1017,7 +1029,7 @@ export default function BankPanel() {
                 </div>
               )}
             </div>
-          )}
+          </>)}
         </>}
 
         </>}
