@@ -86,7 +86,8 @@ export async function validateSharePayload(payload) {
  */
 export function createRateLimiter(now = Date.now) {
   const buckets = new Map(); // `${ip}|${kind}` → { tokens, at }
-  return function take(ip, kind) {
+
+  const take = (ip, kind) => {
     const { capacity, refillMs } = RATE[kind];
     const key = `${ip}|${kind}`;
     const t = now();
@@ -101,6 +102,15 @@ export function createRateLimiter(now = Date.now) {
     if (b.tokens >= 1) { b.tokens -= 1; return { ok: true }; }
     return { ok: false, retryAfterSeconds: Math.max(1, Math.ceil((b.at + refillMs - t) / 1000)) };
   };
+
+  // Give a token back (never past capacity). Used when an action turns
+  // out to be a no-op on the world — canceling your own code.
+  const refund = (ip, kind) => {
+    const b = buckets.get(`${ip}|${kind}`);
+    if (b) b.tokens = Math.min(RATE[kind].capacity, b.tokens + 1);
+  };
+
+  return { take, refund };
 }
 
 /**
@@ -109,7 +119,7 @@ export function createRateLimiter(now = Date.now) {
  */
 export function createMemoryShareBox({ now = Date.now } = {}) {
   const shares = new Map(); // code → { payload, expiresAt, ip }
-  const take = createRateLimiter(now);
+  const rate = createRateLimiter(now);
 
   const purge = () => {
     const t = now();
@@ -118,7 +128,7 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
 
   return {
     async create(payload, ip) {
-      const gate = take(ip, "create");
+      const gate = rate.take(ip, "create");
       if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
       const valid = await validateSharePayload(payload);
       if (!valid.ok) return valid;
@@ -143,12 +153,19 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
     },
 
     async claim(rawCode, ip) {
-      const gate = take(ip, "claim");
+      const gate = rate.take(ip, "claim");
       if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
       purge();
       const share = shares.get(normalizeCode(rawCode));
       if (!share) return { ok: false, reason: "not_found" };
       shares.delete(normalizeCode(rawCode)); // one use — gone on first claim
+      // Self-cancel is a no-op on the world, so it's free: taking back
+      // your own code refunds both tokens. Claims of OTHER people's
+      // codes stay budgeted — that's the scan defense.
+      if (share.ip === ip) {
+        rate.refund(ip, "claim");
+        rate.refund(ip, "create");
+      }
       return { ok: true, payload: share.payload };
     },
   };

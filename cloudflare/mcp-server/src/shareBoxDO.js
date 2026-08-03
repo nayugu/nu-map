@@ -35,7 +35,7 @@ export class ShareBoxDO {
     this.env = env;
     // In-memory on purpose — eviction resets budgets honest users never
     // exhaust, and a scanner keeping the DO hot keeps its budget alive.
-    this.take = createRateLimiter();
+    this.rate = createRateLimiter();
   }
 
   /** 200 ok · 429 rate/concurrency · 404 unknown code · 400 the rest. */
@@ -68,7 +68,7 @@ export class ShareBoxDO {
   }
 
   async create(payload, ip) {
-    const gate = this.take(ip, "create");
+    const gate = this.rate.take(ip, "create");
     if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
     const valid = await validateSharePayload(payload);
     if (!valid.ok) return valid;
@@ -107,12 +107,19 @@ export class ShareBoxDO {
   }
 
   async claim(rawCode, ip) {
-    const gate = this.take(ip, "claim");
+    const gate = this.rate.take(ip, "claim");
     if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
     const key = `share:${normalizeCode(rawCode)}`;
     const share = await this.ctx.storage.get(key);
     if (!share || share.expiresAt <= Date.now()) return { ok: false, reason: "not_found" };
     await this.ctx.storage.delete(key); // one use — gone on first claim
+    // Self-cancel is a no-op on the world, so it's free: taking back
+    // your own code refunds both tokens. Claims of OTHER people's codes
+    // stay budgeted — that's the scan defense.
+    if (share.ip === ip) {
+      this.rate.refund(ip, "claim");
+      this.rate.refund(ip, "create");
+    }
     return { ok: true, payload: share.payload };
   }
 

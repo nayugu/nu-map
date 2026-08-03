@@ -146,6 +146,21 @@ test("shareBox › token bucket: burst then trickle, with a retry countdown", as
   assert.equal((await box.create(payload, "6.6.6.6")).ok, true);
 });
 
+test("shareBox › canceling your own code refunds the budget", async () => {
+  let t = 1_000_000;
+  const box = createMemoryShareBox({ now: () => t });
+  const payload = await encodePlan(plan);
+
+  // 40 mint-then-cancel cycles from one IP — far past both budgets.
+  // Self-cancel is a no-op on the world, so it never rate-limits.
+  for (let i = 0; i < 40; i++) {
+    const r = await box.create(payload, "6.6.6.6");
+    assert.equal(r.ok, true, `create in cycle ${i + 1}`);
+    const c = await box.claim(r.code, "6.6.6.6");
+    assert.equal(c.ok, true, `cancel in cycle ${i + 1}`);
+  }
+});
+
 test("shareBox › claim budget cuts off scanners and recovers by trickle", async () => {
   let t = 1_000_000;
   const box = createMemoryShareBox({ now: () => t });
