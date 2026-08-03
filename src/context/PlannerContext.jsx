@@ -591,6 +591,14 @@ export function PlannerProvider({ children }) {
   const ghostRef        = useRef(null);  // floating ghost element during touch drag
   const touchStartOff   = useRef({ x: 0, y: 0 }); // finger offset within card
   const isFirstRender = useRef(true);
+  // The plan id the live state currently describes. Used to tell "loading
+  // the plan we were already showing" (state-v2 is a valid source for
+  // anything the slot omits) from "the user switched plans" (the slot is
+  // the only truth). Keyed on the ID rather than a first-run flag because
+  // StrictMode double-invokes effects in dev: a one-shot flag flips on the
+  // first pass and the second pass then takes the wrong branch — which is
+  // exactly how the wipe survived its first fix. See restorePlan.
+  const restoredPlanId = useRef(null);
   const touchDragFromRef    = useRef(null);
   const touchDragTypeRef    = useRef(null);
   const touchDragTypeIdRef  = useRef(null);
@@ -2246,7 +2254,13 @@ export function PlannerProvider({ children }) {
     return result;
   };
 
-  const restorePlan = (d) => {
+  /**
+   * @param {object} d  the saved plan object
+   * @param {{ initial?: boolean }} [opts]
+   *   initial: this is the first restore of the ACTIVE plan on mount, where
+   *   the live state loaded from state-v2 describes this same plan.
+   */
+  const restorePlan = (d, { initial = false } = {}) => {
     setPlacements(d.placements ?? {});
     setSpecialTermPl(migrateSpecialTermPl(d));
     setSemOrders(d.semOrders ?? {});
@@ -2268,7 +2282,22 @@ export function PlannerProvider({ children }) {
     setStudentTypeRaw(st);
     try { localStorage.setItem(key("student-type"), st); } catch {}
     setPlacedOut(d.placedOut ? new Set(d.placedOut) : new Set());
-    setGrades(d.grades && typeof d.grades === "object" ? d.grades : {});
+    // ABSENT ≠ EMPTY, and conflating them destroyed data.
+    //
+    // Every plan slot written before grades existed has no `grades` key at
+    // all. Restoring `d.grades ?? {}` on mount therefore wiped the grades
+    // that state-v2 had correctly saved, and the autosave then persisted
+    // the empty map over both stores — entered grades gone for good, on an
+    // ordinary reload, with nothing the user did to cause it.
+    //
+    // So: an explicit {} means "this plan has no grades" and is honoured.
+    // A MISSING key means "this slot predates grades and knows nothing",
+    // and on the initial restore the live state (same plan, loaded from
+    // state-v2) is the better source — keep it, and the autosave migrates
+    // the slot forward. On a plan SWITCH the key's absence must still
+    // clear, or the previous plan's grades would leak into this one.
+    if (d.grades && typeof d.grades === "object") setGrades(d.grades);
+    else if (!initial) setGrades({});
   };
 
   useEffect(() => {
@@ -2276,9 +2305,16 @@ export function PlannerProvider({ children }) {
       const raw = localStorage.getItem(key(`plan-data-${activePlanId}`));
       if (raw) {
         const d = JSON.parse(raw);
-        restorePlan(d);
+        // Same plan as the live state (mount, or a StrictMode re-run) →
+        // the slot's omissions may be filled from what we already hold.
+        restorePlan(d, { initial: restoredPlanId.current === null || restoredPlanId.current === activePlanId });
+        restoredPlanId.current = activePlanId;
       } else {
-        resetPlanToDefaults();
+        // No slot at all. On MOUNT that is a legacy profile whose plan was
+        // only ever in state-v2 — resetting would throw the live plan away,
+        // grades included. Only a real plan switch resets.
+        if (restoredPlanId.current !== null && restoredPlanId.current !== activePlanId) resetPlanToDefaults();
+        restoredPlanId.current = activePlanId;
       }
     } catch {
       resetPlanToDefaults();
