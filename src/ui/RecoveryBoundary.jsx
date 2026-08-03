@@ -86,15 +86,22 @@ function Emblem({ dark }) {
 // on its own clock (negative delays start them mid-flight), swaying and
 // tumbling as it falls. Deterministic pseudo-randomness from the index,
 // mirroring the index.html overlay exactly.
-const PETALS = Array.from({ length: 12 }, (_, i) => ({
-  left:    (i * 83 + 7) % 100,
-  size:    10 + ((i * 37) % 8),
-  fall:    9 + ((i * 53) % 70) / 10,
-  delay:   -(((i * 91) % 120) / 10),
-  sway:    2.4 + ((i * 29) % 20) / 10,
-  color:   i % 3 === 0 ? "#ef4444" : i % 3 === 1 ? "#f87171" : "#fca5a5",
-  opacity: 0.35 + ((i * 17) % 30) / 100,
-}));
+// Phase-uniform delays: each petal starts at an evenly spaced fraction
+// of its own fall (5 is coprime to 14, so the fractions cover the whole
+// cycle) — the shower is steady at every height, never bunches, never
+// leaves gaps.
+const PETALS = Array.from({ length: 14 }, (_, i) => {
+  const fall = 9 + ((i * 53) % 70) / 10;
+  return {
+    left:    (i * 83 + 7) % 100,
+    size:    10 + ((i * 37) % 8),
+    fall,
+    delay:   -(fall * ((i * 5) % 14) / 14),
+    sway:    2.4 + ((i * 29) % 20) / 10,
+    color:   i % 3 === 0 ? "#ef4444" : i % 3 === 1 ? "#f87171" : "#fca5a5",
+    opacity: 0.35 + ((i * 17) % 30) / 100,
+  };
+});
 
 function Petals() {
   return (

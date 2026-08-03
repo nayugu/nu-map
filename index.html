@@ -213,11 +213,15 @@
             // every load looks the same and nothing needs storing. Behind
             // the card (earlier in the DOM), pointer-events off.
             var petals = '';
-            for (var i = 0; i < 12; i++) {
+            for (var i = 0; i < 14; i++) {
               var pl = (i * 83 + 7) % 100;
               var ps = 10 + ((i * 37) % 8);
               var pf = 9 + ((i * 53) % 70) / 10;
-              var pd = -(((i * 91) % 120) / 10);
+              // Phase-uniform: each petal starts at an evenly spaced
+              // fraction of its own fall (5 is coprime to 14, so the
+              // fractions cover the whole cycle) — the shower is steady
+              // at every height, never bunches, never leaves gaps.
+              var pd = -(pf * ((i * 5) % 14) / 14);
               var pw = 2.4 + ((i * 29) % 20) / 10;
               var pc = i % 3 === 0 ? '#ef4444' : i % 3 === 1 ? '#f87171' : '#fca5a5';
               var po = 0.35 + ((i * 17) % 30) / 100;
