@@ -607,7 +607,7 @@ export function PlannerProvider({ children }) {
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    stateRef.current    = { placements, specialTermPl, semOrders, placedOut };
+    stateRef.current    = { placements, specialTermPl, semOrders, placedOut, grades: gradesRaw };
     allEdgesRef.current = allEdges;
     onDropRef.current          = onDrop;
     onDropBankRef.current      = onDropBank;
@@ -1129,11 +1129,15 @@ export function PlannerProvider({ children }) {
   }
 
   // ── Undo / redo ───────────────────────────────────────────────
+  // Grades ride the undo snapshots: removing a graded course prunes its
+  // grade (the cleanup effect), so an undo that restores the placement
+  // must restore the grade with it — otherwise undo silently loses data.
   const pushUndo = () => {
     const snap = {
       placements:    stateRef.current.placements,
       specialTermPl: stateRef.current.specialTermPl,
       semOrders:     stateRef.current.semOrders,
+      grades:        stateRef.current.grades,
     };
     undoStack.current = [...undoStack.current.slice(-49), snap];
     redoStack.current = [];
@@ -1146,11 +1150,13 @@ export function PlannerProvider({ children }) {
       placements:    stateRef.current.placements,
       specialTermPl: stateRef.current.specialTermPl,
       semOrders:     stateRef.current.semOrders,
+      grades:        stateRef.current.grades,
     }];
     undoStack.current = undoStack.current.slice(0, -1);
     setPlacements(snap.placements);
     setSpecialTermPl(snap.specialTermPl);
     setSemOrders(snap.semOrders);
+    if (snap.grades) setGrades(snap.grades);
   };
 
   const doRedo = () => {
@@ -1160,11 +1166,13 @@ export function PlannerProvider({ children }) {
       placements:    stateRef.current.placements,
       specialTermPl: stateRef.current.specialTermPl,
       semOrders:     stateRef.current.semOrders,
+      grades:        stateRef.current.grades,
     }];
     redoStack.current = redoStack.current.slice(0, -1);
     setPlacements(snap.placements);
     setSpecialTermPl(snap.specialTermPl);
     setSemOrders(snap.semOrders);
+    if (snap.grades) setGrades(snap.grades);
   };
 
   // ── Effect: keyboard shortcuts ────────────────────────────────
@@ -2295,16 +2303,14 @@ export function PlannerProvider({ children }) {
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
+    // ONE builder for the plan artifact: hand-building a second object here
+    // is how grades were silently missing from JSON backups (round-trip
+    // data loss). A plan FILE is a local, user-initiated backup — unlike
+    // share links it carries grades on purpose; restorePlan reads them back.
     const data = {
-      version: 1,
-      exported: new Date().toISOString(),
+      ...captureCurrentPlan(),
       planName: plans.find(p => p.id === activePlanId)?.name || "Plan",
-      entSem: planEntSem, entYear: planEntYear,
-      gradSem: planGradSem, gradYear: planGradYear,
-      placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
-      offeredOverrides, collapsedSubs,
-      placedOut: [...placedOut], substitutions,
-      major, major2, conc, conc2, minor1, minor2, studentType,
+      substitutions,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");

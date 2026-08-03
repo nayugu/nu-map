@@ -55,10 +55,18 @@ export default function GradePopover({ pid, grade, rect, setGrade, onDismiss }) 
 
   return createPortal(
     <>
+      {/* A React portal still bubbles synthetic events through the REACT
+          tree, so without these the anchor card sees the pointer as never
+          having left (its hover state sticks, and the chip lingers after
+          dismissal). Stop the mouse pair here, at the portal boundary. */}
       <div onClick={e => { e.stopPropagation(); onDismiss?.(); }}
+           onMouseOver={e => e.stopPropagation()}
+           onMouseOut={e => e.stopPropagation()}
            style={{ position: "fixed", inset: 0, zIndex: 9000 }} />
       <div ref={ref}
            onClick={e => e.stopPropagation()}
+           onMouseOver={e => e.stopPropagation()}
+           onMouseOut={e => e.stopPropagation()}
            style={{
              position: "fixed",
              left: placed ? placed.left : Math.round(rect.left),

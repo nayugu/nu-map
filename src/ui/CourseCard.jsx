@@ -51,8 +51,13 @@ function fadeSubjectColor(hex, k, isDark) {
 // COMPLETED semesters: grades are facts about the past. The rect is
 // captured eagerly at click time — reading it inside a state updater from
 // a pooled event was a real crash in the verification pill.
-function GradeChip({ pid, grade, setGrade, t, compact = false }) {
-  const [pop, setPop] = useState(null); // anchor DOMRect while open
+//
+// `pop`/`setPop` live in the CARD, not here: the empty chip renders on
+// hover, and if the popover's lifetime were tied to the chip's render,
+// hover-state and open-state fight — the chip lingered after dismissing,
+// and a mouse-out could kill an open popover. The card keeps the chip
+// mounted exactly while (hovered || graded || open).
+function GradeChip({ pid, grade, setGrade, t, pop, setPop, compact = false }) {
   return (
     <>
       <span
@@ -120,6 +125,18 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const title        = useTranslatedText(course.title);
 
   const [editingSh, setEditingSh] = useState(false);
+  const [gradePop, setGradePop]   = useState(null); // grade popover anchor rect while open
+  const [isMouseHov, setIsMouseHov] = useState(false);
+  // Closing the popover also drops hover: the pointer may have travelled to
+  // the popover (or off the card entirely) while the portal was up, and the
+  // card can't observe that. Without this the empty chip lingers on a card
+  // the pointer already left.
+  const closeGradePop = (v) =>
+    setGradePop(prev => {
+      const next = typeof v === "function" ? v(prev) : v;
+      if (!next) setIsMouseHov(false);
+      return next;
+    });
 
   const isSel         = selectedId === course.id;
   // Repeat-take awareness: sibling = another representation of the SELECTED
@@ -188,7 +205,6 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // Sibling takes are exempt from selection-dimming — they ARE the selected
   // course, just another take of it.
   const dimmed = hasSel && !isSel && !isConn && !isSibling;
-  const [isMouseHov, setIsMouseHov] = useState(false);
 
   // Relevance fade — courses allocated to the selected major(s) /
   // concentration keep their full subject colour, minor courses a step
@@ -334,8 +350,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         {/* Grade entry (phone): completed semesters only, and only once
             selected or already graded — the 17px card row has no room for
             a resting affordance on every card */}
-        {isDone && (isSel || grades[course.id] != null) && (
-          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t} compact />
+        {isDone && (isSel || grades[course.id] != null || gradePop) && (
+          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t}
+                     pop={gradePop} setPop={closeGradePop} compact />
         )}
         {(isViolated || notOffered || coreqViol) && (
           isViolated && violationType === "order" ? (
@@ -488,11 +505,13 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           </span>
         )}
         {/* Grade entry (desktop): completed semesters only. Entered grades
-            always show; the empty affordance appears on HOVER only — tying
-            it to selection left a stray "–" chip sitting on the selected
-            card after Clear grade */}
-        {inSem && isDone && (grades[course.id] != null || isMouseHov) && (
-          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t} />
+            always show; the empty affordance appears on HOVER only (tying
+            it to selection left a stray "–" chip after Clear grade), and
+            stays mounted while its popover is open so the popover survives
+            the pointer leaving the card — and vanishes with the dismiss. */}
+        {inSem && isDone && (grades[course.id] != null || isMouseHov || gradePop) && (
+          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t}
+                     pop={gradePop} setPop={closeGradePop} />
         )}
         {isViolated && violationType === "order" && (
           <span title={t("course.tooltip.prereq.order")}
