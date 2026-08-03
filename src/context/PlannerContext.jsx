@@ -630,7 +630,7 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw });
+    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
   }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   useEffect(() => {
@@ -650,7 +650,7 @@ export function PlannerProvider({ children }) {
     // wrote {"persist":true} to a junk key on every unload. The last-moment
     // safety net has never actually saved anything.
     const h = () => {
-      saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw });
+      saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
       // The SLOT is what the app reloads from, so it needs the same net.
       saveCurrentPlanToSlot();
     };
@@ -2260,6 +2260,19 @@ export function PlannerProvider({ children }) {
    *   initial: this is the first restore of the ACTIVE plan on mount, where
    *   the live state loaded from state-v2 describes this same plan.
    */
+  // Is the live state (loaded from state-v2 at mount) actually about the
+  // plan we are being asked to show? state-v2 now carries the plan id it
+  // was written for; a snapshot from before that stamp has none, and for
+  // those the active plan at load time IS the plan it describes. Only when
+  // we can prove a MISMATCH do we discard live state.
+  // Deliberately NOT gated on "is this the first run": StrictMode
+  // double-invokes effects in dev, so any one-shot flag flips on the first
+  // pass and the second pass takes the opposite branch — the exact trap
+  // that made two earlier attempts at this fix appear to do nothing. Plan
+  // identity is idempotent, so both passes agree.
+  const liveStateMatchesPlan = () =>
+    _saved?.planId === undefined || _saved.planId === activePlanId;
+
   const restorePlan = (d, { initial = false } = {}) => {
     setPlacements(d.placements ?? {});
     setSpecialTermPl(migrateSpecialTermPl(d));
@@ -2310,14 +2323,26 @@ export function PlannerProvider({ children }) {
         restorePlan(d, { initial: restoredPlanId.current === null || restoredPlanId.current === activePlanId });
         restoredPlanId.current = activePlanId;
       } else {
-        // No slot at all. On MOUNT that is a legacy profile whose plan was
-        // only ever in state-v2 — resetting would throw the live plan away,
-        // grades included. Only a real plan switch resets.
-        if (restoredPlanId.current !== null && restoredPlanId.current !== activePlanId) resetPlanToDefaults();
+        // No slot at all. That is either a legacy profile whose plan lived
+        // only in state-v2 (resetting would throw the live plan away,
+        // grades included) or a genuinely new plan (which MUST start
+        // empty). Tell them apart by whether the live state belongs to
+        // this plan — never by mount-vs-switch, which cannot distinguish a
+        // reload that lands on a different plan.
+        const keepLive = liveStateMatchesPlan();
+        if (!keepLive) resetPlanToDefaults();
         restoredPlanId.current = activePlanId;
       }
     } catch {
-      resetPlanToDefaults();
+      // The slot is unreadable — corrupt or truncated, which is exactly
+      // what a quota-exceeded write leaves behind. Wiping to defaults here
+      // would destroy the live plan (grades included) because of damage to
+      // a MIRROR, so on the initial mount we keep what state-v2 already
+      // gave us and let the autosave rewrite a good slot. Only a real plan
+      // switch resets, where the live state belongs to a different plan.
+      const keepLive = liveStateMatchesPlan();
+      if (!keepLive) resetPlanToDefaults();
+      restoredPlanId.current = activePlanId;
     }
     // Reset bank UI filters to defaults
     setBankSearch("");
