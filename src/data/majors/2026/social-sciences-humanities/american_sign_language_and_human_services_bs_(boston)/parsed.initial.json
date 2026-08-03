@@ -37,7 +37,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/american-sign-language-human-services-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -225,6 +225,19 @@
         }
       ],
       "minRequirementCount": 2
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Combined Major GPA Requirement",
+      "threshold": 2.75,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "ASL"
+        ]
+      },
+      "text": "Minimum 2.750 GPA required in all ASL courses"
     }
   ]
 }

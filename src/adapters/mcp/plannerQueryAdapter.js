@@ -388,7 +388,14 @@ export function createPlannerQuery(deps) {
     if (!json) return null;
     const option = programList.find(p => p.id === id) ?? { id };
     const out = { ...option, resolvedFrom: programId !== id ? programId : undefined };
-    if (include.includes("tree")) out.requirementSections = json.requirementSections ?? [];
+    if (include.includes("tree")) {
+      out.requirementSections = json.requirementSections ?? [];
+      // GPA rules are constraints over the student's grades, not
+      // requirements a placement can satisfy — surfaced verbatim so the
+      // model can EXPLAIN them, never evaluated here: grades never leave
+      // the browser (docs/grades-design.md).
+      if (json.gpaRequirements?.length) out.gpaRequirements = json.gpaRequirements;
+    }
     if (include.includes("concentrations")) {
       out.concentrations = {
         required: (json.concentrations?.minOptions ?? 0) > 0,
@@ -475,6 +482,12 @@ export function createPlannerQuery(deps) {
       totalCreditsRequired: majorJson.totalCreditsRequired ?? null,
       concentrationApplied,
       concentrationRequired: (majorJson.concentrations?.minOptions ?? 0) > 0 && !concentrationApplied,
+      // GPA constraints ride along verbatim (with a note below). They are
+      // never evaluated server-side: grades live only in the user's browser.
+      ...(majorJson.gpaRequirements?.length ? {
+        gpaRequirements: majorJson.gpaRequirements,
+        gpaNote: "These GPA rules are constraints on grades, which NU Map does not share. State them to the user; do not claim they are met or unmet.",
+      } : {}),
       ...(v ? {
         verification: {
           level: v.level,

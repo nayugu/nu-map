@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/computer-science-mscs-align/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -481,6 +481,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "36-44 total semester hours required Minimum 3.000 GPA required"
     }
   ]
 }

@@ -52,7 +52,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-data-science-bsenve/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -696,6 +696,29 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Engineering GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "major (CIVE) courses"
+      },
+      "text": "Minimum 2.000 GPA required in major (CIVE) courses"
+    },
+    {
+      "title": "Data Science Major Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CS",
+          "DS"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in all CS and DS courses"
     }
   ]
 }

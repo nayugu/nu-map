@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/interdisciplinary-studies-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -483,6 +483,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA/Grade Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 2.000 GPA required"
     }
   ]
 }

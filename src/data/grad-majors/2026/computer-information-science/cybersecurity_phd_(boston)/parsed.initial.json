@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/computer-information-science/cybersecurity/cybersecurity-bachelors-degree-entrance-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -365,6 +365,25 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "48 total semester hours required Minimum 3.000 GPA required"
+    },
+    {
+      "title": "Degree Requirements",
+      "threshold": 3.5,
+      "scope": {
+        "kind": "described",
+        "text": "the core requirement"
+      },
+      "text": "Incoming PhD in Cybersecurity students who have already completed a Master of Science in an adjacent field may petition to the graduate program administration for advanced entry. Advanced entry petitions are reviewed by the program administration on a case-by-case basis. Please note that advanced entry does not waive by itself any part of the PhD coursework requirements. As a degree conferral requirement, a minimum of 16 semester hours of coursework beyond the 32 semester hours of the master’s degree is required of advanced entry PhD students (48 semester hours is required of standard entry PhD students). A grade of B or higher is required in each course. A cumulative 3.500 GPA is required for the core requirement."
     }
   ]
 }

@@ -41,7 +41,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/economics/economics-psychology-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -513,39 +513,34 @@
         }
       ],
       "minRequirementCount": 1
-    },
+    }
+  ],
+  "gpaRequirements": [
     {
-      "type": "SECTION",
       "title": "Combined Major Credit/ GPA Requirement",
-      "requirements": [
+      "threshold": 2,
+      "scope": {
+        "kind": "courses"
+      },
+      "courses": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2315
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2316
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2560
-            },
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 2320
-            }
-          ]
+          "subject": "ECON",
+          "classId": 2315
+        },
+        {
+          "subject": "ECON",
+          "classId": 2316
+        },
+        {
+          "subject": "ECON",
+          "classId": 2560
+        },
+        {
+          "subject": "PSYC",
+          "classId": 2320
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "text": "Grades in the following required courses must average to a minimum of C (2.000):"
     }
   ]
 }

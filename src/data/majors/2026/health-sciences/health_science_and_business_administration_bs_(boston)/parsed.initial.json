@@ -14,7 +14,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-business-administration-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -548,6 +548,17 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Business GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all business courses"
+      },
+      "text": "Minimum 2.000 GPA required in all business courses"
     }
   ],
   "concentrations": {

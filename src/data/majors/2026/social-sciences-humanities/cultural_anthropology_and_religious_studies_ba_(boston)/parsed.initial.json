@@ -24,7 +24,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/cultural-anthropology-religious-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -386,6 +386,26 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Cultural Anthropology GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all anthropology courses"
+      },
+      "text": "Minimum 2.000 GPA required in all anthropology courses"
+    },
+    {
+      "title": "Religion GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all religion courses"
+      },
+      "text": "Minimum 2.000 GPA required in all religion courses"
     }
   ]
 }

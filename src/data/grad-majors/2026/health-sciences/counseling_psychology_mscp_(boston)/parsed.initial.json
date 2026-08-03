@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/counseling-psychology-mscp/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -156,6 +156,16 @@
         }
       ],
       "minRequirementCount": 2
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "A minimum of 60 total semester hours is required Minimum 3.000 GPA required"
     }
   ],
   "concentrations": {

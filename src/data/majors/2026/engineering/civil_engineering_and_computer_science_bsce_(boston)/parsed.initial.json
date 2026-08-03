@@ -58,7 +58,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/civil-engineering-computer-science-bsce/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -660,6 +660,34 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Engineering GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CIVE",
+          "GE"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in CIVE and GE courses"
+    },
+    {
+      "title": "Khoury GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CS",
+          "CY",
+          "DS",
+          "IS"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in CS, CY, DS, and IS courses"
     }
   ],
   "generalElectiveSH": 4

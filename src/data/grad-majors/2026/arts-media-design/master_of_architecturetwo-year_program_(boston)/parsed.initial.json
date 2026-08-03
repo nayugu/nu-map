@@ -28,7 +28,7 @@
       "level": "partial",
       "kind": "grad",
       "score": 0.85,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/architecture/two-year-program-march/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -168,6 +168,16 @@
         }
       ],
       "minRequirementCount": 2
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "60 total semester hours required (64 if a concentration is declared) Minimum 3.000 GPA required"
     }
   ],
   "concentrations": {

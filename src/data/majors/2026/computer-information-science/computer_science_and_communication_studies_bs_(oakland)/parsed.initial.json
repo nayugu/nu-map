@@ -41,7 +41,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-communication-studies-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -608,6 +608,28 @@
       ],
       "minRequirementCount": 1,
       "shared": true
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Khoury College GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all CS, CY, DS, IS"
+      },
+      "text": "Minimum cumulative 2.000 GPA required in all CS, CY, DS, IS"
+    },
+    {
+      "title": "Communication Studies GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "COMM"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in all COMM courses"
     }
   ],
   "generalElectiveSH": 32

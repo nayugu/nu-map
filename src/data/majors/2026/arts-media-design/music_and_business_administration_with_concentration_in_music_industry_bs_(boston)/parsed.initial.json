@@ -36,7 +36,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/music/music-business-administration-concentration-music-industry-bs-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -727,6 +727,17 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Business GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all business courses"
+      },
+      "text": "Minimum 2.000 GPA required in all business courses"
     }
   ],
   "concentrations": {

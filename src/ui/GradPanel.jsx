@@ -20,6 +20,8 @@ import { IInstitution }       from "../ports/IInstitution.js";
 import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { filterInTimeline } from "../core/planModel.js";
+import { setConstraintStatus, effectiveGradeOfTakes } from "../core/gradeSystem.js";
+import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
@@ -394,6 +396,149 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
       {open && has && <div style={{ marginTop: 3 }}>
         {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.type === "OR" && r.sat && !c.sat} />)}
       </div>}
+    </div>
+  );
+}
+
+// ── GPA rules ────────────────────────────────────────────────────
+// Constraints over grades, rendered as info — never as requirements a
+// course can tick off. With no grades entered every rule reads neutral
+// (the arithmetic genuinely says "satisfiable"); entered grades tighten
+// it to met / needs-at-least-X / impossible. Impossible is the only red,
+// because it is a proof, not a prediction. Fuzzy scopes ("all business
+// courses") display their own text and are never computed.
+
+function GpaRules({ program, programKind = "major" }) {
+  const { t } = useLanguage();
+  const { grades, placements, placedOut, courseMap, SEM_INDEX, isPhone } = usePlanner();
+  const rules = program?.gpaRequirements ?? [];
+
+  // Every row carries an explicit scope chip — without one, a rule like
+  // "must average to C" is ambiguous between "this section" and "the whole
+  // major", which is exactly the misreading the old pick-1 phantom caused.
+  const scopeChip = (rule) => {
+    switch (rule.scope.kind) {
+      case "cumulative": return t("grad.gpa.scope.cumulative");
+      case "program":    return t(programKind === "minor" ? "grad.gpa.scope.minor" : "grad.gpa.scope.major");
+      case "subjects":   return t("grad.gpa.scope.subjects", { subjects: rule.scope.subjects.join(", ") });
+      case "courses":    return t("grad.gpa.scope.courses", { n: (rule.courses ?? []).length });
+      default:           return null; // described: its own text carries the scope
+    }
+  };
+
+  const rows = useMemo(() => {
+    if (!rules.length) return [];
+
+    // Effective grade per base course — the latest take counts (replacement).
+    const gradeOfBase = (base) => {
+      const takes = [];
+      for (const [pid, sid] of Object.entries(placements)) {
+        if (baseId(pid) !== base) continue;
+        const fi = SEM_INDEX[sid];
+        if (fi === undefined) continue;
+        takes.push({ fi, grade: grades[pid] ?? null });
+      }
+      for (const pid of placedOut) {
+        if (baseId(pid) === base) takes.push({ fi: "out", grade: grades[pid] ?? null });
+      }
+      return takes.length ? effectiveGradeOfTakes(takes) : null;
+    };
+
+    const programKeys = (() => {
+      const keys = new Set();
+      const walk = (n) => {
+        if (!n || typeof n !== "object") return;
+        if (n.type === "COURSE" && n.subject) keys.add(`${n.subject}${n.classId}`);
+        for (const k of ["requirements", "courses", "children"]) (n[k] ?? []).forEach(walk);
+      };
+      (program?.requirementSections ?? []).forEach(walk);
+      return keys;
+    })();
+
+    const entriesFor = (rule) => {
+      if (rule.scope.kind === "courses") {
+        return (rule.courses ?? []).map(c => {
+          const base = `${c.subject}${c.classId}`;
+          return { grade: gradeOfBase(base), credits: courseMap[base]?.sh ?? 4 };
+        });
+      }
+      const subjOk = rule.scope.kind === "subjects" ? new Set(rule.scope.subjects) : null;
+      const out = [], seen = new Set();
+      const consider = (pid, inTL) => {
+        if (!inTL) return;
+        const base = baseId(pid);
+        if (seen.has(base)) return;
+        seen.add(base);
+        const c = courseMap[base];
+        if (!c) return;
+        if (subjOk && !subjOk.has(c.subject)) return;
+        if (rule.scope.kind === "program" && !programKeys.has(base)) return;
+        out.push({ grade: gradeOfBase(base), credits: c.sh ?? 4 });
+      };
+      for (const [pid, sid] of Object.entries(placements)) consider(pid, SEM_INDEX[sid] !== undefined);
+      for (const pid of placedOut) consider(pid, true);
+      return out;
+    };
+
+    return rules.map(rule => {
+      const label = rule.text ?? rule.title ?? "";
+      const chip  = scopeChip(rule);
+      if (rule.threshold == null || rule.scope.kind === "described") {
+        return { mark: "·", color: "var(--text-5)", label, chip, sub: null };
+      }
+      const entries = entriesFor(rule);
+      const st = setConstraintStatus(entries, rule.threshold);
+      const anyEntered = entries.some(e => e.grade != null);
+      if (st.status === "impossible") {
+        return { mark: "✕", color: REL_STYLE["prerequisite-order"].color, label, chip,
+                 sub: t("grad.gpa.impossible", { gpa: rule.threshold.toFixed(3) }) };
+      }
+      if (st.status === "atRisk" && anyEntered) {
+        return { mark: "!", color: REL_STYLE["corequisite-viol"].color, label, chip,
+                 sub: t("grad.gpa.needed", { grade: st.neededGrade }) };
+      }
+      if (anyEntered && st.status === "met") {
+        return { mark: "✓", color: REL_STYLE.prerequisite.color, label, chip,
+                 sub: t("grad.gpa.met") };
+      }
+      return { mark: "·", color: "var(--text-5)", label, chip,
+               sub: anyEntered && st.neededGrade ? t("grad.gpa.needed", { grade: st.neededGrade }) : null };
+    });
+  }, [rules, grades, placements, placedOut, courseMap, SEM_INDEX, program, programKind, t]);
+
+  if (!rows.length) return null;
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
+                    letterSpacing: "0.05em", marginBottom: 4 }}>
+        {t("grad.gpa.title")}
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        {rows.map((r, i) => (
+          <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start" }}>
+            <span style={{ flexShrink: 0, width: 10, textAlign: "center", fontSize: 9,
+                           fontWeight: 800, color: r.color, lineHeight: "14px" }}>{r.mark}</span>
+            <div style={{ minWidth: 0 }}>
+              {r.chip && (
+                <span style={{ display: "inline-block", fontSize: isPhone ? 6.5 : 8, fontWeight: 700,
+                               color: "var(--text-4)", background: "var(--badge-bg)",
+                               border: "1px solid var(--border-2)", borderRadius: 3,
+                               padding: "0px 4px", marginBottom: 2 }}>
+                  {r.chip}
+                </span>
+              )}
+              <div style={{ fontSize: isPhone ? 8 : 9.5, lineHeight: 1.45, color: "var(--text-4)" }}>
+                {scaleLatinRuns(r.label)}
+              </div>
+              {r.sub && (
+                <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: r.color, marginTop: 1 }}>
+                  {r.sub}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -813,6 +958,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
       {expanded && (
         <div style={{ padding: "0 10px 10px" }}>
           {sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+          <GpaRules program={minor} programKind="minor" />
         </div>
       )}
     </div>
@@ -1463,6 +1609,7 @@ export default function GradPanel({ wideCatalog = false }) {
               <SectionBlock sec={concSection} defaultOpen={true} />
             </>
           )}
+          <GpaRules program={major} />
         </MajorCard>}
 
         {/* ── Major 2 framed card ──────────────────────────────── */}
@@ -1482,6 +1629,7 @@ export default function GradPanel({ wideCatalog = false }) {
           loadingLabel={t("grad.loading")}
         >
           {major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+          <GpaRules program={major2Data} />
         </MajorCard>}
 
         {/* ── Minor requirement sections — undergrad only ─────── */}

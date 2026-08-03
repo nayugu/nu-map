@@ -64,7 +64,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/bioengineering/bioengineering-biochemistry-bsbioe/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -530,6 +530,17 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "BIOE coursework"
+      },
+      "text": "Minimum 2.000 GPA required in BIOE coursework"
     }
   ],
   "concentrations": {

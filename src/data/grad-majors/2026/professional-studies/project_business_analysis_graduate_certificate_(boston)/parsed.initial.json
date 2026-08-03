@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "certificate",
       "score": 0.98,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/project-business-analysis-graduate-certificate/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -155,6 +155,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "16 total quarter hours required Minimum 3.000 GPA required"
     }
   ]
 }

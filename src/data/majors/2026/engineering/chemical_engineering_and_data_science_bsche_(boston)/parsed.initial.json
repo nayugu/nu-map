@@ -62,7 +62,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/chemical/chemical-engineering-data-science-bsche/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -526,6 +526,33 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CHME"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in CHME courses"
+    },
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CS",
+          "CY",
+          "DS",
+          "IS"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in CS, CY, DS, and IS courses"
     }
   ],
   "generalElectiveSH": 8

@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/nursing/applied-nursing-research-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -100,6 +100,16 @@
         }
       ],
       "minRequirementCount": 7
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "30 total semester hours required Minimum 3.000 GPA required"
     }
   ]
 }

@@ -44,7 +44,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/economics/economics-human-services-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -413,6 +413,16 @@
       ],
       "minRequirementCount": 1,
       "shared": true
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Economics Major Grade Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "courses"
+      },
+      "text": "Grades in the following four economics courses must average to a minimum of C (2.000):"
     }
   ]
 }

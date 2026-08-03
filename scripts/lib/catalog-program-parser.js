@@ -442,7 +442,28 @@ function parseTable(table, h2Title) {
 
   return groups.map(g => {
     const requirements = parseRowGroup(g.rows);
-    if (!requirements.length) return null;
+
+    // Comment texts survive on the section (transient — parseRequirements
+    // strips them) so a GPA-titled group can be re-read as a constraint:
+    // its threshold lives in a comment row ("… must average to a minimum
+    // of C (2.000):") that parseRowGroup otherwise drops.
+    const comments = g.rows
+      .map(tr => tr.querySelector('td[colspan="2"] span.courselistcomment'))
+      .filter(sp => sp && !(sp.getAttribute('class') ?? '').includes('areaheader'))
+      .map(sp => sp.text.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim());
+
+    if (!requirements.length) {
+      // A comment-only group is normally noise \u2014 EXCEPT when a comment
+      // states a GPA rule ("Khoury College GPA Requirement" over one prose
+      // row; grad "Program Requirement" blocks with "Minimum 3.000 GPA
+      // required"). Emit a shell so parseRequirements converts it into a
+      // constraint; shells never survive into requirementSections.
+      if (comments.some(c => parseGpaRule(c))) {
+        return { type: 'SECTION', title: g.title, requirements: [],
+                 minRequirementCount: 0, _comments: comments };
+      }
+      return null;
+    }
 
     if (g.creditHint > 0) {
       // The section header specifies a credit total → wrap in XOM
@@ -451,6 +472,7 @@ function parseTable(table, h2Title) {
         title: g.title,
         requirements: [{ type: 'XOM', numCreditsMin: g.creditHint, courses: requirements }],
         minRequirementCount: 1,
+        ...(comments.length ? { _comments: comments } : {}),
       };
     }
 
@@ -459,6 +481,7 @@ function parseTable(table, h2Title) {
       title: g.title,
       requirements,
       minRequirementCount: requirements.length,
+      ...(comments.length ? { _comments: comments } : {}),
     };
   }).filter(Boolean);
 }
@@ -865,27 +888,37 @@ const GPA_HEADING = /GPA|grade[\s-]?point/i;
  * never guessed into a subject list.
  */
 export function parseGpaRule(text) {
-  const t = text.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+  const t = text.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
 
   // "Grades in the following … must average to a minimum of C (2.000)"
   let m = /must average to a minimum of [A-DF][+-]? \(([0-9.]+)\)/.exec(t);
   if (m) return { threshold: parseFloat(m[1]), scope: { kind: 'courses' } };
 
-  // "Minimum [cumulative] 2.000 GPA [is] required [in <scope>]"
-  m = /[Mm]inimum(?: cumulative)? ([0-9]\.[0-9]{1,3}) GPA(?: is)? required(?: in ([^.;]+?))?[.;]?$/.exec(t)
-   || /[Mm]inimum cumulative ([0-9]\.[0-9]{1,3}) GPA(?: is)?(?: required)?(?: in ([^.;]+?))?[.;]?$/.exec(t);
+  // "[Minimum] [cumulative] 2.000 GPA [is] required [in <scope>]".
+  // "Minimum" is OPTIONAL: the dominant minor phrasing (146 pages) is the
+  // bare "2.000 GPA required in the minor". A "for <x>" tail ("required for
+  // the core requirement") is NOT a degree-wide floor — it stays described.
+  m = /(?:[Mm]inimum )?(?:[Cc]umulative )?([0-9]\.[0-9]{1,3}) GPA(?: is)? required(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t)
+   || /[Mm]inimum [Cc]umulative ([0-9]\.[0-9]{1,3}) GPA(?: is)?(?: required)?(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t);
   if (!m) return null;
   const threshold = parseFloat(m[1]);
-  const scopeText = (m[2] ?? '').trim();
+  const prep      = m[2] ?? null;
+  const scopeText = (m[3] ?? '').trim();
 
+  if (prep === 'for')
+    return { threshold, scope: { kind: 'described', text: scopeText } };
   if (!scopeText || /^all courses completed/.test(scopeText))
     return { threshold, scope: { kind: 'cumulative' } };
   if (/^(?:the (?:minor|major)|all (?:minor|major) courses)$/i.test(scopeText))
     return { threshold, scope: { kind: 'program' } };
-  // "all CS, CY, DS, and IS courses" — commas Oxford or not, "and" optional
-  const sm = /^all ((?:[A-Z]{2,6}(?:\s*,\s*|,? and )?)+) ?courses$/.exec(scopeText);
+  // "[all] CS, CY, DS, and IS courses" — "all" and Oxford comma optional.
+  // "and" is normalized to a comma BEFORE splitting: splitting on the
+  // alternation directly left "and IS" fused into one token, because the
+  // Oxford ", and " was consumed by the comma branch first.
+  const sm = /^(?:all )?((?:[A-Z]{2,6}(?:\s*,\s*|,? and )?)+) ?courses$/.exec(scopeText);
   if (sm) {
-    const subjects = sm[1].split(/\s*,\s*|,? and /).map(s => s.trim()).filter(Boolean);
+    const subjects = sm[1].replace(/\band\b/g, ',').split(/\s*,\s*/)
+      .map(s => s.trim()).filter(Boolean);
     if (subjects.length && subjects.every(s => /^[A-Z]{2,6}$/.test(s)))
       return { threshold, scope: { kind: 'subjects', subjects } };
   }
@@ -958,8 +991,83 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
   const usedConcTitles       = new Set();
   let generalElectiveSH = 0;
 
+  // GPA rules are CONSTRAINTS over grades, not requirements a course can
+  // satisfy. The old parser coerced tabled ones into "pick 1 of N" OR
+  // sections — misstating the rule AND adding a phantom requirement to
+  // progress counts on 24 programs. Conversion rules:
+  //   · a GPA-titled section, or one whose comment says "must average to a
+  //     minimum of X (n.nnn)", becomes a course-set constraint and leaves
+  //     requirementSections entirely;
+  //   · an ordinary section whose comments state a cumulative/subject/
+  //     program-scoped rule KEEPS its courses and additionally yields the
+  //     constraint (grad "Program Requirement" blocks mix "80 total semester
+  //     hours" with "Minimum 3.000 GPA required");
+  //   · unparseable GPA prose falls through unchanged — never silently drop.
+  const gpaConstraints = [];
+  const seenGpa = new Set();
+  const pushGpa = (c) => {
+    const key = JSON.stringify([c.threshold, c.scope, c.courses ?? null]);
+    if (seenGpa.has(key)) return;
+    seenGpa.add(key);
+    gpaConstraints.push(c);
+  };
+  /** Prose paragraphs between a heading and the next heading — the CS+Econ
+      layout states the threshold in a <p> under the <h3>, with the course
+      table following, so the section path needs those paras to see it. */
+  const adjacentParas = (headingIdx) => {
+    const out = [];
+    for (let i = headingIdx + 1; i < blocks.length; i++) {
+      if (blocks[i].kind === 'heading') break;
+      if (blocks[i].kind === 'para') out.push(blocks[i].text);
+    }
+    return out;
+  };
+
+  /** Returns true when the whole section was consumed as a constraint. */
+  const extractGpa = (s, extraParas = []) => {
+    const comments = [...(s._comments ?? []), ...extraParas];
+    delete s._comments;                       // never let scratch text reach the JSON
+    const rules = comments.map(parseGpaRule).filter(Boolean);
+    const gpaTitled = GPA_HEADING.test(s.title ?? '');
+    if (!rules.length && !gpaTitled) return false;
+
+    const courses = flattenCourseNodes(s.requirements ?? [])
+      .filter(r => r.type === 'COURSE')
+      .map(r => ({ subject: r.subject, classId: r.classId }));
+    const courseRule = rules.find(r => r.scope.kind === 'courses') ?? null;
+
+    if ((gpaTitled || courseRule) && (courses.length || rules.length)) {
+      // The section IS the rule. Scope preference: an explicit course-set
+      // average binds to this section's courses; otherwise whatever the
+      // prose said (Khoury's subject scope); a bare GPA title over courses
+      // means those courses.
+      const rule = courseRule ?? rules[0] ?? null;
+      const scope = courseRule ? { kind: 'courses' }
+                  : rule       ? rule.scope
+                  :              { kind: 'courses' };
+      if (scope.kind !== 'courses' || courses.length) {
+        pushGpa({
+          title: s.title,
+          threshold: rule?.threshold ?? null,
+          scope,
+          ...(scope.kind === 'courses' ? { courses } : {}),
+          ...(comments.length ? { text: comments.find(c => parseGpaRule(c)) ?? comments[0] } : {}),
+        });
+        return true;                          // drop the phantom section
+      }
+    }
+    // Ordinary section with GPA prose riding along: keep the section,
+    // surface each rule.
+    for (const r of rules) {
+      pushGpa({ title: s.title, threshold: r.threshold, scope: r.scope,
+                text: comments.find(c => parseGpaRule(c)) });
+    }
+    return (s.requirements ?? []).length === 0; // shells with nothing left vanish
+  };
+
   for (const tb of orphanTables) {
     for (const sec of parseTable(tb.el, 'Requirements')) {
+      if (extractGpa(sec)) continue;
       sec.title = uniquify(sec.title, usedSectionTitles);
       requirementSections.push(sec);
     }
@@ -1005,10 +1113,30 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
       const sections = parseTable(tb.el, title);
       consumed.add(tb);
       for (const s of sections) {
+        if (extractGpa(s, GPA_HEADING.test(title) ? adjacentParas(headingIdx) : [])) continue;
         s.title = uniquify(s.title, usedSectionTitles);
         requirementSections.push(s);
       }
     }
+  }
+
+  // GPA rules stated as plain prose paragraphs — the standard CourseLeaf
+  // pattern is <h2>Program Credit/GPA Requirements</h2> followed by bare
+  // <p>s ("12 total semester hours required" / "Minimum 3.000 GPA
+  // required"). Two heading classes are skipped: admission-flavoured ones
+  // (a PlusOne "Minimum 3.500 GPA required" is an entry bar, not a degree
+  // constraint — misfiling it would be worse than missing it), and
+  // GPA-titled headings that own tables, whose paras were already folded
+  // into the section constraint above.
+  let paraHeading = null, paraHeadingIdx = -1;
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    if (b.kind === 'heading') { paraHeading = b.text; paraHeadingIdx = i; continue; }
+    if (b.kind !== 'para') continue;
+    if (paraHeading && /admission|entrance|eligib/i.test(paraHeading)) continue;
+    if (paraHeading && GPA_HEADING.test(paraHeading) && owners.has(paraHeadingIdx)) continue;
+    const r = parseGpaRule(b.text);
+    if (r) pushGpa({ title: paraHeading, threshold: r.threshold, scope: r.scope, text: b.text });
   }
 
   // Concentrations that live on their own page (the business school pattern).
@@ -1051,6 +1179,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
     : null;
 
   return { requirementSections, concentrations, generalElectiveSH,
+           gpaConstraints,
            tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
            excludedPanes, unconsumedHeadings, warnings,
            // Concentrations hosted on their own pages. Parsing is synchronous

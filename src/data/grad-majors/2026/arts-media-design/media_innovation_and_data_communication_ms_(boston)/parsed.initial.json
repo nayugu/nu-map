@@ -20,7 +20,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/journalism/media-innovation-data-communication-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -76,6 +76,16 @@
         }
       ],
       "minRequirementCount": 5
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 3.000 GPA required"
     }
   ]
 }

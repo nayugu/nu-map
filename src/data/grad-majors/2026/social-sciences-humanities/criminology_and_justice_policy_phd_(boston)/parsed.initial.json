@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/criminology-criminal-justice/criminology-justice-policy-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -431,6 +431,16 @@
       ],
       "minRequirementCount": 1,
       "shared": true
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3.5,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "54 total semester hours required Minimum 3.500 GPA required"
     }
   ]
 }

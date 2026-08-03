@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/history/history-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -355,6 +355,16 @@
       ],
       "minRequirementCount": 1,
       "shared": true
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3.5,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "45 total semester hours required Minimum 3.500 GPA required"
     }
   ]
 }

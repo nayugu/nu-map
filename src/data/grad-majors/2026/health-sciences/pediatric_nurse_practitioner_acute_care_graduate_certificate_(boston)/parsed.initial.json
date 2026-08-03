@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "certificate",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/nursing/pediatric-nurse-practitioner-acute-care-graduate-certificate/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -105,6 +105,16 @@
         }
       ],
       "minRequirementCount": 4
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "16 total semester hours required Minimum 3.000 GPA required"
     }
   ]
 }

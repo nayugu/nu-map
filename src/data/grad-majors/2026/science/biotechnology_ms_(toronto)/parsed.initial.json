@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/biotechnology-ms-tor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -304,6 +304,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "34 total semester hours required (35 total semester hours required for students assessed to need Biotechnology Lab Skills (BIOT 5145) and who choose to declare a concentration) Minimum 3.000 GPA required"
     }
   ],
   "concentrations": {

@@ -39,7 +39,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/international-affairs/economics-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -1312,34 +1312,30 @@
         }
       ],
       "minRequirementCount": 1
-    },
+    }
+  ],
+  "gpaRequirements": [
     {
-      "type": "SECTION",
       "title": "International Affairs and Economics Combined-Major GPA",
-      "requirements": [
+      "threshold": null,
+      "scope": {
+        "kind": "courses"
+      },
+      "courses": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2315
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2316
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2350
-            }
-          ]
+          "subject": "ECON",
+          "classId": 2315
+        },
+        {
+          "subject": "ECON",
+          "classId": 2316
+        },
+        {
+          "subject": "ECON",
+          "classId": 2350
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "text": "Grades in the following Economics courses must average a minimum of C (2.000):"
     }
   ]
 }

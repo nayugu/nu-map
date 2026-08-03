@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/civil-engineering-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -350,6 +350,16 @@
         }
       ],
       "minRequirementCount": 2
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "2.000 GPA required in the minor"
     }
   ]
 }

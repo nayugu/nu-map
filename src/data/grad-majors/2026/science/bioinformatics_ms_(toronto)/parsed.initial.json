@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/science/biology/bioinformatics-ms-tor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -248,6 +248,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "32 total semester hours required (Additional hours may be required based on choice of concentration) Minimum 3.000 GPA required"
     }
   ],
   "concentrations": {

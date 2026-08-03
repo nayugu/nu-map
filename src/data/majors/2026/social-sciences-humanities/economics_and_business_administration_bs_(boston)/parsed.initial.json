@@ -43,7 +43,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/economics/economics-business-administration-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -424,58 +424,55 @@
         }
       ],
       "minRequirementCount": 1
-    },
+    }
+  ],
+  "gpaRequirements": [
     {
-      "type": "SECTION",
       "title": "Economics GPA Requirement",
-      "requirements": [
+      "threshold": 2,
+      "scope": {
+        "kind": "courses"
+      },
+      "courses": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2315
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2316
-            },
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ECON",
-                  "classId": 2350
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "MGSC",
-                  "classId": 2301
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "MATH",
-                  "classId": 2280
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "MATH",
-                  "classId": 3081
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2560
-            }
-          ]
+          "subject": "ECON",
+          "classId": 2315
+        },
+        {
+          "subject": "ECON",
+          "classId": 2316
+        },
+        {
+          "subject": "ECON",
+          "classId": 2350
+        },
+        {
+          "subject": "MGSC",
+          "classId": 2301
+        },
+        {
+          "subject": "MATH",
+          "classId": 2280
+        },
+        {
+          "subject": "MATH",
+          "classId": 3081
+        },
+        {
+          "subject": "ECON",
+          "classId": 2560
         }
       ],
-      "minRequirementCount": 1
+      "text": "Grades in the following four economics courses must average to a minimum of C (2.000):"
+    },
+    {
+      "title": "Business GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "business courses"
+      },
+      "text": "A minimum 2.000 GPA is required in business courses."
     }
   ],
   "concentrations": {

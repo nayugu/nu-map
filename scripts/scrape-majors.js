@@ -143,7 +143,7 @@ async function scrapeProgram(url) {
     ?? '';
 
   const { value: totalCreditsRequired, source: totalCreditsSource } = parseTotalCredits(root, PROFILE);
-  const { requirementSections, concentrations, generalElectiveSH,
+  const { requirementSections, concentrations, generalElectiveSH, gpaConstraints,
           tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
           unconsumedHeadings } = await parseRequirementsResolvingExternals(root);
 
@@ -182,6 +182,10 @@ async function scrapeProgram(url) {
     ...(totalCreditsSource ? { totalCreditsSource } : {}),
     yearVersion: YEAR,
     requirementSections,
+    // GPA rules are constraints over grades, not satisfiable requirements —
+    // they render as info in the graduation panel and are evaluated only
+    // against grades the user chose to enter (src/core/gradeSystem.js).
+    ...(gpaConstraints?.length ? { gpaRequirements: gpaConstraints } : {}),
     ...(concentrations ? { concentrations } : {}),
     ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
   };

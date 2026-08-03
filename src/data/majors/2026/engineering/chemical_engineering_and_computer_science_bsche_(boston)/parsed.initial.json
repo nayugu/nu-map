@@ -58,7 +58,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/chemical/chemical-engineering-computer-science-bsche/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -557,6 +557,31 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all CHME coursework"
+      },
+      "text": "Minimum 2.000 GPA required in all CHME coursework"
+    },
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CS",
+          "CY",
+          "DS",
+          "IS"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in all CS, CY, DS, and IS courses"
     }
   ],
   "generalElectiveSH": 8

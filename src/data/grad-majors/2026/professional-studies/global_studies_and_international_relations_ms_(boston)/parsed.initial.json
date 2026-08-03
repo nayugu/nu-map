@@ -14,7 +14,7 @@
       "level": "partial",
       "kind": "grad",
       "score": 0.85,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/global-studies-and-international-relations-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -508,6 +508,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "46 total quarter hours required Minimum 3.000 GPA required"
     }
   ]
 }

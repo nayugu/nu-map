@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/interdisciplinary-minors/marketing-analytics-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -83,6 +83,17 @@
         }
       ],
       "minRequirementCount": 4
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all completed courses"
+      },
+      "text": "Minimum 2.000 GPA required in all completed courses"
     }
   ]
 }

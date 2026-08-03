@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/art-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -508,6 +508,16 @@
       ],
       "minRequirementCount": 1,
       "shared": true
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirement",
+      "threshold": 2.5,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "2.500 GPA required in the minor"
     }
   ]
 }

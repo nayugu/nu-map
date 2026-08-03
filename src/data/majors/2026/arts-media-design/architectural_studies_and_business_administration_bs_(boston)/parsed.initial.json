@@ -39,7 +39,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/architectural-studies-business-administration-bs-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -471,6 +471,25 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Combined Major GPA Requirement",
+      "threshold": 2.5,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 2.500 GPA required"
+    },
+    {
+      "title": "Business GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all business courses"
+      },
+      "text": "Minimum 2.000 GPA required in all business courses"
     }
   ],
   "concentrations": {

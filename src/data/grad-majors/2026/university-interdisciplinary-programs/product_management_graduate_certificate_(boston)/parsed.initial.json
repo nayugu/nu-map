@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "certificate",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/university-interdisciplinary-programs/product-management-graduate-certificate-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -100,6 +100,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirement",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "12 total semester hours required (additional hours may be required based on student choice of course options) Minimum 3.000 GPA required"
     }
   ]
 }

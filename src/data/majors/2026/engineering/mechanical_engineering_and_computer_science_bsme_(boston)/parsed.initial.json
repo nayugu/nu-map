@@ -63,7 +63,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/mechanical-engineering-computer-science-bsme/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -629,6 +629,21 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Khoury College GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "CS",
+          "CY",
+          "DS"
+        ]
+      },
+      "text": "Minimum cumulative 2.000 GPA required in all CS, CY, and DS courses"
     }
   ],
   "generalElectiveSH": 8

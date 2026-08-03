@@ -27,7 +27,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/cultural-anthropology-philosophy-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -283,6 +283,17 @@
         }
       ],
       "minRequirementCount": 2
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Cultural Anthropology and Philosophy Combined Major Credit Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "anthropology and philosophy courses"
+      },
+      "text": "Minimum 2.000 GPA required in anthropology and philosophy courses"
     }
   ]
 }

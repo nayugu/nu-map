@@ -46,7 +46,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/biology/biology-english-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -952,6 +952,37 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Biology and English Combined Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "BIOC",
+          "BIOL",
+          "CHEM",
+          "PHYS",
+          "MATH",
+          "EEMB",
+          "ENVR",
+          "PSYC"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in all BIOC, BIOL, CHEM, PHYS, MATH, EEMB, ENVR, and PSYC courses"
+    },
+    {
+      "title": "Biology and English Combined Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "ENGL"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in all ENGL courses"
     }
   ]
 }

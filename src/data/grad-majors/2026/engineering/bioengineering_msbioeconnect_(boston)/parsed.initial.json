@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/bioengineering/bioengineering-msbioe-connect-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -241,6 +241,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "41 total semester hours required (42 with optional co-op) Minimum 3.000 GPA required"
     }
   ],
   "concentrations": {

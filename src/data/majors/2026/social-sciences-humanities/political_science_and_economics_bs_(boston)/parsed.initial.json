@@ -38,7 +38,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-economics-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -431,49 +431,38 @@
         }
       ],
       "minRequirementCount": 1
-    },
+    }
+  ],
+  "gpaRequirements": [
     {
-      "type": "SECTION",
       "title": "Combined Major GPA/Credit Requirement:",
-      "requirements": [
+      "threshold": 2,
+      "scope": {
+        "kind": "courses"
+      },
+      "courses": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2315
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2316
-            },
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ECON",
-                  "classId": 2350
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "POLS",
-                  "classId": 2400
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2560
-            }
-          ]
+          "subject": "ECON",
+          "classId": 2315
+        },
+        {
+          "subject": "ECON",
+          "classId": 2316
+        },
+        {
+          "subject": "ECON",
+          "classId": 2350
+        },
+        {
+          "subject": "POLS",
+          "classId": 2400
+        },
+        {
+          "subject": "ECON",
+          "classId": 2560
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "text": "Grades in the following required Economics courses and in Quantitative Techniques (POLS 2400) or Statistics for Economists (ECON 2350) must average to a minimum of C (2.000):"
     }
   ],
   "concentrations": {

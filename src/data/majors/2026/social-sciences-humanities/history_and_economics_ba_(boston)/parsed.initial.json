@@ -45,7 +45,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-economics-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -408,39 +408,34 @@
         }
       ],
       "minRequirementCount": 1
-    },
+    }
+  ],
+  "gpaRequirements": [
     {
-      "type": "SECTION",
       "title": "History and Economics Major GPA/Credit Requirements",
-      "requirements": [
+      "threshold": null,
+      "scope": {
+        "kind": "courses"
+      },
+      "courses": [
         {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2315
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2316
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2350
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2560
-            }
-          ]
+          "subject": "ECON",
+          "classId": 2315
+        },
+        {
+          "subject": "ECON",
+          "classId": 2316
+        },
+        {
+          "subject": "ECON",
+          "classId": 2350
+        },
+        {
+          "subject": "ECON",
+          "classId": 2560
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "text": "Grades in the following four economics courses must average a minimum of C (2.000):"
     }
   ]
 }

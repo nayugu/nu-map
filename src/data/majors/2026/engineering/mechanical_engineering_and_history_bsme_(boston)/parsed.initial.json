@@ -56,7 +56,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/mechanical-engineering-history-bsme/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -607,6 +607,30 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "ME"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in ME courses"
+    },
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "HIST"
+        ]
+      },
+      "text": "Minimum 2.000 GPA required in all HIST courses"
     }
   ]
 }

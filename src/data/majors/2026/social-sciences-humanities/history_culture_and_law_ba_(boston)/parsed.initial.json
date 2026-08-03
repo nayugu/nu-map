@@ -32,7 +32,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/history-culture-law-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -358,6 +358,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Major GPA Requirement",
+      "threshold": 3,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "Minimum 3.000 GPA required in all major courses"
     }
   ],
   "concentrations": {

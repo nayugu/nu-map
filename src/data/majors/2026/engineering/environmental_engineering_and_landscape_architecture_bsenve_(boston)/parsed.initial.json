@@ -58,7 +58,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-landscape-architecture-bsenve/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -707,6 +707,25 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Engineering GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "all CIVE coursework"
+      },
+      "text": "Minimum 2.000 GPA required in all CIVE coursework"
+    },
+    {
+      "title": "Landscape Architecture GPA Requirement",
+      "threshold": 2.5,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "Minimum 2.500 GPA required in all major courses"
     }
   ]
 }

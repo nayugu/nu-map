@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/behavioral-neuroscience-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -151,6 +151,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Credit/GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "20 total semester hours required 2.000 GPA required in the minor"
     }
   ]
 }

@@ -14,7 +14,7 @@
       "level": "verified",
       "kind": "certificate",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/additional-programs/postsecondary-teaching-graduate-certificate/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -58,6 +58,16 @@
         }
       ],
       "minRequirementCount": 3
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 3.000 GPA required"
     }
   ]
 }

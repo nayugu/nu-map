@@ -42,7 +42,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-02",
+      "checkedAt": "2026-08-03",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/biology/biology-political-science-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -559,6 +559,19 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirements",
+      "threshold": 2,
+      "scope": {
+        "kind": "subjects",
+        "subjects": [
+          "POLS"
+        ]
+      },
+      "text": "Minimum 2.000 GPA in the following course codes is required: BIOC, BIOL, BNSC, CHEM, EEMB, ENVR, MATH, PHYS, PSYC Minimum 2.000 GPA required in all POLS courses"
     }
   ],
   "concentrations": {
