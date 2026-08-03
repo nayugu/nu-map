@@ -532,7 +532,11 @@ export function PlannerProvider({ children }) {
     for (const pid of placedOut) consider(pid, true);
     const gpa = enteredGPA(entries);
     if (gpa == null) return null;
-    return { gpa, counted: entries.filter(e => countsInGPA(e.grade)), n: entries.filter(e => countsInGPA(e.grade)).length };
+    // "from N graded" must mean N courses that actually moved the number.
+    // A graded 0-credit recitation contributes no quality points, so
+    // including it overstates the basis the figure rests on.
+    const counted = entries.filter(e => countsInGPA(e.grade) && (e.credits ?? 0) > 0);
+    return { gpa, counted, n: counted.length };
   }, [grades, placements, placedOut, courseMap, SEM_INDEX]);
 
   // effectiveCourseMap — same as courseMap but with per-plan sh overrides

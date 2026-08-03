@@ -24,7 +24,7 @@ const GAP   = 8;
 const EDGE  = 8;
 
 const LETTERS = Object.keys(GRADE_POINTS);           // A … D-, F — grid order
-const OTHERS  = ["S", "U", "I", "W"];                // each explained
+const OTHERS  = ["S", "U", "T", "I", "W"];           // each explained
 
 export default function GradePopover({ pid, grade, rect, setGrade, onDismiss }) {
   const { t } = useLanguage();

@@ -278,12 +278,19 @@ function ClassChip({ id, cmap, onOpen, faded, fz = 11 }) {
 const GPA_SCALE_MAX = 4;
 const GPA_REF = 2;
 const GPA_BAR_W = 92;      // long enough that a 0.3 difference is visible
-function GpaMeter({ value, title, color }) {
+function GpaMeter({ value, title, color, provisional = false }) {
   const pct = Math.max(0, Math.min(1, value / GPA_SCALE_MAX)) * 100;
   const below = value < GPA_REF;
   return (
+    // A single graded course is dimmed rather than hidden. Suppressing it
+    // entirely meant a student who had finished one course in a subject
+    // entered a grade and saw nothing — a broken affordance, and worse than
+    // the thing suppression was guarding against. Dimming keeps the data
+    // visible while saying "not settled yet"; the exact basis (1 of 3) is
+    // in the tooltip.
     <span title={title} style={{ display: "inline-flex", alignItems: "center", gap: 7,
-      flexShrink: 0, cursor: "default", letterSpacing: 0 }}>
+      flexShrink: 0, cursor: "default", letterSpacing: 0,
+      opacity: provisional ? 0.5 : 1 }}>
       <span style={{ position: "relative", width: GPA_BAR_W, height: 6, borderRadius: 3,
         background: "var(--border-2)", overflow: "hidden", display: "inline-block" }}>
         {/* The SUBJECT's colour, not a semantic green: this bar is part of
@@ -329,7 +336,7 @@ function CourseGroup({ title, sub, badge, badgeSlot = false, ids, cmap, onOpen, 
             subline, and reads as nothing at all. */}
         {badgeSlot && (
           <span style={{ width: GPA_BAR_W + 37, display: "inline-flex", flexShrink: 0 }}>
-            {badge && <GpaMeter value={badge.value} title={badge.title} color={badge.color} />}
+            {badge && <GpaMeter value={badge.value} title={badge.title} color={badge.color} provisional={badge.provisional} />}
           </span>
         )}
         <span style={{ fontSize: 12, color: "var(--text-4)", flex: 1, textAlign: "right", minWidth: 0 }}>{sub}</span>
@@ -835,7 +842,13 @@ export default function StatsPanel() {
       const gpa = enteredGPA(sorted.map(id => ({
         grade: grades[id] ?? null, credits: cmap[id]?.sh,
       })));
-      const graded = sorted.filter(id => countsInGPA(grades[id])).length;
+      // Count only courses that actually CARRY WEIGHT. A graded 0-credit
+      // recitation contributes no quality points (credit × points), so
+      // counting it overstated the basis — and let a subject clear the
+      // "needs 2 graded" gate on a single weighted course, which is the
+      // very "4.000 from one course" case that gate exists to stop.
+      const graded = sorted.filter(id =>
+        countsInGPA(grades[id]) && (cmap[id]?.sh ?? 0) > 0).length;
       return {
         subject, ids: sorted, count: sorted.length,
         sh: sorted.reduce((s, id) => s + (cmap[id]?.sh ?? 0), 0),
@@ -847,7 +860,7 @@ export default function StatsPanel() {
   // Reserve the GPA column only when at least one subject actually has
   // one, so an ungraded plan sees the same layout it always did.
   const anyDeptGpa = useMemo(
-    () => byDept.some(g => g.gpa != null && g.graded >= 2), [byDept]);
+    () => byDept.some(g => g.gpa != null && g.graded >= 1), [byDept]);
 
   // Credit-load timeline: summers as one bucket, per-half co-op occupancy
   // (Summer A / B) from the start + continuation maps so spanning co-ops
@@ -1051,9 +1064,12 @@ export default function StatsPanel() {
                         // confident-but-hollow figure this whole feature
                         // is supposed to avoid. The basis (2 of 15) lives
                         // in the tooltip: it is a caveat, not a headline.
-                        badge={g.gpa != null && g.graded >= 2 ? {
+                        // Shown from ONE weighted graded course, dimmed
+                        // until there are two — see GpaMeter.
+                        badge={g.gpa != null && g.graded >= 1 ? {
                           value: g.gpa,
                           color: subjectColor(g.subject),
+                          provisional: g.graded < 2,
                           title: t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded, total: g.count }),
                         } : null}
                         ids={g.ids} cmap={cmap} onOpen={openCourse} fadedIds={incomingSet}

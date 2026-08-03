@@ -191,6 +191,7 @@ export const strings = {
   "grade.pop.other":              "Otros resultados",
   "grade.desc.S":                 "Satisfactorio — aprobado en modo aprobado/suspenso: da créditos, sin efecto en el GPA",
   "grade.desc.U":                 "No satisfactorio — suspenso en modo aprobado/suspenso: sin créditos",
+  "grade.desc.T":                 "Transferido — cuenta para créditos y requisitos, pero no para el GPA",
   "grade.desc.I":                 "Incompleto — trabajo sin terminar; luego se convierte en una nota real",
   "grade.desc.W":                 "Retirado — abandonaste el curso: sin créditos ni efecto en el GPA",
   "grade.clear":                  "Borrar nota",

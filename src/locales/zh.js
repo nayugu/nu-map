@@ -329,6 +329,7 @@ export const strings = {
   "grade.pop.other":              "其他结果",
   "grade.desc.S":                 "合格（S）— 通过/不通过制中的通过：获得学分，不影响 GPA",
   "grade.desc.U":                 "不合格（U）— 通过/不通过制中的不通过：无学分",
+  "grade.desc.T":                 "转学分（T）— 计入学分与要求，但不计入 GPA",
   "grade.desc.I":                 "未完成（I）— 作业未完成；之后会转为正式成绩",
   "grade.desc.W":                 "退课（W）— 中途退出：无学分，不影响 GPA",
   "grade.clear":                  "清除成绩",

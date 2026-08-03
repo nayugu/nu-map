@@ -191,6 +191,7 @@ export const strings = {
   "grade.pop.other":              "Autres résultats",
   "grade.desc.S":                 "Satisfaisant — réussite en réussite/échec : crédits acquis, sans effet sur le GPA",
   "grade.desc.U":                 "Insatisfaisant — échec en réussite/échec : aucun crédit",
+  "grade.desc.T":                 "Transfert — compte pour les crédits et les exigences, mais pas pour le GPA",
   "grade.desc.I":                 "Incomplet — travail inachevé ; deviendra une vraie note plus tard",
   "grade.desc.W":                 "Abandon — cours quitté : aucun crédit, aucun effet sur le GPA",
   "grade.clear":                  "Effacer la note",

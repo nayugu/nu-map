@@ -48,10 +48,19 @@ export const ASSUMED_POINTS = GRADE_POINTS["A"];
 export const COOP_GPA = { undergrad: 2.0, graduate: 3.0 };
 
 /** Everything the dropdown offers, in display order. `X` (final-exam
-    absence) is handled by the logic but too rare to offer. */
+    absence) is handled by the logic but too rare to offer.
+
+    `T` matters more than its rarity suggests. NU Map's "Incoming Credit"
+    bucket is overloaded: it holds transfer/AP/IB/waiver credit, which
+    earns hours but no quality points, AND courses from programs like NU
+    Accelerate (summer classes before a fall start) which are ordinary
+    Northeastern coursework and DO count toward the GPA. Nothing about the
+    placement distinguishes them — only the grade can. Without T on the
+    menu a student had no way to say "these hours transferred", so genuine
+    transfer credit either sat ungraded or got a letter it never earned. */
 export const GRADE_SYMBOLS = [
   "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F",
-  "S", "U", "I", "W",
+  "S", "U", "T", "I", "W",
 ];
 
 // IP ("in progress") isn't offered by the dropdown, but if it ever enters

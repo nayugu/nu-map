@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import {
   GRADE_POINTS, GRADE_SYMBOLS, yieldsCredit, countsInGPA, satisfiesGate,
   setConstraintStatus, enteredGPA, effectiveGradeOfTakes,
-  dropVoidTakes, dropUnearnedTakes,
+  dropVoidTakes, dropUnearnedTakes, takeConsumesSlot,
 } from "../../src/core/gradeSystem.js";
 import { buildTakesResolver } from "../../src/core/repeatInstances.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
@@ -29,6 +29,41 @@ test("axes › U, W, X: neither credit nor points; I pending", () => {
     assert.equal(yieldsCredit(g), false, g);
     assert.equal(countsInGPA(g), false, g);
   }
+});
+
+// T is the marker that makes the overloaded "Incoming Credit" bucket
+// workable: it holds transfer/AP/IB/waiver AND programs like NU Accelerate
+// (summer coursework before a fall start), which IS Northeastern
+// coursework and does count toward the GPA. The placement can't tell them
+// apart — only the grade can. So incoming credit is included in the GPA
+// like any other placement, and T is how a student marks the hours that
+// transferred: full credit, satisfies downstream requirements, zero
+// quality points.
+
+test("axes › T earns credit and requirements but contributes NO quality points", () => {
+  assert.equal(yieldsCredit("T"), true);
+  assert.equal(countsInGPA("T"), false);
+  assert.equal(satisfiesGate("T", "C-"), true, "transferred hours satisfy a prereq gate");
+  assert.equal(satisfiesGate("T", null), true);
+});
+
+test("axes › T occupies its slot — transferred credit is not a failed attempt", () => {
+  // If T handed the slot back it would offer a phantom "retake" of a course
+  // the student already has credit for.
+  assert.equal(takeConsumesSlot("T"), true);
+});
+
+test("enteredGPA › T is excluded from both sides of the average", () => {
+  // 4 SH of T alongside 4 SH of C must read 2.000, not 1.000: the
+  // transferred hours leave the denominator too, they don't count as zero.
+  assert.equal(enteredGPA([{ grade: "T", credits: 4 }, { grade: "C", credits: 4 }]), 2.0);
+  assert.equal(enteredGPA([{ grade: "T", credits: 4 }]), null, "T alone yields no GPA at all");
+});
+
+test("constraint › a T-graded course neither helps nor hurts a set average", () => {
+  const withT = setConstraintStatus([e("T"), e("B"), e("B")], 3.0);
+  const withoutT = setConstraintStatus([e("B"), e("B")], 3.0);
+  assert.equal(withT.status, withoutT.status);
 });
 
 test("axes › unentered is assumed to yield credit and stays out of averages", () => {
@@ -66,7 +101,10 @@ test("gate › S clears letter gates (ambiguity resolves upward) and S-gates", (
 });
 
 test("gate › unknown symbols never alarm", () => {
-  assert.equal(satisfiesGate("T", "C"), true);
+  // "T" used to stand in here as an unknown symbol; it is a defined grade
+  // now, so this needs a genuinely unrecognised one or it stops testing
+  // the fallback at all.
+  assert.equal(satisfiesGate("ZZ", "C"), true);
   assert.equal(satisfiesGate("B", "??"), true);
 });
 

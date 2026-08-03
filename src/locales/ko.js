@@ -191,6 +191,7 @@ export const strings = {
   "grade.pop.other":              "기타 결과",
   "grade.desc.S":                 "만족(S) — 통과/탈락제의 통과: 학점 인정, GPA에는 영향 없음",
   "grade.desc.U":                 "불만족(U) — 통과/탈락제의 탈락: 학점 없음",
+  "grade.desc.T":                 "편입(T) — 학점과 요건에는 인정, GPA에는 미반영",
   "grade.desc.I":                 "미완료(I) — 미완성 과제; 나중에 실제 성적으로 바뀝니다",
   "grade.desc.W":                 "수강 철회(W) — 중도 포기: 학점 없음, GPA 영향 없음",
   "grade.clear":                  "성적 지우기",

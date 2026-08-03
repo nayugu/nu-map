@@ -192,6 +192,7 @@ export const strings = {
   "grade.pop.other":              "その他の結果",
   "grade.desc.S":                 "合格（S）— 合否制の合格：単位は取得、GPAに影響なし",
   "grade.desc.U":                 "不合格（U）— 合否制の不合格：単位なし",
+  "grade.desc.T":                 "編入（T）— 単位と要件には算入、GPAには算入されません",
   "grade.desc.I":                 "未完了（I）— 未提出の課題あり。後で正式な成績に変わります",
   "grade.desc.W":                 "履修取消（W）— 途中離脱：単位なし、GPAに影響なし",
   "grade.clear":                  "成績をクリア",

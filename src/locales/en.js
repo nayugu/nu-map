@@ -192,6 +192,7 @@ export const strings = {
   "grade.pop.other":              "Other outcomes",
   "grade.desc.S":                 "Satisfactory — pass/fail pass: credit earned, no effect on GPA",
   "grade.desc.U":                 "Unsatisfactory — pass/fail fail: no credit",
+  "grade.desc.T":                 "Transfer — counts for credit and requirements, but not toward GPA",
   "grade.desc.I":                 "Incomplete — unfinished work; becomes a real grade later",
   "grade.desc.W":                 "Withdrawn — left the course: no credit, no GPA effect",
   "grade.clear":                  "Clear grade",
