@@ -408,6 +408,14 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
 // because it is a proof, not a prediction. Fuzzy scopes ("all business
 // courses") display their own text and are never computed.
 
+// A described rule's text IS the rule, and it's scraped English — route it
+// through the same live-translation pipeline course titles use, or a zh/ja
+// panel renders a raw English sentence (caught in review).
+function DescribedRuleText({ text, style }) {
+  const translated = useTranslatedText(text);
+  return <span style={style}>{scaleLatinRuns(translated)}</span>;
+}
+
 function GpaRules({ program, programKind = "major" }) {
   const { t } = useLanguage();
   const { grades, placements, placedOut, courseMap, SEM_INDEX, isPhone } = usePlanner();
@@ -572,10 +580,9 @@ function GpaRules({ program, programKind = "major" }) {
                     ≥ {r.threshold.toFixed(3)}
                   </span>
                 ) : (
-                  <span style={{ minWidth: 0, fontSize: isPhone ? 8 : 9.5, lineHeight: 1.4,
-                                 color: "var(--text-4)" }}>
-                    {scaleLatinRuns(r.label)}
-                  </span>
+                  <DescribedRuleText text={r.label}
+                    style={{ minWidth: 0, fontSize: isPhone ? 8 : 9.5, lineHeight: 1.4,
+                             color: "var(--text-4)" }} />
                 )}
                 <span style={{ flex: 1 }} />
                 {r.cur && (
@@ -602,15 +609,14 @@ function GpaRules({ program, programKind = "major" }) {
                 </div>
               )}
 
-              {/* Provenance: the catalog's own sentence + exactly what was
-                  counted. Graded courses full-strength, ungraded dimmed. */}
+              {/* Provenance: exactly what was counted. Graded courses
+                  full-strength, ungraded dimmed. (The catalog's sentence
+                  used to render here too — pure redundancy: the header
+                  already IS the rule, and the sentence is untranslatable
+                  scraped English.) */}
               {isOpen && expandable && (
                 <div style={{ margin: "5px 0 2px 0", paddingLeft: 8,
                               borderLeft: "2px solid var(--border-2)" }}>
-                  <div style={{ fontSize: isPhone ? 7 : 8.5, lineHeight: 1.5, color: "var(--text-5)",
-                                marginBottom: 4 }}>
-                    {scaleLatinRuns(r.label)}
-                  </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {r.entries.map((e, j) => {
                       const c = courseMap[e.base];
