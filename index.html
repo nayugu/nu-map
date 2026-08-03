@@ -161,24 +161,34 @@
         // ── Petal storm (shared by the exit and the reveal veil) ─────
         // Dense, fast, wind-blown diagonal fall; phase-uniform delays
         // (stride 5, coprime to 36) keep it a wall of motion, not waves.
+        // Each petal ACCELERATES left→right (ease-in cubic-bezier = a wind
+        // force, not constant speed), and the infinite repeat means fresh
+        // petals keep arriving from the left. The layer itself carries a
+        // gust cycle — irregular opacity waves, so the storm obstructs
+        // more at some moments than others, like real weather.
         function stormStyle() {
           if (document.getElementById('numap-storm-style')) return;
           var s = document.createElement('style');
           s.id = 'numap-storm-style';
-          s.textContent = '@keyframes numapStorm{from{transform:translate3d(0,-16vh,0) rotate(0deg)}to{transform:translate3d(44vw,116vh,0) rotate(300deg)}}';
+          s.textContent =
+            '@keyframes numapStorm{from{transform:translate3d(0,0,0) rotate(0deg)}to{transform:translate3d(150vw,42vh,0) rotate(480deg)}}'
+            + '@keyframes numapGust{0%{opacity:.35}22%{opacity:.85}41%{opacity:.55}63%{opacity:1}82%{opacity:.6}100%{opacity:.35}}'
+            + '@keyframes numapBlowoff{from{transform:translateX(0)}to{transform:translateX(135vw)}}'
+            + '@keyframes numapCardDim{0%{opacity:1}22%{opacity:.5}38%{opacity:.75}58%{opacity:.3}72%{opacity:.45}100%{opacity:0}}'
+            + '@keyframes numapTileOut{to{opacity:0}}';
           document.head.appendChild(s);
         }
         function addStorm(parent, n) {
           stormStyle();
           for (var i = 0; i < n; i++) {
             var sz = 8 + ((i * 37) % 9);
-            var dur = 0.9 + ((i * 53) % 80) / 100;
+            var dur = 1.2 + ((i * 53) % 100) / 100;
             var dl = -(dur * ((i * 5) % n) / n);
-            var lf = ((i * 83 + 11) % 130) - 25;
+            var tp = ((i * 61 + 3) % 100) - 8;
             var col = i % 3 === 0 ? '#ef4444' : i % 3 === 1 ? '#f87171' : '#fca5a5';
             var op = 0.4 + ((i * 17) % 40) / 100;
             var d = document.createElement('div');
-            d.style.cssText = 'position:absolute;top:-16vh;left:' + lf + '%;animation:numapStorm ' + dur + 's linear ' + dl + 's infinite;';
+            d.style.cssText = 'position:absolute;top:' + tp + '%;left:-12%;animation:numapStorm ' + dur + 's cubic-bezier(.5,.05,.85,.45) ' + dl + 's infinite;';
             d.innerHTML = '<svg width="' + sz + '" height="' + sz + '" viewBox="0 0 12 12" style="display:block;opacity:' + op + '" aria-hidden="true"><path d="M6 0 C 9.2 2.4, 9.2 7.2, 6 12 C 2.8 7.2, 2.8 2.4, 6 0" fill="' + col + '"/></svg>';
             parent.appendChild(d);
           }
@@ -191,19 +201,51 @@
         // (or after 5 s regardless — the veil must never trap anyone).
         function buildVeil() {
           if (document.getElementById('numap-veil')) return;
+          stormStyle();
+          var dark = resolveDark();
+          var bg = dark ? '#0d1117' : '#fefefe';
+          var bgT = dark ? 'rgba(13,17,23,0)' : 'rgba(254,254,254,0)';
           var v = document.createElement('div');
           v.id = 'numap-veil';
-          v.style.cssText = 'position:fixed;inset:0;z-index:999999;overflow:hidden;pointer-events:none;background:' + (resolveDark() ? '#0d1117' : '#fefefe') + ';';
-          addStorm(v, 36);
+          v.style.cssText = 'position:fixed;inset:0;z-index:999999;overflow:hidden;pointer-events:none;';
+          // A solid base plus twenty overlapping soft-edged patches
+          // (radial gradients). Dissolving clears the base first — the
+          // whole app shows through faintly — then each patch fades on
+          // its own clock, so the page surfaces part by part.
+          var base = document.createElement('div');
+          base.style.cssText = 'position:absolute;inset:0;background:' + bg + ';';
+          v.appendChild(base);
+          var tiles = [];
+          for (var r = 0; r < 4; r++) {
+            for (var c = 0; c < 5; c++) {
+              var t = document.createElement('div');
+              t.style.cssText = 'position:absolute;left:' + (c * 25 - 9) + '%;top:' + (r * 25 - 9) + '%;width:43%;height:43%;'
+                + 'background:radial-gradient(ellipse at center,' + bg + ' 52%,' + bgT + ' 78%);';
+              v.appendChild(t);
+              tiles.push(t);
+            }
+          }
+          var storm = document.createElement('div');
+          storm.style.cssText = 'position:absolute;inset:0;animation:numapGust 2.6s ease-in-out infinite;';
+          addStorm(storm, 36);
+          v.appendChild(storm);
           document.body.appendChild(v);
           var done = false;
           window.__numapVeilDone = function () {
             if (done) return;
             done = true;
             setTimeout(function () {
-              v.style.transition = 'opacity .85s ease';
-              v.style.opacity = '0';
-              setTimeout(function () { if (v.parentNode) v.parentNode.removeChild(v); }, 950);
+              base.style.animation = 'numapTileOut .7s ease forwards';
+              for (var i = 0; i < tiles.length; i++) {
+                // Stride 7 is coprime to 20 → the patch order is scattered,
+                // never a sweep.
+                var dl = ((i * 7) % 20) * 0.06;
+                var du = 0.5 + ((i * 11) % 5) * 0.09;
+                tiles[i].style.animation = 'numapTileOut ' + du + 's ease ' + dl + 's forwards';
+              }
+              storm.style.transition = 'opacity 1.2s ease .6s';
+              storm.style.opacity = '0';
+              setTimeout(function () { if (v.parentNode) v.parentNode.removeChild(v); }, 2300);
             }, 250);
           };
           if (booted) window.__numapVeilDone();
@@ -252,19 +294,39 @@
         }
 
         // ── Storm exit: intensify, then reload into the reveal ───────
+        // Exit choreography (~2.3 s): the storm rises and gusts, the
+        // ambient petal field feels the same wind — it ACCELERATES off
+        // the right edge (ease-in curve, force not velocity) — and the
+        // card flickers dimmer and brighter in the gusts until it's
+        // gone. The navigation happens deep inside the storm.
+        function exitChoreo() {
+          overlayStorm();
+          var card = document.getElementById('numap-recovery-card');
+          if (card) card.style.animation = 'numapCardDim 2.2s ease-in-out forwards';
+          var amb = document.querySelector('#numap-recovery .nmr-petals');
+          if (amb) amb.style.animation = 'numapBlowoff 2.4s cubic-bezier(.5,0,.85,.5) forwards';
+        }
+        function undoChoreo() {
+          var layer = document.getElementById('numap-overlay-storm');
+          if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
+          var card = document.getElementById('numap-recovery-card');
+          if (card) card.style.animation = '';
+          var amb = document.querySelector('#numap-recovery .nmr-petals');
+          if (amb) amb.style.animation = '';
+        }
         var exiting = false;
         window.__numapRecoveryExit = function () {
           if (exiting) return;
           exiting = true;
           stopProbe();
-          overlayStorm();
+          exitChoreo();
           setTimeout(function () {
             try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
             // Leaving a preview drops the preview param, so the storm
             // genuinely returns to the real app instead of the preview.
             if (/[?&]preview=/.test(location.search)) location.href = location.pathname;
             else window.location.reload();
-          }, 700);
+          }, 2300);
         };
         function overlayStorm() {
           showRecovery();
@@ -272,21 +334,18 @@
           if (!host || document.getElementById('numap-overlay-storm')) return;
           var layer = document.createElement('div');
           layer.id = 'numap-overlay-storm';
-          layer.style.cssText = 'position:absolute;inset:0;overflow:hidden;pointer-events:none;';
+          layer.style.cssText = 'position:absolute;inset:0;overflow:hidden;pointer-events:none;animation:numapGust 2.6s ease-in-out infinite;';
           addStorm(layer, 36);
           host.appendChild(layer);
         }
-        // Throttled reload with the exit choreography: the storm rises
-        // for 0.7 s and the reload happens inside it.
+        // Throttled reload with the same choreography; if the throttle
+        // holds when the moment comes, the storm dies back down.
         function stormReload(key) {
           if (exiting || !canReload(key)) return;
-          overlayStorm();
+          exitChoreo();
           setTimeout(function () {
-            if (!exiting && !reloadOnce(key)) {
-              var layer = document.getElementById('numap-overlay-storm');
-              if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
-            }
-          }, 700);
+            if (!exiting && !reloadOnce(key)) undoChoreo();
+          }, 2300);
         }
 
         // Recovery overlay — the reloads above used to be silent, so during

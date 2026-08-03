@@ -103,12 +103,15 @@ const PETALS = Array.from({ length: 14 }, (_, i) => {
   };
 });
 
-// The exit storm: the same petals, dense and wind-blown (mirrors the
-// index.html storm — phase-uniform with stride 5, coprime to 36).
+// The exit storm, mirroring index.html: each petal ACCELERATES
+// left→right (ease-in cubic-bezier = wind force, not constant speed),
+// the infinite repeat keeps fresh petals arriving from the left, and
+// the layer itself gusts — irregular opacity waves, denser at some
+// moments than others.
 const STORM = Array.from({ length: 36 }, (_, i) => {
-  const dur = 0.9 + ((i * 53) % 80) / 100;
+  const dur = 1.2 + ((i * 53) % 100) / 100;
   return {
-    left:    ((i * 83 + 11) % 130) - 25,
+    top:     ((i * 61 + 3) % 100) - 8,
     size:    8 + ((i * 37) % 9),
     dur,
     delay:   -(dur * ((i * 5) % 36) / 36),
@@ -119,10 +122,11 @@ const STORM = Array.from({ length: 36 }, (_, i) => {
 
 function Storm() {
   return (
-    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none",
+      animation: "numapGust 2.6s ease-in-out infinite" }}>
       {STORM.map((p, i) => (
-        <div key={i} style={{ position: "absolute", top: "-16vh", left: `${p.left}%`,
-          animation: `numapStorm ${p.dur}s linear ${p.delay}s infinite` }}>
+        <div key={i} style={{ position: "absolute", top: `${p.top}%`, left: "-12%",
+          animation: `numapStorm ${p.dur}s cubic-bezier(.5,.05,.85,.45) ${p.delay}s infinite` }}>
           <svg width={p.size} height={p.size} viewBox="0 0 12 12" aria-hidden="true"
             style={{ display: "block", opacity: p.opacity }}>
             <path d="M6 0 C 9.2 2.4, 9.2 7.2, 6 12 C 2.8 7.2, 2.8 2.4, 6 0" fill={p.color} />
@@ -133,9 +137,12 @@ function Storm() {
   );
 }
 
-function Petals() {
+function Petals({ leaving }) {
   return (
-    <div className="numap-petals" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+    <div className="numap-petals" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none",
+      // The ambient field feels the exit wind too: it accelerates off
+      // the right edge rather than jumping to a speed.
+      ...(leaving ? { animation: "numapBlowoff 2.4s cubic-bezier(.5,0,.85,.5) forwards" } : {}) }}>
       {PETALS.map((p, i) => (
         <div key={i} style={{ position: "absolute", top: "-6vh", left: `${p.left}%`,
           animation: `numapFall ${p.fall}s linear ${p.delay}s infinite` }}>
@@ -192,7 +199,7 @@ export default class RecoveryBoundary extends Component {
       // returns to the real app instead of the preview.
       if (/[?&]preview=/.test(window.location.search)) window.location.href = window.location.pathname;
       else window.location.reload();
-    }, 700);
+    }, 2300);
   };
 
   componentDidCatch(error, info) {
@@ -231,14 +238,23 @@ export default class RecoveryBoundary extends Component {
           @keyframes numapGlint { 0% { left: -45% } 55% { left: 125% } 100% { left: 125% } }
           @keyframes numapFall { from { transform: translateY(0) } to { transform: translateY(112vh) } }
           @keyframes numapSway { from { transform: translateX(-10px) rotate(-40deg) } to { transform: translateX(10px) rotate(40deg) } }
-          @keyframes numapStorm { from { transform: translate3d(0,-16vh,0) rotate(0deg) } to { transform: translate3d(44vw,116vh,0) rotate(300deg) } }
+          @keyframes numapStorm { from { transform: translate3d(0,0,0) rotate(0deg) } to { transform: translate3d(150vw,42vh,0) rotate(480deg) } }
+          @keyframes numapGust { 0% { opacity:.35 } 22% { opacity:.85 } 41% { opacity:.55 } 63% { opacity:1 } 82% { opacity:.6 } 100% { opacity:.35 } }
+          @keyframes numapBlowoff { from { transform: translateX(0) } to { transform: translateX(135vw) } }
+          @keyframes numapCardDim { 0% { opacity:1 } 22% { opacity:.5 } 38% { opacity:.75 } 58% { opacity:.3 } 72% { opacity:.45 } 100% { opacity:0 } }
           @media (prefers-reduced-motion: reduce) {
             .numap-crash *, .numap-petals * { animation: none !important }
             .numap-petals { display: none }
           }
         `}</style>
-        <Petals />
-        <div className="numap-crash" style={{ animation: "numapCrashIn .35s ease-out", position: "relative" }}>
+        <Petals leaving={this.state.leaving} />
+        <div className="numap-crash" style={{
+          // In the exit gusts the card flickers dimmer and brighter,
+          // then dies away entirely as the storm takes over.
+          animation: this.state.leaving
+            ? "numapCardDim 2.2s ease-in-out forwards"
+            : "numapCrashIn .35s ease-out",
+          position: "relative" }}>
           <Emblem dark={dark} />
           <div style={{ width: 260, height: 4, borderRadius: 99, overflow: "hidden",
             margin: "0 auto 20px", background: dark ? "#21262d" : "#e2e8f0" }}>
