@@ -539,6 +539,30 @@
             // for a few seconds before the probe's detection (~4 s)
             // sweeps it away — the real removal sequence, just observable.
             }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 1000 : 90000);
+            // At the five-minute mark the promise has expired — keeping
+            // it on screen would read as a lie. The sub-line hands its
+            // slot to the nudge (in place, clickable) and the lower
+            // nudge line folds away: one calm honest line remains.
+            setTimeout(function () {
+              if (exiting || document.getElementById('numap-back-link')) return;
+              var s3 = document.getElementById('numap-recovery-sub');
+              var n3 = document.getElementById('numap-recovery-nudge');
+              if (!s3) return;
+              s3.style.transition = 'opacity .6s';
+              s3.style.opacity = '0';
+              if (n3) { n3.style.transition = 'opacity .6s'; n3.style.opacity = '0'; }
+              setTimeout(function () {
+                if (exiting || document.getElementById('numap-back-link')) return;
+                if (n3 && n3.parentNode) n3.parentNode.removeChild(n3);
+                s3.textContent = RECOVERY_NUDGE[lc] || RECOVERY_NUDGE.en;
+                s3.style.cursor = 'pointer';
+                s3.onclick = function () {
+                  try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
+                  window.location.reload();
+                };
+                s3.style.opacity = '1';
+              }, 620);
+            }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 8000 : 300000);
           };
           if (document.body) make();
           else document.addEventListener('DOMContentLoaded', make);

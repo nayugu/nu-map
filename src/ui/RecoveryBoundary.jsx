@@ -194,6 +194,7 @@ export default class RecoveryBoundary extends Component {
     crashed: import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search),
     leaving: false,
     showLink: false,
+    subSwapped: false, // 5-minute mark: the promise line hands its slot to the nudge
   };
 
   static getDerivedStateFromError() { return { crashed: true }; }
@@ -203,14 +204,15 @@ export default class RecoveryBoundary extends Component {
   // quiet reload nudge fades in as the escape hatch.
   scheduleGhost = () => {
     if (this.ghostTimer) return;
-    // 5 s in the dev preview so the nudge is testable without the wait.
-    const delay = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search)
-      ? 5_000 : 90_000;
-    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), delay);
+    // 5 s / 12 s in the dev preview so both stages are testable without
+    // the wait; 90 s / 5 min in reality.
+    const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
+    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), preview ? 5_000 : 90_000);
+    this.swapTimer = setTimeout(() => this.setState({ subSwapped: true }), preview ? 12_000 : 300_000);
   };
 
   componentDidMount() { if (this.state.crashed) this.scheduleGhost(); }
-  componentWillUnmount() { clearTimeout(this.ghostTimer); }
+  componentWillUnmount() { clearTimeout(this.ghostTimer); clearTimeout(this.swapTimer); }
 
   // Exit choreography shared by auto-retry and the button: the petal
   // storm rises for 0.7 s, the reload happens inside it, and the next
@@ -299,11 +301,16 @@ export default class RecoveryBoundary extends Component {
           <div style={{ fontSize: "min(15px, 3.4vw)", fontWeight: 600, lineHeight: 1.5, whiteSpace: "nowrap" }}>
             {MSG[lc] || MSG.en}
           </div>
-          <div style={{ marginTop: 6, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
-            whiteSpace: "nowrap", color: dark ? "#8b949e" : "#64748b" }}>
-            {SUB[lc] || SUB.en}
+          {/* After 5 minutes the promise has expired — the sub-line hands
+              its slot to the nudge (clickable, in place) and the lower
+              nudge line folds away. */}
+          <div onClick={this.state.subSwapped ? this.stormReload : undefined}
+            style={{ marginTop: 6, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
+              whiteSpace: "nowrap", color: dark ? "#8b949e" : "#64748b",
+              cursor: this.state.subSwapped ? "pointer" : "default" }}>
+            {this.state.subSwapped ? (NUDGE[lc] || NUDGE.en) : (SUB[lc] || SUB.en)}
           </div>
-          {this.state.showLink && (
+          {this.state.showLink && !this.state.subSwapped && (
             <div onClick={this.stormReload} style={{
               marginTop: 18, fontSize: 11, fontWeight: 600, cursor: "pointer",
               color: dark ? "#8b949e" : "#64748b",
