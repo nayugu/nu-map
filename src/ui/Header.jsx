@@ -1692,25 +1692,32 @@ export default function Header() {
                 </SettingsSection>
               )}
 
-              {/* About — short links, laid out as a row instead of a stack */}
+              {/* About — short links, two deliberate rows (2 up top, 3 below)
+                  so every pill in a row shares the same width */}
               <SettingsSection label={t("header.links.title")}>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-                  {[
-                    { href: `${import.meta.env.BASE_URL}northeastern/dev.html`, label: "/dev" },
+                {[
+                  [
                     { href: "https://github.com/nayugu/nu-map",                label: "/github" },
                     { href: `${import.meta.env.BASE_URL}privacy.html`,          label: "/privacy" },
+                  ],
+                  [
                     { href: `${import.meta.env.BASE_URL}data.html`,             label: "/data" },
                     { href: `${import.meta.env.BASE_URL}story.html`,            label: "/story" },
-                  ].map(({ href, label }) => (
-                    <a key={label} href={href} target="_blank" rel="noreferrer" className="set-row"
-                      style={{ flex: "1 1 30%", whiteSpace: "nowrap", textAlign: "center", fontSize: 11.5,
-                        background: "var(--bg-surface)", padding: "5px 10px", borderRadius: 5,
-                        border: "1px solid var(--bg-surface)", color: "var(--text-4)",
-                        textDecoration: "none", boxSizing: "border-box",
-                        fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
-                    >{label}</a>
-                  ))}
-                </div>
+                    { href: `${import.meta.env.BASE_URL}northeastern/dev.html`, label: "/dev" },
+                  ],
+                ].map((row, i) => (
+                  <div key={i} style={{ display: "flex", gap: 4, marginTop: i ? 4 : 0 }}>
+                    {row.map(({ href, label }) => (
+                      <a key={label} href={href} target="_blank" rel="noreferrer" className="set-row"
+                        style={{ flex: "1 1 0", whiteSpace: "nowrap", textAlign: "center", fontSize: 11.5,
+                          background: "var(--bg-surface)", padding: "5px 10px", borderRadius: 5,
+                          border: "1px solid var(--bg-surface)", color: "var(--text-4)",
+                          textDecoration: "none", boxSizing: "border-box",
+                          fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
+                      >{label}</a>
+                    ))}
+                  </div>
+                ))}
               </SettingsSection>
             </div>
           )}
