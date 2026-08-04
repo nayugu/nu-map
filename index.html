@@ -582,7 +582,10 @@
                 };
                 if (n3.parentNode) n3.parentNode.removeChild(n3);
               }, 1600);
-            }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 8000 : 300000);
+            // Six minutes, not five: "about five minutes" gets its full
+            // window plus grace before yielding — the promise is never
+            // seen breaking itself early.
+            }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 8000 : 360000);
           };
           if (document.body) make();
           else document.addEventListener('DOMContentLoaded', make);
