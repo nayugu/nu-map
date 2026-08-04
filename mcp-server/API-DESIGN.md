@@ -103,7 +103,7 @@ have consented on the nu-map side.** Identity and authorization are deliberately
 
 - **Identity (who is asking)** comes from the connector's OAuth — on the NU Enterprise
   org every chat is authenticated as a specific user, so the server knows "this is
-  gu.nat@northeastern.edu's chat" with no pairing codes typed into conversations.
+  student@northeastern.edu's chat" with no pairing codes typed into conversations.
 - **Authorization (may they see/change this plan)** is granted in the app, not the chat,
   and is **OFF by default**. The link is created by a pairing handshake: a plan tool call
   while unlinked tells Claude to call `request_pairing`, which returns a 6-character code
