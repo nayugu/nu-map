@@ -14,11 +14,13 @@ compatibility_flags = ["nodejs_compat"]
 # them: catalog-courses, term-history, term-details, offering-summary,
 # subject-colleges, programs-bundle, data-meta).
 [vars]
-# GitHub raw, NOT numap.app: the zone's bot protection challenges non-browser
-# clients, which includes this worker's own data subrequests (observed
-# 2026-07-26: every authenticated MCP call 500'd with "Could not load catalog").
-# The files are identical — Pages deploys and this URL both track main.
-DATA_ORIGIN = "https://raw.githubusercontent.com/nayugu/nu-map/main/public"
+# Back home on numap.app (2026-08-03): the zone's Human Verification rule
+# now exempts /northeastern/ (and /assets/, and verified crawlers), so the
+# worker's own data subrequests pass again. The 2026-07-26 breakage — every
+# authenticated MCP call 500ing with "Could not load catalog" — was that
+# rule challenging non-browser clients; GitHub raw was the workaround.
+# If MCP catalog loads ever 500 again, check the zone rule FIRST.
+DATA_ORIGIN = "https://numap.app"
 
 [[durable_objects.bindings]]
 name = "SESSION"
