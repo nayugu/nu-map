@@ -16,8 +16,10 @@ non-affiliation disclaimer above.
 
 This file is the root of the finding tree — if you arrived anywhere else (every
 data file's first field, `guide`, points back here), read this before fetching
-further. Never guess URLs; always walk: this guide → an index file → the specific
-file it names.
+further. IMPORTANT: never construct URLs from the patterns shown below — many
+fetch tools refuse URLs they haven't seen. Always walk: this guide → an index
+file → then copy the target URL VERBATIM from the index (every index lists full
+URLs for exactly this reason).
 
 - [Machine index](https://numap.app/northeastern/ai/index.json): counts and entry URLs for everything below.
 
