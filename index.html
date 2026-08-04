@@ -535,10 +535,10 @@
               };
               card.appendChild(g);
               setTimeout(function () { g.style.opacity = '1'; }, 30);
-            // 3 s in preview so the nudge is testable without the wait —
-            // just ahead of the probe's first tick (~4 s), so you also see
-            // detection sweep it away, which is the real sequence.
-            }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 3000 : 90000);
+            // 1 s in preview so the nudge is fully visible and clickable
+            // for a few seconds before the probe's detection (~4 s)
+            // sweeps it away — the real removal sequence, just observable.
+            }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 1000 : 90000);
           };
           if (document.body) make();
           else document.addEventListener('DOMContentLoaded', make);
