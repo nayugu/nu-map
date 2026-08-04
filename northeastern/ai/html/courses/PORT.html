@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" />
+<title>PORT courses at Northeastern — prerequisites, offerings, instructors — NU Map Data</title>
+<meta name="description" content="Every Northeastern PORT course with prerequisites, offering history, typical meeting days, and instructors. Machine-readable data from NU Map, a student-built planner not affiliated with Northeastern." />
+<link rel="canonical" href="https://numap.app/northeastern/ai/html/courses/PORT.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head><body style="font-family:system-ui,sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem;line-height:1.5;">
+<h1>PORT courses at Northeastern — prerequisites, offerings, instructors</h1>
+<p><strong>NU Map is an independent, student-built planner — not affiliated with,
+endorsed by, or officially connected to Northeastern University.</strong>
+Data is scraped from the public catalog on a schedule; confirm with the official
+catalog and an advisor. Machine-readable guide: <a href="https://numap.app/llms.txt">numap.app/llms.txt</a>
+· JSON version: <a href="https://numap.app/northeastern/ai/courses/PORT.json">https://numap.app/northeastern/ai/courses/PORT.json</a></p>
+<pre style="white-space:pre-wrap;word-break:break-word;">{
+ &quot;subject&quot;: &quot;PORT&quot;,
+ &quot;count&quot;: 14,
+ &quot;lastUpdated&quot;: &quot;Aug 2026&quot;,
+ &quot;generatedAt&quot;: &quot;2026-08-04T16:50:39.891Z&quot;,
+ &quot;disclaimer&quot;: &quot;NU Map is an independent, student-built planner. It is not affiliated with, endorsed by, or officially connected to Northeastern University. Data is scraped from Northeastern's public catalog and refreshed on a schedule; always confirm with the official catalog and an academic advisor.&quot;,
+ &quot;legend&quot;: {
+  &quot;prereqs&quot;: &quot;Flat token list: course refs {subject, number, minGrade} joined by 'And'/'Or' strings; nested arrays are parenthesized groups. minGrade is the minimum passing grade required.&quot;,
+  &quot;coreqs&quot;: &quot;Courses that must be taken in the same term.&quot;,
+  &quot;offerings.terms&quot;: &quot;Past/scheduled terms by Banner code (YYYY = academic-year END year; Fall runs in YYYY-1). sections/enrolled/capacity are snapshots from the scheduled scrape, NOT live seat availability.&quot;,
+  &quot;offerings.typicalDays&quot;: &quot;Weekdays on which at least 50% of recent sections met.&quot;,
+  &quot;offerings.daysPct&quot;: &quot;Percent of recent sections meeting on each weekday (M/T/W/Th/F).&quot;,
+  &quot;offerings.meetingPatterns&quot;: &quot;[pattern, percent-of-sections] pairs; in patterns like 'MWR', R means Thursday.&quot;,
+  &quot;instructors&quot;: &quot;Per season. sharePct = average percent of that season's enrolled students taught by this professor (recent terms). 'reviews' links their RateMyHusky page when one exists.&quot;,
+  &quot;level&quot;: &quot;undergrad for course numbers below 5000, grad otherwise.&quot;,
+  &quot;typicallyOffered&quot;: &quot;Seasons in which the course was scheduled in at least two-thirds of that season's terms on record since it first appeared — a pattern, not a guarantee.&quot;,
+  &quot;unlocks&quot;: &quot;Courses that list this course in their prerequisites — what taking it opens up.&quot;,
+  &quot;nuPath&quot;: &quot;NUpath general-education attributes this course carries.&quot;,
+  &quot;repeatable&quot;: &quot;Whether the course may be taken more than once for credit (repeatMax / repeatMaxSH cap it).&quot;
+ },
+ &quot;courses&quot;: [
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;1101&quot;,
+   &quot;title&quot;: &quot;Elementary Portuguese 1&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 4,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Begins the integrated development of elementary language skills through cultural exploration. Includes class discussion and project-based learning. Offers students an opportunity to gain a deeper understanding of daily life, social norms, and family structure in Portuguese-speaking countries.Designed for students with very little or no prior knowledge of Portuguese.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;typicallyOffered&quot;: [
+    &quot;fall&quot;,
+    &quot;spring&quot;
+   ],
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;,
+   &quot;reviews&quot;: &quot;https://ratemyhusky.com/courses/PORT1101&quot;,
+   &quot;offerings&quot;: {
+    &quot;terms&quot;: {
+     &quot;202410&quot;: {
+      &quot;term&quot;: &quot;Fall 2023&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 4,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202430&quot;: {
+      &quot;term&quot;: &quot;Spring 2024&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 7,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202510&quot;: {
+      &quot;term&quot;: &quot;Fall 2024&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 14,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202530&quot;: {
+      &quot;term&quot;: &quot;Spring 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 10,
+      &quot;capacity&quot;: 16
+     },
+     &quot;202610&quot;: {
+      &quot;term&quot;: &quot;Fall 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 11,
+      &quot;capacity&quot;: 16
+     },
+     &quot;202630&quot;: {
+      &quot;term&quot;: &quot;Spring 2026&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 6,
+      &quot;capacity&quot;: 16
+     }
+    },
+    &quot;typicalDays&quot;: [
+     &quot;M&quot;,
+     &quot;W&quot;,
+     &quot;Th&quot;
+    ],
+    &quot;daysPct&quot;: {
+     &quot;M&quot;: 100,
+     &quot;T&quot;: 0,
+     &quot;W&quot;: 100,
+     &quot;Th&quot;: 100,
+     &quot;F&quot;: 0
+    },
+    &quot;meetingPatterns&quot;: [
+     [
+      &quot;MWR&quot;,
+      100
+     ]
+    ],
+    &quot;campuses&quot;: [
+     &quot;Boston&quot;
+    ],
+    &quot;formats&quot;: [
+     &quot;Traditional&quot;
+    ]
+   },
+   &quot;instructors&quot;: {
+    &quot;fall&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ],
+    &quot;spring&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ]
+   },
+   &quot;unlocks&quot;: [
+    &quot;PORT 1102&quot;
+   ]
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;1102&quot;,
+   &quot;title&quot;: &quot;Elementary Portuguese 2&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 4,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Builds on PORT 1101 and continues the integrated development of elementary language skills through cultural exploration. Includes class discussion and project-based learning. Offers students an opportunity to gain a deeper understanding of the linguistic, cultural, and geographic diversity of the Portuguese-speaking world.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;1101&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    },
+    &quot;Or&quot;,
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;1301&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    }
+   ],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;typicallyOffered&quot;: [
+    &quot;fall&quot;,
+    &quot;spring&quot;
+   ],
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;,
+   &quot;reviews&quot;: &quot;https://ratemyhusky.com/courses/PORT1102&quot;,
+   &quot;offerings&quot;: {
+    &quot;terms&quot;: {
+     &quot;202410&quot;: {
+      &quot;term&quot;: &quot;Fall 2023&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 1,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202510&quot;: {
+      &quot;term&quot;: &quot;Fall 2024&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 6,
+      &quot;capacity&quot;: 15
+     },
+     &quot;202530&quot;: {
+      &quot;term&quot;: &quot;Spring 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 7,
+      &quot;capacity&quot;: 15
+     },
+     &quot;202610&quot;: {
+      &quot;term&quot;: &quot;Fall 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 5,
+      &quot;capacity&quot;: 15
+     },
+     &quot;202630&quot;: {
+      &quot;term&quot;: &quot;Spring 2026&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 5,
+      &quot;capacity&quot;: 15
+     }
+    },
+    &quot;typicalDays&quot;: [],
+    &quot;daysPct&quot;: {
+     &quot;M&quot;: 0,
+     &quot;T&quot;: 0,
+     &quot;W&quot;: 0,
+     &quot;Th&quot;: 4,
+     &quot;F&quot;: 0
+    },
+    &quot;meetingPatterns&quot;: [
+     [
+      &quot;async&quot;,
+      96
+     ],
+     [
+      &quot;R&quot;,
+      4
+     ]
+    ],
+    &quot;campuses&quot;: [
+     &quot;Boston&quot;,
+     &quot;Online&quot;
+    ],
+    &quot;formats&quot;: [
+     &quot;Hybrid&quot;,
+     &quot;Online&quot;
+    ]
+   },
+   &quot;instructors&quot;: {
+    &quot;fall&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ],
+    &quot;spring&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ]
+   },
+   &quot;unlocks&quot;: [
+    &quot;PORT 2101&quot;,
+    &quot;PORT 2900&quot;
+   ]
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;1501&quot;,
+   &quot;title&quot;: &quot;Accelerated Elementary Portuguese 1&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 4,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Introduces Portuguese to native/heritage speakers of Spanish, beginner-level heritage speakers of Portuguese, and students who have completed at least two levels of intermediate Spanish. Focuses on fundamental communication skills—speaking, aural comprehension, reading, and writing. Also explores cultural elements of the Portuguese-speaking countries. Students who do not have the preparation described may seek permission of instructor. This course is the equivalent of completing two semesters of elementary Portuguese.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;typicallyOffered&quot;: [
+    &quot;fall&quot;
+   ],
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;,
+   &quot;reviews&quot;: &quot;https://ratemyhusky.com/courses/PORT1501&quot;,
+   &quot;offerings&quot;: {
+    &quot;terms&quot;: {
+     &quot;202410&quot;: {
+      &quot;term&quot;: &quot;Fall 2023&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 2,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202430&quot;: {
+      &quot;term&quot;: &quot;Spring 2024&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 5,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202510&quot;: {
+      &quot;term&quot;: &quot;Fall 2024&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 4,
+      &quot;capacity&quot;: 18
+     }
+    },
+    &quot;typicalDays&quot;: [
+     &quot;T&quot;
+    ],
+    &quot;daysPct&quot;: {
+     &quot;M&quot;: 36,
+     &quot;T&quot;: 64,
+     &quot;W&quot;: 0,
+     &quot;Th&quot;: 36,
+     &quot;F&quot;: 0
+    },
+    &quot;meetingPatterns&quot;: [
+     [
+      &quot;T&quot;,
+      64
+     ],
+     [
+      &quot;MR&quot;,
+      36
+     ]
+    ],
+    &quot;campuses&quot;: [
+     &quot;Boston&quot;
+    ],
+    &quot;formats&quot;: [
+     &quot;Hybrid&quot;,
+     &quot;Traditional&quot;
+    ]
+   },
+   &quot;instructors&quot;: {
+    &quot;fall&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ],
+    &quot;spring&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ]
+   },
+   &quot;unlocks&quot;: [
+    &quot;PORT 2101&quot;
+   ]
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;1990&quot;,
+   &quot;title&quot;: &quot;Elective&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 1,
+   &quot;creditsMax&quot;: 4,
+   &quot;repeatable&quot;: true,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;2101&quot;,
+   &quot;title&quot;: &quot;Intermediate Portuguese 1&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 4,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Builds on PORT 1102 and begins the integrated development of intermediate language skills through cultural exploration. Includes class discussion and project-based learning. Offers students an opportunity to gain a deeper understanding of the changes to modern life in Portuguese-speaking countries and efforts to face societal challenges.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;1102&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    },
+    &quot;Or&quot;,
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;1302&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    },
+    &quot;Or&quot;,
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;1501&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    }
+   ],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;typicallyOffered&quot;: [
+    &quot;fall&quot;,
+    &quot;spring&quot;
+   ],
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;,
+   &quot;reviews&quot;: &quot;https://ratemyhusky.com/courses/PORT2101&quot;,
+   &quot;offerings&quot;: {
+    &quot;terms&quot;: {
+     &quot;202410&quot;: {
+      &quot;term&quot;: &quot;Fall 2023&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 3,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202430&quot;: {
+      &quot;term&quot;: &quot;Spring 2024&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 2,
+      &quot;capacity&quot;: 18
+     },
+     &quot;202530&quot;: {
+      &quot;term&quot;: &quot;Spring 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 5,
+      &quot;capacity&quot;: 15
+     },
+     &quot;202610&quot;: {
+      &quot;term&quot;: &quot;Fall 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 7,
+      &quot;capacity&quot;: 15
+     },
+     &quot;202630&quot;: {
+      &quot;term&quot;: &quot;Spring 2026&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 2,
+      &quot;capacity&quot;: 15
+     }
+    },
+    &quot;typicalDays&quot;: [],
+    &quot;daysPct&quot;: {
+     &quot;M&quot;: 26,
+     &quot;T&quot;: 0,
+     &quot;W&quot;: 0,
+     &quot;Th&quot;: 0,
+     &quot;F&quot;: 0
+    },
+    &quot;meetingPatterns&quot;: [
+     [
+      &quot;async&quot;,
+      74
+     ],
+     [
+      &quot;M&quot;,
+      26
+     ]
+    ],
+    &quot;campuses&quot;: [
+     &quot;Boston&quot;,
+     &quot;Online&quot;
+    ],
+    &quot;formats&quot;: [
+     &quot;Hybrid&quot;,
+     &quot;Online&quot;
+    ]
+   },
+   &quot;instructors&quot;: {
+    &quot;fall&quot;: [
+     {
+      &quot;name&quot;: &quot;Daniel Cuenca&quot;,
+      &quot;sharePct&quot;: 70,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/daniel-cuenca&quot;
+     },
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 30,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ],
+    &quot;spring&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ]
+   },
+   &quot;unlocks&quot;: [
+    &quot;PORT 2102&quot;
+   ]
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;2102&quot;,
+   &quot;title&quot;: &quot;Intermediate Portuguese 2&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 4,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Builds on PORT 2101 and focuses on further development of vocabulary. Offers students an opportunity to continue to master grammar and conversation through written composition, prepared oral reports, and reading and discussion from contemporary Portuguese materials.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [
+    &quot;(&quot;,
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;2101&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    },
+    &quot;Or&quot;,
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;2301&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    },
+    &quot;)&quot;
+   ],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;typicallyOffered&quot;: [
+    &quot;fall&quot;
+   ],
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;,
+   &quot;reviews&quot;: &quot;https://ratemyhusky.com/courses/PORT2102&quot;,
+   &quot;offerings&quot;: {
+    &quot;terms&quot;: {
+     &quot;202510&quot;: {
+      &quot;term&quot;: &quot;Fall 2024&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 2,
+      &quot;capacity&quot;: 15
+     },
+     &quot;202610&quot;: {
+      &quot;term&quot;: &quot;Fall 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 3,
+      &quot;capacity&quot;: 15
+     },
+     &quot;202630&quot;: {
+      &quot;term&quot;: &quot;Spring 2026&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 3,
+      &quot;capacity&quot;: 15
+     }
+    },
+    &quot;typicalDays&quot;: [],
+    &quot;daysPct&quot;: {
+     &quot;M&quot;: 0,
+     &quot;T&quot;: 0,
+     &quot;W&quot;: 0,
+     &quot;Th&quot;: 0,
+     &quot;F&quot;: 0
+    },
+    &quot;meetingPatterns&quot;: [
+     [
+      &quot;async&quot;,
+      100
+     ]
+    ],
+    &quot;campuses&quot;: [
+     &quot;Online&quot;
+    ],
+    &quot;formats&quot;: [
+     &quot;Online&quot;
+    ]
+   },
+   &quot;instructors&quot;: {
+    &quot;fall&quot;: [
+     {
+      &quot;name&quot;: &quot;Daniel Cuenca&quot;,
+      &quot;sharePct&quot;: 60,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/daniel-cuenca&quot;
+     },
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 40,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ],
+    &quot;spring&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ]
+   },
+   &quot;unlocks&quot;: [
+    &quot;PORT 3101&quot;,
+    &quot;PORT 3900&quot;
+   ]
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;2900&quot;,
+   &quot;title&quot;: &quot;Specialized Instruction in Portuguese&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 1,
+   &quot;creditsMax&quot;: 4,
+   &quot;repeatable&quot;: true,
+   &quot;repeatMax&quot;: 3,
+   &quot;repeatMaxSH&quot;: 12,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Focuses on developing students’ language proficiency and cultural competence within a specific context. May be repeated twice for a maximum of 12 semester hours with department approval.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;1102&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    }
+   ],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;2990&quot;,
+   &quot;title&quot;: &quot;Elective&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 1,
+   &quot;creditsMax&quot;: 4,
+   &quot;repeatable&quot;: true,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;3101&quot;,
+   &quot;title&quot;: &quot;Advanced Portuguese 1&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 4,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Continues further development of vocabulary. Offers students an opportunity to continue to master grammar and conversation through advanced reading, composition, grammar review, and listening skills. Whenever possible, offers students an opportunity to engage in local community activities to enhance communication skills and cultural knowledge.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;2102&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    },
+    &quot;Or&quot;,
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;2302&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    }
+   ],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;,
+   &quot;reviews&quot;: &quot;https://ratemyhusky.com/courses/PORT3101&quot;,
+   &quot;offerings&quot;: {
+    &quot;terms&quot;: {
+     &quot;202530&quot;: {
+      &quot;term&quot;: &quot;Spring 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 5,
+      &quot;capacity&quot;: 15
+     }
+    },
+    &quot;typicalDays&quot;: [],
+    &quot;daysPct&quot;: {
+     &quot;M&quot;: 0,
+     &quot;T&quot;: 0,
+     &quot;W&quot;: 0,
+     &quot;Th&quot;: 0,
+     &quot;F&quot;: 0
+    },
+    &quot;meetingPatterns&quot;: [
+     [
+      &quot;async&quot;,
+      100
+     ]
+    ],
+    &quot;campuses&quot;: [
+     &quot;Online&quot;
+    ],
+    &quot;formats&quot;: [
+     &quot;Online&quot;
+    ]
+   },
+   &quot;instructors&quot;: {
+    &quot;spring&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ]
+   }
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;3900&quot;,
+   &quot;title&quot;: &quot;Specialized Instruction in Portuguese&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 1,
+   &quot;creditsMax&quot;: 4,
+   &quot;repeatable&quot;: true,
+   &quot;repeatMax&quot;: 3,
+   &quot;repeatMaxSH&quot;: 12,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Focuses on developing students’ language proficiency and cultural competence within a specific context. May be repeated twice for a maximum of 12 semester hours with department approval.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [
+    {
+     &quot;subject&quot;: &quot;PORT&quot;,
+     &quot;number&quot;: &quot;2102&quot;,
+     &quot;minGrade&quot;: &quot;C-&quot;
+    }
+   ],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;3990&quot;,
+   &quot;title&quot;: &quot;Elective&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 1,
+   &quot;creditsMax&quot;: 4,
+   &quot;repeatable&quot;: true,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;4990&quot;,
+   &quot;title&quot;: &quot;Elective&quot;,
+   &quot;scheduleType&quot;: &quot;Lecture&quot;,
+   &quot;credits&quot;: 1,
+   &quot;creditsMax&quot;: 4,
+   &quot;repeatable&quot;: true,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;4992&quot;,
+   &quot;title&quot;: &quot;Directed Study&quot;,
+   &quot;scheduleType&quot;: &quot;Individual Instruction&quot;,
+   &quot;credits&quot;: 1,
+   &quot;creditsMax&quot;: 4,
+   &quot;repeatable&quot;: true,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Offers students a way of going beyond work given in the regular curriculum; may also enable students to complete major or minor requirements in certain situations. Priority is given to language majors and to juniors and seniors. May be repeated without limit.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;undergrad&quot;,
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;
+  },
+  {
+   &quot;subject&quot;: &quot;PORT&quot;,
+   &quot;number&quot;: &quot;5976&quot;,
+   &quot;title&quot;: &quot;Directed Study&quot;,
+   &quot;scheduleType&quot;: &quot;Individual Instruction&quot;,
+   &quot;credits&quot;: 1,
+   &quot;repeatable&quot;: true,
+   &quot;nuPath&quot;: [],
+   &quot;description&quot;: &quot;Offers independent work under the direction of members of the department on a chosen topic. Course content depends on instructor. May be repeated without limit.&quot;,
+   &quot;coreqs&quot;: [],
+   &quot;prereqs&quot;: [],
+   &quot;level&quot;: &quot;grad&quot;,
+   &quot;typicallyOffered&quot;: [
+    &quot;fall&quot;,
+    &quot;spring&quot;
+   ],
+   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/port/&quot;,
+   &quot;offerings&quot;: {
+    &quot;terms&quot;: {
+     &quot;202610&quot;: {
+      &quot;term&quot;: &quot;Fall 2025&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 1,
+      &quot;capacity&quot;: 2
+     },
+     &quot;202630&quot;: {
+      &quot;term&quot;: &quot;Spring 2026&quot;,
+      &quot;sections&quot;: 1,
+      &quot;enrolled&quot;: 1,
+      &quot;capacity&quot;: 2
+     }
+    },
+    &quot;typicalDays&quot;: [],
+    &quot;daysPct&quot;: {
+     &quot;M&quot;: 0,
+     &quot;T&quot;: 0,
+     &quot;W&quot;: 0,
+     &quot;Th&quot;: 0,
+     &quot;F&quot;: 0
+    },
+    &quot;meetingPatterns&quot;: [
+     [
+      &quot;async&quot;,
+      100
+     ]
+    ],
+    &quot;campuses&quot;: [
+     &quot;No campus, no room needed&quot;
+    ],
+    &quot;formats&quot;: [
+     &quot;One-On-One&quot;
+    ]
+   },
+   &quot;instructors&quot;: {
+    &quot;fall&quot;: [
+     {
+      &quot;name&quot;: &quot;Daniel Cuenca&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/daniel-cuenca&quot;
+     }
+    ],
+    &quot;spring&quot;: [
+     {
+      &quot;name&quot;: &quot;Boris Yelin&quot;,
+      &quot;sharePct&quot;: 100,
+      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/boris-yelin&quot;
+     }
+    ]
+   }
+  }
+ ]
+}</pre>
+</body></html>
