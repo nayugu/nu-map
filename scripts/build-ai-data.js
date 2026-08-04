@@ -373,20 +373,39 @@ for (const [code, off] of Object.entries(offering)) {
     }
   }
 }
+// Split by surname-agnostic FIRST letter of the display name so no
+// single file can overflow an AI fetch context (the monolith hit
+// 581 KB, which silently truncated — losing professors N–Z).
+const profsByLetter = new Map();
+for (const [name, p] of [...professors.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
+  const letter = /^[A-Za-z]/.test(name) ? name[0].toUpperCase() : "_";
+  if (!profsByLetter.has(letter)) profsByLetter.set(letter, {});
+  profsByLetter.get(letter)[name] = {
+    ...(rmhProfs[name] ? { reviews: `${RMH}/professors/${rmhProfs[name]}` } : {}),
+    courses: Object.fromEntries([...p.courses.entries()].sort(([a], [b2]) => a.localeCompare(b2))
+      .map(([c, seasons]) => [c, [...seasons].sort()])),
+  };
+}
+const profLetters = {};
+for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
+  writeJSON(`professors/${letter}.json`, {
+    what: `Instructors whose name starts with "${letter}", with the courses they teach per season.`,
+    count: Object.keys(profs).length,
+    lastUpdated: meta.lastUpdated,
+    generatedAt,
+    disclaimer: DISCLAIMER,
+    professors: profs,
+  });
+  profLetters[letter] = { count: Object.keys(profs).length, url: `${ORIGIN}/northeastern/ai/professors/${letter}.json` };
+}
 writeJSON("professors.json", {
-  what: "Every instructor in the offering data, with the courses they teach and in which seasons. Use for professor-based course search.",
+  what: "Index of instructors, split by first letter of name so each file stays small. Fetch the letter file for the professor you need; use for professor-based course search.",
   note: "Derived from recent scheduled terms; 'reviews' links RateMyHusky when a profile exists.",
   count: professors.size,
   lastUpdated: meta.lastUpdated,
   generatedAt,
   disclaimer: DISCLAIMER,
-  professors: Object.fromEntries([...professors.entries()]
-    .sort(([a], [b2]) => a.localeCompare(b2))
-    .map(([name, p]) => [name, {
-      ...(rmhProfs[name] ? { reviews: `${RMH}/professors/${rmhProfs[name]}` } : {}),
-      courses: Object.fromEntries([...p.courses.entries()].sort(([a], [b2]) => a.localeCompare(b2))
-        .map(([c, seasons]) => [c, [...seasons].sort()])),
-    }])),
+  letters: profLetters,
 });
 
 // ── NUpath reverse index ─────────────────────────────────────────────

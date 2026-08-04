@@ -34,6 +34,8 @@ IMPORTANT — know your fetch tool's rules:
 2. You know only a topic ("machine learning", "robotics") → fetch the
    [titles index](https://numap.app/northeastern/ai/courses/titles.json) — every course
    code → title in one file — scan for matches, then fetch that subject's file for details.
+   (This file is ~330 KB; if your tool truncates it, guess the 2-6 likeliest subject
+   codes from the course index instead and scan those subject files.)
 3. You know a requirement ("a DD NUpath course", "taught by Professor X") → start
    from the matching cross-cutting index below.
 
@@ -63,7 +65,7 @@ IMPORTANT — know your fetch tool's rules:
 ## Cross-cutting indexes
 
 - [NUpath](https://numap.app/northeastern/ai/nupath.json): which courses satisfy each of the 13 NUpath general-education attributes (note: the writing competency is three codes — WF, WD, WI).
-- [Professors](https://numap.app/northeastern/ai/professors.json): every instructor with the courses they teach, per season, plus RateMyHusky review links.
+- [Professors](https://numap.app/northeastern/ai/professors.json): index by first letter of name — fetch the letter file it names (e.g. `professors/S.json`) for that instructor's courses per season, with RateMyHusky review links.
 - [Course equivalences](https://numap.app/northeastern/course-equivalences.json): substitution suggestions by tier — A (a program explicitly allows either course), B (catalog-stated equivalents/cross-listings), C (inferred, needs advisor approval), D (weak signals). Read its embedded note for the tier semantics.
 
 ## Searching with filters
