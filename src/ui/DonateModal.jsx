@@ -13,6 +13,9 @@ import { usePlanner }   from "../context/PlannerContext.jsx";
 import { useLanguage }  from "../context/LanguageContext.jsx";
 import { scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { DONATE_URL, donateUrlFor } from "../core/donate.js";
+// Bundled (not public/) so it ships hashed under /assets/ — cache-busted,
+// and immune to zone rules that treat unlisted root paths differently.
+import donateQrUrl from "../assets/donate-qr.svg";
 
 export default function DonateModal() {
   const { showDonate, setShowDonate } = usePlanner();
@@ -73,7 +76,7 @@ export default function DonateModal() {
             }}
           >
             <img
-              src={`${import.meta.env.BASE_URL}donate-qr.svg`}
+              src={donateQrUrl}
               alt={t("donate.qr.hint")}
               style={{ display: "block", width: "100%", height: "auto", imageRendering: "pixelated" }}
             />
