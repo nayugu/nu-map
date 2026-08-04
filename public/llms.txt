@@ -54,19 +54,21 @@ IMPORTANT — know your fetch tool's rules:
   parsed requirement sections (required courses, choose-from pools, credit ranges,
   concentrations), a `verified` flag, and the official catalog `sourceUrl`.
 
-## Courses — one file per subject code, matching everything the app shows
+## Courses — two levels: a filter index per subject, full detail per course
 
 - [Course index](https://numap.app/northeastern/ai/courses/index.json): all subject codes with counts and per-subject URLs.
 - Per-subject URL pattern: `https://numap.app/northeastern/ai/courses/{SUBJECT}.json`
-  (e.g. `https://numap.app/northeastern/ai/courses/CS.json`; most files are tens of
-  KB, the largest subjects a few hundred KB).
-  Each course includes: title, description, credits, **prerequisite logic** (with
-  And/Or structure and minimum grades), corequisites, NUpath attributes,
-  repeatability, **offering history per term** (sections/enrollment/capacity
-  snapshots), **typical meeting days with per-day percentages**, meeting patterns
-  (R = Thursday), campuses, **instructors per season with the average percent of
-  students they teach** and RateMyHusky review links, the official catalog link,
-  and `unlocks` — the courses that list this one as a prerequisite.
+  (e.g. `https://numap.app/northeastern/ai/courses/CS.json`). This is a COMPACT
+  filter index — small enough to read whole — with one row per course: title,
+  credits, **prerequisite logic** (And/Or structure, minimum grades), corequisites,
+  NUpath, level, `typicallyOffered`, typical meeting days, campuses, instructor
+  names, `unlocks` (courses that list this one as a prerequisite), and a `detail`
+  URL.
+- **The `detail` URL is each course's full page** (copy it verbatim): description,
+  offering history per term (sections/enrollment/capacity snapshots), per-day and
+  meeting-pattern percentages (R = Thursday), **instructors per season with the
+  average percent of students they teach** and RateMyHusky review links, and the
+  official catalog link. Fetch it for any single-course question.
 
 ## Cross-cutting indexes
 
@@ -90,7 +92,7 @@ typicallyOffered contains "summer".
 - "What do I need for the X major/minor?" → program index → find by name → fetch its URL → read `requirements`.
 - "What are the prereqs for CS 3500?" → fetch `courses/CS.json` → find number 3500 → `prereqs` (tokens joined by And/Or; check `minGrade`).
 - "What does taking CS 2500 unlock?" → same file → `unlocks`.
-- "Who teaches CS 2000 and when is it offered?" → same file → `instructors` (sharePct = share of students taught) and `offerings` (`typicalDays`, `terms`).
+- "Who teaches CS 2000 and when is it offered?" → same file → `instructors` (names) and `typicallyOffered`/`typicalDays`; for student-share percentages, review links, and term-by-term history, fetch that row's `detail` URL.
 - "Which courses count for the DD NUpath?" → `nupath.json` → `DD.courses`.
 - "What does Professor X teach?" → `professors.json` → their `courses` map (seasons included).
 - "Does CS 3500 count toward my major?" → fetch the program's requirements file and look for the course in its required lists and choose-from pools; open-ended "any course" electives can't be detected this way.

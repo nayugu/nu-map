@@ -301,27 +301,51 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
   if (!/^[A-Z]{2,6}$/.test(subject)) throw new Error(`unexpected subject code: "${subject}"`);
   courses.sort((a, b2) => a.number.localeCompare(b2.number));
   const url = `${ORIGIN}/northeastern/ai/courses/${subject}.json`;
+  // The subject file is the FILTER INDEX: every field a query can filter
+  // on, one compact row per course, small enough that no fetch tool
+  // truncates it. Everything heavyweight (description prose, per-term
+  // enrollment, meeting-pattern and instructor-share percentages) answers
+  // single-course questions, so it lives one hop away at the course's
+  // `detail` page - whose literal URL rides in each row.
+  const slim = courses.map((c) => ({
+    number: c.number,
+    title: c.title,
+    credits: c.credits,
+    ...(c.creditsMax ? { creditsMax: c.creditsMax } : {}),
+    level: c.level,
+    ...(c.typicallyOffered ? { typicallyOffered: c.typicallyOffered } : {}),
+    ...(c.nuPath?.length ? { nuPath: c.nuPath } : {}),
+    ...(c.prereqs?.length ? { prereqs: c.prereqs } : {}),
+    ...(c.coreqs?.length ? { coreqs: c.coreqs } : {}),
+    ...(c.repeatable ? { repeatable: c.repeatable } : {}),
+    ...(c.offerings?.typicalDays?.length ? { typicalDays: c.offerings.typicalDays } : {}),
+    ...(c.offerings?.campuses?.length ? { campuses: c.offerings.campuses } : {}),
+    ...(c.instructors
+      ? { instructors: [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort() }
+      : {}),
+    ...(c.unlocks ? { unlocks: c.unlocks } : {}),
+    detail: `${ORIGIN}/northeastern/ai/html/courses/${subject}/${c.number}`,
+  }));
   const subjectPayload = {
     subject,
     count: courses.length,
+    what: "Compact filterable index of every course in this subject. Full detail per course - description, offering history with enrollment, meeting-day and instructor-share percentages, RateMyHusky links - is at its `detail` URL (copy it verbatim).",
     lastUpdated: meta.lastUpdated,
     generatedAt,
     disclaimer: DISCLAIMER,
     legend: {
       prereqs: "Flat token list: course refs {subject, number, minGrade} joined by 'And'/'Or' strings; nested arrays are parenthesized groups. minGrade is the minimum passing grade required.",
       coreqs: "Courses that must be taken in the same term.",
-      "offerings.terms": "Past/scheduled terms by Banner code (YYYY = academic-year END year; Fall runs in YYYY-1). sections/enrolled/capacity are snapshots from the scheduled scrape, NOT live seat availability.",
-      "offerings.typicalDays": "Weekdays on which at least 50% of recent sections met.",
-      "offerings.daysPct": "Percent of recent sections meeting on each weekday (M/T/W/Th/F).",
-      "offerings.meetingPatterns": "[pattern, percent-of-sections] pairs; in patterns like 'MWR', R means Thursday.",
-      instructors: "Per season. sharePct = average percent of that season's enrolled students taught by this professor (recent terms). 'reviews' links their RateMyHusky page when one exists.",
       level: "undergrad for course numbers below 5000, grad otherwise.",
       typicallyOffered: "Seasons in which the course was scheduled in at least two-thirds of that season's terms on record since it first appeared — a pattern, not a guarantee.",
+      typicalDays: "Weekdays on which at least 50% of recent sections met (R means Thursday).",
+      instructors: "Names of everyone who taught it in recent terms; per-season shares and review links are on the detail page.",
       unlocks: "Courses that list this course in their prerequisites — what taking it opens up.",
       nuPath: "NUpath general-education attributes this course carries.",
-      repeatable: "Whether the course may be taken more than once for credit (repeatMax / repeatMaxSH cap it).",
+      repeatable: "Whether the course may be taken more than once for credit.",
+      detail: "This course's full text page: description, offering history, percentages, professors. Fetch it for any single-course question.",
     },
-    courses,
+    courses: slim,
   };
   writeJSON(`courses/${subject}.json`, subjectPayload);
 
