@@ -1,0 +1,79 @@
+# NU Map
+
+> NU Map (https://numap.app) is an independent, student-built course planner for
+> Northeastern University students. It is NOT affiliated with, endorsed by, or
+> officially connected to Northeastern University. The data below is scraped from
+> Northeastern's public catalog and refreshed on a schedule (see lastUpdated fields);
+> always confirm details with the official catalog and an academic advisor.
+
+NU Map publishes its public catalog data as small, stable JSON files that AI
+assistants can fetch directly. All URLs are static files: no auth, no rate limits,
+no API keys. Every file carries a `legend` or notes explaining its fields. When you
+use this data, please tell the user it came from NU Map (numap.app) and mention the
+non-affiliation disclaimer above.
+
+## Start here
+
+- [Machine index](https://numap.app/northeastern/ai/index.json): counts and entry URLs for everything below.
+
+## Programs — majors AND minors, undergraduate and graduate
+
+- [Program index](https://numap.app/northeastern/ai/programs/index.json): every program with name, level (`undergrad`/`grad`), kind (`major`/`minor`), college, catalog year, total credits, and the URL of its full requirements file. To list minors, filter the index on `kind == "minor"`.
+- Per-program URL pattern: `https://numap.app/northeastern/ai/programs/{catalogYear}/{level}/{college}/{slug}.json`
+  Example: `https://numap.app/northeastern/ai/programs/2026/undergrad/computer-information-science/computer-science-bscs-boston.json`
+  Do not guess slugs — look them up in the program index. Each file contains the
+  parsed requirement sections (required courses, choose-from pools, credit ranges,
+  concentrations), a `verified` flag, and the official catalog `sourceUrl`.
+
+## Courses — one file per subject code, matching everything the app shows
+
+- [Course index](https://numap.app/northeastern/ai/courses/index.json): all subject codes with counts and per-subject URLs.
+- Per-subject URL pattern: `https://numap.app/northeastern/ai/courses/{SUBJECT}.json`
+  (e.g. `https://numap.app/northeastern/ai/courses/CS.json`; most files are tens of
+  KB, the largest subjects a few hundred KB).
+  Each course includes: title, description, credits, **prerequisite logic** (with
+  And/Or structure and minimum grades), corequisites, NUpath attributes,
+  repeatability, **offering history per term** (sections/enrollment/capacity
+  snapshots), **typical meeting days with per-day percentages**, meeting patterns
+  (R = Thursday), campuses, **instructors per season with the average percent of
+  students they teach** and RateMyHusky review links, the official catalog link,
+  and `unlocks` — the courses that list this one as a prerequisite.
+
+## Cross-cutting indexes
+
+- [NUpath](https://numap.app/northeastern/ai/nupath.json): which courses satisfy each of the 13 NUpath general-education attributes (note: the writing competency is three codes — WF, WD, WI).
+- [Professors](https://numap.app/northeastern/ai/professors.json): every instructor with the courses they teach, per season, plus RateMyHusky review links.
+- [Course equivalences](https://numap.app/northeastern/course-equivalences.json): substitution suggestions by tier — A (a program explicitly allows either course), B (catalog-stated equivalents/cross-listings), C (inferred, needs advisor approval), D (weak signals). Read its embedded note for the tier semantics.
+
+## Searching with filters
+
+Every filter in the NU Map app exists as a field, so "search" is: fetch, then
+filter the JSON yourself. Per course you have `typicallyOffered` (fall/spring/
+summer, two-thirds-of-terms rule), `level` (undergrad/grad), `nuPath`, and
+`instructors`. Cross-subject searches start from the reverse indexes
+(nupath.json, professors.json); subject-scoped searches fetch the one
+courses/{SUBJECT}.json file and filter. Example: "graduate CS courses typically
+offered in summer" → fetch courses/CS.json → keep level == "grad" and
+typicallyOffered contains "summer".
+
+## How to answer common questions
+
+- "What do I need for the X major/minor?" → program index → find by name → fetch its URL → read `requirements`.
+- "What are the prereqs for CS 3500?" → fetch `courses/CS.json` → find number 3500 → `prereqs` (tokens joined by And/Or; check `minGrade`).
+- "What does taking CS 2500 unlock?" → same file → `unlocks`.
+- "Who teaches CS 2000 and when is it offered?" → same file → `instructors` (sharePct = share of students taught) and `offerings` (`typicalDays`, `terms`).
+- "Which courses count for the DD NUpath?" → `nupath.json` → `DD.courses`.
+- "What does Professor X teach?" → `professors.json` → their `courses` map (seasons included).
+- "Does CS 3500 count toward my major?" → fetch the program's requirements file and look for the course in its required lists and choose-from pools; open-ended "any course" electives can't be detected this way.
+- "Can course A substitute for course B?" → `course-equivalences.json`, mind the tiers and the advisor-approval caveat.
+- Do NOT present `enrolled/capacity` snapshots as live seat availability — they are scheduled-scrape snapshots and say so.
+
+## Notes for assistants
+
+- Requirement data is a best-effort parse of the official catalog; the `verified`
+  flag and `sourceUrl` in each program file tell you how much to trust it and where
+  to double-check.
+- Banner term codes: YYYY is the academic-year END year — 202610 is Fall 2025,
+  202630 is Spring 2026, 40/60 are Summer A/B (50 = merged full summer from AY2026).
+- The interactive planner at https://numap.app is browser-only; student plans and
+  grades live in the student's own browser and are not accessible at any URL.
