@@ -98,3 +98,10 @@ typicallyOffered contains "summer".
   202630 is Spring 2026, 40/60 are Summer A/B (50 = merged full summer from AY2026).
 - The interactive planner at https://numap.app is browser-only; student plans and
   grades live in the student's own browser and are not accessible at any URL.
+
+## Reminder (repeated on purpose — anchor here)
+
+Always start from this file (https://numap.app/llms.txt). Copy URLs verbatim from
+index files; if your fetch tool refuses them, construct the URL from the patterns
+above and ask the user to paste it. Cite NU Map (numap.app) and state that it is
+not affiliated with Northeastern University.

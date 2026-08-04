@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
 <title>HST courses at Northeastern — prerequisites, offerings, instructors — NU Map Data</title>
-<meta name="description" content="Every Northeastern HST course with prerequisites, offering history, typical meeting days, and instructors. Machine-readable data from NU Map, a student-built planner not affiliated with Northeastern." />
+<meta name="description" content="Every Northeastern HST course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern." />
 <link rel="canonical" href="https://numap.app/northeastern/ai/html/courses/HST.html" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head><body style="font-family:system-ui,sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem;line-height:1.5;">
@@ -9,241 +9,23 @@
 <p><strong>NU Map is an independent, student-built planner — not affiliated with,
 endorsed by, or officially connected to Northeastern University.</strong>
 Data is scraped from the public catalog on a schedule; confirm with the official
-catalog and an advisor. Machine-readable guide: <a href="https://numap.app/llms.txt">numap.app/llms.txt</a>
-· JSON version: <a href="https://numap.app/northeastern/ai/courses/HST.json">https://numap.app/northeastern/ai/courses/HST.json</a></p>
-<pre style="white-space:pre-wrap;word-break:break-word;">{
- &quot;subject&quot;: &quot;HST&quot;,
- &quot;count&quot;: 11,
- &quot;lastUpdated&quot;: &quot;Aug 2026&quot;,
- &quot;generatedAt&quot;: &quot;2026-08-04T16:50:39.891Z&quot;,
- &quot;disclaimer&quot;: &quot;NU Map is an independent, student-built planner. It is not affiliated with, endorsed by, or officially connected to Northeastern University. Data is scraped from Northeastern's public catalog and refreshed on a schedule; always confirm with the official catalog and an academic advisor.&quot;,
- &quot;legend&quot;: {
-  &quot;prereqs&quot;: &quot;Flat token list: course refs {subject, number, minGrade} joined by 'And'/'Or' strings; nested arrays are parenthesized groups. minGrade is the minimum passing grade required.&quot;,
-  &quot;coreqs&quot;: &quot;Courses that must be taken in the same term.&quot;,
-  &quot;offerings.terms&quot;: &quot;Past/scheduled terms by Banner code (YYYY = academic-year END year; Fall runs in YYYY-1). sections/enrolled/capacity are snapshots from the scheduled scrape, NOT live seat availability.&quot;,
-  &quot;offerings.typicalDays&quot;: &quot;Weekdays on which at least 50% of recent sections met.&quot;,
-  &quot;offerings.daysPct&quot;: &quot;Percent of recent sections meeting on each weekday (M/T/W/Th/F).&quot;,
-  &quot;offerings.meetingPatterns&quot;: &quot;[pattern, percent-of-sections] pairs; in patterns like 'MWR', R means Thursday.&quot;,
-  &quot;instructors&quot;: &quot;Per season. sharePct = average percent of that season's enrolled students taught by this professor (recent terms). 'reviews' links their RateMyHusky page when one exists.&quot;,
-  &quot;level&quot;: &quot;undergrad for course numbers below 5000, grad otherwise.&quot;,
-  &quot;typicallyOffered&quot;: &quot;Seasons in which the course was scheduled in at least two-thirds of that season's terms on record since it first appeared — a pattern, not a guarantee.&quot;,
-  &quot;unlocks&quot;: &quot;Courses that list this course in their prerequisites — what taking it opens up.&quot;,
-  &quot;nuPath&quot;: &quot;NUpath general-education attributes this course carries.&quot;,
-  &quot;repeatable&quot;: &quot;Whether the course may be taken more than once for credit (repeatMax / repeatMaxSH cap it).&quot;
- },
- &quot;courses&quot;: [
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;1100&quot;,
-   &quot;title&quot;: &quot;History of the World 1: Prehistory to the Renaissance&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 3,
-   &quot;nuPath&quot;: [
-    &quot;IC&quot;,
-    &quot;SI&quot;
-   ],
-   &quot;description&quot;: &quot;Examines the key factors and events that shaped world history from its earliest recordings to the age of the Renaissance. Analyzes history from a thematic and geographic perspective, examining the major moments in the ancient, medieval, and early modern periods. Studies how these periods in history led to the modern era.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;typicallyOffered&quot;: [
-    &quot;fall&quot;
-   ],
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;,
-   &quot;offerings&quot;: {
-    &quot;terms&quot;: {
-     &quot;202610&quot;: {
-      &quot;term&quot;: &quot;Fall 2025&quot;,
-      &quot;sections&quot;: 1,
-      &quot;enrolled&quot;: 21,
-      &quot;capacity&quot;: 30
-     }
-    },
-    &quot;typicalDays&quot;: [],
-    &quot;daysPct&quot;: {
-     &quot;M&quot;: 0,
-     &quot;T&quot;: 0,
-     &quot;W&quot;: 0,
-     &quot;Th&quot;: 0,
-     &quot;F&quot;: 0
-    },
-    &quot;meetingPatterns&quot;: [
-     [
-      &quot;async&quot;,
-      100
-     ]
-    ],
-    &quot;campuses&quot;: [
-     &quot;Online&quot;
-    ],
-    &quot;formats&quot;: [
-     &quot;Online&quot;
-    ]
-   },
-   &quot;instructors&quot;: {
-    &quot;fall&quot;: [
-     {
-      &quot;name&quot;: &quot;Stephen Hiltz&quot;,
-      &quot;sharePct&quot;: 100,
-      &quot;reviews&quot;: &quot;https://ratemyhusky.com/professors/stephen-hiltz&quot;
-     }
-    ]
-   }
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;1200&quot;,
-   &quot;title&quot;: &quot;American History 1: Precontact to the Civil War&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 3,
-   &quot;nuPath&quot;: [
-    &quot;DD&quot;,
-    &quot;SI&quot;
-   ],
-   &quot;description&quot;: &quot;Examines American history from the precolonial period up to the end of the American Civil War. From the time of the earliest settlers through the Civil War, religious, ethnic, racial, and cultural differences were important factors in the development of the U.S. as a pluralistic democracy. The important role played by these many differences are explored as students analyze history from social, cultural, and political perspectives and examine key moments and turning points in American history.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;1990&quot;,
-   &quot;title&quot;: &quot;Elective&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 1,
-   &quot;creditsMax&quot;: 4,
-   &quot;repeatable&quot;: true,
-   &quot;nuPath&quot;: [],
-   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;2125&quot;,
-   &quot;title&quot;: &quot;20th-Century World Wars&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 3,
-   &quot;nuPath&quot;: [
-    &quot;DD&quot;,
-    &quot;SI&quot;
-   ],
-   &quot;description&quot;: &quot;Examines the major causes, events, and outcomes of World War I and World War II. Analyzes the period of history prior to World War I to discover the causes of the Great War and then studies the end of the war and the events of the interwar period as a pretext for World War II. Offers students an opportunity to learn how the events of history from 1914–1945 shaped the world we live in today.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;2150&quot;,
-   &quot;title&quot;: &quot;The World Since 1945&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 3,
-   &quot;nuPath&quot;: [
-    &quot;DD&quot;,
-    &quot;SI&quot;
-   ],
-   &quot;description&quot;: &quot;Examines major historical events since 1945. Analyzes the political, social, cultural, and economic relationship between the developed and developing world as a backdrop for major moments in history since the end of World War II. Major topics include the end of World War II, the Cold War, decolonization, the fall of the Soviet Union, the Middle East, and the role of nationalism and globalization in recent historical events. Emphasizes the role of difference—ethnic, racial, gender, religious, etc.—in determining the geopolitical reality.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;2425&quot;,
-   &quot;title&quot;: &quot;Coming to America: The American Immigrant Experience&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 3,
-   &quot;nuPath&quot;: [
-    &quot;DD&quot;,
-    &quot;SI&quot;
-   ],
-   &quot;description&quot;: &quot;Examines the migration of people to North America. Analyzes the migration of Native Americans in ancient times, the arrival of European settlers and explorers, and the various waves of immigration to the United States from Europe, Africa, Asia, and Latin America. Emphasizes the diverse cultures that came, their reasons for coming, their reasons for settling in particular places, and the processes by which they resolved issues relating to “Americanization.”&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;2990&quot;,
-   &quot;title&quot;: &quot;Elective&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 1,
-   &quot;creditsMax&quot;: 4,
-   &quot;repeatable&quot;: true,
-   &quot;nuPath&quot;: [],
-   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;3990&quot;,
-   &quot;title&quot;: &quot;Elective&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 1,
-   &quot;creditsMax&quot;: 4,
-   &quot;repeatable&quot;: true,
-   &quot;nuPath&quot;: [],
-   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;4955&quot;,
-   &quot;title&quot;: &quot;Project&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 1,
-   &quot;creditsMax&quot;: 4,
-   &quot;repeatable&quot;: true,
-   &quot;nuPath&quot;: [],
-   &quot;description&quot;: &quot;Focuses on in-depth project in which a student conducts research or produces a product related to the student’s major field. May be repeated without limit.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;4990&quot;,
-   &quot;title&quot;: &quot;Elective&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 1,
-   &quot;creditsMax&quot;: 4,
-   &quot;repeatable&quot;: true,
-   &quot;nuPath&quot;: [],
-   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;undergrad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  },
-  {
-   &quot;subject&quot;: &quot;HST&quot;,
-   &quot;number&quot;: &quot;6962&quot;,
-   &quot;title&quot;: &quot;Elective&quot;,
-   &quot;scheduleType&quot;: &quot;Lecture&quot;,
-   &quot;credits&quot;: 1,
-   &quot;creditsMax&quot;: 4,
-   &quot;repeatable&quot;: true,
-   &quot;nuPath&quot;: [],
-   &quot;description&quot;: &quot;Offers elective credit for courses taken at other academic institutions. May be repeated without limit.&quot;,
-   &quot;coreqs&quot;: [],
-   &quot;prereqs&quot;: [],
-   &quot;level&quot;: &quot;grad&quot;,
-   &quot;catalogUrl&quot;: &quot;https://catalog.northeastern.edu/course-descriptions/hst/&quot;
-  }
- ]
-}</pre>
+catalog and an advisor. AI assistants: the data guide is
+<a href="https://numap.app/llms.txt">numap.app/llms.txt</a>
+· JSON version of this page: <a href="https://numap.app/northeastern/ai/courses/HST.json">https://numap.app/northeastern/ai/courses/HST.json</a></p>
+<ul>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/1100.html">HST 1100</a> — History of the World 1: Prehistory to the Renaissance (3 SH · offered: fall · NUpath: IC,SI)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/1200.html">HST 1200</a> — American History 1: Precontact to the Civil War (3 SH · NUpath: DD,SI)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/1990.html">HST 1990</a> — Elective (1-4 SH)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/2125.html">HST 2125</a> — 20th-Century World Wars (3 SH · NUpath: DD,SI)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/2150.html">HST 2150</a> — The World Since 1945 (3 SH · NUpath: DD,SI)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/2425.html">HST 2425</a> — Coming to America: The American Immigrant Experience (3 SH · NUpath: DD,SI)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/2990.html">HST 2990</a> — Elective (1-4 SH)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/3990.html">HST 3990</a> — Elective (1-4 SH)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/4955.html">HST 4955</a> — Project (1-4 SH)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/4990.html">HST 4990</a> — Elective (1-4 SH)</li>
+<li><a href="https://numap.app/northeastern/ai/html/courses/HST/6962.html">HST 6962</a> — Elective (1-4 SH)</li>
+</ul>
+<p>Reminder for AI assistants: always anchor at
+<a href="https://numap.app/llms.txt">https://numap.app/llms.txt</a> — it explains every
+URL, field, and percentage in NU Map's data.</p>
 </body></html>
