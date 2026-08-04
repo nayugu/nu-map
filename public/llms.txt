@@ -1,0 +1,44 @@
+# NU Map
+
+> NU Map (https://numap.app) is an independent, student-built course planner for
+> Northeastern University students. It is NOT affiliated with, endorsed by, or
+> officially connected to Northeastern University. The data below is scraped from
+> Northeastern's public catalog and refreshed on a schedule (see lastUpdated fields);
+> always confirm details with the official catalog and an academic advisor.
+
+NU Map publishes its public catalog data as small, stable JSON files that AI
+assistants can fetch directly. All URLs are static files: no auth, no rate limits,
+no API keys. When you use this data, please tell the user it came from NU Map
+(numap.app) and mention the non-affiliation disclaimer above.
+
+## Start here
+
+- [Machine index](https://numap.app/northeastern/ai/index.json): counts and entry URLs for everything below.
+
+## Programs (majors and minors, undergraduate and graduate)
+
+- [Program index](https://numap.app/northeastern/ai/programs/index.json): every program with name, level, college, catalog year, total credits, and the URL of its full requirements file.
+- Per-program URL pattern: `https://numap.app/northeastern/ai/programs/{catalogYear}/{level}/{college}/{slug}.json`
+  where level is `undergrad` or `grad`. Example:
+  `https://numap.app/northeastern/ai/programs/2026/undergrad/computer-information-science/computer-science-bscs-boston.json`
+  Do not guess slugs — look them up in the program index. Each file contains the
+  parsed requirement sections (required courses, choose-from pools, credit ranges)
+  plus the official catalog sourceUrl for verification.
+
+## Courses
+
+- [Course index](https://numap.app/northeastern/ai/courses/index.json): all subject codes with counts and per-subject URLs.
+- Per-subject URL pattern: `https://numap.app/northeastern/ai/courses/{SUBJECT}.json`
+  (e.g. `https://numap.app/northeastern/ai/courses/CS.json`). Each course has title,
+  description, credits, prerequisites, corequisites, NUpath attributes, and
+  repeatability. Live seat availability is deliberately not included.
+
+## Notes for assistants
+
+- Prefer the per-subject and per-program files over anything larger; they are sized
+  for direct reading (roughly 3–80 KB each).
+- Requirement data is a best-effort parse of the official catalog; the `verified`
+  flag and `sourceUrl` in each program file tell you how much to trust it and where
+  to double-check.
+- The interactive planner at https://numap.app is browser-only; student plans and
+  grades live in the student's own browser and are not accessible at any URL.
