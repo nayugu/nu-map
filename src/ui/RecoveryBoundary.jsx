@@ -16,7 +16,7 @@
 // locales, keyed off the persisted locale, exactly like the index.html
 // overlay it visually matches.
 
-import { Component, createRef } from "react";
+import { Component } from "react";
 
 const MSG = {
   en: "Something went wrong. Fixing it…",
@@ -28,18 +28,8 @@ const MSG = {
   ko: "문제가 발생했습니다. 복구 중…",
   zh: "出了点问题，正在修复…",
 };
-// Anchored HIGH on purpose (mirrors the index.html overlay): promising
-// ~5 minutes makes the usual quick recovery feel fast.
-const SUB = {
-  en: "This usually resolves within about five minutes.",
-  es: "Esto suele resolverse en unos cinco minutos.",
-  fr: "Cela se résout généralement en cinq minutes environ.",
-  ar: "عادةً ما يُحل هذا خلال خمس دقائق تقريبًا.",
-  hi: "यह आमतौर पर लगभग पाँच मिनट में ठीक हो जाता है।",
-  ja: "通常は 5 分ほどで復旧します。",
-  ko: "보통 5분 정도면 해결됩니다.",
-  zh: "通常约五分钟内即可恢复。",
-};
+// No time estimate on the crash page — a bug's duration can't honestly
+// be promised, unlike a deploy's. Just the message, then the nudge.
 // Mirrors the overlay's return-button label ("NU Map" stays untranslated).
 const BACK = {
   en: "Back to NU Map",
@@ -212,15 +202,10 @@ export default class RecoveryBoundary extends Component {
   state = {
     crashed: import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search),
     leaving: false,
-    showLink: false,
-    subSwapped: false,       // 5-minute mark: the promise line hands its slot to the nudge
-    glideY: null,            // px the nudge travels up during the hand-off
+    showLink: false,         // 2-minute mark: the nudge fades in under the message
     detected: false,         // a newer build is live — recovery is offered
     detectedSettled: false,  // fade-outs done; the return button may arrive
   };
-
-  subRef = createRef();
-  nudgeRef = createRef();
 
   // Detection, crash-page flavor: a bug can't be probed away, but the
   // most common real crash is deploy skew (old code + new data), and
@@ -252,9 +237,7 @@ export default class RecoveryBoundary extends Component {
     clearInterval(this.probeTimer);
     clearTimeout(this.previewDetectTimer);
     clearTimeout(this.ghostTimer);
-    clearTimeout(this.swapTimer);
-    clearTimeout(this.swapTimer2);
-    this.setState({ detected: true, showLink: false, glideY: null });
+    this.setState({ detected: true, showLink: false });
     this.settleTimer = setTimeout(() => this.setState({ detectedSettled: true }), 620);
     // Not pressed? Return on our own after five minutes, like the overlay.
     this.autoReturnTimer = setTimeout(this.stormReload, 300_000);
@@ -262,27 +245,13 @@ export default class RecoveryBoundary extends Component {
 
   static getDerivedStateFromError() { return { crashed: true }; }
 
-  // No button — recovery is automatic. But never a dead end: if the
-  // screen has sat for 90 s (auto-retry throttled or not helping), the
-  // quiet reload nudge fades in as the escape hatch.
+  // No button — recovery is automatic. But never a dead end: at the
+  // 2-minute mark the quiet reload nudge fades in under the message
+  // as the escape hatch (5 s in the dev preview).
   scheduleGhost = () => {
     if (this.ghostTimer) return;
-    // 5 s / 12 s in the dev preview so both stages are testable without
-    // the wait; 90 s / 5 min in reality.
     const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
-    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), preview ? 5_000 : 90_000);
-    // The hand-off: the promise drifts out while the nudge glides up
-    // into its row (measured travel), then an invisible bookkeeping
-    // swap puts the text into the sub-line slot for clean layout.
-    this.swapTimer = setTimeout(() => {
-      const s = this.subRef.current, n = this.nudgeRef.current;
-      if (s && n) {
-        this.setState({ glideY: s.getBoundingClientRect().top - n.getBoundingClientRect().top });
-        this.swapTimer2 = setTimeout(() => this.setState({ subSwapped: true, glideY: null }), 1600);
-      } else {
-        this.setState({ subSwapped: true });
-      }
-    }, preview ? 12_000 : 300_000);
+    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), preview ? 5_000 : 120_000);
   };
 
   componentDidMount() {
@@ -290,8 +259,6 @@ export default class RecoveryBoundary extends Component {
   }
   componentWillUnmount() {
     clearTimeout(this.ghostTimer);
-    clearTimeout(this.swapTimer);
-    clearTimeout(this.swapTimer2);
     clearTimeout(this.previewDetectTimer);
     clearTimeout(this.settleTimer);
     clearTimeout(this.autoReturnTimer);
@@ -404,22 +371,18 @@ export default class RecoveryBoundary extends Component {
             ...(this.state.detectedSettled ? { visibility: "hidden" } : {}) }}>
             {MSG[lc] || MSG.en}
           </div>
-          {/* After 5 minutes the promise has expired — it drifts out
-              while the nudge below glides up into its row, then the text
-              settles into this slot (clickable). */}
-          <div ref={this.subRef}
-            onClick={this.state.subSwapped ? this.stormReload : undefined}
-            style={{ marginTop: 6, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
-              whiteSpace: "nowrap", color: dark ? "#8b949e" : "#64748b",
-              cursor: this.state.subSwapped ? "pointer" : "default",
-              ...(this.state.glideY != null ? {
-                opacity: 0, transform: "translateY(-6px)",
-                transition: "opacity 1.2s ease, transform 1.2s ease",
-              } : {}),
-              ...(this.state.detected ? { transition: "opacity .6s", opacity: 0 } : {}),
-              ...(this.state.detectedSettled ? { visibility: "hidden" } : {}) }}>
-            {this.state.subSwapped ? (NUDGE[lc] || NUDGE.en) : (SUB[lc] || SUB.en)}
-          </div>
+          {/* No time promise here — a bug's duration can't honestly be
+              estimated. At the 2-minute mark the nudge fades in where a
+              sub-line would sit. */}
+          {this.state.showLink && !this.state.detected && (
+            <div onClick={this.stormReload} style={{
+              marginTop: 6, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
+              whiteSpace: "nowrap", cursor: "pointer",
+              color: dark ? "#8b949e" : "#64748b",
+              animation: "numapCrashIn 1.2s ease-out" }}>
+              {NUDGE[lc] || NUDGE.en}
+            </div>
+          )}
           {/* Detection landed: the localized return button arrives in the
               text's footprint, mirroring the overlay. */}
           {this.state.detectedSettled && !this.state.leaving && (
@@ -433,22 +396,6 @@ export default class RecoveryBoundary extends Component {
               animation: "numapBackIn 1.6s ease .25s both" }}>
               {BACK[lc] || BACK.en}
             </button>
-          )}
-          {this.state.showLink && !this.state.subSwapped && !this.state.detected && (
-            <div ref={this.nudgeRef} onClick={this.stormReload} style={{
-              // Typography identical to the sub-line above: the glide's
-              // landing must be pixel-identical for the swap to vanish.
-              marginTop: 18, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
-              whiteSpace: "nowrap", cursor: "pointer",
-              color: dark ? "#8b949e" : "#64748b",
-              animation: "numapCrashIn 1.2s ease-out",
-              ...(this.state.glideY != null ? {
-                transform: `translateY(${this.state.glideY}px)`,
-                // Unhurried, matching the index.html overlay's glide.
-                transition: "transform 1.5s ease-in-out",
-              } : {}) }}>
-              {NUDGE[lc] || NUDGE.en}
-            </div>
           )}
           </div>
         </div>
