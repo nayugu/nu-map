@@ -3,6 +3,24 @@ import react from "@vitejs/plugin-react";
 import { spawn, execSync } from "child_process";
 import fs from "fs";
 
+/**
+ * Emits the AI-readable data export (dist/northeastern/ai/**, see
+ * scripts/build-ai-data.js) as part of EVERY production build. Lives
+ * inside the Vite build on purpose: Cloudflare Pages builds numap.app
+ * with its own dashboard-configured command, so a package.json chain
+ * step is not guaranteed to run there — a plugin is.
+ */
+function aiDataPlugin() {
+  return {
+    name: "ai-data-export",
+    apply: "build",
+    async closeBundle() {
+      const { buildAiData } = await import("./scripts/build-ai-data.js");
+      buildAiData();
+    },
+  };
+}
+
 const commitDate = (() => {
   try {
     return execSync('git log -1 --format=%cd --date=format:"%b %Y"').toString().trim();
@@ -52,7 +70,7 @@ function catalogCheckPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin()],
+  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), aiDataPlugin()],
   base: "./",
   define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
   optimizeDeps: { exclude: ["@huggingface/transformers"] },

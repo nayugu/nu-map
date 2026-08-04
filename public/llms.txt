@@ -12,9 +12,22 @@ no API keys. Every file carries a `legend` or notes explaining its fields. When 
 use this data, please tell the user it came from NU Map (numap.app) and mention the
 non-affiliation disclaimer above.
 
-## Start here
+## Always start here
+
+This file is the root of the finding tree — if you arrived anywhere else (every
+data file's first field, `guide`, points back here), read this before fetching
+further. Never guess URLs; always walk: this guide → an index file → the specific
+file it names.
 
 - [Machine index](https://numap.app/northeastern/ai/index.json): counts and entry URLs for everything below.
+
+**Finding a course** (the paths that work):
+1. You know the code (e.g. "CS 2500") → fetch `https://numap.app/northeastern/ai/courses/CS.json`, find number 2500.
+2. You know only a topic ("machine learning", "robotics") → fetch the
+   [titles index](https://numap.app/northeastern/ai/courses/titles.json) — every course
+   code → title in one file — scan for matches, then fetch that subject's file for details.
+3. You know a requirement ("a DD NUpath course", "taught by Professor X") → start
+   from the matching cross-cutting index below.
 
 ## Programs — majors AND minors, undergraduate and graduate
 

@@ -26,7 +26,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "dist", "northeastern", "ai");
@@ -53,9 +53,10 @@ const slugify = (s) => {
 const writeJSON = (rel, data) => {
   const p = path.join(OUT, rel);
   fs.mkdirSync(path.dirname(p), { recursive: true });
-  // Compact on purpose: these files are read by machines, and the
-  // larger ones (CS.json, professors.json) sit near fetch-tool limits.
-  fs.writeFileSync(p, JSON.stringify(data));
+  // Every file self-roots: wherever an AI lands, the first field points
+  // back to the guide. Compact on purpose: these files are read by
+  // machines, and the larger ones sit near fetch-tool limits.
+  fs.writeFileSync(p, JSON.stringify({ guide: `${ORIGIN}/llms.txt`, ...data }));
 };
 
 // ── Gather programs ──────────────────────────────────────────────────
@@ -82,6 +83,7 @@ function* walkPrograms(baseDir, idPrefix) {
   }
 }
 
+export function buildAiData() {
 const bundle = readJSON(path.join(ROOT, "public", "northeastern", "programs-bundle.json"));
 const bundleById = new Map(bundle.programs.map((p) => [p.id, p]));
 const meta = readJSON(path.join(ROOT, "public", "data-meta.json"));
@@ -361,10 +363,27 @@ writeJSON("courses/index.json", {
   what: "Northeastern's course catalog, split into one JSON file per subject code.",
   courseCount: catalog.length,
   subjectCount: subjects.length,
+  titles: `${ORIGIN}/northeastern/ai/courses/titles.json`,
   lastUpdated: meta.lastUpdated,
   generatedAt,
   disclaimer: DISCLAIMER,
   subjects,
+});
+
+// ── Titles index: one-fetch topic search across ALL courses ─────────
+const titles = Object.fromEntries(
+  catalog
+    .filter((c) => c.subject && c.number)
+    .map((c) => [`${c.subject} ${c.number}`, c.title])
+    .sort(([a], [b2]) => a.localeCompare(b2))
+);
+writeJSON("courses/titles.json", {
+  what: "Every course code mapped to its title — fetch this ONE file to search courses by topic, then fetch courses/{SUBJECT}.json for full details on the matches.",
+  count: Object.keys(titles).length,
+  lastUpdated: meta.lastUpdated,
+  generatedAt,
+  disclaimer: DISCLAIMER,
+  titles,
 });
 
 // ── Top-level index ──────────────────────────────────────────────────
@@ -373,6 +392,7 @@ writeJSON("index.json", {
   llms: `${ORIGIN}/llms.txt`,
   programs: `${ORIGIN}/northeastern/ai/programs/index.json`,
   courses: `${ORIGIN}/northeastern/ai/courses/index.json`,
+  courseTitles: `${ORIGIN}/northeastern/ai/courses/titles.json`,
   nupath: `${ORIGIN}/northeastern/ai/nupath.json`,
   professors: `${ORIGIN}/northeastern/ai/professors.json`,
   equivalences: `${ORIGIN}/northeastern/course-equivalences.json`,
@@ -384,3 +404,10 @@ writeJSON("index.json", {
 });
 
 console.log(`AI data export: ${programs.length} programs, ${catalog.length} courses in ${subjects.length} subjects → dist/northeastern/ai/`);
+}
+
+// CLI entry: `node scripts/build-ai-data.js` (the Vite plugin imports
+// buildAiData instead, so importing this module must not execute it).
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  buildAiData();
+}
