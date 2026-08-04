@@ -221,6 +221,7 @@ export const strings = {
   "course.star.remove":           "저장에서 제거",
   "course.tooltip.variable-sh":   "가변 학점: {min}–{max} {unit} (클릭하여 설정)",
   "info.prereqs":                 "선수 과목:",
+  "info.prereq.condition.met":      "자동 충족 — 이 플랜은 대학원 과정입니다",
   "info.relationships.title":     "이후 수강 가능",
   "info.offered.title":           "개설 학기",
   "info.offered.schedule":        "일반 수업 요일",

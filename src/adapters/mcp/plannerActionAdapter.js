@@ -15,6 +15,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { evalPrereqTree } from "../../core/prereqEval.js";
+import { planConditions } from "../../core/prereqConditions.js";
 import { baseId, resolveAddId } from "../../core/repeatInstances.js";
 import { cohortCatalogYear, withCatalogYear } from "../../data/programPaths.js";
 
@@ -89,6 +90,9 @@ export function checkViolations(plan, courseMap) {
   );
   const semIndex     = buildSemIndex({ ...plan, placements });
   const placedOutSet = new Set(placedOut);
+  // A graduate plan asserts "graduate program admission", the OR alternative
+  // to the undergraduate prereq chain on 209 courses (see prereqConditions.js).
+  const conditions   = planConditions(plan);
 
   for (const [courseId, semId] of Object.entries(placements)) {
     if (semId === "incoming") continue;
@@ -98,7 +102,7 @@ export function checkViolations(plan, courseMap) {
     const ti = semIndex[semId] ?? 0;
 
     if (course.prereqs?.length) {
-      const result = evalPrereqTree(course.prereqs, placements, semIndex, ti, placedOutSet);
+      const result = evalPrereqTree(course.prereqs, placements, semIndex, ti, placedOutSet, null, conditions);
       if (result === "missing") {
         violations.push({
           type: "prereq",

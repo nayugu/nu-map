@@ -221,6 +221,7 @@ export const strings = {
   "course.star.remove":           "सहेजे से हटाएं",
   "course.tooltip.variable-sh":   "परिवर्तनीय क्रेडिट: {min}–{max} {unit} (सेट करने के लिए क्लिक करें",
   "info.prereqs":                 "पूर्व-आवश्यकताएँ:",
+  "info.prereq.condition.met":      "स्वतः पूर्ण — यह योजना एक स्नातकोत्तर कार्यक्रम है",
   "info.relationships.title":     "अनलॉक",
   "info.offered.title":           "प्रस्तुत सेमेस्टर",
   "info.offered.schedule":        "सामान्य कक्षा दिवस",

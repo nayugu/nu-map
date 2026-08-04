@@ -222,6 +222,7 @@ export const strings = {
   "course.star.remove":           "保存から削除",
   "course.tooltip.variable-sh":   "可変単位: {min}–{max} {unit}（クリックして設定）",
   "info.prereqs":                 "履修条件：",
+  "info.prereq.condition.met":      "自動的に充足 — このプランは大学院プログラムです",
   "info.relationships.title":     "アンロック",
   "info.offered.title":           "開講学期",
   "info.offered.schedule":        "通常の開講曜日",

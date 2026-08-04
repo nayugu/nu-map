@@ -14,6 +14,7 @@ import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
+import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
@@ -276,6 +277,16 @@ export function PlannerProvider({ children }) {
   const pvPlacedOut     = useMemo(
     () => (pv ? new Set(pv.placedOut ?? []) : placedOut),
     [pv, placedOut]
+  );
+
+  // Non-course prereq conditions the plan itself satisfies — a graduate plan
+  // IS graduate program admission, which 209 catalog courses list as the OR
+  // alternative to their undergraduate prereq chain (see prereqConditions.js).
+  // Preview-aware like everything else here, so a SET_STUDENT_TYPE preview
+  // re-evaluates prereqs for the proposed world.
+  const prereqConditions = useMemo(
+    () => planConditions({ studentType: pv?.studentType ?? studentType }),
+    [pv?.studentType, studentType]
   );
 
   // Repeat instances: a placement key "BASE#n" (an additional take of a
@@ -934,7 +945,7 @@ export function PlannerProvider({ children }) {
             const toCourse = courseMap[rel.to];
             if (!toCourse || !toCourse.prereqs?.length) return;
             const ti = SEM_INDEX[placements[rel.to]];
-            const prereqResult = evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut);
+            const prereqResult = evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, null, prereqConditions);
 
             // Grade-blocked: placement satisfied, but an entered grade vetoes
             // the tree. Draw a dotted red from every take of this prereq whose
@@ -943,7 +954,7 @@ export function PlannerProvider({ children }) {
             // grade-aware result flips back to satisfied). Dead until a grade
             // exists: takesOf is null with none entered.
             if (prereqResult === "satisfied" && takesOf &&
-                evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, takesOf) !== "satisfied") {
+                evalPrereqTree(toCourse.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, takesOf, prereqConditions) !== "satisfied") {
               for (const [pid, sid] of Object.entries(placements)) {
                 if (baseId(pid) !== rel.from) continue;
                 if (SEM_INDEX[sid] === undefined || sid === "incoming") continue;
@@ -998,7 +1009,7 @@ export function PlannerProvider({ children }) {
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, connectionEdges, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut, takesOf, grades]);
+  }, [selectedId, connectionEdges, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut, takesOf, grades, prereqConditions]);
 
   // ── MCP action applier ───────────────────────────────────────────
   // Applies a batch of IPlannerAction actions dispatched by Claude via APPLY events.
@@ -1443,7 +1454,7 @@ export function PlannerProvider({ children }) {
       if (pvPlacedOut.has(c.id)) return; // skip placed-out courses – they have no prereq warnings
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[pvPlacements[c.id]];
-      const result = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut);
+      const result = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, null, prereqConditions);
       if (result !== "satisfied") { v.set(c.id, result); return; }
       // Grade layer: placement says satisfied, but an ENTERED grade may veto
       // (an F/U/I/W attempt, or a letter under the ref's minGrade). Only the
@@ -1451,12 +1462,12 @@ export function PlannerProvider({ children }) {
       // evaluator's enum has no such state on purpose. takesOf is null until
       // a grade is entered, so this branch is dead by default.
       if (takesOf) {
-        const graded = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, takesOf);
+        const graded = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, takesOf, prereqConditions);
         if (graded !== "satisfied") v.set(c.id, "grade");
       }
     });
     return v;
-  }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX, takesOf]);
+  }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX, takesOf, prereqConditions]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
@@ -3445,7 +3456,7 @@ export function PlannerProvider({ children }) {
     currentSemIdx, placedIds, specialTermStartMap, specialTermContMap,
     gradSemId, coopGradConflicts,
     isGraduated, setIsGraduated,
-    prereqViolations, coreqViolations, connectedIds,
+    prereqViolations, coreqViolations, connectedIds, prereqConditions,
     grades, setGrade, enteredGpaStat,
     totalSHPlaced, totalSHDone,
     bonusSH: pvBonusSH, setBonusSH,

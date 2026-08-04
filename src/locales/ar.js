@@ -220,6 +220,7 @@ export const strings = {
   "course.star.remove":           "إزالة من المحفوظات",
   "course.tooltip.variable-sh":   "ساعات معتمدة متغيرة: {min}–{max} {unit} (انقر للتحديد)",
   "info.prereqs":                 "المتطلبات السابقة:",
+  "info.prereq.condition.met":      "مستوفى تلقائيًا — هذه الخطة برنامج دراسات عليا",
   "info.relationships.title":     "يفتح",
   "info.offered.title":           "يُقدم في",
   "info.offered.schedule":        "المواعيد المعتادة",

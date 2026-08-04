@@ -221,6 +221,7 @@ export const strings = {
   "course.star.remove":           "Retirer des sauvegardés",
   "course.tooltip.variable-sh":   "Crédits variables : {min}–{max} {unit} (cliquer pour définir)",
   "info.prereqs":                 "Prérequis :",
+  "info.prereq.condition.met":      "Satisfait automatiquement : ce plan est un programme d’études supérieures",
   "info.relationships.title":     "DÉBLOQUE",
   "info.offered.title":           "PROPOSÉ EN",
   "info.offered.schedule":        "HORAIRE HABITUEL",

@@ -222,6 +222,7 @@ export const strings = {
   "course.star.remove":           "Remove from saved",
   "course.tooltip.variable-sh":   "Variable credit: {min}–{max} {unit} (click to set)",
   "info.prereqs":                 "Prereqs:",
+  "info.prereq.condition.met":      "Met automatically — this plan is a graduate program",
   "info.relationships.title":     "UNLOCKS",
   "info.offered.title":           "AVAILABILITY",
   "info.offered.schedule":        "TYPICALLY MEETS",

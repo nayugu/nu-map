@@ -20,10 +20,17 @@
 // minGrade gate (unentered grades clear everything — see gradeSystem).
 // Absent, the legacy placement-only path below runs bit-for-bit; the
 // call sites derive "blocked by grade" by comparing the two results.
+//
+// Optional `conditions` (a Set of met condition kinds from
+// planConditions()) resolves non-course { note } leaves — "graduate program
+// admission" passes in a graduate plan. Omitted, every note is neutral,
+// which is the legacy behaviour. Conditions can only ever satisfy a branch,
+// never fail one (see prereqConditions.js).
 // ═══════════════════════════════════════════════════════════════════
 import { satisfiesGate } from "./gradeSystem.js";
+import { conditionStatus } from "./prereqConditions.js";
 
-export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new Set(), takesOf = null) {
+export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new Set(), takesOf = null, conditions = null) {
   if (!tree || !tree.length) return "satisfied";
   let pos = 0;
 
@@ -65,7 +72,7 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
     return v;
   }
 
-  // Factor = "(" Expr ")" | NestedArray | CourseRef | (skip stray token)
+  // Factor = "(" Expr ")" | NestedArray | CourseRef | ConditionNote | (skip stray token)
   function parseFactor() {
     if (pos >= tree.length) return null;
     const tok = tree[pos];
@@ -79,7 +86,16 @@ export function evalPrereqTree(tree, placements, semIndex, ti, placedOut = new S
 
     if (Array.isArray(tok)) {
       pos++;
-      return tok.length ? evalPrereqTree(tok, placements, semIndex, ti, placedOut, takesOf) : null;
+      return tok.length ? evalPrereqTree(tok, placements, semIndex, ti, placedOut, takesOf, conditions) : null;
+    }
+
+    // Non-course condition leaf: { note: "graduate program admission" }.
+    // "satisfied" when the plan asserts that condition, otherwise neutral —
+    // NEVER "missing", or an undergrad taking a grad course on permission
+    // would get a violation we have no evidence for.
+    if (tok && typeof tok === "object" && tok.note) {
+      pos++;
+      return conditionStatus(tok.note, conditions);
     }
 
     if (tok && typeof tok === "object" && tok.subject && tok.number) {

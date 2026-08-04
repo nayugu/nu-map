@@ -173,6 +173,14 @@ export const IPlannerQuery = "plannerQuery";
  * @property {string[]} concurrent  - Course IDs that may be taken the same semester
  *                                    (catalog: "may be taken concurrently").
  *                                    Not counted as missing.
+ * @property {{note: string, kind: string, satisfied: boolean}[]} [conditions]
+ *                                  - Non-course prerequisites ("graduate program
+ *                                    admission", "permission of instructor") with
+ *                                    their classification and whether the plan
+ *                                    already meets them. Present only when the
+ *                                    course has any. A condition can satisfy a
+ *                                    branch but never fails one — see
+ *                                    src/core/prereqConditions.js.
  */
 
 // ─── Offered In ──────────────────────────────────────────────────
@@ -300,9 +308,11 @@ export const IPlannerQuery = "plannerQuery";
  *   Returns one entry per attribute code in the institution's grid,
  *   ordered to match the grid layout.
  *
- * @property {(courseId: string, completedIds: string[]) => PrereqCheckResult} checkPrereqs
+ * @property {(courseId: string, completedIds: string[], plan?: PlanContext, studentType?: string) => PrereqCheckResult} checkPrereqs
  *   Check whether a course's prerequisites are met.
  *   completedIds should include all placed, placed-out, and incoming courses.
+ *   studentType ("undergrad" | "graduate") resolves non-course conditions when
+ *   no plan is passed; a graduate plan satisfies "graduate program admission".
  *   Pure function — does not read live plan state.
  *
  * ── Dry-run ────────────────────────────────────────────────────

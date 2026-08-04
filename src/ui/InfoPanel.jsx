@@ -12,6 +12,7 @@ import { ICalendar }                from "../ports/ICalendar.js";
 import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
+import { conditionStatus } from "../core/prereqConditions.js";
 import { baseId } from "../core/repeatInstances.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTranslation, useCourseTranslation, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -523,18 +524,20 @@ function cleanPrereqNodes(nodes) {
 }
 
 function PrereqChips({ nodes, courseMap, navTo, onDragStart }) {
+  const { prereqConditions } = usePlanner();
   const clean = cleanPrereqNodes(nodes);
   if (!Array.isArray(clean) || clean.length === 0) return <span>—</span>;
   return (
     <span>
       {clean.map((item, i) => (
-        <PrereqNode key={i} item={item} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
+        <PrereqNode key={i} item={item} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} conditions={prereqConditions} />
       ))}
     </span>
   );
 }
 
-function PrereqNode({ item, courseMap, navTo, onDragStart }) {
+function PrereqNode({ item, courseMap, navTo, onDragStart, conditions }) {
+  const { t } = useLanguage();
   const [hov, setHov] = useState(false);
   if (typeof item === "string") {
     return <span style={{ color: "var(--text-5)", padding: "0 2px" }}>{item}</span>;
@@ -543,15 +546,30 @@ function PrereqNode({ item, courseMap, navTo, onDragStart }) {
     return (
       <span>
         {item.map((sub, i) => (
-          <PrereqNode key={i} item={sub} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
+          <PrereqNode key={i} item={sub} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} conditions={conditions} />
         ))}
       </span>
     );
   }
   // Informational, non-course condition (e.g. "permission of instructor",
   // "graduate program admission") — plain italic text, not a draggable chip.
+  // One the plan already satisfies (grad admission in a graduate plan) turns
+  // prereq-green with a tick, so the OR branch that clears the course's
+  // undergraduate chain is visible rather than mysterious.
   if (item && typeof item === "object" && item.note) {
-    return <span style={{ color: "var(--text-4)", fontStyle: "italic", padding: "0 3px" }}>{item.note}</span>;
+    const met = conditionStatus(item.note, conditions) === "satisfied";
+    return (
+      <span
+        title={met ? t("info.prereq.condition.met") : undefined}
+        style={{
+          color: met ? REL_STYLE.prerequisite.color : "var(--text-4)",
+          fontStyle: "italic", padding: "0 3px",
+          ...(met && { fontWeight: 600 }),
+        }}
+      >
+        {met ? `✓ ${item.note}` : item.note}
+      </span>
+    );
   }
   if (item && item.subject && item.number) {
     const id = `${item.subject.toUpperCase()}${item.number}`;

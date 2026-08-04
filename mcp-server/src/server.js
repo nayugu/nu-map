@@ -97,7 +97,7 @@ export function createServer({ query, sessionId, state, channel }) {
       "- The complete action reference (arguments + restrictions) is in get_meta capabilities.actionDocs. validate_changes dry-runs a changeset without touching anything — use it when unsure.",
       "- Never guess ids. Verify courseIds via search_courses/get_course and programIds via list_programs before composing a changeset.",
       "",
-      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts, prereqsMetBy with the plan's completed + placed-out ids for 'what can the user take', unlockedBy for 'what does course X open up', instructor for 'what does Prof. X teach' (3-year history; combine with term for a season), includeInstructors: true when the user wants to know who teaches the results, sortBy: 'enrollment' for popularity — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. Predicting who teaches a course next: read the per-term instructor history (get_offered_in or instructorMatch.taught) for REGULARITY — shares say whose course it is, term lists say when they teach it. The full catalog lives server-side; you never need to fetch external pages.",
+      "Broad catalog surveys ('all upper-level MATH', 'courses about X'): one search_courses call with filters — subject + minNumber/maxNumber for level ranges, anyOf with several synonyms for concepts, prereqsMetBy with the plan's completed + placed-out ids (plus studentType) for 'what can the user take', unlockedBy for 'what does course X open up', instructor for 'what does Prof. X teach' (3-year history; combine with term for a season), includeInstructors: true when the user wants to know who teaches the results, sortBy: 'enrollment' for popularity — and limit up to 200. Then get_course on the narrowed shortlist for descriptions, prereqs, and offering history. Predicting who teaches a course next: read the per-term instructor history (get_offered_in or instructorMatch.taught) for REGULARITY — shares say whose course it is, term lists say when they teach it. The full catalog lives server-side; you never need to fetch external pages.",
       "",
       "Restrictions that most often reject changesets:",
       "- SET_SH_OVERRIDE: most courses have FIXED credits and cannot be overridden. Only valid when get_course shows a credit range (shMin < shMax).",
@@ -283,6 +283,8 @@ export function createServer({ query, sessionId, state, channel }) {
       unlockedBy: z.string().optional().describe("Courses whose prerequisites reference this course id — 'what does CS2000 unlock'"),
       prereqsMetBy: z.array(z.string()).optional()
         .describe("Completed course ids — keep only courses whose full prerequisite tree these satisfy. Pass the plan's completed + placed-out ids to answer 'what is the user eligible to take'."),
+      studentType: z.enum(["undergrad", "graduate"]).optional()
+        .describe("Refines prereqsMetBy only. Pass the plan's studentType: 'graduate' satisfies 'graduate program admission', which most 5000-level courses list as the alternative to their undergraduate prereq chain — omit it for a grad student and the eligible list loses those courses."),
       scheduleType: z.string().optional().describe("Schedule type substring: 'Lecture', 'Lab', 'Seminar', 'Studio', 'Recitation'"),
       instructor: z.string().optional()
         .describe("Instructor name substring (case/accent-insensitive) — courses this person has taught as primary instructor in the last 3 years. Combine with term ('fall') for 'what do they teach in the fall'. Results gain instructorMatch: {name: {share: {semesterType: avg % of enrolment}, taught: ['Spring 2026', …]}} — `taught` is the actual term list, the evidence for predicting when they'll teach it again. Historical record, not future staffing."),
@@ -454,20 +456,22 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "check_prereqs",
-    "Check whether a course's prerequisites are satisfied. Omit completedIds to use the live plan's completed courses (incoming credit + semesters before the current one + placed-out).",
+    "Check whether a course's prerequisites are satisfied. Omit completedIds to use the live plan's completed courses (incoming credit + semesters before the current one + placed-out). Results may include `conditions`: non-course prereqs like 'graduate program admission' or 'permission of instructor', each with `satisfied` — a graduate plan meets admission automatically, so most grad courses are takeable without their undergraduate prereq chain. An unsatisfied condition never blocks: it is something the student may already hold and we cannot see.",
     {
       courseId:     z.string().describe("Course to check, e.g. 'CS3650'"),
       completedIds: z.array(z.string()).optional()
         .describe("Explicit completed course ids — omit to derive from the live plan"),
+      studentType:  z.enum(["undergrad", "graduate"]).optional()
+        .describe("Only needed alongside completedIds — 'graduate' satisfies 'graduate program admission' prereqs. Taken from the live plan when completedIds is omitted."),
     },
-    async ({ courseId, completedIds }) => {
+    async ({ courseId, completedIds, studentType }) => {
       let plan = null;
       if (!completedIds) {
         const live = livePlan();
         if (live.deny) return respond(live.deny);
         plan = live.plan;
       }
-      return respond(query.checkPrereqs(courseId, completedIds ?? null, plan));
+      return respond(query.checkPrereqs(courseId, completedIds ?? null, plan, studentType ?? null));
     }
   );
 

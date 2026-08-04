@@ -17,6 +17,7 @@ import { extractEdges } from "../../core/courseModel.js";
 import { resolveConcentration } from "../../core/concentrationResolve.js";
 import { buildCheckRows, detailText } from "../../core/verificationRows.js";
 import { evalPrereqTree } from "../../core/prereqEval.js";
+import { planConditions, collectConditions } from "../../core/prereqConditions.js";
 import {
   buildPlacedKeySet,
   allocateMajorWithElectives,
@@ -154,7 +155,7 @@ export function createPlannerQuery(deps) {
     const {
       query, anyOf, subject, attributes, minSH, maxSH, term,
       level, college, campus, format, meetsOn,
-      minNumber, maxNumber, noPrereqs, unlockedBy, prereqsMetBy,
+      minNumber, maxNumber, noPrereqs, unlockedBy, prereqsMetBy, studentType,
       scheduleType, excludeIds, instructor, includeInstructors, sortBy, limit = 20,
     } = opts;
 
@@ -193,7 +194,10 @@ export function createPlannerQuery(deps) {
       results = results.filter(c => references(c.prereqs));
     }
     if (prereqsMetBy)
-      results = results.filter(c => checkPrereqs(c.id, prereqsMetBy).satisfied);
+      // studentType: "graduate" keeps the grad courses whose only unmet
+      // branch is "graduate program admission" — without it, "what can I
+      // take" silently drops most 5000-level courses for a grad student.
+      results = results.filter(c => checkPrereqs(c.id, prereqsMetBy, null, studentType).satisfied);
 
     if (subject)
       results = results.filter(c => c.subject === subject.toUpperCase().trim());
@@ -596,7 +600,7 @@ export function createPlannerQuery(deps) {
     }));
   }
 
-  function checkPrereqs(courseId, completedIds = null, plan = null) {
+  function checkPrereqs(courseId, completedIds = null, plan = null, studentType = null) {
     const id = canonId(courseId);
     const course = courseMap[id];
     if (!course) {
@@ -611,10 +615,16 @@ export function createPlannerQuery(deps) {
 
     if (!course.prereqs?.length) return { satisfied: true, missing: [], concurrent: [] };
 
+    // Non-course conditions: an explicit studentType wins (the caller passed
+    // its own completed list, so there may be no plan), else the plan's. A
+    // graduate plan satisfies "graduate program admission" — the OR branch
+    // beside the undergrad chain on 209 courses (see prereqConditions.js).
+    const conditions = planConditions({ studentType: studentType ?? plan?.studentType });
+
     const fakePlacements = {};
     for (const cid of completed) fakePlacements[cid] = "s0";
     fakePlacements[id] = "s1";
-    const result = evalPrereqTree(course.prereqs, fakePlacements, { s0: 0, s1: 1 }, 1);
+    const result = evalPrereqTree(course.prereqs, fakePlacements, { s0: 0, s1: 1 }, 1, new Set(), null, conditions);
 
     const missing = [], concurrent = [];
     if (result !== "satisfied") {
@@ -630,10 +640,16 @@ export function createPlannerQuery(deps) {
       })(course.prereqs);
     }
 
+    // Non-course conditions ride along so the answer is explainable: an
+    // unsatisfied course can still be takeable via permission, and a satisfied
+    // grad course should say WHY (admission, not the undergrad chain).
+    const conds = collectConditions(course.prereqs, conditions);
+
     return {
       satisfied: result === "satisfied",
       missing:    [...new Set(missing)],
       concurrent: [...new Set(concurrent)],
+      ...(conds.length && { conditions: conds }),
     };
   }
 

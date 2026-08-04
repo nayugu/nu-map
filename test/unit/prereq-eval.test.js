@@ -3,6 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
+import { planConditions } from "../../src/core/prereqConditions.js";
 
 // A three-semester plan: fall < spring < summer (indices 0,1,2).
 const semIndex = { fall: 0, spring: 1, summer: 2 };
@@ -118,4 +119,68 @@ test("evalPrereqTree › nested empty sub-expression › neutral (satisfied)", (
 
 test("evalPrereqTree › only stray tokens (no real refs) › does not throw", () => {
   assert.doesNotThrow(() => evalPrereqTree([")", "And", "Or", "("], {}, semIndex, 1));
+});
+
+// ── Non-course conditions ({ note } leaves) ─────────────────────────────────
+// The shape every one of the 209 grad-admission courses has: the undergraduate
+// prereq chain OR admission. A note the evaluator can't read is neutral, and a
+// neutral OR branch collapses to the other side — which is how a graduate
+// student was told they were missing MATH 2341 for BIOE 5115.
+const GRAD = planConditions({ studentType: "graduate" });
+const UG   = planConditions({ studentType: "undergrad" });
+const bioe5115 = [ref("MATH", "2341", { minGrade: "D-" }), "Or", { note: "graduate program admission" }];
+
+test("evalPrereqTree › grad-admission note in a graduate plan › satisfies the Or branch", () => {
+  assert.equal(evalPrereqTree(bioe5115, {}, semIndex, 1, new Set(), null, GRAD), "satisfied");
+});
+
+test("evalPrereqTree › grad-admission note without a graduate plan › unchanged (missing)", () => {
+  assert.equal(evalPrereqTree(bioe5115, {}, semIndex, 1, new Set(), null, UG), "missing");
+  assert.equal(evalPrereqTree(bioe5115, {}, semIndex, 1), "missing"); // legacy call, no conditions
+});
+
+test("evalPrereqTree › satisfied condition inside a parenthesised group › propagates out", () => {
+  // ARCH 3450 shape: (A And B And C) Or admission — with the group unplaced.
+  const tree = ["(", ref("ARCH", "1110"), "And", ref("ARCH", "1120"), ")",
+                "Or", { note: "graduate program admission" }];
+  assert.equal(evalPrereqTree(tree, {}, semIndex, 1, new Set(), null, GRAD), "satisfied");
+});
+
+test("evalPrereqTree › satisfied condition in a nested sub-expression › propagates out", () => {
+  const tree = [[ref("CS", "1000"), "Or", { note: "graduate program admission" }], "And", ref("CS", "2000")];
+  assert.equal(evalPrereqTree(tree, { CS2000: "fall" }, semIndex, 1, new Set(), null, GRAD), "satisfied");
+});
+
+// Invariant 1 (prereqConditions.js): a condition may only satisfy, never fail.
+// An undergrad in a combined BS/MS takes grad courses on permission we can't
+// see, so an unmet note must stay neutral rather than manufacture a violation.
+test("evalPrereqTree › unmet condition as the sole prereq › never a violation", () => {
+  const tree = [{ note: "graduate program admission" }];
+  assert.equal(evalPrereqTree(tree, {}, semIndex, 1, new Set(), null, UG), "satisfied");
+  assert.equal(evalPrereqTree(tree, {}, semIndex, 1, new Set(), null, GRAD), "satisfied");
+});
+
+test("evalPrereqTree › unmet condition ANDed with a missing course › still missing", () => {
+  // The note must not rescue the And — only the course placement can.
+  const tree = [ref("CS", "1000"), "And", { note: "permission of instructor" }];
+  assert.equal(evalPrereqTree(tree, {}, semIndex, 1, new Set(), null, GRAD), "missing");
+});
+
+test("evalPrereqTree › a met condition does not excuse an And-ed missing course", () => {
+  const tree = [ref("CS", "1000"), "And", { note: "graduate program admission" }];
+  assert.equal(evalPrereqTree(tree, {}, semIndex, 1, new Set(), null, GRAD), "missing");
+});
+
+test("evalPrereqTree › a non-auto-satisfiable note in a graduate plan › stays neutral", () => {
+  // "permission of the graduate program director" mentions graduate study but
+  // is somebody's decision; the Or must still fall back to the course.
+  const tree = [ref("CS", "1000"), "Or", { note: "permission of the graduate program director" }];
+  assert.equal(evalPrereqTree(tree, {}, semIndex, 1, new Set(), null, GRAD), "missing");
+});
+
+test("evalPrereqTree › grade-aware path also honours conditions", () => {
+  // takesOf and conditions must compose: no takes at all, admission carries it.
+  const takesOf = () => [];
+  assert.equal(evalPrereqTree(bioe5115, {}, semIndex, 1, new Set(), takesOf, GRAD), "satisfied");
+  assert.equal(evalPrereqTree(bioe5115, {}, semIndex, 1, new Set(), takesOf, UG), "missing");
 });

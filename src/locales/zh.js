@@ -441,6 +441,7 @@ export const strings = {
   "course.star.remove":           "\u53d6\u6d88\u6536\u85cf",
   "course.tooltip.variable-sh":   "\u53ef\u53d8\u5b66\u5206\uff1a{min}\u2013{max} {unit}\uff08\u70b9\u51fb\u8bbe\u7f6e\uff09",
   "info.prereqs":                 "\u5148\u4fee\uff1a",
+  "info.prereq.condition.met":      "自动满足 — 本计划为研究生项目",
   "info.relationships.title":     "\u89e3\u9501",
   "info.offered.title":           "\u5f00\u8bfe\u5b66\u671f",
   "info.offered.schedule":        "常规上课日",
