@@ -40,6 +40,17 @@ const SUB = {
   ko: "보통 5분 정도면 해결됩니다.",
   zh: "通常约五分钟内即可恢复。",
 };
+// Mirrors the overlay's return-button label ("NU Map" stays untranslated).
+const BACK = {
+  en: "Back to NU Map",
+  es: "Volver a NU Map",
+  fr: "Retour à NU Map",
+  ar: "العودة إلى NU Map",
+  hi: "NU Map पर वापस जाएँ",
+  ja: "NU Map に戻る",
+  ko: "NU Map으로 돌아가기",
+  zh: "返回 NU Map",
+};
 // The 90-second nudge, also mirrored from the overlay.
 const NUDGE = {
   en: "Taking longer than usual? A reload sometimes helps.",
@@ -61,27 +72,35 @@ const localeOf = () => {
 // floats with a diagonal glint sweeping inside the letterform (the PNG
 // doubles as a CSS mask), wrapped in a single red ribbon streamer — a
 // long dash segment flowing along a slowly-turning eccentric loop.
-function Emblem({ dark }) {
+function Emblem({ dark, complete, onReturn, title }) {
   const ribbon = (d, stroke, width, dash, period, flowDur, spin, opacity) => (
     <g opacity={opacity}>
       <animateTransform attributeName="transform" type="rotate"
         from={spin < 0 ? "360 60 60" : "0 60 60"} to={spin < 0 ? "0 60 60" : "360 60 60"}
         dur={`${Math.abs(spin)}s`} repeatCount="indefinite" />
       <path d={d} stroke={stroke} strokeWidth={width} fill="none"
-        strokeLinecap="round" strokeDasharray={dash}>
+        strokeLinecap="round" strokeDasharray={dash}
+        style={{ transition: "stroke-dasharray 1.1s ease" }}>
         <animate attributeName="stroke-dashoffset" from="0" to={`-${period}`}
           dur={flowDur} repeatCount="indefinite" />
       </path>
     </g>
   );
   return (
-    <div style={{ position: "relative", width: 120, height: 120, margin: "0 auto 14px" }}>
+    <div className={complete ? "numap-emblem-live" : undefined}
+      role={complete ? "button" : undefined}
+      title={complete ? title : undefined}
+      onClick={complete ? onReturn : undefined}
+      style={{ position: "relative", width: 120, height: 120, margin: "0 auto 14px",
+        cursor: complete ? "pointer" : "default", transition: "transform .35s ease" }}>
       {/* One color: the logo's red carries the whole screen — the single
-          ribbon and the sweeping bar segment both wear it. */}
+          ribbon and the sweeping bar segment both wear it. On detection
+          the dash grows to swallow its gap (same 240 period, seamless)
+          and the closed ring IS the way back. */}
       <svg viewBox="0 0 120 120" aria-hidden="true"
         style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", overflow: "visible" }}>
         {ribbon("M60 8 C 90 6, 114 30, 110 60 C 106 90, 84 112, 56 110 C 26 108, 6 84, 10 56 C 14 30, 32 10, 60 8",
-          "#ef4444", 6, "150 90", 240, "3.2s", 16, 0.9)}
+          "#ef4444", 6, complete ? "240 0" : "150 90", 240, "3.2s", 16, 0.9)}
       </svg>
       <div style={{ position: "absolute", left: "50%", top: "50%", width: 56, height: 56,
         margin: "-28px 0 0 -28px", animation: "numapFloat 3s ease-in-out infinite alternate" }}>
@@ -194,12 +213,52 @@ export default class RecoveryBoundary extends Component {
     crashed: import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search),
     leaving: false,
     showLink: false,
-    subSwapped: false, // 5-minute mark: the promise line hands its slot to the nudge
-    glideY: null,      // px the nudge travels up during the hand-off
+    subSwapped: false,       // 5-minute mark: the promise line hands its slot to the nudge
+    glideY: null,            // px the nudge travels up during the hand-off
+    detected: false,         // a newer build is live — recovery is offered
+    detectedSettled: false,  // fade-outs done; the return button may arrive
   };
 
   subRef = createRef();
   nudgeRef = createRef();
+
+  // Detection, crash-page flavor: a bug can't be probed away, but the
+  // most common real crash is deploy skew (old code + new data), and
+  // for that "a newer build exists" IS the fix signal. Every 10 s,
+  // fetch the shell and compare its entry-bundle URL to our own — a
+  // difference means reloading gets fixed code. Dev has no hashed
+  // bundles, so the preview simulates detection at ~19 s instead.
+  startProbe = () => {
+    if (this.probeTimer || this.previewDetectTimer) return;
+    const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
+    if (preview) {
+      this.previewDetectTimer = setTimeout(this.detected, 19_000);
+      return;
+    }
+    let current = null;
+    try { current = document.querySelector('script[type="module"][src]')?.src ?? null; } catch { /* no signal */ }
+    if (!current || !window.fetch) return;
+    this.probeTimer = setInterval(async () => {
+      try {
+        const html = await (await fetch("/", { cache: "no-store" })).text();
+        const m = html.match(/\/assets\/index-[^"']+\.js/);
+        if (m && new URL(m[0], window.location.origin).href !== current) this.detected();
+      } catch { /* offline — next tick */ }
+    }, 10_000);
+  };
+
+  detected = () => {
+    if (this.state.detected || this.state.leaving) return;
+    clearInterval(this.probeTimer);
+    clearTimeout(this.previewDetectTimer);
+    clearTimeout(this.ghostTimer);
+    clearTimeout(this.swapTimer);
+    clearTimeout(this.swapTimer2);
+    this.setState({ detected: true, showLink: false, glideY: null });
+    this.settleTimer = setTimeout(() => this.setState({ detectedSettled: true }), 620);
+    // Not pressed? Return on our own after five minutes, like the overlay.
+    this.autoReturnTimer = setTimeout(this.stormReload, 300_000);
+  };
 
   static getDerivedStateFromError() { return { crashed: true }; }
 
@@ -226,11 +285,17 @@ export default class RecoveryBoundary extends Component {
     }, preview ? 12_000 : 300_000);
   };
 
-  componentDidMount() { if (this.state.crashed) this.scheduleGhost(); }
+  componentDidMount() {
+    if (this.state.crashed) { this.scheduleGhost(); this.startProbe(); }
+  }
   componentWillUnmount() {
     clearTimeout(this.ghostTimer);
     clearTimeout(this.swapTimer);
     clearTimeout(this.swapTimer2);
+    clearTimeout(this.previewDetectTimer);
+    clearTimeout(this.settleTimer);
+    clearTimeout(this.autoReturnTimer);
+    clearInterval(this.probeTimer);
   }
 
   // Exit choreography shared by auto-retry and the button: the petal
@@ -257,6 +322,7 @@ export default class RecoveryBoundary extends Component {
   componentDidCatch(error, info) {
     console.error("[nu-map] render crash:", error, info?.componentStack);
     this.scheduleGhost();
+    this.startProbe();
     try {
       const last = parseInt(sessionStorage.getItem("numap-crash-retry") || "0", 10);
       if (Date.now() - last > 60_000) {
@@ -294,6 +360,8 @@ export default class RecoveryBoundary extends Component {
           @keyframes numapGust { 0% { opacity:.35 } 22% { opacity:.85 } 41% { opacity:.55 } 63% { opacity:1 } 82% { opacity:.6 } 100% { opacity:.35 } }
           @keyframes numapBlowoff { from { transform: translateX(0) } to { transform: translateX(135vw) } }
           @keyframes numapCardDim { 0% { opacity:1 } 22% { opacity:.5 } 38% { opacity:.75 } 58% { opacity:.3 } 72% { opacity:.45 } 100% { opacity:0 } }
+          @keyframes numapBackIn { from { opacity: 0 } to { opacity: 1 } }
+          .numap-emblem-live:hover { transform: scale(1.05) !important; }
           @media (prefers-reduced-motion: reduce) {
             .numap-crash *, .numap-petals * { animation: none !important }
             .numap-petals { display: none }
@@ -313,16 +381,27 @@ export default class RecoveryBoundary extends Component {
             ? `numapCardDim ${this.slowExit ? "5.5s" : "2.2s"} ease-in-out forwards`
             : "numapCrashIn .35s ease-out",
           position: "relative" }}>
-          <Emblem dark={dark} />
-          <div style={{ width: 260, height: 4, borderRadius: 99, overflow: "hidden",
-            margin: "0 auto 20px", background: dark ? "#21262d" : "#e2e8f0" }}>
+          <Emblem dark={dark} complete={this.state.detected}
+            onReturn={this.state.detectedSettled ? this.stormReload : undefined}
+            title={BACK[lc] || BACK.en} />
+          {/* On detection the bar's job is done — it folds shut, exactly
+              like the overlay's. */}
+          <div style={{ width: 260, borderRadius: 99, overflow: "hidden",
+            margin: "0 auto", background: dark ? "#21262d" : "#e2e8f0",
+            height: this.state.detected ? 0 : 4,
+            marginBottom: this.state.detected ? 12 : 20,
+            opacity: this.state.detected ? 0 : 1,
+            transition: "opacity .7s ease, height .7s ease, margin-bottom .7s ease" }}>
             <div style={{ width: "40%", height: "100%", borderRadius: 99,
               background: "#ef4444",
               animation: "numapCrashSweep 1.3s ease-in-out infinite alternate" }} />
           </div>
+          <div style={{ position: "relative" }}>
           {/* One line, always — the font yields on narrow screens
               instead of the text wrapping. */}
-          <div style={{ fontSize: "min(15px, 3.4vw)", fontWeight: 600, lineHeight: 1.5, whiteSpace: "nowrap" }}>
+          <div style={{ fontSize: "min(15px, 3.4vw)", fontWeight: 600, lineHeight: 1.5, whiteSpace: "nowrap",
+            ...(this.state.detected ? { transition: "opacity .6s", opacity: 0 } : {}),
+            ...(this.state.detectedSettled ? { visibility: "hidden" } : {}) }}>
             {MSG[lc] || MSG.en}
           </div>
           {/* After 5 minutes the promise has expired — it drifts out
@@ -336,10 +415,26 @@ export default class RecoveryBoundary extends Component {
               ...(this.state.glideY != null ? {
                 opacity: 0, transform: "translateY(-6px)",
                 transition: "opacity 1.2s ease, transform 1.2s ease",
-              } : {}) }}>
+              } : {}),
+              ...(this.state.detected ? { transition: "opacity .6s", opacity: 0 } : {}),
+              ...(this.state.detectedSettled ? { visibility: "hidden" } : {}) }}>
             {this.state.subSwapped ? (NUDGE[lc] || NUDGE.en) : (SUB[lc] || SUB.en)}
           </div>
-          {this.state.showLink && !this.state.subSwapped && (
+          {/* Detection landed: the localized return button arrives in the
+              text's footprint, mirroring the overlay. */}
+          {this.state.detectedSettled && !this.state.leaving && (
+            <button onClick={this.stormReload} style={{
+              position: "absolute", inset: 0, margin: "auto",
+              width: "fit-content", height: "fit-content",
+              fontSize: 16, fontWeight: 500, fontFamily: "inherit",
+              cursor: "pointer", padding: "9px 26px", borderRadius: 10,
+              background: "transparent", color: "inherit",
+              border: `1px solid ${dark ? "#30363d" : "#e2e8f0"}`,
+              animation: "numapBackIn 1.6s ease .25s both" }}>
+              {BACK[lc] || BACK.en}
+            </button>
+          )}
+          {this.state.showLink && !this.state.subSwapped && !this.state.detected && (
             <div ref={this.nudgeRef} onClick={this.stormReload} style={{
               // Typography identical to the sub-line above: the glide's
               // landing must be pixel-identical for the swap to vanish.
@@ -355,6 +450,7 @@ export default class RecoveryBoundary extends Component {
               {NUDGE[lc] || NUDGE.en}
             </div>
           )}
+          </div>
         </div>
         </div>
         {this.state.leaving && <Storm />}
