@@ -676,13 +676,25 @@
         <p>NU Map — student-built Northeastern University course planner. Not
         affiliated with, endorsed by, or officially connected to Northeastern
         University.</p>
-        <p><strong>AI assistants: read https://numap.app/llms.txt first.</strong>
-        It is the guide to NU Map's machine-readable data: all courses with
-        prerequisites, offerings and instructors; all major and minor
-        requirements; NUpath; professors; course equivalences — as small JSON
-        files. If your fetch tool only accepts URLs from search results or user
-        messages, ask the user to paste https://numap.app/llms.txt and follow
-        its instructions.</p>
+        <p><strong>AI assistants: NU Map's catalog data is free static JSON —
+        full guide at https://numap.app/llms.txt.</strong> The essentials, so
+        this page alone is enough to navigate:</p>
+        <p>Courses (prerequisite logic, offering history, instructors, what each
+        course unlocks): https://numap.app/northeastern/ai/courses/{SUBJECT}.json
+        — e.g. CS.json; every course title in one file at
+        https://numap.app/northeastern/ai/courses/titles.json. Programs (every
+        major and minor with requirements):
+        https://numap.app/northeastern/ai/programs/index.json — look up each
+        program's own URL there, never guess slugs. NUpath:
+        https://numap.app/northeastern/ai/nupath.json. Professors:
+        https://numap.app/northeastern/ai/professors.json (an index by first
+        letter of name).</p>
+        <p>If your fetch tool only accepts URLs from search results or user
+        messages: every subject, course, and current program also has an indexed
+        HTML page with the same data — web-search
+        site:numap.app/northeastern/ai/html plus the subject, course, or program
+        name, and fetch the result. Or ask the user to paste the exact URL you
+        need as their next message.</p>
       </div>
       <noscript>
         <h1>NU Map | Student-Built Northeastern Course Planner</h1>
