@@ -313,24 +313,28 @@
           }, 620);
         }
         // onUp defaults to the storm exit; previews pass their own handler.
-        // The second regex alternative matches the Vite dev shell so the
-        // detection is testable on localhost.
-        // Plain GETs only: the zone's bot protection challenges anything
-        // odd (HEAD requests got 403'd — that silently killed detection
-        // in production), and a challenge page contains no /assets/ URL
-        // to match, so the probe idled forever. A GET of the bundle is
-        // exactly what a real browser sends.
+        // The probe touches ONLY /assets/ (exempt from the zone's
+        // Human Verification rule) and needs no HTML: it GETs this very
+        // page's own entry bundle, read from its own DOM. 200 = the
+        // server is serving our version again (a reload will boot);
+        // 404 = a newer deploy replaced us (a reload gets the new
+        // version). Either way, the way back is open. Fetching '/'
+        // is out of the question — a long-lived tab's challenge
+        // clearance expires, and the challenge page that fetch()
+        // receives (and can't render) matches nothing, which is why
+        // real deploys were never detected.
         function startProbe(onUp) {
           if (probeTimer || !window.fetch) return;
+          var entry = null;
+          try {
+            var s = document.querySelector('script[type="module"][src]');
+            entry = s && s.src;
+          } catch (e) {}
+          if (!entry) return;
           probeTimer = setInterval(function () {
-            fetch('/', { cache: 'no-store' })
-              .then(function (r) { return r.text(); })
-              .then(function (html) {
-                var m = html.match(/\/assets\/index-[^"']+\.js|\/src\/main\.jsx/);
-                if (!m) return;
-                return fetch(m[0], { cache: 'no-store' }).then(function (r2) {
-                  if (r2 && r2.ok) { stopProbe(); (onUp || offerReturn)(); }
-                });
+            fetch(entry, { cache: 'no-store' })
+              .then(function (r) {
+                if (r && (r.ok || r.status === 404)) { stopProbe(); (onUp || offerReturn)(); }
               })
               .catch(function () {});
           }, 4000);

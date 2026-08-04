@@ -209,10 +209,12 @@ export default class RecoveryBoundary extends Component {
 
   // Detection, crash-page flavor: a bug can't be probed away, but the
   // most common real crash is deploy skew (old code + new data), and
-  // for that "a newer build exists" IS the fix signal. Every 10 s,
-  // fetch the shell and compare its entry-bundle URL to our own — a
-  // difference means reloading gets fixed code. Dev has no hashed
-  // bundles, so the preview simulates detection at ~19 s instead.
+  // for that "a newer build exists" IS the fix signal. Every 10 s, GET
+  // our own entry bundle (an /assets/ request — exempt from the zone's
+  // Human Verification, unlike '/', whose challenge blinded fetch()
+  // once a long-lived tab's clearance expired): a 404 means the
+  // content hash changed, i.e. a newer build replaced ours. Dev has
+  // no hashed bundles, so the preview simulates detection instead.
   startProbe = () => {
     if (this.probeTimer || this.previewDetectTimer) return;
     const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
@@ -220,14 +222,13 @@ export default class RecoveryBoundary extends Component {
       this.previewDetectTimer = setTimeout(this.detected, 10_000);
       return;
     }
-    let current = null;
-    try { current = document.querySelector('script[type="module"][src]')?.src ?? null; } catch { /* no signal */ }
-    if (!current || !window.fetch) return;
+    let entry = null;
+    try { entry = document.querySelector('script[type="module"][src]')?.src ?? null; } catch { /* no signal */ }
+    if (!entry || !window.fetch || !/\/assets\//.test(entry)) return;
     this.probeTimer = setInterval(async () => {
       try {
-        const html = await (await fetch("/", { cache: "no-store" })).text();
-        const m = html.match(/\/assets\/index-[^"']+\.js/);
-        if (m && new URL(m[0], window.location.origin).href !== current) this.detected();
+        const r = await fetch(entry, { cache: "no-store" });
+        if (r.status === 404) this.detected();
       } catch { /* offline — next tick */ }
     }, 10_000);
   };
