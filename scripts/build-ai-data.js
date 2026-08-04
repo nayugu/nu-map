@@ -360,14 +360,21 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       + `<td>${c.level === "grad" ? "grad" : "ug"}</td>`
       + `<td>${c.typicallyOffered ? escapeHtml(c.typicallyOffered.join(", ")) : ""}</td>`
       + `<td>${c.nuPath?.length ? escapeHtml(c.nuPath.join(", ")) : ""}</td>`
-      + `<td class="muted">${escapeHtml(fmtPrereqs(c.prereqs))}</td></tr>`;
+      + `<td class="muted">${escapeHtml(fmtPrereqs(c.prereqs))}</td>`
+      + `<td class="muted">${(() => {
+        if (!c.instructors) return "";
+        const names = [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort();
+        const shown = names.slice(0, 6).map(escapeHtml).join(", ");
+        return names.length > 6 ? `${shown}, <a href="${pageUrl}">+${names.length - 6} more</a>` : shown;
+      })()}</td></tr>`;
   }).join("\n");
   mirrorQueue.push({
     rel: `courses/${subject}.html`,
     title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
     description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
-    body: `<table>\n<tr><th>Code</th><th>Title</th><th>SH</th><th>Level</th><th>Usually offered</th><th>NUpath</th><th>Prerequisites</th></tr>\n${rows}\n</table>`,
+    body: `<table>\n<tr><th>Code</th><th>Title</th><th>SH</th><th>Level</th><th>Usually offered</th><th>NUpath</th><th>Prerequisites</th><th>Recent instructors</th></tr>\n${rows}\n</table>`
+      + `<p class="muted">Instructors are from recent scheduled terms; each course page shows them per season with student shares. Blank means no recent scheduled sections on record.</p>`,
   });
 
   // Per-course pages: small (a few KB), never truncated, and shaped
@@ -790,11 +797,8 @@ mirrorQueue.push({
   title: "NUpath — which Northeastern courses satisfy each attribute",
   description: "Every course satisfying each of the 13 NUpath general-education attributes at Northeastern (the writing competency is three codes: WF, WD, WI). From NU Map (not affiliated with Northeastern).",
   jsonUrl: `${ORIGIN}/northeastern/ai/nupath.json`,
-  body: `<p>13 codes, not 12 — the writing competency is awarded as three (WF, WD, WI).
-Course codes are plain text to keep this page light; open any of them through the
-<a href="${HTML_ROOT}/courses">subject directory</a>.</p>`
-    + Object.entries(nupath).map(([code, e]) =>
-      `<details><summary>${escapeHtml(code)} — ${escapeHtml(e.label)} <span class="muted">(${e.courses.length} courses)</span></summary><p>${e.courses.map(escapeHtml).join(", ")}</p></details>`).join(""),
+  body: Object.entries(nupath).map(([code, e]) =>
+    `<details><summary>${escapeHtml(code)} — ${escapeHtml(e.label)} <span class="muted">(${e.courses.length} courses)</span></summary><p>${e.courses.map(linkCode).join(", ")}</p></details>`).join(""),
 });
 
 for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
