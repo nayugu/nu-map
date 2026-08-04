@@ -203,7 +203,10 @@ export default class RecoveryBoundary extends Component {
   // quiet reload nudge fades in as the escape hatch.
   scheduleGhost = () => {
     if (this.ghostTimer) return;
-    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), 90_000);
+    // 5 s in the dev preview so the nudge is testable without the wait.
+    const delay = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search)
+      ? 5_000 : 90_000;
+    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), delay);
   };
 
   componentDidMount() { if (this.state.crashed) this.scheduleGhost(); }
