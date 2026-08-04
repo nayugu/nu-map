@@ -46,17 +46,6 @@ const readJSON = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
 
 const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-// One-line prerequisite rendering for the compact subject listings.
-const fmtPrereqs = (node) => {
-  if (Array.isArray(node)) {
-    const parts = node.map(fmtPrereqs).filter(Boolean);
-    return parts.length > 1 ? `(${parts.join(" ")})` : parts.join(" ");
-  }
-  if (typeof node === "string") return node.toLowerCase();
-  if (node && node.subject) return `${node.subject} ${node.number}${node.minGrade ? ` (min ${node.minGrade})` : ""}`;
-  return "";
-};
-
 const slugify = (s) => {
   const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   if (!slug) throw new Error(`unsluggable name: "${s}"`);
@@ -287,6 +276,34 @@ const enrich = (course) => {
   };
 };
 
+// Cross-page link helpers, defined before the subject loop because the
+// listing tables use them at queue time (const = TDZ if defined later).
+const titleOf = new Map();
+for (const c of catalog) if (c.subject && c.number) titleOf.set(`${c.subject} ${c.number}`, c.title);
+
+const linkRef = (subject, number) => {
+  const code = `${subject} ${number}`;
+  return titleOf.has(code)
+    ? `<a href="${ORIGIN}/northeastern/ai/html/courses/${subject}/${number}" title="${escapeHtml(titleOf.get(code) ?? "")}">${escapeHtml(code)}</a>`
+    : escapeHtml(code);
+};
+const linkCode = (code) => {
+  const m = /^([A-Z]{2,6})\s?(\S+)$/.exec(code);
+  return m ? linkRef(m[1], m[2]) : escapeHtml(code);
+};
+// Prereq logic as a readable sentence with linked course refs.
+const prereqHtml = (node) => {
+  if (Array.isArray(node)) {
+    const parts = node.map(prereqHtml).filter(Boolean);
+    return parts.length > 1 ? `(${parts.join(" ")})` : parts.join(" ");
+  }
+  if (typeof node === "string") return node.toLowerCase();
+  if (node && node.subject) {
+    return `${linkRef(node.subject, node.number)}${node.minGrade ? ` <span class="muted">(min ${escapeHtml(node.minGrade)})</span>` : ""}`;
+  }
+  return "";
+};
+
 // Every instructor name links to their entry on the professors letter
 // page. The letter rule must match profsByLetter's split exactly.
 const profLetterOf = (name) => (/^[A-Za-z]/.test(name) ? name[0].toUpperCase() : "_");
@@ -370,7 +387,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       + `<td>${c.level === "grad" ? "grad" : "ug"}</td>`
       + `<td>${c.typicallyOffered ? escapeHtml(c.typicallyOffered.join(", ")) : ""}</td>`
       + `<td>${c.nuPath?.length ? escapeHtml(c.nuPath.join(", ")) : ""}</td>`
-      + `<td class="muted">${escapeHtml(fmtPrereqs(c.prereqs))}</td>`
+      + `<td class="muted">${prereqHtml(c.prereqs)}</td>`
       + `<td class="muted">${(() => {
         if (!c.instructors) return "";
         const names = [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort();
@@ -589,35 +606,9 @@ the user to paste the exact URL you need as their next message.</li>
 };
 
 // ── Renderers: one per page kind ─────────────────────────────────────
-const titleOf = new Map();
-for (const c of catalog) if (c.subject && c.number) titleOf.set(`${c.subject} ${c.number}`, c.title);
-
-const linkRef = (subject, number) => {
-  const code = `${subject} ${number}`;
-  return titleOf.has(code)
-    ? `<a href="${HTML_ROOT}/courses/${subject}/${number}" title="${escapeHtml(titleOf.get(code) ?? "")}">${escapeHtml(code)}</a>`
-    : escapeHtml(code);
-};
-const linkCode = (code) => {
-  const m = /^([A-Z]{2,6})\s?(\S+)$/.exec(code);
-  return m ? linkRef(m[1], m[2]) : escapeHtml(code);
-};
 const chips = (arr) => `<p class="chips">${arr.filter(Boolean).map((x) => `<span>${x}</span>`).join("")}</p>`;
 const SEASON_LABEL = { fall: "Fall", spring: "Spring", summer: "Summer", sumA: "Summer A", sumB: "Summer B" };
 const seasonLabel = (s) => SEASON_LABEL[s] ?? s;
-
-// Prereq logic as a readable sentence with linked course refs.
-const prereqHtml = (node) => {
-  if (Array.isArray(node)) {
-    const parts = node.map(prereqHtml).filter(Boolean);
-    return parts.length > 1 ? `(${parts.join(" ")})` : parts.join(" ");
-  }
-  if (typeof node === "string") return node.toLowerCase();
-  if (node && node.subject) {
-    return `${linkRef(node.subject, node.number)}${node.minGrade ? ` <span class="muted">(min ${escapeHtml(node.minGrade)})</span>` : ""}`;
-  }
-  return "";
-};
 
 const COURSE_KNOWN = new Set([
   "subject", "number", "title", "scheduleType", "credits", "creditsMax", "nuPath",
