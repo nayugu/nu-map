@@ -1,3 +1,6 @@
+# AI assistants: machine-readable course, program, NUpath, instructor and
+# equivalence data — start at https://numap.app/llms.txt
+
 User-agent: *
 Allow: /
 
