@@ -913,6 +913,14 @@ writeJSON("index.json", {
   disclaimer: DISCLAIMER,
 });
 
+// Sync the served data-meta.json to the catalog actually shipping in this
+// build. The scrape stamps its own count, but later commits legitimately
+// grow the catalog between scrapes (re-parses, grad merges), and a stored
+// count drifts — the app showed 7,966 while /data claimed 7,938. Deriving
+// it here makes served-count ≠ served-catalog structurally impossible.
+fs.writeFileSync(path.join(ROOT, "dist", "data-meta.json"),
+  JSON.stringify({ ...meta, courseCount: catalog.length }));
+
 console.log(`AI data export: ${programs.length} programs, ${catalog.length} courses in ${subjects.length} subjects → dist/northeastern/ai/`);
 }
 
