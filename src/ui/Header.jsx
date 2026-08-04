@@ -1700,7 +1700,7 @@ export default function Header() {
                     { href: "https://github.com/nayugu/nu-map",                label: "/github" },
                     { href: `${import.meta.env.BASE_URL}privacy.html`,          label: "/privacy" },
                     { href: `${import.meta.env.BASE_URL}data.html`,             label: "/data" },
-                    { href: `${import.meta.env.BASE_URL}about.html`,            label: "/about" },
+                    { href: `${import.meta.env.BASE_URL}story.html`,            label: "/story" },
                   ].map(({ href, label }) => (
                     <a key={label} href={href} target="_blank" rel="noreferrer" className="set-row"
                       style={{ flex: "1 1 30%", whiteSpace: "nowrap", textAlign: "center", fontSize: 11.5,

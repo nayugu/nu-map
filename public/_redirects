@@ -1,3 +1,8 @@
+# /about lived for a few hours on 2026-08-04 (sitemap + early crawls)
+# before being renamed to /story — 301 both spellings so nothing rots.
+/about https://numap.app/story 301
+/about.html https://numap.app/story 301
+
 # AI assistants and crawlers guess URL shapes like /courses/CS2000 or
 # /api/... that were never real. Serve the data guide AT the guessed URL
 # with a 200 rewrite (not a redirect: fetch-restricted AI tools refuse
