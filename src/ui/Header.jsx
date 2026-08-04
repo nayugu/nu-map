@@ -1694,7 +1694,7 @@ export default function Header() {
 
               {/* About — short links, laid out as a row instead of a stack */}
               <SettingsSection label={t("header.links.title")}>
-                <div style={{ display: "flex", gap: 4 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
                   {[
                     { href: `${import.meta.env.BASE_URL}northeastern/dev.html`, label: "/dev" },
                     { href: "https://github.com/nayugu/nu-map",                label: "/github" },
@@ -1703,7 +1703,7 @@ export default function Header() {
                     { href: `${import.meta.env.BASE_URL}about.html`,            label: "/about" },
                   ].map(({ href, label }) => (
                     <a key={label} href={href} target="_blank" rel="noreferrer" className="set-row"
-                      style={{ flex: "1 1 auto", whiteSpace: "nowrap", textAlign: "center", fontSize: 11.5,
+                      style={{ flex: "1 1 30%", whiteSpace: "nowrap", textAlign: "center", fontSize: 11.5,
                         background: "var(--bg-surface)", padding: "4px 6px", borderRadius: 5,
                         border: "1px solid var(--bg-surface)", color: "var(--text-4)",
                         textDecoration: "none", boxSizing: "border-box",
