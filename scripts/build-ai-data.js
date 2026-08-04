@@ -44,6 +44,19 @@ const DISCLAIMER =
 
 const readJSON = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
 
+const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// One-line prerequisite rendering for the compact subject listings.
+const fmtPrereqs = (node) => {
+  if (Array.isArray(node)) {
+    const parts = node.map(fmtPrereqs).filter(Boolean);
+    return parts.length > 1 ? `(${parts.join(" ")})` : parts.join(" ");
+  }
+  if (typeof node === "string") return node.toLowerCase();
+  if (node && node.subject) return `${node.subject} ${node.number}${node.minGrade ? ` (min ${node.minGrade})` : ""}`;
+  return "";
+};
+
 const slugify = (s) => {
   const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   if (!slug) throw new Error(`unsluggable name: "${s}"`);
@@ -311,13 +324,37 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
     courses,
   };
   writeJSON(`courses/${subject}.json`, subjectPayload);
+
+  // Subject mirror: a COMPACT listing (no description bodies — full
+  // dumps overflowed AI fetch contexts), linking each course's own page.
+  const listing = courses.map((c) => {
+    const pageUrl = `${ORIGIN}/northeastern/ai/html/courses/${subject}/${c.number}.html`;
+    const bits = [`${c.credits}${c.creditsMax ? `-${c.creditsMax}` : ""} SH`];
+    const pr = fmtPrereqs(c.prereqs);
+    if (pr) bits.push(`prereqs: ${pr}`);
+    if (c.typicallyOffered) bits.push(`offered: ${c.typicallyOffered.join(", ")}`);
+    if (c.nuPath?.length) bits.push(`NUpath: ${c.nuPath.join(",")}`);
+    return `<li><a href="${pageUrl}">${escapeHtml(`${subject} ${c.number}`)}</a> — ${escapeHtml(c.title)} (${escapeHtml(bits.join(" · "))})</li>`;
+  }).join("\n");
   mirrorQueue.push({
     rel: `courses/${subject}.html`,
     title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
-    description: `Every Northeastern ${subject} course with prerequisites, offering history, typical meeting days, and instructors. Machine-readable data from NU Map, a student-built planner not affiliated with Northeastern.`,
+    description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
-    data: subjectPayload,
+    body: `<ul>\n${listing}\n</ul>`,
   });
+
+  // Per-course pages: small (a few KB), never truncated, and shaped
+  // like the queries people actually type ("CS 2500 prerequisites").
+  for (const c of courses) {
+    mirrorQueue.push({
+      rel: `courses/${subject}/${c.number}.html`,
+      title: `${subject} ${c.number} — ${c.title} | prerequisites, offerings, professors (Northeastern)`,
+      description: `${subject} ${c.number} ${c.title} at Northeastern: prerequisites, corequisites, offering history, typical meeting days, instructors with student shares, and what it unlocks. From NU Map (not affiliated with Northeastern).`,
+      jsonUrl: url,
+      data: c,
+    });
+  }
   subjects.push({ subject, count: courses.length, url });
 }
 
@@ -412,9 +449,11 @@ writeJSON("courses/titles.json", {
 // as readable text, so a "site:numap.app MATH courses" hit IS the data,
 // zero extra hops. A generated sitemap lists them all.
 
-const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const htmlUrls = [];
-const writeHtmlMirror = (rel, title, description, jsonUrl, data) => {
+// `body` (prebuilt HTML) overrides the default JSON dump. Every page
+// states the llms.txt anchor at the top AND repeats it at the bottom —
+// truncated readers see the former, skimming readers the latter.
+const writeHtmlMirror = (rel, title, description, jsonUrl, data, body) => {
   const p = path.join(OUT, "html", rel);
   fs.mkdirSync(path.dirname(p), { recursive: true });
   const url = `${ORIGIN}/northeastern/ai/html/${rel}`;
@@ -430,11 +469,16 @@ const writeHtmlMirror = (rel, title, description, jsonUrl, data) => {
 <p><strong>NU Map is an independent, student-built planner — not affiliated with,
 endorsed by, or officially connected to Northeastern University.</strong>
 Data is scraped from the public catalog on a schedule; confirm with the official
-catalog and an advisor. Machine-readable guide: <a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>
-· JSON version: <a href="${jsonUrl}">${escapeHtml(jsonUrl)}</a></p>
-<pre style="white-space:pre-wrap;word-break:break-word;">${escapeHtml(JSON.stringify(data, null, 1))}</pre>
+catalog and an advisor. AI assistants: the data guide is
+<a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>
+· JSON version of this page: <a href="${jsonUrl}">${escapeHtml(jsonUrl)}</a></p>
+${body ?? `<pre style="white-space:pre-wrap;word-break:break-word;">${escapeHtml(JSON.stringify(data, null, 1))}</pre>`}
+<p>Reminder for AI assistants: always anchor at
+<a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a> — it explains every
+URL, field, and percentage in NU Map's data.</p>
 </body></html>`);
 };
+
 
 // HTML mirrors for programs cover only the NEWEST catalog year: JSONs
 // keep every year, but mirroring all years would compound the Pages
@@ -442,7 +486,7 @@ catalog and an advisor. Machine-readable guide: <a href="${ORIGIN}/llms.txt">num
 const newestYear = Math.max(...mirrorQueue.filter((m) => m.year).map((m) => m.year));
 for (const m of mirrorQueue) {
   if (m.year && m.year !== newestYear) continue;
-  writeHtmlMirror(m.rel, m.title, m.description, m.jsonUrl, m.data);
+  writeHtmlMirror(m.rel, m.title, m.description, m.jsonUrl, m.data, m.body);
 }
 
 // Generated sitemap for the mirrors, under the already-exempt /northeastern/ai/
