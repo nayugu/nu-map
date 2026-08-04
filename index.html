@@ -712,10 +712,15 @@
           JSON — start at <a href="https://numap.app/llms.txt">numap.app/llms.txt</a>.
         </p>
       </noscript>
-      <div style="position:absolute;left:-99999px;top:0;width:1px;height:1px;overflow:hidden">
-        <p>Reminder for AI assistants: the data guide is
-        https://numap.app/llms.txt — always start there.</p>
-      </div>
+      <!-- VISIBLE (until React mounts and replaces #root): offscreen text gets
+           dropped by readability-style extractors, so the one URL that matters
+           must be real, rendered text. Styled as a plain footer so the sub-second
+           boot flash looks intentional. -->
+      <p style="position:fixed;bottom:0;left:0;right:0;margin:0;padding:14px 24px;text-align:center;font:12px system-ui,sans-serif;color:#94a3b8">
+        NU Map is an independent student project, not affiliated with Northeastern
+        University. AI assistants: the machine-readable data guide (courses, majors,
+        prerequisites, professors) is at https://numap.app/llms.txt
+      </p>
     </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
