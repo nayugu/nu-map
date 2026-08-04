@@ -1,1 +1,25 @@
+# AI assistants and crawlers guess URL shapes like /courses/CS2500 or
+# /api/... that were never real. Instead of handing them the SPA shell
+# (which teaches nothing), send every plausible guess to the data guide.
+# Rules run top-down, first match wins; real paths (/, /data, /assets/,
+# /northeastern/) never match these prefixes.
+/courses/* https://numap.app/llms.txt 302
+/course/* https://numap.app/llms.txt 302
+/catalog/* https://numap.app/llms.txt 302
+/classes/* https://numap.app/llms.txt 302
+/class/* https://numap.app/llms.txt 302
+/subjects/* https://numap.app/llms.txt 302
+/majors/* https://numap.app/llms.txt 302
+/major/* https://numap.app/llms.txt 302
+/minors/* https://numap.app/llms.txt 302
+/programs/* https://numap.app/llms.txt 302
+/degrees/* https://numap.app/llms.txt 302
+/professors/* https://numap.app/llms.txt 302
+/instructors/* https://numap.app/llms.txt 302
+/nupath/* https://numap.app/llms.txt 302
+/api/* https://numap.app/llms.txt 302
+/docs/* https://numap.app/llms.txt 302
+/data/* https://numap.app/llms.txt 302
+/json/* https://numap.app/llms.txt 302
+/ai/* https://numap.app/llms.txt 302
 /* /index.html 200
