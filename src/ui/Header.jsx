@@ -2,7 +2,7 @@
 // HEADER  — sticky timeline header: title, SH counters, controls,
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
@@ -19,6 +19,8 @@ import dataMeta from "../core/dataMeta.json";
 import YearStepper    from "./YearStepper.jsx";
 import { SemLabel }   from "./SemLabel.jsx";
 import NewPlanModal   from "./NewPlanModal.jsx";
+import PlanTree, { PlanIcon } from "./PlanTree.jsx";
+import { flattenTree, buildSearchIndex, matchIds } from "../core/planFolders.js";
 import HoverTip       from "./InfoTip.jsx";
 
 // Measured header-row width (logical px) below which the labeled buttons fold
@@ -214,6 +216,7 @@ export default function Header() {
     shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     aiAssistantAvailable, claudePreview, claudePaired,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
+    folders, planTree, openFolders, toggleFolder, folderSort, setShowPlanLibrary,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
     grades, privateGrades, setPrivateGrades, privateCoop, setPrivateCoop,
@@ -412,6 +415,38 @@ export default function Header() {
   const [selectedIds, setSelectedIds] = useState(new Set());
   const lastClickedIdx = useRef(-1);
   const { showNewPlanModal, setShowNewPlanModal } = usePlanner();
+
+  // ── Plan dropdown: flat list vs folder tree ──
+  // With zero folders the dropdown renders EXACTLY as it always has, including
+  // the undergraduate/graduate auto-grouping and the per-row rename/delete
+  // buttons — shipping folders changes nothing for anyone who never makes one.
+  // The first folder switches it to the tree, and the auto-grouping steps aside
+  // rather than competing with a hierarchy the user built on purpose.
+  const treeMode = folders.length > 0;
+  // Only while the menu is open: this reads one slot per plan, and switchPlan
+  // stamps lastOpened, so an ungated memo would re-read every slot on every
+  // plan switch.
+  const planLabels = useMemo(() => {
+    const out = new Map();
+    if (!showPlanMenu) return out;
+    for (const p of plans) {
+      try {
+        const raw = localStorage.getItem(`${institution.storagePrefix}-plan-data-${p.id}`);
+        const parts = (JSON.parse(raw || "{}").major || "").split("/");
+        const folder = parts[parts.length - 2] || "";
+        out.set(p.id, folder ? majorRequirements.fmtProgramLabel(folder) : "");
+      } catch { out.set(p.id, ""); }
+    }
+    return out;
+  }, [plans, showPlanMenu, institution.storagePrefix, majorRequirements]);
+  const planTreeRows = useMemo(() => {
+    if (!treeMode || !showPlanMenu) return [];
+    const index = buildSearchIndex(planTree, { slotLabel: id => planLabels.get(id) ?? "" });
+    return flattenTree(planTree, {
+      open: openFolders, sortMode: folderSort,
+      matches: matchIds(index, planSearch), locale,
+    });
+  }, [treeMode, showPlanMenu, planTree, planLabels, openFolders, folderSort, planSearch, locale]);
 
   // ── Responsive header: measure the *rendered* width, not window.innerWidth ──
   // The app container is transform:scale(uiScale) on tablet/desktop, so app zoom
@@ -737,17 +772,25 @@ export default function Header() {
   // Renders a single row in the plan switcher list.
   // majorLabel is non-empty only when the row surfaced via a major-name fallback search.
   // idx + visiblePlans enable shift-range selection in select mode.
-  const renderPlanRow = (p, majorLabel = "", idx = 0, visiblePlans = plans) => {
+  // indent nests the row under a group header, so the header reads as its parent.
+  const renderPlanRow = (p, majorLabel = "", idx = 0, visiblePlans = plans, indent = false) => {
+    const padLeft = indent ? 20 : 10;
     const isChecked = selectedIds.has(p.id);
     const nameSpan = (
       <span style={{ flex: 1, minWidth: 0 }}>
         <span style={{
           display: "block", fontSize: isPhone ? 9 : 10,
-          fontWeight: !selectMode && p.id === activePlanId ? 700 : 400,
-          color: !selectMode && p.id === activePlanId ? "var(--active)" : "var(--text-3)",
+          // Green marks "the plan you're in", matching the library panel — one
+          // signal for one meaning across both surfaces. The old blue dot said
+          // the same thing in the accent colour that now means "selected".
+          // Held through select mode too: which plan is open doesn't stop being
+          // true because you're picking things to delete, and that is exactly
+          // when you most want to see it.
+          fontWeight: p.id === activePlanId ? 700 : 400,
+          color: p.id === activePlanId ? "var(--success)" : "var(--text-3)",
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
         }}>
-          {!selectMode && p.id === activePlanId ? "● " : ""}{p.name}
+          {p.name}
         </span>
         {majorLabel && (
           <MajorLabelText label={majorLabel} isPhone={isPhone} />
@@ -758,7 +801,7 @@ export default function Header() {
     if (selectMode) {
       return (
         <div key={p.id} style={{
-          display: "flex", alignItems: "center", gap: 6, padding: "4px 10px",
+          display: "flex", alignItems: "center", gap: 6, padding: "4px 10px", paddingLeft: padLeft,
           background: isChecked ? "var(--active-bg)" : "transparent", cursor: "pointer",
         }} onClick={e => handleSelectToggle(p, idx, visiblePlans, e.shiftKey)}>
           <input type="checkbox" checked={isChecked} onChange={() => {}}
@@ -771,10 +814,17 @@ export default function Header() {
 
     return (
       <div key={p.id} style={{
-        display: "flex", alignItems: "center", gap: 4, padding: "4px 10px",
-        background: p.id === activePlanId ? "var(--active-bg)" : "transparent",
+        position: "relative",
+        display: "flex", alignItems: "center", gap: 4, padding: "4px 10px", paddingLeft: padLeft,
+        background: p.id === activePlanId ? "var(--success-bg)" : "transparent",
         cursor: p.id === activePlanId ? "default" : "pointer",
       }} onClick={() => { if (p.id !== activePlanId) { switchPlan(p.id); setShowPlanMenu(false); } }}>
+        {p.id === activePlanId && (
+          <span aria-hidden="true" style={{
+            position: "absolute", left: indent ? 10 : 1, top: 2, bottom: 2,
+            width: 2, borderRadius: 2, background: "var(--success)",
+          }} />
+        )}
         {nameSpan}
         <button onClick={e => {
           e.stopPropagation();
@@ -805,20 +855,30 @@ export default function Header() {
       return ordered.map((p, i) => renderPlanRow(p, "", i, ordered));
     }
 
-    const groupHeader = label => (
+    // The header carries the same U / G tag the tree puts on plan icons. This
+    // list is where a user sees the two levels spelled out in words, so pairing
+    // the glyph with the label here is what teaches the badge before folders
+    // ever exist — after the first folder these headers are gone and the badge
+    // is the only level cue left. The rows themselves stay bare: under a
+    // labelled header the badge would only repeat what the group already says.
+    const groupHeader = (label, studentType, first) => (
       <div key={`hdr-${label}`} style={{
-        padding: "5px 10px 2px", fontSize: isPhone ? 7.5 : 8.5, fontWeight: 700,
+        padding: "5px 10px 3px", marginTop: first ? 0 : (isPhone ? 9 : 12),
+        fontSize: isPhone ? 7.5 : 8.5, fontWeight: 700,
         letterSpacing: "0.07em", color: "var(--text-5)", textTransform: "uppercase",
-        userSelect: "none",
-      }}>{label}</div>
+        userSelect: "none", display: "flex", alignItems: "center", gap: 5,
+      }}>
+        <PlanIcon size={isPhone ? 10 : 11.5} studentType={studentType} />
+        {label}
+      </div>
     );
 
     return (
       <>
-        {groupHeader(t("header.plan.group.undergrad"))}
-        {ug.map(p => renderPlanRow(p, "", ordered.indexOf(p), ordered))}
-        {groupHeader(t("header.plan.group.graduate"))}
-        {gr.map(p => renderPlanRow(p, "", ordered.indexOf(p), ordered))}
+        {groupHeader(t("header.plan.group.undergrad"), "undergrad", true)}
+        {ug.map(p => renderPlanRow(p, "", ordered.indexOf(p), ordered, true))}
+        {groupHeader(t("header.plan.group.graduate"), "graduate", false)}
+        {gr.map(p => renderPlanRow(p, "", ordered.indexOf(p), ordered, true))}
       </>
     );
   };
@@ -1016,7 +1076,7 @@ export default function Header() {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 8, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", padding: "3px 10px 5px", borderBottom: "1px solid var(--border-1)" }}>
                 <span>{t("header.plans.title")}</span>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  {plans.length > 1 && (
+                  {!treeMode && plans.length > 1 && (
                     <button onClick={e => { e.stopPropagation(); setSelectMode(v => !v); setSelectedIds(new Set()); lastClickedIdx.current = -1; }}
                       style={{ background: "none", border: "none", cursor: "pointer", fontSize: 8, padding: 0, fontWeight: 600,
                         color: selectMode ? "var(--active)" : "var(--text-5)" }}>
@@ -1028,7 +1088,7 @@ export default function Header() {
               </div>
 
               {/* Search */}
-              {plans.length > 3 && (
+              {(plans.length > 3 || treeMode) && (
                 <div style={{ padding: "5px 10px 4px", borderBottom: "1px solid var(--border-1)" }}>
                   <input
                     autoFocus
@@ -1048,7 +1108,30 @@ export default function Header() {
 
               {/* Scrollable plan list */}
               <div style={{ maxHeight: "40vh", overflowY: "auto" }}>
-                {(() => {
+                {treeMode ? (
+                  planTreeRows.length === 0 ? (
+                    <div style={{ padding: "8px 10px", fontSize: isPhone ? 9 : 10, color: "var(--text-5)", fontStyle: "italic" }}>
+                      {t("folders.search.noMatch")}
+                    </div>
+                  ) : (
+                    // Same component the library panel draws, at compact density.
+                    // One click switches (this is a menu, not a file manager);
+                    // rename, move and delete live in the library.
+                    <PlanTree
+                      rows={planTreeRows}
+                      density="compact"
+                      activePlanId={activePlanId}
+                      onRowClick={row => {
+                        if (row.kind === "folder") { toggleFolder(row.id); return; }
+                        if (row.id !== activePlanId) switchPlan(row.id);
+                        setShowPlanMenu(false);
+                      }}
+                      onToggle={toggleFolder}
+                      metaOf={row => row.kind === "folder" && row.counts.plans > 0 ? String(row.counts.plans) : ""}
+                      t={t}
+                    />
+                  )
+                ) : (() => {
                   const q = planSearch.trim().toLowerCase();
                   if (!q) return renderGroupedPlans();
 
@@ -1105,17 +1188,32 @@ export default function Header() {
                     {selectedIds.size === 0 ? "Select plans to delete" : `Delete ${selectedIds.size} plan${selectedIds.size > 1 ? "s" : ""}`}
                   </button>
                 ) : (
-                  <button onClick={e => {
-                    e.stopPropagation();
-                    setShowPlanMenu(false);
-                    setShowNewPlanModal(true);
-                  }} style={{
-                    width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
-                    background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
-                    border: "1px solid var(--border-2)", color: "var(--accent)", textAlign: "left",
-                  }}>
-                    {t("header.plan.new")}
-                  </button>
+                  <div style={{ display: "flex", gap: 4 }}>
+                    <button onClick={e => {
+                      e.stopPropagation();
+                      setShowPlanMenu(false);
+                      setShowNewPlanModal(true);
+                    }} style={{
+                      flex: 1, minWidth: 0, fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
+                      background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
+                      border: "1px solid var(--border-2)", color: "var(--accent)", textAlign: "left",
+                    }}>
+                      {t("header.plan.new")}
+                    </button>
+                    {/* Every folder operation lives in the library — the
+                        dropdown stays a switcher. */}
+                    <button onClick={e => {
+                      e.stopPropagation();
+                      setShowPlanMenu(false);
+                      setShowPlanLibrary(true);
+                    }} style={{
+                      flexShrink: 0, fontSize: isPhone ? 9 : 10, fontWeight: 700, cursor: "pointer",
+                      background: "var(--bg-surface-2)", padding: "5px 8px", borderRadius: 5,
+                      border: "1px solid var(--border-2)", color: "var(--text-4)",
+                    }} title={t("folders.title")}>
+                      {t("folders.manage")}
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

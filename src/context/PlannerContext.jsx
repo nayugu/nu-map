@@ -21,6 +21,8 @@ import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
+import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
+         topmostNodes, childDepth, MAX_DEPTH } from "../core/planFolders.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
@@ -443,6 +445,10 @@ export function PlannerProvider({ children }) {
   const [showDonate,       setShowDonate]       = useState(false);
   const [showNewPlanModal,    setShowNewPlanModal]    = useState(false);
   const [newPlanInitialType,  setNewPlanInitialType]  = useState(null);
+  // Which folder a new plan lands in — set before opening the modal by
+  // "+ New plan" inside a folder; null means root.
+  const [newPlanFolderId,     setNewPlanFolderId]     = useState(null);
+  const [showPlanLibrary,     setShowPlanLibrary]     = useState(false);
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
     // Pure read — the "seen" flag is written on completion (finishOnboarding),
     // not here, so a reload mid-setup re-shows it rather than stranding the user.
@@ -2236,6 +2242,296 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("active-plan"), activePlanId); } catch {}
   }, [activePlanId]);
 
+  // ── Folders ──────────────────────────────────────────────────────
+  // Folder membership lives on the plan INDEX (`parentId`), never in a plan's
+  // data slot: moving a plan you aren't currently viewing must not require a
+  // read-modify-write of another plan's snapshot. That also keeps
+  // captureCurrentPlan/restorePlan untouched, so the plan-persistence
+  // invariant test has nothing new to police.
+  //
+  // Three keys, deliberately separate:
+  //   folder-index — the structure (id, name, parentId)
+  //   folder-open  — which folders are expanded. VIEW state, and it has to be
+  //                  separate: search force-opens every folder holding a match,
+  //                  so if expansion were part of the structure, clearing a
+  //                  query would either leave the tree splayed open or need a
+  //                  save/restore dance around every keystroke.
+  //   folder-sort  — 'name' | 'recent'
+  const [folders, setFolders] = useState(() => {
+    try {
+      const raw = localStorage.getItem(key("folder-index"));
+      const v = raw ? JSON.parse(raw) : null;
+      if (Array.isArray(v)) return v;
+    } catch {}
+    return [];
+  });
+  const [openFolders, setOpenFolders] = useState(() => {
+    try {
+      const raw = localStorage.getItem(key("folder-open"));
+      const v = raw ? JSON.parse(raw) : null;
+      if (Array.isArray(v)) return new Set(v);
+    } catch {}
+    return new Set();
+  });
+  const [folderSort, setFolderSort] = useState(() => {
+    try { return localStorage.getItem(key("folder-sort")) === "recent" ? "recent" : "name"; } catch { return "name"; }
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem(key("folder-index"), JSON.stringify(folders)); } catch {}
+  }, [folders]);
+  useEffect(() => {
+    try { localStorage.setItem(key("folder-open"), JSON.stringify([...openFolders])); } catch {}
+  }, [openFolders]);
+  useEffect(() => {
+    try { localStorage.setItem(key("folder-sort"), folderSort); } catch {}
+  }, [folderSort]);
+
+  // The derived tree — one per (plans, folders) so the header dropdown, the
+  // library panel and keyboard navigation all read the same structure.
+  const planTree = useMemo(() => buildTree({ plans, folders }), [plans, folders]);
+
+  // ── Folder undo/redo, and retained plan data ─────────────────────
+  // A recursive folder delete is the one unrecoverable action in the library,
+  // so deleting a plan NO LONGER removes its `plan-data-<id>` slot. The slot
+  // stays and the id is tombstoned, which makes undo a pure index restore —
+  // nothing has to be reconstructed. Tombstones are swept after TRASH_TTL so
+  // abandoned slots cannot grow without bound in a 5 MB store.
+  //
+  // History is snapshots, not inverse commands: the plan index and folder list
+  // hold only ids, names and parents, so a snapshot is a few hundred bytes and
+  // cannot drift out of sync with the operation it is meant to reverse.
+  const TRASH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+  const FOLDER_HISTORY_MAX = 50;
+
+  const [planTrash, setPlanTrash] = useState(() => {
+    try {
+      const raw = localStorage.getItem(key("plan-trash"));
+      const v = raw ? JSON.parse(raw) : null;
+      if (v && typeof v === "object" && !Array.isArray(v)) return v;
+    } catch {}
+    return {};
+  });
+  const [folderPast, setFolderPast] = useState([]);
+  const [folderFuture, setFolderFuture] = useState([]);
+
+  useEffect(() => {
+    try { localStorage.setItem(key("plan-trash"), JSON.stringify(planTrash)); } catch {}
+  }, [planTrash]);
+
+  // Sweep expired tombstones once per session — this is the only thing that
+  // ever reclaims a deleted plan's storage.
+  useEffect(() => {
+    const now = Date.now();
+    const expired = Object.keys(planTrash).filter(id => now - (planTrash[id]?.deletedAt ?? 0) > TRASH_TTL_MS);
+    if (expired.length === 0) return;
+    for (const id of expired) {
+      try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
+    }
+    setPlanTrash(prev => {
+      const next = { ...prev };
+      for (const id of expired) delete next[id];
+      return next;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const folderSnapshot = () => ({ plans, folders, activePlanId });
+
+  /** Record the pre-mutation state. Call immediately before mutating. */
+  const pushFolderHistory = () => {
+    setFolderPast(prev => [...prev.slice(-(FOLDER_HISTORY_MAX - 1)), folderSnapshot()]);
+    setFolderFuture([]);
+  };
+
+  const applyFolderSnapshot = (snap) => {
+    const alive = new Set(snap.plans.map(p => p.id));
+    // Tombstone whatever this snapshot drops, revive whatever it restores —
+    // so undo and redo both keep the trash consistent with the index.
+    setPlanTrash(prev => {
+      const next = { ...prev };
+      for (const id of alive) delete next[id];
+      for (const p of plans) {
+        if (!alive.has(p.id)) next[p.id] = { name: p.name, deletedAt: Date.now() };
+      }
+      return next;
+    });
+    const switching = snap.activePlanId !== activePlanId && alive.has(snap.activePlanId);
+    // Flush live state to the outgoing plan's slot first, exactly as
+    // switchPlan does — otherwise the pending edits land in the wrong plan.
+    if (switching) saveCurrentPlanToSlot();
+    setPlans(snap.plans);
+    setFolders(snap.folders);
+    const keptFolders = new Set(snap.folders.map(f => f.id));
+    setOpenFolders(prev => new Set([...prev].filter(id => keptFolders.has(id))));
+    if (switching) setActivePlanId(snap.activePlanId);
+  };
+
+  const undoFolders = () => {
+    if (folderPast.length === 0) return false;
+    const snap = folderPast[folderPast.length - 1];
+    setFolderPast(prev => prev.slice(0, -1));
+    setFolderFuture(prev => [...prev, folderSnapshot()]);
+    applyFolderSnapshot(snap);
+    return true;
+  };
+
+  const redoFolders = () => {
+    if (folderFuture.length === 0) return false;
+    const snap = folderFuture[folderFuture.length - 1];
+    setFolderFuture(prev => prev.slice(0, -1));
+    setFolderPast(prev => [...prev, folderSnapshot()]);
+    applyFolderSnapshot(snap);
+    return true;
+  };
+
+  const toggleFolder = (id) => setOpenFolders(prev => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
+  const setFolderOpen = (id, isOpen) => setOpenFolders(prev => {
+    const next = new Set(prev);
+    isOpen ? next.add(id) : next.delete(id);
+    return next;
+  });
+
+  /** Create a folder. Returns its id, or null when the depth cap blocks it. */
+  const createFolder = (name, parentId = null) => {
+    const parent = parentId ?? null;
+    if (childDepth(planTree, parent) > MAX_DEPTH - 1) return null;
+    // Date.now() alone collides when two folders are made in the same tick —
+    // "New Folder with Selection" immediately followed by another does that.
+    const id = `fold_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    const finalName = uniqueName(siblingNames(planTree, parent), (name ?? "").trim() || "untitled folder");
+    pushFolderHistory();
+    setFolders(prev => [...prev, { id, name: finalName, parentId: parent }]);
+    if (parent) setFolderOpen(parent, true);
+    return id;
+  };
+
+  /**
+   * "New Folder with Selection" — create a folder and move the selection into
+   * it in ONE commit.
+   *
+   * Doing this as createFolder() then moveNodesTo() cannot work: moveNodesTo
+   * validates against `planTree`, which is memoized on the current render and
+   * therefore does not contain the folder that was just created. Validating
+   * against a probe tree built from the pending arrays is the whole point.
+   */
+  const createFolderWithNodes = (ids, name) => {
+    const top = topmostNodes(planTree, ids);
+    if (top.length === 0) return { ok: false, reason: "noop" };
+    // Common parent when they share one, root otherwise — the folder appears
+    // where the user was already looking.
+    const parents = new Set(top.map(id => planTree.parentOf.get(id) ?? null));
+    const parent = parents.size === 1 ? [...parents][0] : null;
+    if (childDepth(planTree, parent) > MAX_DEPTH - 1) return { ok: false, reason: "depth" };
+
+    const id = `fold_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    const rec = {
+      id,
+      name: uniqueName(siblingNames(planTree, parent), (name ?? "").trim() || "untitled folder"),
+      parentId: parent,
+    };
+    const nextFolders = [...folders, rec];
+    const probe = buildTree({ plans, folders: nextFolders });
+    const verdict = planMove(probe, top, id);
+    if (!verdict.ok) return verdict;
+
+    const moved = applyMove({ plans, folders: nextFolders }, verdict.moving, id);
+    pushFolderHistory();
+    setPlans(moved.plans);
+    setFolders(moved.folders);
+    setFolderOpen(id, true);
+    return { ok: true, id };
+  };
+
+  const renameFolder = (id, name) => {
+    const clean = (name ?? "").trim();
+    if (!clean) return;
+    pushFolderHistory();
+    setFolders(prev => prev.map(f => f.id === id ? { ...f, name: clean } : f));
+  };
+
+  /**
+   * Move plans and/or folders into `targetId` (null = root).
+   * Returns the planMove verdict so the caller can explain a refusal
+   * (a drag that silently snaps back is the worst possible outcome).
+   */
+  const moveNodesTo = (ids, targetId) => {
+    const target = targetId ?? null;
+    const verdict = planMove(planTree, ids, target);
+    if (!verdict.ok) return verdict;
+    const next = applyMove({ plans, folders }, verdict.moving, target);
+    pushFolderHistory();
+    setPlans(next.plans);
+    setFolders(next.folders);
+    if (target) setFolderOpen(target, true); // reveal where it landed
+    return verdict;
+  };
+
+  /**
+   * What a delete of `ids` would remove — for the confirmation dialog.
+   *
+   * `contained` counts only what the delete reaches BEYOND the named targets,
+   * so deleting one empty folder doesn't announce "0 plans and 1 folders".
+   */
+  const previewDelete = (ids) => {
+    const targets = topmostNodes(planTree, ids);
+    const scope = deleteScope(planTree, ids);
+    const targetFolders = targets.filter(id => planTree.folderIds.has(id)).length;
+    const survivors = plans.length - scope.planIds.length;
+    return {
+      ...scope, targets, survivors, blocked: survivors < 1,
+      contained: {
+        plans: scope.planIds.length - (targets.length - targetFolders),
+        folders: scope.folderIds.length - targetFolders,
+      },
+    };
+  };
+
+  /**
+   * Recursive delete of any mix of plans and folders.
+   *
+   * `deleteScope` normalizes first, so a selection holding both a folder and
+   * something inside it counts that child once. At least one plan must always
+   * survive — the same invariant `deletePlan` enforces — and the replacement
+   * active plan is chosen from the survivors, so the slot-load effect can
+   * never read a key this delete dropped from the index.
+   *
+   * The plan-data slots are deliberately LEFT IN PLACE and tombstoned, which
+   * is what makes this undoable; the TRASH_TTL sweep reclaims them later.
+   */
+  const deleteNodes = (ids) => {
+    const scope = deleteScope(planTree, ids);
+    const doomedPlans = new Set(scope.planIds);
+    const remaining = plans.filter(p => !doomedPlans.has(p.id));
+    if (remaining.length === 0) return { ok: false, reason: "last-plan", ...scope };
+
+    pushFolderHistory();
+    const now = Date.now();
+    setPlanTrash(prev => {
+      const next = { ...prev };
+      for (const id of scope.planIds) {
+        next[id] = { name: plans.find(p => p.id === id)?.name ?? "", deletedAt: now };
+      }
+      return next;
+    });
+    const doomedFolders = new Set(scope.folderIds);
+    if (doomedFolders.size) {
+      setFolders(prev => prev.filter(f => !doomedFolders.has(f.id)));
+      setOpenFolders(prev => {
+        const next = new Set(prev);
+        for (const id of doomedFolders) next.delete(id);
+        return next;
+      });
+    }
+    setPlans(remaining);
+    if (doomedPlans.has(activePlanId)) setActivePlanId(remaining[0].id);
+    return { ok: true, ...scope };
+  };
+
   // Browser tab title = "<active plan> — <app>". The static <title> in
   // index.html stays SEO/disclaimer-focused for crawlers (most don't run
   // JS); this only overrides it at runtime for actual users.
@@ -2415,6 +2711,9 @@ export function PlannerProvider({ children }) {
     if (id === activePlanId) return;
     // Auto-save current plan
     saveCurrentPlanToSlot();
+    // Stamp the open so the library's "Recently opened" sort has something to
+    // order by. Index-only, so it never touches the plan's snapshot.
+    setPlans(prev => prev.map(p => p.id === id ? { ...p, lastOpened: Date.now() } : p));
     // Switch to new plan – the useEffect will load its data (or reset)
     setActivePlanId(id);
   };
@@ -2423,7 +2722,9 @@ export function PlannerProvider({ children }) {
   // Optional cohort = { entSem, entYear, gradSem, gradYear, studentType }.
   // When provided, pre-writes a minimal plan snapshot so that the activePlanId
   // useEffect calls restorePlan (with the given cohort) instead of resetPlanToDefaults.
-  const createPlan = (name, cohort = null) => {
+  // parentId files the new plan straight into a folder ("+ New plan" from
+  // inside one); null puts it at the root.
+  const createPlan = (name, cohort = null, parentId = null) => {
     saveCurrentPlanToSlot();
     const id = `plan_${Date.now()}`;
     if (cohort) {
@@ -2443,7 +2744,11 @@ export function PlannerProvider({ children }) {
         }));
       } catch {}
     }
-    setPlans(prev => [...prev, { id, name, studentType: cohort?.studentType ?? "undergrad" }]);
+    setPlans(prev => [...prev, {
+      id, name, studentType: cohort?.studentType ?? "undergrad",
+      parentId: parentId ?? null, lastOpened: Date.now(),
+    }]);
+    if (parentId) setFolderOpen(parentId, true);
     setActivePlanId(id);
   };
 
@@ -3216,6 +3521,14 @@ export function PlannerProvider({ children }) {
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
+    // Folders — structure, view state, and the mutations that respect both.
+    folders, planTree, openFolders, toggleFolder, setFolderOpen,
+    folderSort, setFolderSort,
+    createFolder, createFolderWithNodes, renameFolder, moveNodesTo, deleteNodes, previewDelete,
+    pushFolderHistory, undoFolders, redoFolders,
+    folderCanUndo: folderPast.length > 0, folderCanRedo: folderFuture.length > 0,
+    showPlanLibrary, setShowPlanLibrary,
+    newPlanFolderId, setNewPlanFolderId,
     toggleStar, toggleOffered,
     getSemStatus,
     substitutions: pvSubstitutions,

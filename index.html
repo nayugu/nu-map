@@ -92,6 +92,11 @@
          blends into the panel; hover swaps it for the subtle control border. */
       .set-row { transition: border-color 110ms ease; }
       .set-row:hover { border-color: var(--border-2, #d9d9d9) !important; }
+      /* Plan-library / plan-dropdown tree rows: same borderless-until-hover
+         treatment as .set-row. The row's selected + active states use INSET
+         rings and backgrounds, so an outer hover border never fights them. */
+      .plan-row { border: 1px solid transparent; transition: border-color 110ms ease; }
+      .plan-row:hover { border-color: var(--border-2, #d9d9d9) !important; }
       input::placeholder { font-size: inherit; opacity: 0.45; }
       .work-input::placeholder { opacity: 1; color: inherit; }
       /* Prevent browser text-selection on draggable cards (fixes serif font flash on touch) */

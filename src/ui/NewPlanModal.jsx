@@ -3,6 +3,8 @@ import { usePlanner }    from "../context/PlannerContext.jsx";
 import { useLanguage }   from "../context/LanguageContext.jsx";
 import YearStepper       from "./YearStepper.jsx";
 import { NUM_YEARS }     from "../core/constants.js";
+import { folderPath }    from "../core/planFolders.js";
+import { FolderIcon }    from "./PlanTree.jsx";
 
 const MAX_GRAD_YEAR = 2040;
 const GRAD_YEARS    = 2;
@@ -12,6 +14,7 @@ export default function NewPlanModal({ open, onClose }) {
     planEntSem, planEntYear, planGradSem, planGradYear,
     semOrd, createPlan, studentType: activeStudentType,
     newPlanInitialType, setNewPlanInitialType,
+    newPlanFolderId, setNewPlanFolderId, planTree,
   } = usePlanner();
   const { t } = useLanguage();
 
@@ -41,12 +44,17 @@ export default function NewPlanModal({ open, onClose }) {
     setTimeout(() => nameRef.current?.focus(), 0);
   }, [open]);
 
+  // Closing must clear the destination folder, or the NEXT plan created from
+  // the header would silently land in whatever folder was targeted last.
+  const dismiss = () => { setNewPlanFolderId(null); onClose(); };
+
   // Escape to dismiss
   useEffect(() => {
     if (!open) return;
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    const onKey = (e) => { if (e.key === "Escape") dismiss(); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, onClose]);
 
   if (!open) return null;
@@ -68,9 +76,13 @@ export default function NewPlanModal({ open, onClose }) {
 
   const submit = () => {
     if (!canCreate) return;
-    createPlan(name.trim(), { entSem, entYear, gradSem, gradYear, studentType });
-    onClose();
+    createPlan(name.trim(), { entSem, entYear, gradSem, gradYear, studentType }, newPlanFolderId);
+    dismiss();
   };
+
+  // Where it will land, when that isn't the root — otherwise "+ New plan" from
+  // inside a folder gives no sign it filed the plan somewhere.
+  const destination = newPlanFolderId ? folderPath(planTree, newPlanFolderId) : "";
 
   const semBtnStyle = (s, isSel, isBlocked) => ({
     flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
@@ -83,7 +95,7 @@ export default function NewPlanModal({ open, onClose }) {
 
   return (
     <div
-      onClick={onClose}
+      onClick={dismiss}
       style={{
         position: "fixed", inset: 0, zIndex: 200,
         background: "rgba(0,0,0,0.6)",
@@ -101,9 +113,17 @@ export default function NewPlanModal({ open, onClose }) {
         }}
       >
         {/* Title */}
-        <div style={{ fontSize: 13, fontWeight: 800, color: "var(--text-1)", marginBottom: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: "var(--text-1)", marginBottom: destination ? 4 : 14 }}>
           {t("header.plan.new.title")}
         </div>
+        {destination && (
+          <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 12, display: "flex", alignItems: "center", gap: 4 }}>
+            <FolderIcon size={11} />
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {t("folders.newPlanIn", { path: destination })}
+            </span>
+          </div>
+        )}
 
         {/* Name */}
         <div style={{ marginBottom: 14 }}>

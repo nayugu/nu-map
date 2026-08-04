@@ -23,6 +23,7 @@ import DonateModal      from './ui/DonateModal.jsx';
 import OnboardingModal  from './ui/OnboardingModal.jsx';
 import FeatureTour       from './ui/FeatureTour.jsx';
 import StatsPanel       from './ui/StatsPanel.jsx';
+import PlanLibrary      from './ui/PlanLibrary.jsx';
 import PalettePanel     from './ui/PalettePanel.jsx';
 import MigrationBanner  from './ui/MigrationBanner.jsx';
 import DevClockPanel    from './ui/DevClockPanel.jsx';
@@ -115,6 +116,7 @@ function PlannerApp() {
       <OnboardingModal />
       <FeatureTour />
       <StatsPanel />
+      <PlanLibrary />
       <MigrationBanner />
       {/* {import.meta.env.DEV && <DevClockPanel />} */}
     </div>
