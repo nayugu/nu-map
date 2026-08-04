@@ -315,6 +315,11 @@
         // onUp defaults to the storm exit; previews pass their own handler.
         // The second regex alternative matches the Vite dev shell so the
         // detection is testable on localhost.
+        // Plain GETs only: the zone's bot protection challenges anything
+        // odd (HEAD requests got 403'd — that silently killed detection
+        // in production), and a challenge page contains no /assets/ URL
+        // to match, so the probe idled forever. A GET of the bundle is
+        // exactly what a real browser sends.
         function startProbe(onUp) {
           if (probeTimer || !window.fetch) return;
           probeTimer = setInterval(function () {
@@ -323,7 +328,7 @@
               .then(function (html) {
                 var m = html.match(/\/assets\/index-[^"']+\.js|\/src\/main\.jsx/);
                 if (!m) return;
-                return fetch(m[0], { method: 'HEAD', cache: 'no-store' }).then(function (r2) {
+                return fetch(m[0], { cache: 'no-store' }).then(function (r2) {
                   if (r2 && r2.ok) { stopProbe(); (onUp || offerReturn)(); }
                 });
               })
