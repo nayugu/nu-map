@@ -550,7 +550,7 @@ const writeHtmlMirror = (rel, title, description, jsonUrl, body) => {
 <p class="muted">NU Map is an independent, student-built planner — not affiliated
 with, endorsed by, or officially connected to Northeastern University. Data comes
 from the public catalog on a schedule; confirm with the official catalog and an
-advisor.</p>
+advisor. Data updated ${escapeHtml(meta.lastUpdated)} · page generated ${generatedAt.slice(0, 10)}.</p>
 ${body}
 <footer>
 <details>
