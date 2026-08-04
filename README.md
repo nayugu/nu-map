@@ -26,7 +26,7 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 NU Map publishes its public catalog data as free, static, machine-readable JSON —
 no auth, no API keys, no rate limits. AI assistants and tools should start at the
 guide, **[numap.app/llms.txt](https://numap.app/llms.txt)** (human-readable
-overview: [numap.app/data.html](https://numap.app/data.html)), which explains
+overview: [numap.app/data](https://numap.app/data)), which explains
 every URL and field: program requirements for every major and minor, per-subject
 course files with prerequisite logic, offering history, instructors, NUpath, and
 course equivalences. Each dataset also has an indexed HTML twin under
