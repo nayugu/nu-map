@@ -19,8 +19,10 @@ data file's first field, `guide`, points back here), read this before fetching
 further.
 
 IMPORTANT — know your fetch tool's rules:
-- If your tool can fetch URLs found in fetched content: walk the tree normally
-  (this guide → an index file → copy the target URL verbatim from the index).
+- Most tools (including claude.ai's) can fetch any URL that appeared VERBATIM in
+  an earlier fetch or search result, but refuse URLs you construct from patterns.
+  So walk the tree: this guide → an index file → copy the target URL verbatim
+  from the index. Every index lists full literal URLs for exactly this reason.
 - If your tool only accepts URLs from search results or the user's own messages
   (claude.ai's web tool works this way): the URL patterns below are deliberately
   simple and predictable so you can construct the exact URL you need — then ASK
