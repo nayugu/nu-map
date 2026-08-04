@@ -124,7 +124,14 @@ export function parsePrereqText(text) {
 // appear in ordinary prose ("See department for details") and caused false
 // notes. Real department/dean/faculty conditions still match via the action
 // word they pair with ("consent of the department" → consent).
-const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|professor|program\s+director|advis|coordinator|standing|candidacy|enrollment)/i;
+//
+// "graduate student|status" is here for a phrasing the catalog does not use
+// yet: every current admission gate says "graduate program admission", and
+// dropping a reworded one would delete an OR branch 208 courses depend on
+// (src/core/prereqConditions.js) — silently, since a dropped phrase leaves no
+// trace to test against. Bare "graduate" is NOT a signal: it appears as the
+// grade-scope qualifier "(Graduate)", stripped above.
+const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|professor|program\s+director|advis|coordinator|standing|candidacy|enrollment|graduate\s+(?:student|status))/i;
 
 // Some gating conditions are stated as a named check/test with a required
 // score rather than a keyword — "Dissertation Check with a score of REQ" (the

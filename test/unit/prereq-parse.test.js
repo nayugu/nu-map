@@ -121,6 +121,14 @@ test("note › 'graduate program admission' is captured", () => {
   assert.deepEqual(t[2], { note: "graduate program admission" });
 });
 
+// A reworded admission gate must survive the scrape. Dropping it deletes an
+// OR branch 208 courses rely on, and a dropped phrase leaves nothing to test
+// against later — so the signal list carries these ahead of need.
+test("note › a bare graduate-status phrasing is captured too", () => {
+  assert.equal(hasPrereqSignal("Must be a graduate student"), true);
+  assert.deepEqual(parse("BIOL 2301 or graduate student status")[2], { note: "graduate student status" });
+});
+
 test("note › plain course-only prereqs gain no spurious note", () => {
   const t = parse("CS 2500 and CS 2510");
   assert.deepEqual(t, [
