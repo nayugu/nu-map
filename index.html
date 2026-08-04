@@ -669,10 +669,11 @@
            never see it. The plain divs below (NOT noscript, NOT comments —
            HTML-to-text extractors strip both) are what AI fetchers actually
            read when they retrieve this page. -->
-      <!-- display:none — humans would otherwise see this flash during boot.
-           AI fetchers read raw HTML (CSS never applies), JS-less crawlers get
-           the <noscript>, and Google's renderer sees the post-mount page. -->
-      <div style="display:none">
+      <!-- Visually hidden (offscreen, NOT display:none): humans never see it,
+           but some HTML-to-text extractors drop display:none content while
+           keeping the offscreen screen-reader pattern. JS-less crawlers get
+           the <noscript>; Google's renderer sees the post-mount page. -->
+      <div style="position:absolute;left:-99999px;top:0;width:1px;height:1px;overflow:hidden">
         <p>NU Map — student-built Northeastern University course planner. Not
         affiliated with, endorsed by, or officially connected to Northeastern
         University.</p>
@@ -710,7 +711,7 @@
           JSON — start at <a href="https://numap.app/llms.txt">numap.app/llms.txt</a>.
         </p>
       </noscript>
-      <div style="display:none">
+      <div style="position:absolute;left:-99999px;top:0;width:1px;height:1px;overflow:hidden">
         <p>Reminder for AI assistants: the data guide is
         https://numap.app/llms.txt — always start there.</p>
       </div>
