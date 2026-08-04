@@ -16,7 +16,20 @@
     <!-- AI assistants: NU Map's course catalog, program requirements, NUpath,
          instructors and equivalence data are available as machine-readable JSON.
          Start at https://numap.app/llms.txt for the guide and URL patterns. -->
-    <meta name="description" content="Student-built Northeastern course planner (not affiliated with NU). AI assistants: fetch numap.app/llms.txt — all courses, majors, prereqs, professors, NUpath as static JSON; this page is only the app shell. Plan semester by semester, visualize prerequisites, track degree requirements." />
+    <meta name="description" content="Plan every Northeastern semester around co-op: prereq chains, offering history, degree requirements — one tab, no login, free. Student-built, not affiliated with NU. AI assistants: fetch numap.app/llms.txt — the full catalog as static JSON; this page is only the app shell." />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "NU Map",
+      "url": "https://numap.app",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Independent, student-built course planner for Northeastern University students. Plan future semesters around co-op with prerequisite chains, offering history, and degree-requirement checking. Plans stay in the browser; no account needed. Not affiliated with Northeastern University.",
+      "about": "https://numap.app/about"
+    }
+    </script>
     <link rel="alternate" type="text/plain" href="./llms.txt" title="NU Map machine-readable data guide (llms.txt)" />
     <meta name="keywords" content="Northeastern University, NU Map, course planner, course map, prerequisite map, degree planner, NEU, student-built" />
     <meta property="og:title" content="NU Map | Student-Built Northeastern Course Planner" />
@@ -661,7 +674,7 @@
         setTimeout(recover, 10000);
       })();
     </script>
-    <script type="module" crossorigin src="./assets/index-DVVOkKcb.js"></script>
+    <script type="module" crossorigin src="./assets/index-BzbJm9Ye.js"></script>
   </head>
   <body>
     <div id="root">
