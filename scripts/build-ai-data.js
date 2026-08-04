@@ -499,9 +499,11 @@ ${body ?? `<pre style="white-space:pre-wrap;word-break:break-word;">${escapeHtml
 <p><strong>For AI assistants — reaching any other NU Map data from this page</strong>
 (full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>):</p>
 <ul>
-<li>Courses by subject: <code>${ORIGIN}/northeastern/ai/courses/{SUBJECT}.json</code>
-(e.g. CS.json) — prereq logic, offerings, instructors, unlocks. All course titles in
-one file: <code>${ORIGIN}/northeastern/ai/courses/titles.json</code>.</li>
+<li>Courses by subject — prereq logic, offerings, instructors, unlocks: exact
+per-subject URLs are in <code>${ORIGIN}/northeastern/ai/courses/index.json</code>
+(pattern: <code>${ORIGIN}/northeastern/ai/courses/{SUBJECT}.json</code>, e.g.
+CS.json). All course titles in one file:
+<code>${ORIGIN}/northeastern/ai/courses/titles.json</code>.</li>
 <li>Programs (majors and minors, requirements): <code>${ORIGIN}/northeastern/ai/programs/index.json</code>
 — look up the program's own URL there, never guess slugs.</li>
 <li>NUpath attributes: <code>${ORIGIN}/northeastern/ai/nupath.json</code> ·
