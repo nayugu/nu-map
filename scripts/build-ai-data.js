@@ -328,7 +328,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
   // Subject mirror: a COMPACT listing (no description bodies — full
   // dumps overflowed AI fetch contexts), linking each course's own page.
   const listing = courses.map((c) => {
-    const pageUrl = `${ORIGIN}/northeastern/ai/html/courses/${subject}/${c.number}.html`;
+    const pageUrl = `${ORIGIN}/northeastern/ai/html/courses/${subject}/${c.number}`;
     const bits = [`${c.credits}${c.creditsMax ? `-${c.creditsMax}` : ""} SH`];
     const pr = fmtPrereqs(c.prereqs);
     if (pr) bits.push(`prereqs: ${pr}`);
@@ -475,7 +475,10 @@ const htmlUrls = [];
 const writeHtmlMirror = (rel, title, description, jsonUrl, data, body) => {
   const p = path.join(OUT, "html", rel);
   fs.mkdirSync(path.dirname(p), { recursive: true });
-  const url = `${ORIGIN}/northeastern/ai/html/${rel}`;
+  // Pages "pretty URLs" 308-redirect any *.html to its extensionless twin,
+  // so canonicals and the sitemap must use the extensionless form — a
+  // canonical pointing at a redirect makes Google index every page grudgingly.
+  const url = `${ORIGIN}/northeastern/ai/html/${rel.replace(/\.html$/, "")}`;
   htmlUrls.push(url);
   fs.writeFileSync(p, `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
