@@ -524,6 +524,7 @@ const PAGE_CSS =
   + "header{font-size:.85rem;color:#64748b;margin-bottom:14px}header a{color:#64748b;font-weight:600}"
   + "footer{margin-top:2.5em;border-top:1px solid #e2e8f0;padding-top:1em;font-size:.82rem;color:#64748b}"
   + "footer code{background:#f1f5f9;padding:0 4px;border-radius:4px;word-break:break-all}"
+  + "footer details{border:none;padding:0;margin:0}footer summary{font-weight:400;color:#94a3b8}"
   + "pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:8px;font-size:.85rem}";
 
 const writeHtmlMirror = (rel, title, description, jsonUrl, body) => {
@@ -552,8 +553,9 @@ from the public catalog on a schedule; confirm with the official catalog and an
 advisor.</p>
 ${body}
 <footer>
-<p><strong>For AI assistants — reaching any other NU Map data from this page</strong>
-(full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>):</p>
+<details>
+<summary>For AI assistants — reaching any other NU Map data from this page</summary>
+<p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>.</p>
 <ul>
 <li>Courses by subject — prereq logic, offerings, instructors, unlocks: exact
 per-subject URLs are in <code>${ORIGIN}/northeastern/ai/courses/index.json</code>
@@ -571,6 +573,7 @@ by web search instead — results of a search ARE fetchable:
 A page like this one exists for every subject, course, and current program. Or ask
 the user to paste the exact URL you need as their next message.</li>
 </ul>
+</details>
 </footer>
 </body></html>`);
 };
