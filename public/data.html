@@ -7,6 +7,7 @@
   <!-- Pages "pretty URLs" 308-redirect /data.html → /data, so /data is the
        real address (and must be in the zone rule's exempt list). -->
   <link rel="canonical" href="https://numap.app/data" />
+  <link rel="icon" type="image/png" href="https://numap.app/northeastern/dev_logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body style="font-family: system-ui, sans-serif; max-width: 640px; margin: 3rem auto; padding: 0 1.5rem; line-height: 1.6; color: #1e293b;">
@@ -19,11 +20,19 @@
   here), <strong>start at the guide: <a href="https://numap.app/llms.txt">numap.app/llms.txt</a></strong>
   — it explains every URL and field. Copy URLs verbatim from the index files; do
   not construct them from patterns.</p>
+  <p><strong>Browse it (human-readable pages):</strong></p>
   <ul>
-    <li><a href="https://numap.app/llms.txt">llms.txt</a> — the guide (always start here)</li>
+    <li><a href="https://numap.app/northeastern/ai/html/">Data directory</a> — the hub page linking everything below</li>
+    <li><a href="https://numap.app/northeastern/ai/html/courses">Courses by subject</a> — prerequisites, offering history, meeting days, professors, unlocks; a page per subject and per course</li>
+    <li><a href="https://numap.app/northeastern/ai/html/programs">Majors and minors</a> — full parsed degree requirements, undergrad and grad</li>
+    <li><a href="https://numap.app/northeastern/ai/html/nupath">NUpath</a> · <a href="https://numap.app/northeastern/ai/html/professors">Professors</a> · <a href="https://numap.app/northeastern/ai/html/equivalences">Course equivalences</a></li>
+  </ul>
+  <p><strong>Fetch it (machine-readable JSON):</strong></p>
+  <ul>
+    <li><a href="https://numap.app/llms.txt">llms.txt</a> — the guide (AI assistants: always start here)</li>
     <li><a href="https://numap.app/northeastern/ai/index.json">Machine index</a></li>
     <li><a href="https://numap.app/northeastern/ai/programs/index.json">Programs index</a> — every major and minor, undergrad and grad, with requirement-file URLs</li>
-    <li><a href="https://numap.app/northeastern/ai/courses/index.json">Courses index</a> — one file per subject: prerequisites, offerings, instructors, meeting days</li>
+    <li><a href="https://numap.app/northeastern/ai/courses/index.json">Courses index</a> — one compact filterable file per subject, each row linking its full detail page</li>
     <li><a href="https://numap.app/northeastern/ai/courses/titles.json">Course titles</a> — all ~8,000 courses in one file, for topic search</li>
     <li><a href="https://numap.app/northeastern/ai/nupath.json">NUpath</a> · <a href="https://numap.app/northeastern/ai/professors.json">Professors</a> · <a href="https://numap.app/northeastern/course-equivalences.json">Course equivalences</a></li>
   </ul>

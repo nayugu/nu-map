@@ -146,6 +146,7 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
     title: `${name} — requirements (${src.year} catalog, ${level === "grad" ? "graduate" : "undergraduate"})`,
     description: `Full parsed degree requirements for ${name} at Northeastern University (${src.year} catalog). Machine-readable data from NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
+    kind: "program",
     data: payload,
   });
 
@@ -349,23 +350,24 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
   };
   writeJSON(`courses/${subject}.json`, subjectPayload);
 
-  // Subject mirror: a COMPACT listing (no description bodies — full
+  // Subject mirror: a COMPACT table (no description bodies — full
   // dumps overflowed AI fetch contexts), linking each course's own page.
-  const listing = courses.map((c) => {
+  const rows = courses.map((c) => {
     const pageUrl = `${ORIGIN}/northeastern/ai/html/courses/${subject}/${c.number}`;
-    const bits = [`${c.credits}${c.creditsMax ? `-${c.creditsMax}` : ""} SH`];
-    const pr = fmtPrereqs(c.prereqs);
-    if (pr) bits.push(`prereqs: ${pr}`);
-    if (c.typicallyOffered) bits.push(`offered: ${c.typicallyOffered.join(", ")}`);
-    if (c.nuPath?.length) bits.push(`NUpath: ${c.nuPath.join(",")}`);
-    return `<li><a href="${pageUrl}">${escapeHtml(`${subject} ${c.number}`)}</a> — ${escapeHtml(c.title)} (${escapeHtml(bits.join(" · "))})</li>`;
+    return `<tr><td><a href="${pageUrl}">${escapeHtml(`${subject} ${c.number}`)}</a></td>`
+      + `<td>${escapeHtml(c.title)}</td>`
+      + `<td>${c.credits}${c.creditsMax ? `–${c.creditsMax}` : ""}</td>`
+      + `<td>${c.level === "grad" ? "grad" : "ug"}</td>`
+      + `<td>${c.typicallyOffered ? escapeHtml(c.typicallyOffered.join(", ")) : ""}</td>`
+      + `<td>${c.nuPath?.length ? escapeHtml(c.nuPath.join(", ")) : ""}</td>`
+      + `<td class="muted">${escapeHtml(fmtPrereqs(c.prereqs))}</td></tr>`;
   }).join("\n");
   mirrorQueue.push({
     rel: `courses/${subject}.html`,
     title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
     description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
-    body: `<ul>\n${listing}\n</ul>`,
+    body: `<table>\n<tr><th>Code</th><th>Title</th><th>SH</th><th>Level</th><th>Usually offered</th><th>NUpath</th><th>Prerequisites</th></tr>\n${rows}\n</table>`,
   });
 
   // Per-course pages: small (a few KB), never truncated, and shaped
@@ -376,6 +378,8 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       title: `${subject} ${c.number} — ${c.title} | prerequisites, offerings, professors (Northeastern)`,
       description: `${subject} ${c.number} ${c.title} at Northeastern: prerequisites, corequisites, offering history, typical meeting days, instructors with student shares, and what it unlocks. From NU Map (not affiliated with Northeastern).`,
       jsonUrl: url,
+      kind: "course",
+      subject,
       data: c,
     });
   }
@@ -493,33 +497,54 @@ writeJSON("courses/titles.json", {
 // zero extra hops. A generated sitemap lists them all.
 
 const htmlUrls = [];
-// `body` (prebuilt HTML) overrides the default JSON dump. Every page
-// states the llms.txt anchor at the top AND repeats it at the bottom —
-// truncated readers see the former, skimming readers the latter.
-const writeHtmlMirror = (rel, title, description, jsonUrl, data, body) => {
+const HTML_ROOT = `${ORIGIN}/northeastern/ai/html`;
+
+// One shared clean design: every mirror is a real human-readable page
+// (the raw-JSON <pre> dump is gone — a page either has a renderer or
+// the build fails). Inline CSS keeps each page self-contained.
+const PAGE_CSS =
+  "body{font-family:system-ui,-apple-system,sans-serif;max-width:820px;margin:0 auto;padding:24px 20px 40px;line-height:1.55;color:#1e293b}"
+  + "a{color:#dc2626;text-decoration:none}a:hover{text-decoration:underline}"
+  + "h1{font-size:1.6rem;margin:.2em 0 .3em}"
+  + "h2{font-size:1.12rem;margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid #e2e8f0}"
+  + "h3{font-size:1rem;margin:1.2em 0 .4em}"
+  + "table{border-collapse:collapse;width:100%;font-size:.92rem}"
+  + "th{text-align:left;background:#f8fafc}th,td{padding:6px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top}"
+  + ".chips{margin:.4em 0}.chips span{display:inline-block;background:#f1f5f9;border-radius:999px;padding:2px 12px;margin:2px 4px 2px 0;font-size:.85rem;color:#334155}"
+  + ".muted{color:#64748b;font-size:.88rem}"
+  + "ul.req{padding-left:1.2em}ul.req ul{padding-left:1.2em}li{margin:.15em 0}"
+  + "details{margin:.5em 0;border:1px solid #e2e8f0;border-radius:10px;padding:.5em .9em}summary{cursor:pointer;font-weight:600}"
+  + "header{font-size:.85rem;color:#64748b;margin-bottom:14px}header a{color:#64748b;font-weight:600}"
+  + "footer{margin-top:2.5em;border-top:1px solid #e2e8f0;padding-top:1em;font-size:.82rem;color:#64748b}"
+  + "footer code{background:#f1f5f9;padding:0 4px;border-radius:4px;word-break:break-all}"
+  + "pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:8px;font-size:.85rem}";
+
+const writeHtmlMirror = (rel, title, description, jsonUrl, body) => {
+  if (typeof body !== "string") throw new Error(`mirror without a rendered body: ${rel}`);
   const p = path.join(OUT, "html", rel);
   fs.mkdirSync(path.dirname(p), { recursive: true });
   // Pages "pretty URLs" 308-redirect any *.html to its extensionless twin,
   // so canonicals and the sitemap must use the extensionless form — a
   // canonical pointing at a redirect makes Google index every page grudgingly.
-  const url = `${ORIGIN}/northeastern/ai/html/${rel.replace(/\.html$/, "")}`;
+  const url = rel === "index.html" ? `${HTML_ROOT}/` : `${HTML_ROOT}/${rel.replace(/\.html$/, "")}`;
   htmlUrls.push(url);
   fs.writeFileSync(p, `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
 <title>${escapeHtml(title)} — NU Map Data</title>
 <meta name="description" content="${escapeHtml(description)}" />
 <link rel="canonical" href="${url}" />
+<link rel="icon" type="image/png" href="${ORIGIN}/northeastern/dev_logo.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head><body style="font-family:system-ui,sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem;line-height:1.5;">
+<style>${PAGE_CSS}</style>
+</head><body>
+<header><a href="${HTML_ROOT}/">NU Map Data</a> · <a href="${ORIGIN}">numap.app planner</a> · <a href="${ORIGIN}/llms.txt">AI data guide</a>${jsonUrl ? ` · <a href="${jsonUrl}">JSON of this page</a>` : ""}</header>
 <h1>${escapeHtml(title)}</h1>
-<p><strong>NU Map is an independent, student-built planner — not affiliated with,
-endorsed by, or officially connected to Northeastern University.</strong>
-Data is scraped from the public catalog on a schedule; confirm with the official
-catalog and an advisor. AI assistants: the data guide is
-<a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>
-· JSON version of this page: <a href="${jsonUrl}">${escapeHtml(jsonUrl)}</a></p>
-${body ?? `<pre style="white-space:pre-wrap;word-break:break-word;">${escapeHtml(JSON.stringify(data, null, 1))}</pre>`}
-<hr />
+<p class="muted">NU Map is an independent, student-built planner — not affiliated
+with, endorsed by, or officially connected to Northeastern University. Data comes
+from the public catalog on a schedule; confirm with the official catalog and an
+advisor.</p>
+${body}
+<footer>
 <p><strong>For AI assistants — reaching any other NU Map data from this page</strong>
 (full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>):</p>
 <ul>
@@ -539,9 +564,309 @@ by web search instead — results of a search ARE fetchable:
 A page like this one exists for every subject, course, and current program. Or ask
 the user to paste the exact URL you need as their next message.</li>
 </ul>
+</footer>
 </body></html>`);
 };
 
+// ── Renderers: one per page kind ─────────────────────────────────────
+const titleOf = new Map();
+for (const c of catalog) if (c.subject && c.number) titleOf.set(`${c.subject} ${c.number}`, c.title);
+
+const linkRef = (subject, number) => {
+  const code = `${subject} ${number}`;
+  return titleOf.has(code)
+    ? `<a href="${HTML_ROOT}/courses/${subject}/${number}" title="${escapeHtml(titleOf.get(code) ?? "")}">${escapeHtml(code)}</a>`
+    : escapeHtml(code);
+};
+const linkCode = (code) => {
+  const m = /^([A-Z]{2,6})\s?(\S+)$/.exec(code);
+  return m ? linkRef(m[1], m[2]) : escapeHtml(code);
+};
+const chips = (arr) => `<p class="chips">${arr.filter(Boolean).map((x) => `<span>${x}</span>`).join("")}</p>`;
+const SEASON_LABEL = { fall: "Fall", spring: "Spring", summer: "Summer", sumA: "Summer A", sumB: "Summer B" };
+const seasonLabel = (s) => SEASON_LABEL[s] ?? s;
+
+// Prereq logic as a readable sentence with linked course refs.
+const prereqHtml = (node) => {
+  if (Array.isArray(node)) {
+    const parts = node.map(prereqHtml).filter(Boolean);
+    return parts.length > 1 ? `(${parts.join(" ")})` : parts.join(" ");
+  }
+  if (typeof node === "string") return node.toLowerCase();
+  if (node && node.subject) {
+    return `${linkRef(node.subject, node.number)}${node.minGrade ? ` <span class="muted">(min ${escapeHtml(node.minGrade)})</span>` : ""}`;
+  }
+  return "";
+};
+
+const COURSE_KNOWN = new Set([
+  "subject", "number", "title", "scheduleType", "credits", "creditsMax", "nuPath",
+  "description", "coreqs", "prereqs", "level", "typicallyOffered", "catalogUrl",
+  "reviews", "offerings", "instructors", "unlocks", "repeatable", "repeatMax", "repeatMaxSH",
+  "minGPA",
+]);
+const renderCourse = (subject, c) => {
+  const out = [];
+  out.push(chips([
+    `${c.credits}${c.creditsMax ? `–${c.creditsMax}` : ""} semester hours`,
+    c.level === "grad" ? "Graduate" : "Undergraduate",
+    c.scheduleType ? escapeHtml(c.scheduleType) : null,
+    ...(c.nuPath ?? []).map((n) => `NUpath ${escapeHtml(n)}`),
+    c.typicallyOffered?.length ? `usually offered: ${c.typicallyOffered.join(", ")}` : null,
+    c.offerings?.typicalDays?.length ? `typical days: ${c.offerings.typicalDays.join("/")}` : null,
+    ...(c.offerings?.campuses ?? []).map(escapeHtml),
+    ...(c.offerings?.formats ?? []).map(escapeHtml),
+    c.repeatable ? "repeatable for credit" : null,
+    c.minGPA ? `requires a ${c.minGPA} GPA` : null,
+  ]));
+  if (c.description) out.push(`<p>${escapeHtml(c.description)}</p>`);
+  if (c.prereqs?.length) out.push(`<h2>Prerequisites</h2><p>${prereqHtml(c.prereqs)}</p>`);
+  if (c.coreqs?.length) out.push(`<h2>Corequisites (same term)</h2><p>${prereqHtml(c.coreqs)}</p>`);
+
+  const terms = c.offerings?.terms && Object.keys(c.offerings.terms).length ? c.offerings.terms : null;
+  if (terms) {
+    out.push(`<h2>Offering history</h2><table><tr><th>Term</th><th>Sections</th><th>Enrolled</th><th>Capacity</th></tr>`
+      + Object.keys(terms).sort().map((k) => {
+        const t = terms[k];
+        return `<tr><td>${escapeHtml(t.term ?? k)}</td><td>${t.sections ?? ""}</td><td>${t.enrolled ?? ""}</td><td>${t.capacity ?? ""}</td></tr>`;
+      }).join("")
+      + `</table><p class="muted">Snapshots from scheduled scrapes — not live seat availability.</p>`);
+  }
+  if (c.offerings?.daysPct || c.offerings?.meetingPatterns?.length) {
+    out.push(`<h2>Meeting times</h2>`);
+    if (c.offerings.daysPct) {
+      out.push(`<p>Share of recent sections by weekday: ${Object.entries(c.offerings.daysPct)
+        .map(([d, pct]) => `${d} ${pct}%`).join(" · ")}</p>`);
+    }
+    if (c.offerings.meetingPatterns?.length) {
+      out.push(`<p>Common patterns: ${c.offerings.meetingPatterns
+        .map(([pat, pct]) => `${escapeHtml(pat)} (${pct}% of sections)`).join(", ")}
+        <span class="muted">— in patterns, R means Thursday</span></p>`);
+    }
+  }
+  if (c.instructors) {
+    const order = ["fall", "spring", "summer", "sumA", "sumB"];
+    const seasons = Object.keys(c.instructors).sort((a, b2) => (order.indexOf(a) + 99) - (order.indexOf(b2) + 99) || order.indexOf(a) - order.indexOf(b2));
+    out.push(`<h2>Professors</h2>` + seasons.map((s) =>
+      `<p><strong>${escapeHtml(seasonLabel(s))}:</strong> ` + c.instructors[s].map((i) =>
+        `${escapeHtml(i.name)} <span class="muted">(${i.sharePct}% of students)</span>${i.reviews ? ` <a href="${i.reviews}">reviews</a>` : ""}`
+      ).join(" · ") + `</p>`).join("")
+      + `<p class="muted">Percentages are each professor's average share of the season's enrolled students in recent terms.</p>`);
+  }
+  if (c.unlocks?.length) {
+    out.push(`<h2>Unlocks</h2><p>${c.unlocks.map(linkCode).join(", ")}</p>`
+      + `<p class="muted">Courses that list ${escapeHtml(`${subject} ${c.number}`)} in their prerequisites.</p>`);
+  }
+  const links = [
+    c.catalogUrl ? `<a href="${c.catalogUrl}">Official catalog (${escapeHtml(subject)} course descriptions)</a>` : null,
+    c.reviews ? `<a href="${c.reviews}">Student reviews on RateMyHusky</a>` : null,
+    `<a href="${HTML_ROOT}/courses/${subject}">All ${escapeHtml(subject)} courses</a>`,
+    `<a href="${ORIGIN}">Plan it at numap.app</a>`,
+  ].filter(Boolean);
+  out.push(`<h2>Links</h2><p>${links.join(" · ")}</p>`);
+
+  // Parity net: any field the template doesn't know still ships, so the
+  // HTML page never silently loses data the JSON row no longer carries.
+  const leftover = Object.keys(c).filter((k) => !COURSE_KNOWN.has(k));
+  if (leftover.length) {
+    out.push(`<h2>More</h2><pre>${escapeHtml(JSON.stringify(Object.fromEntries(leftover.map((k) => [k, c[k]])), null, 1))}</pre>`);
+  }
+  return out.join("\n");
+};
+
+// Program requirements: the parser's node tree, rendered recursively.
+const renderNode = (n) => {
+  if (!n || typeof n !== "object") return `<li>${escapeHtml(String(n))}</li>`;
+  switch (n.type) {
+    case "COURSE": {
+      const t = titleOf.get(`${n.subject} ${n.classId}`);
+      return `<li>${linkRef(n.subject, n.classId)}${t ? ` — ${escapeHtml(t)}` : ""}</li>`;
+    }
+    case "AND":
+      return `<li>All of:<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
+    case "OR":
+      return `<li>One of:<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
+    case "XOM": {
+      const want = n.numCreditsMin != null ? `${n.numCreditsMin} semester hours`
+        : n.numRequired != null ? `${n.numRequired} course${n.numRequired === 1 ? "" : "s"}` : "courses";
+      return `<li>Choose ${want} from:<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
+    }
+    case "RANGE": {
+      const ex = (n.exceptions ?? []).map((e) => linkRef(e.subject, e.classId)).join(", ");
+      return `<li>Any ${escapeHtml(n.subject)} course numbered ${n.idRangeStart}–${n.idRangeEnd}${ex ? ` <span class="muted">(except ${ex})</span>` : ""}</li>`;
+    }
+    case "EXCLUDE":
+      return `<li><span class="muted">Excluding</span> ${linkRef(n.subject, n.classId)}</li>`;
+    case "SECTION":
+      return `<li><strong>${escapeHtml(n.title ?? "")}</strong>${sectionInner(n)}</li>`;
+    default:
+      // Unknown node kinds must stay visible rather than vanish.
+      return `<li><pre>${escapeHtml(JSON.stringify(n, null, 1))}</pre></li>`;
+  }
+};
+const sectionInner = (s) => {
+  const reqs = s.requirements ?? [];
+  const note = s.minRequirementCount != null && s.minRequirementCount < reqs.length
+    ? `<p class="muted">Complete ${s.minRequirementCount} of the following:</p>` : "";
+  return `${note}<ul class="req">${reqs.map(renderNode).join("")}</ul>`;
+};
+const renderProgram = (p) => {
+  const r = p.requirements ?? {};
+  const pretty = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
+  const out = [];
+  out.push(chips([
+    p.level === "grad" ? "Graduate" : "Undergraduate",
+    escapeHtml(p.kind ?? "major"),
+    `${p.catalogYear} catalog`,
+    p.college ? escapeHtml(pretty(p.college)) : null,
+    p.location ? escapeHtml(p.location) : null,
+    r.totalCreditsRequired ? `${r.totalCreditsRequired} semester hours total` : null,
+    p.verified ? "verified parse" : "unverified parse — check the source",
+  ]));
+  if (p.sourceUrl) out.push(`<p><a href="${p.sourceUrl}">Official catalog page for this program</a></p>`);
+  for (const s of r.requirementSections ?? []) {
+    out.push(`<h2>${escapeHtml(s.title ?? "Requirements")}</h2>${sectionInner(s)}`);
+  }
+  if (r.concentrations?.concentrationOptions?.length) {
+    const con = r.concentrations;
+    out.push(`<h2>Concentrations${con.minOptions ? ` <span class="muted">(choose ${con.minOptions})</span>` : ""}</h2>`
+      + con.concentrationOptions.map((o) =>
+        `<details><summary>${escapeHtml(o.label ?? o.title ?? "Concentration")}</summary>${sectionInner(o)}</details>`).join(""));
+  }
+  if (r.gpaRequirements?.length) {
+    out.push(`<h2>GPA requirements</h2><ul>${r.gpaRequirements.map((g) => `<li>${escapeHtml(g.text ?? g.title ?? "")}</li>`).join("")}</ul>`);
+  }
+  if (r.generalElectiveSH) {
+    out.push(`<p>Plus ${r.generalElectiveSH} semester hours of general electives.</p>`);
+  }
+  out.push(`<p class="muted">Parsed from the catalog by NU Map; the <a href="${p.url}">JSON version</a> is the canonical machine copy${p.sourceUrl ? `, and the <a href="${p.sourceUrl}">official page</a> is the authority` : ""}.</p>`);
+  return out.join("\n");
+};
+
+// ── Cross-cutting pages: hub, directories, nupath, professors, equivalences ──
+const equivalencesData = readJSON(path.join(ROOT, "public", "northeastern", "course-equivalences.json"));
+const TIER_LABEL = {
+  A: "A — a program explicitly allows either course",
+  B: "B — catalog-stated equivalents / cross-listings",
+  C: "C — inferred from shared usage; needs advisor approval",
+  D: "D — weak signals only",
+};
+
+mirrorQueue.push({
+  rel: "courses.html",
+  title: "All Northeastern subjects — course listings",
+  description: "Directory of all Northeastern subject codes with course counts; each links a full listing with prerequisites, offerings and NUpath. From NU Map (not affiliated with Northeastern).",
+  jsonUrl: `${ORIGIN}/northeastern/ai/courses/index.json`,
+  body: `<table><tr><th>Subject</th><th>Courses</th><th></th></tr>`
+    + subjects.map((s) => `<tr><td><a href="${HTML_ROOT}/courses/${s.subject}">${s.subject}</a></td><td>${s.count}</td><td class="muted"><a href="${s.url}">JSON</a></td></tr>`).join("")
+    + `</table>`,
+});
+
+{
+  const current = mirrorQueue.filter((m) => m.kind === "program" && m.year === Math.max(...mirrorQueue.filter((q) => q.year).map((q) => q.year)));
+  const pretty = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
+  const byLevel = { undergrad: new Map(), grad: new Map() };
+  for (const m of current) {
+    const p = m.data;
+    const bucket = byLevel[p.level] ?? byLevel.undergrad;
+    if (!bucket.has(p.college)) bucket.set(p.college, []);
+    bucket.get(p.college).push({ name: p.name, kind: p.kind, href: `${HTML_ROOT}/${m.rel.replace(/\.html$/, "")}` });
+  }
+  const section = (label, bucket) => `<h2>${label}</h2>` + [...bucket.entries()].sort(([a], [b2]) => a.localeCompare(b2)).map(([college, list]) =>
+    `<h3>${escapeHtml(pretty(college))}</h3><ul>` + list.sort((a, b2) => a.name.localeCompare(b2.name)).map((p) =>
+      `<li><a href="${p.href}">${escapeHtml(p.name)}</a>${p.kind === "minor" ? ` <span class="muted">(minor)</span>` : ""}</li>`).join("") + `</ul>`).join("");
+  mirrorQueue.push({
+    rel: "programs.html",
+    title: "All Northeastern majors and minors — degree requirements",
+    description: "Directory of every Northeastern program NU Map knows — majors and minors, undergraduate and graduate — each linking its full parsed requirements. From NU Map (not affiliated with Northeastern).",
+    jsonUrl: `${ORIGIN}/northeastern/ai/programs/index.json`,
+    body: section("Undergraduate", byLevel.undergrad) + section("Graduate", byLevel.grad)
+      + `<p class="muted">Current catalog year; earlier years are in the <a href="${ORIGIN}/northeastern/ai/programs/index.json">JSON index</a>.</p>`,
+  });
+}
+
+mirrorQueue.push({
+  rel: "nupath.html",
+  title: "NUpath — which Northeastern courses satisfy each attribute",
+  description: "Every course satisfying each of the 13 NUpath general-education attributes at Northeastern (the writing competency is three codes: WF, WD, WI). From NU Map (not affiliated with Northeastern).",
+  jsonUrl: `${ORIGIN}/northeastern/ai/nupath.json`,
+  body: `<p>13 codes, not 12 — the writing competency is awarded as three (WF, WD, WI).
+Course codes are plain text to keep this page light; open any of them through the
+<a href="${HTML_ROOT}/courses">subject directory</a>.</p>`
+    + Object.entries(nupath).map(([code, e]) =>
+      `<details><summary>${escapeHtml(code)} — ${escapeHtml(e.label)} <span class="muted">(${e.courses.length} courses)</span></summary><p>${e.courses.map(escapeHtml).join(", ")}</p></details>`).join(""),
+});
+
+for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
+  mirrorQueue.push({
+    rel: `professors/${letter}.html`,
+    title: `Northeastern professors — ${letter}`,
+    description: `Northeastern instructors whose name starts with "${letter}", with the courses they teach per season and student review links. From NU Map (not affiliated with Northeastern).`,
+    jsonUrl: `${ORIGIN}/northeastern/ai/professors/${letter}.json`,
+    body: Object.entries(profs).map(([name, p]) =>
+      `<p><strong>${escapeHtml(name)}</strong>${p.reviews ? ` <a href="${p.reviews}">reviews</a>` : ""} — `
+      + Object.entries(p.courses).map(([code, seasons]) => `${linkCode(code)} <span class="muted">(${seasons.map(seasonLabel).join(", ")})</span>`).join("; ")
+      + `</p>`).join("\n"),
+  });
+}
+mirrorQueue.push({
+  rel: "professors.html",
+  title: "Northeastern professors — who teaches what",
+  description: "Every Northeastern instructor in recent scheduled terms, with the courses they teach per season and RateMyHusky review links, split by first letter. From NU Map (not affiliated with Northeastern).",
+  jsonUrl: `${ORIGIN}/northeastern/ai/professors.json`,
+  body: `<p>${professors.size} instructors from recent scheduled terms, split by the first letter of their name:</p><p>`
+    + [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))
+      .map(([letter, profs]) => `<a href="${HTML_ROOT}/professors/${letter}">${letter}</a> <span class="muted">(${Object.keys(profs).length})</span>`).join(" · ")
+    + `</p>`,
+});
+
+{
+  const tiers = { A: [], B: [], C: [], D: [] };
+  for (const pair of equivalencesData.pairs ?? []) (tiers[pair.t] ?? tiers.D).push(pair);
+  const table = (list) => `<table><tr><th>Course</th><th>Course</th></tr>`
+    + list.sort((a, b2) => a.a.localeCompare(b2.a)).map((p) => `<tr><td>${linkCode(p.a)}</td><td>${linkCode(p.b)}</td></tr>`).join("") + `</table>`;
+  mirrorQueue.push({
+    rel: "equivalences.html",
+    title: "Course equivalences and substitutions at Northeastern",
+    description: "Course substitution suggestions by evidence tier: program-stated, catalog-stated, and inferred pairs (inferred ones need advisor approval). From NU Map (not affiliated with Northeastern).",
+    jsonUrl: `${ORIGIN}/northeastern/course-equivalences.json`,
+    body: `<p>Substitution suggestions by evidence tier. <strong>Every substitution needs
+your advisor's sign-off</strong> — tiers only say how strong the written evidence is.</p>`
+      + ["A", "B", "C"].map((t) => `<h2>Tier ${escapeHtml(TIER_LABEL[t])} <span class="muted">(${tiers[t].length} pairs)</span></h2>${table(tiers[t])}`).join("")
+      + `<h2>Tier ${escapeHtml(TIER_LABEL.D)} <span class="muted">(${tiers.D.length} pairs)</span></h2>
+<p class="muted">Too weak to list here; they live in the <a href="${ORIGIN}/northeastern/course-equivalences.json">JSON file</a> with their evidence.</p>`,
+  });
+}
+
+mirrorQueue.push({
+  rel: "titles.html",
+  title: "Every Northeastern course title in one file",
+  description: "All Northeastern course codes and titles in a single machine-readable file for topic search, with the subject directory for humans. From NU Map (not affiliated with Northeastern).",
+  jsonUrl: `${ORIGIN}/northeastern/ai/courses/titles.json`,
+  body: `<p>The one-fetch topic index: every course code mapped to its title lives in
+<a href="${ORIGIN}/northeastern/ai/courses/titles.json">titles.json</a> (~330 KB).
+Humans browsing by subject want the <a href="${HTML_ROOT}/courses">subject
+directory</a> instead; each subject page lists its courses with prerequisites and
+links to full course pages.</p>`,
+});
+
+mirrorQueue.push({
+  rel: "index.html",
+  title: "NU Map Data — Northeastern courses, majors and professors",
+  description: "Human-readable directory of NU Map's public Northeastern data: every course with prerequisites and professors, every major and minor with requirements, NUpath, and course equivalences. Machine version at numap.app/llms.txt.",
+  jsonUrl: `${ORIGIN}/northeastern/ai/index.json`,
+  body: `<ul>
+<li><a href="${HTML_ROOT}/courses">Courses by subject</a> — ${catalog.length} courses in ${subjects.length} subjects: prerequisites, offering history, meeting days, professors, and what each course unlocks.</li>
+<li><a href="${HTML_ROOT}/programs">Majors and minors</a> — ${programs.length} programs with full parsed degree requirements.</li>
+<li><a href="${HTML_ROOT}/nupath">NUpath</a> — which courses satisfy each of the 13 general-education attributes.</li>
+<li><a href="${HTML_ROOT}/professors">Professors</a> — who teaches what, per season, with review links.</li>
+<li><a href="${HTML_ROOT}/equivalences">Course equivalences</a> — substitution suggestions by evidence tier.</li>
+<li><a href="${HTML_ROOT}/titles">Course titles index</a> — topic search across all ~${Math.round(catalog.length / 1000)}k courses.</li>
+</ul>
+<p>AI assistants: everything here is also plain JSON — start at
+<a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>. Humans: the interactive planner
+is <a href="${ORIGIN}">numap.app</a>.</p>`,
+});
 
 // HTML mirrors for programs cover only the NEWEST catalog year: JSONs
 // keep every year, but mirroring all years would compound the Pages
@@ -549,7 +874,11 @@ the user to paste the exact URL you need as their next message.</li>
 const newestYear = Math.max(...mirrorQueue.filter((m) => m.year).map((m) => m.year));
 for (const m of mirrorQueue) {
   if (m.year && m.year !== newestYear) continue;
-  writeHtmlMirror(m.rel, m.title, m.description, m.jsonUrl, m.data, m.body);
+  const body = m.body
+    ?? (m.kind === "course" ? renderCourse(m.subject, m.data)
+      : m.kind === "program" ? renderProgram(m.data)
+      : undefined);
+  writeHtmlMirror(m.rel, m.title, m.description, m.jsonUrl, body);
 }
 
 // Generated sitemap for the mirrors, under the already-exempt /northeastern/ai/
@@ -563,6 +892,7 @@ fs.writeFileSync(path.join(OUT, "sitemap.xml"),
 writeJSON("index.json", {
   what: "Machine-readable index of NU Map's public Northeastern data. Start at /llms.txt for the guide.",
   llms: `${ORIGIN}/llms.txt`,
+  html: `${HTML_ROOT}/`,
   programs: `${ORIGIN}/northeastern/ai/programs/index.json`,
   courses: `${ORIGIN}/northeastern/ai/courses/index.json`,
   courseTitles: `${ORIGIN}/northeastern/ai/courses/titles.json`,
