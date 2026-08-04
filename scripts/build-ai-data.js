@@ -287,6 +287,16 @@ const enrich = (course) => {
   };
 };
 
+// Every instructor name links to their entry on the professors letter
+// page. The letter rule must match profsByLetter's split exactly.
+const profLetterOf = (name) => (/^[A-Za-z]/.test(name) ? name[0].toUpperCase() : "_");
+const profAnchor = (name) => {
+  const s = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return s || "p" + [...name].reduce((h, ch) => (h * 31 + ch.codePointAt(0)) >>> 0, 0);
+};
+const profLink = (name) =>
+  `<a href="${ORIGIN}/northeastern/ai/html/professors/${profLetterOf(name)}#${profAnchor(name)}">${escapeHtml(name)}</a>`;
+
 const bySubject = new Map();
 for (const course of catalog) {
   if (!course.subject || !course.number) continue;
@@ -364,7 +374,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       + `<td class="muted">${(() => {
         if (!c.instructors) return "";
         const names = [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort();
-        const shown = names.slice(0, 6).map(escapeHtml).join(", ");
+        const shown = names.slice(0, 6).map(profLink).join(", ");
         return names.length > 6 ? `${shown}, <a href="${pageUrl}">+${names.length - 6} more</a>` : shown;
       })()}</td></tr>`;
   }).join("\n");
@@ -435,7 +445,7 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
 }
 writeJSON("professors.json", {
   what: "Index of instructors, split by first letter of name so each file stays small. Fetch the letter file for the professor you need; use for professor-based course search.",
-  note: "Derived from recent scheduled terms; 'reviews' links RateMyHusky when a profile exists.",
+  note: "Derived from recent scheduled terms; 'reviews' links RateMyHusky when a profile exists. A few course codes are from recently scheduled terms but no longer in the catalog (retired/renumbered).",
   count: professors.size,
   lastUpdated: meta.lastUpdated,
   generatedAt,
@@ -659,7 +669,7 @@ const renderCourse = (subject, c) => {
     const seasons = Object.keys(c.instructors).sort((a, b2) => (order.indexOf(a) + 99) - (order.indexOf(b2) + 99) || order.indexOf(a) - order.indexOf(b2));
     out.push(`<h2>Professors</h2>` + seasons.map((s) =>
       `<p><strong>${escapeHtml(seasonLabel(s))}:</strong> ` + c.instructors[s].map((i) =>
-        `${escapeHtml(i.name)} <span class="muted">(${i.sharePct}% of students)</span>${i.reviews ? ` <a href="${i.reviews}">reviews</a>` : ""}`
+        `${profLink(i.name)} <span class="muted">(${i.sharePct}% of students)</span>${i.reviews ? ` <a href="${i.reviews}">reviews</a>` : ""}`
       ).join(" · ") + `</p>`).join("")
       + `<p class="muted">Percentages are each professor's average share of the season's enrolled students in recent terms.</p>`);
   }
@@ -811,7 +821,7 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
     description: `Northeastern instructors whose name starts with "${letter}", with the courses they teach per season and student review links. From NU Map (not affiliated with Northeastern).`,
     jsonUrl: `${ORIGIN}/northeastern/ai/professors/${letter}.json`,
     body: Object.entries(profs).map(([name, p]) =>
-      `<p><strong>${escapeHtml(name)}</strong>${p.reviews ? ` <a href="${p.reviews}">reviews</a>` : ""} — `
+      `<p id="${profAnchor(name)}"><strong>${escapeHtml(name)}</strong>${p.reviews ? ` <a href="${p.reviews}">reviews</a>` : ""} — `
       + Object.entries(p.courses).map(([code, seasons]) => `${linkCode(code)} <span class="muted">(${seasons.map(seasonLabel).join(", ")})</span>`).join("; ")
       + `</p>`).join("\n"),
   });
@@ -886,6 +896,30 @@ for (const m of mirrorQueue) {
       : m.kind === "program" ? renderProgram(m.data)
       : undefined);
   writeHtmlMirror(m.rel, m.title, m.description, m.jsonUrl, body);
+}
+
+// Link-integrity rail: every internal href in every generated page must
+// point at a page this build generated. A renamed rel or a bad anchor
+// helper must fail the build, never ship a dead link.
+{
+  const generated = new Set(htmlUrls);
+  const dead = new Map();
+  const scan = (dir) => {
+    for (const f of fs.readdirSync(dir)) {
+      const p = path.join(dir, f);
+      if (fs.statSync(p).isDirectory()) { scan(p); continue; }
+      if (!f.endsWith(".html")) continue;
+      const html = fs.readFileSync(p, "utf8");
+      for (const m of html.matchAll(/href="(https:\/\/numap\.app\/northeastern\/ai\/html\/[^"#]*)/g)) {
+        if (!generated.has(m[1])) dead.set(m[1], f);
+      }
+    }
+  };
+  scan(path.join(OUT, "html"));
+  if (dead.size) {
+    const sample = [...dead.entries()].slice(0, 5).map(([u, f]) => `${u} (in ${f})`).join("\n  ");
+    throw new Error(`rails: ${dead.size} dead internal links, e.g.\n  ${sample}`);
+  }
 }
 
 // Generated sitemap for the mirrors, under the already-exempt /northeastern/ai/
