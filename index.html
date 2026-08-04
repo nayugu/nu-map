@@ -559,10 +559,12 @@
               var n3 = document.getElementById('numap-recovery-nudge');
               if (!s3 || !n3) return;
               var dy = s3.getBoundingClientRect().top - n3.getBoundingClientRect().top;
-              s3.style.transition = 'opacity .7s ease, transform .7s ease';
+              s3.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
               s3.style.opacity = '0';
               s3.style.transform = 'translateY(-6px)';
-              n3.style.transition = 'transform .8s cubic-bezier(.25,.7,.3,1)';
+              // Unhurried: a long ease-in-out so the nudge drifts up like
+              // everything else on these pages, rather than snapping.
+              n3.style.transition = 'transform 1.5s ease-in-out';
               n3.style.transform = 'translateY(' + dy + 'px)';
               setTimeout(function () {
                 if (exiting || document.getElementById('numap-back-link')) return;
@@ -577,7 +579,7 @@
                   window.location.reload();
                 };
                 if (n3.parentNode) n3.parentNode.removeChild(n3);
-              }, 850);
+              }, 1600);
             }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 8000 : 300000);
           };
           if (document.body) make();

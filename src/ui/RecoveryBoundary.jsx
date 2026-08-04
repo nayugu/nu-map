@@ -219,7 +219,7 @@ export default class RecoveryBoundary extends Component {
       const s = this.subRef.current, n = this.nudgeRef.current;
       if (s && n) {
         this.setState({ glideY: s.getBoundingClientRect().top - n.getBoundingClientRect().top });
-        this.swapTimer2 = setTimeout(() => this.setState({ subSwapped: true, glideY: null }), 850);
+        this.swapTimer2 = setTimeout(() => this.setState({ subSwapped: true, glideY: null }), 1600);
       } else {
         this.setState({ subSwapped: true });
       }
@@ -335,7 +335,7 @@ export default class RecoveryBoundary extends Component {
               cursor: this.state.subSwapped ? "pointer" : "default",
               ...(this.state.glideY != null ? {
                 opacity: 0, transform: "translateY(-6px)",
-                transition: "opacity .7s ease, transform .7s ease",
+                transition: "opacity 1.2s ease, transform 1.2s ease",
               } : {}) }}>
             {this.state.subSwapped ? (NUDGE[lc] || NUDGE.en) : (SUB[lc] || SUB.en)}
           </div>
@@ -349,7 +349,8 @@ export default class RecoveryBoundary extends Component {
               animation: "numapCrashIn 1.2s ease-out",
               ...(this.state.glideY != null ? {
                 transform: `translateY(${this.state.glideY}px)`,
-                transition: "transform .8s cubic-bezier(.25,.7,.3,1)",
+                // Unhurried, matching the index.html overlay's glide.
+                transition: "transform 1.5s ease-in-out",
               } : {}) }}>
               {NUDGE[lc] || NUDGE.en}
             </div>
