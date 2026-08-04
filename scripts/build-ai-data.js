@@ -88,6 +88,7 @@ const bundle = readJSON(path.join(ROOT, "public", "northeastern", "programs-bund
 const bundleById = new Map(bundle.programs.map((p) => [p.id, p]));
 const meta = readJSON(path.join(ROOT, "public", "data-meta.json"));
 const generatedAt = new Date().toISOString();
+const mirrorQueue = []; // filled by the loops, flushed at the HTML-mirror stage
 
 const programs = [];
 const seenUrls = new Map(); // url → id, for collision rails
@@ -106,7 +107,7 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
   seenUrls.set(url, src.id);
 
   const { metadata, name, ...requirements } = parsed;
-  writeJSON(rel, {
+  const payload = {
     id: src.id,
     name,
     level,
@@ -124,6 +125,15 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
     generatedAt,
     disclaimer: DISCLAIMER,
     requirements,
+  };
+  writeJSON(rel, payload);
+  mirrorQueue.push({
+    year: Number(src.year),
+    rel: `programs/${src.year}-${level}-${slugify(src.college)}-${slugify(src.prog)}.html`,
+    title: `${name} — requirements (${src.year} catalog, ${level === "grad" ? "graduate" : "undergraduate"})`,
+    description: `Full parsed degree requirements for ${name} at Northeastern University (${src.year} catalog). Machine-readable data from NU Map, a student-built planner not affiliated with Northeastern.`,
+    jsonUrl: url,
+    data: payload,
   });
 
   programs.push({
@@ -278,7 +288,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
   if (!/^[A-Z]{2,6}$/.test(subject)) throw new Error(`unexpected subject code: "${subject}"`);
   courses.sort((a, b2) => a.number.localeCompare(b2.number));
   const url = `${ORIGIN}/northeastern/ai/courses/${subject}.json`;
-  writeJSON(`courses/${subject}.json`, {
+  const subjectPayload = {
     subject,
     count: courses.length,
     lastUpdated: meta.lastUpdated,
@@ -299,6 +309,14 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       repeatable: "Whether the course may be taken more than once for credit (repeatMax / repeatMaxSH cap it).",
     },
     courses,
+  };
+  writeJSON(`courses/${subject}.json`, subjectPayload);
+  mirrorQueue.push({
+    rel: `courses/${subject}.html`,
+    title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
+    description: `Every Northeastern ${subject} course with prerequisites, offering history, typical meeting days, and instructors. Machine-readable data from NU Map, a student-built planner not affiliated with Northeastern.`,
+    jsonUrl: url,
+    data: subjectPayload,
   });
   subjects.push({ subject, count: courses.length, url });
 }
@@ -385,6 +403,54 @@ writeJSON("courses/titles.json", {
   disclaimer: DISCLAIMER,
   titles,
 });
+
+// ── Indexable HTML mirrors (search as the transport) ─────────────────
+// Some AI fetch tools (claude.ai's) only fetch URLs that appear in
+// SEARCH RESULTS or the user's messages — never URLs found in fetched
+// files. Raw JSON rarely gets indexed, but HTML does: each subject and
+// program gets a search-friendly HTML page with the full data embedded
+// as readable text, so a "site:numap.app MATH courses" hit IS the data,
+// zero extra hops. A generated sitemap lists them all.
+
+const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const htmlUrls = [];
+const writeHtmlMirror = (rel, title, description, jsonUrl, data) => {
+  const p = path.join(OUT, "html", rel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  const url = `${ORIGIN}/northeastern/ai/html/${rel}`;
+  htmlUrls.push(url);
+  fs.writeFileSync(p, `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8" />
+<title>${escapeHtml(title)} — NU Map Data</title>
+<meta name="description" content="${escapeHtml(description)}" />
+<link rel="canonical" href="${url}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head><body style="font-family:system-ui,sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem;line-height:1.5;">
+<h1>${escapeHtml(title)}</h1>
+<p><strong>NU Map is an independent, student-built planner — not affiliated with,
+endorsed by, or officially connected to Northeastern University.</strong>
+Data is scraped from the public catalog on a schedule; confirm with the official
+catalog and an advisor. Machine-readable guide: <a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>
+· JSON version: <a href="${jsonUrl}">${escapeHtml(jsonUrl)}</a></p>
+<pre style="white-space:pre-wrap;word-break:break-word;">${escapeHtml(JSON.stringify(data, null, 1))}</pre>
+</body></html>`);
+};
+
+// HTML mirrors for programs cover only the NEWEST catalog year: JSONs
+// keep every year, but mirroring all years would compound the Pages
+// file count (~1,000/year) for pages nobody searches for.
+const newestYear = Math.max(...mirrorQueue.filter((m) => m.year).map((m) => m.year));
+for (const m of mirrorQueue) {
+  if (m.year && m.year !== newestYear) continue;
+  writeHtmlMirror(m.rel, m.title, m.description, m.jsonUrl, m.data);
+}
+
+// Generated sitemap for the mirrors, under the already-exempt /northeastern/ai/
+// path; robots.txt points search engines at it.
+fs.writeFileSync(path.join(OUT, "sitemap.xml"),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
+  + htmlUrls.map((u) => `  <url><loc>${u}</loc><changefreq>monthly</changefreq></url>`).join("\n")
+  + `\n</urlset>\n`);
 
 // ── Top-level index ──────────────────────────────────────────────────
 writeJSON("index.json", {
