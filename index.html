@@ -282,6 +282,9 @@
           var s2 = document.getElementById('numap-recovery-sub');
           if (m) { m.style.transition = 'opacity .6s'; m.style.opacity = '0'; }
           if (s2) { s2.style.transition = 'opacity .6s'; s2.style.opacity = '0'; }
+          // Detection landed — the nudge (if it ever appeared) is moot.
+          var nudge = document.getElementById('numap-recovery-nudge');
+          if (nudge && nudge.parentNode) nudge.parentNode.removeChild(nudge);
           setTimeout(function () {
             var box = document.getElementById('numap-recovery-text');
             if (!box || document.getElementById('numap-back-link')) return;
@@ -344,6 +347,11 @@
             // genuinely returns to the real app instead of the preview.
             if (/[?&]preview=/.test(location.search)) location.href = location.pathname;
             else window.location.reload();
+            // Watchdog: if we're still running 8 s later, the navigation
+            // silently failed (e.g. the network dropped mid-exit) — retry
+            // bluntly rather than stranding an inert page behind the
+            // permanently-set `exiting` flag.
+            setTimeout(function () { window.location.reload(); }, 8000);
           }, 2300);
         };
         function overlayStorm() {
@@ -373,15 +381,31 @@
           ko: 'NU Map이 방금 업데이트되었습니다. 새 버전을 불러오는 중…',
           zh: 'NU Map 刚刚更新，正在加载新版本…'
         };
+        // Anchored HIGH on purpose: promising ~5 minutes makes the usual
+        // 1–2 minute recovery feel fast, instead of a fast promise making
+        // a normal wait feel broken.
         var RECOVERY_SUB = {
-          en: 'This usually resolves within a minute or two.',
-          es: 'Esto suele resolverse en uno o dos minutos.',
-          fr: 'Cela se résout généralement en une à deux minutes.',
-          ar: 'عادةً ما يُحل هذا خلال دقيقة أو دقيقتين.',
-          hi: 'यह आमतौर पर एक-दो मिनट में ठीक हो जाता है।',
-          ja: '通常は 1〜2 分ほどで復旧します。',
-          ko: '보통 1~2분 안에 해결됩니다.',
-          zh: '通常一两分钟内即可恢复。'
+          en: 'This usually resolves within about five minutes.',
+          es: 'Esto suele resolverse en unos cinco minutos.',
+          fr: 'Cela se résout généralement en cinq minutes environ.',
+          ar: 'عادةً ما يُحل هذا خلال خمس دقائق تقريبًا.',
+          hi: 'यह आमतौर पर लगभग पाँच मिनट में ठीक हो जाता है।',
+          ja: '通常は 5 分ほどで復旧します。',
+          ko: '보통 5분 정도면 해결됩니다.',
+          zh: '通常约五分钟内即可恢复。'
+        };
+        // The 90-second nudge: if detection still hasn't landed (offline?
+        // throttled tab? half-propagated deploy?), quietly suggest the
+        // manual reload that often shortcuts those cases.
+        var RECOVERY_NUDGE = {
+          en: 'Taking longer than usual? A reload sometimes helps.',
+          es: '¿Tarda más de lo normal? Recargar a veces ayuda.',
+          fr: 'Plus long que prévu ? Recharger aide parfois.',
+          ar: 'يستغرق وقتًا أطول من المعتاد؟ قد تساعد إعادة التحميل.',
+          hi: 'सामान्य से ज़्यादा समय लग रहा है? कभी-कभी फिर से लोड करने से मदद मिलती है।',
+          ja: 'いつもより時間がかかっていますか？再読み込みすると直ることがあります。',
+          ko: '평소보다 오래 걸리나요? 새로고침이 도움이 될 때가 있습니다.',
+          zh: '比平时慢？有时重新加载会有帮助。'
         };
         var RECOVERY_BACK = {
           en: 'Back to NU Map',
@@ -493,6 +517,25 @@
               + '</div>'
               + '</div>';
             document.body.appendChild(el);
+            // 90 s in with no detection: fade in the reload nudge under
+            // the card (top-anchored, so nothing above moves). Cleared by
+            // offerReturn if detection lands after all.
+            setTimeout(function () {
+              if (exiting || !document.getElementById('numap-recovery')) return;
+              if (document.getElementById('numap-back-link') || document.getElementById('numap-recovery-nudge')) return;
+              var card = document.getElementById('numap-recovery-card');
+              if (!card) return;
+              var g = document.createElement('div');
+              g.id = 'numap-recovery-nudge';
+              g.textContent = RECOVERY_NUDGE[lc] || RECOVERY_NUDGE.en;
+              g.style.cssText = 'margin-top:18px;font-size:11px;font-weight:600;cursor:pointer;opacity:0;transition:opacity 1.2s ease;color:' + (dark ? '#8b949e' : '#64748b') + ';';
+              g.onclick = function () {
+                try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
+                window.location.reload();
+              };
+              card.appendChild(g);
+              setTimeout(function () { g.style.opacity = '1'; }, 30);
+            }, 90000);
           };
           if (document.body) make();
           else document.addEventListener('DOMContentLoaded', make);

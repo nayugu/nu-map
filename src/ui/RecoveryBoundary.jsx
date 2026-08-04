@@ -28,10 +28,28 @@ const MSG = {
   ko: "문제가 발생했습니다. 복구 중…",
   zh: "出了点问题，正在修复…",
 };
-const BTN = {
-  en: "Reload", es: "Recargar", fr: "Recharger",
-  ar: "إعادة التحميل", hi: "फिर से लोड करें",
-  ja: "再読み込み", ko: "새로고침", zh: "重新加载",
+// Anchored HIGH on purpose (mirrors the index.html overlay): promising
+// ~5 minutes makes the usual quick recovery feel fast.
+const SUB = {
+  en: "This usually resolves within about five minutes.",
+  es: "Esto suele resolverse en unos cinco minutos.",
+  fr: "Cela se résout généralement en cinq minutes environ.",
+  ar: "عادةً ما يُحل هذا خلال خمس دقائق تقريبًا.",
+  hi: "यह आमतौर पर लगभग पाँच मिनट में ठीक हो जाता है।",
+  ja: "通常は 5 分ほどで復旧します。",
+  ko: "보통 5분 정도면 해결됩니다.",
+  zh: "通常约五分钟内即可恢复。",
+};
+// The 90-second nudge, also mirrored from the overlay.
+const NUDGE = {
+  en: "Taking longer than usual? A reload sometimes helps.",
+  es: "¿Tarda más de lo normal? Recargar a veces ayuda.",
+  fr: "Plus long que prévu ? Recharger aide parfois.",
+  ar: "يستغرق وقتًا أطول من المعتاد؟ قد تساعد إعادة التحميل.",
+  hi: "सामान्य से ज़्यादा समय लग रहा है? कभी-कभी फिर से लोड करने से मदद मिलती है।",
+  ja: "いつもより時間がかかっていますか？再読み込みすると直ることがあります。",
+  ko: "평소보다 오래 걸리나요? 새로고침이 도움이 될 때가 있습니다.",
+  zh: "比平时慢？有时重新加载会有帮助。",
 };
 
 const localeOf = () => {
@@ -181,11 +199,11 @@ export default class RecoveryBoundary extends Component {
   static getDerivedStateFromError() { return { crashed: true }; }
 
   // No button — recovery is automatic. But never a dead end: if the
-  // screen has sat for 25 s (auto-retry throttled or not helping), a
-  // quiet reload link fades in as the escape hatch.
+  // screen has sat for 90 s (auto-retry throttled or not helping), the
+  // quiet reload nudge fades in as the escape hatch.
   scheduleGhost = () => {
     if (this.ghostTimer) return;
-    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), 25_000);
+    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), 90_000);
   };
 
   componentDidMount() { if (this.state.crashed) this.scheduleGhost(); }
@@ -278,13 +296,16 @@ export default class RecoveryBoundary extends Component {
           <div style={{ fontSize: "min(15px, 3.4vw)", fontWeight: 600, lineHeight: 1.5, whiteSpace: "nowrap" }}>
             {MSG[lc] || MSG.en}
           </div>
+          <div style={{ marginTop: 6, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
+            whiteSpace: "nowrap", color: dark ? "#8b949e" : "#64748b" }}>
+            {SUB[lc] || SUB.en}
+          </div>
           {this.state.showLink && (
             <div onClick={this.stormReload} style={{
-              marginTop: 16, fontSize: 11, fontWeight: 600,
-              textDecoration: "underline", cursor: "pointer",
+              marginTop: 18, fontSize: 11, fontWeight: 600, cursor: "pointer",
               color: dark ? "#8b949e" : "#64748b",
             }}>
-              {BTN[lc] || BTN.en}
+              {NUDGE[lc] || NUDGE.en}
             </div>
           )}
         </div>
