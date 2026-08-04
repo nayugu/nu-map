@@ -1704,7 +1704,7 @@ export default function Header() {
                   ].map(({ href, label }) => (
                     <a key={label} href={href} target="_blank" rel="noreferrer" className="set-row"
                       style={{ flex: "1 1 30%", whiteSpace: "nowrap", textAlign: "center", fontSize: 11.5,
-                        background: "var(--bg-surface)", padding: "4px 6px", borderRadius: 5,
+                        background: "var(--bg-surface)", padding: "5px 10px", borderRadius: 5,
                         border: "1px solid var(--bg-surface)", color: "var(--text-4)",
                         textDecoration: "none", boxSizing: "border-box",
                         fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace", letterSpacing: "0.02em" }}
