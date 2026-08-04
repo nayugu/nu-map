@@ -5,6 +5,7 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 > Not affiliated with or endorsed by Northeastern University. Course data is collected from public sources on a schedule and may be outdated or incomplete. Always verify your plan with your academic advisor and DegreeWorks.
 
 **Live:** https://numap.app/
+**Story & principles:** https://numap.app/story
 **Mirror:** https://nayugu.github.io/nu-map/
 
 ---
