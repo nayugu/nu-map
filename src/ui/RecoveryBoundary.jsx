@@ -239,8 +239,10 @@ export default class RecoveryBoundary extends Component {
     clearTimeout(this.ghostTimer);
     this.setState({ detected: true, showLink: false });
     this.settleTimer = setTimeout(() => this.setState({ detectedSettled: true }), 620);
-    // Not pressed? Return on our own after five minutes, like the overlay.
-    this.autoReturnTimer = setTimeout(this.stormReload, 300_000);
+    // Not pressed? Return on our own after five minutes, like the
+    // overlay (30 s in preview, so the unattended cycle is watchable).
+    const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
+    this.autoReturnTimer = setTimeout(this.stormReload, preview ? 30_000 : 300_000);
   };
 
   static getDerivedStateFromError() { return { crashed: true }; }

@@ -249,8 +249,10 @@
         // text's footprint. The emblem itself never moves.
         function offerReturn() {
           if (exiting || document.getElementById('numap-back-link')) return;
-          // Not pressed? Return on our own after five minutes.
-          setTimeout(function () { window.__numapRecoveryExit(); }, 300000);
+          // Not pressed? Return on our own after five minutes (30 s in
+          // preview, so the unattended cycle is watchable end to end).
+          setTimeout(function () { window.__numapRecoveryExit(); },
+            PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 30000 : 300000);
           var lc = 'en';
           try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
           var dark = resolveDark();
