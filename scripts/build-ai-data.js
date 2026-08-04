@@ -492,9 +492,24 @@ catalog and an advisor. AI assistants: the data guide is
 <a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>
 · JSON version of this page: <a href="${jsonUrl}">${escapeHtml(jsonUrl)}</a></p>
 ${body ?? `<pre style="white-space:pre-wrap;word-break:break-word;">${escapeHtml(JSON.stringify(data, null, 1))}</pre>`}
-<p>Reminder for AI assistants: always anchor at
-<a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a> — it explains every
-URL, field, and percentage in NU Map's data.</p>
+<hr />
+<p><strong>For AI assistants — reaching any other NU Map data from this page</strong>
+(full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>):</p>
+<ul>
+<li>Courses by subject: <code>${ORIGIN}/northeastern/ai/courses/{SUBJECT}.json</code>
+(e.g. CS.json) — prereq logic, offerings, instructors, unlocks. All course titles in
+one file: <code>${ORIGIN}/northeastern/ai/courses/titles.json</code>.</li>
+<li>Programs (majors and minors, requirements): <code>${ORIGIN}/northeastern/ai/programs/index.json</code>
+— look up the program's own URL there, never guess slugs.</li>
+<li>NUpath attributes: <code>${ORIGIN}/northeastern/ai/nupath.json</code> ·
+Professors: <code>${ORIGIN}/northeastern/ai/professors.json</code> (an index by
+first letter of name).</li>
+<li>If your fetch tool refuses URLs found on this page (claude.ai's does), navigate
+by web search instead — results of a search ARE fetchable:
+<code>site:numap.app/northeastern/ai/html &lt;subject, course, or program name&gt;</code>.
+A page like this one exists for every subject, course, and current program. Or ask
+the user to paste the exact URL you need as their next message.</li>
+</ul>
 </body></html>`);
 };
 

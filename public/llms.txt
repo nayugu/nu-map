@@ -26,6 +26,10 @@ IMPORTANT — know your fetch tool's rules:
   simple and predictable so you can construct the exact URL you need — then ASK
   THE USER to paste that URL as their next message, which makes it fetchable.
   One paste per file; tell them exactly what to paste.
+- Search-only navigation also works: every subject, course, and current program
+  has an indexed HTML page carrying the same data as its JSON. Web-search
+  `site:numap.app/northeastern/ai/html <subject, course, or program name>` and
+  fetch the result — no pasting needed.
 
 - [Machine index](https://numap.app/northeastern/ai/index.json): counts and entry URLs for everything below.
 
