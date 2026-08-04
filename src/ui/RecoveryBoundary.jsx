@@ -217,7 +217,7 @@ export default class RecoveryBoundary extends Component {
     if (this.probeTimer || this.previewDetectTimer) return;
     const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
     if (preview) {
-      this.previewDetectTimer = setTimeout(this.detected, 19_000);
+      this.previewDetectTimer = setTimeout(this.detected, 10_000);
       return;
     }
     let current = null;
@@ -242,7 +242,7 @@ export default class RecoveryBoundary extends Component {
     // Not pressed? Return on our own after five minutes, like the
     // overlay (30 s in preview, so the unattended cycle is watchable).
     const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
-    this.autoReturnTimer = setTimeout(this.stormReload, preview ? 30_000 : 300_000);
+    this.autoReturnTimer = setTimeout(this.stormReload, preview ? 15_000 : 300_000);
   };
 
   static getDerivedStateFromError() { return { crashed: true }; }
@@ -253,18 +253,21 @@ export default class RecoveryBoundary extends Component {
   scheduleGhost = () => {
     if (this.ghostTimer) return;
     const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
-    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), preview ? 5_000 : 120_000);
+    this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), preview ? 3_000 : 120_000);
   };
 
   componentDidMount() {
     if (this.state.crashed) { this.scheduleGhost(); this.startProbe(); }
   }
   componentWillUnmount() {
-    clearTimeout(this.ghostTimer);
-    clearTimeout(this.previewDetectTimer);
-    clearTimeout(this.settleTimer);
-    clearTimeout(this.autoReturnTimer);
-    clearInterval(this.probeTimer);
+    // Null the ids as well as clearing: StrictMode remounts this same
+    // instance in dev, and stale ids would trip the "already scheduled"
+    // guards — which silently killed the nudge and detection in dev.
+    clearTimeout(this.ghostTimer);         this.ghostTimer = null;
+    clearTimeout(this.previewDetectTimer); this.previewDetectTimer = null;
+    clearTimeout(this.settleTimer);        this.settleTimer = null;
+    clearTimeout(this.autoReturnTimer);    this.autoReturnTimer = null;
+    clearInterval(this.probeTimer);        this.probeTimer = null;
   }
 
   // Exit choreography shared by auto-retry and the button: the petal
