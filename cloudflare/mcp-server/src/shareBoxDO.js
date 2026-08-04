@@ -19,7 +19,7 @@ import {
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "*",
 };
 
@@ -36,7 +36,24 @@ export class ShareBoxDO {
     // In-memory on purpose — eviction resets budgets honest users never
     // exhaust, and a scanner keeping the DO hot keeps its budget alive.
     this.rate = createRateLimiter();
+    // Sender-tab pickup sockets hibernate between events; the runtime
+    // answers their keepalive pings without waking this DO.
+    try { this.ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong")); } catch { /* older runtime */ }
   }
+
+  // The "interrupt": push the burn to every hibernating sender socket
+  // tagged with this code, then hang up.
+  burnNotify(code, msg) {
+    for (const ws of this.ctx.getWebSockets(code)) {
+      try { ws.send(msg); ws.close(1000, msg); } catch { /* already gone */ }
+    }
+  }
+
+  // Hibernation handlers — pings are auto-answered above; anything else
+  // is ignored, and closed sockets clean themselves up.
+  webSocketMessage() {}
+  webSocketClose() {}
+  webSocketError() {}
 
   /** 200 ok · 429 rate/concurrency · 404 unknown code · 400 the rest. */
   static statusOf(result) {
@@ -60,6 +77,24 @@ export class ShareBoxDO {
       if (seg[0] === "claim" && seg[1] && request.method === "POST") {
         const result = await this.claim(seg[1], ip);
         return json(result, ShareBoxDO.statusOf(result));
+      }
+      if (seg[0] === "share-status" && seg[1] && request.method === "GET") {
+        const result = await this.status(seg[1], ip);
+        return json(result, ShareBoxDO.statusOf(result));
+      }
+      // Pickup interrupt: the sender tab parks a hibernating socket on
+      // its code and is pushed 'claimed' the instant the code burns.
+      // Creator-IP only — anyone else gets a flat 404 whether or not the
+      // code exists, same rule as status().
+      if (seg[0] === "share-ws" && seg[1] && request.headers.get("Upgrade") === "websocket") {
+        const code = normalizeCode(seg[1]);
+        const share = await this.ctx.storage.get("share:" + code);
+        if (!share || share.expiresAt <= Date.now() || share.ip !== ip) {
+          return json({ error: "Not found" }, 404);
+        }
+        const pair = new WebSocketPair();
+        this.ctx.acceptWebSocket(pair[1], [code]);
+        return new Response(null, { status: 101, webSocket: pair[0] });
       }
       return json({ error: "Not found" }, 404);
     } catch (err) {
@@ -106,6 +141,16 @@ export class ShareBoxDO {
     return { ok: true, code, expiresInSeconds: SHARE_TTL_MS / 1000 };
   }
 
+  // Pickup feedback for the sender's tab. Only the creator's IP learns
+  // anything — everyone else gets a flat "not yours" whether the code
+  // exists or not, so status can never scan for codes silently.
+  async status(rawCode, ip) {
+    const gate = this.rate.take(ip, "status");
+    if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
+    const share = await this.ctx.storage.get(`share:${normalizeCode(rawCode)}`);
+    return { ok: true, live: !!(share && share.expiresAt > Date.now() && share.ip === ip) };
+  }
+
   async claim(rawCode, ip) {
     const gate = this.rate.take(ip, "claim");
     if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
@@ -113,6 +158,7 @@ export class ShareBoxDO {
     const share = await this.ctx.storage.get(key);
     if (!share || share.expiresAt <= Date.now()) return { ok: false, reason: "not_found" };
     await this.ctx.storage.delete(key); // one use — gone on first claim
+    this.burnNotify(normalizeCode(rawCode), "claimed");
     // Self-cancel is a no-op on the world, so it's free: taking back
     // your own code refunds both tokens. Claims of OTHER people's codes
     // stay budgeted — that's the scan defense.
@@ -128,7 +174,10 @@ export class ShareBoxDO {
     const now = Date.now();
     let nextExpiry = null;
     for (const [key, share] of all) {
-      if (share.expiresAt <= now) await this.ctx.storage.delete(key);
+      if (share.expiresAt <= now) {
+        await this.ctx.storage.delete(key);
+        this.burnNotify(key.slice("share:".length), "expired");
+      }
       else if (nextExpiry === null || share.expiresAt < nextExpiry) nextExpiry = share.expiresAt;
     }
     if (nextExpiry !== null) await this.ctx.storage.setAlarm(nextExpiry + 1000);

@@ -211,7 +211,7 @@ export default function Header() {
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
-    shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, importSharedPlan,
+    shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     aiAssistantAvailable, claudePreview, claudePaired,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     major, major2, conc, minor1, minor2,
@@ -300,11 +300,36 @@ export default function Header() {
   // closed or reloaded tab never leaves an unclaimed code behind. The
   // server's 10-minute TTL remains only as the crash backstop.
   const [shareCode, setShareCode]             = useState(null);
+  const [shareCodePickedUp, setShareCodePickedUp] = useState(false);
   useEffect(() => {
     if (!shareCode) return;
     const revoke = () => abandonShareCode(shareCode.code);
     window.addEventListener("pagehide", revoke);
     return () => window.removeEventListener("pagehide", revoke);
+  }, [shareCode]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Pickup feedback: a hibernating WebSocket parked on the code pushes
+  // "claimed" the instant the friend takes it — clear the clock and
+  // flash the confirmation. A slow 20 s status poll (skipped while the
+  // tab is hidden) is the backstop for browsers/proxies that drop the
+  // socket. Cancelling locally clears shareCode first, which tears both
+  // down before the server's own notify could arrive — no false flash.
+  useEffect(() => {
+    if (!shareCode) return;
+    const pickedUp = () => {
+      setShareCode(null);
+      setShareCodePickedUp(true);
+      setTimeout(() => setShareCodePickedUp(false), 2_500);
+    };
+    const unwatch = watchShareCode(shareCode.code, pickedUp);
+    const poll = setInterval(async () => {
+      if (document.visibilityState !== "visible") return;
+      try {
+        const live = await shareCodeStatus(shareCode.code);
+        if (live === false && Date.now() < shareCode.expiresAt - 2_000) pickedUp();
+      } catch { /* transient — next tick will try again */ }
+    }, 20_000);
+    return () => { unwatch?.(); clearInterval(poll); };
   }, [shareCode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [shareCodeCopied, setShareCodeCopied] = useState(false);
   const [shareCodeBusy, setShareCodeBusy]     = useState(false);
@@ -1171,15 +1196,18 @@ export default function Header() {
                     title={shareCode ? t("header.io.code.copy.title") : undefined}
                     style={{ display: "flex", alignItems: "center", justifyContent: "center",
                       position: "relative", minWidth: 0, fontSize: 10, fontWeight: 700,
-                      fontFamily: "ui-monospace, monospace", letterSpacing: 2,
+                      fontFamily: "ui-monospace, monospace",
+                      letterSpacing: shareCodePickedUp ? 0 : 2,
                       background: shareCodeCopied ? "var(--active)" : "var(--bg-surface)",
-                      color: shareCodeCopied ? "#fff" : shareCode ? "var(--text-2)" : "var(--text-5)",
-                      border: `1px solid ${shareCodeCopied ? "var(--active)" : "var(--border-2)"}`,
+                      color: shareCodeCopied ? "#fff"
+                        : shareCodePickedUp ? "#22c55e"
+                        : shareCode ? "var(--text-2)" : "var(--text-5)",
+                      border: `1px solid ${shareCodeCopied ? "var(--active)" : shareCodePickedUp ? "#22c55e" : "var(--border-2)"}`,
                       borderRadius: 5, padding: "4px 8px",
                       cursor: shareCode ? "pointer" : "default", userSelect: "none",
                       transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
                     <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {shareCode ? shareCode.code : "······"}
+                      {shareCodePickedUp ? t("header.io.code.pickedup") : shareCode ? shareCode.code : "······"}
                     </span>
                   </div>
                   {/* While a code is live the countdown takes over this

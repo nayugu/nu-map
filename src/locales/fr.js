@@ -333,6 +333,7 @@ export const strings = {
   "header.io.code.placeholder":   "Saisir le code",
   "header.io.code.load":          "Charger",
   "header.io.code.load.title":    "Charger un plan partagé par code",
+  "header.io.code.pickedup":      "Récupéré !",
   "header.io.code.notfound":      "Code introuvable ou expiré.",
   "header.io.code.ratelimited":   "Ralentissez un peu. Vous pourrez créer un autre code dans {time}.",
   "header.io.code.toomanylive":   "Trop de vos codes ne sont pas encore réclamés. Le plus ancien expire dans {time}.",

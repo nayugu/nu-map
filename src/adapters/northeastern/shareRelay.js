@@ -15,6 +15,7 @@
 
 const SERVER = (import.meta.env.VITE_MCP_SERVER_URL ?? "http://localhost:27182")
   .replace(/\/$/, "");
+const WS_SERVER = SERVER.replace(/^http/, "ws");
 
 async function post(path, body) {
   let res;
@@ -59,5 +60,39 @@ export default {
    */
   abandonShareCode(code) {
     try { navigator.sendBeacon?.(`${SERVER}/claim/${encodeURIComponent(code)}`); } catch {}
+  },
+
+  /**
+   * Pickup polling: true while the code is still parked (unclaimed and
+   * unexpired). The server answers honestly only to the code's creator.
+   * Used as the slow backstop under watchShareCode.
+   */
+  async shareCodeStatus(code) {
+    const res = await fetch(`${SERVER}/share-status/${encodeURIComponent(code)}`);
+    const json = await res.json().catch(() => null);
+    if (!json?.ok) throw new Error(json?.reason ?? "network");
+    return !!json.live;
+  },
+
+  /**
+   * The pickup interrupt: a WebSocket parked on the code (hibernating
+   * server-side, so it costs nothing while idle) that is pushed
+   * 'claimed' the instant the code burns. Returns an unwatch function,
+   * or null when sockets aren't available (the poll backstop covers it).
+   */
+  watchShareCode(code, onPickedUp) {
+    let ws;
+    try { ws = new WebSocket(`${WS_SERVER}/share-ws/${encodeURIComponent(code)}`); } catch { return null; }
+    let ping = null;
+    const stop = () => { if (ping) { clearInterval(ping); ping = null; } };
+    ws.onopen = () => {
+      // Keepalive well inside Cloudflare's ~100 s idle cutoff; answered
+      // by the runtime without waking the DO.
+      ping = setInterval(() => { try { ws.send("ping"); } catch { /* closing */ } }, 30_000);
+    };
+    ws.onmessage = (e) => { if (e.data === "claimed") onPickedUp(); };
+    ws.onclose = stop;
+    ws.onerror = stop;
+    return () => { stop(); try { ws.close(1000); } catch { /* already closed */ } };
   },
 };

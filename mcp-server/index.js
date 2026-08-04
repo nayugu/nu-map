@@ -159,6 +159,11 @@ app.post("/claim/:code", async (req, res) => {
   res.status(shareStatus(result)).json(result);
 });
 
+app.get("/share-status/:code", async (req, res) => {
+  const result = await shareBox.status(req.params.code, req.ip);
+  res.status(shareStatus(result)).json(result);
+});
+
 // ── Health ───────────────────────────────────────────────────────────
 app.get("/health", (_req, res) => res.json({ ok: true, courses: Object.keys(catalog.courseMap).length }));
 
@@ -196,6 +201,16 @@ const httpServer = app.listen(PORT, () => {
 // package — the browser bundle never sees it.
 const wss = new WebSocketServer({ noServer: true });
 httpServer.on("upgrade", (req, socket, head) => {
+  // Share pickup interrupt: the sender tab parks a socket on its code
+  // and is pushed 'claimed' the instant the code burns (see shareBox).
+  const sw = /^\/share-ws\/([^/?#]+)/.exec(req.url ?? "");
+  if (sw) {
+    const code = decodeURIComponent(sw[1]);
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      shareBox.watch(code, req.socket.remoteAddress, ws);
+    });
+    return;
+  }
   const m = /^\/ws\/([^/?#]+)/.exec(req.url ?? "");
   if (!m) { socket.destroy(); return; }
   const sessionId = decodeURIComponent(m[1]);

@@ -38,6 +38,7 @@ export const CODE_LENGTH = 6;
 const RATE = {
   create: { capacity: 30,  refillMs: 10_000 }, // 30 burst, then 6/min
   claim:  { capacity: 100, refillMs: 5_000 },  // 100 burst, then 12/min
+  status: { capacity: 120, refillMs: 2_000 },  // sender-side pickup polling (~1 per 5 s)
 };
 
 /** Crypto-random code, rejection-sampled so every character is uniform. */
@@ -121,12 +122,24 @@ export function createRateLimiter(now = Date.now) {
  * tests. API mirrors ShareBoxDO: { create(payload, ip), claim(code, ip) }.
  */
 export function createMemoryShareBox({ now = Date.now } = {}) {
-  const shares = new Map(); // code → { payload, expiresAt, ip }
+  const shares = new Map();   // code → { payload, expiresAt, ip }
+  const watchers = new Map(); // code → Set<ws> (sender tabs awaiting pickup)
   const rate = createRateLimiter(now);
+
+  // The "interrupt": tell every watching sender tab the code is gone,
+  // then hang up. Mirrors ShareBoxDO's hibernation-socket notify.
+  const burnNotify = (code, msg) => {
+    const set = watchers.get(code);
+    if (!set) return;
+    for (const ws of set) { try { ws.send(msg); ws.close(1000, msg); } catch { /* already gone */ } }
+    watchers.delete(code);
+  };
 
   const purge = () => {
     const t = now();
-    for (const [code, s] of shares) if (s.expiresAt <= t) shares.delete(code);
+    for (const [code, s] of shares) {
+      if (s.expiresAt <= t) { shares.delete(code); burnNotify(code, 'expired'); }
+    }
   };
 
   return {
@@ -155,6 +168,19 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
       return { ok: true, code, expiresInSeconds: SHARE_TTL_MS / 1000 };
     },
 
+    // Pickup feedback for the sender's tab: is my code still parked?
+    // Only the creator's IP learns anything — everyone else gets a flat
+    // "not yours" whether the code exists or not, so status can never be
+    // used to scan for codes silently (claims stay the only probe, and
+    // they burn).
+    async status(rawCode, ip) {
+      const gate = rate.take(ip, "status");
+      if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
+      purge();
+      const share = shares.get(normalizeCode(rawCode));
+      return { ok: true, live: !!(share && share.ip === ip) };
+    },
+
     async claim(rawCode, ip) {
       const gate = rate.take(ip, "claim");
       if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
@@ -162,6 +188,7 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
       const share = shares.get(normalizeCode(rawCode));
       if (!share) return { ok: false, reason: "not_found" };
       shares.delete(normalizeCode(rawCode)); // one use — gone on first claim
+      burnNotify(normalizeCode(rawCode), 'claimed');
       // Self-cancel is a no-op on the world, so it's free: taking back
       // your own code refunds both tokens. Claims of OTHER people's
       // codes stay budgeted — that's the scan defense.
@@ -170,6 +197,25 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
         rate.refund(ip, "create");
       }
       return { ok: true, payload: share.payload };
+    },
+
+    /**
+     * Attach a sender tab's WebSocket to its code (Node `ws` socket).
+     * Creator-IP only, same rule as status(); anyone else is hung up on
+     * without learning whether the code exists.
+     */
+    watch(rawCode, ip, ws) {
+      const code = normalizeCode(rawCode);
+      const share = shares.get(code);
+      if (!share || share.ip !== ip || share.expiresAt <= now()) {
+        try { ws.close(1000, 'gone'); } catch { /* already gone */ }
+        return;
+      }
+      let set = watchers.get(code);
+      if (!set) watchers.set(code, set = new Set());
+      set.add(ws);
+      ws.on('message', (m) => { if (String(m) === 'ping') { try { ws.send('pong'); } catch { /* closing */ } } });
+      ws.on('close', () => { set.delete(ws); if (set.size === 0) watchers.delete(code); });
     },
   };
 }

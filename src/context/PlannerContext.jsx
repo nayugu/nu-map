@@ -2611,6 +2611,10 @@ export function PlannerProvider({ children }) {
   // closed tab never leaves a ticket parked on the server.
   const abandonShareCode = (code) => shareRelay.abandonShareCode?.(code);
 
+  // Pickup feedback: the socket interrupt, with polling as backstop.
+  const shareCodeStatus = (code) => shareRelay.shareCodeStatus?.(code);
+  const watchShareCode = (code, onPickedUp) => shareRelay.watchShareCode?.(code, onPickedUp) ?? null;
+
   // Redeem a code and decode — the caller confirms with the user before
   // importSharedPlan actually touches any state.
   const claimShareCode = async (code) => {
@@ -3210,7 +3214,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, importSharedPlan,
+    shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     toggleStar, toggleOffered,
     getSemStatus,

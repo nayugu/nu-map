@@ -158,7 +158,7 @@ const defaultHandler = {
     // OAuth — the payload is the grade-free snapshot-link artifact and
     // burns on first claim). SHARE_DISABLED is the kill switch: set it
     // to any value in the dashboard to 503 these routes without a deploy.
-    if (pathname === "/share" || pathname.startsWith("/claim/")) {
+    if (pathname === "/share" || pathname.startsWith("/claim/") || pathname.startsWith("/share-status/")) {
       if (env.SHARE_DISABLED) return json({ ok: false, reason: "disabled" }, 503);
       return env.SHAREBOX.get(env.SHAREBOX.idFromName("global")).fetch(request);
     }

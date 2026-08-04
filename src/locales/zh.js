@@ -274,6 +274,7 @@ export const strings = {
   "header.io.code.placeholder":    "\u8f93\u5165\u4ee3\u7801",
   "header.io.code.load":           "\u52a0\u8f7d",
   "header.io.code.load.title":     "\u52a0\u8f7d\u901a\u8fc7\u4ee3\u7801\u5206\u4eab\u7684\u8ba1\u5212",
+  "header.io.code.pickedup":       "\u5df2\u88ab\u9886\u53d6\uff01",
   "header.io.code.notfound":       "\u4ee3\u7801\u4e0d\u5b58\u5728\u6216\u5df2\u8fc7\u671f\u3002",
   "header.io.code.ratelimited":    "\u6162\u4e00\u70b9\u3002{time} \u540e\u53ef\u4ee5\u518d\u751f\u6210\u4e00\u4e2a\u4ee3\u7801\u3002",
   "header.io.code.toomanylive":    "\u60a8\u6709\u592a\u591a\u672a\u4f7f\u7528\u7684\u4ee3\u7801\uff0c\u6700\u65e9\u7684\u5c06\u5728 {time} \u540e\u8fc7\u671f\u3002",

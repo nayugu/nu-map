@@ -333,6 +333,7 @@ export const strings = {
   "header.io.code.placeholder":   "कोड दर्ज करें",
   "header.io.code.load":          "लोड करें",
   "header.io.code.load.title":    "कोड से साझा किया गया प्लान लोड करें",
+  "header.io.code.pickedup":      "ले लिया गया!",
   "header.io.code.notfound":      "कोड नहीं मिला या समाप्त हो गया।",
   "header.io.code.ratelimited":   "थोड़ा धीरे। आप {time} में एक और कोड बना सकते हैं।",
   "header.io.code.toomanylive":   "आपके बहुत सारे कोड अभी भी बिना उपयोग के हैं। सबसे पुराना {time} में समाप्त होगा।",

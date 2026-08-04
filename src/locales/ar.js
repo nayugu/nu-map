@@ -332,6 +332,7 @@ export const strings = {
   "header.io.code.placeholder":   "أدخل الرمز",
   "header.io.code.load":          "تحميل",
   "header.io.code.load.title":    "تحميل خطة تمت مشاركتها برمز",
+  "header.io.code.pickedup":      "تم الاستلام!",
   "header.io.code.notfound":      "الرمز غير موجود أو منتهي الصلاحية.",
   "header.io.code.ratelimited":   "تمهّل قليلًا. يمكنك إنشاء رمز آخر بعد {time}.",
   "header.io.code.toomanylive":   "لديك عدد كبير من الرموز التي لم تُستلم بعد. أقدمها ينتهي بعد {time}.",

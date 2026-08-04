@@ -334,6 +334,7 @@ export const strings = {
   "header.io.code.placeholder":   "コードを入力",
   "header.io.code.load":          "読み込む",
   "header.io.code.load.title":    "コードで共有されたプランを読み込む",
+  "header.io.code.pickedup":      "受け取られました！",
   "header.io.code.notfound":      "コードが見つからないか期限切れです。",
   "header.io.code.ratelimited":   "少しゆっくりお願いします。{time} 後に次のコードを作成できます。",
   "header.io.code.toomanylive":   "未使用のコードが多すぎます。最も古いものは {time} 後に期限切れになります。",

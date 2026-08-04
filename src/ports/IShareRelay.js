@@ -41,4 +41,15 @@ export const IShareRelay = "shareRelay";
  *   Fire-and-forget revoke that survives tab unload (sendBeacon). A code
  *   lives only while its sender's tab does; the server TTL is merely the
  *   backstop for crashes and clients that never say goodbye.
+ *
+ * @property {(code: string) => Promise<boolean>} [shareCodeStatus]
+ *   Whether the code is still parked (unclaimed, unexpired). Only the
+ *   creator's IP gets an honest answer — for anyone else it reports
+ *   false regardless, so it can't be used to scan the code space.
+ *
+ * @property {(code: string, onPickedUp: () => void) => (() => void) | null} [watchShareCode]
+ *   Push-based pickup feedback: parks a WebSocket on the code (creator
+ *   IP only; hibernates server-side) and calls onPickedUp the moment
+ *   the code is claimed. Returns an unwatch function, or null when
+ *   sockets are unavailable — callers keep shareCodeStatus as backstop.
  */

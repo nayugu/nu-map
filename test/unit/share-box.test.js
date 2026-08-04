@@ -161,6 +161,51 @@ test("shareBox › canceling your own code refunds the budget", async () => {
   }
 });
 
+test("shareBox › status answers the creator honestly and everyone else with silence", async () => {
+  const box = createMemoryShareBox();
+  const payload = await encodePlan(plan);
+  const { code } = await box.create(payload, "6.6.6.6");
+
+  assert.deepEqual(await box.status(code, "6.6.6.6"), { ok: true, live: true });
+  // A stranger gets the same answer whether or not the code exists —
+  // status can never confirm a guessed code.
+  assert.deepEqual(await box.status(code, "9.9.9.9"), { ok: true, live: false });
+  assert.deepEqual(await box.status("XXXXXX", "9.9.9.9"), { ok: true, live: false });
+
+  await box.claim(code, "9.9.9.9");
+  assert.deepEqual(await box.status(code, "6.6.6.6"), { ok: true, live: false });
+});
+
+test("shareBox › the burn interrupts a watching sender socket", async () => {
+  const box = createMemoryShareBox();
+  const payload = await encodePlan(plan);
+  const { code } = await box.create(payload, "6.6.6.6");
+
+  const fakeWs = {
+    sent: [], closed: false, handlers: {},
+    send(m) { this.sent.push(String(m)); },
+    close() { this.closed = true; },
+    on(ev, fn) { this.handlers[ev] = fn; },
+  };
+  box.watch(code, "6.6.6.6", fakeWs);
+
+  // keepalive round-trips through the watcher
+  fakeWs.handlers.message("ping");
+  assert.deepEqual(fakeWs.sent, ["pong"]);
+
+  await box.claim(code, "9.9.9.9");
+  assert.deepEqual(fakeWs.sent, ["pong", "claimed"]);
+  assert.equal(fakeWs.closed, true);
+
+  // a stranger's watch attempt is hung up on without learning anything
+  const spyWs = { sent: [], closed: false, handlers: {},
+    send(m) { this.sent.push(String(m)); }, close() { this.closed = true; }, on() {} };
+  const { code: code2 } = await box.create(payload, "6.6.6.6");
+  box.watch(code2, "9.9.9.9", spyWs);
+  assert.equal(spyWs.closed, true);
+  assert.deepEqual(spyWs.sent, []);
+});
+
 test("shareBox › claim budget cuts off scanners and recovers by trickle", async () => {
   let t = 1_000_000;
   const box = createMemoryShareBox({ now: () => t });

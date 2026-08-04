@@ -333,6 +333,7 @@ export const strings = {
   "header.io.code.placeholder":   "코드 입력",
   "header.io.code.load":          "불러오기",
   "header.io.code.load.title":    "코드로 공유된 계획 불러오기",
+  "header.io.code.pickedup":      "전달 완료!",
   "header.io.code.notfound":      "코드를 찾을 수 없거나 만료되었습니다.",
   "header.io.code.ratelimited":   "조금 천천히 해주세요. {time} 후에 새 코드를 만들 수 있습니다.",
   "header.io.code.toomanylive":   "아직 사용되지 않은 코드가 너무 많습니다. 가장 오래된 코드는 {time} 후에 만료됩니다.",

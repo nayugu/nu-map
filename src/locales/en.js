@@ -334,6 +334,7 @@ export const strings = {
   "header.io.code.placeholder":   "Enter code",
   "header.io.code.load":          "Load",
   "header.io.code.load.title":    "Load a plan shared with a code",
+  "header.io.code.pickedup":      "Picked up!",
   "header.io.code.notfound":      "Code not found or expired.",
   "header.io.code.ratelimited":   "Slow down a little. You can make another code in {time}.",
   "header.io.code.toomanylive":   "Too many of your codes are still unclaimed. The oldest expires in {time}.",

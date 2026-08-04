@@ -333,6 +333,7 @@ export const strings = {
   "header.io.code.placeholder":   "Introducir código",
   "header.io.code.load":          "Cargar",
   "header.io.code.load.title":    "Cargar un plan compartido con código",
+  "header.io.code.pickedup":      "¡Recogido!",
   "header.io.code.notfound":      "Código no encontrado o caducado.",
   "header.io.code.ratelimited":   "Ve más despacio. Podrás crear otro código en {time}.",
   "header.io.code.toomanylive":   "Demasiados códigos tuyos siguen sin reclamar. El más antiguo caduca en {time}.",
