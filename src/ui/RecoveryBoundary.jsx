@@ -16,7 +16,7 @@
 // locales, keyed off the persisted locale, exactly like the index.html
 // overlay it visually matches.
 
-import { Component } from "react";
+import { Component, createRef } from "react";
 
 const MSG = {
   en: "Something went wrong. Fixing it…",
@@ -155,12 +155,12 @@ function Storm() {
   );
 }
 
-function Petals({ leaving }) {
+function Petals({ leaving, slow }) {
   return (
     <div className="numap-petals" style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none",
       // The ambient field feels the exit wind too: it accelerates off
       // the right edge rather than jumping to a speed.
-      ...(leaving ? { animation: "numapBlowoff 2.4s cubic-bezier(.5,0,.85,.5) forwards" } : {}) }}>
+      ...(leaving ? { animation: `numapBlowoff ${slow ? "6s" : "2.4s"} cubic-bezier(.5,0,.85,.5) forwards` } : {}) }}>
       {PETALS.map((p, i) => (
         <div key={i} style={{ position: "absolute", top: "-6vh", left: `${p.left}%`,
           animation: `numapFall ${p.fall}s linear ${p.delay}s infinite` }}>
@@ -195,7 +195,11 @@ export default class RecoveryBoundary extends Component {
     leaving: false,
     showLink: false,
     subSwapped: false, // 5-minute mark: the promise line hands its slot to the nudge
+    glideY: null,      // px the nudge travels up during the hand-off
   };
+
+  subRef = createRef();
+  nudgeRef = createRef();
 
   static getDerivedStateFromError() { return { crashed: true }; }
 
@@ -208,11 +212,26 @@ export default class RecoveryBoundary extends Component {
     // the wait; 90 s / 5 min in reality.
     const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
     this.ghostTimer = setTimeout(() => this.setState({ showLink: true }), preview ? 5_000 : 90_000);
-    this.swapTimer = setTimeout(() => this.setState({ subSwapped: true }), preview ? 12_000 : 300_000);
+    // The hand-off: the promise drifts out while the nudge glides up
+    // into its row (measured travel), then an invisible bookkeeping
+    // swap puts the text into the sub-line slot for clean layout.
+    this.swapTimer = setTimeout(() => {
+      const s = this.subRef.current, n = this.nudgeRef.current;
+      if (s && n) {
+        this.setState({ glideY: s.getBoundingClientRect().top - n.getBoundingClientRect().top });
+        this.swapTimer2 = setTimeout(() => this.setState({ subSwapped: true, glideY: null }), 850);
+      } else {
+        this.setState({ subSwapped: true });
+      }
+    }, preview ? 12_000 : 300_000);
   };
 
   componentDidMount() { if (this.state.crashed) this.scheduleGhost(); }
-  componentWillUnmount() { clearTimeout(this.ghostTimer); clearTimeout(this.swapTimer); }
+  componentWillUnmount() {
+    clearTimeout(this.ghostTimer);
+    clearTimeout(this.swapTimer);
+    clearTimeout(this.swapTimer2);
+  }
 
   // Exit choreography shared by auto-retry and the button: the petal
   // storm rises for 0.7 s, the reload happens inside it, and the next
@@ -220,14 +239,19 @@ export default class RecoveryBoundary extends Component {
   // that clears once the app is alive.
   stormReload = () => {
     if (this.state.leaving) return;
-    try { sessionStorage.setItem("numap-reveal", "1"); } catch { /* veil is a nicety */ }
+    // Preview exits run in slow motion (~2.5×), mirrored from the
+    // index.html overlay; flag value '2' carries the slowness across
+    // the reload into the reveal veil.
+    const slow = /[?&]preview=/.test(window.location.search);
+    this.slowExit = slow;
+    try { sessionStorage.setItem("numap-reveal", slow ? "2" : "1"); } catch { /* veil is a nicety */ }
     this.setState({ leaving: true });
     setTimeout(() => {
       // Leaving a preview drops the preview param, so the storm genuinely
       // returns to the real app instead of the preview.
-      if (/[?&]preview=/.test(window.location.search)) window.location.href = window.location.pathname;
+      if (slow) window.location.href = window.location.pathname;
       else window.location.reload();
-    }, 2300);
+    }, slow ? 6000 : 2300);
   };
 
   componentDidCatch(error, info) {
@@ -275,7 +299,7 @@ export default class RecoveryBoundary extends Component {
             .numap-petals { display: none }
           }
         `}</style>
-        <Petals leaving={this.state.leaving} />
+        <Petals leaving={this.state.leaving} slow={this.slowExit} />
         {/* Top-anchored positioner: identical offset to the index.html
             overlay, so the emblem sits at the same viewport spot on both
             recovery pages, in every state. */}
@@ -286,7 +310,7 @@ export default class RecoveryBoundary extends Component {
           // In the exit gusts the card flickers dimmer and brighter,
           // then dies away entirely as the storm takes over.
           animation: this.state.leaving
-            ? "numapCardDim 2.2s ease-in-out forwards"
+            ? `numapCardDim ${this.slowExit ? "5.5s" : "2.2s"} ease-in-out forwards`
             : "numapCrashIn .35s ease-out",
           position: "relative" }}>
           <Emblem dark={dark} />
@@ -301,20 +325,32 @@ export default class RecoveryBoundary extends Component {
           <div style={{ fontSize: "min(15px, 3.4vw)", fontWeight: 600, lineHeight: 1.5, whiteSpace: "nowrap" }}>
             {MSG[lc] || MSG.en}
           </div>
-          {/* After 5 minutes the promise has expired — the sub-line hands
-              its slot to the nudge (clickable, in place) and the lower
-              nudge line folds away. */}
-          <div onClick={this.state.subSwapped ? this.stormReload : undefined}
+          {/* After 5 minutes the promise has expired — it drifts out
+              while the nudge below glides up into its row, then the text
+              settles into this slot (clickable). */}
+          <div ref={this.subRef}
+            onClick={this.state.subSwapped ? this.stormReload : undefined}
             style={{ marginTop: 6, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
               whiteSpace: "nowrap", color: dark ? "#8b949e" : "#64748b",
-              cursor: this.state.subSwapped ? "pointer" : "default" }}>
+              cursor: this.state.subSwapped ? "pointer" : "default",
+              ...(this.state.glideY != null ? {
+                opacity: 0, transform: "translateY(-6px)",
+                transition: "opacity .7s ease, transform .7s ease",
+              } : {}) }}>
             {this.state.subSwapped ? (NUDGE[lc] || NUDGE.en) : (SUB[lc] || SUB.en)}
           </div>
           {this.state.showLink && !this.state.subSwapped && (
-            <div onClick={this.stormReload} style={{
-              marginTop: 18, fontSize: 11, fontWeight: 600, cursor: "pointer",
+            <div ref={this.nudgeRef} onClick={this.stormReload} style={{
+              // Typography identical to the sub-line above: the glide's
+              // landing must be pixel-identical for the swap to vanish.
+              marginTop: 18, fontSize: "min(12px, 2.9vw)", fontWeight: 500,
+              whiteSpace: "nowrap", cursor: "pointer",
               color: dark ? "#8b949e" : "#64748b",
-            }}>
+              animation: "numapCrashIn 1.2s ease-out",
+              ...(this.state.glideY != null ? {
+                transform: `translateY(${this.state.glideY}px)`,
+                transition: "transform .8s cubic-bezier(.25,.7,.3,1)",
+              } : {}) }}>
               {NUDGE[lc] || NUDGE.en}
             </div>
           )}

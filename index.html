@@ -187,7 +187,7 @@
         // theme-colored storm veil before the app can paint, lets the app
         // boot beneath it, and clears the storm once __numapBooted fires
         // (or after 5 s regardless — the veil must never trap anyone).
-        function buildVeil() {
+        function buildVeil(slow) {
           if (document.getElementById('numap-veil')) return;
           stormStyle();
           var dark = resolveDark();
@@ -208,26 +208,28 @@
             if (done) return;
             done = true;
             setTimeout(function () {
-              v.style.transition = 'opacity 1.2s ease';
+              v.style.transition = 'opacity ' + (slow ? '3s' : '1.2s') + ' ease';
               v.style.opacity = '0';
-              setTimeout(function () { if (v.parentNode) v.parentNode.removeChild(v); }, 1350);
-            }, 250);
+              setTimeout(function () { if (v.parentNode) v.parentNode.removeChild(v); }, slow ? 3200 : 1350);
+            }, slow ? 1500 : 250);
           };
           if (booted) window.__numapVeilDone();
           else setTimeout(window.__numapVeilDone, 5000);
         }
-        var wantReveal = false;
+        var revealMode = null;
         try {
-          wantReveal = sessionStorage.getItem('numap-reveal') === '1';
+          revealMode = sessionStorage.getItem('numap-reveal');
           sessionStorage.removeItem('numap-reveal');
         } catch (e) {}
-        // Design preview: ?preview=reveal plays the ending on a normal load.
-        if (!wantReveal && PREVIEW_OK && /[?&]preview=reveal\b/.test(location.search)) wantReveal = true;
-        if (wantReveal) {
+        if (revealMode !== '1' && revealMode !== '2') revealMode = null;
+        // Design preview: ?preview=reveal plays the ending (slowly) on a
+        // normal load.
+        if (!revealMode && PREVIEW_OK && /[?&]preview=reveal\b/.test(location.search)) revealMode = '2';
+        if (revealMode) {
           var vIv = setInterval(function () {
             if (!document.body) return;
             clearInterval(vIv);
-            buildVeil();
+            buildVeil(revealMode === '2'); // '2' = slow-motion preview
           }, 5);
         }
 
@@ -328,31 +330,35 @@
         // the right edge (ease-in curve, force not velocity) — and the
         // card flickers dimmer and brighter in the gusts until it's
         // gone. The navigation happens deep inside the storm.
-        function exitChoreo() {
+        function exitChoreo(slow) {
           overlayStorm();
           var card = document.getElementById('numap-recovery-card');
-          if (card) card.style.animation = 'numapCardDim 2.2s ease-in-out forwards';
+          if (card) card.style.animation = 'numapCardDim ' + (slow ? '5.5s' : '2.2s') + ' ease-in-out forwards';
           var amb = document.querySelector('#numap-recovery .nmr-petals');
-          if (amb) amb.style.animation = 'numapBlowoff 2.4s cubic-bezier(.5,0,.85,.5) forwards';
+          if (amb) amb.style.animation = 'numapBlowoff ' + (slow ? '6s' : '2.4s') + ' cubic-bezier(.5,0,.85,.5) forwards';
         }
         var exiting = false;
         window.__numapRecoveryExit = function () {
           if (exiting) return;
           exiting = true;
           stopProbe();
-          exitChoreo();
+          // Preview exits run in slow motion (~2.5×) so the choreography
+          // can actually be studied; the flag value '2' carries the
+          // slowness across the reload into the reveal veil.
+          var slow = /[?&]preview=/.test(location.search);
+          exitChoreo(slow);
           setTimeout(function () {
-            try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
+            try { sessionStorage.setItem('numap-reveal', slow ? '2' : '1'); } catch (e) {}
             // Leaving a preview drops the preview param, so the storm
             // genuinely returns to the real app instead of the preview.
-            if (/[?&]preview=/.test(location.search)) location.href = location.pathname;
+            if (slow) location.href = location.pathname;
             else window.location.reload();
             // Watchdog: if we're still running 8 s later, the navigation
             // silently failed (e.g. the network dropped mid-exit) — retry
             // bluntly rather than stranding an inert page behind the
             // permanently-set `exiting` flag.
             setTimeout(function () { window.location.reload(); }, 8000);
-          }, 2300);
+          }, slow ? 6000 : 2300);
         };
         function overlayStorm() {
           showRecovery();
@@ -528,7 +534,10 @@
               var g = document.createElement('div');
               g.id = 'numap-recovery-nudge';
               g.textContent = RECOVERY_NUDGE[lc] || RECOVERY_NUDGE.en;
-              g.style.cssText = 'margin-top:18px;font-size:11px;font-weight:600;cursor:pointer;opacity:0;transition:opacity 1.2s ease;color:' + (dark ? '#8b949e' : '#64748b') + ';';
+              // Typography identical to the sub-line: at the 5-minute mark
+              // this element GLIDES up into that row, and the landing must
+              // be pixel-identical for the bookkeeping swap to be invisible.
+              g.style.cssText = 'margin-top:18px;font-size:min(12px,2.9vw);font-weight:500;white-space:nowrap;cursor:pointer;opacity:0;transition:opacity 1.2s ease;color:' + (dark ? '#8b949e' : '#64748b') + ';';
               g.onclick = function () {
                 try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
                 window.location.reload();
@@ -540,28 +549,35 @@
             // sweeps it away — the real removal sequence, just observable.
             }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 1000 : 90000);
             // At the five-minute mark the promise has expired — keeping
-            // it on screen would read as a lie. The sub-line hands its
-            // slot to the nudge (in place, clickable) and the lower
-            // nudge line folds away: one calm honest line remains.
+            // it on screen would read as a lie. The promise drifts up and
+            // out while the nudge GLIDES up into its row (same element,
+            // continuous motion); then an invisible bookkeeping swap puts
+            // the text into the sub-line slot for clean layout.
             setTimeout(function () {
               if (exiting || document.getElementById('numap-back-link')) return;
               var s3 = document.getElementById('numap-recovery-sub');
               var n3 = document.getElementById('numap-recovery-nudge');
-              if (!s3) return;
-              s3.style.transition = 'opacity .6s';
+              if (!s3 || !n3) return;
+              var dy = s3.getBoundingClientRect().top - n3.getBoundingClientRect().top;
+              s3.style.transition = 'opacity .7s ease, transform .7s ease';
               s3.style.opacity = '0';
-              if (n3) { n3.style.transition = 'opacity .6s'; n3.style.opacity = '0'; }
+              s3.style.transform = 'translateY(-6px)';
+              n3.style.transition = 'transform .8s cubic-bezier(.25,.7,.3,1)';
+              n3.style.transform = 'translateY(' + dy + 'px)';
               setTimeout(function () {
                 if (exiting || document.getElementById('numap-back-link')) return;
-                if (n3 && n3.parentNode) n3.parentNode.removeChild(n3);
+                // Same text, same pixels — nobody sees this swap.
                 s3.textContent = RECOVERY_NUDGE[lc] || RECOVERY_NUDGE.en;
+                s3.style.transition = 'none';
+                s3.style.transform = 'none';
+                s3.style.opacity = '1';
                 s3.style.cursor = 'pointer';
                 s3.onclick = function () {
                   try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
                   window.location.reload();
                 };
-                s3.style.opacity = '1';
-              }, 620);
+                if (n3.parentNode) n3.parentNode.removeChild(n3);
+              }, 850);
             }, PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search) ? 8000 : 300000);
           };
           if (document.body) make();
@@ -570,11 +586,13 @@
 
         // Design preview: ?preview=recovery shows the overlay without any
         // failure (nothing reloads), so it can be styled against reality.
-        // The preview exercises the REAL flow: overlay, probe, detection
-        // folding the bar into the localized return button, storm exit.
+        // The preview exercises the REAL flow, but with the probe held
+        // back 15 s so every stage gets a visible window: nudge at 1 s,
+        // promise→nudge swap at 8 s, detection (return state) at ~19 s.
+        // In production the probe starts immediately.
         if (PREVIEW_OK && /[?&]preview=recovery\b/.test(location.search)) {
           showRecovery();
-          startProbe();
+          setTimeout(startProbe, 15000);
         }
 
         function recover() {
