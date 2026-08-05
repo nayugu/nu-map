@@ -436,7 +436,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       + `<td>${c.typicallyOffered ? escapeHtml(c.typicallyOffered.join(", ")) : ""}</td>`
       + `<td>${c.nuPath?.length ? escapeHtml(c.nuPath.join(", ")) : ""}</td>`
       + `<td class="muted">${prereqTree(c.prereqs)}</td>`
-      + `<td class="muted">${(() => {
+      + `<td class="muted nowrap">${(() => {
         if (!c.instructors) return "";
         const names = [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort();
         const shown = names.slice(0, 6).map(profLink).join("<br>");
@@ -446,6 +446,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
   pageQueue.push({
     rel: `courses/${subject}.html`,
     section: "courses",
+    wide: true,
     title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
     description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
@@ -583,7 +584,12 @@ const PAGE_CSS =
   + "nav .aux a{display:block;color:#94a3b8;font-size:.82rem;padding:3px 14px}"
   + "nav .aux a:hover{color:#64748b}"
   + ".layout{padding-left:190px}"
-  + "main{max-width:780px;margin:0 auto;min-width:0;padding:26px 24px 48px}"
+  + "main{max-width:780px;margin:0 auto;min-width:0;padding:26px 24px 48px;overflow-x:auto}"
+  // Table-heavy pages (subject listings) widen with the viewport so each
+  // prereq entry and professor name can hold a full unwrapped line.
+  + "main.wide{max-width:1240px}"
+  + ".nowrap{white-space:nowrap}"
+  + "td ul.req li{white-space:nowrap}"
   + "@media(max-width:760px){.layout{padding-left:0}nav{position:static;width:auto;border:none;background:none;"
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px 14px 0}"
   + "nav .sections{display:contents}nav .aux{display:contents}"
@@ -616,7 +622,7 @@ const NAV_SECTIONS = [
 ];
 
 // rel "index.html" is the hub, written to dist/data.html and served at /data.
-const writePage = ({ rel, section, title, description, jsonUrl, body }) => {
+const writePage = ({ rel, section, title, description, jsonUrl, body, wide }) => {
   if (typeof body !== "string") throw new Error(`page without a rendered body: ${rel}`);
   const isHub = rel === "index.html";
   const p = isHub ? path.join(ROOT, "dist", "data.html") : path.join(OUT, rel);
@@ -630,6 +636,17 @@ const writePage = ({ rel, section, title, description, jsonUrl, body }) => {
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
     + `</div>`;
+  // The hub keeps its opening uncluttered: disclaimer moves to the bottom,
+  // with the freshness stamp centered on its own line. Every other page
+  // keeps the one-line version under the title.
+  const disclaimerText = `NU Map is an independent, student-built planner — not affiliated
+with, endorsed by, or officially connected to Northeastern University. Data comes
+from the public catalog on a schedule; confirm with the official catalog and an
+advisor.`;
+  const stamp = `Data updated ${escapeHtml(meta.lastUpdated)} · page generated ${generatedAt.slice(0, 10)}.`;
+  const disclaimerTop = isHub ? "" : `<p class="muted">${disclaimerText} ${stamp}</p>`;
+  const disclaimerBottom = isHub
+    ? `<p class="muted">${disclaimerText}</p>\n<p class="muted" style="text-align:center">${stamp}</p>` : "";
   fs.writeFileSync(p, `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
 <title>${isHub ? "Data - NU Map" : `${escapeHtml(title)} - NU Map Data`}</title>
@@ -641,13 +658,11 @@ const writePage = ({ rel, section, title, description, jsonUrl, body }) => {
 </head><body>
 <div class="layout">
 <nav>${nav}</nav>
-<main>
+<main${wide ? ` class="wide"` : ""}>
 <h1>${escapeHtml(title)}</h1>
-<p class="muted">NU Map is an independent, student-built planner — not affiliated
-with, endorsed by, or officially connected to Northeastern University. Data comes
-from the public catalog on a schedule; confirm with the official catalog and an
-advisor. Data updated ${escapeHtml(meta.lastUpdated)} · page generated ${generatedAt.slice(0, 10)}.</p>
+${disclaimerTop}
 ${body}
+${disclaimerBottom}
 <footer>
 <details>
 <summary>For AI assistants — reaching any other NU Map data from this page</summary>
@@ -1002,7 +1017,7 @@ for (const m of pageQueue) {
     ?? (m.kind === "course" ? renderCourse(m.subject, m.data)
       : m.kind === "program" ? renderProgram(m.data)
       : undefined);
-  writePage({ rel: m.rel, section: m.section, title: m.title, description: m.description, jsonUrl: m.jsonUrl, body });
+  writePage({ rel: m.rel, section: m.section, title: m.title, description: m.description, jsonUrl: m.jsonUrl, body, wide: m.wide });
 }
 
 // Link-integrity rail: every internal page href in every generated page
