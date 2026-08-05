@@ -568,18 +568,20 @@ const pageUrls = [];
 const PAGE_CSS =
   "*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.55;color:#1e293b}"
   + "a{color:#dc2626;text-decoration:none}a:hover{text-decoration:underline}"
-  // Sidebar pinned to the viewport's left edge, full height; section links
-  // distribute evenly down it like filing-cabinet tabs (flush left, rounded
-  // right). Content centers itself in the remaining width.
+  // Sidebar: fixed left rail, same white as the body with a hairline
+  // divider. Links sit inset from the edge as a tight, vertically centered
+  // cluster of pills; the hovered one slides out a few pixels (filing-tab
+  // effect) and the active one sits permanently slid-out and filled.
   + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;"
-  + "border-right:1px solid #e2e8f0;background:#fcfcfd;font-size:.92rem}"
-  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;padding:18px 0}"
-  + "nav .sections a{display:block;padding:9px 14px 9px 22px;margin-right:14px;"
-  + "border-radius:0 999px 999px 0;color:#334155}"
-  + "nav .sections a:hover{background:#f1f5f9;text-decoration:none}"
-  + "nav .sections a.here{background:#fef2f2;color:#dc2626;font-weight:600}"
-  + "nav .aux{padding:14px 0 18px;border-top:1px solid #e2e8f0}"
-  + "nav .aux a{display:block;color:#64748b;font-size:.82rem;padding:4px 14px 4px 22px}"
+  + "border-right:1px solid #f1f5f9;font-size:.92rem}"
+  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:18px 14px}"
+  + "nav .sections a{display:block;padding:7px 14px;border-radius:999px;color:#334155;"
+  + "transition:transform .16s ease,background .16s ease}"
+  + "nav .sections a:hover{background:#f8fafc;transform:translateX(6px);text-decoration:none}"
+  + "nav .sections a.here{background:#fef2f2;color:#dc2626;font-weight:600;transform:translateX(6px)}"
+  + "nav .aux{padding:14px 14px 20px;border-top:1px solid #f1f5f9}"
+  + "nav .aux a{display:block;color:#94a3b8;font-size:.82rem;padding:3px 14px}"
+  + "nav .aux a:hover{color:#64748b}"
   + ".layout{padding-left:190px}"
   + "main{max-width:780px;margin:0 auto;min-width:0;padding:26px 24px 48px}"
   + "@media(max-width:760px){.layout{padding-left:0}nav{position:static;width:auto;border:none;background:none;"
