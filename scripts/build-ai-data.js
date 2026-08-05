@@ -727,7 +727,7 @@ ${footer}
 const chips = (arr) => `<p class="chips">${arr.filter(Boolean).map((x) => `<span>${x}</span>`).join("")}</p>`;
 const SEASON_LABEL = { fall: "Fall", spring: "Spring", summer: "Summer", sumA: "Summer A", sumB: "Summer B" };
 const seasonLabel = (s) => SEASON_LABEL[s] ?? s;
-const SEASON_ORDER = ["fall", "spring", "summer", "sumA", "sumB"];
+const SEASON_ORDER = ["spring", "summer", "sumA", "sumB", "fall"];
 const seasonSort = (a, b2) => {
   const ia = SEASON_ORDER.indexOf(a), ib = SEASON_ORDER.indexOf(b2);
   return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b2);
@@ -1031,8 +1031,8 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
   for (const [name, p] of Object.entries(profs)) {
     const rows = Object.entries(p.courses).map(([code, seasons]) => {
       const when = Object.entries(seasons).sort(([a], [b2]) => seasonSort(a, b2))
-        .map(([s, pct]) => `${seasonLabel(s)} ${pct}%`).join(" · ");
-      return `<tr><td>${linkCode(code)}</td><td>${titleOf.has(code) ? escapeHtml(titleOf.get(code)) : `<span class="muted">no longer in the catalog</span>`}</td><td>${escapeHtml(when)}</td></tr>`;
+        .map(([s, pct]) => `${seasonLabel(s)} ${pct}%`).join("<br>");
+      return `<tr><td class="nowrap">${linkCode(code)}</td><td>${titleOf.has(code) ? escapeHtml(titleOf.get(code)) : `<span class="muted">no longer in the catalog</span>`}</td><td class="nowrap">${when}</td></tr>`;
     }).join("\n");
     pageQueue.push({
       rel: `professors/${profSlugOf.get(name)}.html`,
@@ -1042,7 +1042,7 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
       description: `Courses ${name} teaches at Northeastern, with seasons and the average share of students taught in recent terms${p.reviews ? ", plus student reviews" : ""}. From NU Map (not affiliated with Northeastern).`,
       jsonUrl: `${JSON_ROOT}/professors/${letter}.json`,
       body: (p.reviews ? `<p><a href="${p.reviews}">Student reviews on RateMyHusky</a></p>` : "")
-        + `<table><tr><th>Course</th><th>Title</th><th>When taught · share of students</th></tr>\n${rows}\n</table>`
+        + `<table><tr><th>Course</th><th>Title</th><th>Teaches</th></tr>\n${rows}\n</table>`
         + `<p class="muted">Share = this professor's average percent of that season's enrolled students across recent terms (~3 years). Seasons not listed had other instructors.</p>`
         + `<p><a href="${PAGE_ROOT}/professors/${letter}">All professors — ${escapeHtml(letter)}</a></p>`,
     });
