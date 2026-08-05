@@ -42,6 +42,7 @@ const META_PUB_PATH  = resolve(ROOT, "public/data-meta.json");
 const STATE_PATH      = resolve(ROOT, "data/northeastern/scrape-state.json");
 const PUBLIC_STATE_PATH = resolve(ROOT, "public/northeastern/scrape-state.json"); // served to dev portal
 const CHANGE_LOG_PATH = resolve(ROOT, "public/northeastern/change-log.json");
+const SUBJECTS_OUT    = resolve(ROOT, "public/northeastern/subjects.json"); // code → display name
 const CHANGE_LOG_MAX  = 600; // keep last 600 run entries
 const BASE_URL      = "https://catalog.northeastern.edu";
 const INDEX_URL     = `${BASE_URL}/course-descriptions/`;
@@ -249,6 +250,25 @@ async function getSubjectURLs() {
       "Could not extract subject links from index page. " +
       "The catalog HTML structure may have changed — inspect " + INDEX_URL
     );
+  }
+
+  // Subject display names ride the same anchors — "Accounting (ACCT)",
+  // "Biology -​CPS (BIO)" — so capture them for zero extra requests.
+  // The "- CPS" suffix is the catalog's own disambiguation (BIOL Biology
+  // vs BIO Biology - CPS) and is kept verbatim. Rail: refuse to overwrite
+  // a good file from a suspiciously small parse.
+  const names = {};
+  for (const a of links) {
+    const href = a.getAttribute("href") || "";
+    if (!/\/course-descriptions\/[a-z0-9-]+\/?$/i.test(href)) continue;
+    const m = a.text.replace(/​/g, "").trim().replace(/\s+/g, " ")
+      .match(/^(.*\S)\s*\(([A-Z]{2,6})\)$/);
+    if (m) names[m[2]] = m[1].replace(/\s*-\s*CPS$/, " - CPS");
+  }
+  if (!DRY_RUN && Object.keys(names).length >= 150) {
+    writeFileSync(SUBJECTS_OUT,
+      JSON.stringify(Object.fromEntries(Object.entries(names).sort(([a], [b]) => a.localeCompare(b))), null, 1) + "\n",
+      "utf8");
   }
 
   return [...urls.entries()]; // [[slug, url], ...]

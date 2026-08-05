@@ -210,6 +210,11 @@ writeJSON("programs/index.json", {
 const catalog = readJSON(path.join(ROOT, "public", "northeastern", "catalog-courses.json"));
 const offering = readJSON(path.join(ROOT, "public", "northeastern", "offering-summary.json"));
 const rmh = readJSON(path.join(ROOT, "public", "northeastern", "ratemyhusky.json"));
+// Subject display names, scraped from the catalog index (scrape-catalog.js).
+// The "- CPS" suffix is the catalog's own disambiguation (BIOL Biology vs
+// BIO Biology - CPS). Graceful when absent.
+const subjectNames = fs.existsSync(path.join(ROOT, "public", "northeastern", "subjects.json"))
+  ? readJSON(path.join(ROOT, "public", "northeastern", "subjects.json")) : {};
 const RMH = "https://ratemyhusky.com";
 const rmhCourses = new Set(Array.isArray(rmh.courses) ? rmh.courses : []);
 const rmhProfs = rmh.profs && typeof rmh.profs === "object" ? rmh.profs : {};
@@ -521,7 +526,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       data: c,
     });
   }
-  subjects.push({ subject, count: courses.length, page: `${PAGE_ROOT}/courses/${subject}`, url });
+  subjects.push({ subject, ...(subjectNames[subject] ? { name: subjectNames[subject] } : {}), count: courses.length, page: `${PAGE_ROOT}/courses/${subject}`, url });
 }
 
 // ── Professor JSON (letter files with per-season shares) ─────────────
@@ -951,8 +956,8 @@ pageQueue.push({
   heading: "Subjects",
   description: "Directory of all Northeastern subject codes with course counts; each links a full listing with prerequisites, offerings and NUpath. From NU Map (not affiliated with Northeastern).",
   jsonUrl: `${JSON_ROOT}/courses/index.json`,
-  body: `<table><tr><th>Subject</th><th>Courses</th><th></th></tr>`
-    + subjects.map((s) => `<tr><td><a href="${s.page}">${s.subject}</a></td><td>${s.count}</td><td class="muted"><a href="${s.url}">JSON</a></td></tr>`).join("")
+  body: `<table><tr><th>Code</th><th>Subject</th><th>Courses</th></tr>`
+    + subjects.map((s) => `<tr><td><a href="${s.page}">${s.subject}</a></td><td class="nowrap">${escapeHtml(s.name ?? "")}</td><td>${s.count}</td></tr>`).join("")
     + `</table>`,
 });
 
