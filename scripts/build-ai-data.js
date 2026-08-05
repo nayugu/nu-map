@@ -440,8 +440,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       + `<td class="muted nowrap">${(() => {
         if (!c.instructors) return "";
         const names = [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort();
-        const shown = names.slice(0, 6).map(profLink).join("<br>");
-        return names.length > 6 ? `${shown}<br><a href="${pageUrl}">+${names.length - 6} more</a>` : shown;
+        return names.map(profLink).join("<br>");
       })()}</td></tr>`;
   }).join("\n");
   pageQueue.push({
@@ -592,6 +591,8 @@ const PAGE_CSS =
   // prereq entry and professor name can hold a full unwrapped line.
   + "main.wide{max-width:1240px}"
   + ".nowrap{white-space:nowrap}"
+  + ".twocol{display:flex;gap:64px;flex-wrap:wrap}"
+  + "ul.letters{list-style:none;margin:.3em 0;padding:0}ul.letters li{margin:2px 0}"
   + "td ul.req li{white-space:nowrap}"
   + "@media(max-width:760px){.layout{padding-left:0}nav{position:static;width:auto;border:none;background:none;"
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px 14px 0}"
@@ -931,7 +932,26 @@ for (const [code, e] of Object.entries(nupath)) {
   });
 }
 
-// Professors: index → letter directories → one page per professor.
+// Professors: index → letter directories (by first AND last name) → one
+// page per professor.
+const lastNameOf = (name) => {
+  const t = name.trim().split(/\s+/);
+  return t[t.length - 1];
+};
+const profsByLastLetter = new Map();
+for (const name of profNames) {
+  const ln = lastNameOf(name);
+  const letter = /^[A-Za-z]/.test(ln) ? ln[0].toUpperCase() : "_";
+  if (!profsByLastLetter.has(letter)) profsByLastLetter.set(letter, []);
+  profsByLastLetter.get(letter).push(name);
+}
+for (const arr of profsByLastLetter.values()) {
+  arr.sort((a, b2) => lastNameOf(a).localeCompare(lastNameOf(b2)) || a.localeCompare(b2));
+}
+const letterCol = (label, entries, hrefOf) =>
+  `<div><h2>${label}</h2><ul class="letters">`
+  + entries.map(([letter, count]) => `<li><a href="${hrefOf(letter)}">${letter}</a> <span class="muted">(${count})</span></li>`).join("")
+  + `</ul></div>`;
 pageQueue.push({
   rel: "professors.html",
   section: "professors",
@@ -939,11 +959,31 @@ pageQueue.push({
   heading: "Professors",
   description: "Every Northeastern instructor in recent scheduled terms, with the courses they teach, per-season student shares, and RateMyHusky review links. From NU Map (not affiliated with Northeastern).",
   jsonUrl: `${JSON_ROOT}/professors.json`,
-  body: `<p>${professors.size} instructors from recent scheduled terms (~3 years), split by the first letter of their name. Each professor has their own page with courses, seasons, and share of students taught.</p><p>`
-    + [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))
-      .map(([letter, profs]) => `<a href="${PAGE_ROOT}/professors/${letter}">${letter}</a> <span class="muted">(${Object.keys(profs).length})</span>`).join(" · ")
-    + `</p>`,
+  body: `<p>${professors.size} instructors from recent scheduled terms (~3 years). Each professor has their own page with courses, seasons, and share of students taught.</p>
+<div class="twocol">`
+    + letterCol("By first name",
+      [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2)).map(([l, profs]) => [l, Object.keys(profs).length]),
+      (l) => `${PAGE_ROOT}/professors/${l}`)
+    + letterCol("By last name",
+      [...profsByLastLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2)).map(([l, names]) => [l, names.length]),
+      (l) => `${PAGE_ROOT}/professors/last/${l}`)
+    + `</div>`,
 });
+for (const [letter, names] of [...profsByLastLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
+  pageQueue.push({
+    rel: `professors/last/${letter}.html`,
+    section: "professors",
+    title: `Northeastern professors — last names starting with ${letter}`,
+    heading: `Professors — ${letter} (last name)`,
+    description: `Northeastern instructors whose last name starts with "${letter}", each linking their own page with courses, seasons, and share of students taught. From NU Map (not affiliated with Northeastern).`,
+    jsonUrl: `${JSON_ROOT}/professors.json`,
+    body: `<ul>` + names.map((name) => {
+      const ln = lastNameOf(name);
+      const first = name.slice(0, name.length - ln.length).trim();
+      return `<li><a href="${PAGE_ROOT}/professors/${profSlugOf.get(name)}">${escapeHtml(first ? `${ln}, ${first}` : ln)}</a></li>`;
+    }).join("\n") + `</ul>`,
+  });
+}
 for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
   pageQueue.push({
     rel: `professors/${letter}.html`,
