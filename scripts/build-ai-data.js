@@ -571,25 +571,28 @@ const pageUrls = [];
 const PAGE_CSS =
   "*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.55;color:#1e293b}"
   + "a{color:#dc2626;text-decoration:none}a:hover{text-decoration:underline}"
-  // Sidebar: fixed left rail, same white as the body with a hairline
-  // divider. Links sit inset from the edge as a tight, vertically centered
-  // cluster of pills; the hovered one slides out a few pixels (filing-tab
-  // effect) and the active one sits permanently slid-out and filled.
+  // Ghost rail: the nav rests faint and fades in on hover. No pills — the
+  // filing slide-out plus darkening is the whole hover language; the
+  // current page is red and semibold, permanently slid out.
   + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;"
-  + "border-right:1px solid #f1f5f9;font-size:.92rem}"
-  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:18px 14px}"
-  + "nav .sections a{display:block;padding:7px 14px;border-radius:999px;color:#334155;"
-  + "transition:transform .16s ease,background .16s ease}"
-  + "nav .sections a:hover{background:#f8fafc;transform:translateX(6px);text-decoration:none}"
-  + "nav .sections a.here{background:#fef2f2;color:#dc2626;font-weight:600;transform:translateX(6px)}"
-  + "nav .aux{padding:14px 14px 20px;border-top:1px solid #f1f5f9}"
+  + "font-size:.92rem;opacity:.25;transition:opacity .25s ease}"
+  + "nav:hover,nav:focus-within{opacity:1}"
+  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:18px 14px}"
+  + "nav .sections a{display:block;padding:4px 14px;color:#64748b;"
+  + "transition:transform .16s ease,color .16s ease}"
+  + "nav .sections a:hover{transform:translateX(6px);color:#0f172a;text-decoration:none}"
+  + "nav .sections a.here{color:#dc2626;font-weight:600;transform:translateX(6px)}"
+  + "nav .aux{padding:14px 14px 20px}"
   + "nav .aux a{display:block;color:#94a3b8;font-size:.82rem;padding:3px 14px}"
-  + "nav .aux a:hover{color:#64748b}"
-  + ".layout{padding-left:190px}"
-  + "main{max-width:780px;margin:0 auto;min-width:0;padding:26px 24px 48px;overflow-x:auto}"
+  + "nav .aux a:hover{color:#475569}"
+  // Main truly centers on the viewport when there's room; when the window
+  // is too narrow for that, it clears the rail instead.
+  + ".layout{padding-left:0}"
+  + "main{max-width:780px;margin-left:max(190px,calc((100vw - 780px)/2));margin-right:auto;"
+  + "min-width:0;padding:26px 24px 48px;overflow-x:auto}"
   // Table-heavy pages (subject listings) widen with the viewport so each
   // prereq entry and professor name can hold a full unwrapped line.
-  + "main.wide{max-width:1240px}"
+  + "main.wide{max-width:1240px;margin-left:max(190px,calc((100vw - 1240px)/2))}"
   + ".nowrap{white-space:nowrap}"
   + ".twocol{display:flex;gap:64px;flex-wrap:wrap;justify-content:center}"
   + "ul.letters{list-style:none;margin:.3em 0;padding:0}ul.letters li{margin:2px 0}"
@@ -600,11 +603,12 @@ const PAGE_CSS =
   + "main.hub{display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding-top:0;padding-bottom:0}"
   + "main.hub h1{text-align:center}"
   + "td ul.req li{white-space:nowrap}"
-  + "@media(max-width:760px){.layout{padding-left:0}nav{position:static;width:auto;border:none;background:none;"
-  + "display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px 14px 0}"
+  + "@media(max-width:760px){nav{position:static;width:auto;opacity:1;"
+  + "display:flex;flex-direction:row;flex-wrap:wrap;gap:2px 14px;padding:12px 16px 0}"
   + "nav .sections{display:contents}nav .aux{display:contents}"
-  + "nav .sections a,nav .aux a{background:#f1f5f9;border-radius:999px;padding:4px 12px;margin:0;font-size:.85rem}"
-  + "nav .sections a.here{background:#fef2f2}}"
+  + "nav .sections a,nav .aux a{padding:3px 0;margin:0;font-size:.88rem}"
+  + "nav .sections a:hover,nav .sections a.here{transform:none}"
+  + "main,main.wide{margin:0 auto}}"
   + "h1{font-size:1.55rem;margin:.1em 0 .3em}"
   + "h2{font-size:1.12rem;margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid #e2e8f0}"
   + "h3{font-size:1rem;margin:1.2em 0 .4em}"
