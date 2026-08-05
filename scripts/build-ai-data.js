@@ -571,44 +571,27 @@ const pageUrls = [];
 const PAGE_CSS =
   "*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.55;color:#1e293b}"
   + "a{color:#dc2626;text-decoration:none}a:hover{text-decoration:underline}"
-  // Dot rail with proximity falloff: at rest the nav is seven tiny dots
-  // (the current page's dot red). Hovering the rail whispers all labels
-  // in; the hovered label goes fully dark and slides out, ±1 neighbors
-  // light to half, ±2 to a quarter (:has() covers the upward direction).
+  // The rail: always-visible quiet labels, no pills, no borders, no dots.
+  // Hover darkens and slides an item out; the current page is semibold
+  // medium grey and doesn't react to hover. Aux links stay faint.
   + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;font-size:.92rem}"
-  // No gaps between links: taller contiguous hit areas mean the cursor is
-  // always over exactly one item, so the falloff rolls like a slider with
-  // no collapse between buttons.
-  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 14px}"
-  + "nav .sections a{display:flex;align-items:center;gap:11px;padding:10px 14px;color:#64748b}"
-  + "nav .sections a:hover{text-decoration:none}"
-  + "nav .sections .dot{width:7px;height:7px;border-radius:50%;background:#e2e8f0;flex:0 0 7px;"
-  + "transition:background .22s ease-out,transform .22s ease-out}"
-  + "nav .sections .lbl{opacity:0;transform:translateX(-6px);white-space:nowrap;"
-  + "transition:opacity .22s ease-out,transform .22s ease-out}"
-  // The page you are on is the dark-grey anchor: dark dot, dark semibold
-  // label, clearly readable whenever the rail is awake, unchanged on hover.
-  + "nav .sections a.here .dot{background:#94a3b8}"
-  + "nav .sections a.here .lbl{color:#64748b;font-weight:600}"
-  + "nav:hover .sections .lbl{opacity:.34}"
-  + "nav .sections a:hover+a+a .lbl,nav .sections a:has(+a+a:hover) .lbl{opacity:.5}"
-  + "nav .sections a:hover+a .lbl,nav .sections a:has(+a:hover) .lbl{opacity:.72;transform:translateX(-3px)}"
-  + "nav:hover .sections a.here .lbl{opacity:.95}"
-  + "nav .sections a:hover .lbl{opacity:1;color:#0f172a;transform:translateX(0)}"
-  + "nav .sections a:hover .dot{transform:scale(1.6);background:#94a3b8}"
-  + "nav .sections a.here:hover .dot{background:#94a3b8}"
-  + "nav .aux{padding:14px 14px 20px;opacity:0;transition:opacity .2s ease}"
-  + "nav:hover .aux{opacity:1}"
+  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:7px;padding:18px 14px}"
+  + "nav .sections a{display:block;padding:4px 14px;color:#94a3b8;"
+  + "transition:transform .18s ease-out,color .18s ease-out}"
+  + "nav .sections a:hover{transform:translateX(5px);color:#0f172a;text-decoration:none}"
+  + "nav .sections a.here{color:#64748b;font-weight:600}"
+  + "nav .sections a.here:hover{transform:none;color:#64748b}"
+  + "nav .aux{padding:14px 14px 20px}"
   + "nav .aux a{display:block;color:#cbd5e1;font-size:.82rem;padding:3px 14px;transition:color .15s ease}"
   + "nav .aux a:hover{color:#475569}"
-  // Main truly centers on the viewport when there's room; when the window
-  // is too narrow for that, it clears the rail instead.
+  // Position: halfway between true viewport centering (felt too far left)
+  // and centering within the space right of the rail (felt too far right).
   + ".layout{padding-left:0}"
-  + "main{max-width:780px;margin-left:max(190px,calc((100vw - 780px)/2));margin-right:auto;"
+  + "main{max-width:780px;margin-left:max(190px,calc((100vw - 780px)/2 + 48px));margin-right:auto;"
   + "min-width:0;padding:26px 24px 48px;overflow-x:auto}"
   // Table-heavy pages (subject listings) widen with the viewport so each
   // prereq entry and professor name can hold a full unwrapped line.
-  + "main.wide{max-width:1240px;margin-left:max(190px,calc((100vw - 1240px)/2))}"
+  + "main.wide{max-width:1240px;margin-left:max(190px,calc((100vw - 1240px)/2 + 48px))}"
   + ".nowrap{white-space:nowrap}"
   + ".twocol{display:flex;gap:64px;flex-wrap:wrap;justify-content:center}"
   + "ul.letters{list-style:none;margin:.3em 0;padding:0}ul.letters li{margin:2px 0}"
@@ -626,10 +609,9 @@ const PAGE_CSS =
   + "td ul.req li{white-space:nowrap}"
   + "@media(max-width:760px){nav{position:static;width:auto;"
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:2px 14px;padding:12px 16px 0}"
-  + "nav .sections{display:contents}nav .aux{display:contents;opacity:1}"
+  + "nav .sections{display:contents}nav .aux{display:contents}"
   + "nav .sections a,nav .aux a{padding:3px 0;margin:0;font-size:.88rem}"
-  + "nav .sections .dot{display:none}"
-  + "nav .sections .lbl,nav:hover .sections .lbl{opacity:1;transform:none}"
+  + "nav .sections a:hover{transform:none}"
   + "main,main.wide{margin:0 auto}}"
   + "h1{font-size:1.55rem;margin:.1em 0 .3em}"
   + "h2{font-size:1.12rem;margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid #e2e8f0}"
@@ -672,7 +654,7 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   const url = isHub ? PAGE_ROOT : `${PAGE_ROOT}/${rel.replace(/\.html$/, "")}`;
   pageUrls.push(url);
   const nav = `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
-    `<a href="${href}"${id === section ? ` class="here"` : ""}><span class="dot"></span><span class="lbl">${label}</span></a>`).join("")
+    `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/story">the story</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
     + `</div>`;
