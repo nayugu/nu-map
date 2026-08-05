@@ -727,7 +727,7 @@ ${footer}
 const chips = (arr) => `<p class="chips">${arr.filter(Boolean).map((x) => `<span>${x}</span>`).join("")}</p>`;
 const SEASON_LABEL = { fall: "Fall", spring: "Spring", summer: "Summer", sumA: "Summer A", sumB: "Summer B" };
 const seasonLabel = (s) => SEASON_LABEL[s] ?? s;
-const SEASON_ORDER = ["spring", "summer", "sumA", "sumB", "fall"];
+const SEASON_ORDER = ["fall", "spring", "summer", "sumA", "sumB"];
 const seasonSort = (a, b2) => {
   const ia = SEASON_ORDER.indexOf(a), ib = SEASON_ORDER.indexOf(b2);
   return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b2);
