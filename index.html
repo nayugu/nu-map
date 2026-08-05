@@ -146,9 +146,27 @@
         // in local dev — sharpening stays possible forever, production
         // users can never summon these screens by URL.
         var PREVIEW_OK = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
+        // The one-shot cache-buster hardReturn may have added, removed again.
+        // Split rather than regex-replace: a single pass over "?nmfresh=1&
+        // nmfresh=2" leaves one behind, and this has to be exact — it decides
+        // what the address bar says.
+        function stripFresh(search) {
+          if (!search) return '';
+          var kept = search.replace(/^\?/, '').split('&').filter(function (p) {
+            return p && p.indexOf('nmfresh=') !== 0;
+          });
+          return kept.length ? '?' + kept.join('&') : '';
+        }
         var booted = false;
         window.__numapBooted = function () {
           booted = true;
+          // A return worked, so the escalation counter starts over (see
+          // hardReturn) and the stamp leaves the address bar.
+          try { sessionStorage.removeItem('numap-return-tries'); } catch (e) {}
+          if (/[?&]nmfresh=/.test(location.search) && history.replaceState) {
+            var q = stripFresh(location.search);
+            try { history.replaceState(null, '', location.pathname + q + location.hash); } catch (e) {}
+          }
           // If this load arrived under the reveal veil, the app is up —
           // let the storm clear.
           if (window.__numapVeilDone) window.__numapVeilDone();
@@ -329,33 +347,255 @@
             setTimeout(function () { a.style.opacity = '1'; }, 250);
           }, 620);
         }
-        // onUp defaults to the storm exit; previews pass their own handler.
-        // The probe touches ONLY /assets/ (exempt from the zone's
-        // Human Verification rule) and needs no HTML: it GETs this very
-        // page's own entry bundle, read from its own DOM. 200 = the
-        // server is serving our version again (a reload will boot);
-        // 404 = a newer deploy replaced us (a reload gets the new
-        // version). Either way, the way back is open. Fetching '/'
-        // is out of the question — a long-lived tab's challenge
-        // clearance expires, and the challenge page that fetch()
-        // receives (and can't render) matches nothing, which is why
-        // real deploys were never detected.
-        function startProbe(onUp) {
-          if (probeTimer || !window.fetch) return;
-          var entry = null;
+        // ── What "recovered" is allowed to mean ──────────────────────
+        // It used to mean "a fetch of our own entry bundle came back
+        // ok-or-404", and that was never proof of anything: a hash this
+        // deploy deleted does NOT 404 — `/* /index.html 200` answers it
+        // with the HTML shell, status 200, content-type text/html (and
+        // /assets/*'s `immutable, max-age=1y`, so the browser then pins
+        // that HTML under a .js URL for a year). `r.ok` was therefore
+        // true on the first tick in exactly the failure being recovered
+        // from, which is why the screen announced the way back while
+        // the way back was still shut — and why the crash screen, which
+        // waited for a literal 404, never announced it at all.
+        //
+        // So readiness is now something we have actually done, not
+        // something we infer. Two independent readings of what is
+        // deployed, because neither may be a single point of failure:
+        //
+        //   the shell itself — authoritative, since it is literally what
+        //     the browser will load, but it is HTML, so an interstitial
+        //     can impersonate it;
+        //   assets/build.json (emitted beside the bundle by
+        //     buildManifestPlugin) — immune to that, because an
+        //     interstitial does not parse as JSON, and served from
+        //     /assets/, the path that stayed exempt while the zone's
+        //     Managed Challenge was on. That challenge was disabled
+        //     2026-08-04 and '/' now answers a bare curl, but Under
+        //     Attack Mode and DDoS auto-mitigation can both put an
+        //     interstitial back with no config change, so this stays.
+        //
+        // When both are readable they must AGREE — a shell and a
+        // manifest naming different bundles is a deploy in flight, the
+        // one moment we must not say the way back is open. Either one
+        // alone is accepted (a rollback to a build with no manifest must
+        // not leave the screen mute), and whichever we get must name a
+        // bundle that comes back as real JavaScript, which is what rules
+        // out the fallback. Every fetch here uses cache:'reload', which
+        // ignores the HTTP cache AND writes the fresh response into it —
+        // so proving readiness is itself the silent hard refresh, and
+        // pre-warms the very files the return navigation needs.
+        //
+        // Resolved lazily, never at parse time: this script runs in <head>,
+        // and the module tag it looks for is at the end of <body>.
+        var ownEntryCache = null;
+        function ownEntry() {
+          if (ownEntryCache) return ownEntryCache;
           try {
-            var s = document.querySelector('script[type="module"][src]');
-            entry = s && s.src;
+            var s0 = document.querySelector('script[type="module"][src]');
+            ownEntryCache = (s0 && s0.src) || null;
           } catch (e) {}
-          if (!entry) return;
+          return ownEntryCache;
+        }
+        var liveEntry = null;   // the live deployment's entry URL, once proven
+        function nocache(u) { return u + (u.indexOf('?') < 0 ? '?' : '&') + 't=' + Date.now(); }
+        function checkLive() {
+          var mine = ownEntry();
+          if (!window.fetch || !mine) return Promise.resolve(null);
+          purgeOnce();   // judge the deployment, not a worker's copy of it
+          if (!/\/assets\//.test(mine)) {
+            // Dev: no hashed bundle, no manifest. The dev server either
+            // serves the module or it doesn't, and its content-type says
+            // which — the same test, one step shorter.
+            if (!PREVIEW_OK) return Promise.resolve(null);
+            return fetch(mine, { cache: 'reload' }).then(function (r) {
+              var ct = (r.headers.get('content-type') || '').toLowerCase();
+              return r.ok && ct.indexOf('javascript') >= 0 ? mine : null;
+            }).catch(function () { return null; });
+          }
+          var dir = mine.replace(/[^/]+$/, '');
+          // Reading 1: the shell the return will land on. Its own <script
+          // type="module"> names the bundle it would boot. Anything that is
+          // not our shell (an interstitial, an error page) simply has no such
+          // reference, so it contributes nothing rather than lying.
+          var fromShell = fetch(location.pathname, { cache: 'reload' })
+            .then(function (r) { return r.ok ? r.text() : ''; })
+            .then(function (html) {
+              var m = html && html.match(/assets\/(index-[^"'/]+\.js)/);
+              return m && m[1];
+            })
+            .catch(function () { return null; });
+          // Reading 2: the manifest. JSON.parse is the test that matters here
+          // — the SPA fallback and any interstitial both fail it.
+          var fromManifest = fetch(nocache(dir + 'build.json'), { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.text() : ''; })
+            .then(function (t) {
+              var j = null;
+              try { j = t && JSON.parse(t); } catch (e) { return null; }
+              return (j && j.entry) || null;
+            })
+            .catch(function () { return null; });
+          return Promise.all([fromShell, fromManifest]).then(function (both) {
+            // Both readable and disagreeing = a deploy in flight. Say nothing.
+            if (both[0] && both[1] && both[0] !== both[1]) return null;
+            var name = both[0] || both[1];
+            if (!name) return null;
+            var live = dir + name;
+            return fetch(live, { cache: 'reload' }).then(function (r) {
+              var ct = (r.headers.get('content-type') || '').toLowerCase();
+              if (!r.ok || ct.indexOf('javascript') < 0) return null;  // the fallback, not a bundle
+              // Recorded here rather than at the call site: the crash screen
+              // calls this too, and its return must pre-warm the same bundle
+              // the boot screen's would.
+              liveEntry = live;
+              return live;
+            }).catch(function () { return null; });
+          });
+        }
+        // The crash screen (src/ui/RecoveryBoundary.jsx) runs inside the
+        // bundle and shares this exact test rather than keeping its own.
+        window.__numapCheckLive = checkLive;
+        // onUp defaults to the storm exit; previews pass their own handler.
+        function startProbe(onUp) {
+          if (probeTimer) return;
+          // Dev has no hashed bundle and no manifest, so the design
+          // previews simulate the outcome instead of proving it.
+          if (PREVIEW_OK && /[?&]preview=/.test(location.search)) {
+            probeTimer = setInterval(function () { stopProbe(); (onUp || offerReturn)(); }, 1000);
+            return;
+          }
+          if (!window.fetch) return;
           probeTimer = setInterval(function () {
-            fetch(entry, { cache: 'no-store' })
-              .then(function (r) {
-                if (r && (r.ok || r.status === 404)) { stopProbe(); (onUp || offerReturn)(); }
-              })
-              .catch(function () {});
+            checkLive().then(function (live) {
+              if (!live || !probeTimer) return;
+              liveEntry = live;
+              stopProbe();
+              (onUp || offerReturn)();
+            });
           }, 4000);
         }
+
+        // ── The way back: a hard reload, minus the keyboard ──────────
+        // There is no JS API for ⌘⇧R, and plain reload() was not enough
+        // — people were pressing "Back to NU Map", landing on the same
+        // broken page, and only a hard refresh fixed it. A hard reload
+        // differs from reload() in exactly two ways, and both can be
+        // reproduced:
+        //
+        //   1. It bypasses any service worker. A coi-serviceworker
+        //      shipped here in May 2026 (for SharedArrayBuffer, no
+        //      longer needed — ORT runs numThreads=1) and nothing
+        //      registers it any more, but every browser that visited
+        //      while it did is STILL controlled by it, and a controlled
+        //      navigation is served by it. So: unregister every worker
+        //      and empty Cache Storage first.
+        //   2. It ignores the HTTP cache for the document and every
+        //      subresource. cache:'reload' does the same per URL and
+        //      writes the fresh response into the cache, so we re-fetch
+        //      the shell, the live entry bundle, and any chunk URL that
+        //      is known to have failed — the poisoned-cache case, where
+        //      a chunk URL holds a year-immutable copy of the HTML
+        //      shell, is precisely a case reload() cannot fix and this
+        //      can (content hashes are deterministic, so a revert can
+        //      resurrect a URL that was poisoned under an older deploy).
+        //
+        // Then navigate. If a return already failed this session
+        // (__numapBooted clears the counter, so a nonzero count means
+        // the last one did not boot), escalate: a ?nmfresh= stamp makes
+        // a document URL the cache has never seen, which it cannot
+        // answer from cache at all. It is stripped on boot.
+        var deadChunks = [];
+        function noteDeadChunk(u) {
+          if (u && /\/assets\//.test(u) && deadChunks.indexOf(u) < 0) deadChunks.push(u);
+        }
+        // Get service workers out of the way. Run as soon as a recovery screen
+        // starts watching, not only when the button is pressed: the two halves
+        // land at different times and both matter. Emptying a worker's Cache
+        // Storage takes effect at once, so it cannot go on serving a stale
+        // shell out of it to the very checks that decide whether to offer the
+        // way back; the unregistration takes effect at the next navigation (a
+        // page keeps its controller until it unloads), which is the one that
+        // has to boot. Nothing here needs a worker any more — see
+        // public/coi-serviceworker.js.
+        //
+        // Cache Storage is emptied ONLY when a registration actually existed,
+        // and never for the translation model: @huggingface/transformers keeps
+        // downloaded weights in `transformers-cache`, so a blanket wipe would
+        // make every crash screen cost the user that download again. A worker
+        // is the only thing that could be answering navigations from Cache
+        // Storage, so "no registration" means there is nothing here to clear.
+        function dropWorkerCaches() {
+          if (!window.caches || !caches.keys) return null;
+          return caches.keys().then(function (ks) {
+            return Promise.all(ks.filter(function (k) { return !/transformers/i.test(k); })
+              .map(function (k) { return caches.delete(k); }));
+          });
+        }
+        function purge(swallow) {
+          try {
+            if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+              swallow(navigator.serviceWorker.getRegistrations().then(function (rs) {
+                if (!rs.length) return null;
+                return Promise.all(rs.map(function (r) { return r.unregister(); })).then(dropWorkerCaches);
+              }));
+            }
+          } catch (e) {}
+        }
+        var purged = false;
+        function purgeOnce() {
+          if (purged) return;
+          purged = true;
+          purge(function (p) { p.catch(function () {}); });
+        }
+        var returning = false;
+        function hardReturn() {
+          // One return per page, or a second caller would bump the escalation
+          // counter again and race a second navigation against the first.
+          if (returning) return;
+          returning = true;
+          var tries = 0;
+          try { tries = parseInt(sessionStorage.getItem('numap-return-tries') || '0', 10) || 0; } catch (e) {}
+          try { sessionStorage.setItem('numap-return-tries', String(tries + 1)); } catch (e) {}
+          // Leaving a preview drops the preview params, so the storm
+          // genuinely returns to the real app instead of the preview.
+          var preview = PREVIEW_OK && /[?&]preview=/.test(location.search);
+          // Drop any stamp we are already carrying before adding a new one: a
+          // page that never booted still has the last one in its URL (only
+          // __numapBooted strips it), and a third attempt would otherwise
+          // navigate to ?nmfresh=…&nmfresh=…
+          var search = preview ? '' : stripFresh(location.search);
+          if (!preview && tries > 0) {
+            search = (search ? search + '&' : '?') + 'nmfresh=' + Date.now();
+          }
+          var target = location.pathname + search + (preview ? '' : location.hash);
+          var jobs = [];
+          var swallow = function (p) { jobs.push(p.catch(function () {})); };
+          purge(swallow);
+          if (window.fetch) {
+            // The pre-warm must use the URL the navigation will use, or
+            // it warms nothing the navigation can read.
+            swallow(fetch(target, { cache: 'reload' }));
+            if (liveEntry) swallow(fetch(liveEntry, { cache: 'reload' }));
+            for (var i = 0; i < deadChunks.length; i++) swallow(fetch(deadChunks[i], { cache: 'reload' }));
+          }
+          // Never hang on the network: the purge and the pre-warm get
+          // 2 s, then we navigate regardless — a plain reload is still
+          // better than staying on a dead page.
+          var went = false;
+          var go = function () {
+            if (went) return;
+            went = true;
+            // replace() to the URL we are already on would be a same-document
+            // navigation if it carries a #hash — nothing would reload at all.
+            // Identical target: reload. Escalated target (?nmfresh=): replace,
+            // which also keeps the dead page out of history.
+            if (target === location.pathname + location.search + location.hash) location.reload();
+            else location.replace(target);
+          };
+          setTimeout(go, 2000);
+          if (window.Promise && jobs.length) Promise.all(jobs).then(go); else go();
+        }
+        window.__numapHardReturn = hardReturn;
 
         // ── Storm exit: intensify, then reload into the reveal ───────
         // Exit choreography (~2.3 s): the storm rises and gusts, the
@@ -382,15 +622,16 @@
           exitChoreo(slow);
           setTimeout(function () {
             try { sessionStorage.setItem('numap-reveal', slow ? '2' : '1'); } catch (e) {}
-            // Leaving a preview drops the preview param, so the storm
-            // genuinely returns to the real app instead of the preview.
-            if (slow) location.href = location.pathname;
-            else window.location.reload();
-            // Watchdog: if we're still running 8 s later, the navigation
-            // silently failed (e.g. the network dropped mid-exit) — retry
-            // bluntly rather than stranding an inert page behind the
+            // hardReturn, not reload(): the point of pressing this is to
+            // land on a WORKING page, and reload() demonstrably didn't.
+            // It handles dropping the preview params itself.
+            hardReturn();
+            // Watchdog: if we're still running 12 s later (hardReturn
+            // caps its own purge at 2 s), the navigation silently failed
+            // — e.g. the network dropped mid-exit — so retry bluntly
+            // rather than stranding an inert page behind the
             // permanently-set `exiting` flag.
-            setTimeout(function () { window.location.reload(); }, 8000);
+            setTimeout(function () { window.location.reload(); }, 12000);
           }, slow ? 6000 : 2300);
         };
         function overlayStorm() {
@@ -609,7 +850,7 @@
                 s3.style.cursor = 'pointer';
                 s3.onclick = function () {
                   try { sessionStorage.setItem('numap-reveal', '1'); } catch (e) {}
-                  window.location.reload();
+                  hardReturn();   // the nudge promises a reload helps — so make it one that can
                 };
                 if (n3.parentNode) n3.parentNode.removeChild(n3);
               }, 1600);
@@ -650,6 +891,12 @@
         // the shell already loaded, correctly, before the deploy happened.
         window.addEventListener('vite:preloadError', function (e) {
           if (e && e.preventDefault) e.preventDefault();  // handled: watch, offer, return
+          // Remember which chunk URL died: it is the one URL we know may
+          // be holding a poisoned cache entry (the HTML shell, served at
+          // 200 under /assets/*'s immutable header), and hardReturn can
+          // overwrite exactly that.
+          var pm = e && e.payload && (e.payload.message || String(e.payload));
+          noteDeadChunk(pm && (pm.match(/https?:\/\/\S+?\.js/) || [])[0]);
           showRecovery();
           startProbe();
         });
@@ -659,6 +906,7 @@
         window.addEventListener('unhandledrejection', function (e) {
           var m = e && e.reason && (e.reason.message || String(e.reason));
           if (m && /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i.test(m)) {
+            noteDeadChunk((m.match(/https?:\/\/\S+?\.js/) || [])[0]);
             showRecovery();
             startProbe();
           }
@@ -668,13 +916,13 @@
         // the bundle loads have no SCRIPT target, so we never reload on app bugs.
         window.addEventListener('error', function (e) {
           var t = e && e.target;
-          if (t && t.tagName === 'SCRIPT') recover();
+          if (t && t.tagName === 'SCRIPT') { noteDeadChunk(t.src); recover(); }
         }, true);
         // Backstop for silent failures (e.g. a blocked module with no error event).
         setTimeout(recover, 10000);
       })();
     </script>
-    <script type="module" crossorigin src="./assets/index-BMTWig2P.js"></script>
+    <script type="module" crossorigin src="./assets/index-BtiuNc9u.js"></script>
   </head>
   <body>
     <div id="root">
