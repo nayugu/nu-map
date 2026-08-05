@@ -591,8 +591,14 @@ const PAGE_CSS =
   // prereq entry and professor name can hold a full unwrapped line.
   + "main.wide{max-width:1240px}"
   + ".nowrap{white-space:nowrap}"
-  + ".twocol{display:flex;gap:64px;flex-wrap:wrap}"
+  + ".twocol{display:flex;gap:64px;flex-wrap:wrap;justify-content:center}"
   + "ul.letters{list-style:none;margin:.3em 0;padding:0}ul.letters li{margin:2px 0}"
+  + ".namelist{width:max-content;max-width:100%;margin:0 auto;list-style:none;padding:0}"
+  + ".namelist li{margin:3px 0}"
+  // The hub reads as a title card: heading centered, the whole block
+  // vertically centered in the viewport.
+  + "main.hub{display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding-top:0;padding-bottom:0}"
+  + "main.hub h1{text-align:center}"
   + "td ul.req li{white-space:nowrap}"
   + "@media(max-width:760px){.layout{padding-left:0}nav{position:static;width:auto;border:none;background:none;"
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px 14px 0}"
@@ -660,7 +666,7 @@ advisor.`;
 </head><body>
 <div class="layout">
 <nav>${nav}</nav>
-<main${wide ? ` class="wide"` : ""}>
+<main class="${[isHub ? "hub" : "", wide ? "wide" : ""].filter(Boolean).join(" ")}">
 <h1>${escapeHtml(heading ?? title)}</h1>
 ${body}
 <footer>
@@ -977,7 +983,7 @@ for (const [letter, names] of [...profsByLastLetter.entries()].sort(([a], [b2]) 
     heading: `Professors — ${letter} (last name)`,
     description: `Northeastern instructors whose last name starts with "${letter}", each linking their own page with courses, seasons, and share of students taught. From NU Map (not affiliated with Northeastern).`,
     jsonUrl: `${JSON_ROOT}/professors.json`,
-    body: `<ul>` + names.map((name) => {
+    body: `<ul class="namelist">` + names.map((name) => {
       const ln = lastNameOf(name);
       const first = name.slice(0, name.length - ln.length).trim();
       return `<li><a href="${PAGE_ROOT}/professors/${profSlugOf.get(name)}">${escapeHtml(first ? `${ln}, ${first}` : ln)}</a></li>`;
@@ -992,7 +998,7 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
     heading: `Professors — ${letter}`,
     description: `Northeastern instructors whose name starts with "${letter}", each linking their own page with courses, seasons, and share of students taught. From NU Map (not affiliated with Northeastern).`,
     jsonUrl: `${JSON_ROOT}/professors/${letter}.json`,
-    body: `<ul>` + Object.entries(profs).map(([name, p]) =>
+    body: `<ul class="namelist">` + Object.entries(profs).map(([name, p]) =>
       `<li><a href="${p.page}">${escapeHtml(name)}</a> <span class="muted">(${Object.keys(p.courses).length} course${Object.keys(p.courses).length === 1 ? "" : "s"})</span></li>`).join("\n") + `</ul>`,
   });
   for (const [name, p] of Object.entries(profs)) {
