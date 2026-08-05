@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>northeastern/ adapter - NU Map Docs</title>
+  <link rel="stylesheet" href="../../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/adapters/northeastern">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">adapters/</a><span class="sep"> / </span><strong>northeastern/</strong>
+    </div>
+
+    <h1>northeastern/ <span class="badge red">Reference implementation</span></h1>
+    <p class="lead">Northeastern University's full adapter — every institution-specific value and rule in one folder. Nine files, one per driven port, plus a bundle export. This is the reference implementation to copy when forking for a new school. No file outside this folder may contain NU-specific logic.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">adapters/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Wired in</div><div class="nb-value"><code>src/config.js</code> — each file imported individually and passed to <code>wire()</code></div></div>
+      <div class="nb-group"><div class="nb-label">Overrides</div><div class="nb-value">All 8 configuration ports + aiAssistant (commented out in config.js pending hosting)</div></div>
+      <div class="nb-group"><div class="nb-label">Forking</div><div class="nb-value">Copy this folder → edit each file → update the 8 import lines in <code>src/config.js</code></div></div>
+    </div>
+
+    <h2>Data source history</h2>
+    <p>The northeastern adapter went through a deliberate migration from external dependencies to self-owned data. The original approach used external git submodules to bootstrap quickly; over time each was replaced with our own scrapers for stability and control.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Data</th><th>Original source</th><th>Current source</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Course metadata</td>
+          <td><code>external/nu-courses</code> submodule → <code>husker.vercel.app</code> API</td>
+          <td><code>scripts/scrape-catalog.js</code> → <code>public/northeastern/catalog-courses.json</code></td>
+          <td><span class="badge green">Migrated</span></td>
+        </tr>
+        <tr>
+          <td>Term availability</td>
+          <td><code>external/searchneu</code> submodule (SearchNEU)</td>
+          <td><code>scripts/scrape-availability.js</code> → <code>public/northeastern/term-history.json</code></td>
+          <td><span class="badge green">Migrated</span></td>
+        </tr>
+        <tr>
+          <td>Major requirements</td>
+          <td><code>external/graduatenu</code> submodule (sandboxnu/graduatenu)</td>
+          <td><code>scripts/scrape-majors.js</code> → <code>src/data/majors/</code></td>
+          <td><span class="badge green">Migrated</span></td>
+        </tr>
+        <tr>
+          <td>Minor requirements</td>
+          <td><code>external/graduatenu</code> submodule</td>
+          <td><code>scripts/scrape-majors.js</code> → <code>src/data/majors/*_minor/</code></td>
+          <td><span class="badge green">Migrated</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Why we migrated:</strong> external submodules gave us a fast start but no control — schema changes, outages, or stale data in those repos would silently break the app. Own scrapers let us control the update cadence, validate output, and apply patches via <code>data/patches/</code>. The migration is complete — all external submodules have been removed.</div></div>
+
+    <h2>File map</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>File</th><th>Port</th><th>Key values / purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>institution.js</code></td><td>IInstitution</td><td>id <code>"northeastern"</code>, name "Northeastern University", shortName "NU", storagePrefix <code>"ncp"</code>, defaultLocale <code>"en"</code>, portalName "MyNEU", degreeAuditName "DegreeWorks"</td></tr>
+        <tr><td><code>calendar.js</code></td><td>ICalendar</td><td>4 semester types: fall/spring (weight 1.0), sumA/sumB (weight 0.5); Banner term code decoder (suffix 10→fall, 30→spring, 40→sumA, 60→sumB)</td></tr>
+        <tr><td><code>creditSystem.js</code></td><td>ICreditSystem</td><td>unitName <code>"SH"</code>, standardValue 4, fullTimeMin 12, semesterMax 22</td></tr>
+        <tr><td><code>attributeSystem.js</code></td><td>IAttributeSystem</td><td>NUPath — 13 codes (12 active in 3×4 grid, 1 legacy WF kept for label resolution), getCoverage() unions course attributes + grantedAttrs</td></tr>
+        <tr><td><code>specialTerms.js</code></td><td>ISpecialTerms</td><td>Co-op: color #f87171, 4mo (w=1.0, grants EX) / 6mo (w=2.0, grants EX). Internship: color #9ca3af, 2mo (w=0.5) / 4mo (w=1.0), grants nothing</td></tr>
+        <tr><td><code>majorRequirements.js</code></td><td>IMajorRequirements</td><td>fmtLabel strips <code>_(boston)</code>/<code>_(burlington)</code> location suffixes, title-cases result; fmtLocation extracts and formats the location tag</td></tr>
+        <tr><td><code>courseCatalog.js</code></td><td>ICourseCatalog</td><td>Fetches <code>public/northeastern/catalog-courses.json</code> + merges <code>public/northeastern/term-history.json</code>; <code>deriveTerms()</code> uses P≥0.5 threshold to predict offering; Banner term decode via calendar adapter</td></tr>
+        <tr><td><code>localization.js</code></td><td>ILocalization</td><td>5 disclaimer bullets: unofficial status, DegreeWorks authority, data freshness (with "confirm with official catalog"), localStorage-only storage, use at own risk</td></tr>
+        <tr><td><code>aiAssistant.js</code></td><td>IAIAssistant</td><td>Posts plan snapshots to MCP server at <code>VITE_MCP_SERVER_URL</code> (default localhost:27182); session UUID in localStorage <code>"nu-map-mcp-session"</code>. <strong>Imported in northeastern/index.js but commented out in src/config.js</strong> — pending public hosting.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>calendar.js — semester types and Banner decoding</h2>
+    <p>Four semester types, each with a weight that drives all span arithmetic. A work term occupies a slot when <code>termWeight &gt; semWeight</code> — the code never hardcodes duration comparisons.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>id</th><th>label</th><th>weight</th><th>optional</th><th>Banner suffix</th></tr></thead>
+      <tbody>
+        <tr><td><code>fall</code></td><td>Fall</td><td>1.0</td><td>false</td><td>10</td></tr>
+        <tr><td><code>spring</code></td><td>Spring</td><td>1.0</td><td>false</td><td>30 (32 = Law Spring → spring)</td></tr>
+        <tr><td><code>sumA</code></td><td>Summer 1</td><td>0.5</td><td>true</td><td>40 (52 = Law Summer → sumA)</td></tr>
+        <tr><td><code>sumB</code></td><td>Summer 2</td><td>0.5</td><td>true</td><td>60</td></tr>
+      </tbody>
+    </table></div>
+    <p>Spring uses idPrefix <code>"spr"</code> (not <code>"spring"</code>) for backward-compatibility with existing localStorage plan keys. Banner codes 32 (Law Spring) and 52 (Law Summer) are remapped to the standard spring/sumA types.</p>
+
+    <h2>specialTerms.js — co-op and internship</h2>
+    <p>Two term types reflecting NU's co-op program and optional internship policy. The <code>weight</code> field matches ICalendar's semester weights so the span logic works uniformly:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>typeId</th><th>Duration</th><th>Weight</th><th>Spans into next slot</th><th>Grants NUPath</th></tr></thead>
+      <tbody>
+        <tr><td><code>coop</code></td><td>4 months</td><td>1.0</td><td>Only if placed in sumA (spills into sumB)</td><td>EX (Integration Experience)</td></tr>
+        <tr><td><code>coop</code></td><td>6 months</td><td>2.0</td><td>Always — occupies two consecutive full-semester slots</td><td>EX</td></tr>
+        <tr><td><code>intern</code></td><td>2 months</td><td>0.5</td><td>Never — fits in one summer half-session</td><td>none</td></tr>
+        <tr><td><code>intern</code></td><td>4 months</td><td>1.0</td><td>Only if placed in sumA (spills into sumB)</td><td>none</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>attributeSystem.js — NUPath</h2>
+    <p>13 attributes total. 12 are displayed in the 3×4 grad panel grid; WF (First Year Writing) is a legacy code kept only for PDF export label resolution.</p>
+    <div class="two-col">
+      <div>
+        <h3>Grid layout (3 rows × 4 cols)</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td><code>ND</code></td><td><code>EI</code></td><td><code>IC</code></td><td><code>FQ</code></td></tr>
+            <tr><td><code>SI</code></td><td><code>AD</code></td><td><code>DD</code></td><td><code>ER</code></td></tr>
+            <tr><td><code>WD</code></td><td><code>WI</code></td><td><code>EX</code></td><td><code>CE</code></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div>
+        <h3>Full label map</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td><code>ND</code></td><td>Natural and Designed World</td></tr>
+            <tr><td><code>EI</code></td><td>Creative Express. and Innovation</td></tr>
+            <tr><td><code>IC</code></td><td>Interpreting Culture</td></tr>
+            <tr><td><code>FQ</code></td><td>Formal and Quantitative Reasoning</td></tr>
+            <tr><td><code>SI</code></td><td>Societies and Institutions</td></tr>
+            <tr><td><code>AD</code></td><td>Analyzing and Using Data</td></tr>
+            <tr><td><code>DD</code></td><td>Difference and Diversity</td></tr>
+            <tr><td><code>ER</code></td><td>Ethical Reasoning</td></tr>
+            <tr><td><code>WF</code></td><td>1st Year Writing <em>(legacy — not in grid)</em></td></tr>
+            <tr><td><code>WD</code></td><td>Advanced Writing in the Disciplines</td></tr>
+            <tr><td><code>WI</code></td><td>Writing Intensive</td></tr>
+            <tr><td><code>EX</code></td><td>Integration Experience</td></tr>
+            <tr><td><code>CE</code></td><td>Capstone Experience</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <p><code>getCoverage(placements, courseMap, grantedAttrs)</code> unions <code>course.attributes</code> for all placed courses, then adds the codes in <code>grantedAttrs</code>. <code>grantedAttrs</code> is computed by <code>computeGrantedAttrs()</code> in <code>specialTermUtils.js</code> — it collects the NUPath grants from all placed work terms (co-ops grant EX).</p>
+
+    <h2>courseCatalog.js — data pipeline</h2>
+    <p>The NU adapter owns the entire course data fetch-and-normalize pipeline. PlannerContext calls <code>fetchAll()</code> once at startup and receives a normalized <code>Course[]</code>:</p>
+    <ol>
+      <li>Fetch <code>public/northeastern/catalog-courses.json</code> — the scraped catalog with course metadata, attributes, and prereq trees.</li>
+      <li>Fetch <code>public/northeastern/term-history.json</code> — Banner term availability per course per semester. Merge into each course's <code>termHistory</code> object.</li>
+      <li>Call <code>deriveTerms()</code> on each course — produces a <code>terms</code> set (the predicted offering semesters) from term history using a P≥0.5 threshold: if a course was offered in at least half of the scraped instances of a given semester type, it is considered offered in that type.</li>
+    </ol>
+
+    <h2>index.js — bundle export</h2>
+    <p><code>northeastern/index.js</code> imports all 9 adapter files (including aiAssistant) and exports them as a typed overrides object. <code>src/config.js</code> currently imports each file individually for selective overriding, but <code>northeastern/index.js</code> provides the same bundle for contexts where you want the full NU adapter as one import:</p>
+
+    <pre><code><span class="cmt">// src/adapters/northeastern/index.js — bundle export</span>
+const overrides = {
+  institution, calendar, creditSystem,
+  attributeSystem, specialTerms, majorRequirements,
+  courseCatalog, localization, aiAssistant,
+};
+export default overrides;</code></pre>
+
+    <pre><code><span class="cmt">// src/config.js — individual imports for selective overriding</span>
+import { wire }          from './adapters/wire.js';
+import institution       from './adapters/northeastern/institution.js';
+import calendar          from './adapters/northeastern/calendar.js';
+<span class="cmt">// ... 5 more imports</span>
+// import aiAssistant from './adapters/northeastern/aiAssistant.js'; <span class="cmt">// disabled until hosted</span>
+
+export const institutionAdapter = wire({
+  institution, calendar, creditSystem,
+  attributeSystem, specialTerms, majorRequirements,
+  courseCatalog, localization,
+  <span class="cmt">// aiAssistant,  ← re-enable once VITE_MCP_SERVER_URL points at a live server</span>
+});</code></pre>
+
+    <h2>Forking for a new institution</h2>
+    <p>The northeastern folder is the starting point for any fork:</p>
+    <ol>
+      <li>Copy <code>src/adapters/northeastern/</code> to <code>src/adapters/myuniversity/</code>.</li>
+      <li>Edit each file. <strong>Only <code>institution.js</code> and <code>courseCatalog.js</code> are required changes</strong> — everything else can stay as-is if the institution has a similar structure. Omit files entirely to fall back to the generic defaults.</li>
+      <li>Update the 8 import lines in <code>src/config.js</code> to point at your new folder.</li>
+    </ol>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>File to change</th><th>Why / what to change</th></tr></thead>
+      <tbody>
+        <tr><td><code>institution.js</code></td><td>id, name, storagePrefix, portal/audit system names — always required</td></tr>
+        <tr><td><code>courseCatalog.js</code></td><td>URL to your course JSON, fetch strategy, normalization logic — always required</td></tr>
+        <tr><td><code>calendar.js</code></td><td>Only if semester structure differs (e.g. quarters, trimester, no summers)</td></tr>
+        <tr><td><code>creditSystem.js</code></td><td>Only if unit name or standard credit value differs</td></tr>
+        <tr><td><code>attributeSystem.js</code></td><td>Replace NUPath grid with your institution's gen-ed framework, or use generic (empty grid)</td></tr>
+        <tr><td><code>specialTerms.js</code></td><td>Only if co-op/exchange programs exist. Use generic (empty types) if not.</td></tr>
+        <tr><td><code>majorRequirements.js</code></td><td>Only if your major data folder naming differs from <code>_(location)</code> suffix pattern</td></tr>
+        <tr><td><code>localization.js</code></td><td>Replace NU-specific portal/system names in disclaimer bullets</td></tr>
+        <tr><td><code>aiAssistant.js</code></td><td>Wire a no-op stub if you have no MCP server; omit for generic default (always unavailable)</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout tip"><div class="ci">✦</div><div class="callout-body"><strong>Invariant to check:</strong> After forking, verify that <code>src/ui/</code> contains zero direct imports from your adapter folder. All institution config must flow through <code>usePort()</code>. Run: <code>grep -r "adapters/" src/ui/</code> — should return nothing.</div></div>
+
+  </main>
+</div>
+<script src="../../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
