@@ -128,6 +128,7 @@ jobs:
             public/northeastern/term-details.json \
             public/northeastern/offering-summary.json \
             public/northeastern/ratemyhusky.json \
+            public/northeastern/subjects.json \
             public/northeastern/change-log.json \
             public/northeastern/course-equivalences.json \
             src/core/dataMeta.json \
