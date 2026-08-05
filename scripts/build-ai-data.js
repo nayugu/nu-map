@@ -571,19 +571,29 @@ const pageUrls = [];
 const PAGE_CSS =
   "*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.55;color:#1e293b}"
   + "a{color:#dc2626;text-decoration:none}a:hover{text-decoration:underline}"
-  // Ghost rail: the nav rests faint and fades in on hover. No pills — the
-  // filing slide-out plus darkening is the whole hover language; the
-  // current page is red and semibold, permanently slid out.
-  + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;"
-  + "font-size:.92rem;opacity:.25;transition:opacity .25s ease}"
-  + "nav:hover,nav:focus-within{opacity:1}"
-  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:18px 14px}"
-  + "nav .sections a{display:block;padding:4px 14px;color:#64748b;"
-  + "transition:transform .16s ease,color .16s ease}"
-  + "nav .sections a:hover{transform:translateX(6px);color:#0f172a;text-decoration:none}"
-  + "nav .sections a.here{color:#dc2626;font-weight:600;transform:translateX(6px)}"
-  + "nav .aux{padding:14px 14px 20px}"
-  + "nav .aux a{display:block;color:#94a3b8;font-size:.82rem;padding:3px 14px}"
+  // Dot rail with proximity falloff: at rest the nav is seven tiny dots
+  // (the current page's dot red). Hovering the rail whispers all labels
+  // in; the hovered label goes fully dark and slides out, ±1 neighbors
+  // light to half, ±2 to a quarter (:has() covers the upward direction).
+  + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;font-size:.92rem}"
+  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:15px;padding:18px 14px}"
+  + "nav .sections a{display:flex;align-items:center;gap:11px;padding:2px 14px;color:#64748b}"
+  + "nav .sections a:hover{text-decoration:none}"
+  + "nav .sections .dot{width:7px;height:7px;border-radius:50%;background:#e2e8f0;flex:0 0 7px;"
+  + "transition:background .18s ease,transform .18s ease}"
+  + "nav .sections a.here .dot{background:#dc2626}"
+  + "nav .sections .lbl{opacity:0;transform:translateX(-6px);white-space:nowrap;"
+  + "transition:opacity .18s ease,transform .18s ease,color .18s ease}"
+  + "nav .sections a.here .lbl{color:#dc2626;font-weight:600}"
+  + "nav:hover .sections .lbl{opacity:.14}"
+  + "nav .sections a:hover+a .lbl,nav .sections a:has(+a:hover) .lbl{opacity:.5;transform:translateX(-3px)}"
+  + "nav .sections a:hover+a+a .lbl,nav .sections a:has(+a+a:hover) .lbl{opacity:.24}"
+  + "nav .sections a:hover .lbl{opacity:1;color:#0f172a;transform:translateX(0)}"
+  + "nav .sections a:hover .dot{transform:scale(1.6);background:#94a3b8}"
+  + "nav .sections a.here:hover .lbl{color:#dc2626}"
+  + "nav .aux{padding:14px 14px 20px;opacity:0;transition:opacity .2s ease}"
+  + "nav:hover .aux{opacity:1}"
+  + "nav .aux a{display:block;color:#cbd5e1;font-size:.82rem;padding:3px 14px;transition:color .15s ease}"
   + "nav .aux a:hover{color:#475569}"
   // Main truly centers on the viewport when there's room; when the window
   // is too narrow for that, it clears the rail instead.
@@ -608,11 +618,12 @@ const PAGE_CSS =
   + ".dir dt{margin-top:1.05em;font-size:1.02rem}"
   + ".dir dd{margin:.1em 0 0;color:#64748b;font-size:.9rem;max-width:34em}"
   + "td ul.req li{white-space:nowrap}"
-  + "@media(max-width:760px){nav{position:static;width:auto;opacity:1;"
+  + "@media(max-width:760px){nav{position:static;width:auto;"
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:2px 14px;padding:12px 16px 0}"
-  + "nav .sections{display:contents}nav .aux{display:contents}"
+  + "nav .sections{display:contents}nav .aux{display:contents;opacity:1}"
   + "nav .sections a,nav .aux a{padding:3px 0;margin:0;font-size:.88rem}"
-  + "nav .sections a:hover,nav .sections a.here{transform:none}"
+  + "nav .sections .dot{display:none}"
+  + "nav .sections .lbl,nav:hover .sections .lbl{opacity:1;transform:none}"
   + "main,main.wide{margin:0 auto}}"
   + "h1{font-size:1.55rem;margin:.1em 0 .3em}"
   + "h2{font-size:1.12rem;margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid #e2e8f0}"
@@ -655,7 +666,7 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   const url = isHub ? PAGE_ROOT : `${PAGE_ROOT}/${rel.replace(/\.html$/, "")}`;
   pageUrls.push(url);
   const nav = `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
-    `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
+    `<a href="${href}"${id === section ? ` class="here"` : ""}><span class="dot"></span><span class="lbl">${label}</span></a>`).join("")
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/story">the story</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
     + `</div>`;
