@@ -611,7 +611,8 @@ const PAGE_CSS =
   + "details{margin:.5em 0;border:1px solid #e2e8f0;border-radius:10px;padding:.5em .9em}summary{cursor:pointer;font-weight:600}"
   + "footer{margin-top:2.5em;border-top:1px solid #e2e8f0;padding-top:1em;font-size:.82rem;color:#64748b}"
   + "footer code{background:#f1f5f9;padding:0 4px;border-radius:4px;word-break:break-all}"
-  + "footer details{border:none;padding:0;margin:0}footer summary{font-weight:400;color:#94a3b8}"
+  + "footer details{border:none;padding:0;margin:0 0 .9em}footer summary{font-weight:400;color:#cbd5e1}"
+  + "footer summary:hover{color:#94a3b8}"
   + "pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:8px;font-size:.85rem}";
 
 const NAV_SECTIONS = [
@@ -662,7 +663,6 @@ advisor.`;
 <h1>${escapeHtml(heading ?? title)}</h1>
 ${body}
 <footer>
-<p class="muted">${disclaimerText}</p>
 <details>
 <summary>For AI assistants — reaching any other NU Map data from this page</summary>
 <p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>. These
@@ -681,6 +681,7 @@ by web search instead — results of a search ARE fetchable:
 Or ask the user to paste the exact URL you need as their next message.</li>
 </ul>
 </details>
+<p class="muted">${disclaimerText}</p>
 <p class="muted" style="text-align:center">${stamp}</p>
 </footer>
 </main>
