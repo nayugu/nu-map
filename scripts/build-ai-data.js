@@ -663,7 +663,6 @@ advisor.`;
 ${body}
 <footer>
 <p class="muted">${disclaimerText}</p>
-<p class="muted" style="text-align:center">${stamp}</p>
 <details>
 <summary>For AI assistants — reaching any other NU Map data from this page</summary>
 <p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>. These
@@ -682,6 +681,7 @@ by web search instead — results of a search ARE fetchable:
 Or ask the user to paste the exact URL you need as their next message.</li>
 </ul>
 </details>
+<p class="muted" style="text-align:center">${stamp}</p>
 </footer>
 </main>
 </div>
