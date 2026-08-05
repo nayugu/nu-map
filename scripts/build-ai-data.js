@@ -599,9 +599,14 @@ const PAGE_CSS =
   + ".namelist{width:max-content;max-width:100%;margin:0 auto;list-style:none;padding:0}"
   + ".namelist li{margin:3px 0}"
   // The hub reads as a title card: heading centered, the whole block
-  // vertically centered in the viewport.
+  // vertically centered in the viewport. Its directory is a definition
+  // list: section name on its own line, description tucked beneath in
+  // smaller muted text, one shared left edge.
   + "main.hub{display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding-top:0;padding-bottom:0}"
-  + "main.hub h1{text-align:center}"
+  + "main.hub h1{text-align:center;margin-bottom:.6em}"
+  + ".dir{width:max-content;max-width:100%;margin:0 auto}"
+  + ".dir dt{margin-top:1.05em;font-size:1.02rem}"
+  + ".dir dd{margin:.1em 0 0;color:#64748b;font-size:.9rem;max-width:34em}"
   + "td ul.req li{white-space:nowrap}"
   + "@media(max-width:760px){nav{position:static;width:auto;opacity:1;"
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:2px 14px;padding:12px 16px 0}"
@@ -1073,14 +1078,20 @@ pageQueue.push({
   heading: "Overview",
   description: "Browse NU Map's public Northeastern data: every course with prerequisites, offering history and professors; every major and minor with requirements; NUpath; course equivalences. Free, no login. AI guide at numap.app/llms.txt.",
   jsonUrl: `${JSON_ROOT}/index.json`,
-  body: `<ul>
-<li><a href="${PAGE_ROOT}/courses">Courses by subject</a> — ${catalog.length.toLocaleString("en-US")} courses in ${subjects.length} subjects: prerequisites, offering history, meeting days, professors, and what each course unlocks. A page per subject and per course.</li>
-<li><a href="${PAGE_ROOT}/majors">Majors</a> — full parsed degree requirements, undergraduate and graduate, grouped by college.</li>
-<li><a href="${PAGE_ROOT}/minors">Minors</a> — same, for every minor.</li>
-<li><a href="${PAGE_ROOT}/nupath">NUpath</a> — which courses satisfy each of the 13 general-education attributes.</li>
-<li><a href="${PAGE_ROOT}/professors">Professors</a> — ${professors.size.toLocaleString("en-US")} instructors: who teaches what, when, and what share of students.</li>
-<li><a href="${PAGE_ROOT}/equivalences">Course equivalences</a> — substitution suggestions by evidence tier.</li>
-</ul>`,
+  body: `<dl class="dir">
+<dt><a href="${PAGE_ROOT}/courses">Courses</a></dt>
+<dd>${catalog.length.toLocaleString("en-US")} courses in ${subjects.length} subjects — prerequisites, offering history, meeting days, professors, unlocks. A page per subject and per course.</dd>
+<dt><a href="${PAGE_ROOT}/majors">Majors</a></dt>
+<dd>Full degree requirements, undergraduate and graduate, grouped by college.</dd>
+<dt><a href="${PAGE_ROOT}/minors">Minors</a></dt>
+<dd>Same, for every minor.</dd>
+<dt><a href="${PAGE_ROOT}/nupath">NUpath</a></dt>
+<dd>Which courses satisfy each of the 13 general-education attributes.</dd>
+<dt><a href="${PAGE_ROOT}/professors">Professors</a></dt>
+<dd>${professors.size.toLocaleString("en-US")} instructors — who teaches what, when, and what share of students.</dd>
+<dt><a href="${PAGE_ROOT}/equivalences">Equivalences</a></dt>
+<dd>Substitution suggestions by evidence tier.</dd>
+</dl>`,
 });
 
 // Program pages cover only the NEWEST catalog year: JSONs keep every
