@@ -102,8 +102,17 @@ const pageQueue = []; // filled by the loops, flushed at the page stage
 
 const programs = [];
 const seenUrls = new Map(); // url → id, for collision rails
+const programRedirects = []; // old /data/programs/* page paths → new homes
 
-for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors", "grad/")]) {
+// Program pages live under their directory, same grammar as courses and
+// professors: /data/majors/{slug}, /data/minors/{slug}, /data/graduate/{slug}.
+// Pages exist for the newest catalog year only, so slugs drop the
+// year-level-college prefix; the rare collision gets a college prefix.
+const allSrcs = [...walkPrograms("majors", ""), ...walkPrograms("grad-majors", "grad/")];
+const newestProgYear = Math.max(...allSrcs.map((s) => Number(s.year)));
+const pageSlugTaken = new Map(); // "dir/slug" → id
+
+for (const src of allSrcs) {
   const parsed = readJSON(src.file);
   if (!parsed.name) throw new Error(`program without a name: ${src.file}`);
 
@@ -117,7 +126,21 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
   seenUrls.set(url, src.id);
 
   const kind = b?.type ?? (/(^|_)minor$/.test(src.prog) ? "minor" : "major");
-  const pageRel = `programs/${src.year}-${level}-${slugify(src.college)}-${slugify(src.prog)}.html`;
+  const isNewest = Number(src.year) === newestProgYear;
+  const dir = level === "grad" ? "graduate" : kind === "minor" ? "minors" : "majors";
+
+  let page;
+  let pageRel;
+  if (isNewest) {
+    let slug = slugify(src.prog);
+    if (pageSlugTaken.has(`${dir}/${slug}`)) slug = `${slugify(src.college)}-${slug}`;
+    if (pageSlugTaken.has(`${dir}/${slug}`)) throw new Error(`page slug collision: ${src.id} vs ${pageSlugTaken.get(`${dir}/${slug}`)}`);
+    pageSlugTaken.set(`${dir}/${slug}`, src.id);
+    pageRel = `${dir}/${slug}.html`;
+    page = `${PAGE_ROOT}/${dir}/${slug}`;
+    programRedirects.push([`/data/programs/${src.year}-${level}-${slugify(src.college)}-${slugify(src.prog)}`, `/data/${dir}/${slug}`]);
+  }
+
   const { metadata, name, ...requirements } = parsed;
   const payload = {
     id: src.id,
@@ -132,7 +155,7 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
     verified: b?.verified ?? metadata?.verified,
     sourceUrl: b?.sourceUrl ?? metadata?.sourceUrl,
     lastEdited: metadata?.lastEdited,
-    page: `${PAGE_ROOT}/${pageRel.replace(/\.html$/, "")}`,
+    ...(page ? { page } : {}),
     url,
     app: ORIGIN,
     generatedAt,
@@ -140,24 +163,26 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
     requirements,
   };
   writeJSON(rel, payload);
-  pageQueue.push({
-    year: Number(src.year),
-    rel: pageRel,
-    section: kind === "minor" ? "minors" : "majors",
-    title: `${name} — requirements (${src.year} catalog, ${level === "grad" ? "graduate" : "undergraduate"})`,
-    heading: name,
-    description: `Full degree requirements for ${name} at Northeastern University (${src.year} catalog). From NU Map, a student-built planner not affiliated with Northeastern.`,
-    jsonUrl: url,
-    kind: "program",
-    data: payload,
-  });
+  if (isNewest) {
+    pageQueue.push({
+      year: Number(src.year),
+      rel: pageRel,
+      section: dir,
+      title: `${name} — requirements (${src.year} catalog, ${level === "grad" ? "graduate" : "undergraduate"})`,
+      heading: name,
+      description: `Full degree requirements for ${name} at Northeastern University (${src.year} catalog). From NU Map, a student-built planner not affiliated with Northeastern.`,
+      jsonUrl: url,
+      kind: "program",
+      data: payload,
+    });
+  }
 
   programs.push({
     id: src.id, name, level, kind,
     catalogYear: Number(src.year), college: src.college,
     location: b?.location || undefined,
     totalCreditsRequired: b?.totalCreditsRequired,
-    page: payload.page, url,
+    ...(page ? { page } : {}), url,
   });
 }
 
@@ -166,7 +191,7 @@ if (programs.length < MIN_PROGRAMS) {
 }
 programs.sort((a, b2) => a.id.localeCompare(b2.id));
 writeJSON("programs/index.json", {
-  what: "Every Northeastern program NU Map knows. `page` is the human-readable requirements page (best for reading); `url` is the full requirements JSON.",
+  what: "Every Northeastern program NU Map knows. `page` is the human-readable requirements page (current catalog year only; best for reading); `url` is the full requirements JSON (all years).",
   count: programs.length,
   generatedAt,
   disclaimer: DISCLAIMER,
@@ -666,6 +691,7 @@ const NAV_SECTIONS = [
   ["courses", "Courses", `${PAGE_ROOT}/courses`],
   ["majors", "Majors", `${PAGE_ROOT}/majors`],
   ["minors", "Minors", `${PAGE_ROOT}/minors`],
+  ["graduate", "Graduate", `${PAGE_ROOT}/graduate`],
   ["nupath", "NUpath", `${PAGE_ROOT}/nupath`],
   ["professors", "Professors", `${PAGE_ROOT}/professors`],
   ["equivalences", "Equivalences", `${PAGE_ROOT}/equivalences`],
@@ -698,7 +724,8 @@ advisor.`;
 pages ARE the primary machine-readable surface: small plain text, fully expanded,
 every reference a literal link you can fetch. Directories: <code>${PAGE_ROOT}/courses</code>
 (a page per subject and per course, pattern <code>${PAGE_ROOT}/courses/{SUBJECT}/{NUMBER}</code>),
-<code>${PAGE_ROOT}/majors</code> and <code>${PAGE_ROOT}/minors</code>,
+<code>${PAGE_ROOT}/majors</code>, <code>${PAGE_ROOT}/minors</code>,
+<code>${PAGE_ROOT}/graduate</code>,
 <code>${PAGE_ROOT}/nupath</code>, <code>${PAGE_ROOT}/professors</code>,
 <code>${PAGE_ROOT}/equivalences</code>.</p>
 <ul>
@@ -929,42 +956,48 @@ pageQueue.push({
 });
 
 {
-  const newest = Math.max(...pageQueue.filter((q) => q.year).map((q) => q.year));
-  const current = pageQueue.filter((m) => m.kind === "program" && m.year === newest);
-  const directory = (kindLabel, wanted) => {
-    const byLevel = { undergrad: new Map(), grad: new Map() };
-    for (const m of current) {
-      const p = m.data;
-      if ((p.kind === "minor") !== (wanted === "minor")) continue;
-      const bucket = byLevel[p.level] ?? byLevel.undergrad;
-      if (!bucket.has(p.college)) bucket.set(p.college, []);
-      bucket.get(p.college).push({ name: p.name, href: p.page });
-    }
-    const section = (label, bucket) => bucket.size
-      ? `<h2>${label}</h2>` + [...bucket.entries()].sort(([a], [b2]) => a.localeCompare(b2)).map(([college, list]) =>
-        `<h3>${escapeHtml(prettyWords(college))}</h3><ul>` + list.sort((a, b2) => a.name.localeCompare(b2.name)).map((p) =>
-          `<li><a href="${p.href}">${escapeHtml(p.name)}</a></li>`).join("") + `</ul>`).join("")
-      : "";
-    return section("Undergraduate", byLevel.undergrad) + section("Graduate", byLevel.grad)
-      + `<p class="muted">Current catalog year; earlier years are in the <a href="${JSON_ROOT}/programs/index.json">JSON index</a>.</p>`;
+  // Directories match the site's grammar: each contains its own pages.
+  // Majors/Minors are the undergraduate vocabulary; Graduate is its own
+  // door with Degrees and Certificates sections.
+  const current = programs.filter((p) => p.page);
+  const collegeSections = (list) => {
+    const m = new Map();
+    for (const p of list) { if (!m.has(p.college)) m.set(p.college, []); m.get(p.college).push(p); }
+    return [...m.entries()].sort(([a], [b2]) => a.localeCompare(b2)).map(([college, ps]) =>
+      `<h3>${escapeHtml(prettyWords(college))}</h3><ul>` + ps.sort((a, b2) => a.name.localeCompare(b2.name)).map((p) =>
+        `<li><a href="${p.page}">${escapeHtml(p.name)}</a></li>`).join("") + `</ul>`).join("");
   };
+  const tail = `<p class="muted">Current catalog year; earlier years are in the <a href="${JSON_ROOT}/programs/index.json">JSON index</a>.</p>`;
+  const grads = current.filter((p) => p.level === "grad");
+  const certs = grads.filter((p) => /certificate/i.test(p.name));
+  const degrees = grads.filter((p) => !/certificate/i.test(p.name));
   pageQueue.push({
     rel: "majors.html",
     section: "majors",
-    title: "Northeastern majors — degree requirements",
+    title: "Northeastern undergraduate majors — degree requirements",
     heading: "Majors",
-    description: "Every Northeastern major NU Map knows, undergraduate and graduate, grouped by college — each linking its full parsed degree requirements. From NU Map (not affiliated with Northeastern).",
+    description: "Every Northeastern undergraduate major NU Map knows, including combined majors, grouped by college — each linking its full degree requirements. From NU Map (not affiliated with Northeastern).",
     jsonUrl: `${JSON_ROOT}/programs/index.json`,
-    body: directory("majors", "major"),
+    body: collegeSections(current.filter((p) => p.level === "undergrad" && p.kind !== "minor")) + tail,
   });
   pageQueue.push({
     rel: "minors.html",
     section: "minors",
     title: "Northeastern minors — requirements",
     heading: "Minors",
-    description: "Every Northeastern minor NU Map knows, grouped by college — each linking its full parsed requirements. From NU Map (not affiliated with Northeastern).",
+    description: "Every Northeastern minor NU Map knows, grouped by college — each linking its full requirements. From NU Map (not affiliated with Northeastern).",
     jsonUrl: `${JSON_ROOT}/programs/index.json`,
-    body: directory("minors", "minor"),
+    body: collegeSections(current.filter((p) => p.kind === "minor")) + tail,
+  });
+  pageQueue.push({
+    rel: "graduate.html",
+    section: "graduate",
+    title: "Northeastern graduate programs — master's, PhD, and certificate requirements",
+    heading: "Graduate",
+    description: `All ${grads.length} Northeastern graduate programs NU Map knows — ${degrees.length} degrees and ${certs.length} certificates, grouped by college, each linking its full requirements. From NU Map (not affiliated with Northeastern).`,
+    jsonUrl: `${JSON_ROOT}/programs/index.json`,
+    body: `<h2>Degrees</h2>` + collegeSections(degrees)
+      + `<h2>Certificates</h2>` + collegeSections(certs) + tail,
   });
 }
 
@@ -1109,9 +1142,11 @@ pageQueue.push({
 <dt><a href="${PAGE_ROOT}/courses">Courses</a></dt>
 <dd>${catalog.length.toLocaleString("en-US")} courses in ${subjects.length} subjects — prerequisites, offering history, meeting days, professors, unlocks. A page per subject and per course.</dd>
 <dt><a href="${PAGE_ROOT}/majors">Majors</a></dt>
-<dd>Full degree requirements, undergraduate and graduate, grouped by college.</dd>
+<dd>Undergraduate degree requirements, including combined majors, grouped by college.</dd>
 <dt><a href="${PAGE_ROOT}/minors">Minors</a></dt>
 <dd>Same, for every minor.</dd>
+<dt><a href="${PAGE_ROOT}/graduate">Graduate</a></dt>
+<dd>Master's, PhD, and certificate requirements, grouped by college.</dd>
 <dt><a href="${PAGE_ROOT}/nupath">NUpath</a></dt>
 <dd>Which courses satisfy each of the 13 general-education attributes.</dd>
 <dt><a href="${PAGE_ROOT}/professors">Professors</a></dt>
@@ -1161,6 +1196,17 @@ for (const m of pageQueue) {
     const sample = [...dead.entries()].slice(0, 5).map(([u, f]) => `${u} (in ${path.basename(f)})`).join("\n  ");
     throw new Error(`rails: ${dead.size} dead internal links, e.g.\n  ${sample}`);
   }
+}
+
+// Old /data/programs/* page URLs 301 to their new directory homes. Pages
+// reads dist/_redirects; public/_redirects holds the hand-written rules
+// and the build prepends the generated program moves (≈1,020 exact rules +
+// the hand-written ~60 sits well under Cloudflare's 2,000 static cap).
+{
+  const base = fs.readFileSync(path.join(ROOT, "public", "_redirects"), "utf8");
+  const gen = programRedirects.map(([o, n]) => `${o} ${n} 301`).join("\n");
+  fs.writeFileSync(path.join(ROOT, "dist", "_redirects"),
+    `# GENERATED by build-ai-data: program pages moved under their directories (2026-08-05)\n${gen}\n/data/programs/* /data 301\n\n${base}`);
 }
 
 // Generated sitemap for the pages; robots.txt points search engines at it.

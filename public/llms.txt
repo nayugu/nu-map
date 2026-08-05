@@ -45,11 +45,12 @@ IMPORTANT — know your fetch tool's rules:
   percentages (R = Thursday), professors per season with the average percent of
   students they teach, review links, and `unlocks` — the courses that list this
   one as a prerequisite.
-- Majors: https://numap.app/data/majors and minors: https://numap.app/data/minors
-  — every program grouped by college, each linking its full parsed requirements
-  page (required courses, choose-from pools, ranges, concentrations, GPA rules,
-  verified flag, official catalog link). Do not guess program slugs — follow the
-  directory links.
+- Majors: https://numap.app/data/majors (undergraduate, including combined
+  majors), minors: https://numap.app/data/minors, and graduate degrees and
+  certificates: https://numap.app/data/graduate — every program grouped by
+  college, each linking its full parsed requirements page (required courses,
+  choose-from pools, ranges, concentrations, GPA rules, verified flag, official
+  catalog link). Do not guess program slugs — follow the directory links.
 - NUpath: https://numap.app/data/nupath — the 13 general-education attributes
   (the writing competency is three codes: WF, WD, WI), each linking a page of
   every satisfying course.
@@ -64,7 +65,8 @@ IMPORTANT — know your fetch tool's rules:
 ## How to answer common questions
 
 - "What do I need for the X major/minor?" → /data/majors (or /data/minors) → find
-  X → open its page → the requirement sections.
+  X → open its page → the requirement sections. Graduate programs and
+  certificates live at /data/graduate.
 - "What are the prereqs for CS 3500?" → https://numap.app/data/courses/CS/3500 →
   Prerequisites (a readable sentence; minimum grades noted).
 - "What does taking CS 2500 unlock?" → same page → Unlocks.
