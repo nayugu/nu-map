@@ -145,6 +145,7 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
     rel: pageRel,
     section: kind === "minor" ? "minors" : "majors",
     title: `${name} — requirements (${src.year} catalog, ${level === "grad" ? "graduate" : "undergraduate"})`,
+    heading: name,
     description: `Full degree requirements for ${name} at Northeastern University (${src.year} catalog). From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
     kind: "program",
@@ -448,6 +449,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
     section: "courses",
     wide: true,
     title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
+    heading: `${subject} courses`,
     description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
     body: `<table>\n<tr><th>Code</th><th>Title</th><th>SH</th><th>Level</th><th>Usually offered</th><th>NUpath</th><th>Prerequisites</th><th>Recent instructors</th></tr>\n${rows}\n</table>`
@@ -461,6 +463,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       rel: `courses/${subject}/${c.number}.html`,
       section: "courses",
       title: `${subject} ${c.number} — ${c.title} | prerequisites, offerings, professors (Northeastern)`,
+      heading: `${subject} ${c.number} — ${c.title}`,
       description: `${subject} ${c.number} ${c.title} at Northeastern: prerequisites, corequisites, offering history, typical meeting days, instructors with student shares, and what it unlocks. From NU Map (not affiliated with Northeastern).`,
       jsonUrl: url,
       kind: "course",
@@ -622,7 +625,7 @@ const NAV_SECTIONS = [
 ];
 
 // rel "index.html" is the hub, written to dist/data.html and served at /data.
-const writePage = ({ rel, section, title, description, jsonUrl, body, wide }) => {
+const writePage = ({ rel, section, title, heading, description, jsonUrl, body, wide }) => {
   if (typeof body !== "string") throw new Error(`page without a rendered body: ${rel}`);
   const isHub = rel === "index.html";
   const p = isHub ? path.join(ROOT, "dist", "data.html") : path.join(OUT, rel);
@@ -656,7 +659,7 @@ advisor.`;
 <div class="layout">
 <nav>${nav}</nav>
 <main${wide ? ` class="wide"` : ""}>
-<h1>${escapeHtml(title)}</h1>
+<h1>${escapeHtml(heading ?? title)}</h1>
 ${body}
 <footer>
 <p class="muted">${disclaimerText}</p>
@@ -854,6 +857,7 @@ pageQueue.push({
   rel: "courses.html",
   section: "courses",
   title: "All Northeastern subjects — course listings",
+  heading: "Subjects",
   description: "Directory of all Northeastern subject codes with course counts; each links a full listing with prerequisites, offerings and NUpath. From NU Map (not affiliated with Northeastern).",
   jsonUrl: `${JSON_ROOT}/courses/index.json`,
   body: `<table><tr><th>Subject</th><th>Courses</th><th></th></tr>`
@@ -885,6 +889,7 @@ pageQueue.push({
     rel: "majors.html",
     section: "majors",
     title: "Northeastern majors — degree requirements",
+    heading: "Majors",
     description: "Every Northeastern major NU Map knows, undergraduate and graduate, grouped by college — each linking its full parsed degree requirements. From NU Map (not affiliated with Northeastern).",
     jsonUrl: `${JSON_ROOT}/programs/index.json`,
     body: directory("majors", "major"),
@@ -893,6 +898,7 @@ pageQueue.push({
     rel: "minors.html",
     section: "minors",
     title: "Northeastern minors — requirements",
+    heading: "Minors",
     description: "Every Northeastern minor NU Map knows, grouped by college — each linking its full parsed requirements. From NU Map (not affiliated with Northeastern).",
     jsonUrl: `${JSON_ROOT}/programs/index.json`,
     body: directory("minors", "minor"),
@@ -903,6 +909,7 @@ pageQueue.push({
   rel: "nupath.html",
   section: "nupath",
   title: "NUpath — which Northeastern courses satisfy each attribute",
+  heading: "NUpath",
   description: "The 13 NUpath general-education attributes at Northeastern, each linking a full page of satisfying courses (the writing competency is three codes: WF, WD, WI). From NU Map (not affiliated with Northeastern).",
   jsonUrl: `${JSON_ROOT}/nupath.json`,
   body: `<table><tr><th>Code</th><th>Attribute</th><th>Courses</th></tr>`
@@ -915,6 +922,7 @@ for (const [code, e] of Object.entries(nupath)) {
     rel: `nupath/${code}.html`,
     section: "nupath",
     title: `NUpath ${code} — ${e.label}: every satisfying course`,
+    heading: `${code} — ${e.label}`,
     description: `All ${e.courses.length} Northeastern courses satisfying the ${code} (${e.label}) NUpath attribute, each linking its full course page. From NU Map (not affiliated with Northeastern).`,
     jsonUrl: `${JSON_ROOT}/nupath.json`,
     body: `<ul>` + e.courses.map((c) =>
@@ -927,6 +935,7 @@ pageQueue.push({
   rel: "professors.html",
   section: "professors",
   title: "Northeastern professors — who teaches what",
+  heading: "Professors",
   description: "Every Northeastern instructor in recent scheduled terms, with the courses they teach, per-season student shares, and RateMyHusky review links. From NU Map (not affiliated with Northeastern).",
   jsonUrl: `${JSON_ROOT}/professors.json`,
   body: `<p>${professors.size} instructors from recent scheduled terms (~3 years), split by the first letter of their name. Each professor has their own page with courses, seasons, and share of students taught.</p><p>`
@@ -939,6 +948,7 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
     rel: `professors/${letter}.html`,
     section: "professors",
     title: `Northeastern professors — ${letter}`,
+    heading: `Professors — ${letter}`,
     description: `Northeastern instructors whose name starts with "${letter}", each linking their own page with courses, seasons, and share of students taught. From NU Map (not affiliated with Northeastern).`,
     jsonUrl: `${JSON_ROOT}/professors/${letter}.json`,
     body: `<ul>` + Object.entries(profs).map(([name, p]) =>
@@ -954,6 +964,7 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
       rel: `professors/${profSlugOf.get(name)}.html`,
       section: "professors",
       title: `${name} — Northeastern courses taught`,
+      heading: name,
       description: `Courses ${name} teaches at Northeastern, with seasons and the average share of students taught in recent terms${p.reviews ? ", plus student reviews" : ""}. From NU Map (not affiliated with Northeastern).`,
       jsonUrl: `${JSON_ROOT}/professors/${letter}.json`,
       body: (p.reviews ? `<p><a href="${p.reviews}">Student reviews on RateMyHusky</a></p>` : "")
@@ -973,6 +984,7 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
     rel: "equivalences.html",
     section: "equivalences",
     title: "Course equivalences and substitutions at Northeastern",
+    heading: "Equivalences",
     description: "Course substitution suggestions by evidence tier: program-stated, catalog-stated, and inferred pairs (inferred ones need advisor approval). From NU Map (not affiliated with Northeastern).",
     jsonUrl: `${ORIGIN}/northeastern/course-equivalences.json`,
     body: `<p>Substitution suggestions by evidence tier. <strong>Every substitution needs
@@ -988,6 +1000,7 @@ pageQueue.push({
   rel: "index.html",
   section: "home",
   title: "Northeastern courses, majors and professors",
+  heading: "Overview",
   description: "Browse NU Map's public Northeastern data: every course with prerequisites, offering history and professors; every major and minor with requirements; NUpath; course equivalences. Free, no login. AI guide at numap.app/llms.txt.",
   jsonUrl: `${JSON_ROOT}/index.json`,
   body: `<ul>
@@ -1014,7 +1027,7 @@ for (const m of pageQueue) {
     ?? (m.kind === "course" ? renderCourse(m.subject, m.data)
       : m.kind === "program" ? renderProgram(m.data)
       : undefined);
-  writePage({ rel: m.rel, section: m.section, title: m.title, description: m.description, jsonUrl: m.jsonUrl, body, wide: m.wide });
+  writePage({ rel: m.rel, section: m.section, title: m.title, heading: m.heading, description: m.description, jsonUrl: m.jsonUrl, body, wide: m.wide });
 }
 
 // Link-integrity rail: every internal page href in every generated page
