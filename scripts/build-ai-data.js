@@ -488,8 +488,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
     const pageUrl = `${PAGE_ROOT}/courses/${subject}/${c.number}`;
     return `<tr><td><a href="${pageUrl}">${escapeHtml(`${subject} ${c.number}`)}</a></td>`
       + `<td>${escapeHtml(c.title)}</td>`
-      + `<td>${c.credits}${c.creditsMax ? `–${c.creditsMax}` : ""}</td>`
-      + `<td>${c.level === "grad" ? "grad" : "ug"}</td>`
+      + `<td class="nowrap">${c.credits}${c.creditsMax ? `–${c.creditsMax}` : ""}</td>`
       + `<td>${c.typicallyOffered ? escapeHtml(c.typicallyOffered.join(", ")) : ""}</td>`
       + `<td>${c.nuPath?.length ? escapeHtml(c.nuPath.join(", ")) : ""}</td>`
       + `<td class="muted">${prereqTree(c.prereqs)}</td>`
@@ -507,7 +506,7 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
     heading: subjectNames[subject] ? `${subjectNames[subject]} (${subject})` : `${subject} courses`,
     description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
-    body: `<table>\n<tr><th>Code</th><th>Title</th><th>SH</th><th>Level</th><th>Usually offered</th><th>NUpath</th><th>Prerequisites</th><th>Recent instructors</th></tr>\n${rows}\n</table>`
+    body: `<table>\n<tr><th>Code</th><th>Title</th><th class="nowrap">SH</th><th>Usually offered</th><th>NUpath</th><th>Prerequisites</th><th>Recent instructors</th></tr>\n${rows}\n</table>`
       + `<p class="muted">Instructors are from recent scheduled terms; each course page shows them per season with student shares. Blank means no recent scheduled sections on record.</p>`,
   });
 
