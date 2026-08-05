@@ -176,7 +176,7 @@ of the Work at §1.1. The Licensor grants no rights in it under either option at
 
 | Material | Governing terms |
 |---|---|
-| `public/coi-serviceworker.js`, adapted from [gzuidhof/coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker) | MIT License |
+| `public/coi-serviceworker.js` — historical only: adapted from [gzuidhof/coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker) between 2026-05-29 and 2026-08-05. The file now holds no third-party material (a self-unregistering tombstone authored by the Licensor). | MIT License, as to the versions distributed in that window |
 | Package dependencies | The respective license of each package; refer to `package-lock.json` |
 | Course, program, and NUPath data obtained from `catalog.northeastern.edu`, `nubanner.neu.edu`, and `tableau.northeastern.edu` | Not the Licensor's copyright. See §6.2 |
 | Prereq data lineage, [ninest/nu-courses](https://github.com/ninest/nu-courses) | Seeded the original snapshot; since superseded in its entirety by the Licensor's scrapers |

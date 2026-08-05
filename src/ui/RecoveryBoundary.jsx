@@ -209,12 +209,17 @@ export default class RecoveryBoundary extends Component {
 
   // Detection, crash-page flavor: a bug can't be probed away, but the
   // most common real crash is deploy skew (old code + new data), and
-  // for that "a newer build exists" IS the fix signal. Every 10 s, GET
-  // our own entry bundle (an /assets/ request — exempt from the zone's
-  // Human Verification, unlike '/', whose challenge blinded fetch()
-  // once a long-lived tab's clearance expired): a 404 means the
-  // content hash changed, i.e. a newer build replaced ours. Dev has
-  // no hashed bundles, so the preview simulates detection instead.
+  // for that "a newer build is live" IS the fix signal.
+  //
+  // The test itself is index.html's — window.__numapCheckLive, defined
+  // in the recovery script that always runs before this bundle. It
+  // reads the live deployment's assets/build.json and re-fetches the
+  // entry bundle it names, because status alone lies here: a hash this
+  // deploy deleted does not 404, the SPA fallback answers it with the
+  // HTML shell at 200. This screen used to wait for that 404, so it
+  // never detected anything; the boot screen used to accept the 200,
+  // so it detected instantly and wrongly. Dev has no manifest, so the
+  // preview simulates detection instead.
   startProbe = () => {
     if (this.probeTimer || this.previewDetectTimer) return;
     const preview = import.meta.env.DEV && /[?&]preview=crash\b/.test(window.location.search);
@@ -222,14 +227,9 @@ export default class RecoveryBoundary extends Component {
       this.previewDetectTimer = setTimeout(this.detected, 10_000);
       return;
     }
-    let entry = null;
-    try { entry = document.querySelector('script[type="module"][src]')?.src ?? null; } catch { /* no signal */ }
-    if (!entry || !window.fetch || !/\/assets\//.test(entry)) return;
+    if (!window.__numapCheckLive) return;
     this.probeTimer = setInterval(async () => {
-      try {
-        const r = await fetch(entry, { cache: "no-store" });
-        if (r.status === 404) this.detected();
-      } catch { /* offline — next tick */ }
+      if (await window.__numapCheckLive()) this.detected();
     }, 10_000);
   };
 
@@ -285,9 +285,13 @@ export default class RecoveryBoundary extends Component {
     try { sessionStorage.setItem("numap-reveal", slow ? "2" : "1"); } catch { /* veil is a nicety */ }
     this.setState({ leaving: true });
     setTimeout(() => {
-      // Leaving a preview drops the preview param, so the storm genuinely
-      // returns to the real app instead of the preview.
-      if (slow) window.location.href = window.location.pathname;
+      // index.html's hardReturn — the reload() this used to do left
+      // people on the same broken page unless they hit ⌘⇧R, so the
+      // return unregisters any service worker, empties Cache Storage and
+      // re-fetches the shell and entry bundle with cache:'reload' before
+      // navigating. It drops the preview params itself.
+      if (window.__numapHardReturn) window.__numapHardReturn();
+      else if (slow) window.location.href = window.location.pathname;
       else window.location.reload();
     }, slow ? 6000 : 2300);
   };

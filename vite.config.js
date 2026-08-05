@@ -102,6 +102,44 @@ function dataMetaPlugin() {
   };
 }
 
+/**
+ * Emits dist/assets/build.json — {entry, built} — naming the entry bundle of
+ * THIS build. It is the only way the recovery screens can learn what the live
+ * deployment's entry bundle is called, and that is the only honest readiness
+ * signal they have.
+ *
+ * Why they can't just ask for their own bundle back: `/* /index.html 200`
+ * (public/_redirects) answers a deleted hash with the HTML shell at status
+ * 200 — under /assets/*'s year-long `immutable` header, no less — so neither
+ * `r.ok` nor `404` distinguishes "the deployment is whole" from "the exact
+ * failure we are recovering from". A JSON body that parses does: the shell,
+ * and a Cloudflare challenge page, both fail JSON.parse.
+ *
+ * Why it lives under /assets/ rather than at the root: the zone's Human
+ * Verification rule exempts /assets/ and /northeastern/, and a long-lived
+ * tab's challenge clearance expires — that is what blinded the probe to real
+ * deploys before. Readers must pass `cache: 'no-store'` (the /assets/*
+ * immutable header applies to this file too).
+ */
+function buildManifestPlugin() {
+  return {
+    name: "build-manifest",
+    apply: "build",
+    writeBundle(_options, bundle) {
+      const entry = Object.values(bundle).find(
+        (c) => c.type === "chunk" && c.isEntry && c.fileName.startsWith("assets/")
+      );
+      if (!entry) return; // worker/sub-builds have no /assets entry — not ours
+      try {
+        fs.writeFileSync(
+          "./dist/assets/build.json",
+          JSON.stringify({ entry: entry.fileName.replace(/^assets\//, ""), built: new Date().toISOString() })
+        );
+      } catch { /* a missing manifest degrades detection, never the build */ }
+    },
+  };
+}
+
 /** Spawns catalog-check-server alongside the dev server so no second terminal is needed. */
 function catalogCheckPlugin() {
   let child;
@@ -118,7 +156,7 @@ function catalogCheckPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), aiDataPlugin(), aiDataDevPlugin()],
+  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin()],
   base: "./",
   define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
   optimizeDeps: { exclude: ["@huggingface/transformers"] },

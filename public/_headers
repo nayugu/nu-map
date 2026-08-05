@@ -12,6 +12,27 @@
 
 # Hashed build assets are content-addressed: a given filename never changes, so
 # cache it forever. (Also stops the fallback ever mattering for a real asset.)
+#
+# ⚠ THE SHARP EDGE, verified 2026-08-05 by curl against a made-up hash:
+# a MISSING /assets/ file is not a 404. The SPA fallback answers it, so the
+# response is the HTML shell at status 200 — and this rule matches by PATH, so
+# that HTML is served with `immutable, max-age=1y`. Two consequences, both of
+# which bit us:
+#   1. Status is not evidence. `r.ok` on a deleted chunk is true, which is why
+#      the recovery screen used to announce the way back on its first probe
+#      tick while the way back was still shut, and why the crash screen — which
+#      waited for a 404 — never announced it at all. Detection now reads
+#      assets/build.json (emitted by buildManifestPlugin in vite.config.js) and
+#      requires a JS content-type: see index.html's checkLive.
+#   2. The browser then pins HTML under a .js URL for a year. Content hashes
+#      are deterministic, so a revert can resurrect a URL that was poisoned
+#      under an older deploy — a page that reload() cannot fix and only a hard
+#      refresh can. index.html's hardReturn re-fetches known-dead chunk URLs
+#      with cache:'reload' to overwrite exactly those entries.
+# `_redirects` cannot express a 404 (Pages supports only 200/301/302/303/307/
+# 308), so the honest server-side fix would be a Pages Function on /assets/*
+# turning a fallback-HTML response into a real 404 — not done: it puts a Worker
+# invocation in front of every asset request.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 

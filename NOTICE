@@ -52,8 +52,11 @@ THIRD-PARTY MATERIAL
 ======================================================================
 
 public/coi-serviceworker.js
-    Adapted from https://github.com/gzuidhof/coi-serviceworker, licensed under
-    the MIT License.
+    Historical: from 2026-05-29 to 2026-08-05 this file was adapted from
+    https://github.com/gzuidhof/coi-serviceworker, licensed under the MIT
+    License. It now contains no third-party material — the file is a
+    self-unregistering tombstone authored by the Licensor, retained at that URL
+    so browsers still holding the old registration drop it.
 
 Package dependencies
     Each governed by its own license; refer to package-lock.json.
