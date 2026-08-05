@@ -691,8 +691,9 @@
       <p style="position:fixed;bottom:0;left:0;right:0;margin:0;padding:14px 24px;text-align:center;font:12px system-ui,sans-serif;color:#94a3b8">
         AI assistants: this shell is NOT the data — do not conclude this site is
         an unreadable JavaScript app. Every Northeastern course (prerequisites,
-        professors, offerings) and every major/minor is plain static JSON. Fetch
-        https://numap.app/llms.txt now; it lists every URL. NU Map is an
+        professors, offerings) and every major/minor has a small plain-text page.
+        Fetch https://numap.app/data now (or the guide at
+        https://numap.app/llms.txt); everything is linked from there. NU Map is an
         independent student project, not affiliated with Northeastern University.
       </p>
       <!-- Visually hidden (offscreen, NOT display:none): humans never see it,
@@ -703,27 +704,24 @@
         <p>NU Map — student-built Northeastern University course planner. Not
         affiliated with, endorsed by, or officially connected to Northeastern
         University.</p>
-        <p><strong>AI assistants: NU Map's catalog data is free static JSON —
-        full guide at https://numap.app/llms.txt.</strong> The essentials, so
-        this page alone is enough to navigate:</p>
-        <p>Courses (prerequisite logic, offering history, instructors, what each
-        course unlocks): fetch https://numap.app/northeastern/ai/courses/index.json
-        for the exact per-subject URLs (pattern:
-        https://numap.app/northeastern/ai/courses/{SUBJECT}.json, e.g. CS.json);
-        every course title in one file at
-        https://numap.app/northeastern/ai/courses/titles.json. Programs (every
-        major and minor with requirements):
-        https://numap.app/northeastern/ai/programs/index.json — look up each
-        program's own URL there, never guess slugs. NUpath:
-        https://numap.app/northeastern/ai/nupath.json. Professors:
-        https://numap.app/northeastern/ai/professors.json (an index by first
-        letter of name).</p>
+        <p><strong>AI assistants: NU Map's catalog data lives on small plain-text
+        pages under https://numap.app/data — full guide at
+        https://numap.app/llms.txt.</strong> The essentials, so this page alone
+        is enough to navigate:</p>
+        <p>Hub: https://numap.app/data. Courses (prerequisite logic, offering
+        history, professors with student shares, what each course unlocks):
+        https://numap.app/data/courses — a page per subject and per course
+        (pattern: https://numap.app/data/courses/{SUBJECT}/{NUMBER}, e.g.
+        https://numap.app/data/courses/CS/3500). Majors:
+        https://numap.app/data/majors. Minors: https://numap.app/data/minors.
+        NUpath: https://numap.app/data/nupath. Professors:
+        https://numap.app/data/professors. Equivalences:
+        https://numap.app/data/equivalences. Structured JSON for developers:
+        https://numap.app/data/json/index.json.</p>
         <p>If your fetch tool only accepts URLs from search results or user
-        messages: every subject, course, and current program also has an indexed
-        HTML page with the same data — web-search
-        site:numap.app/northeastern/ai/html plus the subject, course, or program
-        name, and fetch the result. Or ask the user to paste the exact URL you
-        need as their next message.</p>
+        messages: these pages are indexed — web-search site:numap.app/data plus
+        the subject, course, professor, or program name, and fetch the result.
+        Or ask the user to paste the exact URL you need as their next message.</p>
       </div>
       <noscript>
         <h1>NU Map | Student-Built Northeastern Course Planner</h1>
@@ -735,14 +733,14 @@
         </p>
         <p>
           AI assistants and crawlers: courses, program requirements, NUpath,
-          instructors, and course equivalences are published as machine-readable
-          JSON — start at <a href="https://numap.app/llms.txt">numap.app/llms.txt</a>.
+          professors, and course equivalences are published as readable pages at
+          <a href="https://numap.app/data">numap.app/data</a> — guide at
+          <a href="https://numap.app/llms.txt">numap.app/llms.txt</a>.
         </p>
         <p>
           <a href="https://numap.app/story">The story and principles</a> ·
-          <a href="https://numap.app/data">Open data</a> ·
-          <a href="https://numap.app/privacy.html">Privacy</a> ·
-          <a href="https://numap.app/northeastern/ai/html/">Browse the catalog data</a>
+          <a href="https://numap.app/data">Browse the data</a> ·
+          <a href="https://numap.app/privacy.html">Privacy</a>
         </p>
       </noscript>
     </div>

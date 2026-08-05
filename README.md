@@ -24,14 +24,14 @@ An unofficial, browser-based degree planner for Northeastern University. Drag co
 
 ## Data for AI assistants (llms.txt)
 
-NU Map publishes its public catalog data as free, static, machine-readable JSON —
-no auth, no API keys, no rate limits. AI assistants and tools should start at the
-guide, **[numap.app/llms.txt](https://numap.app/llms.txt)** (human-readable
-overview: [numap.app/data](https://numap.app/data)), which explains
-every URL and field: program requirements for every major and minor, per-subject
-course files with prerequisite logic, offering history, instructors, NUpath, and
-course equivalences. Each dataset also has an indexed HTML twin under
-`numap.app/northeastern/ai/html/`, and everything is mirrored at
+NU Map publishes its public catalog data as small human-readable pages under
+**[numap.app/data](https://numap.app/data)** — every course with prerequisites,
+offering history and professors; every major and minor with requirements; NUpath;
+equivalences — free, no auth, no rate limits. The pages are the primary machine
+surface too (plain text, fully expanded, every reference a link); AI assistants
+should start at the guide, **[numap.app/llms.txt](https://numap.app/llms.txt)**.
+A structured JSON API for developers lives under `numap.app/data/json`, and
+everything is mirrored at
 [nayugu.github.io/nu-map/llms.txt](https://nayugu.github.io/nu-map/llms.txt).
 
 ---

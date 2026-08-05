@@ -19,18 +19,33 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://numap.app/northeastern/ai/index.json</loc>
+    <loc>https://numap.app/data/courses</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://numap.app/northeastern/ai/programs/index.json</loc>
+    <loc>https://numap.app/data/majors</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://numap.app/northeastern/ai/courses/index.json</loc>
+    <loc>https://numap.app/data/minors</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://numap.app/data/nupath</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://numap.app/data/professors</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://numap.app/data/equivalences</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

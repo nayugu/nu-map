@@ -3,11 +3,31 @@
 /about https://numap.app/story 301
 /about.html https://numap.app/story 301
 
+# The data surface moved home on 2026-08-05: pages from
+# /northeastern/ai/html/** to /data/**, JSON from /northeastern/ai/** to
+# /data/json/**. Splats keep this to a handful of rules for ~13k URLs.
+# Exact rules must precede their covering splats (first match wins).
+/northeastern/ai/html /data 301
+/northeastern/ai/html/index /data 301
+/northeastern/ai/html/courses /data/courses 301
+/northeastern/ai/html/programs /data/majors 301
+/northeastern/ai/html/nupath /data/nupath 301
+/northeastern/ai/html/titles /data 301
+/northeastern/ai/html/equivalences /data/equivalences 301
+/northeastern/ai/html/professors /data/professors 301
+/northeastern/ai/html/courses/* /data/courses/:splat 301
+/northeastern/ai/html/programs/* /data/programs/:splat 301
+/northeastern/ai/html/professors/* /data/professors/:splat 301
+/northeastern/ai/sitemap.xml /data/sitemap.xml 301
+/northeastern/ai /data/json/index.json 301
+/northeastern/ai/* /data/json/:splat 301
+
 # AI assistants and crawlers guess URL shapes like /courses/CS2000 or
 # /api/... that were never real. Serve the data guide AT the guessed URL
 # with a 200 rewrite (not a redirect: fetch-restricted AI tools refuse
 # to follow a Location header to a URL they haven't seen). Bare and /*
 # forms both listed - a splat does not match its own bare path.
+# NOTE: /data/** is REAL content now and must never appear here.
 # Rules run top-down, first match wins; real paths (/, /data, /assets/,
 # /northeastern/) never match these prefixes.
 /courses /llms.txt 200
@@ -42,7 +62,6 @@
 /api/* /llms.txt 200
 /docs /llms.txt 200
 /docs/* /llms.txt 200
-/data/* /llms.txt 200
 /json /llms.txt 200
 /json/* /llms.txt 200
 /ai /llms.txt 200

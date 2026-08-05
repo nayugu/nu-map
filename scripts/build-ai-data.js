@@ -2,35 +2,43 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // AGPL-3.0-only + attribution term under §7(b); see LICENSING.md and NOTICE.
 //
-// AI-readable data export — the static "API".
+// The public data surface at numap.app/data.
 //
-// Emits the public catalog as small, stable-URL JSON files that any AI
-// with a URL fetcher (claude.ai, ChatGPT, Perplexity, agents) can
-// discover via /llms.txt and read directly. Static files on Pages cost
-// nothing at any scale — this is deliberately NOT a worker endpoint.
+// PAGES FIRST: the primary surface is human-readable HTML under /data —
+// small plain-text pages, fully expanded (no collapsed content), every
+// course/professor/program reference a real link. That same property is
+// what makes them the best MACHINE surface too: AI fetch tools read a
+// 10 KB page whole, follow verbatim links, and never truncate, where a
+// 300 KB JSON gets cut off. The JSON tree under /data/json is the
+// developer API: same data, structured, explicitly secondary.
 //
-//   dist/northeastern/ai/index.json
-//   dist/northeastern/ai/programs/index.json
-//   dist/northeastern/ai/programs/{year}/{level}/{college}/{slug}.json
-//   dist/northeastern/ai/courses/index.json
-//   dist/northeastern/ai/courses/{SUBJECT}.json
+//   dist/data.html                     the hub (served at /data)
+//   dist/data/courses[.html|/SUBJ|/SUBJ/NUM]
+//   dist/data/majors, /minors          program directories
+//   dist/data/programs/{slug}          one page per program
+//   dist/data/nupath[/CODE]            index + 13 attribute pages
+//   dist/data/professors[/A|/name-slug]
+//   dist/data/equivalences
+//   dist/data/sitemap.xml
+//   dist/data/json/**                  the developer JSON API
 //
 // Runs AFTER `vite build` (writes into dist/), so the repo stays free of
-// a thousand generated files. Sources: the same parsed.initial.json
+// thousands of generated files. Sources: the same parsed.initial.json
 // files that feed the app's hashed chunks, the programs bundle, and the
 // course catalog — nothing here can drift from what the app shows.
 //
-// Rails: refuses to write a suspiciously small export (broken glob,
-// empty catalog) and fails the build on slug collisions — a wrong URL
-// surface must never ship silently.
+// Rails: refuses a suspiciously small export, fails on slug collisions,
+// and fails on any internal link that doesn't resolve to a generated page.
 
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = path.join(ROOT, "dist", "northeastern", "ai");
+const OUT = path.join(ROOT, "dist", "data");
 const ORIGIN = "https://numap.app";
+const PAGE_ROOT = `${ORIGIN}/data`;
+const JSON_ROOT = `${ORIGIN}/data/json`;
 
 const MIN_PROGRAMS = 900;
 const MIN_SUBJECTS = 150;
@@ -53,11 +61,11 @@ const slugify = (s) => {
 };
 
 const writeJSON = (rel, data) => {
-  const p = path.join(OUT, rel);
+  const p = path.join(OUT, "json", rel);
   fs.mkdirSync(path.dirname(p), { recursive: true });
-  // Every file self-roots: wherever an AI lands, the first field points
-  // back to the guide. Compact on purpose: these files are read by
-  // machines, and the larger ones sit near fetch-tool limits.
+  // Every file self-roots: wherever a reader lands, the first field points
+  // back to the guide. Compact on purpose — this is the developer API; the
+  // readable surface is the HTML pages.
   fs.writeFileSync(p, JSON.stringify({ guide: `${ORIGIN}/llms.txt`, ...data }));
 };
 
@@ -90,7 +98,7 @@ const bundle = readJSON(path.join(ROOT, "public", "northeastern", "programs-bund
 const bundleById = new Map(bundle.programs.map((p) => [p.id, p]));
 const meta = readJSON(path.join(ROOT, "public", "data-meta.json"));
 const generatedAt = new Date().toISOString();
-const mirrorQueue = []; // filled by the loops, flushed at the HTML-mirror stage
+const pageQueue = []; // filled by the loops, flushed at the page stage
 
 const programs = [];
 const seenUrls = new Map(); // url → id, for collision rails
@@ -102,18 +110,20 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
   const b = bundleById.get(src.id);
   const level = b?.level ?? (src.id.startsWith("grad/") ? "grad" : "undergrad");
   const rel = `programs/${src.year}/${level}/${slugify(src.college)}/${slugify(src.prog)}.json`;
-  const url = `${ORIGIN}/northeastern/ai/${rel}`;
+  const url = `${JSON_ROOT}/${rel}`;
 
   const clash = seenUrls.get(url);
   if (clash) throw new Error(`slug collision: ${src.id} vs ${clash} → ${url}`);
   seenUrls.set(url, src.id);
 
+  const kind = b?.type ?? (/(^|_)minor$/.test(src.prog) ? "minor" : "major");
+  const pageRel = `programs/${src.year}-${level}-${slugify(src.college)}-${slugify(src.prog)}.html`;
   const { metadata, name, ...requirements } = parsed;
   const payload = {
     id: src.id,
     name,
     level,
-    kind: b?.type ?? (/(^|_)minor$/.test(src.prog) ? "minor" : "major"),
+    kind,
     catalogYear: Number(src.year),
     college: src.college,
     location: b?.location || undefined,
@@ -122,6 +132,7 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
     verified: b?.verified ?? metadata?.verified,
     sourceUrl: b?.sourceUrl ?? metadata?.sourceUrl,
     lastEdited: metadata?.lastEdited,
+    page: `${PAGE_ROOT}/${pageRel.replace(/\.html$/, "")}`,
     url,
     app: ORIGIN,
     generatedAt,
@@ -129,21 +140,23 @@ for (const src of [...walkPrograms("majors", ""), ...walkPrograms("grad-majors",
     requirements,
   };
   writeJSON(rel, payload);
-  mirrorQueue.push({
+  pageQueue.push({
     year: Number(src.year),
-    rel: `programs/${src.year}-${level}-${slugify(src.college)}-${slugify(src.prog)}.html`,
+    rel: pageRel,
+    section: kind === "minor" ? "minors" : "majors",
     title: `${name} — requirements (${src.year} catalog, ${level === "grad" ? "graduate" : "undergraduate"})`,
-    description: `Full parsed degree requirements for ${name} at Northeastern University (${src.year} catalog). Machine-readable data from NU Map, a student-built planner not affiliated with Northeastern.`,
+    description: `Full degree requirements for ${name} at Northeastern University (${src.year} catalog). From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
     kind: "program",
     data: payload,
   });
 
   programs.push({
-    id: src.id, name, level, kind: b?.type ?? "major",
+    id: src.id, name, level, kind,
     catalogYear: Number(src.year), college: src.college,
     location: b?.location || undefined,
-    totalCreditsRequired: b?.totalCreditsRequired, url,
+    totalCreditsRequired: b?.totalCreditsRequired,
+    page: payload.page, url,
   });
 }
 
@@ -152,7 +165,7 @@ if (programs.length < MIN_PROGRAMS) {
 }
 programs.sort((a, b2) => a.id.localeCompare(b2.id));
 writeJSON("programs/index.json", {
-  what: "Every Northeastern program NU Map knows, with a stable URL to its full requirements JSON.",
+  what: "Every Northeastern program NU Map knows. `page` is the human-readable requirements page (best for reading); `url` is the full requirements JSON.",
   count: programs.length,
   generatedAt,
   disclaimer: DISCLAIMER,
@@ -276,15 +289,16 @@ const enrich = (course) => {
   };
 };
 
-// Cross-page link helpers, defined before the subject loop because the
-// listing tables use them at queue time (const = TDZ if defined later).
+// ── Cross-page link helpers ──────────────────────────────────────────
+// Defined before the subject loop because listing tables use them at
+// queue time (const = TDZ if defined later).
 const titleOf = new Map();
 for (const c of catalog) if (c.subject && c.number) titleOf.set(`${c.subject} ${c.number}`, c.title);
 
 const linkRef = (subject, number) => {
   const code = `${subject} ${number}`;
   return titleOf.has(code)
-    ? `<a href="${ORIGIN}/northeastern/ai/html/courses/${subject}/${number}" title="${escapeHtml(titleOf.get(code) ?? "")}">${escapeHtml(code)}</a>`
+    ? `<a href="${PAGE_ROOT}/courses/${subject}/${number}" title="${escapeHtml(titleOf.get(code) ?? "")}">${escapeHtml(code)}</a>`
     : escapeHtml(code);
 };
 const linkCode = (code) => {
@@ -304,16 +318,43 @@ const prereqHtml = (node) => {
   return "";
 };
 
-// Every instructor name links to their entry on the professors letter
-// page. The letter rule must match profsByLetter's split exactly.
+// ── Professors ───────────────────────────────────────────────────────
+// Built BEFORE the subject loop so instructor names in course tables can
+// link straight to each professor's own page. Every professor gets a tiny
+// page of their own (a 2 KB page can never truncate in a fetch tool);
+// letter pages are just name directories.
+const professors = new Map(); // name → { courses: Map(code → Map(season → sharePct)) }
+for (const [code, off] of Object.entries(offering)) {
+  if (!off?.prof) continue;
+  const m = /^([A-Z]{2,6})(\d+\w*)$/.exec(code);
+  const label = m ? `${m[1]} ${m[2]}` : code;
+  for (const [season, list] of Object.entries(off.prof)) {
+    for (const [name, sharePct] of list) {
+      if (!professors.has(name)) professors.set(name, { courses: new Map() });
+      const p = professors.get(name);
+      if (!p.courses.has(label)) p.courses.set(label, new Map());
+      p.courses.get(label).set(season, sharePct);
+    }
+  }
+}
+const profNames = [...professors.keys()].sort((a, b2) => a.localeCompare(b2));
+// Deterministic slugs: sorted names, collisions get -2, -3, …
+const profSlugOf = new Map();
+{
+  const taken = new Map();
+  for (const name of profNames) {
+    const base = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+      || "p" + [...name].reduce((h, ch) => (h * 31 + ch.codePointAt(0)) >>> 0, 0);
+    const n = (taken.get(base) ?? 0) + 1;
+    taken.set(base, n);
+    profSlugOf.set(name, n === 1 ? base : `${base}-${n}`);
+  }
+}
 const profLetterOf = (name) => (/^[A-Za-z]/.test(name) ? name[0].toUpperCase() : "_");
-const profAnchor = (name) => {
-  const s = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-  return s || "p" + [...name].reduce((h, ch) => (h * 31 + ch.codePointAt(0)) >>> 0, 0);
-};
 const profLink = (name) =>
-  `<a href="${ORIGIN}/northeastern/ai/html/professors/${profLetterOf(name)}#${profAnchor(name)}">${escapeHtml(name)}</a>`;
+  `<a href="${PAGE_ROOT}/professors/${profSlugOf.get(name)}">${escapeHtml(name)}</a>`;
 
+// ── Subject JSON + course/subject pages ──────────────────────────────
 const bySubject = new Map();
 for (const course of catalog) {
   if (!course.subject || !course.number) continue;
@@ -328,7 +369,7 @@ const subjects = [];
 for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
   if (!/^[A-Z]{2,6}$/.test(subject)) throw new Error(`unexpected subject code: "${subject}"`);
   courses.sort((a, b2) => a.number.localeCompare(b2.number));
-  const url = `${ORIGIN}/northeastern/ai/courses/${subject}.json`;
+  const url = `${JSON_ROOT}/courses/${subject}.json`;
   // The subject file is the FILTER INDEX: every field a query can filter
   // on, one compact row per course, small enough that no fetch tool
   // truncates it. Everything heavyweight (description prose, per-term
@@ -352,12 +393,12 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       ? { instructors: [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort() }
       : {}),
     ...(c.unlocks ? { unlocks: c.unlocks } : {}),
-    detail: `${ORIGIN}/northeastern/ai/html/courses/${subject}/${c.number}`,
+    detail: `${PAGE_ROOT}/courses/${subject}/${c.number}`,
   }));
   const subjectPayload = {
     subject,
     count: courses.length,
-    what: "Compact filterable index of every course in this subject. Full detail per course - description, offering history with enrollment, meeting-day and instructor-share percentages, RateMyHusky links - is at its `detail` URL (copy it verbatim).",
+    what: "Compact filterable index of every course in this subject. Full detail per course - description, offering history with enrollment, meeting-day and instructor-share percentages, RateMyHusky links - is at its `detail` page (copy the URL verbatim).",
     lastUpdated: meta.lastUpdated,
     generatedAt,
     disclaimer: DISCLAIMER,
@@ -371,16 +412,16 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       unlocks: "Courses that list this course in their prerequisites — what taking it opens up.",
       nuPath: "NUpath general-education attributes this course carries.",
       repeatable: "Whether the course may be taken more than once for credit.",
-      detail: "This course's full text page: description, offering history, percentages, professors. Fetch it for any single-course question.",
+      detail: "This course's full page: description, offering history, percentages, professors. Fetch it for any single-course question.",
     },
     courses: slim,
   };
   writeJSON(`courses/${subject}.json`, subjectPayload);
 
-  // Subject mirror: a COMPACT table (no description bodies — full
-  // dumps overflowed AI fetch contexts), linking each course's own page.
+  // Subject page: a COMPACT table (no description bodies — full dumps
+  // overflowed AI fetch contexts), linking each course's own page.
   const rows = courses.map((c) => {
-    const pageUrl = `${ORIGIN}/northeastern/ai/html/courses/${subject}/${c.number}`;
+    const pageUrl = `${PAGE_ROOT}/courses/${subject}/${c.number}`;
     return `<tr><td><a href="${pageUrl}">${escapeHtml(`${subject} ${c.number}`)}</a></td>`
       + `<td>${escapeHtml(c.title)}</td>`
       + `<td>${c.credits}${c.creditsMax ? `–${c.creditsMax}` : ""}</td>`
@@ -395,8 +436,9 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
         return names.length > 6 ? `${shown}, <a href="${pageUrl}">+${names.length - 6} more</a>` : shown;
       })()}</td></tr>`;
   }).join("\n");
-  mirrorQueue.push({
+  pageQueue.push({
     rel: `courses/${subject}.html`,
+    section: "courses",
     title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
     description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
@@ -407,8 +449,9 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
   // Per-course pages: small (a few KB), never truncated, and shaped
   // like the queries people actually type ("CS 2500 prerequisites").
   for (const c of courses) {
-    mirrorQueue.push({
+    pageQueue.push({
       rel: `courses/${subject}/${c.number}.html`,
+      section: "courses",
       title: `${subject} ${c.number} — ${c.title} | prerequisites, offerings, professors (Northeastern)`,
       description: `${subject} ${c.number} ${c.title} at Northeastern: prerequisites, corequisites, offering history, typical meeting days, instructors with student shares, and what it unlocks. From NU Map (not affiliated with Northeastern).`,
       jsonUrl: url,
@@ -417,48 +460,33 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       data: c,
     });
   }
-  subjects.push({ subject, count: courses.length, url });
+  subjects.push({ subject, count: courses.length, page: `${PAGE_ROOT}/courses/${subject}`, url });
 }
 
-// ── Professor reverse index (the app's PROFESSOR filter) ─────────────
-const professors = new Map(); // name → { reviews?, courses: Map(code → Set(seasons)) }
-for (const [code, off] of Object.entries(offering)) {
-  if (!off?.prof) continue;
-  const m = /^([A-Z]{2,6})(\d+\w*)$/.exec(code);
-  const label = m ? `${m[1]} ${m[2]}` : code;
-  for (const [season, list] of Object.entries(off.prof)) {
-    for (const [name] of list) {
-      if (!professors.has(name)) professors.set(name, { courses: new Map() });
-      const p = professors.get(name);
-      if (!p.courses.has(label)) p.courses.set(label, new Set());
-      p.courses.get(label).add(season);
-    }
-  }
-}
-// Split by surname-agnostic FIRST letter of the display name so no
-// single file can overflow an AI fetch context (the monolith hit
-// 581 KB, which silently truncated — losing professors N–Z).
+// ── Professor JSON (letter files with per-season shares) ─────────────
 const profsByLetter = new Map();
-for (const [name, p] of [...professors.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
-  const letter = /^[A-Za-z]/.test(name) ? name[0].toUpperCase() : "_";
+for (const name of profNames) {
+  const letter = profLetterOf(name);
   if (!profsByLetter.has(letter)) profsByLetter.set(letter, {});
+  const p = professors.get(name);
   profsByLetter.get(letter)[name] = {
+    page: `${PAGE_ROOT}/professors/${profSlugOf.get(name)}`,
     ...(rmhProfs[name] ? { reviews: `${RMH}/professors/${rmhProfs[name]}` } : {}),
     courses: Object.fromEntries([...p.courses.entries()].sort(([a], [b2]) => a.localeCompare(b2))
-      .map(([c, seasons]) => [c, [...seasons].sort()])),
+      .map(([c, seasons]) => [c, Object.fromEntries([...seasons.entries()].sort(([a], [b2]) => a.localeCompare(b2)))])),
   };
 }
 const profLetters = {};
 for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
   writeJSON(`professors/${letter}.json`, {
-    what: `Instructors whose name starts with "${letter}", with the courses they teach per season.`,
+    what: `Instructors whose name starts with "${letter}". courses maps each course to per-season share: the professor's average percent of that season's enrolled students in recent terms (~3 years).`,
     count: Object.keys(profs).length,
     lastUpdated: meta.lastUpdated,
     generatedAt,
     disclaimer: DISCLAIMER,
     professors: profs,
   });
-  profLetters[letter] = { count: Object.keys(profs).length, url: `${ORIGIN}/northeastern/ai/professors/${letter}.json` };
+  profLetters[letter] = { count: Object.keys(profs).length, url: `${JSON_ROOT}/professors/${letter}.json` };
 }
 writeJSON("professors.json", {
   what: "Index of instructors, split by first letter of name so each file stays small. Fetch the letter file for the professor you need; use for professor-based course search.",
@@ -480,7 +508,7 @@ const NUPATH_LABELS = {
   WF: "First-Year Writing", WD: "Advanced Writing in the Disciplines",
   WI: "Writing Intensive", EX: "Integration Experience", CE: "Capstone Experience",
 };
-const nupath = Object.fromEntries(Object.entries(NUPATH_LABELS).map(([code, label]) => [code, { label, courses: [] }]));
+const nupath = Object.fromEntries(Object.entries(NUPATH_LABELS).map(([code, label]) => [code, { label, page: `${PAGE_ROOT}/nupath/${code}`, courses: [] }]));
 for (const course of catalog) {
   for (const code of course.nuPath ?? []) {
     if (nupath[code]) nupath[code].courses.push(`${course.subject} ${course.number}`);
@@ -496,10 +524,10 @@ writeJSON("nupath.json", {
   nupath,
 });
 writeJSON("courses/index.json", {
-  what: "Northeastern's course catalog, split into one JSON file per subject code.",
+  what: "Northeastern's course catalog, split into one JSON file per subject code. `page` is the human-readable listing.",
   courseCount: catalog.length,
   subjectCount: subjects.length,
-  titles: `${ORIGIN}/northeastern/ai/courses/titles.json`,
+  titles: `${JSON_ROOT}/courses/titles.json`,
   lastUpdated: meta.lastUpdated,
   generatedAt,
   disclaimer: DISCLAIMER,
@@ -514,7 +542,7 @@ const titles = Object.fromEntries(
     .sort(([a], [b2]) => a.localeCompare(b2))
 );
 writeJSON("courses/titles.json", {
-  what: "Every course code mapped to its title — fetch this ONE file to search courses by topic, then fetch courses/{SUBJECT}.json for full details on the matches.",
+  what: "Every course code mapped to its title — fetch this ONE file to search courses by topic, then open the subject page or JSON for details on the matches.",
   count: Object.keys(titles).length,
   lastUpdated: meta.lastUpdated,
   generatedAt,
@@ -522,24 +550,28 @@ writeJSON("courses/titles.json", {
   titles,
 });
 
-// ── Indexable HTML mirrors (search as the transport) ─────────────────
-// Some AI fetch tools (claude.ai's) only fetch URLs that appear in
-// SEARCH RESULTS or the user's messages — never URLs found in fetched
-// files. Raw JSON rarely gets indexed, but HTML does: each subject and
-// program gets a search-friendly HTML page with the full data embedded
-// as readable text, so a "site:numap.app MATH courses" hit IS the data,
-// zero extra hops. A generated sitemap lists them all.
+// ── The page layer ───────────────────────────────────────────────────
+// Human-readable pages ARE the primary surface, for people and machines
+// alike: small, fully expanded, real links. Sidebar navigation on every
+// page, catalog-style. A page either has a rendered body or the build
+// fails — there is no raw-JSON fallback.
 
-const htmlUrls = [];
-const HTML_ROOT = `${ORIGIN}/northeastern/ai/html`;
+const pageUrls = [];
 
-// One shared clean design: every mirror is a real human-readable page
-// (the raw-JSON <pre> dump is gone — a page either has a renderer or
-// the build fails). Inline CSS keeps each page self-contained.
 const PAGE_CSS =
-  "body{font-family:system-ui,-apple-system,sans-serif;max-width:820px;margin:0 auto;padding:24px 20px 40px;line-height:1.55;color:#1e293b}"
+  "*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.55;color:#1e293b}"
   + "a{color:#dc2626;text-decoration:none}a:hover{text-decoration:underline}"
-  + "h1{font-size:1.6rem;margin:.2em 0 .3em}"
+  + ".layout{display:flex;max-width:1100px;margin:0 auto;align-items:flex-start}"
+  + "nav{flex:0 0 190px;position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:22px 6px 22px 18px;font-size:.9rem}"
+  + "nav a{display:block;padding:5px 11px;border-radius:7px;color:#334155;margin:1px 0}"
+  + "nav a:hover{background:#f8fafc;text-decoration:none}"
+  + "nav a.here{background:#fef2f2;color:#dc2626;font-weight:600}"
+  + "nav .aux{margin-top:14px;padding-top:10px;border-top:1px solid #e2e8f0}"
+  + "nav .aux a{color:#64748b;font-size:.82rem;padding:3px 11px}"
+  + "main{flex:1;min-width:0;padding:24px 22px 48px}"
+  + "@media(max-width:760px){.layout{display:block}nav{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px;padding:12px 14px 0}"
+  + "nav a{background:#f1f5f9;padding:4px 11px;margin:0}nav .aux{border:none;margin:0;padding:0;display:contents}}"
+  + "h1{font-size:1.55rem;margin:.1em 0 .3em}"
   + "h2{font-size:1.12rem;margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid #e2e8f0}"
   + "h3{font-size:1rem;margin:1.2em 0 .4em}"
   + "table{border-collapse:collapse;width:100%;font-size:.92rem}"
@@ -548,31 +580,48 @@ const PAGE_CSS =
   + ".muted{color:#64748b;font-size:.88rem}"
   + "ul.req{padding-left:1.2em}ul.req ul{padding-left:1.2em}li{margin:.15em 0}"
   + "details{margin:.5em 0;border:1px solid #e2e8f0;border-radius:10px;padding:.5em .9em}summary{cursor:pointer;font-weight:600}"
-  + "header{font-size:.85rem;color:#64748b;margin-bottom:14px}header a{color:#64748b;font-weight:600}"
   + "footer{margin-top:2.5em;border-top:1px solid #e2e8f0;padding-top:1em;font-size:.82rem;color:#64748b}"
   + "footer code{background:#f1f5f9;padding:0 4px;border-radius:4px;word-break:break-all}"
   + "footer details{border:none;padding:0;margin:0}footer summary{font-weight:400;color:#94a3b8}"
   + "pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:8px;font-size:.85rem}";
 
-const writeHtmlMirror = (rel, title, description, jsonUrl, body) => {
-  if (typeof body !== "string") throw new Error(`mirror without a rendered body: ${rel}`);
-  const p = path.join(OUT, "html", rel);
+const NAV_SECTIONS = [
+  ["home", "Overview", PAGE_ROOT],
+  ["courses", "Courses", `${PAGE_ROOT}/courses`],
+  ["majors", "Majors", `${PAGE_ROOT}/majors`],
+  ["minors", "Minors", `${PAGE_ROOT}/minors`],
+  ["nupath", "NUpath", `${PAGE_ROOT}/nupath`],
+  ["professors", "Professors", `${PAGE_ROOT}/professors`],
+  ["equivalences", "Equivalences", `${PAGE_ROOT}/equivalences`],
+];
+
+// rel "index.html" is the hub, written to dist/data.html and served at /data.
+const writePage = ({ rel, section, title, description, jsonUrl, body }) => {
+  if (typeof body !== "string") throw new Error(`page without a rendered body: ${rel}`);
+  const isHub = rel === "index.html";
+  const p = isHub ? path.join(ROOT, "dist", "data.html") : path.join(OUT, rel);
   fs.mkdirSync(path.dirname(p), { recursive: true });
   // Pages "pretty URLs" 308-redirect any *.html to its extensionless twin,
-  // so canonicals and the sitemap must use the extensionless form — a
-  // canonical pointing at a redirect makes Google index every page grudgingly.
-  const url = rel === "index.html" ? `${HTML_ROOT}/` : `${HTML_ROOT}/${rel.replace(/\.html$/, "")}`;
-  htmlUrls.push(url);
+  // so canonicals and the sitemap must use the extensionless form.
+  const url = isHub ? PAGE_ROOT : `${PAGE_ROOT}/${rel.replace(/\.html$/, "")}`;
+  pageUrls.push(url);
+  const nav = NAV_SECTIONS.map(([id, label, href]) =>
+    `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
+    + `<div class="aux"><a href="${ORIGIN}">numap.app planner</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
+    + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
+    + `</div>`;
   fs.writeFileSync(p, `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
-<title>${escapeHtml(title)} — NU Map Data</title>
+<title>${isHub ? "Data - NU Map" : `${escapeHtml(title)} - NU Map Data`}</title>
 <meta name="description" content="${escapeHtml(description)}" />
 <link rel="canonical" href="${url}" />
 <link rel="icon" type="image/png" href="${ORIGIN}/northeastern/dev_logo.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>${PAGE_CSS}</style>
 </head><body>
-<header><a href="${HTML_ROOT}/">NU Map Data</a> · <a href="${ORIGIN}">numap.app planner</a> · <a href="${ORIGIN}/llms.txt">AI data guide</a>${jsonUrl ? ` · <a href="${jsonUrl}">JSON of this page</a>` : ""}</header>
+<div class="layout">
+<nav>${nav}</nav>
+<main>
 <h1>${escapeHtml(title)}</h1>
 <p class="muted">NU Map is an independent, student-built planner — not affiliated
 with, endorsed by, or officially connected to Northeastern University. Data comes
@@ -582,26 +631,25 @@ ${body}
 <footer>
 <details>
 <summary>For AI assistants — reaching any other NU Map data from this page</summary>
-<p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>.</p>
+<p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>. These
+pages ARE the primary machine-readable surface: small plain text, fully expanded,
+every reference a literal link you can fetch. Directories: <code>${PAGE_ROOT}/courses</code>
+(a page per subject and per course, pattern <code>${PAGE_ROOT}/courses/{SUBJECT}/{NUMBER}</code>),
+<code>${PAGE_ROOT}/majors</code> and <code>${PAGE_ROOT}/minors</code>,
+<code>${PAGE_ROOT}/nupath</code>, <code>${PAGE_ROOT}/professors</code>,
+<code>${PAGE_ROOT}/equivalences</code>.</p>
 <ul>
-<li>Courses by subject — prereq logic, offerings, instructors, unlocks: exact
-per-subject URLs are in <code>${ORIGIN}/northeastern/ai/courses/index.json</code>
-(pattern: <code>${ORIGIN}/northeastern/ai/courses/{SUBJECT}.json</code>, e.g.
-CS.json). All course titles in one file:
-<code>${ORIGIN}/northeastern/ai/courses/titles.json</code>.</li>
-<li>Programs (majors and minors, requirements): <code>${ORIGIN}/northeastern/ai/programs/index.json</code>
-— look up the program's own URL there, never guess slugs.</li>
-<li>NUpath attributes: <code>${ORIGIN}/northeastern/ai/nupath.json</code> ·
-Professors: <code>${ORIGIN}/northeastern/ai/professors.json</code> (an index by
-first letter of name).</li>
+<li>Structured JSON (developer API): <code>${JSON_ROOT}/index.json</code> lists every
+file; all course titles in one file: <code>${JSON_ROOT}/courses/titles.json</code>.</li>
 <li>If your fetch tool refuses URLs found on this page (claude.ai's does), navigate
 by web search instead — results of a search ARE fetchable:
-<code>site:numap.app/northeastern/ai/html &lt;subject, course, or program name&gt;</code>.
-A page like this one exists for every subject, course, and current program. Or ask
-the user to paste the exact URL you need as their next message.</li>
+<code>site:numap.app/data &lt;subject, course, professor, or program name&gt;</code>.
+Or ask the user to paste the exact URL you need as their next message.</li>
 </ul>
 </details>
 </footer>
+</main>
+</div>
 </body></html>`);
 };
 
@@ -609,6 +657,11 @@ the user to paste the exact URL you need as their next message.</li>
 const chips = (arr) => `<p class="chips">${arr.filter(Boolean).map((x) => `<span>${x}</span>`).join("")}</p>`;
 const SEASON_LABEL = { fall: "Fall", spring: "Spring", summer: "Summer", sumA: "Summer A", sumB: "Summer B" };
 const seasonLabel = (s) => SEASON_LABEL[s] ?? s;
+const SEASON_ORDER = ["fall", "spring", "summer", "sumA", "sumB"];
+const seasonSort = (a, b2) => {
+  const ia = SEASON_ORDER.indexOf(a), ib = SEASON_ORDER.indexOf(b2);
+  return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b2);
+};
 
 const COURSE_KNOWN = new Set([
   "subject", "number", "title", "scheduleType", "credits", "creditsMax", "nuPath",
@@ -656,8 +709,7 @@ const renderCourse = (subject, c) => {
     }
   }
   if (c.instructors) {
-    const order = ["fall", "spring", "summer", "sumA", "sumB"];
-    const seasons = Object.keys(c.instructors).sort((a, b2) => (order.indexOf(a) + 99) - (order.indexOf(b2) + 99) || order.indexOf(a) - order.indexOf(b2));
+    const seasons = Object.keys(c.instructors).sort(seasonSort);
     out.push(`<h2>Professors</h2>` + seasons.map((s) =>
       `<p><strong>${escapeHtml(seasonLabel(s))}:</strong> ` + c.instructors[s].map((i) =>
         `${profLink(i.name)} <span class="muted">(${i.sharePct}% of students)</span>${i.reviews ? ` <a href="${i.reviews}">reviews</a>` : ""}`
@@ -671,13 +723,13 @@ const renderCourse = (subject, c) => {
   const links = [
     c.catalogUrl ? `<a href="${c.catalogUrl}">Official catalog (${escapeHtml(subject)} course descriptions)</a>` : null,
     c.reviews ? `<a href="${c.reviews}">Student reviews on RateMyHusky</a>` : null,
-    `<a href="${HTML_ROOT}/courses/${subject}">All ${escapeHtml(subject)} courses</a>`,
+    `<a href="${PAGE_ROOT}/courses/${subject}">All ${escapeHtml(subject)} courses</a>`,
     `<a href="${ORIGIN}">Plan it at numap.app</a>`,
   ].filter(Boolean);
   out.push(`<h2>Links</h2><p>${links.join(" · ")}</p>`);
 
   // Parity net: any field the template doesn't know still ships, so the
-  // HTML page never silently loses data the JSON row no longer carries.
+  // page never silently loses data.
   const leftover = Object.keys(c).filter((k) => !COURSE_KNOWN.has(k));
   if (leftover.length) {
     out.push(`<h2>More</h2><pre>${escapeHtml(JSON.stringify(Object.fromEntries(leftover.map((k) => [k, c[k]])), null, 1))}</pre>`);
@@ -721,15 +773,15 @@ const sectionInner = (s) => {
     ? `<p class="muted">Complete ${s.minRequirementCount} of the following:</p>` : "";
   return `${note}<ul class="req">${reqs.map(renderNode).join("")}</ul>`;
 };
+const prettyWords = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
 const renderProgram = (p) => {
   const r = p.requirements ?? {};
-  const pretty = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
   const out = [];
   out.push(chips([
     p.level === "grad" ? "Graduate" : "Undergraduate",
     escapeHtml(p.kind ?? "major"),
     `${p.catalogYear} catalog`,
-    p.college ? escapeHtml(pretty(p.college)) : null,
+    p.college ? escapeHtml(prettyWords(p.college)) : null,
     p.location ? escapeHtml(p.location) : null,
     r.totalCreditsRequired ? `${r.totalCreditsRequired} semester hours total` : null,
     p.verified ? "verified parse" : "unverified parse — check the source",
@@ -742,7 +794,7 @@ const renderProgram = (p) => {
     const con = r.concentrations;
     out.push(`<h2>Concentrations${con.minOptions ? ` <span class="muted">(choose ${con.minOptions})</span>` : ""}</h2>`
       + con.concentrationOptions.map((o) =>
-        `<details><summary>${escapeHtml(o.label ?? o.title ?? "Concentration")}</summary>${sectionInner(o)}</details>`).join(""));
+        `<h3>${escapeHtml(o.label ?? o.title ?? "Concentration")}</h3>${sectionInner(o)}`).join(""));
   }
   if (r.gpaRequirements?.length) {
     out.push(`<h2>GPA requirements</h2><ul>${r.gpaRequirements.map((g) => `<li>${escapeHtml(g.text ?? g.title ?? "")}</li>`).join("")}</ul>`);
@@ -750,11 +802,11 @@ const renderProgram = (p) => {
   if (r.generalElectiveSH) {
     out.push(`<p>Plus ${r.generalElectiveSH} semester hours of general electives.</p>`);
   }
-  out.push(`<p class="muted">Parsed from the catalog by NU Map; the <a href="${p.url}">JSON version</a> is the canonical machine copy${p.sourceUrl ? `, and the <a href="${p.sourceUrl}">official page</a> is the authority` : ""}.</p>`);
+  out.push(`<p class="muted">Parsed from the catalog by NU Map; the <a href="${p.url}">JSON version</a> is the structured machine copy${p.sourceUrl ? `, and the <a href="${p.sourceUrl}">official page</a> is the authority` : ""}.</p>`);
   return out.join("\n");
 };
 
-// ── Cross-cutting pages: hub, directories, nupath, professors, equivalences ──
+// ── Directory and cross-cutting pages ────────────────────────────────
 const equivalencesData = readJSON(path.join(ROOT, "public", "northeastern", "course-equivalences.json"));
 const TIER_LABEL = {
   A: "A — a program explicitly allows either course",
@@ -763,78 +815,128 @@ const TIER_LABEL = {
   D: "D — weak signals only",
 };
 
-mirrorQueue.push({
+pageQueue.push({
   rel: "courses.html",
+  section: "courses",
   title: "All Northeastern subjects — course listings",
   description: "Directory of all Northeastern subject codes with course counts; each links a full listing with prerequisites, offerings and NUpath. From NU Map (not affiliated with Northeastern).",
-  jsonUrl: `${ORIGIN}/northeastern/ai/courses/index.json`,
+  jsonUrl: `${JSON_ROOT}/courses/index.json`,
   body: `<table><tr><th>Subject</th><th>Courses</th><th></th></tr>`
-    + subjects.map((s) => `<tr><td><a href="${HTML_ROOT}/courses/${s.subject}">${s.subject}</a></td><td>${s.count}</td><td class="muted"><a href="${s.url}">JSON</a></td></tr>`).join("")
+    + subjects.map((s) => `<tr><td><a href="${s.page}">${s.subject}</a></td><td>${s.count}</td><td class="muted"><a href="${s.url}">JSON</a></td></tr>`).join("")
     + `</table>`,
 });
 
 {
-  const current = mirrorQueue.filter((m) => m.kind === "program" && m.year === Math.max(...mirrorQueue.filter((q) => q.year).map((q) => q.year)));
-  const pretty = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
-  const byLevel = { undergrad: new Map(), grad: new Map() };
-  for (const m of current) {
-    const p = m.data;
-    const bucket = byLevel[p.level] ?? byLevel.undergrad;
-    if (!bucket.has(p.college)) bucket.set(p.college, []);
-    bucket.get(p.college).push({ name: p.name, kind: p.kind, href: `${HTML_ROOT}/${m.rel.replace(/\.html$/, "")}` });
-  }
-  const section = (label, bucket) => `<h2>${label}</h2>` + [...bucket.entries()].sort(([a], [b2]) => a.localeCompare(b2)).map(([college, list]) =>
-    `<h3>${escapeHtml(pretty(college))}</h3><ul>` + list.sort((a, b2) => a.name.localeCompare(b2.name)).map((p) =>
-      `<li><a href="${p.href}">${escapeHtml(p.name)}</a>${p.kind === "minor" ? ` <span class="muted">(minor)</span>` : ""}</li>`).join("") + `</ul>`).join("");
-  mirrorQueue.push({
-    rel: "programs.html",
-    title: "All Northeastern majors and minors — degree requirements",
-    description: "Directory of every Northeastern program NU Map knows — majors and minors, undergraduate and graduate — each linking its full parsed requirements. From NU Map (not affiliated with Northeastern).",
-    jsonUrl: `${ORIGIN}/northeastern/ai/programs/index.json`,
-    body: section("Undergraduate", byLevel.undergrad) + section("Graduate", byLevel.grad)
-      + `<p class="muted">Current catalog year; earlier years are in the <a href="${ORIGIN}/northeastern/ai/programs/index.json">JSON index</a>.</p>`,
+  const newest = Math.max(...pageQueue.filter((q) => q.year).map((q) => q.year));
+  const current = pageQueue.filter((m) => m.kind === "program" && m.year === newest);
+  const directory = (kindLabel, wanted) => {
+    const byLevel = { undergrad: new Map(), grad: new Map() };
+    for (const m of current) {
+      const p = m.data;
+      if ((p.kind === "minor") !== (wanted === "minor")) continue;
+      const bucket = byLevel[p.level] ?? byLevel.undergrad;
+      if (!bucket.has(p.college)) bucket.set(p.college, []);
+      bucket.get(p.college).push({ name: p.name, href: p.page });
+    }
+    const section = (label, bucket) => bucket.size
+      ? `<h2>${label}</h2>` + [...bucket.entries()].sort(([a], [b2]) => a.localeCompare(b2)).map(([college, list]) =>
+        `<h3>${escapeHtml(prettyWords(college))}</h3><ul>` + list.sort((a, b2) => a.name.localeCompare(b2.name)).map((p) =>
+          `<li><a href="${p.href}">${escapeHtml(p.name)}</a></li>`).join("") + `</ul>`).join("")
+      : "";
+    return section("Undergraduate", byLevel.undergrad) + section("Graduate", byLevel.grad)
+      + `<p class="muted">Current catalog year; earlier years are in the <a href="${JSON_ROOT}/programs/index.json">JSON index</a>.</p>`;
+  };
+  pageQueue.push({
+    rel: "majors.html",
+    section: "majors",
+    title: "Northeastern majors — degree requirements",
+    description: "Every Northeastern major NU Map knows, undergraduate and graduate, grouped by college — each linking its full parsed degree requirements. From NU Map (not affiliated with Northeastern).",
+    jsonUrl: `${JSON_ROOT}/programs/index.json`,
+    body: directory("majors", "major"),
+  });
+  pageQueue.push({
+    rel: "minors.html",
+    section: "minors",
+    title: "Northeastern minors — requirements",
+    description: "Every Northeastern minor NU Map knows, grouped by college — each linking its full parsed requirements. From NU Map (not affiliated with Northeastern).",
+    jsonUrl: `${JSON_ROOT}/programs/index.json`,
+    body: directory("minors", "minor"),
   });
 }
 
-mirrorQueue.push({
+pageQueue.push({
   rel: "nupath.html",
+  section: "nupath",
   title: "NUpath — which Northeastern courses satisfy each attribute",
-  description: "Every course satisfying each of the 13 NUpath general-education attributes at Northeastern (the writing competency is three codes: WF, WD, WI). From NU Map (not affiliated with Northeastern).",
-  jsonUrl: `${ORIGIN}/northeastern/ai/nupath.json`,
-  body: Object.entries(nupath).map(([code, e]) =>
-    `<details><summary>${escapeHtml(code)} — ${escapeHtml(e.label)} <span class="muted">(${e.courses.length} courses)</span></summary><p>${e.courses.map(linkCode).join(", ")}</p></details>`).join(""),
+  description: "The 13 NUpath general-education attributes at Northeastern, each linking a full page of satisfying courses (the writing competency is three codes: WF, WD, WI). From NU Map (not affiliated with Northeastern).",
+  jsonUrl: `${JSON_ROOT}/nupath.json`,
+  body: `<table><tr><th>Code</th><th>Attribute</th><th>Courses</th></tr>`
+    + Object.entries(nupath).map(([code, e]) =>
+      `<tr><td><a href="${e.page}">${escapeHtml(code)}</a></td><td><a href="${e.page}">${escapeHtml(e.label)}</a></td><td>${e.courses.length}</td></tr>`).join("")
+    + `</table><p class="muted">13 codes, not 12 — the writing competency is awarded as three (WF, WD, WI).</p>`,
 });
-
-for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
-  mirrorQueue.push({
-    rel: `professors/${letter}.html`,
-    title: `Northeastern professors — ${letter}`,
-    description: `Northeastern instructors whose name starts with "${letter}", with the courses they teach per season and student review links. From NU Map (not affiliated with Northeastern).`,
-    jsonUrl: `${ORIGIN}/northeastern/ai/professors/${letter}.json`,
-    body: Object.entries(profs).map(([name, p]) =>
-      `<p id="${profAnchor(name)}"><strong>${escapeHtml(name)}</strong>${p.reviews ? ` <a href="${p.reviews}">reviews</a>` : ""} — `
-      + Object.entries(p.courses).map(([code, seasons]) => `${linkCode(code)} <span class="muted">(${seasons.map(seasonLabel).join(", ")})</span>`).join("; ")
-      + `</p>`).join("\n"),
+for (const [code, e] of Object.entries(nupath)) {
+  pageQueue.push({
+    rel: `nupath/${code}.html`,
+    section: "nupath",
+    title: `NUpath ${code} — ${e.label}: every satisfying course`,
+    description: `All ${e.courses.length} Northeastern courses satisfying the ${code} (${e.label}) NUpath attribute, each linking its full course page. From NU Map (not affiliated with Northeastern).`,
+    jsonUrl: `${JSON_ROOT}/nupath.json`,
+    body: `<ul>` + e.courses.map((c) =>
+      `<li>${linkCode(c)}${titleOf.has(c) ? ` — ${escapeHtml(titleOf.get(c))}` : ""}</li>`).join("\n") + `</ul>`,
   });
 }
-mirrorQueue.push({
+
+// Professors: index → letter directories → one page per professor.
+pageQueue.push({
   rel: "professors.html",
+  section: "professors",
   title: "Northeastern professors — who teaches what",
-  description: "Every Northeastern instructor in recent scheduled terms, with the courses they teach per season and RateMyHusky review links, split by first letter. From NU Map (not affiliated with Northeastern).",
-  jsonUrl: `${ORIGIN}/northeastern/ai/professors.json`,
-  body: `<p>${professors.size} instructors from recent scheduled terms, split by the first letter of their name:</p><p>`
+  description: "Every Northeastern instructor in recent scheduled terms, with the courses they teach, per-season student shares, and RateMyHusky review links. From NU Map (not affiliated with Northeastern).",
+  jsonUrl: `${JSON_ROOT}/professors.json`,
+  body: `<p>${professors.size} instructors from recent scheduled terms (~3 years), split by the first letter of their name. Each professor has their own page with courses, seasons, and share of students taught.</p><p>`
     + [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))
-      .map(([letter, profs]) => `<a href="${HTML_ROOT}/professors/${letter}">${letter}</a> <span class="muted">(${Object.keys(profs).length})</span>`).join(" · ")
+      .map(([letter, profs]) => `<a href="${PAGE_ROOT}/professors/${letter}">${letter}</a> <span class="muted">(${Object.keys(profs).length})</span>`).join(" · ")
     + `</p>`,
 });
+for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a.localeCompare(b2))) {
+  pageQueue.push({
+    rel: `professors/${letter}.html`,
+    section: "professors",
+    title: `Northeastern professors — ${letter}`,
+    description: `Northeastern instructors whose name starts with "${letter}", each linking their own page with courses, seasons, and share of students taught. From NU Map (not affiliated with Northeastern).`,
+    jsonUrl: `${JSON_ROOT}/professors/${letter}.json`,
+    body: `<ul>` + Object.entries(profs).map(([name, p]) =>
+      `<li><a href="${p.page}">${escapeHtml(name)}</a> <span class="muted">(${Object.keys(p.courses).length} course${Object.keys(p.courses).length === 1 ? "" : "s"})</span></li>`).join("\n") + `</ul>`,
+  });
+  for (const [name, p] of Object.entries(profs)) {
+    const rows = Object.entries(p.courses).map(([code, seasons]) => {
+      const when = Object.entries(seasons).sort(([a], [b2]) => seasonSort(a, b2))
+        .map(([s, pct]) => `${seasonLabel(s)} ${pct}%`).join(" · ");
+      return `<tr><td>${linkCode(code)}</td><td>${titleOf.has(code) ? escapeHtml(titleOf.get(code)) : `<span class="muted">no longer in the catalog</span>`}</td><td>${escapeHtml(when)}</td></tr>`;
+    }).join("\n");
+    pageQueue.push({
+      rel: `professors/${profSlugOf.get(name)}.html`,
+      section: "professors",
+      title: `${name} — Northeastern courses taught`,
+      description: `Courses ${name} teaches at Northeastern, with seasons and the average share of students taught in recent terms${p.reviews ? ", plus student reviews" : ""}. From NU Map (not affiliated with Northeastern).`,
+      jsonUrl: `${JSON_ROOT}/professors/${letter}.json`,
+      body: (p.reviews ? `<p><a href="${p.reviews}">Student reviews on RateMyHusky</a></p>` : "")
+        + `<table><tr><th>Course</th><th>Title</th><th>When taught · share of students</th></tr>\n${rows}\n</table>`
+        + `<p class="muted">Share = this professor's average percent of that season's enrolled students across recent terms (~3 years). Seasons not listed had other instructors.</p>`
+        + `<p><a href="${PAGE_ROOT}/professors/${letter}">All professors — ${escapeHtml(letter)}</a></p>`,
+    });
+  }
+}
 
 {
   const tiers = { A: [], B: [], C: [], D: [] };
   for (const pair of equivalencesData.pairs ?? []) (tiers[pair.t] ?? tiers.D).push(pair);
   const table = (list) => `<table><tr><th>Course</th><th>Course</th></tr>`
     + list.sort((a, b2) => a.a.localeCompare(b2.a)).map((p) => `<tr><td>${linkCode(p.a)}</td><td>${linkCode(p.b)}</td></tr>`).join("") + `</table>`;
-  mirrorQueue.push({
+  pageQueue.push({
     rel: "equivalences.html",
+    section: "equivalences",
     title: "Course equivalences and substitutions at Northeastern",
     description: "Course substitution suggestions by evidence tier: program-stated, catalog-stated, and inferred pairs (inferred ones need advisor approval). From NU Map (not affiliated with Northeastern).",
     jsonUrl: `${ORIGIN}/northeastern/course-equivalences.json`,
@@ -846,90 +948,86 @@ your advisor's sign-off</strong> — tiers only say how strong the written evide
   });
 }
 
-mirrorQueue.push({
-  rel: "titles.html",
-  title: "Every Northeastern course title in one file",
-  description: "All Northeastern course codes and titles in a single machine-readable file for topic search, with the subject directory for humans. From NU Map (not affiliated with Northeastern).",
-  jsonUrl: `${ORIGIN}/northeastern/ai/courses/titles.json`,
-  body: `<p>The one-fetch topic index: every course code mapped to its title lives in
-<a href="${ORIGIN}/northeastern/ai/courses/titles.json">titles.json</a> (~330 KB).
-Humans browsing by subject want the <a href="${HTML_ROOT}/courses">subject
-directory</a> instead; each subject page lists its courses with prerequisites and
-links to full course pages.</p>`,
-});
-
-mirrorQueue.push({
+// The hub — served at /data, the human-readable front door.
+pageQueue.push({
   rel: "index.html",
-  title: "NU Map Data — Northeastern courses, majors and professors",
-  description: "Human-readable directory of NU Map's public Northeastern data: every course with prerequisites and professors, every major and minor with requirements, NUpath, and course equivalences. Machine version at numap.app/llms.txt.",
-  jsonUrl: `${ORIGIN}/northeastern/ai/index.json`,
+  section: "home",
+  title: "Northeastern courses, majors and professors",
+  description: "Browse NU Map's public Northeastern data: every course with prerequisites, offering history and professors; every major and minor with requirements; NUpath; course equivalences. Free, no login. AI guide at numap.app/llms.txt.",
+  jsonUrl: `${JSON_ROOT}/index.json`,
   body: `<ul>
-<li><a href="${HTML_ROOT}/courses">Courses by subject</a> — ${catalog.length} courses in ${subjects.length} subjects: prerequisites, offering history, meeting days, professors, and what each course unlocks.</li>
-<li><a href="${HTML_ROOT}/programs">Majors and minors</a> — ${programs.length} programs with full parsed degree requirements.</li>
-<li><a href="${HTML_ROOT}/nupath">NUpath</a> — which courses satisfy each of the 13 general-education attributes.</li>
-<li><a href="${HTML_ROOT}/professors">Professors</a> — who teaches what, per season, with review links.</li>
-<li><a href="${HTML_ROOT}/equivalences">Course equivalences</a> — substitution suggestions by evidence tier.</li>
-<li><a href="${HTML_ROOT}/titles">Course titles index</a> — topic search across all ~${Math.round(catalog.length / 1000)}k courses.</li>
+<li><a href="${PAGE_ROOT}/courses">Courses by subject</a> — ${catalog.length.toLocaleString("en-US")} courses in ${subjects.length} subjects: prerequisites, offering history, meeting days, professors, and what each course unlocks. A page per subject and per course.</li>
+<li><a href="${PAGE_ROOT}/majors">Majors</a> — full parsed degree requirements, undergraduate and graduate, grouped by college.</li>
+<li><a href="${PAGE_ROOT}/minors">Minors</a> — same, for every minor.</li>
+<li><a href="${PAGE_ROOT}/nupath">NUpath</a> — which courses satisfy each of the 13 general-education attributes.</li>
+<li><a href="${PAGE_ROOT}/professors">Professors</a> — ${professors.size.toLocaleString("en-US")} instructors: who teaches what, when, and what share of students.</li>
+<li><a href="${PAGE_ROOT}/equivalences">Course equivalences</a> — substitution suggestions by evidence tier.</li>
 </ul>
-<p>AI assistants: everything here is also plain JSON — start at
-<a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>. Humans: the interactive planner
-is <a href="${ORIGIN}">numap.app</a>.</p>`,
+<p class="muted">AI assistants: the guide is <a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a> —
+these pages are the primary machine-readable surface. Developers: structured JSON
+at <a href="${JSON_ROOT}/index.json">/data/json</a>. Humans: the interactive planner
+is <a href="${ORIGIN}">numap.app</a>, and the story behind it is at
+<a href="${ORIGIN}/story">/story</a>.</p>`,
 });
 
-// HTML mirrors for programs cover only the NEWEST catalog year: JSONs
-// keep every year, but mirroring all years would compound the Pages
-// file count (~1,000/year) for pages nobody searches for.
-const newestYear = Math.max(...mirrorQueue.filter((m) => m.year).map((m) => m.year));
-for (const m of mirrorQueue) {
+// Program pages cover only the NEWEST catalog year: JSONs keep every
+// year, but pages for old years would compound the Pages file count
+// (~1,000/year) for pages nobody searches for.
+const newestYear = Math.max(...pageQueue.filter((m) => m.year).map((m) => m.year));
+for (const m of pageQueue) {
   if (m.year && m.year !== newestYear) continue;
   const body = m.body
     ?? (m.kind === "course" ? renderCourse(m.subject, m.data)
       : m.kind === "program" ? renderProgram(m.data)
       : undefined);
-  writeHtmlMirror(m.rel, m.title, m.description, m.jsonUrl, body);
+  writePage({ rel: m.rel, section: m.section, title: m.title, description: m.description, jsonUrl: m.jsonUrl, body });
 }
 
-// Link-integrity rail: every internal href in every generated page must
-// point at a page this build generated. A renamed rel or a bad anchor
-// helper must fail the build, never ship a dead link.
+// Link-integrity rail: every internal page href in every generated page
+// must point at a page this build generated. A renamed rel or a bad slug
+// helper must fail the build, never ship a dead link. (/data/json/ links
+// are files, not pages — they're validated by construction.)
 {
-  const generated = new Set(htmlUrls);
+  const generated = new Set(pageUrls);
   const dead = new Map();
+  const scanFile = (p) => {
+    const html = fs.readFileSync(p, "utf8");
+    for (const m of html.matchAll(/href="(https:\/\/numap\.app\/data\/[^"#]*)"/g)) {
+      if (m[1].startsWith(`${JSON_ROOT}/`)) continue;
+      if (!generated.has(m[1])) dead.set(m[1], p);
+    }
+  };
   const scan = (dir) => {
     for (const f of fs.readdirSync(dir)) {
       const p = path.join(dir, f);
-      if (fs.statSync(p).isDirectory()) { scan(p); continue; }
-      if (!f.endsWith(".html")) continue;
-      const html = fs.readFileSync(p, "utf8");
-      for (const m of html.matchAll(/href="(https:\/\/numap\.app\/northeastern\/ai\/html\/[^"#]*)/g)) {
-        if (!generated.has(m[1])) dead.set(m[1], f);
-      }
+      if (fs.statSync(p).isDirectory()) { if (f !== "json") scan(p); continue; }
+      if (f.endsWith(".html")) scanFile(p);
     }
   };
-  scan(path.join(OUT, "html"));
+  scan(OUT);
+  scanFile(path.join(ROOT, "dist", "data.html"));
   if (dead.size) {
-    const sample = [...dead.entries()].slice(0, 5).map(([u, f]) => `${u} (in ${f})`).join("\n  ");
+    const sample = [...dead.entries()].slice(0, 5).map(([u, f]) => `${u} (in ${path.basename(f)})`).join("\n  ");
     throw new Error(`rails: ${dead.size} dead internal links, e.g.\n  ${sample}`);
   }
 }
 
-// Generated sitemap for the mirrors, under the already-exempt /northeastern/ai/
-// path; robots.txt points search engines at it.
+// Generated sitemap for the pages; robots.txt points search engines at it.
 fs.writeFileSync(path.join(OUT, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
-  + htmlUrls.map((u) => `  <url><loc>${u}</loc><changefreq>monthly</changefreq></url>`).join("\n")
+  + pageUrls.map((u) => `  <url><loc>${u}</loc><changefreq>monthly</changefreq></url>`).join("\n")
   + `\n</urlset>\n`);
 
-// ── Top-level index ──────────────────────────────────────────────────
+// ── Top-level JSON index ─────────────────────────────────────────────
 writeJSON("index.json", {
-  what: "Machine-readable index of NU Map's public Northeastern data. Start at /llms.txt for the guide.",
+  what: "Machine-readable index of NU Map's public Northeastern data. The human-readable pages under /data are the primary surface (small, fully expanded, every reference a link); this JSON tree is the structured developer API. Start at /llms.txt for the guide.",
   llms: `${ORIGIN}/llms.txt`,
-  html: `${HTML_ROOT}/`,
-  programs: `${ORIGIN}/northeastern/ai/programs/index.json`,
-  courses: `${ORIGIN}/northeastern/ai/courses/index.json`,
-  courseTitles: `${ORIGIN}/northeastern/ai/courses/titles.json`,
-  nupath: `${ORIGIN}/northeastern/ai/nupath.json`,
-  professors: `${ORIGIN}/northeastern/ai/professors.json`,
+  pages: PAGE_ROOT,
+  programs: `${JSON_ROOT}/programs/index.json`,
+  courses: `${JSON_ROOT}/courses/index.json`,
+  courseTitles: `${JSON_ROOT}/courses/titles.json`,
+  nupath: `${JSON_ROOT}/nupath.json`,
+  professors: `${JSON_ROOT}/professors.json`,
   equivalences: `${ORIGIN}/northeastern/course-equivalences.json`,
   programCount: programs.length,
   courseCount: catalog.length,
@@ -946,7 +1044,7 @@ writeJSON("index.json", {
 fs.writeFileSync(path.join(ROOT, "dist", "data-meta.json"),
   JSON.stringify({ ...meta, courseCount: catalog.length }));
 
-console.log(`AI data export: ${programs.length} programs, ${catalog.length} courses in ${subjects.length} subjects → dist/northeastern/ai/`);
+console.log(`Data surface: ${programs.length} programs, ${catalog.length} courses in ${subjects.length} subjects, ${professors.size} professors → ${pageUrls.length} pages + JSON API at dist/data/`);
 }
 
 // CLI entry: `node scripts/build-ai-data.js` (the Vite plugin imports

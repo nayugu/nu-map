@@ -5,4 +5,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://numap.app/sitemap.xml
-Sitemap: https://numap.app/northeastern/ai/sitemap.xml
+Sitemap: https://numap.app/data/sitemap.xml
