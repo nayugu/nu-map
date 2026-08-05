@@ -360,17 +360,31 @@
         // waited for a literal 404, never announced it at all.
         //
         // So readiness is now something we have actually done, not
-        // something we infer: read the LIVE deployment's manifest
-        // (assets/build.json, beside our own bundle — /assets/ is exempt
-        // from the zone's Human Verification rule, unlike '/', whose
-        // challenge page blinded the old probe once a tab's clearance
-        // expired), then fetch the entry bundle it names with
-        // cache:'reload' and require real JavaScript back. A JSON body
-        // that parses rules out both the SPA shell and a challenge
-        // page; a JS content-type rules out the fallback. cache:'reload'
-        // both ignores the HTTP cache and WRITES the fresh response into
-        // it, so proving readiness also pre-warms the very files the
-        // return navigation needs.
+        // something we infer. Two independent readings of what is
+        // deployed, because neither may be a single point of failure:
+        //
+        //   the shell itself — authoritative, since it is literally what
+        //     the browser will load, but it is HTML, so an interstitial
+        //     can impersonate it;
+        //   assets/build.json (emitted beside the bundle by
+        //     buildManifestPlugin) — immune to that, because an
+        //     interstitial does not parse as JSON, and served from
+        //     /assets/, the path that stayed exempt while the zone's
+        //     Managed Challenge was on. That challenge was disabled
+        //     2026-08-04 and '/' now answers a bare curl, but Under
+        //     Attack Mode and DDoS auto-mitigation can both put an
+        //     interstitial back with no config change, so this stays.
+        //
+        // When both are readable they must AGREE — a shell and a
+        // manifest naming different bundles is a deploy in flight, the
+        // one moment we must not say the way back is open. Either one
+        // alone is accepted (a rollback to a build with no manifest must
+        // not leave the screen mute), and whichever we get must name a
+        // bundle that comes back as real JavaScript, which is what rules
+        // out the fallback. Every fetch here uses cache:'reload', which
+        // ignores the HTTP cache AND writes the fresh response into it —
+        // so proving readiness is itself the silent hard refresh, and
+        // pre-warms the very files the return navigation needs.
         //
         // Resolved lazily, never at parse time: this script runs in <head>,
         // and the module tag it looks for is at the end of <body>.
@@ -399,43 +413,44 @@
               return r.ok && ct.indexOf('javascript') >= 0 ? mine : null;
             }).catch(function () { return null; });
           }
-          var mf = mine.replace(/[^/]+$/, 'build.json');
-          return fetch(nocache(mf), { cache: 'no-store' })
-            .then(function (r) { return r.ok ? r.text() : null; })
-            .then(function (t) {
-              var m = null;
-              try { m = t && JSON.parse(t); } catch (e) { return null; }  // shell or challenge — no proof
-              if (!m || !m.entry) return null;
-              var live = mine.replace(/[^/]+$/, m.entry);
-              return fetch(live, { cache: 'reload' }).then(function (r) {
-                var ct = (r.headers.get('content-type') || '').toLowerCase();
-                if (!r.ok || ct.indexOf('javascript') < 0) return null;
-                // Last step, and the one that makes the offer honest: read
-                // the shell this return will actually land on and check it
-                // points at the same bundle. A deploy in flight is exactly
-                // where a shell and a manifest disagree, and that is the
-                // moment we must NOT say the way back is open.
-                //
-                // Tolerant by design: '/' can come back as a Cloudflare
-                // challenge page once a long-lived tab's clearance expires,
-                // and a challenge page must not be able to withhold the way
-                // back forever — so only a shell we can actually read, and
-                // which names a DIFFERENT bundle, counts against readiness.
-                return fetch(location.pathname, { cache: 'reload' })
-                  .then(function (r2) { return r2.ok ? r2.text() : ''; })
-                  .then(function (html) {
-                    var refs = html && html.match(/assets\/index-[^"']+\.js/);
-                    if (refs && html.indexOf(m.entry) < 0) return null;
-                    // Remember it here, not at the call site: the crash screen
-                    // calls this too, and its return must pre-warm the same
-                    // bundle the boot screen's would.
-                    liveEntry = live;
-                    return live;
-                  })
-                  .catch(function () { liveEntry = live; return live; });
-              });
+          var dir = mine.replace(/[^/]+$/, '');
+          // Reading 1: the shell the return will land on. Its own <script
+          // type="module"> names the bundle it would boot. Anything that is
+          // not our shell (an interstitial, an error page) simply has no such
+          // reference, so it contributes nothing rather than lying.
+          var fromShell = fetch(location.pathname, { cache: 'reload' })
+            .then(function (r) { return r.ok ? r.text() : ''; })
+            .then(function (html) {
+              var m = html && html.match(/assets\/(index-[^"'/]+\.js)/);
+              return m && m[1];
             })
-            .catch(function () { return null; });   // offline / mid-deploy — next tick
+            .catch(function () { return null; });
+          // Reading 2: the manifest. JSON.parse is the test that matters here
+          // — the SPA fallback and any interstitial both fail it.
+          var fromManifest = fetch(nocache(dir + 'build.json'), { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.text() : ''; })
+            .then(function (t) {
+              var j = null;
+              try { j = t && JSON.parse(t); } catch (e) { return null; }
+              return (j && j.entry) || null;
+            })
+            .catch(function () { return null; });
+          return Promise.all([fromShell, fromManifest]).then(function (both) {
+            // Both readable and disagreeing = a deploy in flight. Say nothing.
+            if (both[0] && both[1] && both[0] !== both[1]) return null;
+            var name = both[0] || both[1];
+            if (!name) return null;
+            var live = dir + name;
+            return fetch(live, { cache: 'reload' }).then(function (r) {
+              var ct = (r.headers.get('content-type') || '').toLowerCase();
+              if (!r.ok || ct.indexOf('javascript') < 0) return null;  // the fallback, not a bundle
+              // Recorded here rather than at the call site: the crash screen
+              // calls this too, and its return must pre-warm the same bundle
+              // the boot screen's would.
+              liveEntry = live;
+              return live;
+            }).catch(function () { return null; });
+          });
         }
         // The crash screen (src/ui/RecoveryBoundary.jsx) runs inside the
         // bundle and shares this exact test rather than keeping its own.

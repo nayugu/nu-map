@@ -29,10 +29,17 @@
 #      under an older deploy — a page that reload() cannot fix and only a hard
 #      refresh can. index.html's hardReturn re-fetches known-dead chunk URLs
 #      with cache:'reload' to overwrite exactly those entries.
-# `_redirects` cannot express a 404 (Pages supports only 200/301/302/303/307/
-# 308), so the honest server-side fix would be a Pages Function on /assets/*
-# turning a fallback-HTML response into a real 404 — not done: it puts a Worker
-# invocation in front of every asset request.
+# Weighed and deliberately NOT fixed server-side (2026-08-05), because neither
+# cure is clean. `_redirects` cannot express a 404 at all (Pages supports only
+# 200/301/302/303/307/308). A Pages Function on /assets/* could turn a
+# fallback-HTML response into a real 404, but a Function cannot run "only on a
+# miss" — it would put a Worker invocation in front of every asset request, and
+# this project is on the free tier. Dropping the `/*` catch-all would also make
+# misses 404 (nothing here uses path routing — there is no pushState in src/),
+# but this rule would then likely stamp `immutable` on the 404 itself, trading
+# HTML poison for negatively-cached poison, and it changes what every unknown
+# URL answers. The client-side proof in index.html neutralises both shapes
+# instead; revisit if this ever moves to a paid plan.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
@@ -40,5 +47,14 @@
 # every load so a fresh deploy is picked up immediately and can never reference
 # a chunk that no longer exists. no-cache = store but always revalidate (a 304
 # keeps it cheap); it does NOT mean "don't store".
+#
+# Note (2026-08-05): a handful of paths answer with `max-age=14400` instead of
+# this rule — /robots.txt, /logo.png, /fonts-cjk.css — and the tell is that each
+# one comes back `cf-cache-status: REVALIDATED` while every path that obeys the
+# rule is `DYNAMIC`. They are edge entries stored BEFORE this file existed:
+# never-modified files revalidate to a 304 forever, and the edge keeps the
+# headers it stored with the body. Nothing here depends on it (the recovery
+# screens force freshness per request), and the cure is a one-time cache purge
+# of those URLs, not a rule.
 /*
   Cache-Control: no-cache
