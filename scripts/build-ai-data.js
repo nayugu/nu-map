@@ -963,11 +963,10 @@ pageQueue.push({
 <li><a href="${PAGE_ROOT}/professors">Professors</a> — ${professors.size.toLocaleString("en-US")} instructors: who teaches what, when, and what share of students.</li>
 <li><a href="${PAGE_ROOT}/equivalences">Course equivalences</a> — substitution suggestions by evidence tier.</li>
 </ul>
-<p class="muted">AI assistants: the guide is <a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a> —
-these pages are the primary machine-readable surface. Developers: structured JSON
-at <a href="${JSON_ROOT}/index.json">/data/json</a>. Humans: the interactive planner
-is <a href="${ORIGIN}">numap.app</a>, and the story behind it is at
-<a href="${ORIGIN}/story">/story</a>.</p>`,
+<p class="muted">The interactive planner is <a href="${ORIGIN}">numap.app</a>, and
+the story behind it is at <a href="${ORIGIN}/story">/story</a>. AI assistants and
+developers: see the collapsed note at the bottom of any page, or start at
+<a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>.</p>`,
 });
 
 // Program pages cover only the NEWEST catalog year: JSONs keep every
