@@ -30,7 +30,14 @@
     // suggests /data/courses/MATH, then /data/courses. Ancestors are
     // directory pages, so they exist whenever their segment is real.
     var segs = location.pathname.replace(/\/+$/, "").split("/").filter(Boolean);
-    document.getElementById("path").textContent = location.pathname;
+    if (location.pathname === "/data-404" || location.pathname === "/data-404.html") {
+      // A redirect stripped the typed path; keep the page generic.
+      document.getElementById("path").remove();
+      document.getElementById("near").previousElementSibling.remove();
+      segs = [];
+    } else {
+      document.getElementById("path").textContent = location.pathname;
+    }
     var near = document.getElementById("near");
     for (var i = segs.length - 1; i >= 2; i--) {
       var href = "/" + segs.slice(0, i).join("/");
