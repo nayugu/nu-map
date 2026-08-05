@@ -764,7 +764,7 @@ ${aiInner}
 <meta property="og:title" content="${escapeHtml(title)} — NU Map" />
 <meta name="description" content="${escapeHtml(description)}" />
 <link rel="canonical" href="${url}" />
-<link rel="icon" type="image/png" href="${ORIGIN}/northeastern/dev_logo.png" />
+<link rel="icon" type="image/png" href="${ORIGIN}/logo.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>${PAGE_CSS}</style>
 </head><body>
