@@ -503,8 +503,8 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
     rel: `courses/${subject}.html`,
     section: "courses",
     wide: true,
-    title: `${subject} courses at Northeastern — prerequisites, offerings, instructors`,
-    heading: `${subject} courses`,
+    title: `${subjectNames[subject] ? `${subjectNames[subject]} (${subject})` : subject} courses at Northeastern — prerequisites, offerings, instructors`,
+    heading: subjectNames[subject] ? `${subjectNames[subject]} (${subject})` : `${subject} courses`,
     description: `Every Northeastern ${subject} course with prerequisites, typical offerings and NUpath, linking full detail pages. From NU Map, a student-built planner not affiliated with Northeastern.`,
     jsonUrl: url,
     body: `<table>\n<tr><th>Code</th><th>Title</th><th>SH</th><th>Level</th><th>Usually offered</th><th>NUpath</th><th>Prerequisites</th><th>Recent instructors</th></tr>\n${rows}\n</table>`
