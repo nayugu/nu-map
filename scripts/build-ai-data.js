@@ -588,15 +588,15 @@ const PAGE_CSS =
   + "transition:opacity .22s ease-out,transform .22s ease-out}"
   // The page you are on is the dark-grey anchor: dark dot, dark semibold
   // label, clearly readable whenever the rail is awake, unchanged on hover.
-  + "nav .sections a.here .dot{background:#475569}"
-  + "nav .sections a.here .lbl{color:#1e293b;font-weight:600}"
+  + "nav .sections a.here .dot{background:#94a3b8}"
+  + "nav .sections a.here .lbl{color:#64748b;font-weight:600}"
   + "nav:hover .sections .lbl{opacity:.14}"
   + "nav .sections a:hover+a+a .lbl,nav .sections a:has(+a+a:hover) .lbl{opacity:.26}"
   + "nav .sections a:hover+a .lbl,nav .sections a:has(+a:hover) .lbl{opacity:.55;transform:translateX(-3px)}"
   + "nav:hover .sections a.here .lbl{opacity:.9}"
   + "nav .sections a:hover .lbl{opacity:1;color:#0f172a;transform:translateX(0)}"
   + "nav .sections a:hover .dot{transform:scale(1.6);background:#94a3b8}"
-  + "nav .sections a.here:hover .dot{background:#475569}"
+  + "nav .sections a.here:hover .dot{background:#94a3b8}"
   + "nav .aux{padding:14px 14px 20px;opacity:0;transition:opacity .2s ease}"
   + "nav:hover .aux{opacity:1}"
   + "nav .aux a{display:block;color:#cbd5e1;font-size:.82rem;padding:3px 14px;transition:color .15s ease}"
