@@ -636,17 +636,14 @@ const writePage = ({ rel, section, title, description, jsonUrl, body, wide }) =>
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
     + `</div>`;
-  // The hub keeps its opening uncluttered: disclaimer moves to the bottom,
-  // with the freshness stamp centered on its own line. Every other page
-  // keeps the one-line version under the title.
+  // The disclaimer is its own bottom section on every page: a hairline bar
+  // (the footer's border-top), the disclaimer, the freshness stamp centered
+  // on its own line, then the collapsed AI note directly beneath.
   const disclaimerText = `NU Map is an independent, student-built planner — not affiliated
 with, endorsed by, or officially connected to Northeastern University. Data comes
 from the public catalog on a schedule; confirm with the official catalog and an
 advisor.`;
   const stamp = `Data updated ${escapeHtml(meta.lastUpdated)} · page generated ${generatedAt.slice(0, 10)}.`;
-  const disclaimerTop = isHub ? "" : `<p class="muted">${disclaimerText} ${stamp}</p>`;
-  const disclaimerBottom = isHub
-    ? `<p class="muted">${disclaimerText}</p>\n<p class="muted" style="text-align:center">${stamp}</p>` : "";
   fs.writeFileSync(p, `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
 <title>${isHub ? "Data - NU Map" : `${escapeHtml(title)} - NU Map Data`}</title>
@@ -660,10 +657,10 @@ advisor.`;
 <nav>${nav}</nav>
 <main${wide ? ` class="wide"` : ""}>
 <h1>${escapeHtml(title)}</h1>
-${disclaimerTop}
 ${body}
-${disclaimerBottom}
 <footer>
+<p class="muted">${disclaimerText}</p>
+<p class="muted" style="text-align:center">${stamp}</p>
 <details>
 <summary>For AI assistants — reaching any other NU Map data from this page</summary>
 <p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>. These
