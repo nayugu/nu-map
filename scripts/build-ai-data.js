@@ -576,21 +576,27 @@ const PAGE_CSS =
   // in; the hovered label goes fully dark and slides out, ±1 neighbors
   // light to half, ±2 to a quarter (:has() covers the upward direction).
   + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;font-size:.92rem}"
-  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:15px;padding:18px 14px}"
-  + "nav .sections a{display:flex;align-items:center;gap:11px;padding:2px 14px;color:#64748b}"
+  // No gaps between links: taller contiguous hit areas mean the cursor is
+  // always over exactly one item, so the falloff rolls like a slider with
+  // no collapse between buttons.
+  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 14px}"
+  + "nav .sections a{display:flex;align-items:center;gap:11px;padding:10px 14px;color:#64748b}"
   + "nav .sections a:hover{text-decoration:none}"
   + "nav .sections .dot{width:7px;height:7px;border-radius:50%;background:#e2e8f0;flex:0 0 7px;"
-  + "transition:background .18s ease,transform .18s ease}"
-  + "nav .sections a.here .dot{background:#dc2626}"
+  + "transition:background .22s ease-out,transform .22s ease-out}"
   + "nav .sections .lbl{opacity:0;transform:translateX(-6px);white-space:nowrap;"
-  + "transition:opacity .18s ease,transform .18s ease,color .18s ease}"
-  + "nav .sections a.here .lbl{color:#dc2626;font-weight:600}"
+  + "transition:opacity .22s ease-out,transform .22s ease-out}"
+  // The page you are on is the dark-grey anchor: dark dot, dark semibold
+  // label, clearly readable whenever the rail is awake, unchanged on hover.
+  + "nav .sections a.here .dot{background:#475569}"
+  + "nav .sections a.here .lbl{color:#1e293b;font-weight:600}"
   + "nav:hover .sections .lbl{opacity:.14}"
-  + "nav .sections a:hover+a .lbl,nav .sections a:has(+a:hover) .lbl{opacity:.5;transform:translateX(-3px)}"
-  + "nav .sections a:hover+a+a .lbl,nav .sections a:has(+a+a:hover) .lbl{opacity:.24}"
+  + "nav .sections a:hover+a+a .lbl,nav .sections a:has(+a+a:hover) .lbl{opacity:.26}"
+  + "nav .sections a:hover+a .lbl,nav .sections a:has(+a:hover) .lbl{opacity:.55;transform:translateX(-3px)}"
+  + "nav:hover .sections a.here .lbl{opacity:.9}"
   + "nav .sections a:hover .lbl{opacity:1;color:#0f172a;transform:translateX(0)}"
   + "nav .sections a:hover .dot{transform:scale(1.6);background:#94a3b8}"
-  + "nav .sections a.here:hover .lbl{color:#dc2626}"
+  + "nav .sections a.here:hover .dot{background:#475569}"
   + "nav .aux{padding:14px 14px 20px;opacity:0;transition:opacity .2s ease}"
   + "nav:hover .aux{opacity:1}"
   + "nav .aux a{display:block;color:#cbd5e1;font-size:.82rem;padding:3px 14px;transition:color .15s ease}"
