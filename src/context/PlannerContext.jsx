@@ -2543,15 +2543,17 @@ export function PlannerProvider({ children }) {
     return { ok: true, ...scope };
   };
 
-  // Browser tab title = "<active plan> - <app>". Tab titles across the site
-  // are "<page> - NU Map", with a scoped suffix for the sections you hold
-  // several tabs of at once ("- NU Map Docs", "- NU Map Dev"); a bare leading
-  // name therefore means the tab is the user's own plan. The static <title>
-  // in index.html stays SEO/disclaimer-focused for crawlers; this only
-  // overrides it at runtime for actual users.
+  // Browser tab title = "<active plan> · <app>". The site-wide tab scheme
+  // carries two signals: the SEPARATOR encodes ownership (· = the user's own
+  // content — plans, plan exports; - = a site page), and the SUFFIX encodes
+  // scope (bare "NU Map" for the app and standalone pages; "NU Map Data" /
+  // "NU Map Docs" / "NU Map Dev" for multi-tab sections). A plan named
+  // "Privacy Policy" is therefore never confusable with the privacy page.
+  // The static <title> in index.html stays SEO/disclaimer-focused for
+  // crawlers; this only overrides it at runtime for actual users.
   useEffect(() => {
     const name = plans.find(p => p.id === activePlanId)?.name;
-    document.title = name ? `${name} - ${institution.appName}` : institution.appName;
+    document.title = name ? `${name} · ${institution.appName}` : institution.appName;
   }, [plans, activePlanId, institution.appName]);
 
   // Keep each plan index entry's studentType up to date so the plan switcher can
