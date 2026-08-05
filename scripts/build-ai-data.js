@@ -307,22 +307,48 @@ const linkCode = (code) => {
   return m ? linkRef(m[1], m[2]) : escapeHtml(code);
 };
 // Prereq logic as an indented tree: "one of:" / "all of:" labels with
-// nested lists, so the logical hierarchy reads at a glance.
-const prereqLeaf = (node) =>
-  `${linkRef(node.subject, node.number)}${node.minGrade ? ` <span class="muted">(min ${escapeHtml(node.minGrade)})</span>` : ""}`;
+// nested lists, so the logical hierarchy reads at a glance. The token
+// arrays carry literal "(" / ")" strings for grouping (as well as nested
+// arrays), { note } leaves for non-course conditions ("graduate program
+// admission"), and `concurrent` flags — all must survive rendering.
+const prereqLeaf = (node) => {
+  if (node.note) return `<span class="muted" style="font-style:italic">${escapeHtml(node.note)}</span>`;
+  return `${linkRef(node.subject, node.number)}`
+    + `${node.minGrade ? ` <span class="muted">(min ${escapeHtml(node.minGrade)})</span>` : ""}`
+    + `${node.concurrent ? ` <span class="muted">(may be taken concurrently)</span>` : ""}`;
+};
+// Fold "(" … ")" token runs into real nested groups first.
+const groupParens = (tokens) => {
+  const out = [];
+  const stack = [out];
+  for (const t of tokens) {
+    if (t === "(") { const g = []; stack[stack.length - 1].push(g); stack.push(g); }
+    else if (t === ")") { if (stack.length > 1) stack.pop(); }
+    else stack[stack.length - 1].push(Array.isArray(t) ? groupParens(t) : t);
+  }
+  return out;
+};
 const prereqTreeItems = (node) => {
   if (Array.isArray(node)) {
-    const op = node.find((t) => typeof t === "string");
+    const ops = new Set(node.filter((t) => t === "And" || t === "Or"));
     const items = node.filter((t) => typeof t !== "string").map(prereqTreeItems).filter(Boolean);
     if (!items.length) return "";
     if (items.length === 1) return items[0];
-    return `<li><span class="muted">${String(op).toLowerCase() === "or" ? "one of" : "all of"}:</span><ul>${items.join("")}</ul></li>`;
+    // Mixed operators at one level without grouping are ambiguous — keep
+    // them inline in written order rather than invent a hierarchy.
+    if (ops.size > 1) {
+      const inline = node.map((t) => typeof t === "string" ? ` <span class="muted">${t.toLowerCase()}</span> `
+        : Array.isArray(t) ? `(<ul style="display:inline">${prereqTreeItems(t)}</ul>)` : prereqLeaf(t)).join("");
+      return `<li>${inline}</li>`;
+    }
+    return `<li><span class="muted">${ops.has("Or") ? "one of" : "all of"}:</span><ul>${items.join("")}</ul></li>`;
   }
-  if (node && node.subject) return `<li>${prereqLeaf(node)}</li>`;
+  if (node && (node.subject || node.note)) return `<li>${prereqLeaf(node)}</li>`;
   return "";
 };
 const prereqTree = (node) => {
-  const items = prereqTreeItems(node);
+  if (!Array.isArray(node) || !node.length) return "";
+  const items = prereqTreeItems(groupParens(node));
   return items ? `<ul class="req">${items}</ul>` : "";
 };
 
@@ -623,7 +649,7 @@ const PAGE_CSS =
   + "th.dim,td.dim{color:#94a3b8}"
   + "td ul{margin:0;padding-left:1.1em}td ul ul{padding-left:1.1em}"
   + ".terms{display:grid;grid-template-columns:5.6em max-content;column-gap:8px}"
-  + ".terms span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums}"
+  + ".terms span:nth-child(even){text-align:left;font-variant-numeric:tabular-nums}"
   + "ul.req{padding-left:1.2em}ul.req ul{padding-left:1.2em}li{margin:.15em 0}"
   + "details{margin:.5em 0;border:1px solid #e2e8f0;border-radius:10px;padding:.5em .9em}summary{cursor:pointer;font-weight:600}"
   + "footer{margin-top:2.5em;border-top:1px solid #e2e8f0;padding-top:1em;font-size:.82rem;color:#64748b}"
