@@ -824,7 +824,7 @@ const renderCourse = (subject, c) => {
         const t = terms[k];
         const full = t.capacity > 0 && t.enrolled != null ? `${Math.round((t.enrolled / t.capacity) * 100)}%` : "";
         const open = t.sections > 0 && t.capacity != null && t.enrolled != null
-          ? String(Math.max(0, Math.round((t.capacity - t.enrolled) / t.sections))) : "";
+          ? Math.max(0, (t.capacity - t.enrolled) / t.sections).toFixed(1) : "";
         return `<tr><td>${escapeHtml(t.term ?? k)}</td><td>${t.sections ?? ""}</td><td>${t.enrolled ?? ""}</td><td>${t.capacity ?? ""}</td><td class="dim">${full}</td><td class="dim">${open}</td></tr>`;
       }).join("")
       + `</table><p class="muted">Snapshots from scheduled scrapes — not live seat availability. "Full" can exceed 100% when sections over-enroll.</p>`);
@@ -1110,7 +1110,11 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
       body: (p.reviews ? `<p><a href="${p.reviews}">Student reviews on RateMyHusky</a></p>` : "")
         + `<table><tr><th>Course</th><th>Title</th><th>Teaches</th></tr>\n${rows}\n</table>`
         + `<p class="muted">Share = this professor's average percent of that season's enrolled students across recent terms (~3 years). Seasons not listed had other instructors.</p>`
-        + `<p><a href="${PAGE_ROOT}/professors/${letter}">All professors — ${escapeHtml(letter)}</a></p>`,
+        + (() => {
+          const ln = lastNameOf(name);
+          const lastLetter = /^[A-Za-z]/.test(ln) ? ln[0].toUpperCase() : "_";
+          return `<p class="muted">All professors: <a href="${PAGE_ROOT}/professors/${letter}">first names ${escapeHtml(letter)}</a> · <a href="${PAGE_ROOT}/professors/last/${lastLetter}">last names ${escapeHtml(lastLetter)}</a></p>`;
+        })(),
     });
   }
 }
