@@ -950,7 +950,7 @@ pageQueue.push({
   body: `<table><tr><th>Code</th><th>Attribute</th><th>Courses</th></tr>`
     + Object.entries(nupath).map(([code, e]) =>
       `<tr><td><a href="${e.page}">${escapeHtml(code)}</a></td><td><a href="${e.page}">${escapeHtml(e.label)}</a></td><td>${e.courses.length}</td></tr>`).join("")
-    + `</table><p class="muted">13 codes, not 12 — the writing competency is awarded as three (WF, WD, WI).</p>`,
+    + `</table>`,
 });
 for (const [code, e] of Object.entries(nupath)) {
   pageQueue.push({
