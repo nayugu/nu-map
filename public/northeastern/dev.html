@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo.png" />
-  <title>NU Map — Developer Portal</title>
+  <title>Developer Portal - NU Map Dev</title>
   <style>
     :root {
       --bg:        #111317;
@@ -358,7 +358,7 @@ function logout() {
   const logoSrc = isLocal ? "dev_logo.png" : "../logo.png";
   document.querySelectorAll(".site-logo").forEach(el => { el.src = logoSrc; });
   document.querySelector("link[rel='icon']").href = logoSrc;
-  document.title = isLocal ? "NU Map — Local Dev" : "NU Map — Developer Portal";
+  document.title = isLocal ? "Local - NU Map Dev" : "Developer Portal - NU Map Dev";
   document.getElementById("header-env").textContent = isLocal ? "Local Dev" : "Developer Portal";
 
   if (isLocal) {

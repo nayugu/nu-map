@@ -525,7 +525,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const html = `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<title>${appName}</title>
+<title>Course Schedule - ${appName}</title>
 <style>
   @page { margin: 18mm 15mm; }
   * { box-sizing: border-box; }

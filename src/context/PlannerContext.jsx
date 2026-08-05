@@ -2543,9 +2543,12 @@ export function PlannerProvider({ children }) {
     return { ok: true, ...scope };
   };
 
-  // Browser tab title = "<active plan> — <app>". The static <title> in
-  // index.html stays SEO/disclaimer-focused for crawlers (most don't run
-  // JS); this only overrides it at runtime for actual users.
+  // Browser tab title = "<active plan> - <app>". Tab titles across the site
+  // are "<page> - NU Map", with a scoped suffix for the sections you hold
+  // several tabs of at once ("- NU Map Docs", "- NU Map Dev"); a bare leading
+  // name therefore means the tab is the user's own plan. The static <title>
+  // in index.html stays SEO/disclaimer-focused for crawlers; this only
+  // overrides it at runtime for actual users.
   useEffect(() => {
     const name = plans.find(p => p.id === activePlanId)?.name;
     document.title = name ? `${name} - ${institution.appName}` : institution.appName;
