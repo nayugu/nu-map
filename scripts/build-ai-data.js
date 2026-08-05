@@ -622,6 +622,8 @@ const PAGE_CSS =
   + ".muted{color:#64748b;font-size:.88rem}"
   + "th.dim,td.dim{color:#94a3b8}"
   + "td ul{margin:0;padding-left:1.1em}td ul ul{padding-left:1.1em}"
+  + ".terms{display:grid;grid-template-columns:5.6em max-content;column-gap:8px}"
+  + ".terms span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums}"
   + "ul.req{padding-left:1.2em}ul.req ul{padding-left:1.2em}li{margin:.15em 0}"
   + "details{margin:.5em 0;border:1px solid #e2e8f0;border-radius:10px;padding:.5em .9em}summary{cursor:pointer;font-weight:600}"
   + "footer{margin-top:2.5em;border-top:1px solid #e2e8f0;padding-top:1em;font-size:.82rem;color:#64748b}"
@@ -1030,8 +1032,8 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
   });
   for (const [name, p] of Object.entries(profs)) {
     const rows = Object.entries(p.courses).map(([code, seasons]) => {
-      const when = Object.entries(seasons).sort(([a], [b2]) => seasonSort(a, b2))
-        .map(([s, pct]) => `${seasonLabel(s)} ${pct}%`).join("<br>");
+      const when = `<div class="terms">` + Object.entries(seasons).sort(([a], [b2]) => seasonSort(a, b2))
+        .map(([s, pct]) => `<span>${seasonLabel(s)}</span><span>${pct}%</span>`).join("") + `</div>`;
       return `<tr><td class="nowrap">${linkCode(code)}</td><td>${titleOf.has(code) ? escapeHtml(titleOf.get(code)) : `<span class="muted">no longer in the catalog</span>`}</td><td class="nowrap">${when}</td></tr>`;
     }).join("\n");
     pageQueue.push({
