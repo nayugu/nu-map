@@ -1085,9 +1085,4 @@
 /json/* /llms.txt 200
 /ai /llms.txt 200
 /ai/* /llms.txt 200
-# Missing /data/** paths get a purposeful not-found page with nearest-
-# ancestor suggestions, instead of falling into the SPA shell (whose
-# relative asset URLs break at depth and trip the recovery screen).
-# 200-rewrites defer to real files, so every existing page still wins.
-/data/* /data-404.html 200
 /* /index.html 200
