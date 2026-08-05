@@ -21,6 +21,54 @@ function aiDataPlugin() {
   };
 }
 
+/**
+ * Dev-only twin of aiDataPlugin: the /data surface is generated at build
+ * time, so the plain dev server has nothing to serve there and every link
+ * 404s into the SPA shell. On the first /data* request this builds the
+ * surface into dist/ (once, ~15s), then serves it with the same pretty-URL
+ * resolution Cloudflare Pages applies — and rewrites the pages' absolute
+ * https://numap.app/data links to local paths so navigation stays on
+ * localhost.
+ */
+function aiDataDevPlugin() {
+  let building = null;
+  return {
+    name: "ai-data-dev",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = (req.url || "").split("?")[0];
+        if (url !== "/data" && url !== "/data.html" && !url.startsWith("/data/")) return next();
+        if (url.includes("..")) return next();
+        try {
+          if (!fs.existsSync("./dist/data.html")) {
+            building ??= import("./scripts/build-ai-data.js").then((m) => m.buildAiData());
+            await building;
+          }
+          const rel = url === "/data" || url === "/data.html" ? "data.html" : decodeURIComponent(url.slice(1));
+          for (const c of [rel, `${rel}.html`, `${rel}/index.html`]) {
+            const p = `./dist/${c}`;
+            if (fs.existsSync(p) && fs.statSync(p).isFile()) {
+              const type = c.endsWith(".json") ? "application/json"
+                : c.endsWith(".xml") ? "application/xml" : "text/html";
+              res.setHeader("Content-Type", `${type}; charset=utf-8`);
+              let body = fs.readFileSync(p, "utf8");
+              if (type === "text/html") body = body.replaceAll("https://numap.app/data", "/data");
+              res.end(body);
+              return;
+            }
+          }
+        } catch (e) {
+          res.statusCode = 500;
+          res.end(`ai-data-dev: ${e}`);
+          return;
+        }
+        next();
+      });
+    },
+  };
+}
+
 const commitDate = (() => {
   try {
     return execSync('git log -1 --format=%cd --date=format:"%b %Y"').toString().trim();
@@ -70,7 +118,7 @@ function catalogCheckPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), aiDataPlugin()],
+  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), aiDataPlugin(), aiDataDevPlugin()],
   base: "./",
   define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
   optimizeDeps: { exclude: ["@huggingface/transformers"] },
