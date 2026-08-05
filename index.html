@@ -146,14 +146,25 @@
         // in local dev — sharpening stays possible forever, production
         // users can never summon these screens by URL.
         var PREVIEW_OK = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
+        // The one-shot cache-buster hardReturn may have added, removed again.
+        // Split rather than regex-replace: a single pass over "?nmfresh=1&
+        // nmfresh=2" leaves one behind, and this has to be exact — it decides
+        // what the address bar says.
+        function stripFresh(search) {
+          if (!search) return '';
+          var kept = search.replace(/^\?/, '').split('&').filter(function (p) {
+            return p && p.indexOf('nmfresh=') !== 0;
+          });
+          return kept.length ? '?' + kept.join('&') : '';
+        }
         var booted = false;
         window.__numapBooted = function () {
           booted = true;
           // A return worked, so the escalation counter starts over (see
-          // hardReturn) and the one-shot cache-buster leaves the URL.
+          // hardReturn) and the stamp leaves the address bar.
           try { sessionStorage.removeItem('numap-return-tries'); } catch (e) {}
           if (/[?&]nmfresh=/.test(location.search) && history.replaceState) {
-            var q = location.search.replace(/([?&])nmfresh=[^&]*&?/, '$1').replace(/[?&]$/, '');
+            var q = stripFresh(location.search);
             try { history.replaceState(null, '', location.pathname + q + location.hash); } catch (e) {}
           }
           // If this load arrived under the reveal veil, the app is up —
@@ -415,9 +426,13 @@
                   .then(function (html) {
                     var refs = html && html.match(/assets\/index-[^"']+\.js/);
                     if (refs && html.indexOf(m.entry) < 0) return null;
+                    // Remember it here, not at the call site: the crash screen
+                    // calls this too, and its return must pre-warm the same
+                    // bundle the boot screen's would.
+                    liveEntry = live;
                     return live;
                   })
-                  .catch(function () { return live; });
+                  .catch(function () { liveEntry = live; return live; });
               });
             })
             .catch(function () { return null; });   // offline / mid-deploy — next tick
@@ -478,27 +493,35 @@
         function noteDeadChunk(u) {
           if (u && /\/assets\//.test(u) && deadChunks.indexOf(u) < 0) deadChunks.push(u);
         }
-        // Unregister every service worker and empty Cache Storage. Run as soon
-        // as a recovery screen starts watching, not only when the button is
-        // pressed. The two halves land at different times and both matter:
-        // emptying Cache Storage takes effect at once, so a worker cannot go on
-        // serving a stale shell out of it to the very checks that decide
-        // whether to offer the way back; the unregistration takes effect at the
-        // next navigation (a page keeps its controller until it unloads), which
-        // is the one that has to boot. Nothing here needs a worker any more —
-        // see public/coi-serviceworker.js.
+        // Get service workers out of the way. Run as soon as a recovery screen
+        // starts watching, not only when the button is pressed: the two halves
+        // land at different times and both matter. Emptying a worker's Cache
+        // Storage takes effect at once, so it cannot go on serving a stale
+        // shell out of it to the very checks that decide whether to offer the
+        // way back; the unregistration takes effect at the next navigation (a
+        // page keeps its controller until it unloads), which is the one that
+        // has to boot. Nothing here needs a worker any more — see
+        // public/coi-serviceworker.js.
+        //
+        // Cache Storage is emptied ONLY when a registration actually existed,
+        // and never for the translation model: @huggingface/transformers keeps
+        // downloaded weights in `transformers-cache`, so a blanket wipe would
+        // make every crash screen cost the user that download again. A worker
+        // is the only thing that could be answering navigations from Cache
+        // Storage, so "no registration" means there is nothing here to clear.
+        function dropWorkerCaches() {
+          if (!window.caches || !caches.keys) return null;
+          return caches.keys().then(function (ks) {
+            return Promise.all(ks.filter(function (k) { return !/transformers/i.test(k); })
+              .map(function (k) { return caches.delete(k); }));
+          });
+        }
         function purge(swallow) {
           try {
             if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
               swallow(navigator.serviceWorker.getRegistrations().then(function (rs) {
-                return Promise.all(rs.map(function (r) { return r.unregister(); }));
-              }));
-            }
-          } catch (e) {}
-          try {
-            if (window.caches && caches.keys) {
-              swallow(caches.keys().then(function (ks) {
-                return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+                if (!rs.length) return null;
+                return Promise.all(rs.map(function (r) { return r.unregister(); })).then(dropWorkerCaches);
               }));
             }
           } catch (e) {}
@@ -509,14 +532,23 @@
           purged = true;
           purge(function (p) { p.catch(function () {}); });
         }
+        var returning = false;
         function hardReturn() {
+          // One return per page, or a second caller would bump the escalation
+          // counter again and race a second navigation against the first.
+          if (returning) return;
+          returning = true;
           var tries = 0;
           try { tries = parseInt(sessionStorage.getItem('numap-return-tries') || '0', 10) || 0; } catch (e) {}
           try { sessionStorage.setItem('numap-return-tries', String(tries + 1)); } catch (e) {}
           // Leaving a preview drops the preview params, so the storm
           // genuinely returns to the real app instead of the preview.
           var preview = PREVIEW_OK && /[?&]preview=/.test(location.search);
-          var search = preview ? '' : location.search;
+          // Drop any stamp we are already carrying before adding a new one: a
+          // page that never booted still has the last one in its URL (only
+          // __numapBooted strips it), and a third attempt would otherwise
+          // navigate to ?nmfresh=…&nmfresh=…
+          var search = preview ? '' : stripFresh(location.search);
           if (!preview && tries > 0) {
             search = (search ? search + '&' : '?') + 'nmfresh=' + Date.now();
           }

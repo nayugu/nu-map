@@ -126,10 +126,15 @@ function buildManifestPlugin() {
     name: "build-manifest",
     apply: "build",
     writeBundle(_options, bundle) {
+      // Must be the APP entry, not just any entry chunk: the web workers
+      // (worker: { format: "es" }) are entry chunks under assets/ too, and if
+      // one of those were written here the manifest would name a bundle the
+      // shell never references — the recovery screens would then read a
+      // permanent disagreement and never offer the way back.
       const entry = Object.values(bundle).find(
-        (c) => c.type === "chunk" && c.isEntry && c.fileName.startsWith("assets/")
+        (c) => c.type === "chunk" && c.isEntry && /^assets\/index-[^/]+\.js$/.test(c.fileName)
       );
-      if (!entry) return; // worker/sub-builds have no /assets entry — not ours
+      if (!entry) return;
       try {
         fs.writeFileSync(
           "./dist/assets/build.json",
