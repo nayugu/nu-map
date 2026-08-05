@@ -620,6 +620,9 @@ const PAGE_CSS =
   + "footer code{background:#f1f5f9;padding:0 4px;border-radius:4px;word-break:break-all}"
   + "footer details{border:none;padding:0;margin:0 0 .9em}footer summary{font-weight:400;color:#cbd5e1}"
   + "footer summary:hover{color:#94a3b8}"
+  + "footer.tidy{border-top:none;text-align:center;margin-top:1.6em}"
+  + "footer.tidy summary{display:inline-block}"
+  + "footer.tidy .inner{text-align:left;margin-top:1em;border-top:1px solid #f1f5f9;padding-top:1em}"
   + "pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:8px;font-size:.85rem}";
 
 const NAV_SECTIONS = [
@@ -644,7 +647,7 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   pageUrls.push(url);
   const nav = `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
     `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
-    + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
+    + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/story">the story</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
     + `</div>`;
   // The disclaimer is its own bottom section on every page: a hairline bar
@@ -655,6 +658,43 @@ with, endorsed by, or officially connected to Northeastern University. Data come
 from the public catalog on a schedule; confirm with the official catalog and an
 advisor.`;
   const stamp = `Data updated ${escapeHtml(meta.lastUpdated)} · page generated ${generatedAt.slice(0, 10)}.`;
+  const aiInner = `<p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>. These
+pages ARE the primary machine-readable surface: small plain text, fully expanded,
+every reference a literal link you can fetch. Directories: <code>${PAGE_ROOT}/courses</code>
+(a page per subject and per course, pattern <code>${PAGE_ROOT}/courses/{SUBJECT}/{NUMBER}</code>),
+<code>${PAGE_ROOT}/majors</code> and <code>${PAGE_ROOT}/minors</code>,
+<code>${PAGE_ROOT}/nupath</code>, <code>${PAGE_ROOT}/professors</code>,
+<code>${PAGE_ROOT}/equivalences</code>.</p>
+<ul>
+<li>Structured JSON (developer API): <code>${JSON_ROOT}/index.json</code> lists every
+file; all course titles in one file: <code>${JSON_ROOT}/courses/titles.json</code>.</li>
+<li>If your fetch tool refuses URLs found on this page (claude.ai's does), navigate
+by web search instead — results of a search ARE fetchable:
+<code>site:numap.app/data &lt;subject, course, professor, or program name&gt;</code>.
+Or ask the user to paste the exact URL you need as their next message.</li>
+</ul>`;
+  // The hub stays extraordinarily clean: everything below the section list
+  // is one faint centered line that expands on click. Interior pages keep
+  // the visible disclaimer + stamp.
+  const footer = isHub
+    ? `<footer class="tidy">
+<details>
+<summary>About this data — for humans, AI assistants, and developers</summary>
+<div class="inner">
+<p class="muted">${disclaimerText}</p>
+${aiInner}
+<p class="muted" style="text-align:center">${stamp}</p>
+</div>
+</details>
+</footer>`
+    : `<footer>
+<details>
+<summary>For AI assistants — reaching any other NU Map data from this page</summary>
+${aiInner}
+</details>
+<p class="muted">${disclaimerText}</p>
+<p class="muted" style="text-align:center">${stamp}</p>
+</footer>`;
   fs.writeFileSync(p, `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
 <title>${isHub ? "Data - NU Map" : `${escapeHtml(title)} - NU Map Data`}</title>
@@ -669,28 +709,7 @@ advisor.`;
 <main class="${[isHub ? "hub" : "", wide ? "wide" : ""].filter(Boolean).join(" ")}">
 <h1>${escapeHtml(heading ?? title)}</h1>
 ${body}
-<footer>
-<details>
-<summary>For AI assistants — reaching any other NU Map data from this page</summary>
-<p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>. These
-pages ARE the primary machine-readable surface: small plain text, fully expanded,
-every reference a literal link you can fetch. Directories: <code>${PAGE_ROOT}/courses</code>
-(a page per subject and per course, pattern <code>${PAGE_ROOT}/courses/{SUBJECT}/{NUMBER}</code>),
-<code>${PAGE_ROOT}/majors</code> and <code>${PAGE_ROOT}/minors</code>,
-<code>${PAGE_ROOT}/nupath</code>, <code>${PAGE_ROOT}/professors</code>,
-<code>${PAGE_ROOT}/equivalences</code>.</p>
-<ul>
-<li>Structured JSON (developer API): <code>${JSON_ROOT}/index.json</code> lists every
-file; all course titles in one file: <code>${JSON_ROOT}/courses/titles.json</code>.</li>
-<li>If your fetch tool refuses URLs found on this page (claude.ai's does), navigate
-by web search instead — results of a search ARE fetchable:
-<code>site:numap.app/data &lt;subject, course, professor, or program name&gt;</code>.
-Or ask the user to paste the exact URL you need as their next message.</li>
-</ul>
-</details>
-<p class="muted">${disclaimerText}</p>
-<p class="muted" style="text-align:center">${stamp}</p>
-</footer>
+${footer}
 </main>
 </div>
 </body></html>`);
@@ -1057,11 +1076,7 @@ pageQueue.push({
 <li><a href="${PAGE_ROOT}/nupath">NUpath</a> — which courses satisfy each of the 13 general-education attributes.</li>
 <li><a href="${PAGE_ROOT}/professors">Professors</a> — ${professors.size.toLocaleString("en-US")} instructors: who teaches what, when, and what share of students.</li>
 <li><a href="${PAGE_ROOT}/equivalences">Course equivalences</a> — substitution suggestions by evidence tier.</li>
-</ul>
-<p class="muted">The interactive planner is <a href="${ORIGIN}">numap.app</a>, and
-the story behind it is at <a href="${ORIGIN}/story">/story</a>. AI assistants and
-developers: see the collapsed note at the bottom of any page, or start at
-<a href="${ORIGIN}/llms.txt">numap.app/llms.txt</a>.</p>`,
+</ul>`,
 });
 
 // Program pages cover only the NEWEST catalog year: JSONs keep every
