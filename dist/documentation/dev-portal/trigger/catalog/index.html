@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Catalog - NU Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="dev-portal/trigger/catalog">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">dev-portal</a><span class="sep"> / </span><a href="../">Trigger tab</a><span class="sep"> / </span><strong>Course Catalog</strong>
+    </div>
+
+    <h1>Course Catalog <span class="badge blue">scrape-catalog.js</span></h1>
+    <p class="lead">Scrapes <code>catalog.northeastern.edu</code> — the faculty-maintained authoritative source for titles, descriptions, NUPath designations, credits, prerequisites, and corequisites. The Trigger tab card runs the script in <strong>full scrape + merge mode</strong>. The separate rotation mechanism (used by <code>npm run data:scrape:rotate:write</code>) scrapes one subject per run in round-robin order.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Script</div><div class="nb-value"><code>scripts/scrape-catalog.js</code></div></div>
+      <div class="nb-group"><div class="nb-label">Output</div><div class="nb-value"><code>public/northeastern/catalog-courses.json</code></div></div>
+      <div class="nb-group"><div class="nb-label">Rate limit</div><div class="nb-value">400 ms between requests (override: <code>CATALOG_DELAY_MS=200</code>)</div></div>
+      <div class="nb-group"><div class="nb-label">Rotation state</div><div class="nb-value"><code>data/northeastern/scrape-state.json</code> (private) + <code>public/northeastern/scrape-state.json</code> (served to portal)</div></div>
+    </div>
+
+    <h2>What the scraper extracts</h2>
+    <p>For each course block on a subject page, the scraper parses:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Field</th><th>Source</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>title</code></td><td><code>.courseblocktitle</code></td><td>Parsed from "SUBJ 1234. Title. (N Hours)"</td></tr>
+        <tr><td><code>credits</code> / <code>creditsMax</code></td><td>Title line parenthetical</td><td>Variable credits (e.g. "1–4 Hours") set both fields</td></tr>
+        <tr><td><code>description</code></td><td><code>.courseblockdesc</code></td><td></td></tr>
+        <tr><td><code>nuPath</code></td><td><code>[class*=nupath]</code> or <code>[class*=attribute]</code></td><td>Text matched against NUPATH_MAP → internal codes (ND, FQ, SI, IC, EI, ER, DD, AD, WF, WD, WI, CE, EX)</td></tr>
+        <tr><td><code>prereqs</code></td><td><code>.courseblockextra</code> "Prerequisite(s):"</td><td>Parsed into structured array of course refs + And/Or/( / ) tokens. Concurrent courses ("may be taken concurrently") get <code>concurrent:true</code>.</td></tr>
+        <tr><td><code>coreqs</code></td><td><code>.courseblockextra</code> "Corequisite(s):"</td><td>List of course refs</td></tr>
+        <tr><td><code>scheduleType</code></td><td>Element, number suffix, or title heuristic</td><td>Defaults to "Lecture" if nothing else matches</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Merge strategy</h2>
+    <p>The scraper never blindly replaces the database. When merging a freshly scraped subject into <code>catalog-courses.json</code>:</p>
+    <ul>
+      <li><strong>Existing course</strong>: catalog fields (title, credits, description, nuPath, prereqs, coreqs) overlay the stored values. Section/term data from other sources is preserved.</li>
+      <li><strong>New course</strong> (in catalog, not in our data): added.</li>
+      <li><strong>Removed course</strong> (in our data, gone from catalog): kept in the file and flagged in the change log. A developer reviews via PR before deciding to delete.</li>
+    </ul>
+
+    <h2>Full scrape mode (Trigger tab)</h2>
+    <p>The Trigger tab card runs: <code>node scripts/scrape-catalog.js --merge --write</code>. This fetches the subject index, scrapes every subject in sequence, merges into <code>catalog-courses.json</code>, and updates <code>dataMeta.json</code>. A complete run covers all subjects (~100+) and takes several minutes at the default 400 ms delay.</p>
+
+    <h2>Rotation mode</h2>
+    <p>For incremental updates without a full re-scrape, <code>npm run data:scrape:rotate:write</code> scrapes one subject per run in round-robin order. This is designed to be called frequently (e.g., as a scheduled job or CI trigger) so that all subjects are refreshed on a rolling basis.</p>
+
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["Run: data:scrape:rotate:write"] --> B{"Subject list in\nscrape-state.json\nfresh? (&lt;90 days)"}
+    B -->|Yes| C["Pick subjects[nextIndex]"]
+    B -->|No| D["Fetch subject index\nfrom catalog.northeastern.edu\nupdate listFetched"]
+    D --> C
+    C --> E["Scrape that subject's page\n400 ms delay between requests"]
+    E --> F["Partial-merge into\ncatalog-courses.json"]
+    F --> G["Advance nextIndex\n(wraps at end of list)"]
+    G --> H["Write scrape-state.json\n+ change log entry"]
+      </div>
+    </div>
+
+    <h3>90-day subject list freshness</h3>
+    <p>The rotation state stores the full list of subject URLs fetched from the catalog index (<code>state.listFetched</code>). If the list is empty or older than 90 days, the script re-fetches the index before picking the next subject. This handles new departments being added to the catalog without requiring a manual reset.</p>
+
+    <h3>scrape-state.json format</h3>
+    <pre><code>{
+  "nextIndex": 12,
+  "subjects": [["CS", "https://catalog.northeastern.edu/course-descriptions/cs/"], ...],
+  "listFetched": "2026-01-15T10:00:00.000Z",
+  "lastRun": "2026-05-19T08:00:00.000Z",
+  "lastScraped": { "CS": "2026-05-19T08:00:00.000Z", "EECE": "2026-05-18T08:00:00.000Z", ... }
+}</code></pre>
+    <p>Two copies are written: <code>data/northeastern/scrape-state.json</code> (authoritative, committed) and <code>public/northeastern/scrape-state.json</code> (served to the dev portal's Log tab for display).</p>
+
+    <h2>Usage</h2>
+    <pre><code>node scripts/scrape-catalog.js                       <span class="cmt"># dry run — prints diff to stdout</span>
+node scripts/scrape-catalog.js --merge --write       <span class="cmt"># full scrape + write (Trigger tab)</span>
+node scripts/scrape-catalog.js --rotate --write      <span class="cmt"># one subject, rotate (incremental)</span>
+node scripts/scrape-catalog.js --dry-run             <span class="cmt"># first 3 subjects only (sanity check)</span>
+node scripts/scrape-catalog.js --subject CS          <span class="cmt"># single subject only</span></code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>

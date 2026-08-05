@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>constants + themes - NU Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/constants">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>constants.js + themes.js</strong>
+    </div>
+
+    <h1>constants.js + themes.js <span class="badge gray">Compile-time</span></h1>
+    <p class="lead">Compile-time constants shared across all layers. No functions, no logic — just exported values. <code>constants.js</code> exports four constants. <code>themes.js</code> defines CSS variable token sets for each UI theme.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Imported by</div><div class="nb-value">courseModel.js, semGrid.js, gradRequirements.js, PlannerContext.jsx, Header.jsx, ThemeContext.jsx</div></div>
+    </div>
+
+    <h2>constants.js exports</h2>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Export</th><th>Type</th><th>Used by</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>NUM_YEARS</code></td><td>number (5)</td><td>semGrid</td><td>Default number of academic years to generate in the full semester grid</td></tr>
+        <tr><td><code>SUBJECT_PALETTE</code></td><td>string[25]</td><td>courseModel</td><td>25 dark-theme CSS hex colors for the deterministic subject color hash</td></tr>
+        <tr><td><code>TYPE_BG</code></td><td>object</td><td>SemRow, SummerRow</td><td>Maps semester type (<code>"fall"</code>, <code>"spring"</code>, <code>"summer"</code>, <code>"special"</code>) to CSS variable name pairs <code>{ bg, border }</code> used for row backgrounds</td></tr>
+        <tr><td><code>REL_STYLE</code></td><td>object</td><td>RelationLines, InfoPanel legend</td><td>SVG line styles <code>{ color, dash, label, arrow }</code> keyed by relationship type</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>NUPath labels, co-op/internship templates, and semester type lists are not in this file — they live in the <a href="../../adapters/northeastern/">northeastern adapter</a> (<code>attributeSystem.js</code>, <code>specialTerms.js</code>) so they stay institution-specific.</p>
+
+    <h3>REL_STYLE — relationship line styles</h3>
+    <pre><code><span class="kw">export const</span> REL_STYLE = {
+  prerequisite:                  { color: <span class="str">'#3dd8a0'</span>, dash: <span class="str">''</span>,     label: <span class="str">'Prereq'</span>,                           arrow: <span class="kw">true</span>  },
+  <span class="str">'prerequisite-order'</span>:          { color: <span class="str">'#f85149'</span>, dash: <span class="str">''</span>,     label: <span class="str">'Prereq (wrong order)'</span>,               arrow: <span class="kw">true</span>  },
+  corequisite:                   { color: <span class="str">'#58a6ff'</span>, dash: <span class="str">'5 4'</span>,  label: <span class="str">'Coreq'</span>,                             arrow: <span class="kw">false</span> },
+  <span class="str">'corequisite-viol'</span>:            { color: <span class="str">'#ffd600'</span>, dash: <span class="str">'5 4'</span>,  label: <span class="str">'Misplaced'</span>,                         arrow: <span class="kw">false</span> },
+  <span class="str">'substitution-prereq'</span>:         { color: <span class="str">'#3dd8a0'</span>, dash: <span class="str">'4 3'</span>,  label: <span class="str">'Substituted prereq'</span>,                 arrow: <span class="kw">true</span>  },
+  <span class="str">'substitution-prereq-order'</span>:   { color: <span class="str">'#f85149'</span>, dash: <span class="str">'4 3'</span>,  label: <span class="str">'Substituted prereq (wrong order)'</span>,  arrow: <span class="kw">true</span>  },
+};</code></pre>
+    <p>Prerequisites use mint green (<code>#3dd8a0</code>) when satisfied and red (<code>#f85149</code>) when ordered wrong. Corequisites use blue (<code>#58a6ff</code>) dashed. Substituted-course variants mirror the same colors with a shorter dash. There is no <code>"substitution"</code> key — substitution relationships are represented as either <code>"substitution-prereq"</code> or <code>"substitution-prereq-order"</code>.</p>
+
+    <h2>themes.js exports</h2>
+
+    <p>Each theme is a plain object mapping CSS variable names to values. <code>ThemeContext</code> injects these onto <code>document.documentElement</code> at runtime.</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Export</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>dark</code></td><td>object (~100 CSS vars)</td><td>Default dark theme token set</td></tr>
+        <tr><td><code>light</code></td><td>object (~100 CSS vars)</td><td>Light theme token set</td></tr>
+        <tr><td><code>THEMES</code></td><td><code>{ dark, light, ... }</code></td><td>All available themes — ThemeContext iterates keys</td></tr>
+        <tr><td><code>THEME_LABELS</code></td><td><code>{ dark: "Dark", ... }</code></td><td>Human-readable theme names for the UI</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Key CSS variable groups</h3>
+    <pre><code><span class="cmt">// Backgrounds</span>
+--bg-app, --bg-surface, --bg-surface-2, --bg-card
+
+<span class="cmt">// Text hierarchy (1 = most prominent)</span>
+--text-1, --text-2, --text-3, --text-4, --text-5, --text-6
+
+<span class="cmt">// Borders</span>
+--border-1, --border-2, --border-3
+
+<span class="cmt">// Semester type colors</span>
+--sel-fall-bg, --sel-fall-border, --sel-fall-text
+--sel-spr-bg,  --sel-spr-border,  --sel-spr-text
+
+<span class="cmt">// Status colors</span>
+--active, --success, --error, --warn, --warn-bright
+
+<span class="cmt">// Scrollbar</span>
+--scrollbar-thumb, --scrollbar-track</code></pre>
+
+    <div class="callout tip">
+      <span class="ci">💡</span>
+      <div class="callout-body"><strong>Adding a theme:</strong> Copy the <code>dark</code> object, adjust values, export it, add to <code>THEMES</code> and <code>THEME_LABELS</code>. ThemeContext and Header will pick it up automatically with no other changes needed.</div>
+    </div>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
