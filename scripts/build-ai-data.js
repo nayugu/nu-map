@@ -760,7 +760,8 @@ ${aiInner}
 </footer>`;
   fs.writeFileSync(p, `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8" />
-<title>${isHub ? "Data - NU Map" : `${escapeHtml(title)} - NU Map Data`}</title>
+<title>${escapeHtml(heading ?? title)} - NU Map</title>
+<meta property="og:title" content="${escapeHtml(title)} — NU Map" />
 <meta name="description" content="${escapeHtml(description)}" />
 <link rel="canonical" href="${url}" />
 <link rel="icon" type="image/png" href="${ORIGIN}/northeastern/dev_logo.png" />
