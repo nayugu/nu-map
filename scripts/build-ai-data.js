@@ -561,16 +561,25 @@ const pageUrls = [];
 const PAGE_CSS =
   "*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.55;color:#1e293b}"
   + "a{color:#dc2626;text-decoration:none}a:hover{text-decoration:underline}"
-  + ".layout{display:flex;max-width:1100px;margin:0 auto;align-items:flex-start}"
-  + "nav{flex:0 0 190px;position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:22px 6px 22px 18px;font-size:.9rem}"
-  + "nav a{display:block;padding:5px 11px;border-radius:7px;color:#334155;margin:1px 0}"
-  + "nav a:hover{background:#f8fafc;text-decoration:none}"
-  + "nav a.here{background:#fef2f2;color:#dc2626;font-weight:600}"
-  + "nav .aux{margin-top:14px;padding-top:10px;border-top:1px solid #e2e8f0}"
-  + "nav .aux a{color:#64748b;font-size:.82rem;padding:3px 11px}"
-  + "main{flex:1;min-width:0;padding:24px 22px 48px}"
-  + "@media(max-width:760px){.layout{display:block}nav{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px;padding:12px 14px 0}"
-  + "nav a{background:#f1f5f9;padding:4px 11px;margin:0}nav .aux{border:none;margin:0;padding:0;display:contents}}"
+  // Sidebar pinned to the viewport's left edge, full height; section links
+  // distribute evenly down it like filing-cabinet tabs (flush left, rounded
+  // right). Content centers itself in the remaining width.
+  + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;"
+  + "border-right:1px solid #e2e8f0;background:#fcfcfd;font-size:.92rem}"
+  + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;padding:18px 0}"
+  + "nav .sections a{display:block;padding:9px 14px 9px 22px;margin-right:14px;"
+  + "border-radius:0 999px 999px 0;color:#334155}"
+  + "nav .sections a:hover{background:#f1f5f9;text-decoration:none}"
+  + "nav .sections a.here{background:#fef2f2;color:#dc2626;font-weight:600}"
+  + "nav .aux{padding:14px 0 18px;border-top:1px solid #e2e8f0}"
+  + "nav .aux a{display:block;color:#64748b;font-size:.82rem;padding:4px 14px 4px 22px}"
+  + ".layout{padding-left:190px}"
+  + "main{max-width:780px;margin:0 auto;min-width:0;padding:26px 24px 48px}"
+  + "@media(max-width:760px){.layout{padding-left:0}nav{position:static;width:auto;border:none;background:none;"
+  + "display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px 14px 0}"
+  + "nav .sections{display:contents}nav .aux{display:contents}"
+  + "nav .sections a,nav .aux a{background:#f1f5f9;border-radius:999px;padding:4px 12px;margin:0;font-size:.85rem}"
+  + "nav .sections a.here{background:#fef2f2}}"
   + "h1{font-size:1.55rem;margin:.1em 0 .3em}"
   + "h2{font-size:1.12rem;margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid #e2e8f0}"
   + "h3{font-size:1rem;margin:1.2em 0 .4em}"
@@ -605,9 +614,9 @@ const writePage = ({ rel, section, title, description, jsonUrl, body }) => {
   // so canonicals and the sitemap must use the extensionless form.
   const url = isHub ? PAGE_ROOT : `${PAGE_ROOT}/${rel.replace(/\.html$/, "")}`;
   pageUrls.push(url);
-  const nav = NAV_SECTIONS.map(([id, label, href]) =>
+  const nav = `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
     `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
-    + `<div class="aux"><a href="${ORIGIN}">numap.app planner</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
+    + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
     + `</div>`;
   fs.writeFileSync(p, `<!DOCTYPE html>
