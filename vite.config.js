@@ -63,7 +63,10 @@ function aiDataDevPlugin() {
           res.end(`ai-data-dev: ${e}`);
           return;
         }
-        next();
+        // No such page: same not-found the production rewrite serves.
+        res.statusCode = 404;
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.end(fs.readFileSync("./public/data-404.html", "utf8"));
       });
     },
   };
