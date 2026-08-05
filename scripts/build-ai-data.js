@@ -305,17 +305,24 @@ const linkCode = (code) => {
   const m = /^([A-Z]{2,6})\s?(\S+)$/.exec(code);
   return m ? linkRef(m[1], m[2]) : escapeHtml(code);
 };
-// Prereq logic as a readable sentence with linked course refs.
-const prereqHtml = (node) => {
+// Prereq logic as an indented tree: "one of:" / "all of:" labels with
+// nested lists, so the logical hierarchy reads at a glance.
+const prereqLeaf = (node) =>
+  `${linkRef(node.subject, node.number)}${node.minGrade ? ` <span class="muted">(min ${escapeHtml(node.minGrade)})</span>` : ""}`;
+const prereqTreeItems = (node) => {
   if (Array.isArray(node)) {
-    const parts = node.map(prereqHtml).filter(Boolean);
-    return parts.length > 1 ? `(${parts.join(" ")})` : parts.join(" ");
+    const op = node.find((t) => typeof t === "string");
+    const items = node.filter((t) => typeof t !== "string").map(prereqTreeItems).filter(Boolean);
+    if (!items.length) return "";
+    if (items.length === 1) return items[0];
+    return `<li><span class="muted">${String(op).toLowerCase() === "or" ? "one of" : "all of"}:</span><ul>${items.join("")}</ul></li>`;
   }
-  if (typeof node === "string") return node.toLowerCase();
-  if (node && node.subject) {
-    return `${linkRef(node.subject, node.number)}${node.minGrade ? ` <span class="muted">(min ${escapeHtml(node.minGrade)})</span>` : ""}`;
-  }
+  if (node && node.subject) return `<li>${prereqLeaf(node)}</li>`;
   return "";
+};
+const prereqTree = (node) => {
+  const items = prereqTreeItems(node);
+  return items ? `<ul class="req">${items}</ul>` : "";
 };
 
 // ── Professors ───────────────────────────────────────────────────────
@@ -428,12 +435,12 @@ for (const [subject, courses] of [...bySubject.entries()].sort(([a], [b2]) => a.
       + `<td>${c.level === "grad" ? "grad" : "ug"}</td>`
       + `<td>${c.typicallyOffered ? escapeHtml(c.typicallyOffered.join(", ")) : ""}</td>`
       + `<td>${c.nuPath?.length ? escapeHtml(c.nuPath.join(", ")) : ""}</td>`
-      + `<td class="muted">${prereqHtml(c.prereqs)}</td>`
+      + `<td class="muted">${prereqTree(c.prereqs)}</td>`
       + `<td class="muted">${(() => {
         if (!c.instructors) return "";
         const names = [...new Set(Object.values(c.instructors).flat().map((i) => i.name))].sort();
-        const shown = names.slice(0, 6).map(profLink).join(", ");
-        return names.length > 6 ? `${shown}, <a href="${pageUrl}">+${names.length - 6} more</a>` : shown;
+        const shown = names.slice(0, 6).map(profLink).join("<br>");
+        return names.length > 6 ? `${shown}<br><a href="${pageUrl}">+${names.length - 6} more</a>` : shown;
       })()}</td></tr>`;
   }).join("\n");
   pageQueue.push({
@@ -587,6 +594,8 @@ const PAGE_CSS =
   + "th{text-align:left;background:#f8fafc}th,td{padding:6px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top}"
   + ".chips{margin:.4em 0}.chips span{display:inline-block;background:#f1f5f9;border-radius:999px;padding:2px 12px;margin:2px 4px 2px 0;font-size:.85rem;color:#334155}"
   + ".muted{color:#64748b;font-size:.88rem}"
+  + "th.dim,td.dim{color:#94a3b8}"
+  + "td ul{margin:0;padding-left:1.1em}td ul ul{padding-left:1.1em}"
   + "ul.req{padding-left:1.2em}ul.req ul{padding-left:1.2em}li{margin:.15em 0}"
   + "details{margin:.5em 0;border:1px solid #e2e8f0;border-radius:10px;padding:.5em .9em}summary{cursor:pointer;font-weight:600}"
   + "footer{margin-top:2.5em;border-top:1px solid #e2e8f0;padding-top:1em;font-size:.82rem;color:#64748b}"
@@ -693,17 +702,20 @@ const renderCourse = (subject, c) => {
     c.minGPA ? `requires a ${c.minGPA} GPA` : null,
   ]));
   if (c.description) out.push(`<p>${escapeHtml(c.description)}</p>`);
-  if (c.prereqs?.length) out.push(`<h2>Prerequisites</h2><p>${prereqHtml(c.prereqs)}</p>`);
-  if (c.coreqs?.length) out.push(`<h2>Corequisites (same term)</h2><p>${prereqHtml(c.coreqs)}</p>`);
+  if (c.prereqs?.length) out.push(`<h2>Prerequisites</h2>${prereqTree(c.prereqs)}`);
+  if (c.coreqs?.length) out.push(`<h2>Corequisites (same term)</h2>${prereqTree(c.coreqs)}`);
 
   const terms = c.offerings?.terms && Object.keys(c.offerings.terms).length ? c.offerings.terms : null;
   if (terms) {
-    out.push(`<h2>Offering history</h2><table><tr><th>Term</th><th>Sections</th><th>Enrolled</th><th>Capacity</th></tr>`
+    out.push(`<h2>Offering history</h2><table><tr><th>Term</th><th>Sections</th><th>Enrolled</th><th>Capacity</th><th class="dim">Full</th><th class="dim">Open seats/section</th></tr>`
       + Object.keys(terms).sort().map((k) => {
         const t = terms[k];
-        return `<tr><td>${escapeHtml(t.term ?? k)}</td><td>${t.sections ?? ""}</td><td>${t.enrolled ?? ""}</td><td>${t.capacity ?? ""}</td></tr>`;
+        const full = t.capacity > 0 && t.enrolled != null ? `${Math.round((t.enrolled / t.capacity) * 100)}%` : "";
+        const open = t.sections > 0 && t.capacity != null && t.enrolled != null
+          ? String(Math.max(0, Math.round((t.capacity - t.enrolled) / t.sections))) : "";
+        return `<tr><td>${escapeHtml(t.term ?? k)}</td><td>${t.sections ?? ""}</td><td>${t.enrolled ?? ""}</td><td>${t.capacity ?? ""}</td><td class="dim">${full}</td><td class="dim">${open}</td></tr>`;
       }).join("")
-      + `</table><p class="muted">Snapshots from scheduled scrapes — not live seat availability.</p>`);
+      + `</table><p class="muted">Snapshots from scheduled scrapes — not live seat availability. "Full" can exceed 100% when sections over-enroll.</p>`);
   }
   if (c.offerings?.daysPct || c.offerings?.meetingPatterns?.length) {
     out.push(`<h2>Meeting times</h2>`);
@@ -720,9 +732,9 @@ const renderCourse = (subject, c) => {
   if (c.instructors) {
     const seasons = Object.keys(c.instructors).sort(seasonSort);
     out.push(`<h2>Professors</h2>` + seasons.map((s) =>
-      `<p><strong>${escapeHtml(seasonLabel(s))}:</strong> ` + c.instructors[s].map((i) =>
-        `${profLink(i.name)} <span class="muted">(${i.sharePct}% of students)</span>${i.reviews ? ` <a href="${i.reviews}">reviews</a>` : ""}`
-      ).join(" · ") + `</p>`).join("")
+      `<h3>${escapeHtml(seasonLabel(s))}</h3><ul>` + c.instructors[s].map((i) =>
+        `<li>${profLink(i.name)} <span class="muted">(${i.sharePct}% of students)</span>${i.reviews ? ` · <a href="${i.reviews}">reviews</a>` : ""}</li>`
+      ).join("") + `</ul>`).join("")
       + `<p class="muted">Percentages are each professor's average share of the season's enrolled students in recent terms.</p>`);
   }
   if (c.unlocks?.length) {
