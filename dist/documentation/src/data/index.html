@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>data/ - NU Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/data">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb"><a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">src/</a><span class="sep"> / </span><strong>data/</strong></div>
+
+    <h1>data/ <span class="badge yellow">I/O layer</span></h1>
+    <p class="lead">Three thin I/O modules. No business logic, no React, no adapter imports. Each wraps one type of external resource: major/minor requirement JSON files (via Vite lazy imports) and browser localStorage. Course loading belongs entirely to the ICourseCatalog adapter — there is no courseLoader module here.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">src/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value"><code>PlannerContext.jsx</code> exclusively</div></div>
+      <div class="nb-group"><div class="nb-label">Invariant</div><div class="nb-value">Zero imports from <code>src/adapters/</code> or React. Path-parsing helpers come from the <code>IMajorRequirements</code> port passed as a parameter.</div></div>
+    </div>
+
+    <h2>Modules</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./majorLoader/">
+        <div class="cc-type">module</div>
+        <div class="cc-name">majorLoader.js</div>
+        <div class="cc-desc">Lazy-loads Major2 requirement JSONs on demand from a Vite glob over the scraped data (src/data/majors/).</div>
+      </a>
+      <a class="child-card" href="./majorLoader/">
+        <div class="cc-type">module</div>
+        <div class="cc-name">minorLoader.js</div>
+        <div class="cc-desc">Mirror of majorLoader.js for minors — scraped folders ending in <code>_minor</code> inside src/data/majors/.</div>
+      </a>
+      <a class="child-card" href="./persistence/">
+        <div class="cc-type">module</div>
+        <div class="cc-name">persistence.js</div>
+        <div class="cc-desc">localStorage read/write for the main plan state blob. Four functions: storageKey, loadSaved, saveState, clearState. All take storagePrefix as first parameter.</div>
+      </a>
+    </div>
+
+    <h2>majorLoader.js</h2>
+    <p>Major requirement JSONs come from our own scraper output (<code>scripts/scrape-majors.js</code> → <code>src/data/majors/</code>):</p>
+
+    <pre><code><span class="cmt">// Vite requires static string literals at the call site</span>
+const _moduleMap = import.meta.glob(
+  './majors/**/parsed.initial.json',
+  { eager: false }
+);</code></pre>
+
+    <p>All path stubs are registered at build time by Vite, but the actual JSON is never loaded until a specific major is selected. <code>loadMajor(path)</code> calls the stub function lazily — only one JSON is ever in memory at a time.</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>getMajorOptions(majorRequirements)</code></td><td>Return all available majors as <code>{ path, year, college, collegeLabel, folder, label, location }[]</code>. No JSON loaded — parses paths only. Sorted newest year first, then by college, then by label. Cached by <code>majorRequirements</code> identity.</td></tr>
+        <tr><td><code>getMajorOptionGroups(majorRequirements)</code></td><td>Group <code>getMajorOptions()</code> output by <code>"YYYY — College Label"</code> for <code>&lt;optgroup&gt;</code> rendering in GradPanel. Returns an ordered <code>Map&lt;groupKey, options[]&gt;</code>.</td></tr>
+        <tr><td><code>loadMajor(path)</code></td><td>Async — lazily loads and returns the Major2 JSON for a given path. Calls <code>canonicalizeMajorPath()</code> first to handle stale paths from saved plans.</td></tr>
+        <tr><td><code>canonicalizeMajorPath(path)</code></td><td>Migrates stale saved paths (older catalog years, renamed slugs, legacy submodule prefixes) to the best current registry entry via <code>resolveInMap()</code> in <code>programPaths.js</code>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <p><strong>History:</strong> requirement data originally came from an <code>external/graduatenu</code> git submodule (1,400+ major files scraped by the GraduateNU team). Our own scraper fully replaced it and the submodule was removed; saved plans holding old submodule paths are migrated by <code>canonicalizeMajorPath()</code>.</p>
+
+    <h2>minorLoader.js</h2>
+    <p>Identical architecture to majorLoader — scraped minors live alongside majors in <code>src/data/majors/</code>, in folders ending with <code>_minor</code>. Exports <code>getMinorOptions()</code>, <code>getMinorOptionGroups()</code>, <code>loadMinor()</code>, <code>canonicalizeMinorPath()</code>.</p>
+
+    <h2>persistence.js</h2>
+    <p>All plan state lives in one localStorage key, namespaced by <code>institution.storagePrefix</code>. The key format is <code>{prefix}-state-v2</code> — the <code>-v2</code> suffix is a schema version that allows breaking state changes to be handled cleanly (old keys are simply ignored).</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>storageKey(prefix)</code></td><td>Returns <code>`${prefix}-state-v2`</code>. Exported so Header can clear the key directly without importing the full module.</td></tr>
+        <tr><td><code>loadSaved(prefix)</code></td><td>Reads and JSON-parses the saved state. Returns null if no saved state exists or if JSON is malformed.</td></tr>
+        <tr><td><code>saveState(prefix, persist, obj)</code></td><td>Writes the plan state. When <code>persist=false</code>, writes <code>{persist:false}</code> only — a marker that tells the next load not to restore any plan state. Silently swallows quota-exceeded errors.</td></tr>
+        <tr><td><code>clearState(prefix)</code></td><td>Removes the key from localStorage entirely (full reset).</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>Multiple institution forks can run in the same browser without collision because each uses a different <code>storagePrefix</code> (NU uses <code>"ncp"</code>). The generic default uses <code>"map"</code>.</p>
+
+    <h2>Full startup data flow</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+sequenceDiagram
+    participant PC as PlannerContext
+    participant PS as persistence.js
+    participant CC as courseCatalog adapter
+    participant ML as majorLoader.js
+    participant LS as localStorage
+    participant FS as public/northeastern/ (static)
+    participant SCR as src/data/majors/ (Vite stubs)
+
+    PC->>PS: loadSaved(storagePrefix)
+    PS->>LS: read {prefix}-state-v2
+    LS-->>PS: saved JSON or null
+    PS-->>PC: hydrated state (or defaults)
+
+    PC->>CC: courseCatalog.fetchAll()
+    CC->>FS: fetch catalog-courses.json + term-history.json
+    FS-->>CC: course catalog + Banner term history
+    CC-->>PC: Course[] (normalized, termHistory merged)
+
+    Note over PC: User selects major in GradPanel
+    PC->>ML: loadMajor(path)
+    ML->>SCR: lazy-import parsed.initial.json
+    ML-->>PC: Major2 requirement tree
+
+    Note over PC: Any state mutation
+    PC->>PS: saveState(prefix, persist, planObj)
+    PS->>LS: write {prefix}-state-v2
+      </div>
+      <div class="caption">Course loading is fully owned by the adapter — persistence.js and majorLoader.js never touch course data. Major JSONs are loaded on first selection and are not cached across sessions.</div>
+    </div>
+
+    <h2>What belongs here vs. in the adapter</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Concern</th><th>Lives in</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Course fetch URL, fetch strategy, normalization</td><td>ICourseCatalog adapter</td><td>Institution-specific — NU fetches static JSON + Banner history; another school might use a live API with a different schema</td></tr>
+        <tr><td>Major/minor JSON loading</td><td>majorLoader.js / minorLoader.js</td><td>Institution-agnostic path traversal — the adapter only provides path-parsing helpers (fmtLabel, fmtLocation) as parameters</td></tr>
+        <tr><td>localStorage read/write</td><td>persistence.js</td><td>Institution-agnostic — the prefix parameter handles all namespacing</td></tr>
+        <tr><td>Locale files</td><td>LanguageContext (eager Vite glob)</td><td>Loaded at context init, not on demand — different lifecycle from major data</td></tr>
+      </tbody>
+    </table></div>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
