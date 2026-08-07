@@ -15,6 +15,18 @@
  * anything older belongs to a student whose audit should be an advisor
  * conversation anyway.
  *
+ * ARCHIVE EDITIONS ARE NOT TOUCHED. src/data/archive/ is a separate tree and
+ * TREES below does not include it, deliberately: the six editions backfilled
+ * from catalog.northeastern.edu/archive/ are the ones this retention window
+ * was sized for. With the live 2026 edition they come to exactly KEEP_YEARS.
+ *
+ * The consequence to remember when 2027 lands: the live tree starts
+ * accumulating again while the archive stays fixed, so the total exceeds 7 and
+ * the OLDEST archived edition — not the oldest live one — is the right thing
+ * to retire. That is a manual judgement, which is why nothing here automates
+ * it. But note the asymmetry: a live edition can be rescraped from the archive
+ * later, and the oldest archived one cannot be recovered from anywhere.
+ *
  * Deleting an edition is irreversible — NEU does not serve retired editions in
  * a form we can rescrape — so this NEVER runs automatically. It is a manual
  * command, it refuses to leave fewer than KEEP_YEARS directories, and --write
