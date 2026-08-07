@@ -45,6 +45,12 @@ const OUT_ROOT    = join(ROOT, 'src/data/majors');
 const CHANGE_LOG  = join(ROOT, 'public/northeastern/change-log.json');
 const CHANGE_LOG_MAX = 600;
 const ARCHIVE_ROOT = join(ROOT, 'src/data/archive/majors');
+// One index across every archived edition, written by BOTH scrapers under
+// their own key. It is what tells a reader (and later the loader) which
+// editions exist without opening ~12 MB of bundles to find out, and it is
+// the at-a-glance health check across a dozen unattended backfill runs.
+const ARCHIVE_MANIFEST = join(ROOT, 'src/data/archive/manifest.json');
+const TREE = 'majors';
 const CATALOG   = 'https://catalog.northeastern.edu';
 // A past edition is the same catalog nested under /archive/{label}/, with its
 // own sitemap and the same markup. See scripts/lib/catalog-edition.js.
@@ -200,6 +206,37 @@ function readArchiveEdition(year = YEAR) {
     }
   }
   return out;
+}
+
+/**
+ * Record this edition in the shared archive manifest.
+ *
+ * Merged rather than rewritten: the undergrad and graduate scrapers each own
+ * their own key for the same edition and run separately, so a write that
+ * replaced the file would silently drop whichever ran first.
+ */
+function writeArchiveManifest(programs, colleges) {
+  let manifest = { editions: {} };
+  if (existsSync(ARCHIVE_MANIFEST)) {
+    try { manifest = JSON.parse(readFileSync(ARCHIVE_MANIFEST, 'utf8')); } catch {}
+  }
+  manifest.editions ??= {};
+  const key = String(YEAR);
+  manifest.editions[key] ??= { label: EDITION.label };
+  manifest.editions[key].label = EDITION.label;
+  manifest.editions[key][TREE] = {
+    programs: programs.length,
+    colleges,
+    sections: programs.reduce((n, p) => n + (p.requirementSections?.length ?? 0), 0),
+    concentrations: programs.reduce((n, p) => n + (p.concentrations?.concentrationOptions?.length ?? 0), 0),
+    plans: programs.filter(p => p.planGrid).length,
+    scrapedAt: new Date().toISOString().slice(0, 10),
+  };
+  // Newest first, so the file reads the way the editions are used.
+  manifest.editions = Object.fromEntries(
+    Object.entries(manifest.editions).sort((a, b) => Number(b[0]) - Number(a[0])));
+  mkdirSync(dirname(ARCHIVE_MANIFEST), { recursive: true });
+  writeFileSync(ARCHIVE_MANIFEST, JSON.stringify(manifest, null, 2) + '\n');
 }
 
 /** Every committed sample plan in one edition — what the plan rail counts. */
@@ -506,10 +543,17 @@ async function main() {
         // Sorted keys so a re-scrape of a frozen edition produces a diff that
         // is about the catalog, not about iteration order.
         const sorted = Object.fromEntries(Object.keys(bundle).sort().map(k => [k, bundle[k]]));
-        writeFileSync(out, JSON.stringify(sorted, null, 2) + '\n');
+        // Minified, unlike the live tree. Pretty-printing exists so the monthly
+        // diff is readable, which is how a bad scrape gets noticed — but a
+        // frozen edition is written once and never diffed, so the indentation
+        // buys nothing and costs 64%. Across seven editions that is the
+        // difference between ~26 MB and ~72 MB in a public repo where every
+        // clone pays, and it makes the eventual lazy load 2.5x smaller too.
+        writeFileSync(out, JSON.stringify(sorted) + '\n');
       }
       console.log(`Archive ${EDITION.label}: ${written} programs in ${byCollege.size} college bundles, ` +
                   `${plansWritten} with a sample plan.`);
+      writeArchiveManifest([...pending.values()], byCollege.size);
     } else {
       for (const [p, data] of pending) {
         const { planGrid, ...program } = data;
