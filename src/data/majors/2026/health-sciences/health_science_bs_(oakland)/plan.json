@@ -1,0 +1,638 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI1000"
+                  ],
+                  "text": "HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH1260"
+                  ],
+                  "text": "PHTH 1260"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1111",
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1111 and BIOL 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1113",
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1113 and BIOL 1114"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI2000"
+                  ],
+                  "text": "HSCI 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 3,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Selective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 7,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI1000"
+                  ],
+                  "text": "HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH1260"
+                  ],
+                  "text": "PHTH 1260"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1113"
+                  ],
+                  "text": "BIOL 1113"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1114"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1161"
+                  ],
+                  "text": "CHEM 1161"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1162"
+                  ],
+                  "text": "CHEM 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1163"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI2000"
+                  ],
+                  "text": "HSCI 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 7,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 14,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Selective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

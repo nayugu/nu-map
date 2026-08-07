@@ -1,0 +1,80 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5120"
+                  ],
+                  "text": "ARTG 5120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5600"
+                  ],
+                  "text": "ARTG 5600"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5620"
+                  ],
+                  "text": "ARTG 5620"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5610"
+                  ],
+                  "text": "ARTG 5610"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6310"
+                  ],
+                  "text": "ARTG 6310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6600"
+                  ],
+                  "text": "ARTG 6600"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

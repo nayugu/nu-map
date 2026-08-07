@@ -1,0 +1,248 @@
+{
+  "plans": [
+    {
+      "label": "Sample Full-Time Plan of Study",
+      "pattern": "Sample Full-Time Plan of Study",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5300"
+                  ],
+                  "text": "INAM 5300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5305"
+                  ],
+                  "text": "INAM 5305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5310"
+                  ],
+                  "text": "INAM 5310"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Electives"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5400"
+                  ],
+                  "text": "INAM 5400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5405"
+                  ],
+                  "text": "INAM 5405"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5410"
+                  ],
+                  "text": "INAM 5410"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Electives"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5415"
+                  ],
+                  "text": "INAM 5415"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5507"
+                  ],
+                  "text": "INAM 5507"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5508"
+                  ],
+                  "text": "INAM 5508"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM6900"
+                  ],
+                  "text": "INAM 6900"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Sample Part-Time Plan of Study",
+      "pattern": "Sample Part-Time Plan of Study",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5300"
+                  ],
+                  "text": "INAM 5300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5305"
+                  ],
+                  "text": "INAM 5305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5310"
+                  ],
+                  "text": "INAM 5310"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5400"
+                  ],
+                  "text": "INAM 5400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5405"
+                  ],
+                  "text": "INAM 5405"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5410"
+                  ],
+                  "text": "INAM 5410"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5415"
+                  ],
+                  "text": "INAM 5415"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5507"
+                  ],
+                  "text": "INAM 5507"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM5508"
+                  ],
+                  "text": "INAM 5508"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Electives"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM6900"
+                  ],
+                  "text": "INAM 6900"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

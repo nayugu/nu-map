@@ -1,0 +1,81 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SUEN7130"
+                  ],
+                  "text": "SUEN 7130"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SUEN7230"
+                  ],
+                  "text": "SUEN 7230"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SUEN7320",
+                    "SUEN6340"
+                  ],
+                  "text": "SUEN 7320 or 6340"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (required)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SUEN7140"
+                  ],
+                  "text": "SUEN 7140 (or co-op*)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SUEN7240"
+                  ],
+                  "text": "SUEN 7240"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SUEN7320"
+                  ],
+                  "text": "SUEN 7320"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (required)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

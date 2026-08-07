@@ -1,0 +1,402 @@
+{
+  "plans": [
+    {
+      "label": "Typical Plan of Study",
+      "pattern": "Typical Plan of Study",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS5116"
+                  ],
+                  "text": "PHYS 5116"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS6116"
+                  ],
+                  "text": "NETS 6116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS7334"
+                  ],
+                  "text": "NETS 7334"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "One elective course"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS7332"
+                  ],
+                  "text": "NETS 7332"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "One elective course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS7335"
+                  ],
+                  "text": "NETS 7335"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "One elective course"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS8986"
+                  ],
+                  "text": "NETS 8986"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS8986"
+                  ],
+                  "text": "NETS 8986"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS8986"
+                  ],
+                  "text": "NETS 8986"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS9990"
+                  ],
+                  "text": "NETS 9990"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS9991"
+                  ],
+                  "text": "NETS 9991"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS9996"
+                  ],
+                  "text": "NETS 9996"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Alternate Plan of Study",
+      "pattern": "Alternate Plan of Study",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS5116"
+                  ],
+                  "text": "PHYS 5116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS7332"
+                  ],
+                  "text": "NETS 7332"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "One elective course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS6116"
+                  ],
+                  "text": "NETS 6116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS7334"
+                  ],
+                  "text": "NETS 7334"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS7335"
+                  ],
+                  "text": "NETS 7335"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS8986"
+                  ],
+                  "text": "NETS 8986"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS8986"
+                  ],
+                  "text": "NETS 8986"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS8986"
+                  ],
+                  "text": "NETS 8986"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS9990"
+                  ],
+                  "text": "NETS 9990"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS9991"
+                  ],
+                  "text": "NETS 9991"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "NETS9996"
+                  ],
+                  "text": "NETS 9996"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

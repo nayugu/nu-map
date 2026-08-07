@@ -1,0 +1,160 @@
+{
+  "plans": [
+    {
+      "label": "Fall Term Entrance1",
+      "pattern": "Fall Term Entrance1",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7210"
+                  ],
+                  "text": "PHYS 7210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7301"
+                  ],
+                  "text": "PHYS 7301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7302"
+                  ],
+                  "text": "PHYS 7302"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7315"
+                  ],
+                  "text": "PHYS 7315"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS5318"
+                  ],
+                  "text": "PHYS 5318"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7210"
+                  ],
+                  "text": "PHYS 7210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7305"
+                  ],
+                  "text": "PHYS 7305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7316"
+                  ],
+                  "text": "PHYS 7316"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7321"
+                  ],
+                  "text": "PHYS 7321"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Electives"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS9984"
+                  ],
+                  "text": "PHYS 9984"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS9990"
+                  ],
+                  "text": "PHYS 9990"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS9991"
+                  ],
+                  "text": "PHYS 9991"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

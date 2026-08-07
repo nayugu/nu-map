@@ -1,0 +1,624 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op",
+      "pattern": "Four Years, One Co-op",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1000"
+                  ],
+                  "text": "CRIM 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1100"
+                  ],
+                  "text": "CRIM 1100"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Current crime and justice issues course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1110"
+                  ],
+                  "text": "CRIM 1110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1120"
+                  ],
+                  "text": "CRIM 1120"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Digital skills course and lab"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Systems and institutions course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sequence elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Systems and institutions course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM3600"
+                  ],
+                  "text": "CRIM 3600"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM3700"
+                  ],
+                  "text": "CRIM 3700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Crime problems elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Systemic issues elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sequence elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM3000"
+                  ],
+                  "text": "CRIM 3000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Solutions and reform course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sequence elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1000"
+                  ],
+                  "text": "CRIM 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1100"
+                  ],
+                  "text": "CRIM 1100"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Current crime and justice issues course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1110"
+                  ],
+                  "text": "CRIM 1110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1120"
+                  ],
+                  "text": "CRIM 1120"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Digital skills course and lab"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Systems and institutions course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sequence elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EESH2000 Co-Op Preparation"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-Op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-Op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM3700"
+                  ],
+                  "text": "CRIM 3700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Crime problems elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Systemic issues elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM3000"
+                  ],
+                  "text": "CRIM 3000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sequence elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM4000"
+                  ],
+                  "text": "CRIM 4000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sequence elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,328 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ARTF1000",
+                    "COMM1000"
+                  ],
+                  "text": "ARTF 1000 or COMM 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM1101"
+                  ],
+                  "text": "COMM 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF 1220 with optional ARTF 1221"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1001",
+                    "ARTG1002"
+                  ],
+                  "text": "ARTG 1001 and ARTG 1002"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COMM1112",
+                    "COMM2301"
+                  ],
+                  "text": "COMM 1112 or 2301"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1270",
+                    "ARTG1271"
+                  ],
+                  "text": "ARTG 1270 and ARTG 1271"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM foundation course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM cluster course"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1290",
+                    "ARTG1291"
+                  ],
+                  "text": "ARTG 1290 and ARTG 1291"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM writing-intensive 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Design option level 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTH elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Design option level 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "A+D elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM writing-intensive 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTG elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3314",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3314 or 3315"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG4550"
+                  ],
+                  "text": "ARTG 4550"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM2200"
+                  ],
+                  "text": "COMM 2200"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

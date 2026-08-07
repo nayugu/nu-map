@@ -1,0 +1,343 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MUSC1000",
+                    "BUSN1102"
+                  ],
+                  "text": "MUSC 1000 or BUSN 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1001"
+                  ],
+                  "text": "MUSC 1001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSI1230"
+                  ],
+                  "text": "MUSI 1230"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MKTG2201"
+                  ],
+                  "text": "MKTG 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music in context course 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Music industry elective 1"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1115",
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1115 or 1116"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1119"
+                  ],
+                  "text": "MUSC 1119"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "EEAM2000",
+                    "BUSN1103"
+                  ],
+                  "text": "EEAM 2000 or BUSN 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "FINA2201"
+                  ],
+                  "text": "FINA 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective 2"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1201"
+                  ],
+                  "text": "MUSC 1201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music industry elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath course"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Music in context course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business concentration course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective 4"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective 5"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music industry elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business concentration course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business concentration course 3"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3314",
+                    "ENGW3304",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3314, 3304, or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSI4601"
+                  ],
+                  "text": "MUSI 4601"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business concentration course 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music industry elective 4"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

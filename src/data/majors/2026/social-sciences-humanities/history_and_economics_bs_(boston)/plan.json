@@ -1,0 +1,341 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1000",
+                    "HIST1000"
+                  ],
+                  "text": "ECON 1000 or HIST 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1200"
+                  ],
+                  "text": "HIST 1200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1201"
+                  ],
+                  "text": "HIST 1201"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1231",
+                    "MATH1241",
+                    "MATH1245",
+                    "MATH1251",
+                    "MATH1340",
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1116"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1100",
+                    "MISM2510"
+                  ],
+                  "text": "CS 1100, DS 2000 and DS 2001, or MISM 2510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2315"
+                  ],
+                  "text": "ECON 2315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2301"
+                  ],
+                  "text": "HIST 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2302"
+                  ],
+                  "text": "HIST 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2316"
+                  ],
+                  "text": "ECON 2316"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective 5"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2350"
+                  ],
+                  "text": "ECON 2350"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective 6"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2560"
+                  ],
+                  "text": "ECON 2560"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 4"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON3470",
+                    "HIST2011",
+                    "ECON1292"
+                  ],
+                  "text": "ECON 3470, HIST 2011, or ECON 1292"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON4692",
+                    "HIST4701",
+                    "ECON4997"
+                  ],
+                  "text": "ECON 4692, HIST 4701, or ECON 4997"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective 7"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

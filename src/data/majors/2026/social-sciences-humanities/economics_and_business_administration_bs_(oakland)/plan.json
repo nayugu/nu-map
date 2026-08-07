@@ -1,0 +1,345 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1000",
+                    "BUSN1102"
+                  ],
+                  "text": "ECON 1000 or BUSN 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1231",
+                    "MATH1241",
+                    "MATH1245",
+                    "MATH1251",
+                    "MATH1340",
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "FINA2201"
+                  ],
+                  "text": "FINA 2201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MGSC2301",
+                    "ECON2350"
+                  ],
+                  "text": "MGSC 2301 or ECON 2350"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2315"
+                  ],
+                  "text": "ECON 2315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath DD"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MKTG2201"
+                  ],
+                  "text": "MKTG 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT2301"
+                  ],
+                  "text": "ACCT 2301"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1103",
+                    "EESH2000"
+                  ],
+                  "text": "BUSN 1103 or EESH 2000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1100",
+                    "MISM2510"
+                  ],
+                  "text": "CS 1100 or MISM 2510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2316"
+                  ],
+                  "text": "ECON 2316"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2560"
+                  ],
+                  "text": "ECON 2560"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced writing in the disciplines"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 5"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

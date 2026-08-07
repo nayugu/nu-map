@@ -1,0 +1,383 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1102",
+                    "INTL1000"
+                  ],
+                  "text": "BUSN 1102 or INTL 1000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1115",
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1115 or 1116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1205"
+                  ],
+                  "text": "INTB 1205"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1116",
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1116 or 1115"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MGSC2301",
+                    "ECON2350"
+                  ],
+                  "text": "MGSC 2301 or ECON 2350"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "FINA2201"
+                  ],
+                  "text": "FINA 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MKTG2201"
+                  ],
+                  "text": "MKTG 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON undergraduate elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1103",
+                    "EESH2000"
+                  ],
+                  "text": "BUSN 1103 or EESH 2000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON2315",
+                    "ECON2316"
+                  ],
+                  "text": "ECON 2315 or 2316"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB2205"
+                  ],
+                  "text": "INTB 2205"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB2206"
+                  ],
+                  "text": "INTB 2206"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Complete one of the approved business core:"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ACCT2301",
+                    "INNO2301",
+                    "MISM2301",
+                    "SCHM2301"
+                  ],
+                  "text": "ACCT 2301, INNO 2301, MISM 2301, or SCHM 2301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON undergraduate elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Student may choose to participate in a Dialogue of Civilizations experience"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON2316",
+                    "ECON2315"
+                  ],
+                  "text": "ECON 2316 or 2315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2560"
+                  ],
+                  "text": "ECON 2560"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Complete one of the following:"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "FINA4320",
+                    "INTB3310",
+                    "INTB3330",
+                    "INTB4983",
+                    "MKTG4512",
+                    "SCHM3301",
+                    "STRT3301"
+                  ],
+                  "text": "FINA 4320, INTB 3310, INTB 3330, INTB 4983, MKTG 4512, SCHM 3301, or STRT 3301"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3304",
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3304, 3308, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON3291",
+                    "ECON3635"
+                  ],
+                  "text": "ECON 3291 or 3635"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON undergraduate elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB4202"
+                  ],
+                  "text": "INTB 4202"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

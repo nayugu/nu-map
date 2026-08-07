@@ -1,0 +1,616 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH1101"
+                  ],
+                  "text": "ANTH 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING1150"
+                  ],
+                  "text": "LING 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1215"
+                  ],
+                  "text": "MATH 1215"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH2305"
+                  ],
+                  "text": "ANTH 2305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING2350"
+                  ],
+                  "text": "LING 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3412"
+                  ],
+                  "text": "LING 3412"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic structure course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistics elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3442"
+                  ],
+                  "text": "LING 3442"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic structure course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3456"
+                  ],
+                  "text": "LING 3456"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology advanced area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic structure course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH4600"
+                  ],
+                  "text": "ANTH 4600"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology advanced area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistics research"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, No Co-op",
+      "pattern": "Four Years, No Co-op",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH1101"
+                  ],
+                  "text": "ANTH 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING1150"
+                  ],
+                  "text": "LING 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1215"
+                  ],
+                  "text": "MATH 1215"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH2305"
+                  ],
+                  "text": "ANTH 2305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING2350"
+                  ],
+                  "text": "LING 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3412"
+                  ],
+                  "text": "LING 3412"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic structure course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3442"
+                  ],
+                  "text": "LING 3442"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic structure course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology advanced area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3456"
+                  ],
+                  "text": "LING 3456"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology advanced area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic structure elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology advanced area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistics research"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH4600"
+                  ],
+                  "text": "ANTH 4600"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistics elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

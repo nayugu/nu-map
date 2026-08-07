@@ -1,0 +1,323 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR1000"
+                  ],
+                  "text": "MSCR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR1220"
+                  ],
+                  "text": "MSCR 1220"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL1101"
+                  ],
+                  "text": "SOCL 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sociology elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MSCR1320",
+                    "MSCR1420"
+                  ],
+                  "text": "MSCR 1320 or 1420"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL3300"
+                  ],
+                  "text": "SOCL 3300"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR foundation"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language core course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000 (For CAMD students)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000 (For CSSH students)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL2320"
+                  ],
+                  "text": "SOCL 2320"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR diversity/globalization"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language core course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL2321"
+                  ],
+                  "text": "SOCL 2321"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR3437"
+                  ],
+                  "text": "MSCR 3437"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SOCL4600",
+                    "ANTH4100"
+                  ],
+                  "text": "SOCL 4600 or ANTH 4100"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

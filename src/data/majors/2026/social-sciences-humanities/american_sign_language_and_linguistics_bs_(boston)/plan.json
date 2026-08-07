@@ -1,0 +1,270 @@
+{
+  "plans": [
+    {
+      "label": "Four Years",
+      "pattern": "Four Years",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AMSL1101"
+                  ],
+                  "text": "AMSL 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DEAF1500"
+                  ],
+                  "text": "DEAF 1500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING1150"
+                  ],
+                  "text": "LING 1150"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AMSL1102"
+                  ],
+                  "text": "AMSL 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING2350"
+                  ],
+                  "text": "LING 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3412"
+                  ],
+                  "text": "LING 3412"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AMSL2101"
+                  ],
+                  "text": "AMSL 2101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DEAF2500"
+                  ],
+                  "text": "DEAF 2500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AMSL2102"
+                  ],
+                  "text": "AMSL 2102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DEAF2700"
+                  ],
+                  "text": "DEAF 2700"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC2320"
+                  ],
+                  "text": "PSYC 2320"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AMSL3101"
+                  ],
+                  "text": "AMSL 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTP3500"
+                  ],
+                  "text": "INTP 3500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTP3510"
+                  ],
+                  "text": "INTP 3510"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure course or Linguistics Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3464"
+                  ],
+                  "text": "PSYC 3464"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTP4940"
+                  ],
+                  "text": "INTP 4940"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistics Elective or Linguistic Structure course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistics Seminar"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistics Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath/Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

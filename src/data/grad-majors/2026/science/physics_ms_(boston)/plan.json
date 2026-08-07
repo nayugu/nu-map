@@ -1,0 +1,96 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7301"
+                  ],
+                  "text": "PHYS 7301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7302"
+                  ],
+                  "text": "PHYS 7302"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7315"
+                  ],
+                  "text": "PHYS 7315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7321"
+                  ],
+                  "text": "PHYS 7321 (can be taken year 1 or year 2)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7305"
+                  ],
+                  "text": "PHYS 7305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS7316"
+                  ],
+                  "text": "PHYS 7316"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (optional)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective or thesis"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Additional elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

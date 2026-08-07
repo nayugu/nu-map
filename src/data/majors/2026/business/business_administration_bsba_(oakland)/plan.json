@@ -1,0 +1,708 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1101"
+                  ],
+                  "text": "BUSN 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1102"
+                  ],
+                  "text": "BUSN 1102"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ECON1116",
+                    "MATH1231"
+                  ],
+                  "text": "ENGW 1111, ECON 1116, or MATH 1231 (FQ)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Take two:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203 (IC and ER)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ECON1116",
+                    "MATH1231"
+                  ],
+                  "text": "ENGW 1111, ECON 1116, or MATH 1231 (FQ)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Take one:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203 (IC and ER)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ECON1116",
+                    "MATH1231"
+                  ],
+                  "text": "ENGW 1111, ECON 1116, or MATH 1231"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1103"
+                  ],
+                  "text": "BUSN 1103"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3304"
+                  ],
+                  "text": "ENGW 3304"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1101"
+                  ],
+                  "text": "BUSN 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1102"
+                  ],
+                  "text": "BUSN 1102"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ECON1116",
+                    "MATH1231"
+                  ],
+                  "text": "ENGW 1111, ECON 1116, or MATH 1231 (FQ)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Take two:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203 (IC and ER)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ECON1116",
+                    "MATH1231"
+                  ],
+                  "text": "ENGW 1111, ECON 1116, or MATH 1231 (FQ)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Take one:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203 (IC and ER)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ECON1116",
+                    "MATH1231"
+                  ],
+                  "text": "ENGW 1111, ECON 1116, or MATH 1231"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1103"
+                  ],
+                  "text": "BUSN 1103"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3304"
+                  ],
+                  "text": "ENGW 3304"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

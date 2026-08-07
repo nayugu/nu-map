@@ -1,0 +1,311 @@
+{
+  "plans": [
+    {
+      "label": "Four Year, Two Co-op Plan of Study",
+      "pattern": "Four Year, Two Co-op Plan of Study",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1000"
+                  ],
+                  "text": "ENGL 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "English elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH1101"
+                  ],
+                  "text": "ANTH 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH2305"
+                  ],
+                  "text": "ANTH 2305"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1160"
+                  ],
+                  "text": "ENGL 1160"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH3410"
+                  ],
+                  "text": "ANTH 3410"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Pre-1850 period course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Area Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Theories & Methods course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "English Diversity course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Writing course"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH3421"
+                  ],
+                  "text": "ANTH 3421"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL3710"
+                  ],
+                  "text": "ENGL 3710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "English elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing in the Disciplines"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Post-1850 period course"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ANTH4600",
+                    "ANTH4100"
+                  ],
+                  "text": "ANTH 4600 or 4100"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL4710"
+                  ],
+                  "text": "ENGL 4710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Anthropology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

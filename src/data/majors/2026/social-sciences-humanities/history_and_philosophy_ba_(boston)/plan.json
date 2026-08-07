@@ -1,0 +1,324 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1200"
+                  ],
+                  "text": "HIST 1200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1201"
+                  ],
+                  "text": "HIST 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1115"
+                  ],
+                  "text": "PHIL 1115"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL2325",
+                    "POLS2325"
+                  ],
+                  "text": "PHIL 2325 or POLS 2325"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1000"
+                  ],
+                  "text": "HIST 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL2330"
+                  ],
+                  "text": "PHIL 2330"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST introductory level"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST pre-1800 history elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Critical PHIL elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2301"
+                  ],
+                  "text": "HIST 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2302"
+                  ],
+                  "text": "HIST 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ANTH area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HIST intermediate/advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST intermediate/advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HIST advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST intermediate/advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL integrative course or elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HIST capstone or senior project"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective or integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST elective or integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL advanced elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

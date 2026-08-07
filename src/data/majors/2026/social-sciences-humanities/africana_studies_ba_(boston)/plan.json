@@ -1,0 +1,326 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer 2/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer 2/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1101"
+                  ],
+                  "text": "AFCS 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CLTR1000"
+                  ],
+                  "text": "CLTR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1215"
+                  ],
+                  "text": "MATH 1215"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1113"
+                  ],
+                  "text": "AFCS 1113"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1225"
+                  ],
+                  "text": "AFCS 1225"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2355"
+                  ],
+                  "text": "AFCS 2355"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS3900"
+                  ],
+                  "text": "AFCS 3900"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BA language requirement course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Course to fulfill NUPath requirement"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1261"
+                  ],
+                  "text": "AFCS 1261"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BA language requirement course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2410"
+                  ],
+                  "text": "AFCS 2410"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS4526"
+                  ],
+                  "text": "AFCS 4526"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BA language requirement course 3"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Upper-division elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS3424"
+                  ],
+                  "text": "AFCS 3424"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS4700"
+                  ],
+                  "text": "AFCS 4700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

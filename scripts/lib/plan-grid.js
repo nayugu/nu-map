@@ -87,13 +87,28 @@
  * "MATH 1365 or 1465" resolve correctly to two distinct courses.
  */
 
-/** Term column headers we understand, mapped to NU Map's semester types. */
+/**
+ * Term column headers, mapped to NU Map's semester ids.
+ *
+ * The right-hand side may only ever be `fall`, `spring`, `sumA` or `sumB` —
+ * those are the four the calendar adapter generates (src/core/semGrid.js), and
+ * anything else is a term the planner has no slot for.
+ *
+ * "Summer Full Semester" is one term spanning both halves, which the planner
+ * has no single slot for: it splits summer in two because that is how NEU
+ * registers it. It anchors to `sumA`, where the course actually starts, and
+ * carries `fullSummer` so the term can say so rather than pretending to be a
+ * first-half term. This is not an edge case — it is how most GRADUATE programs
+ * write summer (17 of the 18 programs using it), where the co-op-driven
+ * half-summer split does not apply.
+ */
 const TERM_TYPES = {
-  "fall": "fall",
-  "spring": "spring",
-  "summer 1": "sumA", "summer i": "sumA", "summer a": "sumA",
-  "summer 2": "sumB", "summer ii": "sumB", "summer b": "sumB",
-  "summer": "summer",
+  "fall": ["fall", false],
+  "spring": ["spring", false],
+  "summer 1": ["sumA", false], "summer i": ["sumA", false], "summer a": ["sumA", false],
+  "summer 2": ["sumB", false], "summer ii": ["sumB", false], "summer b": ["sumB", false],
+  "summer": ["sumA", true], "summer full semester": ["sumA", true],
+  "full summer": ["sumA", true], "summer full": ["sumA", true],
 };
 
 /** Co-op / experiential entries, which are blocks rather than courses. */
@@ -107,7 +122,8 @@ function keyOf(raw) {
 }
 
 const termTypeOf = (label) =>
-  TERM_TYPES[String(label || "").replace(/ /g, " ").trim().toLowerCase()] ?? null;
+  TERM_TYPES[String(label || "").replace(/ /g, " ").replace(/\s+/g, " ").trim().toLowerCase()]
+  ?? [null, false];
 
 /**
  * Classify one grid cell.
@@ -250,10 +266,14 @@ function parseGridTable(table) {
       cells.forEach((c, i) => {
         const label = c.text.replace(/ /g, " ").replace(/\s+/g, " ").trim();
         if (!label || /^hours$/i.test(label)) return;
-        columns.push({ label, type: termTypeOf(label), cellIndex: i });
+        const [type, fullSummer] = termTypeOf(label);
+        columns.push({ label, type, fullSummer, cellIndex: i });
       });
       if (!year) year = { label: `Year ${years.length + 1}`, terms: [] };
-      year.terms = columns.map((c) => ({ term: c.label, type: c.type, hours: null, entries: [] }));
+      year.terms = columns.map((c) => ({
+        term: c.label, type: c.type, hours: null, entries: [],
+        ...(c.fullSummer ? { fullSummer: true } : {}),
+      }));
       continue;
     }
 

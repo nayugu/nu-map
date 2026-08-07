@@ -1,0 +1,224 @@
+{
+  "plans": [
+    {
+      "label": "Two Years",
+      "pattern": "Two Years",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6000"
+                  ],
+                  "text": "AACE 6000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6200"
+                  ],
+                  "text": "AACE 6200"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6010"
+                  ],
+                  "text": "AACE 6010"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6300"
+                  ],
+                  "text": "AACE 6300"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 3,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Arts Administration Directed Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6020"
+                  ],
+                  "text": "AACE 6020"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6210"
+                  ],
+                  "text": "AACE 6210"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Cultural Entrepreneurship Directed Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Experiential Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 3,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Experiential Elective 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "One and a Half Years",
+      "pattern": "One and a Half Years",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6000"
+                  ],
+                  "text": "AACE 6000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6200"
+                  ],
+                  "text": "AACE 6200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6210"
+                  ],
+                  "text": "AACE 6210"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6010"
+                  ],
+                  "text": "AACE 6010"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6020"
+                  ],
+                  "text": "AACE 6020"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AACE6300"
+                  ],
+                  "text": "AACE 6300"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 3,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Arts Administration Directed Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Cultural entrepreneurship directed elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Experiential elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Experiential elective 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

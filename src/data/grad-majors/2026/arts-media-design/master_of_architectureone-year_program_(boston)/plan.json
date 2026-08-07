@@ -1,0 +1,98 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH6330"
+                  ],
+                  "text": "ARCH 6330"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH6430"
+                  ],
+                  "text": "ARCH 6430"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH7130"
+                  ],
+                  "text": "ARCH 7130"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Required)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 14,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH6340"
+                  ],
+                  "text": "ARCH 6340"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH6440"
+                  ],
+                  "text": "ARCH 6440"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH7140"
+                  ],
+                  "text": "ARCH 7140"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

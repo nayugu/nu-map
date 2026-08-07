@@ -1,0 +1,323 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CLTR1000",
+                    "POLS1000"
+                  ],
+                  "text": "CLTR 1000 or POLS 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1101"
+                  ],
+                  "text": "AFCS 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1270"
+                  ],
+                  "text": "AFCS 1270"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS supporting course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language requirement course 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language requirement course 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2400"
+                  ],
+                  "text": "POLS 2400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language requirement course 3"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2325"
+                  ],
+                  "text": "AFCS 2325"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2296"
+                  ],
+                  "text": "AFCS 2296"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "POLS political thought course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS3900"
+                  ],
+                  "text": "AFCS 3900"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1261"
+                  ],
+                  "text": "AFCS 1261"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2399"
+                  ],
+                  "text": "POLS 2399"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101 (ND NUpath)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS4526"
+                  ],
+                  "text": "AFCS 4526"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing in the Disciplines"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

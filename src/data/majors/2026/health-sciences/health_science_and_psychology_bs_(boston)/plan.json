@@ -1,0 +1,1000 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op in Spring/Summer First Half",
+      "pattern": "Four Years, One Co-op in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HSCI1000",
+                    "PSYC1000"
+                  ],
+                  "text": "HSCI 1000 or PSYC 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHTH1260",
+                    "PHTH1261"
+                  ],
+                  "text": "PHTH 1260 or 1261"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1113"
+                  ],
+                  "text": "BIOL 1113"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1114"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC2320"
+                  ],
+                  "text": "PSYC 2320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Area A course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area A course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area B course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HSCI2000",
+                    "EESC2000"
+                  ],
+                  "text": "HSCI 2000 or EESC 2000 (*)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC lab"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General electives"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC3510",
+                    "PSYC4514",
+                    "CAEP2012"
+                  ],
+                  "text": "PSYC 3510, 4514, or CAEP 2012"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC seminar"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half (College: Bouvé)",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half (College: Bouvé)",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHTH1260",
+                    "PHTH1261"
+                  ],
+                  "text": "PHTH 1260 or 1261"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC1000",
+                    "HSCI1000"
+                  ],
+                  "text": "PSYC 1000 or HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1113"
+                  ],
+                  "text": "BIOL 1113"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1114"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A selective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area B selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HSCI2000",
+                    "EESC2000"
+                  ],
+                  "text": "HSCI 2000 or EESC 2000 (*)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC2320"
+                  ],
+                  "text": "PSYC 2320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC lab"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYCH elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC3510",
+                    "PSYC4514",
+                    "CAEP2012"
+                  ],
+                  "text": "PSYC 3510, 4514, or CAEP 2012"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC seminar"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall (College: Science)",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall (College: Science)",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHTH1260",
+                    "PHTH1261"
+                  ],
+                  "text": "PHTH 1260 or 1261"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC1000",
+                    "HSCI1000"
+                  ],
+                  "text": "PSYC 1000 or HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1113"
+                  ],
+                  "text": "BIOL 1113"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1114"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A selective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area B selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General electives"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC2320"
+                  ],
+                  "text": "PSYC 2320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "EESC2000",
+                    "HSCI2000"
+                  ],
+                  "text": "EESC 2000 or HSCI 2000 (*)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A selective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC3510",
+                    "PSYC4514",
+                    "CAEP2012"
+                  ],
+                  "text": "PSYC 3510, 4514, or CAEP 2012"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC lab"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC seminar"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

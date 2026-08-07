@@ -1,0 +1,314 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1000"
+                  ],
+                  "text": "ARCH 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1310"
+                  ],
+                  "text": "ARCH 1310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1110"
+                  ],
+                  "text": "ARCH 1110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1120"
+                  ],
+                  "text": "ARCH 1120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Architecture History Elective (1 of 2)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2130"
+                  ],
+                  "text": "ARCH 2130"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2260"
+                  ],
+                  "text": "ARCH 2260"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARCH2330",
+                    "ARCH2331"
+                  ],
+                  "text": "ARCH 2330 and ARCH 2331"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Architecture History Elective (2 of 2)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2140"
+                  ],
+                  "text": "ARCH 2140"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARCH2340",
+                    "ARCH2341"
+                  ],
+                  "text": "ARCH 2340 and ARCH 2341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3314"
+                  ],
+                  "text": "ENGW 3314"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Optional Summer Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Optional Summer Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Semester in Segovia (or Boston)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH4960"
+                  ],
+                  "text": "ARCH 4960"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

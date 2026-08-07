@@ -1,0 +1,343 @@
+{
+  "plans": [
+    {
+      "label": "Fours Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Fours Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1102"
+                  ],
+                  "text": "BUSN 1102"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1115",
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1115 or 1116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT2301"
+                  ],
+                  "text": "ACCT 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "INNO2301",
+                    "MISM2301",
+                    "MKTG2201",
+                    "SCHM2301"
+                  ],
+                  "text": "INNO 2301, MISM 2301, MKTG 2201, or SCHM 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "FINA2201"
+                  ],
+                  "text": "FINA 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ND NUpath"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "EI NUpath or open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1103"
+                  ],
+                  "text": "BUSN 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3101"
+                  ],
+                  "text": "LAW 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3102"
+                  ],
+                  "text": "LAW 3102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "DD NUpath"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "DMSB integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "LAW elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3120"
+                  ],
+                  "text": "LAW 3120"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced writing"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "LAW elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3130"
+                  ],
+                  "text": "LAW 3130"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "LAW elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3235"
+                  ],
+                  "text": "LAW 3235"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3140"
+                  ],
+                  "text": "LAW 3140"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,341 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Spring Co-ops",
+      "pattern": "Four Years, Two Spring Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INSC1000"
+                  ],
+                  "text": "INSC 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB1101",
+                    "EEMB1102"
+                  ],
+                  "text": "EEMB 1101 and EEMB 1102"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR1500",
+                    "ENVR1501"
+                  ],
+                  "text": "ENVR 1500 and ENVR 1501"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1241",
+                    "MATH1251"
+                  ],
+                  "text": "MATH 1241 or 1251"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB1105",
+                    "EEMB1106"
+                  ],
+                  "text": "EEMB 1105 and EEMB 1106"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1145",
+                    "PHYS1146"
+                  ],
+                  "text": "PHYS 1145 and PHYS 1146"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUPath Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUPath Elective 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL2301",
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2301 and BIOL 2302"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR2500",
+                    "ENVR2501"
+                  ],
+                  "text": "ENVR 2500 and ENVR 2501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUPath Elective 3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB2302",
+                    "EEMB2303"
+                  ],
+                  "text": "EEMB 2302 and EEMB 2303"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB2400"
+                  ],
+                  "text": "EEMB 2400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EEB elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EEB elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "NUPath Elective 4"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3307"
+                  ],
+                  "text": "ENGW 3307"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB3460"
+                  ],
+                  "text": "EEMB 3460"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EEB elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EEB elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUPath Elective 5"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR4000"
+                  ],
+                  "text": "ENVR 4000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR4997"
+                  ],
+                  "text": "ENVR 4997"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EEB elective 5"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EEB elective 6"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer 2/ Fall",
+      "pattern": "Four Years, Two Co-ops in Summer 2/ Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1365"
+                  ],
+                  "text": "MATH 1365"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1115"
+                  ],
+                  "text": "PHIL 1115"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL2325"
+                  ],
+                  "text": "PHIL 2325"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL2330"
+                  ],
+                  "text": "PHIL 2330"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2331"
+                  ],
+                  "text": "MATH 2331"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH3081"
+                  ],
+                  "text": "MATH 3081"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL2001",
+                    "PHIL3050"
+                  ],
+                  "text": "PHIL 2001 or 3050"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Course in the following range: MATH 3001 to Math 4999"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL4515"
+                  ],
+                  "text": "PHIL 4515"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone in PHIL or MATH"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Course in the following range: MATH 3001 to MATH 4999"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

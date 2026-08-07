@@ -1,0 +1,1833 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BIOC1000",
+                    "INSC1000"
+                  ],
+                  "text": "BIOC 1000 or INSC 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1107"
+                  ],
+                  "text": "BIOL 1107"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1108"
+                  ],
+                  "text": "BIOL 1108"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1161"
+                  ],
+                  "text": "CHEM 1161"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1162"
+                  ],
+                  "text": "CHEM 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2299"
+                  ],
+                  "text": "BIOL 2299"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ENGW1102"
+                  ],
+                  "text": "ENGW 1111 or 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 4"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2309"
+                  ],
+                  "text": "BIOL 2309"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2313"
+                  ],
+                  "text": "CHEM 2313"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2314"
+                  ],
+                  "text": "CHEM 2314"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 5"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3611"
+                  ],
+                  "text": "BIOL 3611"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3612"
+                  ],
+                  "text": "BIOL 3612"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1155"
+                  ],
+                  "text": "PHYS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1156"
+                  ],
+                  "text": "PHYS 1156"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1157"
+                  ],
+                  "text": "PHYS 1157"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 6"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 7"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL4707"
+                  ],
+                  "text": "BIOL 4707"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 8"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3431"
+                  ],
+                  "text": "CHEM 3431"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3432"
+                  ],
+                  "text": "CHEM 3432"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CHEM5620",
+                    "CHEM3331",
+                    "CHEM3332"
+                  ],
+                  "text": "CHEM 5620 or 3331 and 3332"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENVR2500",
+                    "ENVR2501",
+                    "ENVR2502"
+                  ],
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 9"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3307 or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 10"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM4750"
+                  ],
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BIOC1000",
+                    "INSC1000"
+                  ],
+                  "text": "BIOC 1000 or INSC 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1107"
+                  ],
+                  "text": "BIOL 1107"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1108"
+                  ],
+                  "text": "BIOL 1108"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1161"
+                  ],
+                  "text": "CHEM 1161"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1162"
+                  ],
+                  "text": "CHEM 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2299"
+                  ],
+                  "text": "BIOL 2299"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ENGW1102"
+                  ],
+                  "text": "ENGW 1111 or 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 4"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2309"
+                  ],
+                  "text": "BIOL 2309"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2313"
+                  ],
+                  "text": "CHEM 2313"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2314"
+                  ],
+                  "text": "CHEM 2314"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 5"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3611"
+                  ],
+                  "text": "BIOL 3611"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3612"
+                  ],
+                  "text": "BIOL 3612"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 6"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3307 or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1155"
+                  ],
+                  "text": "PHYS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1156"
+                  ],
+                  "text": "PHYS 1156"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1157"
+                  ],
+                  "text": "PHYS 1157"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENVR2500",
+                    "ENVR2501",
+                    "ENVR2502"
+                  ],
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 7"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL4707"
+                  ],
+                  "text": "BIOL 4707"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3431"
+                  ],
+                  "text": "CHEM 3431"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3432"
+                  ],
+                  "text": "CHEM 3432"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CHEM5620",
+                    "CHEM3331",
+                    "CHEM3332"
+                  ],
+                  "text": "CHEM 5620 or 3331 and 3332"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 9"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM4750"
+                  ],
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 10"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "pattern": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BIOC1000",
+                    "INSC1000"
+                  ],
+                  "text": "BIOC 1000 or INSC 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1107"
+                  ],
+                  "text": "BIOL 1107"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1108"
+                  ],
+                  "text": "BIOL 1108"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1161"
+                  ],
+                  "text": "CHEM 1161"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1162"
+                  ],
+                  "text": "CHEM 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2299"
+                  ],
+                  "text": "BIOL 2299"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ENGW1102"
+                  ],
+                  "text": "ENGW 1111 or 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2309"
+                  ],
+                  "text": "BIOL 2309"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2313"
+                  ],
+                  "text": "CHEM 2313"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2314"
+                  ],
+                  "text": "CHEM 2314"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 3"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3611"
+                  ],
+                  "text": "BIOL 3611"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3612"
+                  ],
+                  "text": "BIOL 3612"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1155"
+                  ],
+                  "text": "PHYS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1156"
+                  ],
+                  "text": "PHYS 1156"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1157"
+                  ],
+                  "text": "PHYS 1157"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 5"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 6"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3431"
+                  ],
+                  "text": "CHEM 3431"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3432"
+                  ],
+                  "text": "CHEM 3432"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR2500",
+                    "ENVR2501",
+                    "ENVR2502"
+                  ],
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3307 or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 7"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CHEM5620",
+                    "CHEM3331",
+                    "CHEM3332"
+                  ],
+                  "text": "CHEM 5620 or 3331 and 3332"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 8"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 9"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL4707"
+                  ],
+                  "text": "BIOL 4707"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM4750"
+                  ],
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 10"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "pattern": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOC1000"
+                  ],
+                  "text": "BIOC 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1107"
+                  ],
+                  "text": "BIOL 1107"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1108"
+                  ],
+                  "text": "BIOL 1108"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1161"
+                  ],
+                  "text": "CHEM 1161"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1162"
+                  ],
+                  "text": "CHEM 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2299"
+                  ],
+                  "text": "BIOL 2299"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ENGW1102"
+                  ],
+                  "text": "ENGW 1111 or 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2309"
+                  ],
+                  "text": "BIOL 2309"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2313"
+                  ],
+                  "text": "CHEM 2313"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2314"
+                  ],
+                  "text": "CHEM 2314"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 3"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3611"
+                  ],
+                  "text": "BIOL 3611"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3612"
+                  ],
+                  "text": "BIOL 3612"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 4"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENVR2500",
+                    "ENVR2501",
+                    "ENVR2502"
+                  ],
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1155"
+                  ],
+                  "text": "PHYS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1156"
+                  ],
+                  "text": "PHYS 1156"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3307 or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1157"
+                  ],
+                  "text": "PHYS 1157"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 5"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL4707"
+                  ],
+                  "text": "BIOL 4707"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3431"
+                  ],
+                  "text": "CHEM 3431"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM3432"
+                  ],
+                  "text": "CHEM 3432"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CHEM5620",
+                    "CHEM3331",
+                    "CHEM3332"
+                  ],
+                  "text": "CHEM 5620 or 3331 and 3332"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 6"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 7"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 8"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM4750"
+                  ],
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL or CHEM advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 9"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 10"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

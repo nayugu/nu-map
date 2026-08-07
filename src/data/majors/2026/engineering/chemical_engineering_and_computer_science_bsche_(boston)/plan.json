@@ -1,0 +1,1660 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op in Summer Second Half/Fall",
+      "pattern": "Four Years, One Co-op in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1151",
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1151 and CHEM 1153 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2001"
+                  ],
+                  "text": "CS 2100 and CS 2001 (ND, AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200 (FQ, AD)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3307, or 3315"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME3305",
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3305 and CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME4703",
+                    "CHME4705"
+                  ],
+                  "text": "CHME 4703 and CHME 4705 (EI, WI, CE)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535 (WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, One Co-op in Spring/Summer First Half",
+      "pattern": "Four Years, One Co-op in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1151",
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1151 and CHEM 1153 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101 (ND, AD)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3302"
+                  ],
+                  "text": "ENGW 3302"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME3305",
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3305 and CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME4703",
+                    "CHME4705"
+                  ],
+                  "text": "CHME 4703 and CHME 4705 (EI, WI, CE)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535 (WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "pattern": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1151",
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1151 and CHEM 1153 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101 (ND, AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200 (FQ, AD)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME3305",
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3305 and CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512 (EI, CE, WI)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME4703",
+                    "CHME4705"
+                  ],
+                  "text": "CHME 4703 and CHME 4705"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535 (WI)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "pattern": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1151",
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1151 and CHEM 1153 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802 (FQ)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101 (ND, FQ)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3307, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME3305",
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3305 and CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512 (EI, CE, WI)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME4703",
+                    "CHME4705"
+                  ],
+                  "text": "CHME 4703 and CHME 4705"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535 (WI)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

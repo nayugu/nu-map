@@ -1,0 +1,350 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1000"
+                  ],
+                  "text": "HIST 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1200"
+                  ],
+                  "text": "HIST 1200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1201"
+                  ],
+                  "text": "HIST 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JPNS1101"
+                  ],
+                  "text": "JPNS 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ASNS Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ASNS Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ASNS1150"
+                  ],
+                  "text": "ASNS 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1100"
+                  ],
+                  "text": "HIST 1100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1246"
+                  ],
+                  "text": "HIST 1246"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JPNS1102"
+                  ],
+                  "text": "JPNS 1102"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1215"
+                  ],
+                  "text": "HIST 1215"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2301"
+                  ],
+                  "text": "HIST 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2302"
+                  ],
+                  "text": "HIST 2302"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2308"
+                  ],
+                  "text": "HIST 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JPNS2101"
+                  ],
+                  "text": "JPNS 2101"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1252"
+                  ],
+                  "text": "HIST 1252"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2351"
+                  ],
+                  "text": "HIST 2351"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2360"
+                  ],
+                  "text": "HIST 2360"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JPNS2102"
+                  ],
+                  "text": "JPNS 2102"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST3350"
+                  ],
+                  "text": "HIST 3350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JPNS1700"
+                  ],
+                  "text": "JPNS 1700"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL2395"
+                  ],
+                  "text": "PHIL 2395"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST4701"
+                  ],
+                  "text": "HIST 4701"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ASNS Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH4350"
+                  ],
+                  "text": "ANTH 4350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS3487"
+                  ],
+                  "text": "POLS 3487"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

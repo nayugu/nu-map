@@ -1,0 +1,318 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "JRNL1000",
+                    "HSCI1000"
+                  ],
+                  "text": "JRNL 1000 or HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL1150"
+                  ],
+                  "text": "JRNL 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH1260"
+                  ],
+                  "text": "PHTH 1260"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "JRNL1101",
+                    "JRNL1102"
+                  ],
+                  "text": "JRNL 1101 and JRNL 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000 (For CAMD students)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Introductory language course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Electives*"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL2201"
+                  ],
+                  "text": "JRNL 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elementary-level language course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI2000"
+                  ],
+                  "text": "HSCI 2000 (For Bouve students)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Intermediate-level language course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Visual storytelling course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3306",
+                    "ENGW3314",
+                    "ENGW3303"
+                  ],
+                  "text": "ENGW 3306, 3314, or 3303"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PH Social science course (introductory)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH Core Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Law and ethics course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH Core Course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 14,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH Core Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PH Social science course (upper)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COMM1000",
+                    "MSCR1000"
+                  ],
+                  "text": "COMM 1000 or MSCR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM1101"
+                  ],
+                  "text": "COMM 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR1220"
+                  ],
+                  "text": "MSCR 1220"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language Elementary 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM2301"
+                  ],
+                  "text": "COMM 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR2220"
+                  ],
+                  "text": "MSCR 2220"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Foundational Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language Elementary 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR Foundational Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Diversity & Globalization course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR Diversity & Globalization course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Creative expression course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Writing Intensive course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR Writing Intensive course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR Elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Intermediate Foreign Language"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing in the Discipline course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

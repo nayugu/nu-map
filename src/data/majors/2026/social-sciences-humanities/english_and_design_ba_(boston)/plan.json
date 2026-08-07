@@ -1,0 +1,696 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer 2/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer 2/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1000",
+                    "ARTF1000"
+                  ],
+                  "text": "ENGL 1000 or ARTF 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1450"
+                  ],
+                  "text": "ENGL 1450"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTF1220"
+                  ],
+                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1001",
+                    "ARTG1002"
+                  ],
+                  "text": "ARTG 1001 and ARTG 1002"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1160",
+                    "ENGL1410"
+                  ],
+                  "text": "ENGL 1160 or 1410"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1270",
+                    "ARTG1271"
+                  ],
+                  "text": "ARTG 1270 and ARTG 1271"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MATH elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1290",
+                    "ARTG1291"
+                  ],
+                  "text": "ARTG 1290 and ARTG 1291"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1700"
+                  ],
+                  "text": "ENGL 1700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL pre-19th-century requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Design option level 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTH elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL 19th-century requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL theories and methods requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Design option level 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "A+D elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL comparative requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL diversity requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTG elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL 20th-century requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG4550"
+                  ],
+                  "text": "ARTG 4550"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Two Co-ops in Summer 2/Fall",
+      "pattern": "Five Years, Two Co-ops in Summer 2/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1000",
+                    "ARTF1000"
+                  ],
+                  "text": "ENGL 1000 or ARTF 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1450"
+                  ],
+                  "text": "ENGL 1450"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTF1220"
+                  ],
+                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1001",
+                    "ARTG1002"
+                  ],
+                  "text": "ARTG 1001 and ARTG 1002"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1160",
+                    "ENGL1410"
+                  ],
+                  "text": "ENGL 1160 or 1410"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1270",
+                    "ARTG1271"
+                  ],
+                  "text": "ARTG 1270 and ARTG 1271"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MATH elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1700"
+                  ],
+                  "text": "ENGL 1700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL pre-19th-century requirement"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1290",
+                    "ARTG1291"
+                  ],
+                  "text": "ARTG 1290 and ARTG 1291"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Design option level 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL 19th-century requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL theories and methods requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Design option level 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "A+D elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL comparative requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL diversity requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTH elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTG elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL 20th-century requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL4710"
+                  ],
+                  "text": "ENGL 4710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG4550"
+                  ],
+                  "text": "ARTG 4550"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL writing requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

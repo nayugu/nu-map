@@ -1,0 +1,181 @@
+{
+  "plans": [
+    {
+      "label": "Two Semesters, No Co-op1",
+      "pattern": "Two Semesters, No Co-op1",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5100"
+                  ],
+                  "text": "ARTG 5100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5310"
+                  ],
+                  "text": "ARTG 5310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5320"
+                  ],
+                  "text": "ARTG 5320"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5120"
+                  ],
+                  "text": "ARTG 5120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5330"
+                  ],
+                  "text": "ARTG 5330"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6100"
+                  ],
+                  "text": "ARTG 6100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6110"
+                  ],
+                  "text": "ARTG 6110"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Semesters, No Co-op2",
+      "pattern": "Four Semesters, No Co-op2",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5100"
+                  ],
+                  "text": "ARTG 5100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5320"
+                  ],
+                  "text": "ARTG 5320"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5310"
+                  ],
+                  "text": "ARTG 5310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6100"
+                  ],
+                  "text": "ARTG 6100"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5330"
+                  ],
+                  "text": "ARTG 5330"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6110"
+                  ],
+                  "text": "ARTG 6110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5120"
+                  ],
+                  "text": "ARTG 5120"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

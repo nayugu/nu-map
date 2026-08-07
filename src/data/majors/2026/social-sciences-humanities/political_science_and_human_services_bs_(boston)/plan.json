@@ -1,0 +1,321 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HUSV1000",
+                    "POLS1000"
+                  ],
+                  "text": "HUSV 1000 or POLS 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV1101"
+                  ],
+                  "text": "HUSV 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2300"
+                  ],
+                  "text": "HUSV 2300"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS thought"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV diverse population course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3570"
+                  ],
+                  "text": "HUSV 3570"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Research methods course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "POLS 2400 supporting course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2400"
+                  ],
+                  "text": "POLS 2400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS3307"
+                  ],
+                  "text": "POLS 3307"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3900"
+                  ],
+                  "text": "HUSV 3900"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3308 or 3315"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone and Elective Option A or Option B"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV4994"
+                  ],
+                  "text": "HUSV 4994"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

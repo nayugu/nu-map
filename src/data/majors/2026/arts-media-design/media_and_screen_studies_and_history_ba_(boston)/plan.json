@@ -1,0 +1,311 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "HIST1200",
+                    "HIST1201"
+                  ],
+                  "text": "HIST 1200 and HIST 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR1000"
+                  ],
+                  "text": "MSCR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR1220"
+                  ],
+                  "text": "MSCR 1220"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MSCR1320",
+                    "MSCR1420"
+                  ],
+                  "text": "MSCR 1320 or 1420"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Intro-level HIST course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR foundation course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "HIST2301",
+                    "HIST2302"
+                  ],
+                  "text": "HIST 2301 and HIST 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR diversity/globalization"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Intermediate/advanced history elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Pre-1800 history elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1357"
+                  ],
+                  "text": "HIST 1357"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced history elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Intermediate/advanced history elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST4701"
+                  ],
+                  "text": "HIST 4701"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Intermediate/advanced history elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

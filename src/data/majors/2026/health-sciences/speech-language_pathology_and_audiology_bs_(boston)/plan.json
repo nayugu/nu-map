@@ -1,0 +1,388 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op in Spring/Summer First-Half",
+      "pattern": "Four Years, One Co-op in Spring/Summer First-Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2217"
+                  ],
+                  "text": "BIOL 2217"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2218"
+                  ],
+                  "text": "BIOL 2218"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1215",
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1215 or 1241 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101 (ND, SI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1000"
+                  ],
+                  "text": "SLPA 1000 (College: An Introduction)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2219"
+                  ],
+                  "text": "BIOL 2219"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2220"
+                  ],
+                  "text": "BIOL 2220"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1101"
+                  ],
+                  "text": "SLPA 1101 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1205"
+                  ],
+                  "text": "SLPA 1205"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1145",
+                    "PHYS1146"
+                  ],
+                  "text": "PHYS 1145 and PHYS 1146"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3404"
+                  ],
+                  "text": "PSYC 3404"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1103"
+                  ],
+                  "text": "SLPA 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1203"
+                  ],
+                  "text": "SLPA 1203"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA2000"
+                  ],
+                  "text": "SLPA 2000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945 (EX)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945 (EX)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306 (WD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210 (AD, FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2300"
+                  ],
+                  "text": "PHTH 2300 (DD, EI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3466"
+                  ],
+                  "text": "PSYC 3466"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HLTH5450"
+                  ],
+                  "text": "HLTH 5450 (FQ, WI, ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1102"
+                  ],
+                  "text": "SLPA 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1200"
+                  ],
+                  "text": "SLPA 1200"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA2400"
+                  ],
+                  "text": "SLPA 2400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4500"
+                  ],
+                  "text": "SLPA 4500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4203"
+                  ],
+                  "text": "SLPA 4203"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA5107"
+                  ],
+                  "text": "SLPA 5107 (WI, CE)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4651"
+                  ],
+                  "text": "SLPA 4651"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA6219"
+                  ],
+                  "text": "SLPA 6219"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath Interpreting Cultures elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

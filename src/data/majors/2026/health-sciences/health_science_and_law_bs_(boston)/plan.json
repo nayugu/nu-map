@@ -1,0 +1,738 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI1000"
+                  ],
+                  "text": "HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH1260"
+                  ],
+                  "text": "PHTH 1260"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1111",
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1111 and BIOL 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1113",
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1113 and BIOL 1114"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2350"
+                  ],
+                  "text": "PHTH 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2515"
+                  ],
+                  "text": "PHTH 2515"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI2000"
+                  ],
+                  "text": "HSCI 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3101"
+                  ],
+                  "text": "LAW 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3102"
+                  ],
+                  "text": "LAW 3102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Co-op1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2300"
+                  ],
+                  "text": "PHTH 2300"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3120"
+                  ],
+                  "text": "LAW 3120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3130"
+                  ],
+                  "text": "LAW 3130"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW4335"
+                  ],
+                  "text": "LAW 4335"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Co-op1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing in the Discipline NUPath course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4120"
+                  ],
+                  "text": "PHTH 4120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4540"
+                  ],
+                  "text": "PHTH 4540"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4202"
+                  ],
+                  "text": "PHTH 4202"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3140"
+                  ],
+                  "text": "LAW 3140"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3235"
+                  ],
+                  "text": "LAW 3235"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "LAW elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "LAW3800",
+                    "LAW3801",
+                    "LAW4983"
+                  ],
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General electives"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "LAW elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "LAW3800",
+                    "LAW3801",
+                    "LAW4983"
+                  ],
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI1000"
+                  ],
+                  "text": "HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH1260"
+                  ],
+                  "text": "PHTH 1260"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1111",
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1111 and BIOL 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1113",
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1113 and BIOL 1114"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2350"
+                  ],
+                  "text": "PHTH 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2515"
+                  ],
+                  "text": "PHTH 2515"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2300"
+                  ],
+                  "text": "PHTH 2300"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General electives"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI2000"
+                  ],
+                  "text": "HSCI 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3101"
+                  ],
+                  "text": "LAW 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3102"
+                  ],
+                  "text": "LAW 3102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General electives"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General electives"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Co-op1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing in the Discipline NUPath course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4202"
+                  ],
+                  "text": "PHTH 4202"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW4335"
+                  ],
+                  "text": "LAW 4335"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3130"
+                  ],
+                  "text": "LAW 3130"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3120"
+                  ],
+                  "text": "LAW 3120"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4120"
+                  ],
+                  "text": "PHTH 4120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4540"
+                  ],
+                  "text": "PHTH 4540"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Co-op1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "LAW elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "LAW3800",
+                    "LAW3801",
+                    "LAW4983"
+                  ],
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3140"
+                  ],
+                  "text": "LAW 3140"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LAW3235"
+                  ],
+                  "text": "LAW 3235"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "LAW elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "LAW3800",
+                    "LAW3801",
+                    "LAW4983"
+                  ],
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

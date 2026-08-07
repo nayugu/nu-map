@@ -1,0 +1,353 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "THTR1000",
+                    "ARTF1000"
+                  ],
+                  "text": "THTR 1000 or ARTF 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1120"
+                  ],
+                  "text": "THTR 1120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTF1220"
+                  ],
+                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1001",
+                    "ARTG1002"
+                  ],
+                  "text": "ARTG 1001 and ARTG 1002"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1101"
+                  ],
+                  "text": "THTR 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1131"
+                  ],
+                  "text": "THTR 1131"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1100"
+                  ],
+                  "text": "THTR 1100"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1270",
+                    "ARTG1271"
+                  ],
+                  "text": "ARTG 1270 and ARTG 1271"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG1290",
+                    "ARTG1291"
+                  ],
+                  "text": "ARTG 1290 and ARTG 1291"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTF elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Design option course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTH elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR2000"
+                  ],
+                  "text": "THTR 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1270"
+                  ],
+                  "text": "THTR 1270"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR3325"
+                  ],
+                  "text": "THTR 3325"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Design option course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ARTG elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Texts, community, and social context course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARTG2262",
+                    "ARTG2263"
+                  ],
+                  "text": "ARTG 2262 and ARTG 2263"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR4702"
+                  ],
+                  "text": "THTR 4702"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG4550"
+                  ],
+                  "text": "ARTG 4550"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

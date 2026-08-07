@@ -1,0 +1,303 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR1101"
+                  ],
+                  "text": "ENVR 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1115"
+                  ],
+                  "text": "PHIL 1115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1180"
+                  ],
+                  "text": "PHIL 1180"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR2515"
+                  ],
+                  "text": "ENVR 2515"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR3150"
+                  ],
+                  "text": "ENVR 3150"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL2325",
+                    "POLS2325"
+                  ],
+                  "text": "PHIL 2325 or POLS 2325"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR3300",
+                    "ENVR3301"
+                  ],
+                  "text": "ENVR 3300 and ENVR 3301"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL1105",
+                    "PHIL4510"
+                  ],
+                  "text": "PHIL 1105 or 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL2330"
+                  ],
+                  "text": "PHIL 2330"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 1 of 4"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 2 of 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Critical PHIL Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 3 of 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 4 of 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL 3000/4000/5000 Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Science/Environment Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative Course #1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative Course #2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL 3000/4000/5000 Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,691 @@
+{
+  "plans": [
+    {
+      "label": "Four years, Two Co-ops",
+      "pattern": "Four years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "INSC1000",
+                    "MATH1000"
+                  ],
+                  "text": "INSC 1000 or MATH 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1365"
+                  ],
+                  "text": "MATH 1365"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath EI"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath IC"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area B"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC2320"
+                  ],
+                  "text": "PSYC 2320"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath DD"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area B"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MATH Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2331"
+                  ],
+                  "text": "MATH 2331"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Lab"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC4540"
+                  ],
+                  "text": "PSYC 4540"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH3081"
+                  ],
+                  "text": "MATH 3081"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Seminar"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Math Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath ER"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five years, Three Co-ops",
+      "pattern": "Five years, Three Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1365"
+                  ],
+                  "text": "MATH 1365"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1000",
+                    "INSC1000"
+                  ],
+                  "text": "MATH 1000 or INSC 1000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath EI"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath IC"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC2320"
+                  ],
+                  "text": "PSYC 2320"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area B"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath DD"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area A"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MATH elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2331"
+                  ],
+                  "text": "MATH 2331"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC Area B"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Adv writing"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH3081"
+                  ],
+                  "text": "MATH 3081"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC4540"
+                  ],
+                  "text": "PSYC 4540"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC lab"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath ER"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC seminar"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MATH elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

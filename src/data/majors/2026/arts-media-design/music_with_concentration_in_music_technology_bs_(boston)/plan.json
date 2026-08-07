@@ -1,0 +1,641 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1000"
+                  ],
+                  "text": "MUSC 1000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MUSC1001",
+                    "MUSC1002",
+                    "MUSC1003"
+                  ],
+                  "text": "MUSC 1001 or 1002 and 1003"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1119"
+                  ],
+                  "text": "MUSC 1119"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST1220"
+                  ],
+                  "text": "MUST 1220"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1201"
+                  ],
+                  "text": "MUSC 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC2350"
+                  ],
+                  "text": "MUSC 2350"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music in context course: Western"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "CAMD elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1202"
+                  ],
+                  "text": "MUSC 1202"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST2431"
+                  ],
+                  "text": "MUST 2431"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music in context course: Ethnomusicology"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music theory/composition elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (online)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (online)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilization possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilization possible)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST2102"
+                  ],
+                  "text": "MUST 2102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music industry elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music industry elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music technology elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilization possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilization possible)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3314"
+                  ],
+                  "text": "ENGW 3314"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music technology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music technology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST4611"
+                  ],
+                  "text": "MUST 4611"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, No Co-op",
+      "pattern": "Four Years, No Co-op",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1000"
+                  ],
+                  "text": "MUSC 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "MUSC1002",
+                    "MUSC1003"
+                  ],
+                  "text": "MUSC 1002 and MUSC 1003"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1201"
+                  ],
+                  "text": "MUSC 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST1220"
+                  ],
+                  "text": "MUST 1220"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC1202"
+                  ],
+                  "text": "MUSC 1202"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC2350"
+                  ],
+                  "text": "MUSC 2350"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music in context: Western"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUSC2350"
+                  ],
+                  "text": "MUSC 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST2102"
+                  ],
+                  "text": "MUST 2102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST2431"
+                  ],
+                  "text": "MUST 2431"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Music in context: Contemporary"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music theory/composition elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Music in context: Ethnomusicological"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music industry elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music technology elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Music technology elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "CAMD elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Music technology restricted elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MUST4611"
+                  ],
+                  "text": "MUST 4611"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,298 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SOCL1000",
+                    "PHIL1000"
+                  ],
+                  "text": "SOCL 1000 or PHIL 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1110"
+                  ],
+                  "text": "PHIL 1110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL1101"
+                  ],
+                  "text": "SOCL 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SOCL2320",
+                    "INSH3102"
+                  ],
+                  "text": "SOCL 2320 or INSH 3102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Lived religion elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Comparative religion elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SOCL2321",
+                    "INSH3101"
+                  ],
+                  "text": "SOCL 2321 or INSH 3101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL3300"
+                  ],
+                  "text": "SOCL 3300"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL 5000 elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL 5000 elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL seminar"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL capstone"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL 5000 elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "plans": [
+    {
+      "label": "Sample Program of Study—Fall Entry",
+      "pattern": "Sample Program of Study—Fall Entry",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6326"
+                  ],
+                  "text": "CAEP 6326"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6329"
+                  ],
+                  "text": "CAEP 6329"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6327"
+                  ],
+                  "text": "CAEP 6327"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6328"
+                  ],
+                  "text": "CAEP 6328"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6341"
+                  ],
+                  "text": "CAEP 6341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6342"
+                  ],
+                  "text": "CAEP 6342"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6343"
+                  ],
+                  "text": "CAEP 6343"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP7412"
+                  ],
+                  "text": "CAEP 7412"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP8412"
+                  ],
+                  "text": "CAEP 8412"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6344"
+                  ],
+                  "text": "CAEP 6344"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP7413"
+                  ],
+                  "text": "CAEP 7413"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP8413"
+                  ],
+                  "text": "CAEP 8413"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Sample Program of Study—Spring Entry",
+      "pattern": "Sample Program of Study—Spring Entry",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": null,
+              "entries": []
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": null,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6326"
+                  ],
+                  "text": "CAEP 6326"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6329"
+                  ],
+                  "text": "CAEP 6329"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6341"
+                  ],
+                  "text": "CAEP 6341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6342"
+                  ],
+                  "text": "CAEP 6342"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6343"
+                  ],
+                  "text": "CAEP 6343"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP7412"
+                  ],
+                  "text": "CAEP 7412"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP8412"
+                  ],
+                  "text": "CAEP 8412"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP6344"
+                  ],
+                  "text": "CAEP 6344"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP7413"
+                  ],
+                  "text": "CAEP 7413"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CAEP8413"
+                  ],
+                  "text": "CAEP 8413"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

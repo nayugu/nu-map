@@ -1,0 +1,153 @@
+{
+  "plans": [
+    {
+      "label": "Fall Start",
+      "pattern": "Fall Start",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB5303"
+                  ],
+                  "text": "EEMB 5303"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB5522"
+                  ],
+                  "text": "EEMB 5522"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB5546"
+                  ],
+                  "text": "EEMB 5546"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB5542"
+                  ],
+                  "text": "EEMB 5542"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB5533",
+                    "EEMB5535"
+                  ],
+                  "text": "EEMB 5533 and EEMB 5535"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 20,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB5504",
+                    "EEMB5505"
+                  ],
+                  "text": "EEMB 5504 and EEMB 5505"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB5506",
+                    "EEMB5507"
+                  ],
+                  "text": "EEMB 5506 and EEMB 5507"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB5508"
+                  ],
+                  "text": "EEMB 5508"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB5518",
+                    "EEMB5519"
+                  ],
+                  "text": "EEMB 5518 and EEMB 5519"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB5520"
+                  ],
+                  "text": "EEMB 5520"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB5538"
+                  ],
+                  "text": "EEMB 5538"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB5540",
+                    "EEMB5541"
+                  ],
+                  "text": "EEMB 5540 and EEMB 5541"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 1,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB7674"
+                  ],
+                  "text": "EEMB 7674"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 1,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEMB7674"
+                  ],
+                  "text": "EEMB 7674"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

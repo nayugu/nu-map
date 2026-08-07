@@ -1,0 +1,751 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CHEM1000",
+                    "INSC1000"
+                  ],
+                  "text": "CHEM 1000 or INSC 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2315",
+                    "CHEM2316",
+                    "CHEM2324"
+                  ],
+                  "text": "CHEM 2315 and CHEM 2316 and CHEM 2324"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1155",
+                    "PHYS1156",
+                    "PHYS1157"
+                  ],
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 3"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2161",
+                    "CHEM2162",
+                    "CHEM2163"
+                  ],
+                  "text": "CHEM 2161 and CHEM 2162 and CHEM 2163"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2317",
+                    "CHEM2318",
+                    "CHEM2325"
+                  ],
+                  "text": "CHEM 2317 and CHEM 2318 and CHEM 2325"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 5"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2321",
+                    "CHEM2322",
+                    "CHEM2323"
+                  ],
+                  "text": "CHEM 2321 and CHEM 2322 and CHEM 2323"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3401",
+                    "CHEM3402"
+                  ],
+                  "text": "CHEM 3401 and CHEM 3402"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 6"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 7"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 8"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 9"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3403",
+                    "CHEM3404"
+                  ],
+                  "text": "CHEM 3403 and CHEM 3404"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3501",
+                    "CHEM3502",
+                    "CHEM3503"
+                  ],
+                  "text": "CHEM 3501 and CHEM 3502 and CHEM 3503"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3307"
+                  ],
+                  "text": "ENGW 3307"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CHEM elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 10"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 11"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM4750"
+                  ],
+                  "text": "CHEM 4750"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM5621",
+                    "CHEM5622"
+                  ],
+                  "text": "CHEM 5621 and CHEM 5622"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CHEM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 12"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "pattern": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CHEM1000",
+                    "INSC1000"
+                  ],
+                  "text": "CHEM 1000 or INSC 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2315",
+                    "CHEM2316",
+                    "CHEM2324"
+                  ],
+                  "text": "CHEM 2315 and CHEM 2316 and CHEM 2324"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 20,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2161",
+                    "CHEM2162",
+                    "CHEM2163"
+                  ],
+                  "text": "CHEM 2161 and CHEM 2162 and CHEM 2163"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2317",
+                    "CHEM2318",
+                    "CHEM2325"
+                  ],
+                  "text": "CHEM 2317 and CHEM 2318 and CHEM 2325"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1155",
+                    "PHYS1156",
+                    "PHYS1157"
+                  ],
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 3"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2321",
+                    "CHEM2322",
+                    "CHEM2323"
+                  ],
+                  "text": "CHEM 2321 and CHEM 2322 and CHEM 2323"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 5"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 6"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3401",
+                    "CHEM3402"
+                  ],
+                  "text": "CHEM 3401 and CHEM 3402"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3501",
+                    "CHEM3502",
+                    "CHEM3503"
+                  ],
+                  "text": "CHEM 3501 and CHEM 3502 and CHEM 3503"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3307"
+                  ],
+                  "text": "ENGW 3307"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 7"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 8"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 9"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3403",
+                    "CHEM3404"
+                  ],
+                  "text": "CHEM 3403 and CHEM 3404"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Chemistry elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 10"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 11"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM4750"
+                  ],
+                  "text": "CHEM 4750"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM5621",
+                    "CHEM5622"
+                  ],
+                  "text": "CHEM 5621 and CHEM 5622"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Chemistry elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 12"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

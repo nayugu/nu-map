@@ -1,0 +1,130 @@
+{
+  "plans": [
+    {
+      "label": "Two Years with Co-op in Summer Second Half",
+      "pattern": "Two Years with Co-op in Summer Second Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 13,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL6100"
+                  ],
+                  "text": "JRNL 6100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL6200"
+                  ],
+                  "text": "JRNL 6200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL6340"
+                  ],
+                  "text": "JRNL 6340"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL6201"
+                  ],
+                  "text": "JRNL 6201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL6202"
+                  ],
+                  "text": "JRNL 6202"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 5"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

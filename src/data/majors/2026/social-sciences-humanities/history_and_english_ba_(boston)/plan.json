@@ -1,0 +1,338 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1000"
+                  ],
+                  "text": "HIST 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1200"
+                  ],
+                  "text": "HIST 1200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1201"
+                  ],
+                  "text": "HIST 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HIST pre-1800 elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST 1000-level elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1160",
+                    "ENGL1410"
+                  ],
+                  "text": "ENGL 1160 or 1410"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2301"
+                  ],
+                  "text": "HIST 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2302"
+                  ],
+                  "text": "HIST 2302"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1700",
+                    "ENGL1701"
+                  ],
+                  "text": "ENGL 1700 or 1701"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Pre–1850 ENGL"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL theory and methods"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST intermediate/advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST intermediate/advanced elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL3400"
+                  ],
+                  "text": "ENGL 3400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Post-1850 ENGL"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "AWD (online)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HIST intermediate/advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL writing"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL3710"
+                  ],
+                  "text": "ENGL 3710"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HIST intermediate/advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL diversity"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HIST advanced elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

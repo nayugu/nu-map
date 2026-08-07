@@ -1,0 +1,684 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring, Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring, Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1102",
+                    "CRIM1000"
+                  ],
+                  "text": "BUSN 1102 or CRIM 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1100"
+                  ],
+                  "text": "CRIM 1100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MGSC2301",
+                    "CRIM3700"
+                  ],
+                  "text": "MGSC 2301 or CRIM 3700"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1115",
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1115 or 1116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1110"
+                  ],
+                  "text": "CRIM 1110"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath ND requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath ER requirement or open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1120"
+                  ],
+                  "text": "CRIM 1120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM3600"
+                  ],
+                  "text": "CRIM 3600"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1103",
+                    "EESH2000"
+                  ],
+                  "text": "BUSN 1103 or EESH 2000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948"
+                  ],
+                  "text": "COOP 3945 or 3948"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948"
+                  ],
+                  "text": "COOP 3945 or 3948"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Current criminal justice issues elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Nupath IC requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Crime problems and criminal justice institutions elective"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3304",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3304, 3307, or 3315 ( OR)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948"
+                  ],
+                  "text": "COOP 3945 or 3948"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948"
+                  ],
+                  "text": "COOP 3945 or 3948"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath EI requirement or open elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Systemic issues in criminal justice elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective 3001–5999"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Crime problems elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1102",
+                    "CRIM1000"
+                  ],
+                  "text": "BUSN 1102 or CRIM 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1100"
+                  ],
+                  "text": "CRIM 1100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MGSC2301",
+                    "CRIM3700"
+                  ],
+                  "text": "MGSC 2301 or CRIM 3700"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1110"
+                  ],
+                  "text": "CRIM 1110"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1115",
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1115 or 1116"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath ND requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath ER requirement or open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM1120"
+                  ],
+                  "text": "CRIM 1120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CRIM3600"
+                  ],
+                  "text": "CRIM 3600"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1103",
+                    "EESH2000"
+                  ],
+                  "text": "BUSN 1103 or EESH 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Current criminal justice issues elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Crime problems and criminal justice institutions elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Nupath IC requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948",
+                    "COOP3946"
+                  ],
+                  "text": "COOP 3945, 3948, or 3946"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948",
+                    "COOP3946"
+                  ],
+                  "text": "COOP 3945, 3948, or 3946"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3304",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3304, 3307, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Crime problems elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath EI requirement or open elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948",
+                    "COOP3946"
+                  ],
+                  "text": "COOP 3945, 3948, or 3946"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COOP3945",
+                    "COOP3948",
+                    "COOP3946"
+                  ],
+                  "text": "COOP 3945, 3948, or 3946"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CRIM elective 3001–5999"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Systemic issues in criminal justice elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

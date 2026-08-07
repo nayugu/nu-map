@@ -1,0 +1,360 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HUSV1000",
+                    "ECON1000"
+                  ],
+                  "text": "HUSV 1000 or ECON 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV1101"
+                  ],
+                  "text": "HUSV 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1100",
+                    "MISM2510"
+                  ],
+                  "text": "CS 1100 or MISM 2510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1116"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2300"
+                  ],
+                  "text": "HUSV 2300"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1231",
+                    "MATH1241",
+                    "MATH1245",
+                    "MATH1251",
+                    "MATH1340",
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2315"
+                  ],
+                  "text": "ECON 2315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2316"
+                  ],
+                  "text": "ECON 2316"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HS diverse populations course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2355"
+                  ],
+                  "text": "HUSV 2355"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2800"
+                  ],
+                  "text": "HUSV 2800"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2960"
+                  ],
+                  "text": "HUSV 2960"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2350"
+                  ],
+                  "text": "ECON 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2970"
+                  ],
+                  "text": "HUSV 2970"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3570"
+                  ],
+                  "text": "HUSV 3570"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2560"
+                  ],
+                  "text": "ECON 2560"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3900"
+                  ],
+                  "text": "HUSV 3900"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV4994"
+                  ],
+                  "text": "HUSV 4994"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 3"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3308 or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative Requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Economics or Human Services Capstone Option"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

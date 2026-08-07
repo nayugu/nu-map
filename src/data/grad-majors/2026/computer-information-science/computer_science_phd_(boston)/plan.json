@@ -1,0 +1,215 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Readings"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Readings"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Readings"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Readings"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Readings"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Area course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Readings"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS9990"
+                  ],
+                  "text": "CS 9990"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS9991"
+                  ],
+                  "text": "CS 9991"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS9996"
+                  ],
+                  "text": "CS 9996"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS9996"
+                  ],
+                  "text": "CS 9996"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 6",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS9996"
+                  ],
+                  "text": "CS 9996"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS9996"
+                  ],
+                  "text": "CS 9996"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,680 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "POLS1000"
+                  ],
+                  "text": "CS 1200 or POLS 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1210",
+                    "EESH2000"
+                  ],
+                  "text": "CS 1210 or EESH 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2399"
+                  ],
+                  "text": "POLS 2399"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Thought Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2400"
+                  ],
+                  "text": "POLS 2400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3308",
+                    "ENGW3311",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3308, 3311, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Computing and Social Issues"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Integrative Requirement"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS4701"
+                  ],
+                  "text": "POLS 4701"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "POLS1000"
+                  ],
+                  "text": "CS 1200 or POLS 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2399"
+                  ],
+                  "text": "POLS 2399"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Thought Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1210",
+                    "EESC2000"
+                  ],
+                  "text": "CS 1210 or EESC 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2400"
+                  ],
+                  "text": "POLS 2400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Computing and Social Issues"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Integrative Requirement"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3308",
+                    "ENGW3311",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3308, 3311, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS4701"
+                  ],
+                  "text": "POLS 4701"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Elective 4"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

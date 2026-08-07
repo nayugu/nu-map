@@ -1,0 +1,645 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1000"
+                  ],
+                  "text": "ENGL 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1160",
+                    "ENGL1410"
+                  ],
+                  "text": "ENGL 1160 or 1410"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS 2400 prerequisite"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL pre-1850 requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL theories and methods requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS thought course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2399"
+                  ],
+                  "text": "POLS 2399"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL post-1850 requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL3710"
+                  ],
+                  "text": "ENGL 3710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL diversity requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing requirement"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Five Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1000"
+                  ],
+                  "text": "ENGL 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1160",
+                    "ENGL1410"
+                  ],
+                  "text": "ENGL 1160 or 1410"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS 2400 prerequisite"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "English elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL pre-1850 requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS thought course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL post-1850 requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL theories and methods requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2400"
+                  ],
+                  "text": "POLS 2400"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL diversity requirement"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL3710"
+                  ],
+                  "text": "ENGL 3710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2399"
+                  ],
+                  "text": "POLS 2399"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": null,
+              "entries": [],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS integrative course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "English writing requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

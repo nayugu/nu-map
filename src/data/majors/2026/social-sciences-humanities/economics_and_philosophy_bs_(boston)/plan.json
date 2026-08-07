@@ -1,0 +1,333 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL1000",
+                    "ECON1000"
+                  ],
+                  "text": "PHIL 1000 or ECON 1000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1116"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1231",
+                    "MATH1241",
+                    "MATH1245",
+                    "MATH1251",
+                    "MATH1340",
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1115"
+                  ],
+                  "text": "PHIL 1115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2325"
+                  ],
+                  "text": "POLS 2325"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2315"
+                  ],
+                  "text": "ECON 2315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2350"
+                  ],
+                  "text": "ECON 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL2330"
+                  ],
+                  "text": "PHIL 2330"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ECON elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2316"
+                  ],
+                  "text": "ECON 2316"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2560"
+                  ],
+                  "text": "ECON 2560"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL integrative course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3308, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Critical philosophy elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2560"
+                  ],
+                  "text": "ECON 2560"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Computing and social issues requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON3520"
+                  ],
+                  "text": "ECON 3520"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON4692"
+                  ],
+                  "text": "ECON 4692"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL capstone"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL intermediate/advanced elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,697 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Summer Second Half/Fall Co-ops",
+      "pattern": "Four Years, Two Summer Second Half/Fall Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM1101"
+                  ],
+                  "text": "COMM 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM1112"
+                  ],
+                  "text": "COMM 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING1000"
+                  ],
+                  "text": "LING 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING1150"
+                  ],
+                  "text": "LING 1150"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING2350"
+                  ],
+                  "text": "LING 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3412"
+                  ],
+                  "text": "LING 3412"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Foundation Course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000 (For CAMD students)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM2301"
+                  ],
+                  "text": "COMM 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000 (For COS students)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Cluster Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3442"
+                  ],
+                  "text": "LING 3442 (Or Linguistics Elective)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3442"
+                  ],
+                  "text": "LING 3442 (or Linguistics Elective)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Writing Intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM3415"
+                  ],
+                  "text": "COMM 3415"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Writing Intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative Capstone Experience"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Summer Second Half/Fall Co-ops",
+      "pattern": "Five Years, Three Summer Second Half/Fall Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM1101"
+                  ],
+                  "text": "COMM 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM1112"
+                  ],
+                  "text": "COMM 1112"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING1000"
+                  ],
+                  "text": "LING 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING1150"
+                  ],
+                  "text": "LING 1150"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING2350"
+                  ],
+                  "text": "LING 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3412"
+                  ],
+                  "text": "LING 3412"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Foundation Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM2301"
+                  ],
+                  "text": "COMM 2301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Cluster Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "EEAM2000",
+                    "EESC2000"
+                  ],
+                  "text": "EEAM 2000 or EESC 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3442"
+                  ],
+                  "text": "LING 3442 (or Linguistics Elective)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LING3442"
+                  ],
+                  "text": "LING 3442 (or Linguistics Elective)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Writing Intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Linguistic Structure or Linguistics Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM3415"
+                  ],
+                  "text": "COMM 3415"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "COMM Studies Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative Capstone Experience"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

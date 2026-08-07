@@ -1,0 +1,315 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1160",
+                    "ENGL1410"
+                  ],
+                  "text": "ENGL 1160 or 1410"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MSCR1000",
+                    "ENGL1000"
+                  ],
+                  "text": "MSCR 1000 or ENGL 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR1220"
+                  ],
+                  "text": "MSCR 1220"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MSCR1320",
+                    "MSCR1420"
+                  ],
+                  "text": "MSCR 1320 or 1420"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR foundation"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL pre-1850 literature elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL post-1850 literature elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL diversity elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR diversity/globalization"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL theories and methods elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGL1450",
+                    "ENGL3340"
+                  ],
+                  "text": "ENGL 1450 or 3340"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL3710"
+                  ],
+                  "text": "ENGL 3710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR3600"
+                  ],
+                  "text": "MSCR 3600"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL4710"
+                  ],
+                  "text": "ENGL 4710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL writing elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM7000"
+                  ],
+                  "text": "INAM 7000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM7001"
+                  ],
+                  "text": "INAM 7001"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Discipline-specific coursework"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM7900"
+                  ],
+                  "text": "INAM 7900"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Research methods elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Discipline-specific coursework"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Discipline-specific coursework"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Discipline-specific coursework"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Discipline-specific coursework"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Discipline-specific coursework"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Discipline-specific coursework"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM7901"
+                  ],
+                  "text": "INAM 7901"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Qualifying exams"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Teaching requirement, TA"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM9990"
+                  ],
+                  "text": "INAM 9990"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Teaching requirement, TA"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM9991"
+                  ],
+                  "text": "INAM 9991"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Teaching requirement, teacher of record"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM9996"
+                  ],
+                  "text": "INAM 9996"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Teaching requirement, teacher of record"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM9996"
+                  ],
+                  "text": "INAM 9996"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM9996"
+                  ],
+                  "text": "INAM 9996"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM9996"
+                  ],
+                  "text": "INAM 9996"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

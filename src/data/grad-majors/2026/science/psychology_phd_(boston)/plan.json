@@ -1,0 +1,368 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Complete the following:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5110"
+                  ],
+                  "text": "PSYC 5110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5180"
+                  ],
+                  "text": "PSYC 5180"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC8401"
+                  ],
+                  "text": "PSYC 8401"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Complete the following:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5170"
+                  ],
+                  "text": "PSYC 5170"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5181"
+                  ],
+                  "text": "PSYC 5181"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC8401"
+                  ],
+                  "text": "PSYC 8401"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Complete one of the following:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5120"
+                  ],
+                  "text": "PSYC 5120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5130"
+                  ],
+                  "text": "PSYC 5130"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5140"
+                  ],
+                  "text": "PSYC 5140"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5150"
+                  ],
+                  "text": "PSYC 5150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5115"
+                  ],
+                  "text": "PSYC 5115"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC8401"
+                  ],
+                  "text": "PSYC 8401"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Complete the following:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC7990"
+                  ],
+                  "text": "PSYC 7990"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC5301"
+                  ],
+                  "text": "PSYC 5301"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Complete the following:"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC7990"
+                  ],
+                  "text": "PSYC 7990"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC7302"
+                  ],
+                  "text": "PSYC 7302"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC7996"
+                  ],
+                  "text": "PSYC 7996"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9990"
+                  ],
+                  "text": "PSYC 9990"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9991"
+                  ],
+                  "text": "PSYC 9991"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9996"
+                  ],
+                  "text": "PSYC 9996"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9996"
+                  ],
+                  "text": "PSYC 9996"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9996"
+                  ],
+                  "text": "PSYC 9996"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9996"
+                  ],
+                  "text": "PSYC 9996"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9996"
+                  ],
+                  "text": "PSYC 9996"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9996"
+                  ],
+                  "text": "PSYC 9996"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC9996"
+                  ],
+                  "text": "PSYC 9996"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

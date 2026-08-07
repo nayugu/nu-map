@@ -1,0 +1,322 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer 2/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer 2/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1101"
+                  ],
+                  "text": "AFCS 1101"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HUSV1000",
+                    "CLTR1000"
+                  ],
+                  "text": "HUSV 1000 or CLTR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV1101"
+                  ],
+                  "text": "HUSV 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies introductory course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2300"
+                  ],
+                  "text": "HUSV 2300"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies humanities course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies social sciences course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies humanities course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies 3000-level elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies humanities course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies social sciences course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2355"
+                  ],
+                  "text": "AFCS 2355"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3570"
+                  ],
+                  "text": "HUSV 3570"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Africana studies 2000-level elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3900"
+                  ],
+                  "text": "HUSV 3900"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV4994"
+                  ],
+                  "text": "HUSV 4994"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3308 or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2618"
+                  ],
+                  "text": "AFCS 2618"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS4700"
+                  ],
+                  "text": "AFCS 4700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CLTR1000"
+                  ],
+                  "text": "CLTR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1160"
+                  ],
+                  "text": "ENGL 1160"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1101"
+                  ],
+                  "text": "AFCS 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1225"
+                  ],
+                  "text": "AFCS 1225"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL1400"
+                  ],
+                  "text": "ENGL 1400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2619"
+                  ],
+                  "text": "AFCS 2619"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Language course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Pre-1850 literature course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1113"
+                  ],
+                  "text": "AFCS 1113"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1261"
+                  ],
+                  "text": "AFCS 1261"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL diversity course"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS2355"
+                  ],
+                  "text": "AFCS 2355"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS4526"
+                  ],
+                  "text": "AFCS 4526"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Post-1850 literature course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "AFCS1270"
+                  ],
+                  "text": "AFCS 1270"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Writing in the Disciplines"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGL3710"
+                  ],
+                  "text": "ENGL 3710"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL writing course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL theories and methods course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENGL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

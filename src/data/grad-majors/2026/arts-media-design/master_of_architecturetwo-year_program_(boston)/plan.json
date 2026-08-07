@@ -1,0 +1,163 @@
+{
+  "plans": [
+    {
+      "label": "Electives Option",
+      "pattern": "Electives Option",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH6115"
+                  ],
+                  "text": "ARCH 6115"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ARCH5210",
+                    "ARCH5211"
+                  ],
+                  "text": "ARCH 5210 and ARCH 5211"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ARCH5330",
+                    "ARCH5310"
+                  ],
+                  "text": "ARCH 5330 or 5310"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 14,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH5115"
+                  ],
+                  "text": "ARCH 5115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH5340"
+                  ],
+                  "text": "ARCH 5340"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 14,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH7120"
+                  ],
+                  "text": "ARCH 7120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH7220"
+                  ],
+                  "text": "ARCH 7220"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH7430"
+                  ],
+                  "text": "ARCH 7430"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Optional concentration course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 14,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH6440"
+                  ],
+                  "text": "ARCH 6440"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH7140"
+                  ],
+                  "text": "ARCH 7140"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ARCH5330",
+                    "ARCH6340"
+                  ],
+                  "text": "ARCH 5330 or 6340"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,330 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MSCR1000",
+                    "THTR1000"
+                  ],
+                  "text": "MSCR 1000 or THTR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MSCR1220"
+                  ],
+                  "text": "MSCR 1220"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1101"
+                  ],
+                  "text": "THTR 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1120"
+                  ],
+                  "text": "THTR 1120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MSCR1320",
+                    "MSCR1420"
+                  ],
+                  "text": "MSCR 1320 or 1420"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1131"
+                  ],
+                  "text": "THTR 1131"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1270"
+                  ],
+                  "text": "THTR 1270"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1100"
+                  ],
+                  "text": "THTR 1100"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR foundation"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM2000"
+                  ],
+                  "text": "INAM 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR2000"
+                  ],
+                  "text": "THTR 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR3325"
+                  ],
+                  "text": "THTR 3325"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR diversity/globalization"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Texts, Community, & Social Context Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR writing-intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "MSCR elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,669 @@
+{
+  "plans": [
+    {
+      "label": "DMSB Student Sample: Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": "DMSB Student Sample",
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1102"
+                  ],
+                  "text": "BUSN 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH1260"
+                  ],
+                  "text": "PHTH 1260"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ECON1116",
+                    "ECON1126"
+                  ],
+                  "text": "ECON 1116 and ECON 1126"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT2301"
+                  ],
+                  "text": "ACCT 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BUSN1103"
+                  ],
+                  "text": "BUSN 1103"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3304"
+                  ],
+                  "text": "ENGW 3304"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MGMT3340",
+                    "PHTH4511"
+                  ],
+                  "text": "MGMT 3340 or PHTH 4511"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4202"
+                  ],
+                  "text": "PHTH 4202"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4540"
+                  ],
+                  "text": "PHTH 4540"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4120"
+                  ],
+                  "text": "PHTH 4120"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Social science course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Bouvé Student Sample: Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": "Bouvé Student Sample",
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1110"
+                  ],
+                  "text": "ENGW 1110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI1000"
+                  ],
+                  "text": "HSCI 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTB1203"
+                  ],
+                  "text": "INTB 1203"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH1260"
+                  ],
+                  "text": "PHTH 1260"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOL course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ECON1116",
+                    "ECON1126"
+                  ],
+                  "text": "ECON 1116 and ECON 1126"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT2301"
+                  ],
+                  "text": "ACCT 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HSCI2000"
+                  ],
+                  "text": "HSCI 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHTH4511",
+                    "MGMT3340"
+                  ],
+                  "text": "PHTH 4511 or MGMT 3340"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHTH core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4120"
+                  ],
+                  "text": "PHTH 4120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4540"
+                  ],
+                  "text": "PHTH 4540"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH4202"
+                  ],
+                  "text": "PHTH 4202"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Social science course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General electives"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

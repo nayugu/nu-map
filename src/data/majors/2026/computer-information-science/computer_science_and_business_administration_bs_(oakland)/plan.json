@@ -1,0 +1,712 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "BUSN1102"
+                  ],
+                  "text": "CS 1200 or BUSN 1102"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1341",
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1341 or 1231"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MKTG2201"
+                  ],
+                  "text": "MKTG 2201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1116"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MISM2301"
+                  ],
+                  "text": "MISM 2301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT2301"
+                  ],
+                  "text": "ACCT 2301"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "FINA2201"
+                  ],
+                  "text": "FINA 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1210",
+                    "BUSN1103"
+                  ],
+                  "text": "CS 1210 or BUSN 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Computing and Social Issues"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "CS Required Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3304",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3304, or 3315"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CS Required Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "BUSN1102"
+                  ],
+                  "text": "CS 1200 or BUSN 1102"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1341",
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1341 or 1231"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1115"
+                  ],
+                  "text": "ECON 1115"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1116"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT2301"
+                  ],
+                  "text": "ACCT 2301"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1210",
+                    "BUSN1103"
+                  ],
+                  "text": "CS 1210 or BUSN 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3000"
+                  ],
+                  "text": "CS 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MKTG2201"
+                  ],
+                  "text": "MKTG 2201"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MGSC2301"
+                  ],
+                  "text": "MGSC 2301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "FINA2201"
+                  ],
+                  "text": "FINA 2201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MISM2301"
+                  ],
+                  "text": "MISM 2301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CS Required Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3304",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3304, or 3315"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "STRT4501"
+                  ],
+                  "text": "STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "CS Required Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Computing and Social Issues"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Business Concentration"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

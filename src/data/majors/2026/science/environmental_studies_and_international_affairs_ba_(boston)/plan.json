@@ -1,0 +1,330 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR1101"
+                  ],
+                  "text": "ENVR 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL1101"
+                  ],
+                  "text": "INTL 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL1246"
+                  ],
+                  "text": "SOCL 1246"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENVR1000",
+                    "INTL1000"
+                  ],
+                  "text": "ENVR 1000 or INTL 1000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR1110"
+                  ],
+                  "text": "ENVR 1110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR2515"
+                  ],
+                  "text": "ENVR 2515"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language course 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR3300",
+                    "ENVR3301"
+                  ],
+                  "text": "ENVR 3300 and ENVR 3301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Global Dynamics course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective; 1 of 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis course 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 2 of 4"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR3300",
+                    "ENVR3301"
+                  ],
+                  "text": "ENVR 3300 and ENVR 3301"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 3 of 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course 3"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective; 4 of 4"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL3400"
+                  ],
+                  "text": "INTL 3400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Global Dynamics course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign Language Course 4"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis course 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Quantitative methods course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON3423"
+                  ],
+                  "text": "ECON 3423"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3308 or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL4700"
+                  ],
+                  "text": "INTL 4700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "INTL Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

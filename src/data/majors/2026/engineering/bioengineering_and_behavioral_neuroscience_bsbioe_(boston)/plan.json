@@ -1,0 +1,1878 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op in Summer Second Half/Fall",
+      "pattern": "Four Years, One Co-op in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101 (SI)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1171",
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1171 or 1151 (ND)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1172",
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1172 or 1152 (AD)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1173",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1173 or 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 10,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1155",
+                    "PHYS1175"
+                  ],
+                  "text": "PHYS 1155 or 1175 (ND)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1156",
+                    "PHYS1176"
+                  ],
+                  "text": "PHYS 1156 or 1176 (AD)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1157",
+                    "PHYS1177"
+                  ],
+                  "text": "PHYS 1157 or 1177"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2350"
+                  ],
+                  "text": "BIOE 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2365"
+                  ],
+                  "text": "BIOE 2365 (AD, WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2366"
+                  ],
+                  "text": "BIOE 2366"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2355"
+                  ],
+                  "text": "BIOE 2355"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC3200",
+                    "PT5410",
+                    "PT5411"
+                  ],
+                  "text": "PSYC 3200 or PT 5410 and PT 5411"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3380"
+                  ],
+                  "text": "BIOE 3380"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3405"
+                  ],
+                  "text": "BIOL 3405"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3210"
+                  ],
+                  "text": "BIOE 3210"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3310"
+                  ],
+                  "text": "BIOE 3310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4790"
+                  ],
+                  "text": "BIOE 4790 (EI, CE, WI)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4792"
+                  ],
+                  "text": "BIOE 4792 (EI, CE, WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315 (WD)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, One Co-op in Spring/Summer First Half",
+      "pattern": "Four Years, One Co-op in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101 (SI)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1171",
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1171 or 1151 (ND)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1172",
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1172 or 1152 (AD)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1173",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1173 or 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 10,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1155",
+                    "PHYS1175"
+                  ],
+                  "text": "PHYS 1155 or 1175 (ND)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1156",
+                    "PHYS1176"
+                  ],
+                  "text": "PHYS 1156 or 1176 (AD)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1157",
+                    "PHYS1177"
+                  ],
+                  "text": "PHYS 1157 or 1177"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2350"
+                  ],
+                  "text": "BIOE 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2365"
+                  ],
+                  "text": "BIOE 2365 (AD, WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2366"
+                  ],
+                  "text": "BIOE 2366"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2355"
+                  ],
+                  "text": "BIOE 2355"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC3200",
+                    "PT5410",
+                    "PT5411"
+                  ],
+                  "text": "PSYC 3200 or PT 5410 and PT 5411"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3380"
+                  ],
+                  "text": "BIOE 3380"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3405"
+                  ],
+                  "text": "BIOL 3405"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3210"
+                  ],
+                  "text": "BIOE 3210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4790"
+                  ],
+                  "text": "BIOE 4790"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3310"
+                  ],
+                  "text": "BIOE 3310"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4792"
+                  ],
+                  "text": "BIOE 4792"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315 (WD)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "pattern": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101 (SI)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1171",
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1171 or 1151 (ND)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1172",
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1172 or 1152 (AD)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1173",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1173 or 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 10,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1155",
+                    "PHYS1175"
+                  ],
+                  "text": "PHYS 1155 or 1175"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1156",
+                    "PHYS1176"
+                  ],
+                  "text": "PHYS 1156 or 1176"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1157",
+                    "PHYS1177"
+                  ],
+                  "text": "PHYS 1157 or 1177"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2350"
+                  ],
+                  "text": "BIOE 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2365"
+                  ],
+                  "text": "BIOE 2365 (AD, WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2366"
+                  ],
+                  "text": "BIOE 2366"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2355"
+                  ],
+                  "text": "BIOE 2355"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC3200",
+                    "PT5410",
+                    "PT5411"
+                  ],
+                  "text": "PSYC 3200 or PT 5410 and PT 5411"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3380"
+                  ],
+                  "text": "BIOE 3380"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3405"
+                  ],
+                  "text": "BIOL 3405"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3210"
+                  ],
+                  "text": "BIOE 3210"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3310"
+                  ],
+                  "text": "BIOE 3310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4790"
+                  ],
+                  "text": "BIOE 4790"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4792"
+                  ],
+                  "text": "BIOE 4792"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "pattern": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101 (SI)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1171",
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1171 or 1151 (ND)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1172",
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1172 or 1152 (AD)"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1173",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1173 or 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 10,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1111"
+                  ],
+                  "text": "BIOL 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1112"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1155",
+                    "PHYS1175"
+                  ],
+                  "text": "PHYS 1155 or 1175"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1156",
+                    "PHYS1176"
+                  ],
+                  "text": "PHYS 1156 or 1176"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHYS1157",
+                    "PHYS1177"
+                  ],
+                  "text": "PHYS 1157 or 1177"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2350"
+                  ],
+                  "text": "BIOE 2350"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2365"
+                  ],
+                  "text": "BIOE 2365 (AD, WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2366"
+                  ],
+                  "text": "BIOE 2366"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE2355"
+                  ],
+                  "text": "BIOE 2355"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2301"
+                  ],
+                  "text": "BIOL 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2302"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3380"
+                  ],
+                  "text": "BIOE 3380"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3405"
+                  ],
+                  "text": "BIOL 3405"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2311"
+                  ],
+                  "text": "CHEM 2311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2312"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PSYC3200",
+                    "PT5410",
+                    "PT5411"
+                  ],
+                  "text": "PSYC 3200 or PT 5410 and PT 5411"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3210"
+                  ],
+                  "text": "BIOE 3210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4790"
+                  ],
+                  "text": "BIOE 4790"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE3310"
+                  ],
+                  "text": "BIOE 3310"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOE4792"
+                  ],
+                  "text": "BIOE 4792"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315 (WD)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BIOE elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

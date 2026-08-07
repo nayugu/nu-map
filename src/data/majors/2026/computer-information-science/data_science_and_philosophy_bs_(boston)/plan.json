@@ -1,0 +1,711 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "PHIL1000"
+                  ],
+                  "text": "CS 1200 or PHIL 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1115"
+                  ],
+                  "text": "PHIL 1115"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "DS2500",
+                    "DS2501"
+                  ],
+                  "text": "DS 2500 and DS 2501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1145"
+                  ],
+                  "text": "PHIL 1145"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL2325",
+                    "PHIL2330",
+                    "POLS2325"
+                  ],
+                  "text": "PHIL 2325, 2330, or POLS 2325"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3000"
+                  ],
+                  "text": "DS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3500"
+                  ],
+                  "text": "DS 3500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL4515"
+                  ],
+                  "text": "PHIL 4515"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1210",
+                    "EESH2000"
+                  ],
+                  "text": "CS 1210 or EESH 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4200"
+                  ],
+                  "text": "DS 4200"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL5005",
+                    "PHIL5010",
+                    "PHIL4050"
+                  ],
+                  "text": "PHIL 5005, 5010, or 4050"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 3"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2350"
+                  ],
+                  "text": "ECON 2350"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4300"
+                  ],
+                  "text": "DS 4300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4400"
+                  ],
+                  "text": "DS 4400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL3050"
+                  ],
+                  "text": "PHIL 3050"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3309",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3309, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "DS4420",
+                    "DS4440"
+                  ],
+                  "text": "DS 4420 or 4440"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "PHIL1000"
+                  ],
+                  "text": "CS 1200 or PHIL 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1115"
+                  ],
+                  "text": "PHIL 1115"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "DS2500",
+                    "DS2501"
+                  ],
+                  "text": "DS 2500 and DS 2501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1145"
+                  ],
+                  "text": "PHIL 1145"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "PHIL2325",
+                    "PHIL2330",
+                    "POLS2325"
+                  ],
+                  "text": "PHIL 2325, 2330, or POLS 2325"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1210"
+                  ],
+                  "text": "CS 1210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3000"
+                  ],
+                  "text": "DS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3500"
+                  ],
+                  "text": "DS 3500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL4515"
+                  ],
+                  "text": "PHIL 4515"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2350"
+                  ],
+                  "text": "ECON 2350"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4200"
+                  ],
+                  "text": "DS 4200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL5005"
+                  ],
+                  "text": "PHIL 5005"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 3"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3309",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3309, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4300"
+                  ],
+                  "text": "DS 4300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4400"
+                  ],
+                  "text": "DS 4400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL3050"
+                  ],
+                  "text": "PHIL 3050"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "DS4420",
+                    "DS4440"
+                  ],
+                  "text": "DS 4420 or 4440"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHIL Elective 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

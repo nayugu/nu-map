@@ -1,0 +1,382 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op in Spring/Summer First Half",
+      "pattern": "Four Years, One Co-op in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1107",
+                    "BIOL1108"
+                  ],
+                  "text": "BIOL 1107 and BIOL 1108"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC1101"
+                  ],
+                  "text": "PSYC 1101"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SLPA1000",
+                    "INSC1000"
+                  ],
+                  "text": "SLPA 1000 or INSC 1000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL2299"
+                  ],
+                  "text": "BIOL 2299"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1101"
+                  ],
+                  "text": "SLPA 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1205"
+                  ],
+                  "text": "SLPA 1205"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL2301",
+                    "BIOL2302"
+                  ],
+                  "text": "BIOL 2301 and BIOL 2302"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3458"
+                  ],
+                  "text": "PSYC 3458"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1103"
+                  ],
+                  "text": "SLPA 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1203"
+                  ],
+                  "text": "SLPA 1203"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SLPA2000",
+                    "EESH2000"
+                  ],
+                  "text": "SLPA 2000 or EESH 2000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COOP3945"
+                  ],
+                  "text": "COOP 3945"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "BIOL3405"
+                  ],
+                  "text": "BIOL 3405"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PSYC elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3306",
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3306, 3308, or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2300"
+                  ],
+                  "text": "PHTH 2300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA2400"
+                  ],
+                  "text": "SLPA 2400"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HLTH5450"
+                  ],
+                  "text": "HLTH 5450"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PSYC3200"
+                  ],
+                  "text": "PSYC 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1200"
+                  ],
+                  "text": "SLPA 1200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1102"
+                  ],
+                  "text": "SLPA 1102"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BNSC elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "BNSC or PSYC upper elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4500"
+                  ],
+                  "text": "SLPA 4500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA5107"
+                  ],
+                  "text": "SLPA 5107"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "BNSC elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1165"
+                  ],
+                  "text": "PHIL 1165"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4651"
+                  ],
+                  "text": "SLPA 4651"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA6219"
+                  ],
+                  "text": "SLPA 6219"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

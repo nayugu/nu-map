@@ -1,0 +1,754 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op in Spring/Summer First Half",
+      "pattern": "Four Years, One Co-op in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "SLPA1000"
+                  ],
+                  "text": "CS 1200 or SLPA 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ENGW1102"
+                  ],
+                  "text": "ENGW 1111 or 1102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL2217",
+                    "BIOL2218"
+                  ],
+                  "text": "BIOL 2217 and BIOL 2218"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1101"
+                  ],
+                  "text": "SLPA 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1205"
+                  ],
+                  "text": "SLPA 1205"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1145"
+                  ],
+                  "text": "PHIL 1145"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1210",
+                    "SLPA2000"
+                  ],
+                  "text": "CS 1210 or SLPA 2000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1103"
+                  ],
+                  "text": "SLPA 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1203"
+                  ],
+                  "text": "SLPA 1203"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS2484"
+                  ],
+                  "text": "CS 2484"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3000",
+                    "CS3001"
+                  ],
+                  "text": "CS 3000 and CS 3001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1145",
+                    "PHYS1146"
+                  ],
+                  "text": "PHYS 1145 and PHYS 1146"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3306",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3306, or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1200"
+                  ],
+                  "text": "SLPA 1200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1102"
+                  ],
+                  "text": "SLPA 1102"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS3200",
+                    "CS4100"
+                  ],
+                  "text": "CS 3200 or 4100"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4500"
+                  ],
+                  "text": "SLPA 4500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA5107"
+                  ],
+                  "text": "SLPA 5107"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS4120"
+                  ],
+                  "text": "CS 4120"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4651"
+                  ],
+                  "text": "SLPA 4651"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA6219"
+                  ],
+                  "text": "SLPA 6219"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, One Co-op in Summer Second Half/Fall",
+      "pattern": "Four Years, One Co-op in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1200",
+                    "SLPA1000"
+                  ],
+                  "text": "CS 1200 or SLPA 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW1111",
+                    "ENGW1102"
+                  ],
+                  "text": "ENGW 1111 or 1102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL2217",
+                    "BIOL2218"
+                  ],
+                  "text": "BIOL 2217 and BIOL 2218"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2100",
+                    "CS2101"
+                  ],
+                  "text": "CS 2100 and CS 2101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1101"
+                  ],
+                  "text": "SLPA 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1205"
+                  ],
+                  "text": "SLPA 1205"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1145"
+                  ],
+                  "text": "PHIL 1145"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS1210",
+                    "SLPA2000"
+                  ],
+                  "text": "CS 1210 or SLPA 2000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3100",
+                    "CS3101"
+                  ],
+                  "text": "CS 3100 and CS 3101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1103"
+                  ],
+                  "text": "SLPA 1103"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1203"
+                  ],
+                  "text": "SLPA 1203"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS2484"
+                  ],
+                  "text": "CS 2484"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS3000",
+                    "CS3001"
+                  ],
+                  "text": "CS 3000 and CS 3001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHTH2210"
+                  ],
+                  "text": "PHTH 2210"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1145",
+                    "PHYS1146"
+                  ],
+                  "text": "PHYS 1145 and PHYS 1146"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3306",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3306, or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1200"
+                  ],
+                  "text": "SLPA 1200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA1102"
+                  ],
+                  "text": "SLPA 1102"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS3200",
+                    "CS4100"
+                  ],
+                  "text": "CS 3200 or 4100"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4500"
+                  ],
+                  "text": "SLPA 4500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA5107"
+                  ],
+                  "text": "SLPA 5107"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS4120"
+                  ],
+                  "text": "CS 4120"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 15,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "CS4530",
+                    "CS4535"
+                  ],
+                  "text": "CS 4530 or 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA4651"
+                  ],
+                  "text": "SLPA 4651"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SLPA6219"
+                  ],
+                  "text": "SLPA 6219"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

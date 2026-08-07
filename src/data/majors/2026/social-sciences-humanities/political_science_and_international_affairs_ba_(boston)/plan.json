@@ -1,0 +1,316 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL1101"
+                  ],
+                  "text": "INTL 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1215"
+                  ],
+                  "text": "MATH 1215"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1000"
+                  ],
+                  "text": "POLS 1000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2211"
+                  ],
+                  "text": "HIST 2211"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1215"
+                  ],
+                  "text": "MATH 1215 (or other MATH course as pre-requisite for POLS 2400)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue Of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON3290"
+                  ],
+                  "text": "ECON 3290"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS Thought course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS undergraduate elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language core course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS2400"
+                  ],
+                  "text": "POLS 2400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "INTL undergraduate elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS undergraduate elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language core course"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL3400"
+                  ],
+                  "text": "INTL 3400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "INTL undergraduate elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS undergraduate elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "INTL undergraduate elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS undergraduate elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Capstone requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language core course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "INTL undergraduate elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS undergraduate elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

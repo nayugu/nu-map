@@ -1,0 +1,1738 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, One Co-op in Summer Second Half/Fall",
+      "pattern": "Four Years, One Co-op in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2300"
+                  ],
+                  "text": "CIVE 2300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2301"
+                  ],
+                  "text": "CIVE 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2334"
+                  ],
+                  "text": "CIVE 2334"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Science elective (Earth)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3430"
+                  ],
+                  "text": "CIVE 3430"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3305"
+                  ],
+                  "text": "CHME 3305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3435"
+                  ],
+                  "text": "CIVE 3435"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3464"
+                  ],
+                  "text": "CIVE 3464"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4534"
+                  ],
+                  "text": "CIVE 4534"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4535"
+                  ],
+                  "text": "CIVE 4535"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4765"
+                  ],
+                  "text": "CIVE 4765"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, One Co-op in Spring/Summer First Half",
+      "pattern": "Four Years, One Co-op in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CIVE2300",
+                    "CIVE2301"
+                  ],
+                  "text": "CIVE 2300 and CIVE 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2334"
+                  ],
+                  "text": "CIVE 2334"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3430"
+                  ],
+                  "text": "CIVE 3430"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Science elective (Earth)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHME3305",
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3305 and CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3435"
+                  ],
+                  "text": "CIVE 3435"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4534"
+                  ],
+                  "text": "CIVE 4534 (WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4535"
+                  ],
+                  "text": "CIVE 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3464"
+                  ],
+                  "text": "CIVE 3464"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4765"
+                  ],
+                  "text": "CIVE 4765"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "pattern": "Five Years, Three Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2300"
+                  ],
+                  "text": "CIVE 2300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2301"
+                  ],
+                  "text": "CIVE 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2334"
+                  ],
+                  "text": "CIVE 2334"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3430"
+                  ],
+                  "text": "CIVE 3430"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Science elective (Earth)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3305"
+                  ],
+                  "text": "CHME 3305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3435"
+                  ],
+                  "text": "CIVE 3435"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3464"
+                  ],
+                  "text": "CIVE 3464"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4534"
+                  ],
+                  "text": "CIVE 4534 (WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4535"
+                  ],
+                  "text": "CIVE 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3302"
+                  ],
+                  "text": "ENGW 3302"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4765"
+                  ],
+                  "text": "CIVE 4765"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "pattern": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2308"
+                  ],
+                  "text": "CHME 2308"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2320"
+                  ],
+                  "text": "CHME 2320"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CIVE2300",
+                    "CIVE2301"
+                  ],
+                  "text": "CIVE 2300 and CIVE 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2334"
+                  ],
+                  "text": "CIVE 2334"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3464"
+                  ],
+                  "text": "CIVE 3464"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME2310"
+                  ],
+                  "text": "CHME 2310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3322"
+                  ],
+                  "text": "CHME 3322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3430"
+                  ],
+                  "text": "CIVE 3430"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Science elective (Earth)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3305"
+                  ],
+                  "text": "CHME 3305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3306"
+                  ],
+                  "text": "CHME 3306"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME3312"
+                  ],
+                  "text": "CHME 3312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3435"
+                  ],
+                  "text": "CIVE 3435"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3302"
+                  ],
+                  "text": "ENGW 3302"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 13,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4510"
+                  ],
+                  "text": "CHME 4510"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4701"
+                  ],
+                  "text": "CHME 4701"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4534"
+                  ],
+                  "text": "CIVE 4534 (WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4535"
+                  ],
+                  "text": "CIVE 4535"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHME4512"
+                  ],
+                  "text": "CHME 4512"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4765"
+                  ],
+                  "text": "CIVE 4765"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Environmental engineering elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

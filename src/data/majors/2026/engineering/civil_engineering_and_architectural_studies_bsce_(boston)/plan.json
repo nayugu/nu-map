@@ -1,0 +1,921 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, 1 Co-op in Summer Second Half/Fall",
+      "pattern": "Four Years, 1 Co-op in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Science Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2221"
+                  ],
+                  "text": "CIVE 2221"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2222"
+                  ],
+                  "text": "CIVE 2222"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2260"
+                  ],
+                  "text": "CIVE 2260"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2261"
+                  ],
+                  "text": "CIVE 2261"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1110"
+                  ],
+                  "text": "ARCH 1110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1120"
+                  ],
+                  "text": "ARCH 1120"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2334"
+                  ],
+                  "text": "CIVE 2334"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2320"
+                  ],
+                  "text": "CIVE 2320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2321"
+                  ],
+                  "text": "CIVE 2321"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2130"
+                  ],
+                  "text": "ARCH 2130"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2340"
+                  ],
+                  "text": "ARCH 2340 (IC, SI, WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2341"
+                  ],
+                  "text": "ARCH 2341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2324"
+                  ],
+                  "text": "CIVE 2324"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE3300"
+                  ],
+                  "text": "GE 3300"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2140"
+                  ],
+                  "text": "ARCH 2140"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH3210"
+                  ],
+                  "text": "ARCH 3210 (ND, AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH3211"
+                  ],
+                  "text": "ARCH 3211"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2331"
+                  ],
+                  "text": "CIVE 2331"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2340"
+                  ],
+                  "text": "CIVE 2340"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2341"
+                  ],
+                  "text": "CIVE 2341"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315 (WD)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Civil Project Elective (WI)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Civil Technical Elective (CIVE 3425 or CIVE 5522)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1310"
+                  ],
+                  "text": "ARCH 1310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1311"
+                  ],
+                  "text": "ARCH 1311"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4767"
+                  ],
+                  "text": "CIVE 4767 (EI, WI, CE)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3464"
+                  ],
+                  "text": "CIVE 3464"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Architectural Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Architectural Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, 3 Co-ops in Summer Second Half/Fall",
+      "pattern": "Five Years, 3 Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1151"
+                  ],
+                  "text": "CHEM 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1153"
+                  ],
+                  "text": "CHEM 1153"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111 (WF)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1000"
+                  ],
+                  "text": "GE 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1501"
+                  ],
+                  "text": "GE 1501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1110"
+                  ],
+                  "text": "ARCH 1110 (EI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1120"
+                  ],
+                  "text": "ARCH 1120 (ND, EI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE1502"
+                  ],
+                  "text": "GE 1502 (ER)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342 (FQ)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321 (FQ)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1151"
+                  ],
+                  "text": "PHYS 1151 (ND)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1152"
+                  ],
+                  "text": "PHYS 1152 (AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1153"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1310"
+                  ],
+                  "text": "ARCH 1310 (IC, DD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH1311"
+                  ],
+                  "text": "ARCH 1311"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2130"
+                  ],
+                  "text": "ARCH 2130"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CIVE2221",
+                    "CIVE2222"
+                  ],
+                  "text": "CIVE 2221 and CIVE 2222"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CIVE2260",
+                    "CIVE2261"
+                  ],
+                  "text": "CIVE 2260 and CIVE 2261 (AD)"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CIVE2320",
+                    "CIVE2321"
+                  ],
+                  "text": "CIVE 2320 and CIVE 2321"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2334"
+                  ],
+                  "text": "CIVE 2334"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP2000"
+                  ],
+                  "text": "ENCP 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "GE3300"
+                  ],
+                  "text": "GE 3300"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2340"
+                  ],
+                  "text": "ARCH 2340 (IC, SI, WI)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2341"
+                  ],
+                  "text": "ARCH 2341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2331"
+                  ],
+                  "text": "CIVE 2331"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CIVE2340",
+                    "CIVE2341"
+                  ],
+                  "text": "CIVE 2340 and CIVE 2341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Civil technical elective (CIVE 3425 or CIVE 5522)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE2324"
+                  ],
+                  "text": "CIVE 2324"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302 or 3315 (WD)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH2140"
+                  ],
+                  "text": "ARCH 2140"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH3210"
+                  ],
+                  "text": "ARCH 3210 (ND, AD)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARCH3211"
+                  ],
+                  "text": "ARCH 3211"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE3464"
+                  ],
+                  "text": "CIVE 3464"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENCP3000"
+                  ],
+                  "text": "ENCP 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Civil project elective (WI)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CIVE4767"
+                  ],
+                  "text": "CIVE 4767 (EI, WI, CE)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Architectural elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Architectural elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Science elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

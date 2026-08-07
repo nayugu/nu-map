@@ -1,0 +1,653 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP1"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1111",
+                    "BIOL1112"
+                  ],
+                  "text": "BIOL 1111 and BIOL 1112"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD1000"
+                  ],
+                  "text": "PHMD 1000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP1"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "BIOL1113",
+                    "BIOL1114"
+                  ],
+                  "text": "BIOL 1113 and BIOL 1114"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2311",
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2311 and CHEM 2312"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MATH1241",
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1241, 1241, or 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation/GEO"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation/GEO"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP2"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2313",
+                    "CHEM2314"
+                  ],
+                  "text": "CHEM 2313 and CHEM 2314"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHSC2301",
+                    "PHSC2302"
+                  ],
+                  "text": "PHSC 2301 and PHSC 2302"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP2"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3306"
+                  ],
+                  "text": "ENGW 3306"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHSC2303",
+                    "PHSC2304"
+                  ],
+                  "text": "PHSC 2303 and PHSC 2304"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHSC2320"
+                  ],
+                  "text": "PHSC 2320"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation/GEO"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PP2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation/GEO"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P1"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHSC5110"
+                  ],
+                  "text": "PHSC 5110"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5120"
+                  ],
+                  "text": "PHMD 5120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5140"
+                  ],
+                  "text": "PHMD 5140"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5191"
+                  ],
+                  "text": "PHMD 5191"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHSC5130"
+                  ],
+                  "text": "PHSC 5130"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHSC5181"
+                  ],
+                  "text": "PHSC 5181"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "IPPE/Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "IPPE/Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5115"
+                  ],
+                  "text": "PHMD 5115"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5182"
+                  ],
+                  "text": "PHMD 5182"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5192"
+                  ],
+                  "text": "PHMD 5192"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P2"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5240"
+                  ],
+                  "text": "PHMD 5240"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5283"
+                  ],
+                  "text": "PHMD 5283"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5293"
+                  ],
+                  "text": "PHMD 5293"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHSC5205"
+                  ],
+                  "text": "PHSC 5205"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHSC5230"
+                  ],
+                  "text": "PHSC 5230"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P2"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5210"
+                  ],
+                  "text": "PHMD 5210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5215"
+                  ],
+                  "text": "PHMD 5215"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5245"
+                  ],
+                  "text": "PHMD 5245"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5284"
+                  ],
+                  "text": "PHMD 5284"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5294"
+                  ],
+                  "text": "PHMD 5294"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P2"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5220"
+                  ],
+                  "text": "PHMD 5220"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5285"
+                  ],
+                  "text": "PHMD 5285"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5295"
+                  ],
+                  "text": "PHMD 5295"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "IPPE/Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "IPPE/Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P3"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5320"
+                  ],
+                  "text": "PHMD 5320"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5335"
+                  ],
+                  "text": "PHMD 5335"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5345"
+                  ],
+                  "text": "PHMD 5345"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5386"
+                  ],
+                  "text": "PHMD 5386"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHMD5396"
+                  ],
+                  "text": "PHMD 5396"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective/NUPpath elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 6,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 6",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "P4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

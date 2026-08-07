@@ -1,0 +1,154 @@
+{
+  "plans": [
+    {
+      "label": "Two Years, One (Optional) Co-op",
+      "pattern": "Two Years, One (Optional) Co-op",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5600"
+                  ],
+                  "text": "ARTG 5600"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5120"
+                  ],
+                  "text": "ARTG 5120"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5620"
+                  ],
+                  "text": "ARTG 5620"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5640"
+                  ],
+                  "text": "ARTG 5640"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG5610"
+                  ],
+                  "text": "ARTG 5610"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6310"
+                  ],
+                  "text": "ARTG 6310"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6600"
+                  ],
+                  "text": "ARTG 6600"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer Full Semester",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op or vacation"
+                }
+              ],
+              "fullSummer": true
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG6700"
+                  ],
+                  "text": "ARTG 6700"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG7100"
+                  ],
+                  "text": "ARTG 7100"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 12,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG7910"
+                  ],
+                  "text": "ARTG 7910"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ARTG7990"
+                  ],
+                  "text": "ARTG 7990"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

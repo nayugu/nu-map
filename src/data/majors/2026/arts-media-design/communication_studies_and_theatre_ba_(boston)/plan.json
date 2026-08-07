@@ -1,0 +1,338 @@
+{
+  "plans": [
+    {
+      "label": "Sample Four Years, Two Co-ops in Spring/Summer",
+      "pattern": "Sample Four Years, Two Co-ops in Spring/Summer",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COMM1000",
+                    "THTR1000"
+                  ],
+                  "text": "COMM 1000 or THTR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "COMM1101"
+                  ],
+                  "text": "COMM 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1100"
+                  ],
+                  "text": "THTR 1100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1101"
+                  ],
+                  "text": "THTR 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1120"
+                  ],
+                  "text": "THTR 1120"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language elective or THTR elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "COMM1112",
+                    "COMM2301"
+                  ],
+                  "text": "COMM 1112 or 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM2000"
+                  ],
+                  "text": "INAM 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1131"
+                  ],
+                  "text": "THTR 1131"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Communicaton studies foundation course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Communicaton studies elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR2000"
+                  ],
+                  "text": "THTR 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR3325"
+                  ],
+                  "text": "THTR 3325"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Communicaton studies cluster course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Communicaton studies elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Text, Community, & Social Context Course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op #1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op #1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3314",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3314 or 3315"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1270"
+                  ],
+                  "text": "THTR 1270"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language or elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Comm writing intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Comm elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Optional Co-op #2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Optional Co-op #2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Communication studies writing-intensive"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

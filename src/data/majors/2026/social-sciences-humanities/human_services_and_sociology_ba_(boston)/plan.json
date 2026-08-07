@@ -1,0 +1,331 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, 2 Co-ops",
+      "pattern": "Four Years, 2 Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HUSV1000",
+                    "SOCL1000"
+                  ],
+                  "text": "HUSV 1000 or SOCL 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV1101"
+                  ],
+                  "text": "HUSV 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL1101"
+                  ],
+                  "text": "SOCL 1101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV2300"
+                  ],
+                  "text": "HUSV 2300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1215"
+                  ],
+                  "text": "MATH 1215"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "SOCL2320",
+                    "INSH3102"
+                  ],
+                  "text": "SOCL 2320 or INSH 3102"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3570"
+                  ],
+                  "text": "HUSV 3570"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "SOCL3300"
+                  ],
+                  "text": "SOCL 3300"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV4994"
+                  ],
+                  "text": "HUSV 4994"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HUSV2970",
+                    "SOCL2321",
+                    "INSH3101"
+                  ],
+                  "text": "HUSV 2970, SOCL 2321, or INSH 3101"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "HUSV elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HUSV3900"
+                  ],
+                  "text": "HUSV 3900"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "HUSV4700",
+                    "SOCL4600"
+                  ],
+                  "text": "HUSV 4700 or SOCL 4600"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "SOCL Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

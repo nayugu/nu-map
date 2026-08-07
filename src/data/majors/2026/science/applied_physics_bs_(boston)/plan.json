@@ -1,0 +1,829 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INSC1000"
+                  ],
+                  "text": "INSC 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1161"
+                  ],
+                  "text": "PHYS 1161"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1162"
+                  ],
+                  "text": "PHYS 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1163"
+                  ],
+                  "text": "PHYS 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1165"
+                  ],
+                  "text": "PHYS 1165"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1166"
+                  ],
+                  "text": "PHYS 1166"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1167"
+                  ],
+                  "text": "PHYS 1167"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1211"
+                  ],
+                  "text": "PHYS 1211"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS2303"
+                  ],
+                  "text": "PHYS 2303"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS2371"
+                  ],
+                  "text": "PHYS 2371"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS2372"
+                  ],
+                  "text": "PHYS 2372"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2331"
+                  ],
+                  "text": "MATH 2331"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1211"
+                  ],
+                  "text": "CHEM 1211"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1212"
+                  ],
+                  "text": "CHEM 1212"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1213"
+                  ],
+                  "text": "CHEM 1213"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS4305"
+                  ],
+                  "text": "PHYS 4305"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS3602"
+                  ],
+                  "text": "PHYS 3602"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS3600"
+                  ],
+                  "text": "PHYS 3600"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS3603"
+                  ],
+                  "text": "PHYS 3603"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "PHYS advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHYS advanced elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3307"
+                  ],
+                  "text": "ENGW 3307"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS5318"
+                  ],
+                  "text": "PHYS 5318"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHYS advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "pattern": "Five Years, Three Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1000"
+                  ],
+                  "text": "PHYS 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1161"
+                  ],
+                  "text": "PHYS 1161"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1162"
+                  ],
+                  "text": "PHYS 1162"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1163"
+                  ],
+                  "text": "PHYS 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1165"
+                  ],
+                  "text": "PHYS 1165"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1166"
+                  ],
+                  "text": "PHYS 1166"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1167"
+                  ],
+                  "text": "PHYS 1167"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS1211"
+                  ],
+                  "text": "PHYS 1211"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS2303"
+                  ],
+                  "text": "PHYS 2303"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS2371"
+                  ],
+                  "text": "PHYS 2371"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS2372"
+                  ],
+                  "text": "PHYS 2372"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2321"
+                  ],
+                  "text": "MATH 2321"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1211"
+                  ],
+                  "text": "CHEM 1211"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1212"
+                  ],
+                  "text": "CHEM 1212"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM1213"
+                  ],
+                  "text": "CHEM 1213"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2341"
+                  ],
+                  "text": "MATH 2341"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS4305"
+                  ],
+                  "text": "PHYS 4305"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS3602"
+                  ],
+                  "text": "PHYS 3602"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH2331"
+                  ],
+                  "text": "MATH 2331"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS3600"
+                  ],
+                  "text": "PHYS 3600"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3307"
+                  ],
+                  "text": "ENGW 3307"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Technical elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 5",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS3603"
+                  ],
+                  "text": "PHYS 3603"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHYS5318"
+                  ],
+                  "text": "PHYS 5318"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHYS advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHYS advanced elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "PHYS advanced elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

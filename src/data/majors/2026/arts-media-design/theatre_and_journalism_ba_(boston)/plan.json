@@ -1,0 +1,340 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL1150"
+                  ],
+                  "text": "JRNL 1150"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "THTR1000",
+                    "JRNL1000"
+                  ],
+                  "text": "THTR 1000 or JRNL 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1100"
+                  ],
+                  "text": "THTR 1100"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1101"
+                  ],
+                  "text": "THTR 1101"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1120"
+                  ],
+                  "text": "THTR 1120"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INAM2000"
+                  ],
+                  "text": "INAM 2000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "JRNL1101",
+                    "JRNL1102"
+                  ],
+                  "text": "JRNL 1101 and JRNL 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1131"
+                  ],
+                  "text": "THTR 1131"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL elective"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EEAM2000"
+                  ],
+                  "text": "EEAM 2000"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language or elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "JRNL2201"
+                  ],
+                  "text": "JRNL 2201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR2000"
+                  ],
+                  "text": "THTR 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR3325"
+                  ],
+                  "text": "THTR 3325"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Text, Community, & Social Engagement Course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language or elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op 1"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR1270"
+                  ],
+                  "text": "THTR 1270"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL visual elective or JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL visual elective or JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "JRNL3550",
+                    "JRNL4650"
+                  ],
+                  "text": "JRNL 3550 or 4650"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL visual elective or JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "THTR Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "THTR4702"
+                  ],
+                  "text": "THTR 4702"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL visual elective or JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "JRNL visual elective or JRNL elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,712 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1200"
+                  ],
+                  "text": "CS 1200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL1101"
+                  ],
+                  "text": "INTL 1101"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ANTH1101",
+                    "HIST2211",
+                    "HIST2311"
+                  ],
+                  "text": "ANTH 1101, HIST 2211, or HIST 2311"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "DS2500",
+                    "DS2501"
+                  ],
+                  "text": "DS 2500 and DS 2501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2350"
+                  ],
+                  "text": "ECON 2350"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3000"
+                  ],
+                  "text": "DS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3500"
+                  ],
+                  "text": "DS 3500"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Global Dynamics Course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "International Affairs Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1210"
+                  ],
+                  "text": "CS 1210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4200"
+                  ],
+                  "text": "DS 4200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL2718"
+                  ],
+                  "text": "INTL 2718"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis Requirement 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4300"
+                  ],
+                  "text": "DS 4300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL3400"
+                  ],
+                  "text": "INTL 3400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Global Dynamics Course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis Requirement 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3308, or 3315"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CY4170"
+                  ],
+                  "text": "CY 4170"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4400"
+                  ],
+                  "text": "DS 4400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL4700"
+                  ],
+                  "text": "INTL 4700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis Requirement 3"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1200"
+                  ],
+                  "text": "CS 1200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL1101"
+                  ],
+                  "text": "INTL 1101"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ANTH1101",
+                    "HIST2211",
+                    "HIST2311"
+                  ],
+                  "text": "ANTH 1101, HIST 2211, or HIST 2311"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "DS2500",
+                    "DS2501"
+                  ],
+                  "text": "DS 2500 and DS 2501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ECON2350"
+                  ],
+                  "text": "ECON 2350"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1210"
+                  ],
+                  "text": "CS 1210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3000"
+                  ],
+                  "text": "DS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3500"
+                  ],
+                  "text": "DS 3500"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Global Dynamics Course 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "International Affairs Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4200"
+                  ],
+                  "text": "DS 4200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL2718"
+                  ],
+                  "text": "INTL 2718"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis Requirement 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3308",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3308, or 3315"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective (Dialogue of Civilizations possible)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4300"
+                  ],
+                  "text": "DS 4300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL3400"
+                  ],
+                  "text": "INTL 3400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Global Dynamics Course 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis Requirement 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CY4170"
+                  ],
+                  "text": "CY 4170"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4400"
+                  ],
+                  "text": "DS 4400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "INTL4700"
+                  ],
+                  "text": "INTL 4700"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Regional Analysis Requirement 3"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

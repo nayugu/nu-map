@@ -1,0 +1,364 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops",
+      "pattern": "Four Years, Two Co-ops",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 20,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1200"
+                  ],
+                  "text": "CS 1200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "DS2500",
+                    "DS2501"
+                  ],
+                  "text": "DS 2500 and DS 2501"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2161",
+                    "CHEM2162"
+                  ],
+                  "text": "CHEM 2161 and CHEM 2162"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2311",
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2311 and CHEM 2312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3000"
+                  ],
+                  "text": "DS 3000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1342"
+                  ],
+                  "text": "MATH 1342"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2313",
+                    "CHEM2314"
+                  ],
+                  "text": "CHEM 2313 and CHEM 2314"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1210"
+                  ],
+                  "text": "CS 1210"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3500"
+                  ],
+                  "text": "DS 3500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4200"
+                  ],
+                  "text": "DS 4200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR2500",
+                    "ENVR2501"
+                  ],
+                  "text": "ENVR 2500 and ENVR 2501"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2321",
+                    "CHEM2322"
+                  ],
+                  "text": "CHEM 2321 and CHEM 2322"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4300"
+                  ],
+                  "text": "DS 4300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4400"
+                  ],
+                  "text": "DS 4400"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3307, or 3315"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CHEM4750"
+                  ],
+                  "text": "CHEM 4750"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3401",
+                    "CHEM3402"
+                  ],
+                  "text": "CHEM 3401 and CHEM 3402"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced Level Chemistry"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

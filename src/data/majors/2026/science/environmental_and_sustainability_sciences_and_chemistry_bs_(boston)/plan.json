@@ -1,0 +1,340 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1161",
+                    "CHEM1162",
+                    "CHEM1163"
+                  ],
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENVR1000",
+                    "CHEM1000",
+                    "INSC1000"
+                  ],
+                  "text": "ENVR 1000, CHEM 1000, or INSC 1000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR1200",
+                    "ENVR1201"
+                  ],
+                  "text": "ENVR 1200 and ENVR 1201"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR1400",
+                    "ENVR1401"
+                  ],
+                  "text": "ENVR 1400 and ENVR 1401"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2161",
+                    "CHEM2162",
+                    "CHEM2163"
+                  ],
+                  "text": "CHEM 2161 and CHEM 2162 and CHEM 2163"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB2302",
+                    "EEMB2303"
+                  ],
+                  "text": "EEMB 2302 and EEMB 2303"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR2515"
+                  ],
+                  "text": "ENVR 2515"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General elective 1"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General Elective 2"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Vacation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2311",
+                    "CHEM2312"
+                  ],
+                  "text": "CHEM 2311 and CHEM 2312"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1241"
+                  ],
+                  "text": "MATH 1241"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 1 of 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR skill; 1 of 2"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2313",
+                    "CHEM2314"
+                  ],
+                  "text": "CHEM 2313 and CHEM 2314"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESC2000"
+                  ],
+                  "text": "EESC 2000"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "PHYS1151",
+                    "PHYS1152",
+                    "PHYS1153"
+                  ],
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR skill; 2 of 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 2 of 3"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 9,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM2321",
+                    "CHEM2322",
+                    "CHEM2323"
+                  ],
+                  "text": "CHEM 2321 and CHEM 2322 and CHEM 2323"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1242"
+                  ],
+                  "text": "MATH 1242"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM3401",
+                    "CHEM3402"
+                  ],
+                  "text": "CHEM 3401 and CHEM 3402"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW3307"
+                  ],
+                  "text": "ENGW 3307"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Advanced CHEM elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR elective; 3 of 3"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General elective 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective 4"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "General elective 5"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "General elective 6"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course; 1 of 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course; 2 of 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

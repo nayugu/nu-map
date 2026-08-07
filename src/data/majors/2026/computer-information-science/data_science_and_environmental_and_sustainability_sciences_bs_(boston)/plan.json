@@ -1,0 +1,710 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "pattern": "Four Years, Two Co-ops in Summer Second Half/Fall",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1200"
+                  ],
+                  "text": "CS 1200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENVR2200",
+                    "ENVR1200",
+                    "ENVR1201"
+                  ],
+                  "text": "ENVR 2200 or 1200 and 1201"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "DS2500",
+                    "DS2501"
+                  ],
+                  "text": "DS 2500 and DS 2501"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB2302",
+                    "EEMB2303"
+                  ],
+                  "text": "EEMB 2302 and EEMB 2303"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR1400",
+                    "ENVR1401"
+                  ],
+                  "text": "ENVR 1400 and ENVR 1401"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR2515"
+                  ],
+                  "text": "ENVR 2515"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1211",
+                    "CHEM1212",
+                    "CHEM1213"
+                  ],
+                  "text": "CHEM 1211 and CHEM 1212 and CHEM 1213"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3000"
+                  ],
+                  "text": "DS 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR skills course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1210"
+                  ],
+                  "text": "CS 1210"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1214",
+                    "CHEM1215",
+                    "CHEM1216"
+                  ],
+                  "text": "CHEM 1214 and CHEM 1215 and CHEM 1216"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3500"
+                  ],
+                  "text": "DS 3500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4200"
+                  ],
+                  "text": "DS 4200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR2500"
+                  ],
+                  "text": "ENVR 2500"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4300"
+                  ],
+                  "text": "DS 4300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4400"
+                  ],
+                  "text": "DS 4400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3303",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3303, 3307, or 3315"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4420"
+                  ],
+                  "text": "DS 4420"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1200"
+                  ],
+                  "text": "CS 1200"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS1800",
+                    "CS1802"
+                  ],
+                  "text": "CS 1800 and CS 1802"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CS2000",
+                    "CS2001"
+                  ],
+                  "text": "CS 2000 and CS 2001"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENVR2200",
+                    "ENVR1200",
+                    "ENVR1201"
+                  ],
+                  "text": "ENVR 2200 or 1200 and 1201"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 19,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "DS2500",
+                    "DS2501"
+                  ],
+                  "text": "DS 2500 and DS 2501"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "EEMB2302",
+                    "EEMB2303"
+                  ],
+                  "text": "EEMB 2302 and EEMB 2303"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "ENVR1400",
+                    "ENVR1401"
+                  ],
+                  "text": "ENVR 1400 and ENVR 1401"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR2515"
+                  ],
+                  "text": "ENVR 2515"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS3200"
+                  ],
+                  "text": "CS 3200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1341"
+                  ],
+                  "text": "MATH 1341"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 18,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CS1210"
+                  ],
+                  "text": "CS 1210"
+                },
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1211",
+                    "CHEM1212",
+                    "CHEM1213"
+                  ],
+                  "text": "CHEM 1211 and CHEM 1212 and CHEM 1213"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3000"
+                  ],
+                  "text": "DS 3000"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "courses",
+                  "codes": [
+                    "CHEM1214",
+                    "CHEM1215",
+                    "CHEM1216"
+                  ],
+                  "text": "CHEM 1214 and CHEM 1215 and CHEM 1216"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS3500"
+                  ],
+                  "text": "DS 3500"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4200"
+                  ],
+                  "text": "DS 4200"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENVR2500"
+                  ],
+                  "text": "ENVR 2500"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 4,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3302",
+                    "ENGW3303",
+                    "ENGW3307",
+                    "ENGW3315"
+                  ],
+                  "text": "ENGW 3302, 3303, 3307, or 3315"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4300"
+                  ],
+                  "text": "DS 4300"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4400"
+                  ],
+                  "text": "DS 4400"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Sustainable Planning and Development Course"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "DS4420"
+                  ],
+                  "text": "DS 4420"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Integrative course"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Khoury elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ENVR Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

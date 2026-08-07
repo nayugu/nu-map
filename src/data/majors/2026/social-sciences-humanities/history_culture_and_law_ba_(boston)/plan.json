@@ -1,0 +1,332 @@
+{
+  "plans": [
+    {
+      "label": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "pattern": "Four Years, Two Co-ops in Spring/Summer First Half",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CLTR1000"
+                  ],
+                  "text": "CLTR 1000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1215"
+                  ],
+                  "text": "MATH 1215 (Potential option to cover NUPath requirement)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LPSC1101"
+                  ],
+                  "text": "LPSC 1101 (Foundational core course)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ASNS1150"
+                  ],
+                  "text": "ASNS 1150 (Concentration core course)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "CLTR3418"
+                  ],
+                  "text": "CLTR 3418 (Major elective)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "LPSC2301"
+                  ],
+                  "text": "LPSC 2301 (Foundational core elective)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "EESH2000"
+                  ],
+                  "text": "EESH 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1100"
+                  ],
+                  "text": "HIST 1100 (Foundational core course)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "PHIL1112"
+                  ],
+                  "text": "PHIL 1112 (Major elective)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH4515"
+                  ],
+                  "text": "ANTH 4515 (Concentration writing-intensive course)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2000"
+                  ],
+                  "text": "HIST 2000 (Major elective)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST2301"
+                  ],
+                  "text": "HIST 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS4500"
+                  ],
+                  "text": "POLS 4500 (Foundational core elective)"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ANTH4350"
+                  ],
+                  "text": "ANTH 4350 (Concentration elective)"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST1246"
+                  ],
+                  "text": "HIST 1246 (Concentration elective)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "HIST4701"
+                  ],
+                  "text": "HIST 4701 (Capstone)"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Foreign language"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Elective"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "plans": [
+    {
+      "label": "Plan 1",
+      "pattern": "",
+      "concentration": null,
+      "years": [
+        {
+          "label": "Year 1",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT1201"
+                  ],
+                  "text": "ACCT 1201"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ENGW1111"
+                  ],
+                  "text": "ENGW 1111"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MATH1231"
+                  ],
+                  "text": "MATH 1231"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "POLS1000",
+                    "BUSN1102"
+                  ],
+                  "text": "POLS 1000 or BUSN 1102"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1155"
+                  ],
+                  "text": "POLS 1155"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ECON1115",
+                    "ECON1116"
+                  ],
+                  "text": "ECON 1115 or 1116"
+                },
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "MGSC2301",
+                    "POLS2400"
+                  ],
+                  "text": "MGSC 2301 or POLS 2400"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1150"
+                  ],
+                  "text": "POLS 1150"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "POLS1160"
+                  ],
+                  "text": "POLS 1160"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "DD NUpath"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Open elective"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 2",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 17,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "BUSN1103",
+                    "EESH2000"
+                  ],
+                  "text": "BUSN 1103 or EESH 2000"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "MKTG2201"
+                  ],
+                  "text": "MKTG 2201"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Computer Science Requirement"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS thought"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "course",
+                  "codes": [
+                    "ACCT2301"
+                  ],
+                  "text": "ACCT 2301"
+                },
+                {
+                  "kind": "course",
+                  "codes": [
+                    "FINA2201"
+                  ],
+                  "text": "FINA 2201"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 3",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ORGB3201",
+                    "ORGB3203"
+                  ],
+                  "text": "ORGB 3201 or 3203"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration class 1"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 1",
+              "type": "sumA",
+              "hours": 0,
+              "entries": [
+                {
+                  "kind": "coop",
+                  "text": "Co-op"
+                }
+              ]
+            },
+            {
+              "term": "Summer 2",
+              "type": "sumB",
+              "hours": 8,
+              "entries": [
+                {
+                  "kind": "placeholder",
+                  "text": "POLS elective"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ND NUpath"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Year 4",
+          "terms": [
+            {
+              "term": "Fall",
+              "type": "fall",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "ENGW3304",
+                    "ENGW3315",
+                    "ENGW3307"
+                  ],
+                  "text": "ENGW 3304, 3315, or 3307"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration class 2"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration class 3"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "EI NUpath"
+                }
+              ]
+            },
+            {
+              "term": "Spring",
+              "type": "spring",
+              "hours": 16,
+              "entries": [
+                {
+                  "kind": "choice",
+                  "codes": [
+                    "POLS4701",
+                    "STRT4501"
+                  ],
+                  "text": "POLS 4701 or STRT 4501"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "Concentration class 4"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "IC NUpath"
+                },
+                {
+                  "kind": "placeholder",
+                  "text": "ER NUpath"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
