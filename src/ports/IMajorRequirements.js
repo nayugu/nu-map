@@ -130,6 +130,17 @@ export const IMajorRequirements = "majorRequirements";
  * @property {(path: string) => Promise<object>} loadGradMajor
  *   Load the raw program definition JSON for a given graduate option id/path.
  *
+ * @property {(path: string, isGrad?: boolean) => Promise<{plans: object[]}|null>} loadSamplePlans
+ *   Load the department's published sample plans of study for a program, or
+ *   null when it publishes none. Most programs do not, so null is the ordinary
+ *   answer and never an error. A program may publish SEVERAL plans that differ
+ *   by co-op timing; all are returned and the choice belongs to the student.
+ *
+ * @property {(path: string, isGrad?: boolean) => boolean} hasSamplePlan
+ *   Whether a program publishes a plan, answerable without fetching it — so
+ *   the UI can decide whether to offer the option at all rather than offering
+ *   it and then finding nothing behind it.
+ *
  * @property {(id: string, plan: PlanSnapshot, courseMap: Object) => Promise<Program>} auditMajor
  *   Load a major by id and audit its requirements against the given plan.
  *   courseMap is { [courseId]: Course } — needed to look up course credit values during audit.

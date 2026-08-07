@@ -24,6 +24,7 @@
 // auditMajor() / auditMinor() are not yet implemented here — GradPanel
 // calls loadMajor() + gradRequirements.js directly (Stage 2 migration).
 // ═══════════════════════════════════════════════════════════════════
+import { loadSamplePlans as _loadSamplePlans, hasSamplePlan as _hasSamplePlan } from "../../data/samplePlanLoader.js";
 import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor, getGradMajorOptions as _getGradMajorOptions, getGradMajorOptionGroups as _getGradMajorOptionGroups, loadGradMajor as _loadGradMajor } from "../../data/majorLoader.js";
 import { getMinorOptions as _getMinorOptions, getMinorOptionGroups as _getMinorOptionGroups, loadMinor as _loadMinor } from "../../data/minorLoader.js";
 
@@ -68,6 +69,12 @@ export default {
 
   /** @returns {Promise<object>} Raw graduate program JSON */
   loadGradMajor(path) { return _loadGradMajor(path); },
+
+  /** @returns {Promise<{plans: object[]}|null>} The department's sample plans, or null */
+  loadSamplePlans(path, isGrad = false) { return _loadSamplePlans(path, isGrad); },
+
+  /** @returns {boolean} Whether a plan exists, without fetching it */
+  hasSamplePlan(path, isGrad = false) { return _hasSamplePlan(path, isGrad); },
 
   auditMajor(_id, _plan, _courseMap) {
     throw new Error("auditMajor() not yet implemented — GradPanel uses loadMajor() + gradRequirements.js directly.");
