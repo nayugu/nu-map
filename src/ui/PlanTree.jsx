@@ -146,6 +146,9 @@ function NameEditor({ value, onCommit, onCancel, density }) {
  * @param {string}   [p.editingId]     row currently being renamed
  * @param {string}   [p.dropTargetId]  folder id (or '' for root) being hovered
  * @param {'ok'|'cycle'|'depth'|'self'|'noop'} [p.dropVerdict]
+ * @param {{beforeId: string|null, afterId: string|null}} [p.insertAt]
+ *   manual-order insertion point: a line is drawn above `beforeId`, or below
+ *   `afterId` when dropping at the end of a list
  * @param {string}   [p.focusId]       keyboard cursor
  * @param {(row, event) => void} p.onRowClick
  * @param {(row) => void}        [p.onRowDoubleClick]
@@ -159,7 +162,7 @@ function NameEditor({ value, onCommit, onCancel, density }) {
 export default function PlanTree({
   rows, density = "comfortable", activePlanId,
   selectedIds = null, editingId = null, focusId = null,
-  dropTargetId = null, dropVerdict = "ok",
+  dropTargetId = null, dropVerdict = "ok", insertAt = null,
   onRowClick, onRowDoubleClick, onRowContextMenu, onToggle, onCommitName, onCancelEdit,
   dnd = null, metaOf = null, selectMode = false, t,
 }) {
@@ -177,6 +180,10 @@ export default function PlanTree({
         const isDropTarget = isFolder && dropTargetId === row.id;
         const dropOk = dropVerdict === "ok";
         const meta = metaOf?.(row) ?? "";
+        // Manual-order insertion line. Drawn on the row itself rather than as a
+        // separate element so it cannot desync from the list it describes.
+        const lineAbove = insertAt?.beforeId === row.id;
+        const lineBelow = insertAt?.afterId === row.id;
 
         return (
           <div
@@ -197,6 +204,10 @@ export default function PlanTree({
             onContextMenu={e => onRowContextMenu?.(row, e)}
             style={{
               position: "relative",
+              // The line sits in the row's own box-shadow so it needs no layout
+              // space — inserting never shifts the rows you are aiming between.
+              ...(lineAbove ? { boxShadow: "inset 0 2px 0 0 var(--active)" } : {}),
+              ...(lineBelow ? { boxShadow: "inset 0 -2px 0 0 var(--active)" } : {}),
               display: "flex", alignItems: "center", gap: compact ? 3 : 7,
               padding: compact ? "3px 8px" : "7px 11px",
               paddingLeft: (compact ? 8 : 11) + rowIndent(row.depth),

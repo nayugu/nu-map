@@ -308,6 +308,7 @@ export const strings = {
   "folders.sort.label":           "並び順",
   "folders.sort.name":            "名前",
   "folders.sort.recent":          "最近",
+  "folders.sort.manual":        "手動",
   "folders.meta.matched":         "{total} 件中 {n} 件",
   "folders.menu.open":            "開く",
   "folders.menu.rename":          "名前を変更",

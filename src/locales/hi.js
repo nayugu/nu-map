@@ -307,6 +307,7 @@ export const strings = {
   "folders.sort.label":           "क्रम",
   "folders.sort.name":            "नाम",
   "folders.sort.recent":          "हाल का",
+  "folders.sort.manual":        "मैनुअल",
   "folders.meta.matched":         "{total} में से {n}",
   "folders.menu.open":            "खोलें",
   "folders.menu.rename":          "नाम बदलें",

@@ -306,6 +306,7 @@ export const strings = {
   "folders.sort.label":           "ترتيب الفرز",
   "folders.sort.name":            "الاسم",
   "folders.sort.recent":          "الأحدث",
+  "folders.sort.manual":        "مخصص",
   "folders.meta.matched":         "{n} من {total}",
   "folders.menu.open":            "فتح",
   "folders.menu.rename":          "إعادة تسمية",

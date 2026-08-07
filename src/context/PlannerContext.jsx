@@ -23,7 +23,8 @@ import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
-         topmostNodes, childDepth, MAX_DEPTH } from "../core/planFolders.js";
+         topmostNodes, childDepth, MAX_DEPTH, applyReorder,
+         siblingsInOrder } from "../core/planFolders.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
@@ -2267,7 +2268,7 @@ export function PlannerProvider({ children }) {
   //                  so if expansion were part of the structure, clearing a
   //                  query would either leave the tree splayed open or need a
   //                  save/restore dance around every keystroke.
-  //   folder-sort  — 'name' | 'recent'
+  //   folder-sort  — 'name' | 'recent' | 'manual'
   const [folders, setFolders] = useState(() => {
     try {
       const raw = localStorage.getItem(key("folder-index"));
@@ -2284,8 +2285,15 @@ export function PlannerProvider({ children }) {
     } catch {}
     return new Set();
   });
+  // An unrecognised stored value falls back to 'name' rather than being
+  // trusted: this key predates 'manual', and a future mode removed in a later
+  // version must not leave the library sorting by a rule that no longer exists.
+  const SORT_MODES = ["name", "recent", "manual"];
   const [folderSort, setFolderSort] = useState(() => {
-    try { return localStorage.getItem(key("folder-sort")) === "recent" ? "recent" : "name"; } catch { return "name"; }
+    try {
+      const v = localStorage.getItem(key("folder-sort"));
+      return SORT_MODES.includes(v) ? v : "name";
+    } catch { return "name"; }
   });
 
   useEffect(() => {
@@ -2481,6 +2489,43 @@ export function PlannerProvider({ children }) {
     if (target) setFolderOpen(target, true); // reveal where it landed
     return verdict;
   };
+
+  /**
+   * Place `ids` immediately before `beforeId` among their siblings under
+   * `parentId`, or at the end when `beforeId` is null. Only meaningful under
+   * the 'manual' sort — the other modes derive order from the records
+   * themselves, so a stored position would be invisible and confusing.
+   *
+   * Cross-parent drops move first, then position, so dragging a plan into a
+   * folder AND to a spot inside it is one undo step.
+   */
+  const reorderNodes = (ids, parentId, beforeId = null) => {
+    const target = parentId ?? null;
+    // Anything not already under `target` has to be moved there first.
+    const needsMove = ids.some((id) => {
+      const rec = [...plans, ...folders].find((r) => r.id === id);
+      return (rec?.parentId ?? null) !== target;
+    });
+    let base = { plans, folders };
+    let tree = planTree;
+    if (needsMove) {
+      const verdict = planMove(planTree, ids, target);
+      if (!verdict.ok) return verdict;
+      base = applyMove(base, verdict.moving, target);
+      tree = buildTree(base);
+    }
+    const next = applyReorder(base, tree, ids, target, beforeId, { sortMode: "manual", locale });
+    if (!next.ok) return next;
+    pushFolderHistory();
+    setPlans(next.plans);
+    setFolders(next.folders);
+    if (target) setFolderOpen(target, true);
+    return { ok: true };
+  };
+
+  /** Siblings of one kind under a parent, in the order they currently render. */
+  const orderedSiblings = (parentId, kind) =>
+    siblingsInOrder(planTree, parentId ?? null, kind, { sortMode: folderSort, locale });
 
   /**
    * What a delete of `ids` would remove — for the confirmation dialog.
@@ -3542,6 +3587,7 @@ export function PlannerProvider({ children }) {
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,
     createFolder, createFolderWithNodes, renameFolder, moveNodesTo, deleteNodes, previewDelete,
+    reorderNodes, orderedSiblings,
     pushFolderHistory, undoFolders, redoFolders,
     folderCanUndo: folderPast.length > 0, folderCanRedo: folderFuture.length > 0,
     showPlanLibrary, setShowPlanLibrary,

@@ -307,6 +307,7 @@ export const strings = {
   "folders.sort.label":           "Ordre de tri",
   "folders.sort.name":            "Nom",
   "folders.sort.recent":          "Récent",
+  "folders.sort.manual":        "Manuel",
   "folders.meta.matched":         "{n} sur {total}",
   "folders.menu.open":            "Ouvrir",
   "folders.menu.rename":          "Renommer",

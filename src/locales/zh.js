@@ -246,6 +246,7 @@ export const strings = {
   "folders.sort.label":           "\u6392\u5e8f\u65b9\u5f0f",
   "folders.sort.name":            "\u540d\u79f0",
   "folders.sort.recent":          "\u6700\u8fd1",
+  "folders.sort.manual":        "\u81ea\u5b9a",
   "folders.meta.matched":         "{total} \u4e2d\u7684 {n}",
   "folders.menu.open":            "\u6253\u5f00",
   "folders.menu.rename":          "\u91cd\u547d\u540d",

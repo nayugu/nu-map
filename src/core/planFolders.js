@@ -610,6 +610,69 @@ export function reseedOrder(siblings) {
   return out;
 }
 
+/**
+ * Sibling records of one kind under `parentId`, in the order they render.
+ *
+ * @param {object} tree
+ * @param {string|null} parentId
+ * @param {'folder'|'plan'} kind
+ * @param {object} [opts] { sortMode, locale }
+ */
+export function siblingsInOrder(tree, parentId, kind, { sortMode = "name", locale } = {}) {
+  const b = tree.childrenOf.get(parentId ?? null) ?? EMPTY_BUCKET;
+  const { byName, plansCmp } = comparators(sortMode, locale);
+  return kind === "folder" ? [...b.folders].sort(byName) : [...b.plans].sort(plansCmp);
+}
+
+/**
+ * Reorder `ids` to sit immediately before `beforeId` among their siblings (or
+ * at the end when `beforeId` is null), returning new plans/folders arrays.
+ *
+ * Rebuilds the sibling sequence and reseeds it, rather than threading a
+ * fractional midpoint. That writes every sibling's `order` instead of one —
+ * which sounds worse and is not, because the plan index persists as a SINGLE
+ * localStorage key: one record or fifty is the same atomic write, so the
+ * tearing risk that motivates fractional indexing does not exist here. In
+ * exchange the result can never run out of precision and never depends on the
+ * previous values being sane, which matters more for data arriving from
+ * imports and older versions.
+ *
+ * Reordering happens WITHIN a kind: folders render before plans at every level,
+ * so a plan cannot be dragged above a folder. Mixed selections reorder the kind
+ * of their first member and leave the rest alone.
+ *
+ * @returns {{plans: Array, folders: Array, ok: boolean, reason?: string}}
+ */
+export function applyReorder({ plans = [], folders = [] }, tree, ids, parentId, beforeId = null, opts = {}) {
+  const moving = new Set(ids);
+  const kind = tree.folderIds.has([...moving][0]) ? "folder" : "plan";
+  // Only same-kind siblings actually under this parent can be placed.
+  const scoped = [...moving].filter((id) =>
+    (kind === "folder") === tree.folderIds.has(id));
+  if (!scoped.length) return { plans, folders, ok: false, reason: "noop" };
+
+  const siblings = siblingsInOrder(tree, parentId, kind, opts);
+  const staying = siblings.filter((r) => !moving.has(r.id));
+  const picked = siblings.filter((r) => moving.has(r.id));
+  // Records being moved in from ANOTHER parent are not in `siblings` yet.
+  const byId = new Map([...plans, ...folders].map((r) => [r.id, r]));
+  for (const id of scoped) if (!picked.some((r) => r.id === id)) picked.push(byId.get(id));
+  const present = picked.filter(Boolean);
+  if (!present.length) return { plans, folders, ok: false, reason: "noop" };
+
+  const at = beforeId ? staying.findIndex((r) => r.id === beforeId) : -1;
+  const cut = at === -1 ? staying.length : at;
+  const sequence = [...staying.slice(0, cut), ...present, ...staying.slice(cut)];
+
+  const orders = reseedOrder(sequence);
+  const stamp = (list) => list.map((r) => (orders.has(r.id) ? { ...r, order: orders.get(r.id) } : r));
+  return {
+    plans: kind === "plan" ? stamp(plans) : plans,
+    folders: kind === "folder" ? stamp(folders) : folders,
+    ok: true,
+  };
+}
+
 export function moveTargets(tree, movingIds = [], { locale } = {}) {
   const { byName } = comparators("name", locale);
   const ids = [...movingIds];

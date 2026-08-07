@@ -57,7 +57,7 @@ export default function PlanLibrary() {
   const {
     showPlanLibrary, setShowPlanLibrary,
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
-    folderSort, setFolderSort,
+    folderSort, setFolderSort, reorderNodes, orderedSiblings,
     activePlanId, switchPlan, renamePlan,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
@@ -78,8 +78,13 @@ export default function PlanLibrary() {
   const [pending, setPending]       = useState(null);   // delete confirmation
   const [notice, setNotice]         = useState("");
   const [drag, setDrag]             = useState(null);   // { ids }
+  // Reordering is only offered under manual sort: name and recency derive
+  // position from the records, so a stored order would be invisible there.
+  const manualOrder = folderSort === "manual";
   const [dropTargetId, setDropTargetId] = useState(null);
   const [dropVerdict, setDropVerdict]   = useState("ok");
+  // Manual-order insertion point while dragging: { beforeId, afterId, parentId }.
+  const [insertAt, setInsertAt] = useState(null);
 
   const cardRef     = useRef(null);
   const searchRef   = useRef(null);
@@ -156,6 +161,43 @@ export default function PlanLibrary() {
 
   const parentFor = (row) =>
     row.kind === "folder" ? row.id : (planTree.parentOf.get(row.id) ?? null);
+
+  /**
+   * Which third of a row the cursor is in, as an insertion point.
+   *
+   * Top/bottom quarter → between rows; the middle half stays "into this
+   * folder". Plans get a wider band (top/bottom half) because they have no
+   * "into" meaning at all, so every pixel of a plan row is an insertion.
+   *
+   * Returns null when the cursor means "into", or when the drag would place a
+   * node relative to itself (a no-op that should show no line).
+   */
+  const edgeZone = (row, e) => {
+    const box = e.currentTarget?.getBoundingClientRect?.();
+    if (!box || !box.height) return null;
+    if (drag?.ids?.includes(row.id)) return null;
+    const frac = (e.clientY - box.top) / box.height;
+    const band = row.kind === "folder" ? 0.25 : 0.5;
+    const parentId = row.item.parentId ?? null;
+    if (frac <= band) return { beforeId: row.id, afterId: null, parentId };
+    if (frac >= 1 - band) {
+      // "After this row" is "before its next sibling", or the end of the list.
+      const sibs = orderedSiblings(parentId, row.kind);
+      const i = sibs.findIndex((r) => r.id === row.id);
+      const next = i === -1 ? null : sibs[i + 1];
+      return { beforeId: next?.id ?? null, afterId: row.id, parentId };
+    }
+    return null;
+  };
+
+  const commitReorder = (ids, at) => {
+    const res = reorderNodes(ids, at.parentId, at.beforeId);
+    clearDrag();
+    if (!res.ok && res.reason !== "noop") {
+      setNotice(t(`folders.move.err.${res.reason}`, { max: MAX_DEPTH }));
+    }
+    return res;
+  };
 
   const commitMove = (ids, targetId) => {
     const res = moveNodesTo(ids, targetId);
@@ -382,6 +424,7 @@ export default function PlanLibrary() {
 
   // ── Drag and drop ───────────────────────────────────────────────
   function clearDrag() {
+    setInsertAt(null);
     setDrag(null); setDropTargetId(null); setDropVerdict("ok");
     if (spring.current.timer) clearTimeout(spring.current.timer);
     spring.current = { id: null, timer: null };
@@ -415,6 +458,22 @@ export default function PlanLibrary() {
     onDragOver: (row, e) => {
       if (!drag) return;
       e.stopPropagation();               // the root zone must not also claim it
+
+      // Under manual order the row's EDGES mean "put it between these two" and
+      // only a folder's middle still means "put it inside". Without the edge
+      // band there would be no gesture for reordering at all, since a plan is
+      // not a container; with it, the two intents stay distinguishable because
+      // the insertion line and the folder highlight never appear together.
+      const zone = manualOrder ? edgeZone(row, e) : null;
+      if (zone) {
+        e.preventDefault();
+        try { e.dataTransfer.dropEffect = "move"; } catch {}
+        setDropTargetId(null);
+        setInsertAt(zone);
+        return;
+      }
+      setInsertAt(null);
+
       if (row.kind !== "folder") {
         // A plan is not a container. Refusing here beats quietly rerouting the
         // drop to its parent, which would land things the user didn't aim at.
@@ -434,7 +493,9 @@ export default function PlanLibrary() {
     },
     onDrop: (row, e) => {
       e.preventDefault(); e.stopPropagation();
-      if (!drag || row.kind !== "folder") { clearDrag(); return; }
+      if (!drag) { clearDrag(); return; }
+      if (insertAt) { commitReorder(drag.ids, insertAt); return; }
+      if (row.kind !== "folder") { clearDrag(); return; }
       commitMove(drag.ids, row.id);
     },
   };
@@ -656,7 +717,8 @@ export default function PlanLibrary() {
             }}
           />
           <div style={{ display: "flex", border: "1px solid var(--border-2)", borderRadius: 5, overflow: "hidden", flexShrink: 0 }}>
-            {[["name", t("folders.sort.name")], ["recent", t("folders.sort.recent")]].map(([mode, label]) => (
+            {[["name", t("folders.sort.name")], ["recent", t("folders.sort.recent")],
+              ["manual", t("folders.sort.manual")]].map(([mode, label]) => (
               <button key={mode} onClick={() => setFolderSort(mode)}
                 title={t("folders.sort.label")}
                 style={{
@@ -705,6 +767,7 @@ export default function PlanLibrary() {
               focusId={focusId}
               dropTargetId={dropTargetId}
               dropVerdict={dropVerdict}
+              insertAt={insertAt}
               selectMode={selectMode}
               onRowClick={onRowClick}
               onRowDoubleClick={openRow}

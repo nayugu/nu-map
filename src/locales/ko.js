@@ -307,6 +307,7 @@ export const strings = {
   "folders.sort.label":           "정렬 순서",
   "folders.sort.name":            "이름",
   "folders.sort.recent":          "최근",
+  "folders.sort.manual":        "수동",
   "folders.meta.matched":         "{total}개 중 {n}개",
   "folders.menu.open":            "열기",
   "folders.menu.rename":          "이름 변경",
