@@ -52,7 +52,7 @@ function cacheKey(url) {
 let queue = Promise.resolve();
 let lastFetchAt = 0;
 
-export const cacheStats = { hits: 0, misses: 0, writes: 0 };
+export const cacheStats = { hits: 0, misses: 0, writes: 0, retries: 0 };
 
 /** True when the on-disk cache is active for this run. */
 export function cacheEnabled() {
@@ -66,14 +66,32 @@ export function cacheDir() {
 /**
  * Fetch a URL as text, honouring the cache and the global rate limit.
  *
+ * ## Why it retries
+ *
+ * A dropped socket used to lose a page for the whole run. The scrapers absorb
+ * that as one fetch failure and the rails tolerate 2%, so a handful of
+ * programs would quietly keep last month's data with nothing in the log to
+ * distinguish it from a page that genuinely went away.
+ *
+ * That is merely untidy for the monthly job, which gets another go in four
+ * weeks. It is not for an ARCHIVE backfill: those editions are frozen and
+ * scraped once, so a transient error there writes a bundle permanently missing
+ * a program. Seven pages were lost this way on the first 2024-2025 run, and
+ * all seven answered 200 a minute later.
+ *
+ * Retries cover transport errors and 5xx — the states that mean "ask again".
+ * A 4xx is a real answer about that URL and is returned immediately, so a
+ * retired page still fails fast instead of costing three round trips.
+ *
  * @param {string} url
  * @param {object} [opts]
  * @param {number} [opts.delayMs=600]   minimum gap between live requests
  * @param {string} [opts.userAgent]
+ * @param {number} [opts.retries=2]     extra attempts after a transient failure
  * @returns {Promise<string>} the page HTML
  * @throws  on non-2xx, with the status in the message (callers already match on this)
  */
-export function politeFetch(url, { delayMs = 600, userAgent } = {}) {
+export function politeFetch(url, { delayMs = 600, userAgent, retries = 2 } = {}) {
   const ua = userAgent
     || "nu-map-scraper/1.0 (educational planning tool; not for commercial use)";
 
@@ -91,9 +109,28 @@ export function politeFetch(url, { delayMs = 600, userAgent } = {}) {
     lastFetchAt = Date.now();
 
     cacheStats.misses++;
-    const res = await fetch(url, { headers: { "User-Agent": ua } });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const html = await res.text();
+    let html, lastErr;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      if (attempt > 0) {
+        cacheStats.retries++;
+        // Back off rather than hammering something that is already struggling.
+        await sleep(delayMs * Math.pow(2, attempt));
+        lastFetchAt = Date.now();
+      }
+      try {
+        const res = await fetch(url, { headers: { "User-Agent": ua } });
+        // 4xx is an answer about this URL, not a reason to ask again.
+        if (!res.ok && res.status < 500) throw Object.assign(new Error(`HTTP ${res.status}`), { final: true });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        html = await res.text();
+        lastErr = null;
+        break;
+      } catch (err) {
+        lastErr = err;
+        if (err.final) break;
+      }
+    }
+    if (lastErr) throw lastErr;
 
     if (path) {
       mkdirSync(dirname(path), { recursive: true });
@@ -110,6 +147,9 @@ export function politeFetch(url, { delayMs = 600, userAgent } = {}) {
 
 /** One-line summary for the end of a run. */
 export function cacheSummary() {
-  if (!CACHE_DIR) return `${cacheStats.misses} pages fetched (cache off)`;
-  return `${cacheStats.hits} from cache, ${cacheStats.misses} fetched → ${CACHE_DIR}`;
+  // Retries are reported because a run that needed several says something
+  // about the network that a clean fetch count hides.
+  const retried = cacheStats.retries ? `, ${cacheStats.retries} retried` : "";
+  if (!CACHE_DIR) return `${cacheStats.misses} pages fetched (cache off)${retried}`;
+  return `${cacheStats.hits} from cache, ${cacheStats.misses} fetched${retried} → ${CACHE_DIR}`;
 }
