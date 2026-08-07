@@ -124,6 +124,8 @@ export const strings = {
   "grad.plan.newplan":        "Ouvrir dans un nouveau plan",
   "grad.plan.addhere":        "Ajouter ici",
   "grad.plan.placed.new":     "Nouveau plan ouvert avec {n} cours et {c} stages coop.",
+  "grad.plan.cycle.spring":  "Cycle de printemps",
+  "grad.plan.cycle.fall":    "Cycle d'automne",
   "grad.gpa.title":               "Exigences de GPA",
   "grad.gpa.met":                 "atteint avec les notes saisies",
   "grad.gpa.current":             "{gpa} à ce jour ({n} notés)",

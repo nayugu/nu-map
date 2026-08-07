@@ -125,6 +125,8 @@ export const strings = {
   "grad.plan.newplan":        "新しいプランで開く",
   "grad.plan.addhere":        "ここに追加",
   "grad.plan.placed.new":     "{n} 科目と {c} 件のコーオプで新しいプランを開きました。",
+  "grad.plan.cycle.spring":  "春サイクル",
+  "grad.plan.cycle.fall":    "秋サイクル",
   "grad.gpa.title":               "GPA要件",
   "grad.gpa.met":                 "入力済みの成績で達成",
   "grad.gpa.current":             "現在 {gpa}（{n}科目入力済み）",

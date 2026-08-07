@@ -124,6 +124,8 @@ export const strings = {
   "grad.plan.newplan":        "नई योजना में खोलें",
   "grad.plan.addhere":        "यहीं जोड़ें",
   "grad.plan.placed.new":     "{n} पाठ्यक्रम और {c} को-ऑप के साथ नई योजना खोली गई।",
+  "grad.plan.cycle.spring":  "स्प्रिंग साइकिल",
+  "grad.plan.cycle.fall":    "फ़ॉल साइकिल",
   "grad.gpa.title":               "GPA आवश्यकताएँ",
   "grad.gpa.met":                 "दर्ज किए गए ग्रेड से पूरा हुआ",
   "grad.gpa.current":             "अब तक {gpa} ({n} ग्रेडेड)",

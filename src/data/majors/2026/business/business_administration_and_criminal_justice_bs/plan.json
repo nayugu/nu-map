@@ -163,7 +163,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948"
@@ -178,7 +178,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948"
@@ -241,7 +241,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948"
@@ -256,7 +256,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948"
@@ -539,7 +539,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948",
@@ -560,7 +560,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948",
@@ -619,7 +619,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948",
@@ -640,7 +640,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "choice",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945",
                     "COOP3948",

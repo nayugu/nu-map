@@ -21,6 +21,7 @@ import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
+import { formatPlanLabel } from "../core/samplePlan.js";
 import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes, COOP_GPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
@@ -1277,9 +1278,14 @@ function SamplePlanRow({ path, isGrad, isPhone, programName }) {
   if (!plans?.length) return null;
 
   const chosen = plans[pick];
+  // "Spring cycle" / "Fall cycle" is Northeastern's own term and what students
+  // actually say, so the choice reads as the one they know they are making.
+  // The catalog writes the same two ideas 166 different ways, and 77 plans
+  // never name the timing at all — formatPlanLabel reads it off the grid.
+  const shown = (p) => formatPlanLabel(p, (c) => t(`grad.plan.cycle.${c}`));
   const onHere = () => setResult({ ...summarizeSamplePlan(applySamplePlan(chosen)), where: "here" });
   const onNew  = () => {
-    const name = programName ? `${programName} \u00b7 ${chosen.label}` : chosen.label;
+    const name = programName ? `${programName} \u00b7 ${shown(chosen)}` : shown(chosen);
     setResult({ ...summarizeSamplePlan(openSamplePlanAsNewPlan(chosen, name)), where: "new" });
   };
 
@@ -1306,12 +1312,12 @@ function SamplePlanRow({ path, isGrad, isPhone, programName }) {
               background: "var(--bg-2)", color: "var(--text-1)",
             }}
           >
-            {plans.map((p, i) => <option key={i} value={i}>{p.label}</option>)}
+            {plans.map((p, i) => <option key={i} value={i}>{shown(p)}</option>)}
           </select>
         )}
         {plans.length === 1 && (
           <span style={{ flex: 1, minWidth: 0, fontSize: isPhone ? 10 : 11, color: "var(--text-2)" }}>
-            {plans[0].label}
+            {shown(plans[0])}
           </span>
         )}
         {/* Which action leads depends on what is at stake. With an empty plan

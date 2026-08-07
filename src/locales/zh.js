@@ -124,6 +124,8 @@ export const strings = {
   "grad.plan.newplan":        "另存为新计划",
   "grad.plan.addhere":        "加入此计划",
   "grad.plan.placed.new":     "已新建计划，包含 {n} 门课程和 {c} 段实习。",
+  "grad.plan.cycle.spring":  "春季周期",
+  "grad.plan.cycle.fall":    "秋季周期",
   "grad.gpa.title":               "GPA 要求",
   "grad.gpa.met":                 "按已输入的成绩已达标",
   "grad.gpa.current":             "当前 {gpa}（已评分 {n} 门）",

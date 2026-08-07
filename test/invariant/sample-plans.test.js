@@ -114,8 +114,14 @@ test("sample plans › every entry is a kind the applier knows", () => {
             // course kinds must never be empty — an entry with a course kind
             // and no codes would place nothing while claiming to place
             // something.
-            if (e.kind === "coop" || e.kind === "placeholder") {
-              assert.equal(e.codes, undefined, `${path}: ${e.kind} carries codes`);
+            if (e.kind === "coop") {
+              // A co-op MAY name the course a student registers for
+              // (COOP 3945 and friends); it is still a work term, not a card.
+              for (const c of e.codes ?? []) {
+                assert.match(c, /^COOP\d/, `${path}: coop entry carries a non-coop code ${c}`);
+              }
+            } else if (e.kind === "placeholder") {
+              assert.equal(e.codes, undefined, `${path}: placeholder carries codes`);
             } else {
               assert.ok(e.codes?.length, `${path}: ${e.kind} with no codes`);
             }

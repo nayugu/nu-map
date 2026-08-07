@@ -164,7 +164,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945"
                   ],
@@ -178,7 +178,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945"
                   ],
@@ -238,7 +238,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945"
                   ],
@@ -252,7 +252,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
+                  "kind": "coop",
                   "codes": [
                     "COOP3945"
                   ],

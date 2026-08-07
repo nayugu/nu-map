@@ -124,6 +124,8 @@ export const strings = {
   "grad.plan.newplan":        "فتح كخطة جديدة",
   "grad.plan.addhere":        "إضافة هنا",
   "grad.plan.placed.new":     "تم فتح خطة جديدة تضم {n} مقررًا و {c} فترة تدريب تعاوني.",
+  "grad.plan.cycle.spring":  "دورة الربيع",
+  "grad.plan.cycle.fall":    "دورة الخريف",
   "grad.gpa.title":               "متطلبات المعدل التراكمي",
   "grad.gpa.met":                 "تحقق بالدرجات المُدخلة",
   "grad.gpa.current":             "{gpa} حتى الآن ({n} مُقيَّمة)",

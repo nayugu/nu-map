@@ -11,7 +11,9 @@
 // at a time and NU registers in four- and six-month blocks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mapSamplePlan, academicYears, summarizeSamplePlan } from "../../src/core/samplePlan.js";
+import {
+  mapSamplePlan, academicYears, summarizeSamplePlan, coopCycle, formatPlanLabel,
+} from "../../src/core/samplePlan.js";
 
 /** Four academic years in NU's shape, matching src/core/semGrid.js output. */
 const SEMESTERS = [
@@ -248,4 +250,94 @@ test("sample plan › an empty or missing plan is safe", () => {
     assert.deepEqual(r.placed, []);
     assert.deepEqual(r.coops, []);
   }
+});
+
+// ── Co-op cycle ──────────────────────────────────────────────────────────────
+//
+// "Spring cycle" and "fall cycle" are Northeastern's own words for which half
+// of the year a student works, and the first thing students tell each other
+// about their schedule. The catalog does not use them: across 678 plans it
+// writes the same two ideas 166 different ways, and 77 plans state a co-op
+// schedule in the grid whose heading never names the timing at all.
+//
+// So the cycle is read from where the co-ops ARE. The wording is a fallback.
+
+const coopPlan = (label, ...types) => ({
+  label,
+  years: [{ label: "Year 2", terms: types.map(t => ({ term: t, type: t, entries: [coop()] })) }],
+});
+const CYC = c => (c === "spring" ? "Spring cycle" : "Fall cycle");
+
+test("cycle › a co-op reaching into spring is the spring cycle", () => {
+  // January to June. The summer half it also covers settles nothing on its own.
+  assert.equal(coopCycle(coopPlan("Plan 1", "spring", "sumA")), "spring");
+});
+
+test("cycle › a co-op reaching into fall is the fall cycle", () => {
+  // July to December.
+  assert.equal(coopCycle(coopPlan("Plan 1", "sumB", "fall")), "fall");
+});
+
+test("cycle › the grid outranks the heading", () => {
+  // 77 plans state a schedule the heading never mentions, and the headings
+  // that do mention it disagree with the grid on 4 of 513. The grid is the
+  // fact; the heading is a description of it.
+  assert.equal(coopCycle(coopPlan("Four Years, Two Co-ops in Summer Second Half/Fall", "spring", "sumA")), "spring");
+});
+
+test("cycle › the heading is used when the grid has no co-op at all", () => {
+  // Some departments draw only part of a co-op into the grid, or none of it.
+  const noGrid = { label: "Four Years, Two Co-ops in Spring/Summer First Half", years: [] };
+  assert.equal(coopCycle(noGrid), "spring");
+  assert.equal(coopCycle({ label: "Four Years, Two Co-ops in Summer 2/Fall", years: [] }), "fall");
+});
+
+test("cycle › a plan spanning both cycles claims neither", () => {
+  // Real on some three-co-op plans. Naming one would be picking for the
+  // student exactly where the choice matters most.
+  assert.equal(coopCycle(coopPlan("Plan 1", "spring", "sumA", "sumB", "fall")), null);
+});
+
+test("cycle › no co-op means no cycle", () => {
+  assert.equal(coopCycle({ label: "Four Years, No Co-op", years: [] }), null);
+  assert.equal(coopCycle(null), null);
+});
+
+test("cycle › the label keeps its identity and loses the timing phrase", () => {
+  const p = coopPlan("Four Years, Two Co-ops in Spring/Summer First Half", "spring", "sumA");
+  assert.equal(formatPlanLabel(p, CYC), "Four Years, Two Co-ops · Spring cycle");
+
+  // A concentration prefix is the plan's identity across saved selections and
+  // must survive untouched.
+  const c = coopPlan("Philosophy with Concentration in Law and Ethics: Four Years, Two Co-ops in Spring/Summer First Half", "spring", "sumA");
+  assert.equal(formatPlanLabel(c, CYC),
+    "Philosophy with Concentration in Law and Ethics: Four Years, Two Co-ops · Spring cycle");
+});
+
+test("cycle › every spelling the catalog uses is stripped", () => {
+  // All verbatim from the corpus, including both orderings of the same
+  // schedule — which is why the wording is not trusted to name the cycle.
+  const spellings = [
+    "Four Years, Two Co-ops in Spring/Summer First Half",
+    "Four Years, Two Co-ops in Spring/Summer First-Half",
+    "Four Years, Two Co-ops Spring/Summer First Half",
+    "Four Years, Two Co-ops in Spring, Summer First Half",
+    "Four Years, Two Co-ops in Summer First Half/Spring",
+    "Four Years, Two Co-ops in Summer First Half / Spring",
+  ];
+  for (const s of spellings) {
+    assert.equal(formatPlanLabel(coopPlan(s, "spring", "sumA"), CYC),
+      "Four Years, Two Co-ops · Spring cycle", s);
+  }
+});
+
+test("cycle › a heading that is ONLY the timing becomes just the cycle", () => {
+  // Falling back to the raw label here would print the wording the cycle was
+  // meant to replace, right next to the cycle.
+  assert.equal(formatPlanLabel(coopPlan("Spring/Summer First Half", "spring", "sumA"), CYC), "Spring cycle");
+});
+
+test("cycle › a plan with no cycle keeps its label untouched", () => {
+  const p = { label: "Four Years, No Co-op", years: [] };
+  assert.equal(formatPlanLabel(p, CYC), "Four Years, No Co-op");
 });
