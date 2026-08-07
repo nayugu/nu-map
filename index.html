@@ -120,6 +120,33 @@
       [data-drag-id] { -webkit-user-select: none; user-select: none; }
     </style>
     <script>
+      // Mistyped URLs must never masquerade as a deploy in progress.
+      //
+      // The app occupies exactly ONE path: nothing in it routes by pathname
+      // (share links ride the # fragment). So any other path arrived here
+      // through the SPA catch-all in _redirects, which answers every
+      // unmatched path with this shell at status 200 — meaning the page does
+      // not exist. Left to boot, the relative asset URLs (`base: "./"`)
+      // resolve against the wrong directory, the module fails to load, and
+      // the recovery screen announces that NU Map is updating: wrong, and
+      // permanent, since no deploy will ever fix a typo. Redirect to a real
+      // not-found page before the module is ever reached, so the recovery
+      // path — which must keep trusting a failed module load — is untouched.
+      (function () {
+        var ROOTS = ['/', '/index.html', '/nu-map/', '/nu-map/index.html'];
+        var p = location.pathname;
+        // Never bounce the not-found page itself: were 404.html ever missing,
+        // the catch-all would serve this shell there and we would loop.
+        if (/\/404(\.html)?$/.test(p) || ROOTS.indexOf(p) !== -1) return;
+        var base = '/';
+        for (var i = 0; i < ROOTS.length; i++) {
+          var r = ROOTS[i];
+          if (r.charAt(r.length - 1) === '/' && p.indexOf(r) === 0 && r.length > base.length) base = r;
+        }
+        location.replace(base + '404?p=' + encodeURIComponent(p + location.search));
+      })();
+    </script>
+    <script>
       // Paint the correct background before React mounts so dark-mode users
       // don't see a white flash. Mirrors ThemeContext's resolution: saved
       // choice first ("ncp"/"map" storage prefixes), then the OS preference.
