@@ -53,6 +53,38 @@ function UpIcon({ size = 12 }) {
   );
 }
 
+/**
+ * Drag a small badge rather than a snapshot of the whole row.
+ *
+ * The browser's default ghost is a translucent copy of the source element,
+ * which for a plan row is a full-width tab that covers the very thing you are
+ * trying to aim at — the gap between two rows. Where the drop will land is
+ * already said by the insertion line and the folder highlight, so the ghost
+ * only has to say WHAT is moving, and the icon says that in a fraction of the
+ * area. Multi-select adds a count, since a bare icon cannot show that three
+ * plans are coming along.
+ *
+ * The node has to be in the document for the browser to rasterise it, and has
+ * to survive the current frame, so it is parked offscreen and removed on the
+ * next tick rather than immediately.
+ */
+function setMinimalDragImage(e, row, count) {
+  const icon = row.item?.type === "folder" || row.children ? "\u{1F4C1}" : "\u{1F4C4}";
+  const el = document.createElement("div");
+  el.textContent = count > 1 ? `${icon} ${count}` : icon;
+  Object.assign(el.style, {
+    position: "fixed", top: "-1000px", left: "-1000px",
+    font: "14px system-ui, sans-serif", lineHeight: "20px",
+    padding: "2px 6px", borderRadius: "6px",
+    background: "var(--bg-2, #fff)", color: "var(--text-1, #1e293b)",
+    border: "1px solid var(--border-1, #cbd5e1)",
+    boxShadow: "0 2px 6px rgba(0,0,0,.18)", pointerEvents: "none",
+  });
+  document.body.appendChild(el);
+  e.dataTransfer.setDragImage(el, 12, 12);
+  setTimeout(() => el.remove(), 0);
+}
+
 export default function PlanLibrary() {
   const {
     showPlanLibrary, setShowPlanLibrary,
@@ -443,6 +475,7 @@ export default function PlanLibrary() {
       try {
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/plain", row.item.name ?? "");
+        setMinimalDragImage(e, row, ids.length);
       } catch {}
       // Deferred for the same reason PlannerContext's course onDragStart defers
       // its own setState: a synchronous state set inside `dragstart` re-renders
