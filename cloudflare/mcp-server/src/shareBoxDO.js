@@ -1,11 +1,16 @@
 // ShareBoxDO — the one coat-check counter for share-by-code.
 //
 // A single instance (idFromName("global")) holds every parked share as
-// its own storage key (`share:<code>` → { payload, expiresAt }), because
+// its own storage key (`share:<id>` → { payload, expiresAt }), because
 // volume is tiny and one instance makes claim-once atomic and the
-// outstanding-shares cap trivial. Validation, code generation, and the
-// per-IP rate budget come from the dev server's shareBox module — same
-// reuse pattern as SessionDO ↔ planState.
+// outstanding-shares cap trivial. Validation and the per-IP rate budget
+// come from the dev server's shareBox module — same reuse pattern as
+// SessionDO ↔ planState.
+//
+// Shares are ENCRYPTED by the client (src/core/shareCrypto.js). This
+// object receives an opaque id and opaque ciphertext and never learns the
+// code, so it cannot derive the key and cannot read a plan. Codes are
+// generated client-side, which is why nothing here mints one.
 //
 // Lifecycle: create parks a share and arms an alarm at its expiry;
 // claim returns the payload once and deletes it; the alarm sweeps
@@ -13,7 +18,7 @@
 // outlives SHARE_TTL_MS, so steady-state storage is a few kilobytes.
 
 import {
-  validateSharePayload, randomCode, normalizeCode, createRateLimiter,
+  validateSharePayload, validateShareId, createRateLimiter,
   SHARE_TTL_MS, MAX_OUTSTANDING, MAX_LIVE_PER_IP,
 } from "../../../mcp-server/src/shareBox.js";
 
@@ -60,6 +65,7 @@ export class ShareBoxDO {
     if (result.ok) return 200;
     if (result.reason === "rate_limited" || result.reason === "too_many_live") return 429;
     if (result.reason === "not_found") return 404;
+    if (result.reason === "collision") return 409;
     return 400;
   }
 
@@ -71,7 +77,7 @@ export class ShareBoxDO {
     try {
       if (seg[0] === "share" && request.method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const result = await this.create(body?.payload, ip);
+        const result = await this.create(body?.id, body?.payload, ip);
         return json(result, ShareBoxDO.statusOf(result));
       }
       if (seg[0] === "claim" && seg[1] && request.method === "POST") {
@@ -87,13 +93,13 @@ export class ShareBoxDO {
       // Creator-IP only — anyone else gets a flat 404 whether or not the
       // code exists, same rule as status().
       if (seg[0] === "share-ws" && seg[1] && request.headers.get("Upgrade") === "websocket") {
-        const code = normalizeCode(seg[1]);
-        const share = await this.ctx.storage.get("share:" + code);
+        const id = seg[1];
+        const share = validateShareId(id) ? await this.ctx.storage.get("share:" + id) : null;
         if (!share || share.expiresAt <= Date.now() || share.ip !== ip) {
           return json({ error: "Not found" }, 404);
         }
         const pair = new WebSocketPair();
-        this.ctx.acceptWebSocket(pair[1], [code]);
+        this.ctx.acceptWebSocket(pair[1], [id]);
         return new Response(null, { status: 101, webSocket: pair[0] });
       }
       return json({ error: "Not found" }, 404);
@@ -102,10 +108,11 @@ export class ShareBoxDO {
     }
   }
 
-  async create(payload, ip) {
+  async create(id, payload, ip) {
     const gate = this.rate.take(ip, "create");
     if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
-    const valid = await validateSharePayload(payload);
+    if (!validateShareId(id)) return { ok: false, reason: "bad_id" };
+    const valid = validateSharePayload(payload);
     if (!valid.ok) return valid;
 
     // Sweep + count (global and this IP's) in one pass; at
@@ -129,36 +136,40 @@ export class ShareBoxDO {
     }
     if (live >= MAX_OUTSTANDING) return { ok: false, reason: "busy" };
 
-    let code = randomCode();
-    while (all.has(`share:${code}`)) code = randomCode();
+    // The client picks the code, so two senders can in principle pick the
+    // same one (~1 in 887 million against a live set of at most 2,000).
+    // Refuse rather than overwrite: the incumbent's share must survive,
+    // and the client simply generates another code.
+    if (all.has(`share:${id}`)) return { ok: false, reason: "collision" };
     const expiresAt = now + SHARE_TTL_MS;
-    await this.ctx.storage.put(`share:${code}`, { payload, expiresAt, ip });
+    await this.ctx.storage.put(`share:${id}`, { payload, expiresAt, ip });
 
     // Arm the sweep for this expiry unless an earlier one is already set.
     const alarm = await this.ctx.storage.getAlarm();
     if (alarm === null || alarm > expiresAt) await this.ctx.storage.setAlarm(expiresAt + 1000);
 
-    return { ok: true, code, expiresInSeconds: SHARE_TTL_MS / 1000 };
+    return { ok: true, expiresInSeconds: SHARE_TTL_MS / 1000 };
   }
 
   // Pickup feedback for the sender's tab. Only the creator's IP learns
   // anything — everyone else gets a flat "not yours" whether the code
   // exists or not, so status can never scan for codes silently.
-  async status(rawCode, ip) {
+  async status(id, ip) {
     const gate = this.rate.take(ip, "status");
     if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
-    const share = await this.ctx.storage.get(`share:${normalizeCode(rawCode)}`);
+    const share = validateShareId(id) ? await this.ctx.storage.get(`share:${id}`) : null;
     return { ok: true, live: !!(share && share.expiresAt > Date.now() && share.ip === ip) };
   }
 
-  async claim(rawCode, ip) {
+  async claim(id, ip) {
     const gate = this.rate.take(ip, "claim");
     if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
-    const key = `share:${normalizeCode(rawCode)}`;
+    if (!validateShareId(id)) return { ok: false, reason: "not_found" };
+    const key = `share:${id}`;
     const share = await this.ctx.storage.get(key);
     if (!share || share.expiresAt <= Date.now()) return { ok: false, reason: "not_found" };
     await this.ctx.storage.delete(key); // one use — gone on first claim
-    this.burnNotify(normalizeCode(rawCode), "claimed");
+    this.burnNotify(id, "claimed");
     // Self-cancel is a no-op on the world, so it's free: taking back
     // your own code refunds both tokens. Claims of OTHER people's codes
     // stay budgeted — that's the scan defense.

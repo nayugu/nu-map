@@ -2,31 +2,47 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // AGPL-3.0-only + attribution term under §7(b); see LICENSING.md and NOTICE.
 //
-// Share-by-code relay — the coat-check model.
+// Share-by-code relay — the coat-check model, now holding sealed bags.
 //
-// A sender parks an encoded plan snapshot under a short random code; the
-// first claim returns it AND deletes it (one use), and anything unclaimed
-// expires after SHARE_TTL_MS. Nothing is ever stored longer than that, so
-// there is no per-user server state and no accumulation.
+// A sender parks a plan; the first claim returns it AND deletes it (one
+// use), and anything unclaimed expires after SHARE_TTL_MS. Nothing is
+// ever stored longer than that, so there is no per-user server state and
+// no accumulation.
 //
-// The payload is the SAME artifact as a snapshot link (planShare v2):
-// its _KEYS allowlist strips grades client-side before anything leaves
-// the tab, and validateSharePayload re-rejects grades server-side as
-// defense in depth. Size + shape validation double as the anti-abuse
-// wall — an opaque blob store this is not.
+// ── What changed when shares became encrypted ───────────────────────
+// The relay used to receive a readable plan: it generated the code, held
+// the encoded plan under it, and decoded it to validate. It therefore
+// COULD read every plan that passed through, and "we don't" was a promise.
+//
+// Now the client generates the code, derives a storage id and an AES key
+// from it in one slow KDF pass (src/core/shareCrypto.js), and uploads only
+// ciphertext under the id. This module never sees a code, so it cannot
+// derive a key, so it cannot read a plan. The promise became an inability.
+//
+// The deliberate cost: content validation is GONE. This module can no
+// longer confirm a payload is a planShare v2 plan, and — the one that
+// mattered — can no longer reject a hostile client smuggling a `grades`
+// key. That invariant now rests entirely on the client's _KEYS allowlist,
+// which cannot express grades and is pinned by test/unit/plan-share-
+// privacy.test.js. A hostile client can therefore store arbitrary bytes
+// here, but only bytes it can retrieve itself, bounded by:
+//   • MAX_PAYLOAD_CHARS, so it is not a file host
+//   • SHARE_TTL_MS, so nothing lingers
+//   • the per-IP token buckets and live-share cap below
+// which is what keeps an opaque blob store from being a useful one.
 //
 // Consumers: the Node dev server (createMemoryShareBox) and the worker's
-// ShareBoxDO (which reuses the validators/helpers against DO storage).
+// ShareBoxDO (which reuses these validators/helpers against DO storage).
 
-import { decodePlan } from "../../src/core/planShare.js";
+import { ID_PATTERN } from "../../src/core/shareCrypto.js";
 
 export const SHARE_TTL_MS = 10 * 60 * 1000;
-export const MAX_PAYLOAD_CHARS = 4096;   // generous for a v2 plan, useless as a pastebin
-export const MAX_OUTSTANDING = 2000;     // global peak-concurrency cap (~2 MB of DO storage)
+// A 4 KB plan becomes ~5.5 KB once the IV and GCM tag are added and the
+// whole thing is base64url'd (4/3 expansion). 6 KB preserves the previous
+// plan capacity exactly; it is still useless as a pastebin.
+export const MAX_PAYLOAD_CHARS = 6144;
+export const MAX_OUTSTANDING = 2000;     // global peak-concurrency cap
 export const MAX_LIVE_PER_IP = 25;       // a classroom behind one NAT IP, not one person
-
-export const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no 0/O/1/I/L
-export const CODE_LENGTH = 6;
 
 // Token buckets per IP — sized for campus NAT, where one public IP can
 // front a whole lecture hall: "per IP" must fit a crowd's honest burst,
@@ -41,44 +57,24 @@ const RATE = {
   status: { capacity: 120, refillMs: 2_000 },  // sender-side pickup polling (~1 per 5 s)
 };
 
-/** Crypto-random code, rejection-sampled so every character is uniform. */
-export function randomCode(len = CODE_LENGTH) {
-  const limit = 256 - (256 % CODE_ALPHABET.length);
-  let code = "";
-  while (code.length < len) {
-    const buf = new Uint8Array(len);
-    globalThis.crypto.getRandomValues(buf);
-    for (const b of buf) {
-      if (b < limit && code.length < len) code += CODE_ALPHABET[b % CODE_ALPHABET.length];
-    }
-  }
-  return code;
-}
-
-/** Uppercase and drop anything outside the alphabet's character class. */
-export function normalizeCode(raw) {
-  return String(raw ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+/**
+ * The id is the only handle the relay gets: hex of the first 16 bytes of
+ * the client's key derivation. Shape is all that can be checked — by
+ * construction the server cannot verify it corresponds to any code.
+ */
+export function validateShareId(id) {
+  return typeof id === "string" && ID_PATTERN.test(id);
 }
 
 /**
- * A share must be exactly what the client produces: a base64url gzip of a
- * planShare v2 compact plan, within size, carrying no grades. Anything
- * else is refused — the relay only ferries plans.
+ * A share must look like ciphertext this client produces: non-empty,
+ * within size, base64url only. Content is unreadable here by design —
+ * see the header note on what that gives up and what bounds it instead.
  */
-export async function validateSharePayload(payload) {
+export function validateSharePayload(payload) {
   if (typeof payload !== "string" || payload.length === 0) return { ok: false, reason: "bad_payload" };
   if (payload.length > MAX_PAYLOAD_CHARS) return { ok: false, reason: "too_large" };
   if (!/^[A-Za-z0-9_-]+$/.test(payload)) return { ok: false, reason: "bad_payload" };
-  let plan;
-  try { plan = await decodePlan(payload); }
-  catch { return { ok: false, reason: "bad_payload" }; }
-  if (!plan || typeof plan !== "object" || Array.isArray(plan)) return { ok: false, reason: "bad_payload" };
-  // v1 passthrough would accept arbitrary JSON — the client only ever
-  // shares v2, so only v2 rides the relay.
-  if (plan.version !== 2) return { ok: false, reason: "bad_payload" };
-  // The client's allowlist can't emit grades, but the server doesn't
-  // trust clients: a crafted payload smuggling a grades key is refused.
-  if ("grades" in plan) return { ok: false, reason: "bad_payload" };
   return { ok: true };
 }
 
@@ -108,7 +104,7 @@ export function createRateLimiter(now = Date.now) {
   };
 
   // Give a token back (never past capacity). Used when an action turns
-  // out to be a no-op on the world — canceling your own code.
+  // out to be a no-op on the world — canceling your own share.
   const refund = (ip, kind) => {
     const b = buckets.get(`${ip}|${kind}`);
     if (b) b.tokens = Math.min(RATE[kind].capacity, b.tokens + 1);
@@ -119,34 +115,35 @@ export function createRateLimiter(now = Date.now) {
 
 /**
  * In-memory share box for the Node dev server. `now` is injectable for
- * tests. API mirrors ShareBoxDO: { create(payload, ip), claim(code, ip) }.
+ * tests. API mirrors ShareBoxDO: { create(id, payload, ip), claim(id, ip) }.
  */
 export function createMemoryShareBox({ now = Date.now } = {}) {
-  const shares = new Map();   // code → { payload, expiresAt, ip }
-  const watchers = new Map(); // code → Set<ws> (sender tabs awaiting pickup)
+  const shares = new Map();   // id → { payload, expiresAt, ip }
+  const watchers = new Map(); // id → Set<ws> (sender tabs awaiting pickup)
   const rate = createRateLimiter(now);
 
-  // The "interrupt": tell every watching sender tab the code is gone,
+  // The "interrupt": tell every watching sender tab the share is gone,
   // then hang up. Mirrors ShareBoxDO's hibernation-socket notify.
-  const burnNotify = (code, msg) => {
-    const set = watchers.get(code);
+  const burnNotify = (id, msg) => {
+    const set = watchers.get(id);
     if (!set) return;
     for (const ws of set) { try { ws.send(msg); ws.close(1000, msg); } catch { /* already gone */ } }
-    watchers.delete(code);
+    watchers.delete(id);
   };
 
   const purge = () => {
     const t = now();
-    for (const [code, s] of shares) {
-      if (s.expiresAt <= t) { shares.delete(code); burnNotify(code, 'expired'); }
+    for (const [id, s] of shares) {
+      if (s.expiresAt <= t) { shares.delete(id); burnNotify(id, 'expired'); }
     }
   };
 
   return {
-    async create(payload, ip) {
+    async create(id, payload, ip) {
       const gate = rate.take(ip, "create");
       if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
-      const valid = await validateSharePayload(payload);
+      if (!validateShareId(id)) return { ok: false, reason: "bad_id" };
+      const valid = validateSharePayload(payload);
       if (!valid.ok) return valid;
       purge();
       // Concurrency cap: claimed/canceled/expired shares free their slot
@@ -162,36 +159,39 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
                  retryAfterSeconds: Math.max(1, Math.ceil((earliest - now()) / 1000)) };
       }
       if (shares.size >= MAX_OUTSTANDING) return { ok: false, reason: "busy" };
-      let code = randomCode();
-      while (shares.has(code)) code = randomCode();
-      shares.set(code, { payload, expiresAt: now() + SHARE_TTL_MS, ip });
-      return { ok: true, code, expiresInSeconds: SHARE_TTL_MS / 1000 };
+      // The client picks the code, so two senders can in principle pick the
+      // same one (~1 in 887 million against a live set of at most 2,000).
+      // Refuse rather than overwrite: the incumbent's share must survive,
+      // and the client simply generates another code.
+      if (shares.has(id)) return { ok: false, reason: "collision" };
+      shares.set(id, { payload, expiresAt: now() + SHARE_TTL_MS, ip });
+      return { ok: true, expiresInSeconds: SHARE_TTL_MS / 1000 };
     },
 
-    // Pickup feedback for the sender's tab: is my code still parked?
+    // Pickup feedback for the sender's tab: is my share still parked?
     // Only the creator's IP learns anything — everyone else gets a flat
-    // "not yours" whether the code exists or not, so status can never be
-    // used to scan for codes silently (claims stay the only probe, and
-    // they burn).
-    async status(rawCode, ip) {
+    // "not yours" whether the share exists or not, so status can never be
+    // used to scan silently (claims stay the only probe, and they burn).
+    async status(id, ip) {
       const gate = rate.take(ip, "status");
       if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
       purge();
-      const share = shares.get(normalizeCode(rawCode));
+      const share = shares.get(String(id ?? ""));
       return { ok: true, live: !!(share && share.ip === ip) };
     },
 
-    async claim(rawCode, ip) {
+    async claim(id, ip) {
       const gate = rate.take(ip, "claim");
       if (!gate.ok) return { ok: false, reason: "rate_limited", retryAfterSeconds: gate.retryAfterSeconds };
       purge();
-      const share = shares.get(normalizeCode(rawCode));
+      const key = String(id ?? "");
+      const share = shares.get(key);
       if (!share) return { ok: false, reason: "not_found" };
-      shares.delete(normalizeCode(rawCode)); // one use — gone on first claim
-      burnNotify(normalizeCode(rawCode), 'claimed');
+      shares.delete(key); // one use — gone on first claim
+      burnNotify(key, 'claimed');
       // Self-cancel is a no-op on the world, so it's free: taking back
-      // your own code refunds both tokens. Claims of OTHER people's
-      // codes stay budgeted — that's the scan defense.
+      // your own share refunds both tokens. Claims of OTHER people's
+      // shares stay budgeted — that's the scan defense.
       if (share.ip === ip) {
         rate.refund(ip, "claim");
         rate.refund(ip, "create");
@@ -200,22 +200,22 @@ export function createMemoryShareBox({ now = Date.now } = {}) {
     },
 
     /**
-     * Attach a sender tab's WebSocket to its code (Node `ws` socket).
+     * Attach a sender tab's WebSocket to its share (Node `ws` socket).
      * Creator-IP only, same rule as status(); anyone else is hung up on
-     * without learning whether the code exists.
+     * without learning whether the share exists.
      */
-    watch(rawCode, ip, ws) {
-      const code = normalizeCode(rawCode);
-      const share = shares.get(code);
+    watch(id, ip, ws) {
+      const key = String(id ?? "");
+      const share = shares.get(key);
       if (!share || share.ip !== ip || share.expiresAt <= now()) {
         try { ws.close(1000, 'gone'); } catch { /* already gone */ }
         return;
       }
-      let set = watchers.get(code);
-      if (!set) watchers.set(code, set = new Set());
+      let set = watchers.get(key);
+      if (!set) watchers.set(key, set = new Set());
       set.add(ws);
       ws.on('message', (m) => { if (String(m) === 'ping') { try { ws.send('pong'); } catch { /* closing */ } } });
-      ws.on('close', () => { set.delete(ws); if (set.size === 0) watchers.delete(code); });
+      ws.on('close', () => { set.delete(ws); if (set.size === 0) watchers.delete(key); });
     },
   };
 }

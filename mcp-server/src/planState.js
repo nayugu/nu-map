@@ -6,7 +6,10 @@
 // /plan-contents, /consent) and from optimistic applies after
 // apply_changes. Reads come from MCP tools.
 
-import { randomCode } from "./shareBox.js";
+// Pairing codes reuse the share alphabet for the same reason it exists:
+// the code gets read aloud, so 0/O/1/I/L are excluded. (Its home moved to
+// core/shareCrypto.js when share payloads became client-encrypted.)
+import { randomCode } from "../../src/core/shareCrypto.js";
 
 const CHANGE_BUFFER_MAX = 50;
 
@@ -173,7 +176,7 @@ const PAIR_CODE_TTL_MS = 10 * 60 * 1000;
 
 export function createPairingCode(sessionId) {
   const s = sess(sessionId);
-  const code = randomCode(); // crypto-random, no 0/O/1/I/L (shareBox alphabet)
+  const code = randomCode(); // crypto-random, no 0/O/1/I/L (shareCrypto alphabet)
   // Drop expired codes; keep at most 3 outstanding.
   const now = Date.now();
   for (const [c, exp] of s.pendingPairCodes) if (exp < now) s.pendingPairCodes.delete(c);

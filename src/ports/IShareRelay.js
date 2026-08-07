@@ -10,10 +10,17 @@
 // code, and the first claim of that code returns the payload once and
 // deletes it. Unclaimed shares expire server-side after ~10 minutes.
 //
-// Encoding/decoding stays in the app (src/core/planShare.js) — the
-// adapter only ferries the opaque payload string. No session, pairing,
-// or account is involved; this port is independent of IAIAssistant even
-// though the default adapter happens to talk to the same server.
+// Encoding/decoding stays in the app (src/core/planShare.js), and the
+// payload an implementation ferries is expected to be UNREADABLE to the
+// relay: the reference adapter generates the code client-side and derives
+// both the storage handle and an AES key from it, so the server holds
+// ciphertext it cannot open (src/core/shareCrypto.js). Implementations
+// that cannot encrypt must say so plainly — the UI's privacy claim
+// depends on this contract.
+//
+// No session, pairing, or account is involved; this port is independent
+// of IAIAssistant even though the default adapter happens to talk to the
+// same server.
 //
 // Who implements this?
 //   - src/adapters/northeastern/shareRelay.js (MCP server's /share + /claim)
@@ -28,9 +35,11 @@ export const IShareRelay = "shareRelay";
  * @typedef {Object} IShareRelay
  *
  * @property {(payload: string) => Promise<{ code: string, expiresInSeconds: number }>} createShareCode
- *   Park an encoded plan payload and resolve with the claim code.
+ *   Park an encoded plan payload and resolve with the claim code, which
+ *   the IMPLEMENTATION generates (the relay never sees it).
  *   Rejects with Error(reason) — reason ∈ "rate_limited" | "too_large" |
- *   "bad_payload" | "busy" | "disabled" | "network".
+ *   "bad_payload" | "bad_id" | "collision" | "busy" | "disabled" |
+ *   "network".
  *
  * @property {(code: string) => Promise<string>} claimShareCode
  *   Redeem a code for its payload (single use). Rejects with

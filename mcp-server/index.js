@@ -138,29 +138,32 @@ app.post("/plan-contents/:sessionId/:requestId", (req, res) => {
 });
 
 // ── Share by code (browser ↔ browser, this server is just the coat check) ──
-// One-shot relay for plan snapshots: park under a short code, first claim
-// takes it and burns it, unclaimed shares expire. Session-free — sharing
-// needs no pairing and touches no per-session state. See src/shareBox.js.
+// One-shot relay for plan snapshots: park under an id derived from the
+// sender's code, first claim takes it and burns it, unclaimed shares
+// expire. Session-free — sharing needs no pairing and touches no
+// per-session state. Payloads are ciphertext the client encrypted under
+// its code, so this server cannot read them. See src/shareBox.js.
 const shareBox = createMemoryShareBox();
 
 const shareStatus = (r) =>
   r.ok ? 200
   : r.reason === "rate_limited" || r.reason === "too_many_live" ? 429
   : r.reason === "not_found" ? 404
+  : r.reason === "collision" ? 409
   : 400;
 
 app.post("/share", async (req, res) => {
-  const result = await shareBox.create(req.body?.payload, req.ip);
+  const result = await shareBox.create(req.body?.id, req.body?.payload, req.ip);
   res.status(shareStatus(result)).json(result);
 });
 
-app.post("/claim/:code", async (req, res) => {
-  const result = await shareBox.claim(req.params.code, req.ip);
+app.post("/claim/:id", async (req, res) => {
+  const result = await shareBox.claim(req.params.id, req.ip);
   res.status(shareStatus(result)).json(result);
 });
 
-app.get("/share-status/:code", async (req, res) => {
-  const result = await shareBox.status(req.params.code, req.ip);
+app.get("/share-status/:id", async (req, res) => {
+  const result = await shareBox.status(req.params.id, req.ip);
   res.status(shareStatus(result)).json(result);
 });
 
@@ -201,13 +204,13 @@ const httpServer = app.listen(PORT, () => {
 // package — the browser bundle never sees it.
 const wss = new WebSocketServer({ noServer: true });
 httpServer.on("upgrade", (req, socket, head) => {
-  // Share pickup interrupt: the sender tab parks a socket on its code
-  // and is pushed 'claimed' the instant the code burns (see shareBox).
+  // Share pickup interrupt: the sender tab parks a socket on its share id
+  // and is pushed 'claimed' the instant the share burns (see shareBox).
   const sw = /^\/share-ws\/([^/?#]+)/.exec(req.url ?? "");
   if (sw) {
-    const code = decodeURIComponent(sw[1]);
+    const id = decodeURIComponent(sw[1]);
     wss.handleUpgrade(req, socket, head, (ws) => {
-      shareBox.watch(code, req.socket.remoteAddress, ws);
+      shareBox.watch(id, req.socket.remoteAddress, ws);
     });
     return;
   }
