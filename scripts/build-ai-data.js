@@ -685,6 +685,9 @@ const PAGE_CSS =
   + ".chips{margin:.4em 0}.chips span{display:inline-block;background:#f1f5f9;border-radius:999px;padding:2px 12px;margin:2px 4px 2px 0;font-size:.85rem;color:#334155}"
   + ".muted{color:#64748b;font-size:.88rem}"
   + "th.dim,td.dim{color:#94a3b8}"
+  // Dashed underline = "suggestion, not a rule". Wavy would read as an
+  // error and solid as a link, and both are wrong: these are provisional.
+  + ".suggest{text-decoration:underline dashed #cbd5e1;text-decoration-thickness:1px;text-underline-offset:3px}"
   + "td ul{margin:0;padding-left:1.1em}td ul ul{padding-left:1.1em}"
   + ".terms{display:grid;grid-template-columns:5.6em max-content;column-gap:8px}"
   + ".terms span:nth-child(even){text-align:left;font-variant-numeric:tabular-nums}"
@@ -944,12 +947,62 @@ const renderProgram = (p) => {
   if (r.generalElectiveSH) {
     out.push(`<p>Plus ${r.generalElectiveSH} semester hours of general electives.</p>`);
   }
+
+  // Substitutions, in descending order of authority: the catalog's own
+  // footnotes on this program's tables first (verbatim, because the exact
+  // wording carries conditions like "in approved situations"), then pairs
+  // the equivalence build scoped to this program.
+  {
+    const notes = r.footnotes ?? [];
+    const pairs = subsByProgramDir.get(String(p.id).split("/").pop()) ?? [];
+    if (notes.length || pairs.length) {
+      out.push(`<h2>Substitutions</h2>`);
+      if (notes.length) {
+        out.push(`<p class="muted">Stated by the catalog on this program's requirements:</p><ul>`
+          + notes.map((n) => {
+            // Link every course code the footnote names, without disturbing
+            // the surrounding sentence.
+            const text = escapeHtml(n.text ?? "").replace(/\b([A-Z]{2,6})\s+(\d{4}[A-Z]?)\b/g,
+              (m0, subj, num) => (titleOf.has(`${subj} ${num}`) ? linkRef(subj, num) : m0));
+            return `<li>${text}</li>`;
+          }).join("") + `</ul>`);
+      }
+      if (pairs.length) {
+        out.push(`<p class="muted">Possible equivalents for this program${notes.length ? " beyond the above" : ""} — <span class="suggest">dashed</span> means a suggestion, not a rule, and every substitution needs your advisor's approval:</p><ul>`
+          + pairs.sort((a, b2) => a.a.localeCompare(b2.a)).map((q) =>
+            `<li><span class="suggest">${linkCode(q.a)} ↔ ${linkCode(q.b)}</span>`
+            + ` <span class="muted">(tier ${escapeHtml(q.t)}${q.e?.fn ? ", from a catalog footnote" : q.e?.s === "counts-as" ? ", one counts as the other" : ""})</span></li>`).join("")
+          + `</ul><p class="muted"><a href="${PAGE_ROOT}/equivalences">What the tiers mean</a></p>`);
+      }
+    }
+  }
   out.push(`<p class="muted">Parsed from the catalog by NU Map; the <a href="${p.url}">JSON version</a> is the structured machine copy${p.sourceUrl ? `, and the <a href="${p.sourceUrl}">official page</a> is the authority` : ""}.</p>`);
   return out.join("\n");
 };
 
 // ── Directory and cross-cutting pages ────────────────────────────────
 const equivalencesData = readJSON(path.join(ROOT, "public", "northeastern", "course-equivalences.json"));
+
+// Substitutions scoped to a single program. The evidence in
+// course-equivalences.json carries `e.p`, an index list into its
+// `programs` array of catalog directory names, so a program page can show
+// exactly the pairs that apply to it. Tier D is inference from weak
+// signals and is deliberately excluded here — a degree page is the last
+// place to float a guess. (Tier D remains listed as a count on the
+// equivalences page, with its evidence in the JSON.)
+const subsByProgramDir = new Map();
+{
+  const names = equivalencesData.programs ?? [];
+  for (const pair of equivalencesData.pairs ?? []) {
+    if (!["A", "B", "C"].includes(pair.t)) continue;
+    for (const i of pair.e?.p ?? []) {
+      const dir = names[i];
+      if (!dir) continue;
+      if (!subsByProgramDir.has(dir)) subsByProgramDir.set(dir, []);
+      subsByProgramDir.get(dir).push(pair);
+    }
+  }
+}
 const TIER_LABEL = {
   A: "A — a program explicitly allows either course",
   B: "B — catalog-stated equivalents / cross-listings",
@@ -1132,7 +1185,9 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
   const tiers = { A: [], B: [], C: [], D: [] };
   for (const pair of equivalencesData.pairs ?? []) (tiers[pair.t] ?? tiers.D).push(pair);
   const table = (list) => `<table><tr><th>Course</th><th>Course</th></tr>`
-    + list.sort((a, b2) => a.a.localeCompare(b2.a)).map((p) => `<tr><td>${linkCode(p.a)}</td><td>${linkCode(p.b)}</td></tr>`).join("") + `</table>`;
+    + list.sort((a, b2) => a.a.localeCompare(b2.a)).map((p) =>
+      `<tr><td><span class="suggest">${linkCode(p.a)}</span></td><td><span class="suggest">${linkCode(p.b)}</span></td></tr>`).join("")
+    + `</table>`;
   pageQueue.push({
     rel: "equivalences.html",
     section: "equivalences",
@@ -1141,7 +1196,10 @@ for (const [letter, profs] of [...profsByLetter.entries()].sort(([a], [b2]) => a
     description: "Course substitution suggestions by evidence tier: program-stated, catalog-stated, and inferred pairs (inferred ones need advisor approval). From NU Map (not affiliated with Northeastern).",
     jsonUrl: `${ORIGIN}/northeastern/course-equivalences.json`,
     body: `<p>Substitution suggestions by evidence tier. <strong>Every substitution needs
-your advisor's sign-off</strong> — tiers only say how strong the written evidence is.</p>`
+your advisor's sign-off</strong> — tiers only say how strong the written evidence is.</p>
+<p class="muted">Every pair below is <span class="suggest">underlined like this</span>: a
+suggestion, never a decision. Nothing here has been approved for you, and even the
+strongest tier only means a catalog page happened to allow both courses somewhere.</p>`
       + ["A", "B", "C"].map((t) => `<h2>Tier ${escapeHtml(TIER_LABEL[t])} <span class="muted">(${tiers[t].length} pairs)</span></h2>${table(tiers[t])}`).join("")
       + `<h2>Tier ${escapeHtml(TIER_LABEL.D)} <span class="muted">(${tiers.D.length} pairs)</span></h2>
 <p class="muted">Too weak to list here; they live in the <a href="${ORIGIN}/northeastern/course-equivalences.json">JSON file</a> with their evidence.</p>`,
