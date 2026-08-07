@@ -24,7 +24,7 @@
  */
 
 import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, statSync, rmSync } from 'fs';
-import { join, dirname }            from 'path';
+import { join, dirname, sep }       from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
 import { markSharedSections }       from './lib/major-integrity.js';
@@ -32,6 +32,8 @@ import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail } from './lib/scrape-rails.js';
 import { extractPlanGrid }           from './lib/plan-grid.js';
+import { parseEditionArg, editionBasePath, assertEdition,
+         isFatalScrapeError }        from './lib/catalog-edition.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
          extractPlanOfStudyCourses,
          normalizeConcentrationHref, parseCatalogEdition,
@@ -42,7 +44,13 @@ const ROOT      = join(__dirname, '..');
 const OUT_ROOT    = join(ROOT, 'src/data/majors');
 const CHANGE_LOG  = join(ROOT, 'public/northeastern/change-log.json');
 const CHANGE_LOG_MAX = 600;
-const BASE      = 'https://catalog.northeastern.edu';
+const ARCHIVE_ROOT = join(ROOT, 'src/data/archive/majors');
+const CATALOG   = 'https://catalog.northeastern.edu';
+// A past edition is the same catalog nested under /archive/{label}/, with its
+// own sitemap and the same markup. See scripts/lib/catalog-edition.js.
+const EDITION   = parseEditionArg(process.argv);
+const BASE_PATH = editionBasePath(EDITION);
+const BASE      = CATALOG + BASE_PATH;
 // /azindex/ is Disallow'd in the catalog's robots.txt; the sitemap is not.
 const SITEMAP_URL = `${BASE}/sitemap.xml`;
 const DELAY_MS  = parseInt(process.env.MAJORS_DELAY_MS ?? '600', 10);
@@ -53,11 +61,16 @@ const DELAY_MS  = parseInt(process.env.MAJORS_DELAY_MS ?? '600', 10);
 // snapshot, destroying the requirements older cohorts follow. The env var
 // still forces it for backfills; the clock is only a last resort.
 const YEAR_OVERRIDE = process.env.MAJORS_YEAR ? parseInt(process.env.MAJORS_YEAR, 10) : null;
-let YEAR = YEAR_OVERRIDE ?? new Date().getFullYear();
-let YEAR_RESOLVED = YEAR_OVERRIDE != null;
+let YEAR = EDITION?.year ?? YEAR_OVERRIDE ?? new Date().getFullYear();
+let YEAR_RESOLVED = EDITION != null || YEAR_OVERRIDE != null;
 
-/** Latch the edition year from a parsed page, once, before any write. */
-function resolveYearFrom(root) {
+/**
+ * Live: latch the edition year from the first page, once, before any write.
+ * Archive: the flag is the authority and EVERY page is checked against it —
+ * see catalog-edition.js for why a mismatch aborts rather than skips.
+ */
+function resolveYearFrom(root, url) {
+  if (EDITION) { assertEdition(parseCatalogEdition(root), EDITION, url); return; }
   if (YEAR_RESOLVED) return;
   const y = parseCatalogEdition(root);
   if (y != null) {
@@ -95,7 +108,7 @@ function slugify(str) {
 async function fetchProgramUrls() {
   console.log('Fetching sitemap…');
   const xml = await fetchPage(SITEMAP_URL);
-  const programs = parseSitemapPrograms(xml, { pathPrefix: '/undergraduate/', minSegments: 3 });
+  const programs = parseSitemapPrograms(xml, { pathPrefix: '/undergraduate/', minSegments: 3, urlBase: EDITION ? BASE : '' });
   console.log(`Found ${programs.length} program URLs`);
   return programs;
 }
@@ -146,6 +159,49 @@ function planPath(college, slug) {
   return join(OUT_ROOT, String(YEAR), college, slug, 'plan.json');
 }
 
+/**
+ * Where a FROZEN past edition is stored: one bundle per college, not one file
+ * per program.
+ *
+ * Two constraints decide this, and they point the same way. Cloudflare Pages
+ * caps a deployment at 20,000 files and dist/ already holds ~15.4k, so seven
+ * archive editions at ~1,000 programs each would blow the cap outright. And
+ * the live tree is addressed by `import.meta.glob('./majors/**\/parsed.initial.json')`
+ * — dropping archive programs into it would triple the program picker and
+ * break the cohort dedupe, which is a UI regression for every student in
+ * exchange for a feature only past cohorts need.
+ *
+ * A separate root with a coarser grain makes both impossible rather than
+ * merely unlikely: ~13 files per edition, and no glob overlap to reason about.
+ * The cost is that opening one 2023 program pulls its whole college (the
+ * largest, social sciences, is ~2 MB pretty-printed and far less over the
+ * wire), paid once, lazily, and only by students who set a past cohort.
+ */
+function archiveBundlePath(college, year = YEAR) {
+  return join(ARCHIVE_ROOT, String(year), `${college}.json`);
+}
+
+/**
+ * Committed archive programs for one edition, keyed by the SAME synthetic path
+ * the live tree uses, so the write rails compare like with like without
+ * knowing which storage form they are looking at.
+ */
+function readArchiveEdition(year = YEAR) {
+  const out = new Map();
+  const dir = join(ARCHIVE_ROOT, String(year));
+  if (!existsSync(dir)) return out;
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith('.json')) continue;
+    const college = file.replace(/\.json$/, '');
+    let bundle;
+    try { bundle = JSON.parse(readFileSync(join(dir, file), 'utf8')); } catch { continue; }
+    for (const [slug, program] of Object.entries(bundle)) {
+      out.set(outPath(college, slug), program);
+    }
+  }
+  return out;
+}
+
 /** Every committed sample plan in one edition — what the plan rail counts. */
 function listCommittedPlans(year = YEAR) {
   const out = [];
@@ -192,7 +248,7 @@ async function parseRequirementsResolvingExternals(root) {
 async function scrapeProgram(url) {
   const html = await fetchPage(url);
   const root = parseHTML(html);
-  resolveYearFrom(root);   // edition year, before any outPath() call
+  resolveYearFrom(root, url);   // edition year, before any outPath() call
 
   const name = root.querySelector('#page-title h1, h1.page-title, h1')
     ?.text?.trim()
@@ -293,6 +349,23 @@ function listCommittedPrograms(year = YEAR) {
 /** Program count of the newest OTHER edition — the discovery-floor baseline
  *  when this edition is brand new and has nothing committed yet. */
 function priorEditionCount() {
+  // Archive backfill: baseline against the NEAREST committed edition, not the
+  // live one. The catalog grows — 2019 really does publish fewer programs than
+  // 2026 — so measuring a seven-year-old edition against today's count would
+  // fire the discovery floor on a perfectly good run and block the backfill it
+  // exists to protect. One year apart, a shortfall means something.
+  //
+  // Backfilling newest-first therefore gives every run a one-year baseline.
+  if (EDITION && existsSync(ARCHIVE_ROOT)) {
+    const nearest = readdirSync(ARCHIVE_ROOT)
+      .filter(n => /^\d{4}$/.test(n) && Number(n) !== YEAR)
+      .map(Number)
+      .sort((a, b) => Math.abs(a - YEAR) - Math.abs(b - YEAR))[0];
+    if (nearest != null) {
+      const n = readArchiveEdition(nearest).size;
+      if (n > 0) return n;
+    }
+  }
   if (!existsSync(OUT_ROOT)) return 0;
   const years = readdirSync(OUT_ROOT)
     .filter(n => /^\d{4}$/.test(n) && Number(n) !== YEAR)
@@ -351,6 +424,15 @@ async function main() {
         done++;
       }
     } catch (err) {
+      // An edition mismatch is evidence about the ARCHIVE, not about this
+      // program, so it must not be absorbed into the fetch-failure count —
+      // that rail tolerates 2%, which would let a handful of wrong-edition
+      // pages land while the run reported itself healthy.
+      if (isFatalScrapeError(err)) {
+        console.log('FAIL');
+        console.error(`\n❌  ${err.message}\n\n    Nothing was written.\n`);
+        process.exit(1);
+      }
       console.log(`FAIL  ${err.message}`);
       failed++;
     }
@@ -365,12 +447,17 @@ async function main() {
   // land. A single program regressing is drift; a fleet regressing is upstream
   // breakage, and this job pushes straight to main unattended.
   if (WRITE && !URL_ARG && !DRY_RUN) {
-    const previous = new Map();
-    for (const p of pending.keys()) {
-      if (existsSync(p)) { try { previous.set(p, JSON.parse(readFileSync(p, 'utf8'))); } catch {} }
-    }
-    for (const p of listCommittedPrograms()) {
-      if (!previous.has(p)) { try { previous.set(p, JSON.parse(readFileSync(p, 'utf8'))); } catch {} }
+    // What this edition looked like before the run. An archive edition is
+    // frozen upstream, so a re-scrape SHOULD reproduce it exactly and the
+    // rails are how a parser regression shows up instead of quietly landing.
+    const previous = EDITION ? readArchiveEdition() : new Map();
+    if (!EDITION) {
+      for (const p of pending.keys()) {
+        if (existsSync(p)) { try { previous.set(p, JSON.parse(readFileSync(p, 'utf8'))); } catch {} }
+      }
+      for (const p of listCommittedPrograms()) {
+        if (!previous.has(p)) { try { previous.set(p, JSON.parse(readFileSync(p, 'utf8'))); } catch {} }
+      }
     }
     const { ok, failures, stats } = checkScrapeRails({
       discovered: programs.length, failed, results: pending, previous,
@@ -393,28 +480,59 @@ async function main() {
     // department had asked for them. But a fleet-wide loss is held rather than
     // applied — see checkPlanRail for why this one warns instead of failing.
     const nowPlans  = [...pending.values()].filter(d => d.planGrid).length;
-    const prevPlans = listCommittedPlans().length;
+    // A frozen edition has no plans to lose: it is written whole every time,
+    // so nothing is ever left behind to delete.
+    const prevPlans = EDITION ? 0 : listCommittedPlans().length;
     const { deleteOk, reason } = checkPlanRail(nowPlans, prevPlans);
     if (!deleteOk) console.warn(`\n⚠  ${reason}\n`);
 
-    for (const [p, data] of pending) {
-      const { planGrid, ...program } = data;
-      mkdirSync(dirname(p), { recursive: true });
-      writeFileSync(p, JSON.stringify(program, null, 2));
-      written++;
+    if (EDITION) {
+      // A frozen edition is written whole, grouped into college bundles. The
+      // plan stays INSIDE the entry here rather than beside it: the split
+      // exists to keep the live per-program download small, and a bundle is
+      // already one request either way.
+      const byCollege = new Map();
+      for (const [p, data] of pending) {
+        const parts = p.split(sep);
+        const slug = parts[parts.length - 2], college = parts[parts.length - 3];
+        if (!byCollege.has(college)) byCollege.set(college, {});
+        byCollege.get(college)[slug] = data.planGrid ? data : (({ planGrid, ...rest }) => rest)(data);
+        written++;
+        if (data.planGrid) plansWritten++;
+      }
+      for (const [college, bundle] of byCollege) {
+        const out = archiveBundlePath(college);
+        mkdirSync(dirname(out), { recursive: true });
+        // Sorted keys so a re-scrape of a frozen edition produces a diff that
+        // is about the catalog, not about iteration order.
+        const sorted = Object.fromEntries(Object.keys(bundle).sort().map(k => [k, bundle[k]]));
+        writeFileSync(out, JSON.stringify(sorted, null, 2) + '\n');
+      }
+      console.log(`Archive ${EDITION.label}: ${written} programs in ${byCollege.size} college bundles, ` +
+                  `${plansWritten} with a sample plan.`);
+    } else {
+      for (const [p, data] of pending) {
+        const { planGrid, ...program } = data;
+        mkdirSync(dirname(p), { recursive: true });
+        writeFileSync(p, JSON.stringify(program, null, 2));
+        written++;
 
-      const pp = join(dirname(p), 'plan.json');
-      if (planGrid) { writeFileSync(pp, JSON.stringify(planGrid, null, 2)); plansWritten++; }
-      else if (existsSync(pp) && deleteOk) { rmSync(pp); plansRemoved++; }
+        const pp = join(dirname(p), 'plan.json');
+        if (planGrid) { writeFileSync(pp, JSON.stringify(planGrid, null, 2)); plansWritten++; }
+        else if (existsSync(pp) && deleteOk) { rmSync(pp); plansRemoved++; }
+      }
+      console.log(`Sample plans: ${plansWritten} written, ${plansRemoved} removed ` +
+                  `(${prevPlans} committed before this run).`);
     }
-    console.log(`Sample plans: ${plansWritten} written, ${plansRemoved} removed ` +
-                `(${prevPlans} committed before this run).`);
   }
 
   console.log(`\nResults: ${done} scraped, ${written} written, ${skipped} skipped, ${failed} failed`);
   if (!WRITE && !DRY_RUN && done > 0) console.log('Run with --write to save output files.');
 
-  if (WRITE) {
+  // The change log is the user-facing "what updated" feed, so it tracks the
+  // LIVE catalog. A backfill of seven frozen editions would push seven
+  // identical rows into it describing nothing that changed.
+  if (WRITE && !EDITION) {
     let changeLog = { runs: [] };
     if (existsSync(CHANGE_LOG)) {
       try { changeLog = JSON.parse(readFileSync(CHANGE_LOG, 'utf8')); } catch {}

@@ -30,13 +30,24 @@ const CONCENTRATION_PATH = /\/(?:under)?graduate\/[^/]+\/concentrations\//;
 /**
  * Extract program entries from a sitemap.xml body.
  *
+ * ## Archive editions keep their ORIGINAL urls
+ *
+ * An archived edition serves its pages under `/archive/{label}/…`, but its
+ * sitemap is a snapshot of the sitemap that edition shipped with: the <loc>
+ * entries are the live urls of the day, with no archive prefix and on `http`.
+ * So `urlBase` REBUILDS each url onto the edition rather than stripping
+ * anything — and because the paths arrive already in live shape, every
+ * classification rule below applies unchanged. Archive scraping shares this
+ * function's behaviour instead of paralleling it.
+ *
  * @param {string} xml        raw sitemap.xml
  * @param {object} profile
  * @param {string} profile.pathPrefix     e.g. "/undergraduate/"
  * @param {number} [profile.minSegments=3]
+ * @param {string} [profile.urlBase]      e.g. "https://catalog.northeastern.edu/archive/2022-2023"
  * @returns {{url: string, college: string, lastmod: string|null, name: string}[]}
  */
-export function parseSitemapPrograms(xml, { pathPrefix, minSegments = 3 }) {
+export function parseSitemapPrograms(xml, { pathPrefix, minSegments = 3, urlBase = '' }) {
   const seen = new Set();
   const programs = [];
 
@@ -55,7 +66,11 @@ export function parseSitemapPrograms(xml, { pathPrefix, minSegments = 3 }) {
     const parts = path.replace(/^\/|\/$/g, '').split('/');
     if (parts.length < minSegments) continue;
 
-    const url = loc.replace(/\/?$/, '/');
+    // Rebuilt onto the requested edition when one was given; otherwise the
+    // sitemap's own url, which for the live catalog is already right.
+    const url = urlBase
+      ? urlBase + path.replace(/\/?$/, '/')
+      : loc.replace(/\/?$/, '/');
     if (seen.has(url)) continue;
     seen.add(url);
 
