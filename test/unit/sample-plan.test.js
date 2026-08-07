@@ -134,15 +134,16 @@ test("sample plan › the inputs are never mutated", () => {
 
 // ── What it refuses to decide ────────────────────────────────────────────────
 
-test("sample plan › a choice is reported, never chosen", () => {
+test("sample plan › a choice is placed as a slot, never chosen", () => {
   // "MATH 1365 or 1465". Picking one silently would be the planner making the
-  // student's decision and then checking its own work.
+  // student's decision and then checking its own work. It still occupies the
+  // semester, carrying the shortlist, so the term is not left short.
   const r = apply(plan(year("Year 1", term("fall", "Fall", [choice("MATH1365", "MATH1465")]))));
   assert.equal(r.placements.MATH1365, undefined);
   assert.equal(r.placements.MATH1465, undefined);
-  const [note] = r.notes.filter(n => n.kind === "choice");
-  assert.deepEqual(note.codes, ["MATH1365", "MATH1465"]);
-  assert.equal(note.semId, "fall2026");
+  const [slot] = Object.values(r.slots);
+  assert.deepEqual(slot.candidates, ["MATH1365", "MATH1465"]);
+  assert.equal(slot.semId, "fall2026");
 });
 
 test("sample plan › a corequisite pair is both courses, not a choice", () => {
@@ -151,11 +152,13 @@ test("sample plan › a corequisite pair is both courses, not a choice", () => {
   assert.equal(r.placements.CS1802, "fall2026");
 });
 
-test("sample plan › an unnamed slot is reported with its wording", () => {
+test("sample plan › an unnamed slot keeps the catalog's own wording", () => {
+  // "Science Requirement" is what the department wrote, and it is the only
+  // thing telling the student what belongs there.
   const r = apply(plan(year("Year 1", term("fall", "Fall", [filler("Science Requirement")]))));
-  const [note] = r.notes.filter(n => n.kind === "placeholder");
-  assert.equal(note.text, "Science Requirement");
-  assert.equal(note.semId, "fall2026");
+  const [slot] = Object.values(r.slots);
+  assert.equal(slot.label, "Science Requirement");
+  assert.equal(slot.semId, "fall2026");
 });
 
 test("sample plan › a course we do not have is reported, not fatal", () => {
@@ -239,7 +242,7 @@ test("sample plan › the summary counts every category it reports", () => {
     term("spring", "Spring", [coop()]),
   )));
   assert.deepEqual(summarizeSamplePlan(r), {
-    placed: 1, coops: 1, choices: 1, placeholders: 1,
+    placed: 1, coops: 1, slots: 2, choices: 1, placeholders: 1,
     alreadyPlaced: 0, unknown: 0, outsideRange: 0, coopsKept: 0,
   });
 });
@@ -340,4 +343,97 @@ test("cycle › a heading that is ONLY the timing becomes just the cycle", () =>
 test("cycle › a plan with no cycle keeps its label untouched", () => {
   const p = { label: "Four Years, No Co-op", years: [] };
   assert.equal(formatPlanLabel(p, CYC), "Four Years, No Co-op");
+});
+
+// ── Slots ────────────────────────────────────────────────────────────────────
+//
+// Placeholders are the largest category in the corpus — 9,629 against 10,338
+// real courses — and they cluster in the later years where a degree is least
+// prescribed. Computer Science BSCS year 4 fall is four slots and zero named
+// courses, and the catalog still states it as 16 SH. Reporting those in a
+// footnote and leaving the semester empty produces a plan that looks broken in
+// exactly the place a student most needs guidance.
+
+const slotsIn = (r, semId) => Object.values(r.slots).filter(s => s.semId === semId);
+
+test("slots › a placeholder is placed, not reported", () => {
+  const r = apply(plan(year("Year 1", term("fall", "Fall", [
+    { kind: "placeholder", text: "Science Requirement", sh: 4 },
+  ]))));
+  assert.equal(slotsIn(r, "fall2026").length, 1);
+  assert.deepEqual(r.notes.filter(n => n.kind === "placeholder"), [],
+    "a placed slot must not also be reported as missing");
+});
+
+test("slots › a slot carries the credit hours the catalog states", () => {
+  // Without this a freshly loaded template reads at roughly half the credits
+  // the department states and every term looks like a warning that is not real.
+  const r = apply(plan(year("Year 1", term("fall", "Fall", [
+    { kind: "placeholder", text: "General Elective", sh: 4 },
+  ]))));
+  assert.equal(slotsIn(r, "fall2026")[0].sh, 4);
+});
+
+test("slots › a choice becomes a slot that keeps its shortlist", () => {
+  // Still not chosen for the student — but now it occupies the semester
+  // instead of vanishing into a note.
+  const r = apply(plan(year("Year 1", term("fall", "Fall", [
+    { ...choice("MATH1365", "MATH1465"), sh: 4 },
+  ]))));
+  const [s] = slotsIn(r, "fall2026");
+  assert.equal(s.source, "choice");
+  assert.deepEqual(s.candidates, ["MATH1365", "MATH1465"]);
+  assert.equal(r.placements.MATH1365, undefined);
+  assert.equal(r.placements.MATH1465, undefined);
+});
+
+test("slots › a named requirement and a free elective are told apart", () => {
+  // Roughly a quarter of slots name no requirement at all. Marking those free
+  // keeps them from looking like a lookup that failed.
+  const r = apply(plan(year("Year 1", term("fall", "Fall", [
+    { kind: "placeholder", text: "Science Requirement", sh: 4 },
+    { kind: "placeholder", text: "General Elective", sh: 4 },
+    { kind: "placeholder", text: "Elective", sh: 4 },
+    { kind: "placeholder", text: "Khoury Elective", sh: 4 },
+  ]))));
+  assert.deepEqual(slotsIn(r, "fall2026").map(s => s.source),
+    ["requirement", "free", "free", "requirement"]);
+});
+
+test("slots › two identical slots in one term stay two", () => {
+  // CS BSCS year 1 summer 2 is "General Elective" twice. Collapsing them would
+  // halve the term.
+  const r = apply(plan(year("Year 1", term("sumB", "Summer 2", [
+    { kind: "placeholder", text: "General Elective", sh: 4 },
+    { kind: "placeholder", text: "General Elective", sh: 4 },
+  ]))));
+  const s = slotsIn(r, "sumB2027");
+  assert.equal(s.length, 2);
+  assert.notEqual(s[0].id, s[1].id, "ids must be distinct or one overwrites the other");
+});
+
+test("slots › applying the same template twice creates no second set", () => {
+  const p = plan(year("Year 1", term("fall", "Fall", [
+    { kind: "placeholder", text: "Science Requirement", sh: 4 },
+    { kind: "placeholder", text: "General Elective", sh: 4 },
+  ])));
+  const first  = apply(p);
+  const second = mapSamplePlan(p, { semesters: SEMESTERS, courseMap, slots: first.slots });
+  assert.equal(second.newSlots.length, 0);
+  assert.deepEqual(Object.keys(second.slots).sort(), Object.keys(first.slots).sort());
+});
+
+test("slots › a vacation places nothing and reports nothing", () => {
+  // A term the department tells you to take off is not an empty slot to fill.
+  const r = apply(plan(year("Year 2", term("sumA", "Summer 1", [
+    { kind: "vacation", text: "Vacation" },
+  ]))));
+  assert.deepEqual(Object.keys(r.slots), []);
+  assert.deepEqual(r.notes, []);
+});
+
+test("slots › the inputs are still never mutated", () => {
+  const slots = {};
+  apply(plan(year("Year 1", term("fall", "Fall", [{ kind: "placeholder", text: "Elective", sh: 4 }]))), { slots });
+  assert.deepEqual(slots, {});
 });

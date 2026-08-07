@@ -13,17 +13,35 @@
 // or replaced, and nothing is removed. Applying the same plan twice changes
 // nothing the second time.
 //
-// ── What it deliberately refuses to do ─────────────────────────────
+// ── Slots are placed, not reported ─────────────────────────────────
 //
-// A grid cell reading "MATH 1365 or 1465" is a CHOICE, and the plan does not
-// make it — the student does. Filling one in silently would be the planner
-// quietly picking a course and then checking its own work, which is the
-// failure mode the whole tool exists to avoid. Same for "General Elective":
-// there is no course to place, only a slot to tell the student about.
+// A cell reading "MATH 1365 or 1465" is a CHOICE and one reading "Khoury
+// Elective" names no course at all. Neither can become a course card, and the
+// planner must not pick for the student — that is the failure mode the whole
+// tool exists to avoid.
 //
-// Everything unplaced comes back as a `notes` entry rather than being dropped,
-// because a sample plan that quietly loses a third of itself looks like it
-// worked.
+// But they cannot be dropped either, and this is not a detail: placeholders
+// are the LARGEST category in the corpus, 9,629 against 10,338 real courses,
+// and they cluster in the later years where a degree is least prescribed.
+// Computer Science BSCS year 4 fall is four slots and zero named courses, and
+// the catalog still states it as 16 SH. Reporting those four in a footnote and
+// leaving the semester empty produces a plan that looks broken in exactly the
+// place the student most needs guidance.
+//
+// So they are PLACED, as slots: real occupants of a semester that carry the
+// credit hours the catalog states, say what kind of course belongs there, and
+// wait for the student to choose. A slot is never a course — it satisfies no
+// requirement and enters no prereq chain — but it is not nothing either.
+//
+// Three kinds, differing only in where their candidates come from:
+//
+//   choice        MATH 1365 or 1465     an explicit shortlist
+//   requirement   Science Requirement   resolved against the program's own
+//                                       requirement sections
+//   free          General Elective      no candidates; anything goes
+//
+// Slot ids are derived from where the slot sits and what it says, so applying
+// the same template twice produces the same slots rather than a second set.
 //
 // ── Co-ops are runs, not cells ─────────────────────────────────────
 //
@@ -79,6 +97,31 @@ function semesterFor(years, yearIndex, termType) {
 const coopId = (semId, typeId) => `${typeId}-plan-${semId}`;
 
 /**
+ * A stable id for a slot. Derived from the semester, the wording and how many
+ * identical slots already sit in that semester — so "General Elective" twice
+ * in one term stays two slots, and re-applying the template lands on the same
+ * two rather than adding more.
+ */
+function slotId(semId, label, ordinal) {
+  const slug = String(label).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+  return `slot-${semId}-${slug}-${ordinal}`;
+}
+
+/** Which kind of slot an entry becomes, and what its candidates are. */
+function slotFor(entry, semId, ordinal) {
+  const label = entry.text?.replace(/\s+/g, " ").trim() || "Elective";
+  const base = { id: slotId(semId, label, ordinal), semId, label, sh: entry.sh ?? null };
+  if (entry.kind === "choice") return { ...base, source: "choice", candidates: entry.codes ?? [] };
+  // "Elective", "General Elective", "Open elective" and friends name no
+  // requirement to resolve against — roughly a quarter of all slots — so they
+  // are marked free rather than left looking like a lookup that failed.
+  if (/^(general |open |upper[\s-]*division |free )?electives?$/i.test(label)) {
+    return { ...base, source: "free" };
+  }
+  return { ...base, source: "requirement" };
+}
+
+/**
  * Map a sample plan onto planner state.
  *
  * @param {object}   plan                  one entry from plan.json `plans[]`
@@ -87,18 +130,21 @@ const coopId = (semId, typeId) => `${typeId}-plan-${semId}`;
  * @param {object}   ctx.courseMap         id → course, for "is this real?"
  * @param {object}   [ctx.placements]      current placements (never mutated)
  * @param {object}   [ctx.specialTermPl]   current special terms (never mutated)
+ * @param {object}   [ctx.slots]           current slots (never mutated); ids already
+ *   present are not created again, so re-applying is idempotent
  * @param {number}   [ctx.startYearIndex]  academic year the plan's Year 1 lands on
  * @param {string}   [ctx.coopTypeId]      special-term type for grid co-ops
  * @param {number[]} [ctx.coopDurations]   durations the institution offers, months
  * @param {number}   [ctx.monthsPerUnitWeight]
- * @returns {{placements: object, specialTermPl: object, placed: string[],
- *            coops: object[], notes: object[]}}
+ * @returns {{placements: object, specialTermPl: object, slots: object,
+ *            placed: string[], coops: object[], newSlots: object[], notes: object[]}}
  */
 export function mapSamplePlan(plan, {
   semesters,
   courseMap = {},
   placements = {},
   specialTermPl = {},
+  slots: slotsIn = {},
   startYearIndex = 0,
   coopTypeId = "coop",
   coopDurations = [4, 6],
@@ -109,11 +155,16 @@ export function mapSamplePlan(plan, {
   const nextSpecial    = { ...specialTermPl };
   const placed = [];
   const coops  = [];
+  const slots  = [];
   const notes  = [];
+  // Per-semester counter so two "General Elective" slots in one term get
+  // distinct, reproducible ids.
+  const slotOrdinal = new Map();
 
   // Every course already in the plan, by base id, so a repeat instance
   // ("CS2500#2") still counts as "the student has this".
   const held = new Set(Object.keys(placements).map(baseId));
+  const existingSlots = new Set(Object.keys(slotsIn ?? {}));
 
   // Co-op cells are collected first and merged afterwards: a run cannot be
   // recognised one cell at a time.
@@ -139,13 +190,21 @@ export function mapSamplePlan(plan, {
           coopTerms.push({ sem, text: entry.text, year: gridYear.label });
           continue;
         }
-        if (entry.kind === "choice") {
-          // The one thing this must not do for the student.
-          notes.push({ kind: "choice", semId: sem.id, codes: entry.codes, text: entry.text });
+        if (entry.kind === "vacation") {
+          // A term the department tells you to take off. Nothing to place, and
+          // nothing to report as missing either.
           continue;
         }
-        if (entry.kind === "placeholder") {
-          notes.push({ kind: "placeholder", semId: sem.id, text: entry.text });
+        if (entry.kind === "choice" || entry.kind === "placeholder") {
+          // Placed as a slot, not reported. It occupies the semester and
+          // carries the catalog's credit hours; it just has no course in it
+          // yet, and choosing one is the student's to do.
+          const label = entry.text?.replace(/\s+/g, " ").trim() || "Elective";
+          const seen = slotOrdinal.get(`${sem.id}:${label}`) ?? 0;
+          slotOrdinal.set(`${sem.id}:${label}`, seen + 1);
+          const slot = slotFor(entry, sem.id, seen);
+          // Re-applying must not stack a second copy on top of the first.
+          if (!existingSlots.has(slot.id)) slots.push(slot);
           continue;
         }
 
@@ -208,7 +267,12 @@ export function mapSamplePlan(plan, {
   }
   flush();
 
-  return { placements: nextPlacements, specialTermPl: nextSpecial, placed, coops, notes };
+  return {
+    placements: nextPlacements,
+    specialTermPl: nextSpecial,
+    slots: { ...slotsIn, ...Object.fromEntries(slots.map(s => [s.id, s])) },
+    placed, coops, newSlots: slots, notes,
+  };
 }
 
 /** Strip a repeat-instance suffix: "CS2500#2" → "CS2500". */
@@ -223,11 +287,13 @@ function baseId(pid) {
  */
 export function summarizeSamplePlan(result) {
   const by = kind => result.notes.filter(n => n.kind === kind);
+  const slotsBy = (source) => (result.newSlots ?? []).filter(s => s.source === source).length;
   return {
     placed:        result.placed.length,
     coops:         result.coops.length,
-    choices:       by("choice").length,
-    placeholders:  by("placeholder").length,
+    slots:         (result.newSlots ?? []).length,
+    choices:       slotsBy("choice"),
+    placeholders:  slotsBy("requirement") + slotsBy("free"),
     alreadyPlaced: by("already-placed").length,
     unknown:       by("unknown-course").length,
     outsideRange:  by("outside-timeline").length,

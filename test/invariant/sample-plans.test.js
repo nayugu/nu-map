@@ -201,3 +201,33 @@ test("sample plans › entries carry the credit hours the grid states", () => {
   // is high coverage, not total.
   assert.ok(withSh / total > 0.95, `only ${(100 * withSh / total).toFixed(1)}% of entries carry credit hours`);
 });
+
+test("sample plans › a term's entries add up to the hours it states", () => {
+  // The end-to-end check on credit extraction: the catalog prints a total per
+  // term AND an hours value per cell, and those are independent readings of
+  // the same grid. If they agree, the per-cell values were read correctly —
+  // which is what lets courses plus unfilled slots reproduce the department's
+  // stated load.
+  //
+  // Not required to be exact everywhere: seven terms in the corpus are the
+  // catalog's own arithmetic disagreeing with its own rows. The bar is that
+  // this stays a handful rather than becoming a pattern.
+  let checked = 0, agree = 0;
+  const off = [];
+  for (const [path, grid] of PLANS) {
+    for (const plan of grid.plans) {
+      for (const year of plan.years) {
+        for (const term of year.terms) {
+          if (term.hours == null || !term.entries.length) continue;
+          checked++;
+          const sum = term.entries.reduce((n, e) => n + (e.sh ?? 0), 0);
+          if (Math.abs(sum - term.hours) < 0.01) agree++;
+          else off.push(`${path} ${year.label} ${term.term}: ${sum} vs ${term.hours}`);
+        }
+      }
+    }
+  }
+  const rate = agree / checked;
+  assert.ok(rate > 0.99,
+    `only ${(100 * rate).toFixed(1)}% of terms add up (${off.length} off, e.g. ${off[0]})`);
+});
