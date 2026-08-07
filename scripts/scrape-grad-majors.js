@@ -24,14 +24,15 @@
  * Override: GRAD_DELAY_MS=300 node scripts/scrape-grad-majors.js
  */
 
-import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, statSync, rmSync } from 'fs';
 import { join, dirname }            from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
 import { markSharedSections }       from './lib/major-integrity.js';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
-import { checkScrapeRails }          from './lib/scrape-rails.js';
+import { checkScrapeRails, checkPlanRail } from './lib/scrape-rails.js';
+import { extractPlanGrid }           from './lib/plan-grid.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
          extractPlanOfStudyCourses,
          normalizeConcentrationHref, parseCatalogEdition,
@@ -127,6 +128,40 @@ function outPath(college, slug) {
   return join(OUT_ROOT, String(YEAR), college, slug, 'parsed.initial.json');
 }
 
+/**
+ * The department's Sample Plan of Study, as a SIBLING file rather than a key
+ * inside parsed.initial.json.
+ *
+ * Two reasons, both about not making everyone pay for one feature. The grid is
+ * 3-18 KB against a ~14 KB program file, so inlining it would roughly double
+ * what every student downloads when they pick a major — to carry something
+ * only the ones who ask for a sample plan will ever open. And keeping it out
+ * leaves the requirement tree exactly the shape verify-majors, the equivalence
+ * builder and the integrity check already walk.
+ *
+ * It sits in the same directory as the program it belongs to, so the existing
+ * year/college/folder path scheme addresses it with no new mapping: the loader
+ * globs the same tree for a different filename.
+ */
+function planPath(college, slug) {
+  return join(OUT_ROOT, String(YEAR), college, slug, 'plan.json');
+}
+
+/** Every committed sample plan in one edition — what the plan rail counts. */
+function listCommittedPlans(year = YEAR) {
+  const out = [];
+  const walk = dir => {
+    if (!existsSync(dir)) return;
+    for (const e of readdirSync(dir)) {
+      const p = join(dir, e);
+      if (statSync(p).isDirectory()) walk(p);
+      else if (e === 'plan.json') out.push(p);
+    }
+  };
+  walk(join(OUT_ROOT, String(year)));
+  return out;
+}
+
 // ── Scrape one program ────────────────────────────────────────────────────────
 
 /**
@@ -199,6 +234,11 @@ async function scrapeProgram(url) {
       // something. Never the reverse — the plan picks one branch per choice.
       planOfStudyCourses: extractPlanOfStudyCourses(root),
     },
+    // The same pane read as STRUCTURE — years, terms, entries — so the plan can
+    // be offered to a student rather than only counted against. Split into
+    // plan.json at write time and never stored here; see planPath().
+    // Null for the many programs that publish no plan, which is normal.
+    planGrid: extractPlanGrid(root),
     totalCreditsRequired,
     // Which phrasing produced the number — 'stated-total' and friends come
     // from what the page says is required; 'plan-grid' means we fell back to
@@ -276,6 +316,7 @@ async function main() {
   }
 
   let done = 0, skipped = 0, failed = 0, written = 0;
+  let plansWritten = 0, plansRemoved = 0;
   // Buffered, not written as we go: the rails below need to see the whole run
   // before any of it lands. Writing per-program meant a broken parse was
   // already committed by the time anyone looked at the log.
@@ -347,11 +388,28 @@ async function main() {
   }
 
   if (WRITE) {
+    // Sample plans are written as siblings, and a program that stopped
+    // publishing one must LOSE its file: a plan left behind would place courses
+    // from a previous edition into a student's plan as though this edition's
+    // department had asked for them. But a fleet-wide loss is held rather than
+    // applied — see checkPlanRail for why this one warns instead of failing.
+    const nowPlans  = [...pending.values()].filter(d => d.planGrid).length;
+    const prevPlans = listCommittedPlans().length;
+    const { deleteOk, reason } = checkPlanRail(nowPlans, prevPlans);
+    if (!deleteOk) console.warn(`\n⚠  ${reason}\n`);
+
     for (const [p, data] of pending) {
+      const { planGrid, ...program } = data;
       mkdirSync(dirname(p), { recursive: true });
-      writeFileSync(p, JSON.stringify(data, null, 2));
+      writeFileSync(p, JSON.stringify(program, null, 2));
       written++;
+
+      const pp = join(dirname(p), 'plan.json');
+      if (planGrid) { writeFileSync(pp, JSON.stringify(planGrid, null, 2)); plansWritten++; }
+      else if (existsSync(pp) && deleteOk) { rmSync(pp); plansRemoved++; }
     }
+    console.log(`Sample plans: ${plansWritten} written, ${plansRemoved} removed ` +
+                `(${prevPlans} committed before this run).`);
   }
 
   console.log(`\nResults: ${done} scraped, ${written} written, ${skipped} skipped, ${failed} failed`);

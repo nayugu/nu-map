@@ -84,3 +84,41 @@ export function checkScrapeRails({ discovered, failed, results, previous, baseli
 
   return { ok: failures.length === 0, failures, stats };
 }
+
+/** Share of previously-published sample plans allowed to disappear in one run. */
+export const MAX_PLAN_LOSS_RATIO = 0.25;
+
+/**
+ * Decide whether this run may DELETE the sample plans it no longer sees.
+ *
+ * Deliberately shaped differently from the rails above, and the difference is
+ * the point. Those refuse the whole run, because a collapse in requirements
+ * means the parse is wrong and nothing should land. A collapse in sample plans
+ * is genuinely ambiguous: departments are moving plans off the catalog onto
+ * their own pages (advisors, Aug 2026), so plans really will start vanishing
+ * upstream, and a hard failure would eventually block every requirements
+ * update for a reason that has nothing to do with requirements.
+ *
+ * So the run always lands; only the deletions are held. Holding them keeps a
+ * plan that is one edition stale, which is a much smaller wrong than removing
+ * a feature from ~388 programs because a class name changed. The warning is
+ * how a human finds out which it was.
+ *
+ * A single program dropping its plan is normal and passes straight through —
+ * only a fleet-wide drop is held.
+ *
+ * @param {number} nowPlans   plans this run successfully parsed
+ * @param {number} prevPlans  plan files already committed for this edition
+ * @returns {{deleteOk: boolean, reason: string|null}}
+ */
+export function checkPlanRail(nowPlans, prevPlans, ratio = MAX_PLAN_LOSS_RATIO) {
+  if (prevPlans === 0) return { deleteOk: true, reason: null };
+  const floor = Math.floor(prevPlans * (1 - ratio));
+  if (nowPlans >= floor) return { deleteOk: true, reason: null };
+  return {
+    deleteOk: false,
+    reason: `sample plans fell ${prevPlans} → ${nowPlans} (floor ${floor}). ` +
+            `Requirements were written; existing plan.json files were KEPT rather than deleted. ` +
+            `Check whether the catalog dropped its plans or the grid parser stopped matching.`,
+  };
+}
