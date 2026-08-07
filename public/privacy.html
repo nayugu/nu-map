@@ -44,7 +44,11 @@
         requirements shown in the app are public information collected from Northeastern's
         public course catalog and registrar systems. They contain no personal data.</li>
     <li><strong>Sharing is explicit.</strong> Plan share links encode your plan into the link
-        itself; they exist only when you create one and are never stored by us.</li>
+        itself; they exist only when you create one and are never stored by us. A share
+        <em>code</em> works differently: the encoded plan is held on our relay server under a
+        short code so another browser can collect it once. It is deleted the moment it is
+        collected, when you cancel it, or after ten minutes — whichever comes first — and its
+        contents are never logged. Grades are excluded from both.</li>
   </ul>
 
   <h2>The optional Claude AI integration</h2>
@@ -81,9 +85,23 @@
         Claude makes on your behalf.</li>
   </ul>
 
+  <h2>Course translation</h2>
+  <p>
+    NU Map's interface is translated into eight languages, and those translations ship with the
+    app — using them sends nothing anywhere. Course <em>titles and descriptions</em> come from
+    Northeastern's catalog in English only, so translating those requires a translation service.
+    When course translation is on, NU Map first tries your browser's built-in translator, which
+    runs on your device. If your browser has none, the title and description of the course you
+    are viewing are sent to an external translation service (Google Translate, or MyMemory where
+    Google is unavailable). Only that public catalog text is sent — never your plan, your grades,
+    or anything you have entered. Results are cached in your browser so each course is translated
+    at most once. You can turn course translation off in settings, which stops all such requests.
+  </p>
+
   <h2>What we don't do</h2>
   <ul>
-    <li>We do not sell or share any data with third parties.</li>
+    <li>We do not sell your data, and we do not share personal data with third parties. The one
+        outbound case is public catalog text sent for course translation, described above.</li>
     <li>We do not use advertising or tracking networks.</li>
     <li>We do not store plan data server-side except as described above for the
         opt-in Claude integration, for as long as the link exists.</li>

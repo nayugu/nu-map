@@ -10,6 +10,7 @@ import { subjectColor } from "../../core/courseModel.js";
 import calendar from "./calendar.js";
 import { parseRepeatability } from "./repeatability.js";
 import { parseDescriptionGpaGate } from "./gpaGate.js";
+import { parseDescriptionPrereq } from "./descriptionPrereq.js";
 
 /**
  * Earliest term code (numeric) where the course was ever confirmed offered.
@@ -53,6 +54,13 @@ export function deriveTerms(termHistory, birthTermCode = null) {
     const ofType = entries.filter(([code]) => calendar.decodeTermCode(code) === id);
     return ofType.filter(([, v]) => v).length / ofType.length >= 2 / 3;
   });
+}
+
+/** Labelled prereqs if present, else the ones stated in the description. */
+function descPrereqFallback(raw) {
+  const labelled = raw.prereqs ?? raw.prerequisites ?? [];
+  if (Array.isArray(labelled) && labelled.length) return labelled;
+  return parseDescriptionPrereq(raw.description) ?? [];
 }
 
 /** Enrollment-restriction patterns sometimes stored in the description field instead of actual content. */
@@ -124,7 +132,13 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     repeatMax:    rep?.max   ?? null,
     repeatMaxSH:  rep?.maxSH ?? null,
     scheduleType: raw.scheduleType || "",
-    prereqs:      raw.prereqs ?? raw.prerequisites ?? [],
+    // 33 courses state their prerequisite only in the description prose and
+    // carry no Prerequisite(s) line, MATH 1342 (Calculus 2 → Calculus 1)
+    // among them. Same pattern as repeatability and the GPA gate: the
+    // scraper writes this field canonically, and this derives the identical
+    // tokens from already-shipped data until that scrape lands. The labelled
+    // field always wins — this only fills a genuinely empty one.
+    prereqs:      descPrereqFallback(raw),
     coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],
     // A GPA gate stated in the description (3 courses corpus-wide). Same
     // pattern as repeatability above: prefer the scraper's field, else

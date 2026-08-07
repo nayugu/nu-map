@@ -33,6 +33,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { parseDescriptionPrereq } from "../src/adapters/northeastern/descriptionPrereq.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "dist", "data");
@@ -274,6 +275,14 @@ const typicallyOffered = (off) => {
 
 const enrich = (course) => {
   const { sections, ...rest } = course;
+  // Match the app: 33 courses state their prerequisite only in description
+  // prose (MATH 1342 among them), and the scraper fills that in canonically
+  // from the next run. Until then derive it here too, or the /data pages
+  // would contradict the planner on the same course.
+  if (!rest.prereqs?.length) {
+    const derived = parseDescriptionPrereq(course.description);
+    if (derived) rest.prereqs = derived;
+  }
   const code = `${course.subject}${course.number}`;
   const off = offering[code];
 

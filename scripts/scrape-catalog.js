@@ -32,6 +32,7 @@ import { parseRepeatability } from "../src/adapters/northeastern/repeatability.j
 import { parseNUPath, findAttributeText, reconcileNuPath, SOURCE_POLICY } from "./lib/nupath.js";
 import { extractConcurrentCourses, parsePrereqText, parseCoreqText, hasPrereqSignal } from "./lib/prereq-parse.js";
 import { parseDescriptionGpaGate } from "../src/adapters/northeastern/gpaGate.js";
+import { parseDescriptionPrereq } from "../src/adapters/northeastern/descriptionPrereq.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -219,7 +220,14 @@ function parseSubjectPage(html, subjectCode) {
       // phrase (e.g. a grad course whose only prereq is "Graduate program
       // admission") — otherwise a phrase-only prereq is dropped before it can
       // become a { note } leaf.
-      prereqs: hasPrereqSignal(cleanedPrereq) ? parsePrereqText(cleanedPrereq) : [],
+      //
+      // When there is no Prerequisite(s) line at all, fall back to the
+      // description: 33 courses state their requirement only in prose, MATH
+      // 1342 (Calculus 2 → Calculus 1) among them. The labelled field always
+      // wins; this never overrides it.
+      prereqs: hasPrereqSignal(cleanedPrereq)
+        ? parsePrereqText(cleanedPrereq)
+        : (parseDescriptionPrereq(description) ?? []),
     });
   }
 

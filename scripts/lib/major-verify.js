@@ -183,7 +183,9 @@ function matchedByRange(key, ranges) {
  * @param {object}  args
  * @param {object}  args.program     parsed.initial.json contents
  * @param {string}  args.id          stable program id, e.g. "majors/2026/…/slug"
- * @param {Set<string>} [args.courseIndex]  known course keys from all-courses.json
+ * @param {Set<string>} [args.courseIndex]  known course keys from catalog-courses.json —
+ *   the file the planner actually loads, so an "unknown course" finding means the
+ *   requirement genuinely cannot be ticked off in the app (see verify-majors.js)
  * @param {object}  [args.policy]    tolerances + allowlists
  * @returns {{level, score, counters, discrepancies, sourcesAvailable}}
  */
