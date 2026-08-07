@@ -1,0 +1,118 @@
+{
+  "editions": {
+    "2020": {
+      "label": "2019-2020",
+      "majors": {
+        "programs": 374,
+        "colleges": 8,
+        "sections": 2728,
+        "concentrations": 228,
+        "plans": 194,
+        "scrapedAt": "2026-08-07"
+      },
+      "grad-majors": {
+        "programs": 369,
+        "colleges": 10,
+        "sections": 1396,
+        "concentrations": 130,
+        "plans": 24,
+        "scrapedAt": "2026-08-07"
+      }
+    },
+    "2021": {
+      "label": "2020-2021",
+      "majors": {
+        "programs": 405,
+        "colleges": 9,
+        "sections": 3016,
+        "concentrations": 426,
+        "plans": 229,
+        "scrapedAt": "2026-08-07"
+      },
+      "grad-majors": {
+        "programs": 341,
+        "colleges": 11,
+        "sections": 1367,
+        "concentrations": 201,
+        "plans": 28,
+        "scrapedAt": "2026-08-07"
+      }
+    },
+    "2022": {
+      "label": "2021-2022",
+      "majors": {
+        "programs": 427,
+        "colleges": 9,
+        "sections": 3082,
+        "concentrations": 452,
+        "plans": 245,
+        "scrapedAt": "2026-08-07"
+      },
+      "grad-majors": {
+        "programs": 356,
+        "colleges": 11,
+        "sections": 1429,
+        "concentrations": 246,
+        "plans": 29,
+        "scrapedAt": "2026-08-07"
+      }
+    },
+    "2023": {
+      "label": "2022-2023",
+      "majors": {
+        "programs": 440,
+        "colleges": 9,
+        "sections": 3180,
+        "concentrations": 486,
+        "plans": 266,
+        "scrapedAt": "2026-08-07"
+      },
+      "grad-majors": {
+        "programs": 361,
+        "colleges": 12,
+        "sections": 1456,
+        "concentrations": 287,
+        "plans": 30,
+        "scrapedAt": "2026-08-07"
+      }
+    },
+    "2024": {
+      "label": "2023-2024",
+      "majors": {
+        "programs": 453,
+        "colleges": 9,
+        "sections": 3335,
+        "concentrations": 576,
+        "plans": 270,
+        "scrapedAt": "2026-08-07"
+      },
+      "grad-majors": {
+        "programs": 356,
+        "colleges": 12,
+        "sections": 1404,
+        "concentrations": 308,
+        "plans": 33,
+        "scrapedAt": "2026-08-07"
+      }
+    },
+    "2025": {
+      "label": "2024-2025",
+      "majors": {
+        "programs": 489,
+        "colleges": 9,
+        "sections": 3711,
+        "concentrations": 596,
+        "plans": 317,
+        "scrapedAt": "2026-08-07"
+      },
+      "grad-majors": {
+        "programs": 380,
+        "colleges": 13,
+        "sections": 1460,
+        "concentrations": 382,
+        "plans": 33,
+        "scrapedAt": "2026-08-07"
+      }
+    }
+  }
+}
