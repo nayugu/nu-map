@@ -34,14 +34,23 @@
  *
  * ## Order is explicit, never implicit
  *
- * Rows sort by name (natural, locale-aware) or recency — there is no `order`
- * field and no drag-to-reorder. Implicit array order cannot work here: `plans`
- * is ONE flat array interleaving every folder's children, so a plan dropped
- * into a folder would land at whatever position the global array implied,
- * which is effectively random. Explicit sorting means "where did it go" always
- * has an answer. Natural sort also makes the default names (`Plan 1`, `Plan 2`,
- * … `Plan 10`) collate into creation order, so existing users see no reordering
- * when folders ship.
+ * Rows sort by name (natural, locale-aware), by recency, or by an explicit
+ * per-record `order` number ('manual'). What is still forbidden is relying on
+ * ARRAY POSITION: `plans` is ONE flat array interleaving every folder's
+ * children, so a plan dropped into a folder would land wherever the global
+ * array implied, which is effectively random. `order` keeps the rule intact —
+ * position is stated on the record, never inferred from where it sits.
+ *
+ * Manual order uses FRACTIONAL indexing: a row dropped between two neighbours
+ * takes the midpoint of their `order` values, so a move is one field write and
+ * never renumbers siblings (which would be an N-record write that can tear
+ * halfway, exactly the failure the pointer model was chosen to avoid). Records
+ * with no `order` fall back to name, so a library that predates this sorts
+ * exactly as it did and nothing reshuffles on upgrade.
+ *
+ * Natural sort also makes the default names (`Plan 1`, `Plan 2`, … `Plan 10`)
+ * collate into creation order, so existing users saw no reordering when
+ * folders shipped.
  *
  * ## Search matches records, never rows
  *
@@ -493,8 +502,17 @@ function matchedPlanCounts(tree, matches) {
 function comparators(sortMode, locale) {
   const collator = new Intl.Collator(locale, { numeric: true, sensitivity: "base" });
   const byName = (a, b) => collator.compare(a.name ?? "", b.name ?? "");
-  // Folders always sort by name — "recently opened" is meaningless for a
-  // container, and a folder that jumps around is disorienting.
+  // Manual: explicit `order`, name as the tiebreak so records that predate
+  // manual ordering (or arrive from a share/import) slot in predictably
+  // instead of piling up at one end.
+  const byOrder = (a, b) => {
+    const ao = typeof a.order === "number" ? a.order : Infinity;
+    const bo = typeof b.order === "number" ? b.order : Infinity;
+    return ao === bo ? byName(a, b) : ao - bo;
+  };
+  if (sortMode === "manual") return { byName: byOrder, plansCmp: byOrder };
+  // Otherwise folders always sort by name — "recently opened" is meaningless
+  // for a container, and a folder that jumps around is disorienting.
   const plansCmp = sortMode === "recent"
     ? (a, b) => (b.lastOpened ?? 0) - (a.lastOpened ?? 0) || byName(a, b)
     : byName;
@@ -507,7 +525,7 @@ function comparators(sortMode, locale) {
  * @param {object} tree from buildTree
  * @param {object} [opts]
  * @param {Set<string>} [opts.open] persisted expansion; ignored while searching
- * @param {'name'|'recent'} [opts.sortMode]
+ * @param {'name'|'recent'|'manual'} [opts.sortMode]
  * @param {Set<string>|null} [opts.matches] from matchIds
  * @param {string} [opts.locale]
  * @returns {Array<{kind:'folder'|'plan', id:string, depth:number, item:object,
@@ -550,6 +568,48 @@ export function flattenTree(tree, { open = null, sortMode = "name", matches = nu
  * "Move to…" menu. `movingIds` disables the nodes a move would reject, so the
  * menu cannot offer an illegal destination.
  */
+/** Gap used when appending past the end, and when seeding a fresh list. */
+const ORDER_STEP = 1024;
+
+/**
+ * The `order` value that places a record between two siblings.
+ *
+ * Fractional indexing: return the midpoint of the neighbours' orders so only
+ * the moved record is written. `before`/`after` are the records the row should
+ * land BETWEEN (either may be null at a list end).
+ *
+ * Doubles run out of precision after ~50 consecutive drops into the same gap;
+ * `needsReseed` reports when a caller should renumber that sibling list once
+ * to restore headroom. That is rare, and paying it lazily beats renumbering on
+ * every move.
+ *
+ * @returns {{order: number, needsReseed: boolean}}
+ */
+export function orderBetween(before, after) {
+  const a = typeof before?.order === "number" ? before.order : null;
+  const b = typeof after?.order === "number" ? after.order : null;
+  if (a === null && b === null) return { order: ORDER_STEP, needsReseed: false };
+  if (a === null) return { order: b - ORDER_STEP, needsReseed: false };
+  if (b === null) return { order: a + ORDER_STEP, needsReseed: false };
+  const mid = (a + b) / 2;
+  // Exhausted precision: the midpoint collided with an endpoint.
+  return { order: mid, needsReseed: mid <= a || mid >= b };
+}
+
+/**
+ * Renumber one sibling list onto clean ORDER_STEP multiples, preserving the
+ * order they currently render in. Used to seed manual order the first time and
+ * to recover the rare precision exhaustion above.
+ *
+ * @param {Array<object>} siblings in their current display order
+ * @returns {Map<string, number>} id → new order
+ */
+export function reseedOrder(siblings) {
+  const out = new Map();
+  siblings.forEach((s, i) => out.set(s.id, (i + 1) * ORDER_STEP));
+  return out;
+}
+
 export function moveTargets(tree, movingIds = [], { locale } = {}) {
   const { byName } = comparators("name", locale);
   const ids = [...movingIds];

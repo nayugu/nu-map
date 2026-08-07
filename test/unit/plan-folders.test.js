@@ -10,14 +10,16 @@
 //     (missing parent, or a cycle where both parents exist);
 //   · a move never makes a folder its own descendant;
 //   · a mixed selection never moves or deletes a node twice;
-//   · search reads records, not rows, so collapse state cannot hide a match.
+//   · search reads records, not rows, so collapse state cannot hide a match;
+//   · manual order is stated on the record, never inferred from array position,
+//     and a library with no `order` at all sorts exactly as it did before.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   MAX_DEPTH, buildTree, flattenTree, isDescendant, subtreeOf, folderSpan,
   childDepth, topmostNodes, deleteScope, planMove, applyMove, uniqueName,
   siblingNames, folderPath, buildSearchIndex, matchIds, searchScope,
-  moveTargets, normalizeSearchText,
+  moveTargets, normalizeSearchText, orderBetween, reseedOrder,
 } from "../../src/core/planFolders.js";
 
 const F = (id, name, parentId = null) => ({ id, name, parentId });
@@ -469,4 +471,83 @@ test("planFolders › an empty store yields an empty tree, not a throw", () => {
 test("planFolders › a move naming an unknown id is rejected, not applied", () => {
   const tree = buildTree(fixture());
   assert.deepEqual(planMove(tree, ["nope"], "adv"), { ok: false, reason: "noop" });
+});
+
+// ── Manual order ──────────────────────────────────────────────────────
+// Order is a persisted field, so the failure modes are data-shaped: a drop
+// that renumbers siblings can tear halfway, and a library saved before manual
+// ordering existed must not reshuffle when it loads.
+
+test("manual order › rows follow `order`, not name or array position", () => {
+  const tree = buildTree({ folders: [], plans: [
+    P("p1", "Zebra", null, { order: 100 }),
+    P("p2", "Apple", null, { order: 200 }),
+    P("p3", "Mango", null, { order: 300 }),
+  ] });
+  const names = (mode) => flattenTree(tree, { sortMode: mode, ...EN }).map(r => r.item.name);
+  assert.deepEqual(names("manual"), ["Zebra", "Apple", "Mango"]);
+  // The same tree under the other modes is untouched by `order`.
+  assert.deepEqual(names("name"), ["Apple", "Mango", "Zebra"]);
+});
+
+test("manual order › records without `order` fall back to name, never to a pile", () => {
+  // A library that predates manual ordering, or a plan just imported from a
+  // share: it must slot in predictably rather than all landing at one end in
+  // arbitrary array order.
+  const tree = buildTree({ folders: [], plans: [
+    P("p1", "Beta"), P("p2", "Alpha"), P("p3", "Ordered", null, { order: 50 }),
+  ] });
+  assert.deepEqual(
+    flattenTree(tree, { sortMode: "manual", ...EN }).map(r => r.item.name),
+    ["Ordered", "Alpha", "Beta"],
+  );
+});
+
+test("manual order › folders reorder too under manual", () => {
+  // A manual library where folders refused to move would be baffling.
+  const tree = buildTree({
+    folders: [F("f1", "Zeta"), F("f2", "Alfa")].map((f, i) => ({ ...f, order: (2 - i) * 10 })),
+    plans: [],
+  });
+  assert.deepEqual(
+    flattenTree(tree, { sortMode: "manual", ...EN }).map(r => r.item.name),
+    ["Alfa", "Zeta"],
+  );
+});
+
+test("orderBetween › a drop writes ONE record, wherever it lands", () => {
+  // Empty list, both ends, and the middle. None of these renumber siblings.
+  assert.equal(orderBetween(null, null).order, 1024);
+  assert.equal(orderBetween(null, { order: 1024 }).order, 0);
+  assert.equal(orderBetween({ order: 2048 }, null).order, 3072);
+  assert.equal(orderBetween({ order: 1024 }, { order: 2048 }).order, 1536);
+  // Missing neighbour orders are treated as absent ends, not as 0.
+  assert.equal(orderBetween({ name: "no order" }, { order: 1024 }).order, 0);
+});
+
+test("orderBetween › repeated drops into one gap stay strictly ordered", () => {
+  // The property that matters: 40 consecutive drops just above the same row
+  // must each land strictly between their neighbours, or rows start swapping.
+  let lo = { order: 0 }, hi = { order: 1024 };
+  let prev = -Infinity;
+  for (let i = 0; i < 40; i++) {
+    const { order, needsReseed } = orderBetween(lo, hi);
+    if (needsReseed) break;
+    assert.ok(order > lo.order && order < hi.order, `drop ${i} escaped its gap`);
+    assert.ok(order !== prev, "two drops produced the same order");
+    prev = order;
+    hi = { order };   // keep dropping just above `lo`
+  }
+});
+
+test("orderBetween › exhausted precision is reported, not silently collapsed", () => {
+  const { needsReseed } = orderBetween({ order: 1 }, { order: 1.0000000000000002 });
+  assert.equal(needsReseed, true);
+});
+
+test("reseedOrder › renumbers onto clean gaps while preserving display order", () => {
+  const seeded = reseedOrder([{ id: "a" }, { id: "b" }, { id: "c" }]);
+  assert.deepEqual([...seeded.entries()], [["a", 1024], ["b", 2048], ["c", 3072]]);
+  // And the reseeded values leave room to drop between any two again.
+  assert.equal(orderBetween({ order: 1024 }, { order: 2048 }).needsReseed, false);
 });
